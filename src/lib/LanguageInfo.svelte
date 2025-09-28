@@ -1,7 +1,15 @@
 <script lang="ts">
-  import type { KCLanguage } from './types.js';
+  import type { KCLanguage, KCOpEntry } from './types.js';
   
   let { selectedLanguage }: { selectedLanguage: KCLanguage | null } = $props();
+
+  const statusColor = (op: KCOpEntry) => {
+    switch (op.polytime) {
+      case 'true': return '#22c55e';
+      case 'false': return '#ef4444';
+      default: return '#f59e0b';
+    }
+  };
 </script>
 
 {#if selectedLanguage}
@@ -10,57 +18,66 @@
     <h4 class="text-sm text-gray-600 mb-4">{selectedLanguage.fullName}</h4>
     
     <p class="text-gray-700 mb-6">{selectedLanguage.description}</p>
+
+    {#if selectedLanguage.tags?.length}
+      <div class="mb-4 flex flex-wrap gap-2">
+        {#each selectedLanguage.tags as tag}
+          <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium" style={`background:${tag.color ?? '#e5e7eb'}20; color:${tag.color ?? '#374151'}; border:1px solid ${tag.color ?? '#e5e7eb'}`}
+            title={tag.description || ''}>
+            {tag.label}
+          </span>
+        {/each}
+      </div>
+    {/if}
     
     <div class="space-y-4">
       <div>
-        <h5 class="font-semibold text-gray-900 mb-2">Polynomial-Time Queries</h5>
+        <h5 class="font-semibold text-gray-900 mb-2">Queries</h5>
         <div class="grid grid-cols-2 gap-2">
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.CO ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">CO (Consistency)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.VA ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">VA (Validity)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.CE ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">CE (Clausal Entailment)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.IM ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">IM (Implicant)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.EQ ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">EQ (Equivalence)</span>
-          </div>
+          {#each selectedLanguage.properties.queries ?? [] as q}
+            <div class="flex items-start gap-2">
+              <span class="inline-block w-3 h-3 rounded-full" style={`background:${statusColor(q)}`}></span>
+              <div class="text-sm">
+                <div><strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''} — <em>{q.polytime}</em></div>
+                {#if q.note}
+                  <div class="text-xs text-gray-500">{q.note}</div>
+                {/if}
+              </div>
+            </div>
+          {/each}
         </div>
       </div>
-      
+
       <div>
-        <h5 class="font-semibold text-gray-900 mb-2">Polynomial-Time Transformations</h5>
+        <h5 class="font-semibold text-gray-900 mb-2">Transformations</h5>
         <div class="grid grid-cols-2 gap-2">
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.SU ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">SU (Conditioning)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.CD ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">CD (Conjunction)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full {selectedLanguage.properties.FO ? 'bg-green-500' : 'bg-red-500'}"></span>
-            <span class="text-sm">FO (Forgetting)</span>
-          </div>
+          {#each selectedLanguage.properties.transformations ?? [] as t}
+            <div class="flex items-start gap-2">
+              <span class="inline-block w-3 h-3 rounded-full" style={`background:${statusColor(t)}`}></span>
+              <div class="text-sm">
+                <div><strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''} — <em>{t.polytime}</em></div>
+                {#if t.note}
+                  <div class="text-xs text-gray-500">{t.note}</div>
+                {/if}
+              </div>
+            </div>
+          {/each}
         </div>
       </div>
     </div>
     
     <div class="mt-4 pt-4 border-t border-gray-200">
-      <p class="text-xs text-gray-500">
-        Click on other nodes to explore different knowledge compilation languages.
-      </p>
+      {#if selectedLanguage.references?.length}
+        <div class="mb-2">
+          <h6 class="text-xs font-semibold text-gray-700 mb-1">References</h6>
+          <ul class="list-disc pl-4 space-y-1">
+            {#each selectedLanguage.references as ref}
+              <li class="text-xs"><a class="underline text-blue-700" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a></li>
+            {/each}
+          </ul>
+        </div>
+      {/if}
+      <p class="text-xs text-gray-500">Click on other nodes to explore different knowledge compilation languages.</p>
     </div>
   </div>
 {:else}

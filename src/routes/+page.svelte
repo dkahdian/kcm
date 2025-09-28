@@ -26,7 +26,15 @@
 
     <aside class="side-panel">
       <LanguageInfo selectedLanguage={selectedNode} />
-
+      <div class="legend">
+        <h4>Legend</h4>
+        {#each initialGraphData.relationTypes as rt}
+          <div class="legend-row">
+            <span class="line" style={`background:${rt.style?.lineColor ?? '#6b7280'}; ${rt.style?.lineStyle === 'dashed' ? 'border-top:2px dashed '+(rt.style?.lineColor ?? '#6b7280')+'; height:0; background:transparent;' : ''}`}></span>
+            <span>{rt.name}{rt.label ? ` (${rt.label})` : ''}</span>
+          </div>
+        {/each}
+      </div>
     </aside>
   </main>
 </div>
@@ -71,6 +79,12 @@
   .graph-panel > :global(div) { height: 100%; }
 
   .side-panel { padding: 0.75rem; overflow: auto; }
+
+  /* Legend */
+  .legend { margin-top: 0.75rem; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
+  .legend h4 { margin: 0 0 0.5rem; font-weight: 600; color: #111827; }
+  .legend-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #374151; }
+  .line { display: inline-block; width: 1.25rem; height: 2px; background: #1e40af; }
 
 
   /* Ensure KCGraph fills container */

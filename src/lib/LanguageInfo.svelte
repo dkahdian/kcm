@@ -33,11 +33,11 @@
     <div class="space-y-4">
       <div>
         <h5 class="font-semibold text-gray-900 mb-2">Queries</h5>
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-2 gap-x-4 gap-y-2">
           {#each selectedLanguage.properties.queries ?? [] as q}
-            <div class="flex items-start gap-2">
-              <span class="inline-block w-3 h-3 rounded-full" style={`background:${statusColor(q)}`}></span>
-              <div class="text-sm">
+            <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
+              <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(q)}`}></span>
+              <div class="text-sm leading-5">
                 <div><strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''}</div>
                 {#if q.note}
                   <div class="text-xs text-gray-500">{q.note}</div>
@@ -50,11 +50,11 @@
 
       <div>
         <h5 class="font-semibold text-gray-900 mb-2">Transformations</h5>
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-2 gap-x-4 gap-y-2">
           {#each selectedLanguage.properties.transformations ?? [] as t}
-            <div class="flex items-start gap-2">
-              <span class="inline-block w-3 h-3 rounded-full" style={`background:${statusColor(t)}`}></span>
-              <div class="text-sm">
+            <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
+              <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(t)}`}></span>
+              <div class="text-sm leading-5">
                 <div><strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''}</div>
                 {#if t.note}
                   <div class="text-xs text-gray-500">{t.note}</div>

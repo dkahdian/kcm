@@ -33,7 +33,6 @@
           id: rel.id,
           source: rel.source,
           target: rel.target,
-          label: rel.label || '',
           typeId: rel.typeId,
           description: rel.description || ''
         }
@@ -86,10 +85,8 @@
           'source-arrow-color': '#6b7280',
           'source-arrow-shape': 'none',
           'curve-style': 'bezier',
-          label: 'data(label)',
-          'font-size': '12px',
-          color: '#4b5563',
-          'text-rotation': 'autorotate'
+          // no labels on edges
+          'font-size': '0px'
         }
       }
     ];
@@ -157,7 +154,12 @@
 
 <div class="kcm-graph-container">
   <div bind:this={graphContainer} class="w-full h-full"></div>
-  
+  <!-- Y-axis overlay: More succinct (top) to Less succinct (bottom) -->
+  <div class="y-axis" aria-hidden="true">
+    <div class="axis-label axis-label-top">More succinct</div>
+    <div class="axis-line"></div>
+    <div class="axis-label axis-label-bottom">Less succinct</div>
+  </div>
 </div>
 
 <style>
@@ -167,5 +169,49 @@
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
     background-color: #ffffff;
+    position: relative;
+  }
+
+  /* Overlay Y-axis (does not capture events) */
+  .y-axis {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+    color: #1f2937; /* gray-800 */
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .axis-line {
+    flex: 1 1 auto;
+    width: 2px;
+    background: linear-gradient(#1e3a8a, #93c5fd); /* blue-800 to blue-300 */
+    border-radius: 1px;
+    margin: 6px 0;
+    opacity: 0.6;
+  }
+
+  .axis-label {
+    writing-mode: vertical-rl;
+    line-height: 1;
+    background: transparent;
+    border: none;
+    padding: 0;
+    opacity: 0.85;
+  }
+
+  .axis-label-top {
+    margin-bottom: 6px;
+  }
+
+  .axis-label-bottom {
+    margin-top: 6px;
   }
 </style>

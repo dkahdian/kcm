@@ -1,12 +1,12 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
+	import starai from '$lib/assets/starai.png';
 	import '../app.css';
 
 	let { children } = $props();
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href={starai} />
 </svelte:head>
 
 {@render children?.()}

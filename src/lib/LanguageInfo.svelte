@@ -95,9 +95,7 @@
         </p>
       </div>
     {/if}
-  </div>
-  
-  <div class="fixed-legend">
+    
     <div class="legend">
       <h4>Legend</h4>
       
@@ -163,12 +161,6 @@
       padding-bottom: 1rem;
     }
     
-    .fixed-legend {
-      flex-shrink: 0;
-      border-top: 1px solid #e5e7eb;
-      background: #f9fafb;
-    }
-    
     .language-details, .welcome-message {
       background: white;
       border: 1px solid #e5e7eb;
@@ -179,7 +171,10 @@
     
     .legend {
       padding: 0.75rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
       background: #ffffff;
+      margin-top: 1rem;
     }
     .legend h4 {
       margin: 0 0 0.75rem 0;

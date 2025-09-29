@@ -12,9 +12,13 @@ const config = {
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 			adapter: adapter({
-				// Generate index.html as the main entry point, with 404.html for SPA routing
-				fallback: 'index.html'
-			})
+				// GitHub Pages SPA: generate index.html and use 404.html as the fallback for deep links
+				fallback: '404.html'
+			}),
+			prerender: {
+				// Generate the root route as index.html alongside the SPA 404 fallback
+				entries: ['/']
+			}
 	}
 };
 

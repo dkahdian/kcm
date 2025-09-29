@@ -26,6 +26,7 @@
 
     <aside class="side-panel">
       <LanguageInfo selectedLanguage={selectedNode} />
+      <!---
       <div class="legend">
         <h4>Legend</h4>
         {#each initialGraphData.relationTypes as rt}
@@ -34,7 +35,7 @@
             <span>{rt.name}{rt.label ? ` (${rt.label})` : ''}</span>
           </div>
         {/each}
-      </div>
+      </div> -->
     </aside>
   </main>
 </div>
@@ -80,12 +81,12 @@
 
   .side-panel { padding: 0.75rem; overflow: auto; }
 
-  /* Legend */
+  /* Legend
   .legend { margin-top: 0.75rem; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
   .legend h4 { margin: 0 0 0.5rem; font-weight: 600; color: #111827; }
   .legend-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #374151; }
   .line { display: inline-block; width: 1.25rem; height: 2px; background: #1e40af; }
-
+ */
 
   /* Ensure KCGraph fills container */
   :global(.kcm-graph-container) { flex: 1 1 auto; min-height: 0; }

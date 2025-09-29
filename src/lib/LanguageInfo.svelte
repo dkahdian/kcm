@@ -38,7 +38,7 @@
             <div class="flex items-start gap-2">
               <span class="inline-block w-3 h-3 rounded-full" style={`background:${statusColor(q)}`}></span>
               <div class="text-sm">
-                <div><strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''} — <em>{q.polytime}</em></div>
+                <div><strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''}</div>
                 {#if q.note}
                   <div class="text-xs text-gray-500">{q.note}</div>
                 {/if}
@@ -55,7 +55,7 @@
             <div class="flex items-start gap-2">
               <span class="inline-block w-3 h-3 rounded-full" style={`background:${statusColor(t)}`}></span>
               <div class="text-sm">
-                <div><strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''} — <em>{t.polytime}</em></div>
+                <div><strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''}</div>
                 {#if t.note}
                   <div class="text-xs text-gray-500">{t.note}</div>
                 {/if}
@@ -86,16 +86,17 @@
     <p class="text-gray-600 text-sm mb-4">
       Click on any node in the graph to view detailed information about that knowledge compilation language.
     </p>
-    <div class="space-y-2 text-xs text-gray-500">
-      <p><span class="w-2 h-2 bg-green-500 rounded-full inline-block mr-2"></span>Polynomial-time operation</p>
-      <p><span class="w-2 h-2 bg-red-500 rounded-full inline-block mr-2"></span>Exponential-time operation</p>
-    </div>
+
   </div>
   <div class="legend">
     <h4>Legend</h4>
     <div class="legend-row"><span class="line line-primary"></span><span>Succinctness (A ≤ B)</span></div>
     <div class="legend-row"><span class="line line-danger dashed"></span><span>Incomparable (A || B)</span></div>
     <div class="legend-row"><span class="line line-success"></span><span>Equivalence (A ≡ B)</span></div>
+        <div class="space-y-2 text-xs text-gray-500">
+      <p><span class="w-2 h-2 bg-green-500 rounded-full inline-block mr-2"></span>Polynomial-time operation</p>
+      <p><span class="w-2 h-2 bg-red-500 rounded-full inline-block mr-2"></span>Exponential-time operation</p>
+    </div>
   </div>
   <style>/* Legend */
     .legend { margin-top: 0.75rem; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }

@@ -25,17 +25,7 @@
     </section>
 
     <aside class="side-panel">
-      <LanguageInfo selectedLanguage={selectedNode} />
-      <!---
-      <div class="legend">
-        <h4>Legend</h4>
-        {#each initialGraphData.relationTypes as rt}
-          <div class="legend-row">
-            <span class="line" style={`background:${rt.style?.lineColor ?? '#6b7280'}; ${rt.style?.lineStyle === 'dashed' ? 'border-top:2px dashed '+(rt.style?.lineColor ?? '#6b7280')+'; height:0; background:transparent;' : ''}`}></span>
-            <span>{rt.name}{rt.label ? ` (${rt.label})` : ''}</span>
-          </div>
-        {/each}
-      </div> -->
+      <LanguageInfo selectedLanguage={selectedNode} graphData={initialGraphData} />
     </aside>
   </main>
 </div>
@@ -66,27 +56,43 @@
     min-height: 0; /* allow children to shrink */
   }
 
-  .graph-panel,
+  .graph-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+  
   .side-panel {
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
-    min-height: 0; /* critical for no overflow in grid */
+    min-height: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
-
-  .graph-panel { padding: 0.5rem; }
-  .graph-panel > :global(div) { height: 100%; }
-
-  .side-panel { padding: 0.75rem; overflow: auto; }
-
-  /* Legend
-  .legend { margin-top: 0.75rem; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
-  .legend h4 { margin: 0 0 0.5rem; font-weight: 600; color: #111827; }
-  .legend-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #374151; }
-  .line { display: inline-block; width: 1.25rem; height: 2px; background: #1e40af; }
- */
+  
+  .side-panel > :global(.content-wrapper) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 0.75rem;
+  }
+  
+  .side-panel > :global(.scrollable-content) {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  
+  .side-panel > :global(.fixed-legend) {
+    flex-shrink: 0;
+  }
 
   /* Ensure KCGraph fills container */
   :global(.kcm-graph-container) { flex: 1 1 auto; min-height: 0; }

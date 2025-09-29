@@ -83,6 +83,8 @@
           'line-color': '#6b7280',
           'target-arrow-color': '#6b7280',
           'target-arrow-shape': 'triangle',
+          'source-arrow-color': '#6b7280',
+          'source-arrow-shape': 'none',
           'curve-style': 'bezier',
           label: 'data(label)',
           'font-size': '12px',
@@ -93,29 +95,40 @@
     ];
 
   const relationTypeStyles: any[] = (graphData.relationTypes || []).map(
-      (rt: KCRelationType) => ({
-        selector: `edge[typeId = "${rt.id}"]`,
-        style: {
-          'line-color': rt.style?.lineColor || '#6b7280',
-          'target-arrow-color': rt.style?.lineColor || '#6b7280',
+      (rt: KCRelationType) => {
+        const color = rt.style?.lineColor || '#6b7280';
+        const style: any = {
+          'line-color': color,
+          'target-arrow-color': color,
           'line-style': rt.style?.lineStyle || 'solid',
           width: (rt.style?.width ?? 2) as any,
           'target-arrow-shape': rt.style?.targetArrow || 'triangle'
+        };
+        // Equivalence edges should be double-arrowed (both directions)
+        if (rt.id === 'equivalence') {
+          style['source-arrow-shape'] = 'triangle';
+          style['source-arrow-color'] = color;
         }
-      })
+        return {
+          selector: `edge[typeId = "${rt.id}"]`,
+          style
+        };
+      }
     );
 
     cy = cytoscape({
       container: graphContainer,
       elements,
       style: [...baseStyles, ...relationTypeStyles],
-      layout: {
-        name: 'grid',
+      layout: ({
+        name: 'dagre',
         fit: true,
-        padding: 50,
-        rows: 2,
-        cols: 2
-      },
+        padding: 40,
+        rankDir: 'TB', // most succinct at top, least at bottom
+        nodeSep: 40,
+        edgeSep: 20,
+        rankSep: 80
+      } as any),
       userZoomingEnabled: true,
       userPanningEnabled: true,
       boxSelectionEnabled: false,

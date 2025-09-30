@@ -3,32 +3,39 @@
   import cytoscape from 'cytoscape';
   // @ts-ignore - dagre doesn't have proper TypeScript types
   import dagre from 'cytoscape-dagre';
-  import type { GraphData, KCLanguage, KCRelationType } from './types.js';
+  import type { GraphData, FilteredGraphData, KCLanguage, KCRelationType } from './types.js';
 
   let { graphData, selectedNode = $bindable() }: {
-    graphData: GraphData;
+    graphData: GraphData | FilteredGraphData;
     selectedNode: KCLanguage | null;
   } = $props();
 
   let graphContainer: HTMLDivElement;
   let cy: cytoscape.Core;
 
-  onMount(() => {
+  // Function to create/update graph
+  function createGraph() {
     if (!graphContainer) return;
-    cytoscape.use(dagre);
+
+    // Filter languages and relations if this is filtered graph data
+    const isFilteredData = 'visibleLanguageIds' in graphData;
+    const visibleLanguageIds = isFilteredData ? graphData.visibleLanguageIds : null;
+    const visibleRelations = isFilteredData ? graphData.visibleRelations : graphData.relations;
 
     const elements: cytoscape.ElementDefinition[] = [
-      ...graphData.languages.map((lang) => ({
-        data: {
-          id: lang.id,
-          label: lang.name,
-          fullName: lang.fullName,
-          description: lang.description,
-          properties: lang.properties
-        },
-        position: lang.position || { x: 0, y: 0 }
-      })),
-      ...graphData.relations.map((rel) => ({
+      ...graphData.languages
+        .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id))
+        .map((lang) => ({
+          data: {
+            id: lang.id,
+            label: lang.name,
+            fullName: lang.fullName,
+            description: lang.description,
+            properties: lang.properties
+          },
+          position: lang.position || { x: 0, y: 0 }
+        })),
+      ...visibleRelations.map((rel) => ({
         data: {
           id: rel.id,
           source: rel.source,
@@ -59,14 +66,7 @@
           'text-max-width': '70px'
         }
       },
-      {
-        selector: 'node:hover',
-        style: {
-          'border-color': '#1e40af',
-          'border-width': 3,
-          'background-color': '#f8fafc'
-        }
-      },
+
       {
         selector: 'node:selected',
         style: {
@@ -146,9 +146,45 @@
       }
     });
 
+    // Add hover effects
+    cy.on('mouseover', 'node', (evt) => {
+      const node = evt.target;
+      node.style({
+        'border-color': '#1e40af',
+        'border-width': 3,
+        'background-color': '#f8fafc'
+      });
+    });
+
+    cy.on('mouseout', 'node', (evt) => {
+      const node = evt.target;
+      // Reset to base style unless selected
+      if (!node.selected()) {
+        node.style({
+          'border-color': '#d1d5db',
+          'border-width': 2,
+          'background-color': '#ffffff'
+        });
+      }
+    });
+
+  }
+
+  onMount(() => {
+    cytoscape.use(dagre);
+    createGraph();
+    
     return () => {
       cy?.destroy();
     };
+  });
+
+  // Recreate graph when data changes
+  $effect(() => {
+    if (graphContainer) {
+      cy?.destroy();
+      createGraph();
+    }
   });
 </script>
 

@@ -1,4 +1,4 @@
-import type { GraphData } from './types.js';
+import type { GraphData, LanguageFilter, KCLanguage, FilterCategory } from './types.js';
 
 export const initialGraphData: GraphData = {
   relationTypes: [
@@ -623,3 +623,106 @@ export const initialGraphData: GraphData = {
     { id: 'sd-dnnf-equiv-d-dnnf', source: 'sd-dnnf', target: 'd-dnnf', typeId: 'equivalence', label: '≡', description: 'sd-DNNF is equivalent to d-DNNF' }
   ]
 };
+
+// Predefined filters
+export const predefinedFilters: LanguageFilter[] = [
+  {
+    id: 'polytime-consistency',
+    name: 'Polytime Consistency',
+    description: 'Languages that support consistency checking in polynomial time',
+    category: 'queries',
+    filterFn: (language: KCLanguage) => {
+      const coQuery = language.properties.queries?.find(q => q.code === 'CO');
+      return coQuery?.polytime === 'true';
+    }
+  },
+  {
+    id: 'polytime-validity',
+    name: 'Polytime Validity',
+    description: 'Languages that support validity checking in polynomial time',
+    category: 'queries',
+    filterFn: (language: KCLanguage) => {
+      const vaQuery = language.properties.queries?.find(q => q.code === 'VA');
+      return vaQuery?.polytime === 'true';
+    }
+  },
+  {
+    id: 'polytime-model-counting',
+    name: 'Polytime Model Counting',
+    description: 'Languages that support model counting in polynomial time',
+    category: 'queries',
+    filterFn: (language: KCLanguage) => {
+      const ctQuery = language.properties.queries?.find(q => q.code === 'CT');
+      return ctQuery?.polytime === 'true';
+    }
+  },
+  {
+    id: 'polytime-conjunction',
+    name: 'Polytime Conjunction',
+    description: 'Languages that support conjunction in polynomial time',
+    category: 'transformations',
+    filterFn: (language: KCLanguage) => {
+      const conjTransform = language.properties.transformations?.find(t => t.code === '∧C');
+      return conjTransform?.polytime === 'true';
+    }
+  },
+  {
+    id: 'polytime-negation',
+    name: 'Polytime Negation',
+    description: 'Languages that support negation in polynomial time',
+    category: 'transformations',
+    filterFn: (language: KCLanguage) => {
+      const negTransform = language.properties.transformations?.find(t => t.code === '¬C');
+      return negTransform?.polytime === 'true';
+    }
+  },
+  {
+    id: 'has-decomposability',
+    name: 'Decomposability',
+    description: 'Languages with decomposability property',
+    category: 'properties',
+    filterFn: (language: KCLanguage) => {
+      return language.tags?.some(tag => tag.id === 'decomposability') ?? false;
+    }
+  },
+  {
+    id: 'has-determinism',
+    name: 'Determinism',
+    description: 'Languages with determinism property',
+    category: 'properties',
+    filterFn: (language: KCLanguage) => {
+      return language.tags?.some(tag => tag.id === 'determinism') ?? false;
+    }
+  },
+  {
+    id: 'decision-diagrams',
+    name: 'Decision Diagrams',
+    description: 'Languages in the decision diagram family',
+    category: 'properties',
+    filterFn: (language: KCLanguage) => {
+      return language.tags?.some(tag => tag.id === 'decision') ?? false;
+    }
+  }
+];
+
+// Function to organize filters by category
+export function organizeFiltersByCategory(filters: LanguageFilter[]): FilterCategory[] {
+  const categorizedFilters = filters.filter(f => f.category);
+  
+  const categoryMap = new Map<string, LanguageFilter[]>();
+  
+  categorizedFilters.forEach(filter => {
+    const categoryName = filter.category!;
+    if (!categoryMap.has(categoryName)) {
+      categoryMap.set(categoryName, []);
+    }
+    categoryMap.get(categoryName)!.push(filter);
+  });
+  
+  const categories: FilterCategory[] = Array.from(categoryMap.entries()).map(([name, filters]) => ({
+    name: name.charAt(0).toUpperCase() + name.slice(1), // Capitalize first letter
+    filters
+  }));
+  
+  return categories;
+}

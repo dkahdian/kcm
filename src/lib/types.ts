@@ -91,3 +91,22 @@ export interface GraphData {
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
 }
+
+// Filter system types
+export interface LanguageFilter {
+  id: string;
+  name: string;
+  description: string;
+  category?: string;
+  filterFn: (language: KCLanguage) => boolean;
+}
+
+export interface FilterCategory {
+  name: string;
+  filters: LanguageFilter[];
+}
+
+export interface FilteredGraphData extends GraphData {
+  visibleLanguageIds: Set<string>;
+  visibleRelations: KCRelation[];
+}

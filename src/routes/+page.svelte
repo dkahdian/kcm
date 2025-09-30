@@ -1,10 +1,24 @@
 <script lang="ts">
   import KCGraph from '$lib/KCGraph.svelte';
   import LanguageInfo from '$lib/LanguageInfo.svelte';
-  import { initialGraphData } from '$lib/data.js';
-  import type { KCLanguage } from '$lib/types.js';
+  import FilterDropdown from '$lib/FilterDropdown.svelte';
+  import { initialGraphData, predefinedFilters } from '$lib/data.js';
+  import { applyFilters } from '$lib/filter-utils.js';
+  import type { KCLanguage, LanguageFilter } from '$lib/types.js';
   
   let selectedNode: KCLanguage | null = null;
+  let selectedFilters: LanguageFilter[] = []; // Start with no filters
+  
+  // Compute filtered graph data reactively
+  $: filteredGraphData = applyFilters(initialGraphData, selectedFilters);
+  
+  // Reset selected node if it's no longer visible after filtering
+  $: if (selectedNode && selectedFilters.length > 0) {
+    const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.id);
+    if (!isVisible) {
+      selectedNode = null;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -15,13 +29,22 @@
 <div class="app-shell">
   <!-- Header -->
   <header class="app-header">
-    <h1 class="title">Knowledge Compilation Map</h1>
+    <div class="header-content">
+      <h1 class="title">Knowledge Compilation Map</h1>
+      <div class="header-controls">
+        <FilterDropdown 
+          filters={predefinedFilters} 
+          bind:selectedFilters 
+          class="filter-control"
+        />
+      </div>
+    </div>
   </header>
 
   <!-- Main Content -->
   <main class="app-main">
     <section class="graph-panel">
-      <KCGraph graphData={initialGraphData} bind:selectedNode />
+      <KCGraph graphData={filteredGraphData} bind:selectedNode />
     </section>
 
     <aside class="side-panel">
@@ -45,7 +68,26 @@
     border-bottom: 1px solid #e5e7eb;
     padding: 0.75rem 1rem;
   }
-  .title { margin: 0; font-size: 1.25rem; font-weight: 700; color: #111827; }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .title { 
+    margin: 0; 
+    font-size: 1.25rem; 
+    font-weight: 700; 
+    color: #111827; 
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
 
   .app-main {
     display: grid;

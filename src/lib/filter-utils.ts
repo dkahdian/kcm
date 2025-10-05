@@ -1,39 +1,38 @@
 import type { GraphData, LanguageFilter, FilteredGraphData, KCLanguage } from './types.js';
 
 /**
- * Applies a set of active filters to the graph data
- * A language is shown only if it satisfies ALL active filters
+ * Applies a set of active filters to the graph data.
+ * Each filter transforms a language or returns null to hide it.
+ * Filters are applied in sequence (composed/chained).
  */
 export function applyFilters(
   graphData: GraphData, 
   activeFilters: LanguageFilter[]
 ): FilteredGraphData {
-  // If no filters are active, show everything
-  if (activeFilters.length === 0) {
-    const allLanguageIds = new Set(graphData.languages.map(l => l.id));
-    return {
-      ...graphData,
-      visibleLanguageIds: allLanguageIds,
-      visibleRelations: graphData.relations
-    };
+  // Transform each language through the filter pipeline
+  const transformedLanguages: KCLanguage[] = [];
+  
+  for (const language of graphData.languages) {
+    let current: KCLanguage | null = language;
+    
+    // Apply each filter in sequence
+    for (const filter of activeFilters) {
+      if (current === null) break; // Already hidden by a previous filter
+      current = filter.lambda(current);
+    }
+    
+    // If language survived all filters, include it
+    if (current !== null) {
+      transformedLanguages.push(current);
+    }
   }
 
-  // Apply all filters - a language must satisfy ALL active filters
-  const visibleLanguages = graphData.languages.filter(language => {
-    return activeFilters.every(filter => filter.filterFn(language));
-  });
-
-  const visibleLanguageIds = new Set(visibleLanguages.map(l => l.id));
-
-  // Filter relations - only show edges between visible languages
-  const visibleRelations = graphData.relations.filter(relation => {
-    return visibleLanguageIds.has(relation.source) && visibleLanguageIds.has(relation.target);
-  });
+  const visibleLanguageIds = new Set(transformedLanguages.map(l => l.id));
 
   return {
     ...graphData,
-    visibleLanguageIds,
-    visibleRelations
+    languages: transformedLanguages,
+    visibleLanguageIds
   };
 }
 

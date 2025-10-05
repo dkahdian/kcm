@@ -60,7 +60,12 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 200, y: 100 }
+      position: { x: 200, y: 100 },
+      children: [
+        { id: 'nnf-dnnf', target: 'dnnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as DNNF' },
+        { id: 'nnf-dnf', target: 'dnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as DNF' },
+        { id: 'nnf-cnf', target: 'cnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as CNF' }
+      ]
     },
     {
       id: 'dnnf',
@@ -95,7 +100,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 50, y: 180 }
+      position: { x: 50, y: 180 },
+      children: [
+        { id: 'dnnf-d-dnnf', target: 'd-dnnf', typeId: 'succinctness', label: '≤', description: 'DNNF is at least as succinct as d-DNNF' }
+      ]
     },
     {
       id: 'd-nnf',
@@ -236,7 +244,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 125, y: 260 }
+      position: { x: 125, y: 260 },
+      children: [
+        { id: 'd-dnnf-fbdd', target: 'fbdd', typeId: 'succinctness', label: '≤', description: 'd-DNNF is at least as succinct as FBDD' }
+      ]
     },
     {
       id: 'sd-dnnf',
@@ -273,7 +284,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 275, y: 260 }
+      position: { x: 275, y: 260 },
+      children: [
+        { id: 'sd-dnnf-equiv-d-dnnf', target: 'd-dnnf', typeId: 'equivalence', label: '≡', description: 'sd-DNNF is equivalent to d-DNNF' }
+      ]
     },
     // Decision diagram family
     {
@@ -344,7 +358,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 575, y: 260 }
+      position: { x: 575, y: 260 },
+      children: [
+        { id: 'fbdd-obdd', target: 'obdd', typeId: 'succinctness', label: '≤', description: 'FBDD is at least as succinct as OBDD' }
+      ]
     },
     {
       id: 'obdd',
@@ -380,7 +397,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 725, y: 260 }
+      position: { x: 725, y: 260 },
+      children: [
+        { id: 'obdd-obdd-lt', target: 'obdd-lt', typeId: 'succinctness', label: '≤', description: 'OBDD is at least as succinct as OBDD<' }
+      ]
     },
     {
       id: 'obdd-lt',
@@ -416,7 +436,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 875, y: 260 }
+      position: { x: 875, y: 260 },
+      children: [
+        { id: 'obdd-lt-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'OBDD< is at least as succinct as MODS' }
+      ]
     },
     // Classical normal forms and other compiled forms
     {
@@ -454,7 +477,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 100, y: 300 }
+      position: { x: 100, y: 300 },
+      children: [
+        { id: 'dnf-ip', target: 'ip', typeId: 'succinctness', label: '≤', description: 'DNF is at least as succinct as IP' }
+      ]
     },
     {
       id: 'cnf',
@@ -491,7 +517,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 300, y: 300 }
+      position: { x: 300, y: 300 },
+      children: [
+        { id: 'cnf-pi', target: 'pi', typeId: 'succinctness', label: '≤', description: 'CNF is at least as succinct as PI' }
+      ]
     },
     {
       id: 'pi',
@@ -527,7 +556,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 500, y: 300 }
+      position: { x: 500, y: 300 },
+      children: [
+        { id: 'pi-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'PI is at least as succinct as MODS' }
+      ]
     },
     {
       id: 'ip',
@@ -563,7 +595,10 @@ export const initialGraphData: GraphData = {
       references: [
         { title: 'Knowledge Compilation Map (Darwiche & Marquis)', href: 'https://arxiv.org/pdf/1106.1819' }
       ],
-      position: { x: 650, y: 300 }
+      position: { x: 650, y: 300 },
+      children: [
+        { id: 'ip-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'IP is at least as succinct as MODS' }
+      ]
     },
     {
       id: 'mods',
@@ -600,27 +635,6 @@ export const initialGraphData: GraphData = {
       ],
       position: { x: 800, y: 300 }
     }
-  ],
-  // Per request, omit succinctness-based edges for now
-  relations: [
-    // Core succinctness cover relations (Hasse diagram) — transitive edges omitted
-    { id: 'nnf-dnnf', source: 'nnf', target: 'dnnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as DNNF' },
-    { id: 'dnnf-d-dnnf', source: 'dnnf', target: 'd-dnnf', typeId: 'succinctness', label: '≤', description: 'DNNF is at least as succinct as d-DNNF' },
-    { id: 'd-dnnf-fbdd', source: 'd-dnnf', target: 'fbdd', typeId: 'succinctness', label: '≤', description: 'd-DNNF is at least as succinct as FBDD' },
-    { id: 'fbdd-obdd', source: 'fbdd', target: 'obdd', typeId: 'succinctness', label: '≤', description: 'FBDD is at least as succinct as OBDD' },
-    { id: 'obdd-obdd-lt', source: 'obdd', target: 'obdd-lt', typeId: 'succinctness', label: '≤', description: 'OBDD is at least as succinct as OBDD<' },
-    { id: 'obdd-lt-mods', source: 'obdd-lt', target: 'mods', typeId: 'succinctness', label: '≤', description: 'OBDD< is at least as succinct as MODS' },
-
-    // Classical forms chain
-    { id: 'nnf-dnf', source: 'nnf', target: 'dnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as DNF' },
-    { id: 'nnf-cnf', source: 'nnf', target: 'cnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as CNF' },
-    { id: 'dnf-ip', source: 'dnf', target: 'ip', typeId: 'succinctness', label: '≤', description: 'DNF is at least as succinct as IP' },
-    { id: 'cnf-pi', source: 'cnf', target: 'pi', typeId: 'succinctness', label: '≤', description: 'CNF is at least as succinct as PI' },
-    { id: 'pi-mods', source: 'pi', target: 'mods', typeId: 'succinctness', label: '≤', description: 'PI is at least as succinct as MODS' },
-    { id: 'ip-mods', source: 'ip', target: 'mods', typeId: 'succinctness', label: '≤', description: 'IP is at least as succinct as MODS' },
-
-    // Equivalence
-    { id: 'sd-dnnf-equiv-d-dnnf', source: 'sd-dnnf', target: 'd-dnnf', typeId: 'equivalence', label: '≡', description: 'sd-DNNF is equivalent to d-DNNF' }
   ]
 };
 
@@ -631,9 +645,11 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Polytime Consistency',
     description: 'Languages that support consistency checking in polynomial time',
     category: 'queries',
-    filterFn: (language: KCLanguage) => {
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
       const coQuery = language.properties.queries?.find(q => q.code === 'CO');
-      return coQuery?.polytime === 'true';
+      return coQuery?.polytime === 'true' ? language : null;
     }
   },
   {
@@ -641,9 +657,11 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Polytime Validity',
     description: 'Languages that support validity checking in polynomial time',
     category: 'queries',
-    filterFn: (language: KCLanguage) => {
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
       const vaQuery = language.properties.queries?.find(q => q.code === 'VA');
-      return vaQuery?.polytime === 'true';
+      return vaQuery?.polytime === 'true' ? language : null;
     }
   },
   {
@@ -651,9 +669,11 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Polytime Model Counting',
     description: 'Languages that support model counting in polynomial time',
     category: 'queries',
-    filterFn: (language: KCLanguage) => {
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
       const ctQuery = language.properties.queries?.find(q => q.code === 'CT');
-      return ctQuery?.polytime === 'true';
+      return ctQuery?.polytime === 'true' ? language : null;
     }
   },
   {
@@ -661,9 +681,11 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Polytime Conjunction',
     description: 'Languages that support conjunction in polynomial time',
     category: 'transformations',
-    filterFn: (language: KCLanguage) => {
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
       const conjTransform = language.properties.transformations?.find(t => t.code === '∧C');
-      return conjTransform?.polytime === 'true';
+      return conjTransform?.polytime === 'true' ? language : null;
     }
   },
   {
@@ -671,9 +693,11 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Polytime Negation',
     description: 'Languages that support negation in polynomial time',
     category: 'transformations',
-    filterFn: (language: KCLanguage) => {
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
       const negTransform = language.properties.transformations?.find(t => t.code === '¬C');
-      return negTransform?.polytime === 'true';
+      return negTransform?.polytime === 'true' ? language : null;
     }
   },
   {
@@ -681,8 +705,10 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Decomposability',
     description: 'Languages with decomposability property',
     category: 'properties',
-    filterFn: (language: KCLanguage) => {
-      return language.tags?.some(tag => tag.id === 'decomposability') ?? false;
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
+      return (language.tags?.some(tag => tag.id === 'decomposability') ?? false) ? language : null;
     }
   },
   {
@@ -690,8 +716,10 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Determinism',
     description: 'Languages with determinism property',
     category: 'properties',
-    filterFn: (language: KCLanguage) => {
-      return language.tags?.some(tag => tag.id === 'determinism') ?? false;
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
+      return (language.tags?.some(tag => tag.id === 'determinism') ?? false) ? language : null;
     }
   },
   {
@@ -699,8 +727,10 @@ export const predefinedFilters: LanguageFilter[] = [
     name: 'Decision Diagrams',
     description: 'Languages in the decision diagram family',
     category: 'properties',
-    filterFn: (language: KCLanguage) => {
-      return language.tags?.some(tag => tag.id === 'decision') ?? false;
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: (language: KCLanguage) => {
+      return (language.tags?.some(tag => tag.id === 'decision') ?? false) ? language : null;
     }
   }
 ];

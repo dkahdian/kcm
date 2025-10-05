@@ -17,44 +17,67 @@
   function createGraph() {
     if (!graphContainer) return;
 
-    // Filter languages and relations if this is filtered graph data
+    // Filter languages if this is filtered graph data
     const isFilteredData = 'visibleLanguageIds' in graphData;
     const visibleLanguageIds = isFilteredData ? graphData.visibleLanguageIds : null;
-    const visibleRelations = isFilteredData ? graphData.visibleRelations : graphData.relations;
+    
+    const visibleLanguages = graphData.languages
+      .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
+
+    // Collect all edges from children arrays
+    const edges: cytoscape.ElementDefinition[] = [];
+    for (const lang of visibleLanguages) {
+      if (lang.children) {
+        for (const child of lang.children) {
+          // Only include edge if target is also visible
+          if (!isFilteredData || visibleLanguageIds!.has(child.target)) {
+            edges.push({
+              data: {
+                id: child.id,
+                source: lang.id,
+                target: child.target,
+                typeId: child.typeId,
+                description: child.description || ''
+              }
+            });
+          }
+        }
+      }
+    }
 
     const elements: cytoscape.ElementDefinition[] = [
-      ...graphData.languages
-        .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id))
-        .map((lang) => ({
-          data: {
-            id: lang.id,
-            label: lang.name,
-            fullName: lang.fullName,
-            description: lang.description,
-            properties: lang.properties
-          },
-          position: lang.position || { x: 0, y: 0 }
-        })),
-      ...visibleRelations.map((rel) => ({
+      ...visibleLanguages.map((lang) => ({
         data: {
-          id: rel.id,
-          source: rel.source,
-          target: rel.target,
-          typeId: rel.typeId,
-          description: rel.description || ''
-        }
-      }))
+          id: lang.id,
+          label: lang.name,
+          fullName: lang.fullName,
+          description: lang.description,
+          properties: lang.properties,
+          // Store visual overrides if present
+          bgColor: lang.visual?.backgroundColor,
+          borderColor: lang.visual?.borderColor,
+          borderWidth: lang.visual?.borderWidth,
+          labelPrefix: lang.visual?.labelPrefix || '',
+          labelSuffix: lang.visual?.labelSuffix || ''
+        },
+        position: lang.position || { x: 0, y: 0 }
+      })),
+      ...edges
     ];
 
   const baseStyles: any[] = [
       {
         selector: 'node',
         style: {
-          'background-color': '#ffffff',
-          'border-color': '#d1d5db',
-          'border-width': 2,
+          'background-color': (ele: any) => ele.data('bgColor') || '#ffffff',
+          'border-color': (ele: any) => ele.data('borderColor') || '#d1d5db',
+          'border-width': (ele: any) => ele.data('borderWidth') || 2,
           color: '#1f2937',
-          label: 'data(label)',
+          label: (ele: any) => {
+            const prefix = ele.data('labelPrefix') || '';
+            const suffix = ele.data('labelSuffix') || '';
+            return prefix + ele.data('label') + suffix;
+          },
           'text-valign': 'center',
           'text-halign': 'center',
           'font-size': '14px',

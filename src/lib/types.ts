@@ -3,6 +3,15 @@
 // flexible status for whether an operation is polytime
 export type PolytimeFlag = 'true' | 'false' | 'unknown';
 
+export interface VisualOverrides {
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  labelPrefix?: string;
+  labelSuffix?: string;
+  highlightLevel?: 'none' | 'subtle' | 'strong';
+}
+
 export interface KCOpEntry {
   /** short code, e.g., CO, VA, CE, IM, EQ, SU, CD, FO */
   code: string;
@@ -12,6 +21,10 @@ export interface KCOpEntry {
   polytime: PolytimeFlag;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
+  /** optional visual hint for highlighting this operation */
+  visualHint?: 'highlight' | 'dim' | 'normal';
+  /** optional color override for this operation's status indicator */
+  colorOverride?: string;
 }
 
 export interface KCLanguageProperties {
@@ -47,6 +60,10 @@ export interface KCLanguage {
   tags?: KCTag[];
   /** list of external references for this language */
   references?: KCReference[];
+  /** visual overrides applied by filters */
+  visual?: VisualOverrides;
+  /** outgoing edges (children) in the DAG */
+  children?: KCRelation[];
 }
 
 export interface KCRelationTypeStyle {
@@ -75,7 +92,7 @@ export interface KCRelationType {
 
 export interface KCRelation {
   id: string;
-  source: string;
+  /** target language id (source is implicit - the parent node) */
   target: string;
   /** relation type id that determines semantics and styling */
   typeId: string;
@@ -87,18 +104,24 @@ export interface KCRelation {
 
 export interface GraphData {
   languages: KCLanguage[];
-  relations: KCRelation[];
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
 }
 
 // Filter system types
+export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown';
+
 export interface LanguageFilter {
   id: string;
   name: string;
   description: string;
   category?: string;
-  filterFn: (language: KCLanguage) => boolean;
+  /** Whether this filter should be active by default (true) or inactive (false) */
+  activeByDefault?: boolean;
+  /** UI control type for displaying this filter */
+  controlType?: FilterControlType;
+  /** Filter function: return modified language to show it, or null to hide it */
+  lambda: (language: KCLanguage) => KCLanguage | null;
 }
 
 export interface FilterCategory {
@@ -108,5 +131,4 @@ export interface FilterCategory {
 
 export interface FilteredGraphData extends GraphData {
   visibleLanguageIds: Set<string>;
-  visibleRelations: KCRelation[];
 }

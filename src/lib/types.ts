@@ -132,3 +132,19 @@ export interface FilterCategory {
 export interface FilteredGraphData extends GraphData {
   visibleLanguageIds: Set<string>;
 }
+
+// TODO: Future enhancement - Filter Presets
+// Allow users to save and load filter combinations for quick access
+// This would be useful for commonly used filter sets
+/*
+export interface FilterPreset {
+  id: string;
+  name: string;
+  description: string;
+  filterIds: string[];  // IDs of filters to activate together
+}
+*/
+
+// Note: Filters are designed to be independent and commutative
+// i.e., f(g(language)) = g(f(language)) for any filters f and g
+// This property ensures filter order doesn't matter

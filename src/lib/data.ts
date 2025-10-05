@@ -638,73 +638,38 @@ export const initialGraphData: GraphData = {
   ]
 };
 
+// Helper function for visualization filters
+function createOperationVisualizer(
+  code: string,
+  type: 'query' | 'transformation'
+): (language: KCLanguage) => KCLanguage {
+  return (language: KCLanguage) => {
+    const operations = type === 'query' ? language.properties.queries : language.properties.transformations;
+    const operation = operations?.find(op => op.code === code);
+    if (!operation) return language;
+    
+    const colorMap = { 'true': '🟢', 'false': '🔴', 'unknown': '🟡' };
+    const icon = colorMap[operation.polytime];
+    const note = operation.note ? '*' : '';
+    const suffix = `\n${icon}${code}${note}`;
+    
+    return {
+      ...language,
+      visual: {
+        ...language.visual,
+        labelSuffix: (language.visual?.labelSuffix || '') + suffix
+      }
+    };
+  };
+}
+
 // Predefined filters
 export const predefinedFilters: LanguageFilter[] = [
-  {
-    id: 'polytime-consistency',
-    name: 'Polytime Consistency',
-    description: 'Languages that support consistency checking in polynomial time',
-    category: 'queries',
-    activeByDefault: false,
-    controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
-      const coQuery = language.properties.queries?.find(q => q.code === 'CO');
-      return coQuery?.polytime === 'true' ? language : null;
-    }
-  },
-  {
-    id: 'polytime-validity',
-    name: 'Polytime Validity',
-    description: 'Languages that support validity checking in polynomial time',
-    category: 'queries',
-    activeByDefault: false,
-    controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
-      const vaQuery = language.properties.queries?.find(q => q.code === 'VA');
-      return vaQuery?.polytime === 'true' ? language : null;
-    }
-  },
-  {
-    id: 'polytime-model-counting',
-    name: 'Polytime Model Counting',
-    description: 'Languages that support model counting in polynomial time',
-    category: 'queries',
-    activeByDefault: false,
-    controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
-      const ctQuery = language.properties.queries?.find(q => q.code === 'CT');
-      return ctQuery?.polytime === 'true' ? language : null;
-    }
-  },
-  {
-    id: 'polytime-conjunction',
-    name: 'Polytime Conjunction',
-    description: 'Languages that support conjunction in polynomial time',
-    category: 'transformations',
-    activeByDefault: false,
-    controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
-      const conjTransform = language.properties.transformations?.find(t => t.code === '∧C');
-      return conjTransform?.polytime === 'true' ? language : null;
-    }
-  },
-  {
-    id: 'polytime-negation',
-    name: 'Polytime Negation',
-    description: 'Languages that support negation in polynomial time',
-    category: 'transformations',
-    activeByDefault: false,
-    controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
-      const negTransform = language.properties.transformations?.find(t => t.code === '¬C');
-      return negTransform?.polytime === 'true' ? language : null;
-    }
-  },
   {
     id: 'has-decomposability',
     name: 'Decomposability',
     description: 'Languages with decomposability property',
-    category: 'properties',
+    category: 'filter by property',
     activeByDefault: false,
     controlType: 'checkbox',
     lambda: (language: KCLanguage) => {
@@ -715,7 +680,7 @@ export const predefinedFilters: LanguageFilter[] = [
     id: 'has-determinism',
     name: 'Determinism',
     description: 'Languages with determinism property',
-    category: 'properties',
+    category: 'filter by property',
     activeByDefault: false,
     controlType: 'checkbox',
     lambda: (language: KCLanguage) => {
@@ -726,12 +691,86 @@ export const predefinedFilters: LanguageFilter[] = [
     id: 'decision-diagrams',
     name: 'Decision Diagrams',
     description: 'Languages in the decision diagram family',
-    category: 'properties',
+    category: 'filter by property',
     activeByDefault: false,
     controlType: 'checkbox',
     lambda: (language: KCLanguage) => {
       return (language.tags?.some(tag => tag.id === 'decision') ?? false) ? language : null;
     }
+  },
+  // Visualization filters for queries
+  {
+    id: 'visualize-co',
+    name: 'Consistency (CO)',
+    description: 'Display Consistency (CO) status on nodes',
+    category: 'Visualize Queries',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('CO', 'query')
+  },
+  {
+    id: 'visualize-va',
+    name: 'Validity (VA)',
+    description: 'Display Validity (VA) status on nodes',
+    category: 'Visualize Queries',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('VA', 'query')
+  },
+  {
+    id: 'visualize-ce',
+    name: 'Clausal Entailment (CE)',
+    description: 'Display Clausal Entailment (CE) status on nodes',
+    category: 'Visualize Queries',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('CE', 'query')
+  },
+  {
+    id: 'visualize-ct',
+    name: 'Model Counting (CT)',
+    description: 'Display Model Counting (CT) status on nodes',
+    category: 'Visualize Queries',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('CT', 'query')
+  },
+  // Visualization filters for transformations
+  {
+    id: 'visualize-cd',
+    name: 'Conditioning (CD)',
+    description: 'Display Conditioning (CD) status on nodes',
+    category: 'Visualize Transformations',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('CD', 'transformation')
+  },
+  {
+    id: 'visualize-fo',
+    name: 'Forgetting (FO)',
+    description: 'Display Forgetting (FO) status on nodes',
+    category: 'Visualize Transformations',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('FO', 'transformation')
+  },
+  {
+    id: 'visualize-conjunction',
+    name: 'Conjunction (∧C)',
+    description: 'Display Conjunction (∧C) status on nodes',
+    category: 'Visualize Transformations',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('∧C', 'transformation')
+  },
+  {
+    id: 'visualize-negation',
+    name: 'Negation (¬C)',
+    description: 'Display Negation (¬C) status on nodes',
+    category: 'Visualize Transformations',
+    activeByDefault: false,
+    controlType: 'checkbox',
+    lambda: createOperationVisualizer('¬C', 'transformation')
   }
 ];
 
@@ -750,7 +789,7 @@ export function organizeFiltersByCategory(filters: LanguageFilter[]): FilterCate
   });
   
   const categories: FilterCategory[] = Array.from(categoryMap.entries()).map(([name, filters]) => ({
-    name: name.charAt(0).toUpperCase() + name.slice(1), // Capitalize first letter
+    name, // Use the original category name as-is
     filters
   }));
   

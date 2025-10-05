@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { LanguageFilter, FilterCategory } from './types.js';
-  import { organizeFiltersByCategory } from './data.js';
+  import { organizeFiltersByCategory } from './data/index.js';
 
   function getDisplayText(): string {
     if (selectedFilters.length === 0) {

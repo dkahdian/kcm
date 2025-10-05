@@ -2,7 +2,7 @@
   import KCGraph from '$lib/KCGraph.svelte';
   import LanguageInfo from '$lib/LanguageInfo.svelte';
   import FilterDropdown from '$lib/FilterDropdown.svelte';
-  import { initialGraphData, getAllFilters } from '$lib/data.js';
+  import { initialGraphData, getAllFilters } from '$lib/data/index.js';
   import { applyFilters } from '$lib/filter-utils.js';
   import type { KCLanguage, LanguageFilter } from '$lib/types.js';
   

@@ -5,38 +5,38 @@ export const obdd: KCLanguage = {
   name: 'OBDD',
   fullName: 'Ordered Binary Decision Diagram',
   description: 'BDD with a fixed variable ordering',
-  descriptionRefs: [0],
+  descriptionRefs: ['darwiche-2002'],
   properties: {
     queries: [
-      { code: 'CO', label: 'Consistency', polytime: 'true', refs: [0] },
-      { code: 'VA', label: 'Validity', polytime: 'true', refs: [0] },
-      { code: 'CE', label: 'Clausal Entailment', polytime: 'true', refs: [0] },
-      { code: 'IM', label: 'Implicant', polytime: 'true', refs: [0] },
-      { code: 'EQ', label: 'Equivalence', polytime: 'true', refs: [0] },
-      { code: 'SE', label: 'Sentential Entailment', polytime: 'true', refs: [0] },
-      { code: 'CT', label: 'Model Counting', polytime: 'true', refs: [0] },
-      { code: 'ME', label: 'Model Enumeration', polytime: 'true', refs: [0] }
+      { code: 'CO', label: 'Consistency', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'VA', label: 'Validity', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'CE', label: 'Clausal Entailment', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'IM', label: 'Implicant', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'EQ', label: 'Equivalence', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'SE', label: 'Sentential Entailment', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'CT', label: 'Model Counting', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'ME', label: 'Model Enumeration', polytime: 'true', refs: ['darwiche-2002'] }
     ],
     transformations: [
-      { code: 'CD', label: 'Conditioning', polytime: 'true', refs: [0] },
-      { code: 'FO', label: 'Forgetting', polytime: 'true', refs: [0] },
-      { code: 'SFO', label: 'Singleton Forgetting', polytime: 'true', refs: [0] },
-      { code: '∧C', label: 'Conjunction', polytime: 'true', refs: [0] },
-      { code: '∧BC', label: 'Bounded Conjunction', polytime: 'true', refs: [0] },
-      { code: '∨C', label: 'Disjunction', polytime: 'true', refs: [0] },
-      { code: '∨BC', label: 'Bounded Disjunction', polytime: 'true', refs: [0] },
-      { code: '¬C', label: 'Negation', polytime: 'true', refs: [0] }
+      { code: 'CD', label: 'Conditioning', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'FO', label: 'Forgetting', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: 'SFO', label: 'Singleton Forgetting', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: '∧C', label: 'Conjunction', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: '∧BC', label: 'Bounded Conjunction', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: '∨C', label: 'Disjunction', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: '∨BC', label: 'Bounded Disjunction', polytime: 'true', refs: ['darwiche-2002'] },
+      { code: '¬C', label: 'Negation', polytime: 'true', refs: ['darwiche-2002'] }
     ]
   },
   tags: [
-    { id: 'decision', label: 'Decision', color: '#f59e0b', refs: [0] },
-    { id: 'ordering', label: 'Ordering', color: '#22c55e', refs: [0] }
+    { id: 'decision', label: 'Decision', color: '#f59e0b', refs: ['darwiche-2002'] },
+    { id: 'ordering', label: 'Ordering', color: '#22c55e', refs: ['darwiche-2002'] }
   ],
   references: [
-    { title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
+    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
   ],
   position: { x: 725, y: 260 },
   children: [
-    { id: 'obdd-obdd-lt', target: 'obdd-lt', typeId: 'succinctness', label: '≤', description: 'OBDD is at least as succinct as OBDD<', refs: [0] }
+    { id: 'obdd-obdd-lt', target: 'obdd-lt', typeId: 'succinctness', label: '≤', description: 'OBDD is at least as succinct as OBDD<', refs: ['darwiche-2002'] }
   ]
 };

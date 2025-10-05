@@ -3,6 +3,8 @@
   
   let { selectedLanguage, graphData }: { selectedLanguage: KCLanguage | null, graphData: GraphData } = $props();
 
+  let referencesSection: HTMLElement | null = $state(null);
+
   const statusColor = (op: KCOpEntry) => {
     switch (op.polytime) {
       case 'true': return '#22c55e';
@@ -15,6 +17,18 @@
     const style = rt?.style?.lineStyle ?? 'solid';
     return style === 'dashed' ? '6,4' : style === 'dotted' ? '2,4' : '0';
   }
+
+  function scrollToReferences(e: MouseEvent) {
+    e.preventDefault();
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Helper to get the display number (1-based) for a reference ID
+  function getRefNumber(refId: string): number {
+    if (!selectedLanguage?.references) return 0;
+    const idx = selectedLanguage.references.findIndex(ref => ref.id === refId);
+    return idx >= 0 ? idx + 1 : 0;
+  }
 </script>
 
 <div class="content-wrapper">
@@ -24,7 +38,13 @@
         <h3 class="text-xl font-bold text-gray-900 mb-2">{selectedLanguage.name}</h3>
         <h4 class="text-sm text-gray-600 mb-4">{selectedLanguage.fullName}</h4>
         
-        <p class="text-gray-700 mb-6">{selectedLanguage.description}</p>
+        <p class="text-gray-700 mb-6">
+          {selectedLanguage.description}{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
+                class="ref-badge"
+                onclick={scrollToReferences}
+                title="View reference"
+              >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+        </p>
 
         {#if selectedLanguage.tags?.length}
           <div class="mb-4 flex flex-wrap gap-2">
@@ -32,6 +52,17 @@
               <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium" style={`background:${tag.color ?? '#e5e7eb'}20; color:${tag.color ?? '#374151'}; border:1px solid ${tag.color ?? '#e5e7eb'}`}
                 title={tag.description || ''}>
                 {tag.label}
+                {#if tag.refs?.length}
+                  {#each tag.refs as refId}
+                    <button 
+                      class="ref-badge inline"
+                      onclick={scrollToReferences}
+                      title="View reference"
+                    >[{getRefNumber(refId)}]</button>
+                  {/each}
+                {:else}
+                  <span class="missing-ref inline" title="Missing reference">[missing ref]</span>
+                {/if}
               </span>
             {/each}
           </div>
@@ -45,7 +76,13 @@
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
                   <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(q)}`}></span>
                   <div class="text-sm leading-5">
-                    <div><strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''}</div>
+                    <div>
+                      <strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''}{#if q.refs?.length}{#each q.refs as refId}<button 
+                            class="ref-badge"
+                            onclick={scrollToReferences}
+                            title="View reference"
+                          >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                    </div>
                     {#if q.note}
                       <div class="text-xs text-gray-500">{q.note}</div>
                     {/if}
@@ -62,7 +99,13 @@
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
                   <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(t)}`}></span>
                   <div class="text-sm leading-5">
-                    <div><strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''}</div>
+                    <div>
+                      <strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''}{#if t.refs?.length}{#each t.refs as refId}<button 
+                            class="ref-badge"
+                            onclick={scrollToReferences}
+                            title="View reference"
+                          >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                    </div>
                     {#if t.note}
                       <div class="text-xs text-gray-500">{t.note}</div>
                     {/if}
@@ -73,18 +116,21 @@
           </div>
         </div>
         
-        <div class="mt-4 pt-4 border-t border-gray-200">
+        <div class="mt-4 pt-4 border-t border-gray-200" bind:this={referencesSection}>
           {#if selectedLanguage.references?.length}
             <div class="mb-2">
-              <h6 class="text-xs font-semibold text-gray-700 mb-1">References</h6>
-              <ul class="list-disc pl-4 space-y-1">
-                {#each selectedLanguage.references as ref}
-                  <li class="text-xs"><a class="underline text-blue-700" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a></li>
+              <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
+              <ol class="space-y-2">
+                {#each selectedLanguage.references as ref, idx}
+                  <li class="text-xs text-gray-700 flex">
+                    <span class="font-semibold mr-1.5 text-gray-900">[{idx + 1}]</span>
+                    <a class="underline text-blue-600 hover:text-blue-800" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
+                  </li>
                 {/each}
-              </ul>
+              </ol>
             </div>
           {/if}
-          <p class="text-xs text-gray-500">Click on other nodes to explore different knowledge compilation languages.</p>
+          <p class="text-xs text-gray-500 mt-3">Click on other nodes to explore different knowledge compilation languages.</p>
         </div>
       </div>
     {:else}
@@ -167,6 +213,50 @@
       border-radius: 0.5rem;
       padding: 1rem;
       margin-bottom: 1rem;
+    }
+
+    .ref-badge {
+      display: inline;
+      font-size: 0.7em;
+      vertical-align: super;
+      line-height: 0;
+      color: #2563eb;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0 0.1em;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    
+    .ref-badge:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    .ref-badge.inline {
+      margin-left: 0.25em;
+    }
+
+    .missing-ref {
+      display: inline;
+      font-size: 0.65em;
+      vertical-align: super;
+      line-height: 0;
+      color: #dc2626;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0.25rem;
+      padding: 0.1em 0.3em;
+      margin: 0 0.2em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .missing-ref.inline {
+      margin-left: 0.25em;
     }
     
     .legend {

@@ -663,6 +663,22 @@ function createOperationVisualizer(
   };
 }
 
+// Helper function to generate individual language selection filters
+function generateLanguageSelectionFilters(graphData: GraphData): LanguageFilter[] {
+  return graphData.languages.map(lang => ({
+    id: `select-${lang.id}`,
+    name: lang.name,
+    description: `Hide ${lang.fullName}`,
+    category: 'Hide Any Language',
+    activeByDefault: false, // All languages visible by default
+    controlType: 'checkbox' as const,
+    lambda: (language: KCLanguage) => {
+      // Only hide the language if it matches this filter's target
+      return language.id !== lang.id ? language : null;
+    }
+  }));
+}
+
 // Predefined filters
 export const predefinedFilters: LanguageFilter[] = [
   {
@@ -773,6 +789,12 @@ export const predefinedFilters: LanguageFilter[] = [
     lambda: createOperationVisualizer('¬C', 'transformation')
   }
 ];
+
+// Function to get all filters including dynamically generated language selection filters
+export function getAllFilters(): LanguageFilter[] {
+  const languageSelectionFilters = generateLanguageSelectionFilters(initialGraphData);
+  return [...predefinedFilters, ...languageSelectionFilters];
+}
 
 // Function to organize filters by category
 export function organizeFiltersByCategory(filters: LanguageFilter[]): FilterCategory[] {

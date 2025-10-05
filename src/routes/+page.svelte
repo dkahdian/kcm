@@ -2,12 +2,15 @@
   import KCGraph from '$lib/KCGraph.svelte';
   import LanguageInfo from '$lib/LanguageInfo.svelte';
   import FilterDropdown from '$lib/FilterDropdown.svelte';
-  import { initialGraphData, predefinedFilters } from '$lib/data.js';
+  import { initialGraphData, getAllFilters } from '$lib/data.js';
   import { applyFilters } from '$lib/filter-utils.js';
   import type { KCLanguage, LanguageFilter } from '$lib/types.js';
   
+  const allFilters = getAllFilters();
+  
   let selectedNode: KCLanguage | null = null;
-  let selectedFilters: LanguageFilter[] = []; // Start with no filters
+  // Initialize with filters that are active by default
+  let selectedFilters: LanguageFilter[] = allFilters.filter(f => f.activeByDefault);
   
   // Compute filtered graph data reactively
   $: filteredGraphData = applyFilters(initialGraphData, selectedFilters);
@@ -33,7 +36,7 @@
       <h1 class="title">Knowledge Compilation Map</h1>
       <div class="header-controls">
         <FilterDropdown 
-          filters={predefinedFilters} 
+          filters={allFilters} 
           bind:selectedFilters 
           class="filter-control"
         />

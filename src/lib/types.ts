@@ -25,6 +25,8 @@ export interface KCOpEntry {
   visualHint?: 'highlight' | 'dim' | 'normal';
   /** optional color override for this operation's status indicator */
   colorOverride?: string;
+  /** reference indices into the language's references array (0-based, displayed as 1-based) */
+  refs: number[];
 }
 
 export interface KCLanguageProperties {
@@ -39,6 +41,8 @@ export interface KCTag {
   label: string;
   color?: string; // CSS color for badge
   description?: string;
+  /** reference indices into the language's references array (0-based, displayed as 1-based) */
+  refs: number[];
 }
 
 export interface KCReference {
@@ -51,6 +55,8 @@ export interface KCLanguage {
   name: string;
   fullName: string;
   description: string;
+  /** reference indices for the main description (0-based, displayed as 1-based) */
+  descriptionRefs: number[];
   properties: KCLanguageProperties;
   /** optional manual positioning for static layouts */
   position?: { x: number; y: number };
@@ -59,7 +65,7 @@ export interface KCLanguage {
   /** badges/tags for quick categorization */
   tags?: KCTag[];
   /** list of external references for this language */
-  references?: KCReference[];
+  references: KCReference[];
   /** visual overrides applied by filters */
   visual?: VisualOverrides;
   /** outgoing edges (children) in the DAG */
@@ -100,6 +106,8 @@ export interface KCRelation {
   label?: string;
   /** optional per-edge description */
   description?: string;
+  /** reference indices into the parent language's references array (0-based, displayed as 1-based) */
+  refs: number[];
 }
 
 export interface GraphData {

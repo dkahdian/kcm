@@ -159,12 +159,32 @@
       const node = evt.target;
       const id = node.id();
       const language = graphData.languages.find((l) => l.id === id);
-      if (language) selectedNode = language;
+      if (language) {
+        // Reset all other nodes to base state before selecting new node
+        cy.nodes().forEach(n => {
+          if (n.id() !== id) {
+            n.style({
+              'border-color': '#d1d5db',
+              'border-width': 2,
+              'background-color': '#ffffff'
+            });
+          }
+        });
+        selectedNode = language;
+      }
     });
 
     cy.on('tap', (evt) => {
       if (evt.target === cy) {
         selectedNode = null;
+        // Reset all node styles to base state when deselecting
+        cy.nodes().forEach(node => {
+          node.style({
+            'border-color': '#d1d5db',
+            'border-width': 2,
+            'background-color': '#ffffff'
+          });
+        });
         cy.elements().unselect();
       }
     });

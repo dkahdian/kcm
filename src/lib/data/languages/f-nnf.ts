@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const fNnf: KCLanguage = {
   id: 'f-nnf',
@@ -31,8 +32,6 @@ export const fNnf: KCLanguage = {
   tags: [
     { id: 'flatness', label: 'Flatness', color: '#7c3aed', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 500, y: 180 }
 };

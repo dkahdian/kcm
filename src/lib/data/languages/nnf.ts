@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const nnf: KCLanguage = {
   id: 'nnf',
@@ -32,9 +33,7 @@ export const nnf: KCLanguage = {
     { id: 'normal-form', label: 'Normal Form', color: '#6366f1', refs: ['darwiche-2002'] },
     { id: 'general', label: 'General', color: '#10b981', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 200, y: 100 },
   children: [
     { id: 'nnf-dnnf', target: 'dnnf', typeId: 'succinctness', label: '≤', description: 'NNF is at least as succinct as DNNF', refs: ['darwiche-2002'] },

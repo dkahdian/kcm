@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const obddLt: KCLanguage = {
   id: 'obdd-lt',
@@ -32,9 +33,7 @@ export const obddLt: KCLanguage = {
     { id: 'decision', label: 'Decision', color: '#f59e0b', refs: ['darwiche-2002'] },
     { id: 'ordering', label: 'Ordering', color: '#22c55e', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 875, y: 260 },
   children: [
     { id: 'obdd-lt-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'OBDD< is at least as succinct as MODS', refs: ['darwiche-2002'] }

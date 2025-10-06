@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const sdDnnf: KCLanguage = {
   id: 'sd-dnnf',
@@ -33,9 +34,7 @@ export const sdDnnf: KCLanguage = {
     { id: 'determinism', label: 'Determinism', color: '#ef4444', refs: ['darwiche-2002'] },
     { id: 'smoothness', label: 'Smoothness', color: '#06b6d4', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 275, y: 260 },
   children: [
     { id: 'sd-dnnf-equiv-d-dnnf', target: 'd-dnnf', typeId: 'equivalence', label: '≡', description: 'sd-DNNF is equivalent to d-DNNF', refs: ['darwiche-2002'] }

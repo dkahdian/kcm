@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const ip: KCLanguage = {
   id: 'ip',
@@ -32,9 +33,7 @@ export const ip: KCLanguage = {
     { id: 'prime-implicants', label: 'Prime Implicants', color: '#3b82f6', refs: ['darwiche-2002'] },
     { id: 'simple-conjunction', label: 'Simple Conjunction', color: '#14b8a6', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 650, y: 300 },
   children: [
     { id: 'ip-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'IP is at least as succinct as MODS', refs: ['darwiche-2002'] }

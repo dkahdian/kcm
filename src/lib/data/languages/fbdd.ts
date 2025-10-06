@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const fbdd: KCLanguage = {
   id: 'fbdd',
@@ -31,9 +32,7 @@ export const fbdd: KCLanguage = {
   tags: [
     { id: 'decision', label: 'Decision', color: '#f59e0b', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 575, y: 260 },
   children: [
     { id: 'fbdd-obdd', target: 'obdd', typeId: 'succinctness', label: '≤', description: 'FBDD is at least as succinct as OBDD', refs: ['darwiche-2002'] }

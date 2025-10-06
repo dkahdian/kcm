@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const dDnnf: KCLanguage = {
   id: 'd-dnnf',
@@ -32,9 +33,7 @@ export const dDnnf: KCLanguage = {
     { id: 'decomposability', label: 'Decomposability', color: '#84cc16', refs: ['darwiche-2002'] },
     { id: 'determinism', label: 'Determinism', color: '#ef4444', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 125, y: 260 },
   children: [
     { id: 'd-dnnf-fbdd', target: 'fbdd', typeId: 'succinctness', label: '≤', description: 'd-DNNF is at least as succinct as FBDD', refs: ['darwiche-2002'] }

@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const dNnf: KCLanguage = {
   id: 'd-nnf',
@@ -31,8 +32,6 @@ export const dNnf: KCLanguage = {
   tags: [
     { id: 'determinism', label: 'Determinism', color: '#ef4444', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 200, y: 180 }
 };

@@ -4,6 +4,7 @@
   let { selectedLanguage, graphData }: { selectedLanguage: KCLanguage | null, graphData: GraphData } = $props();
 
   let referencesSection: HTMLElement | null = $state(null);
+  let copiedRefId: string | null = $state(null);
 
   const statusColor = (op: KCOpEntry) => {
     switch (op.polytime) {
@@ -28,6 +29,20 @@
     if (!selectedLanguage?.references) return 0;
     const idx = selectedLanguage.references.findIndex(ref => ref.id === refId);
     return idx >= 0 ? idx + 1 : 0;
+  }
+
+  // Copy BibTeX to clipboard
+  async function copyBibtex(bibtex: string, refId: string) {
+    try {
+      await navigator.clipboard.writeText(bibtex);
+      copiedRefId = refId;
+      // Reset after 2 seconds
+      setTimeout(() => {
+        copiedRefId = null;
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy BibTeX:', err);
+    }
   }
 </script>
 
@@ -120,11 +135,25 @@
           {#if selectedLanguage.references?.length}
             <div class="mb-2">
               <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
-              <ol class="space-y-2">
+                            <ol class="space-y-2">
                 {#each selectedLanguage.references as ref, idx}
-                  <li class="text-xs text-gray-700 flex">
-                    <span class="font-semibold mr-1.5 text-gray-900">[{idx + 1}]</span>
-                    <a class="underline text-blue-600 hover:text-blue-800" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
+                  <li class="text-xs text-gray-700">
+                    <div class="flex items-start gap-1.5">
+                      <span class="font-semibold text-gray-900">[{idx + 1}]</span>
+                      <div class="flex-1 min-w-0">
+                        <a class="underline text-blue-600 hover:text-blue-800 break-words" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
+                        <button
+                          class="font-medium cursor-pointer ml-2 transition-colors"
+                          class:text-green-600={copiedRefId !== ref.id}
+                          class:hover:text-green-800={copiedRefId !== ref.id}
+                          class:text-green-700={copiedRefId === ref.id}
+                          onclick={() => copyBibtex(ref.bibtex, ref.id)}
+                          title="Copy BibTeX citation"
+                        >
+                          {copiedRefId === ref.id ? '[✓ copied]' : '[copy bibtex]'}
+                        </button>
+                      </div>
+                    </div>
                   </li>
                 {/each}
               </ol>

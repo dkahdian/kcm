@@ -49,6 +49,7 @@ export interface KCReference {
   id: string;
   title: string;
   href: string;
+  bibtex: string;
 }
 
 export interface KCLanguage {

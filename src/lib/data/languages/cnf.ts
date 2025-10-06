@@ -1,4 +1,5 @@
 import type { KCLanguage } from '../../types.js';
+import { getReferences } from '../references.js';
 
 export const cnf: KCLanguage = {
   id: 'cnf',
@@ -33,9 +34,7 @@ export const cnf: KCLanguage = {
     { id: 'flatness', label: 'Flatness', color: '#7c3aed', refs: ['darwiche-2002'] },
     { id: 'simple-disjunction', label: 'Simple Disjunction', color: '#0ea5e9', refs: ['darwiche-2002'] }
   ],
-  references: [
-    { id: 'darwiche-2002', title: 'Knowledge Compilation Map (Darwiche & Marquis, 2002)', href: 'https://arxiv.org/pdf/1106.1819' }
-  ],
+  references: getReferences('darwiche-2002'),
   position: { x: 300, y: 300 },
   children: [
     { id: 'cnf-pi', target: 'pi', typeId: 'succinctness', label: '≤', description: 'CNF is at least as succinct as PI', refs: ['darwiche-2002'] }

@@ -48,7 +48,7 @@ export function generateLanguageSelectionFilters(graphData: GraphData): Language
     id: `select-${lang.id}`,
     name: lang.name,
     description: `Show ${lang.fullName}`,
-    category: 'Show/Hide Languages',
+    category: 'Show Languages',
     defaultParam: true, // All languages visible by default
     controlType: 'checkbox' as const,
     lambda: (language: KCLanguage, param: boolean) => {

@@ -26,17 +26,19 @@ export const QUERIES: Record<string, KCOperation> = {
 };
 
 /**
- * All possible transformation operations
+ * All possible transformation operations.
+ * Note: Keys use safe identifiers (AND_C, OR_C, etc.) to avoid quoting special characters,
+ * but the 'code' field contains the actual display symbol (∧C, ∨C, etc.)
  */
 export const TRANSFORMATIONS: Record<string, KCOperation> = {
   CD: { code: 'CD', label: 'Conditioning', description: 'Restrict formula given variable assignments' },
   FO: { code: 'FO', label: 'Forgetting', description: 'Existentially quantify out variables' },
   SFO: { code: 'SFO', label: 'Singleton Forgetting', description: 'Forget a single variable' },
-  '∧C': { code: '∧C', label: 'Conjunction', description: 'Compute conjunction of formulas' },
-  '∧BC': { code: '∧BC', label: 'Bounded Conjunction', description: 'Conjunction with bounded result size' },
-  '∨C': { code: '∨C', label: 'Disjunction', description: 'Compute disjunction of formulas' },
-  '∨BC': { code: '∨BC', label: 'Bounded Disjunction', description: 'Disjunction with bounded result size' },
-  '¬C': { code: '¬C', label: 'Negation', description: 'Negate the formula' }
+  AND_C: { code: '∧C', label: 'Conjunction', description: 'Compute conjunction of formulas' },
+  AND_BC: { code: '∧BC', label: 'Bounded Conjunction', description: 'Conjunction with bounded result size' },
+  OR_C: { code: '∨C', label: 'Disjunction', description: 'Compute disjunction of formulas' },
+  OR_BC: { code: '∨BC', label: 'Bounded Disjunction', description: 'Disjunction with bounded result size' },
+  NOT_C: { code: '¬C', label: 'Negation', description: 'Negate the formula' }
 };
 
 /**
@@ -56,6 +58,7 @@ export function getAllTransformationCodes(): string[] {
 /**
  * Resolve operation support map into full operation entries.
  * For operations not specified in the support map, they are marked as 'open' (open problem).
+ * Supports both safe keys (AND_C) and display codes (∧C) for lookup.
  */
 export function resolveOperations(
   supportMap: KCOpSupportMap | undefined,
@@ -63,8 +66,9 @@ export function resolveOperations(
 ): KCOpEntry[] {
   const result: KCOpEntry[] = [];
   
-  for (const [code, opDef] of Object.entries(operationDefs)) {
-    const support = supportMap?.[code];
+  for (const [safeKey, opDef] of Object.entries(operationDefs)) {
+    // Try lookup by safe key first (AND_C), then by display code (∧C)
+    const support = supportMap?.[safeKey] || supportMap?.[opDef.code];
     
     if (support) {
       // Operation explicitly specified

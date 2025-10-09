@@ -22,11 +22,11 @@ export const fbdd: KCLanguage = {
       CD: { polytime: 'true', refs: ['darwiche-2002'] },
       FO: { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
       SFO: { polytime: 'true', refs: ['darwiche-2002'] },
-      '∧C': { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
-      '∧BC': { polytime: 'true', refs: ['darwiche-2002'] },
-      '∨C': { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
-      '∨BC': { polytime: 'true', refs: ['darwiche-2002'] },
-      '¬C': { polytime: 'true', refs: ['darwiche-2002'] }
+      AND_C: { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
+      AND_BC: { polytime: 'true', refs: ['darwiche-2002'] },
+      OR_C: { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
+      OR_BC: { polytime: 'true', refs: ['darwiche-2002'] },
+      NOT_C: { polytime: 'true', refs: ['darwiche-2002'] }
     }
   },
   tags: [

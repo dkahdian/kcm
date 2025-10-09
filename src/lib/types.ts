@@ -12,11 +12,28 @@ export interface VisualOverrides {
   highlightLevel?: 'none' | 'subtle' | 'strong';
 }
 
+/**
+ * Language-specific support information for an operation.
+ * The operation code and label come from the canonical operations definition.
+ */
+export interface KCOpSupport {
+  /** whether operation is known polynomial-time */
+  polytime: PolytimeFlag;
+  /** optional explanatory note, e.g., "Unless P=NP" */
+  note?: string;
+  /** reference IDs pointing to entries in the language's references array */
+  refs: string[];
+}
+
+/**
+ * Full operation entry with all metadata, used for rendering.
+ * Combines canonical operation info with language-specific support info.
+ */
 export interface KCOpEntry {
   /** short code, e.g., CO, VA, CE, IM, EQ, SU, CD, FO */
   code: string;
   /** human-friendly label, e.g., "Consistency" */
-  label?: string;
+  label: string;
   /** whether operation is known polynomial-time */
   polytime: PolytimeFlag;
   /** optional explanatory note, e.g., "Unless P=NP" */
@@ -29,11 +46,28 @@ export interface KCOpEntry {
   refs: string[];
 }
 
+/**
+ * Language-specific operation support, keyed by operation code.
+ */
+export interface KCOpSupportMap {
+  [opCode: string]: KCOpSupport;
+}
+
 export interface KCLanguageProperties {
+  /** map of query operation codes to their support info */
+  queries?: KCOpSupportMap;
+  /** map of transformation operation codes to their support info */
+  transformations?: KCOpSupportMap;
+}
+
+/**
+ * Resolved language properties with full operation entries for rendering.
+ */
+export interface KCLanguagePropertiesResolved {
   /** list of query operations for this language */
-  queries?: KCOpEntry[];
+  queries: KCOpEntry[];
   /** list of transformation operations for this language */
-  transformations?: KCOpEntry[];
+  transformations: KCOpEntry[];
 }
 
 export interface KCTag {
@@ -120,24 +154,40 @@ export interface GraphData {
 
 // Filter system types
 export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown';
+export type FilterParamValue = boolean | string | number;
 
-export interface LanguageFilter {
+export interface LanguageFilter<T extends FilterParamValue = boolean> {
   id: string;
   name: string;
   description: string;
   category?: string;
-  /** Whether this filter should be active by default (true) or inactive (false) */
-  activeByDefault?: boolean;
+  /** Whether this filter is internal/hidden from UI or can be edited by the user */
+  hidden?: boolean;
+  /** Default value for the filter parameter */
+  defaultParam: T;
   /** UI control type for displaying this filter */
   controlType?: FilterControlType;
-  /** Filter function: return modified language to show it, or null to hide it */
-  lambda: (language: KCLanguage) => KCLanguage | null;
+  /** Filter function: takes language and parameter value, returns modified language to show it, or null to hide it */
+  lambda: (language: KCLanguage, param: T) => KCLanguage | null;
 }
 
 export interface FilterCategory {
   name: string;
   filters: LanguageFilter[];
 }
+
+/**
+ * State for a single filter, including its current parameter value
+ */
+export interface FilterState<T extends FilterParamValue = FilterParamValue> {
+  filterId: string;
+  param: T;
+}
+
+/**
+ * Map of filter IDs to their current parameter values
+ */
+export type FilterStateMap = Map<string, FilterParamValue>;
 
 export interface FilteredGraphData extends GraphData {
   visibleLanguageIds: Set<string>;

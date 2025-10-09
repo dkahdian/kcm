@@ -3,20 +3,20 @@
   import LanguageInfo from '$lib/LanguageInfo.svelte';
   import FilterDropdown from '$lib/FilterDropdown.svelte';
   import { initialGraphData, getAllFilters } from '$lib/data/index.js';
-  import { applyFilters } from '$lib/filter-utils.js';
-  import type { KCLanguage, LanguageFilter } from '$lib/types.js';
+  import { applyFiltersWithParams, createDefaultFilterState } from '$lib/filter-utils.js';
+  import type { KCLanguage, FilterStateMap } from '$lib/types.js';
   
   const allFilters = getAllFilters();
   
   let selectedNode: KCLanguage | null = null;
-  // Initialize with filters that are active by default
-  let selectedFilters: LanguageFilter[] = allFilters.filter(f => f.activeByDefault);
+  // Initialize filter state with default parameter values
+  let filterStates: FilterStateMap = createDefaultFilterState(allFilters);
   
   // Compute filtered graph data reactively
-  $: filteredGraphData = applyFilters(initialGraphData, selectedFilters);
+  $: filteredGraphData = applyFiltersWithParams(initialGraphData, allFilters, filterStates);
   
   // Reset selected node if it's no longer visible after filtering
-  $: if (selectedNode && selectedFilters.length > 0) {
+  $: if (selectedNode) {
     const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.id);
     if (!isVisible) {
       selectedNode = null;
@@ -37,7 +37,7 @@
       <div class="header-controls">
         <FilterDropdown 
           filters={allFilters} 
-          bind:selectedFilters 
+          bind:filterStates 
           class="filter-control"
         />
       </div>

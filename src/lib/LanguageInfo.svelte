@@ -1,7 +1,18 @@
 <script lang="ts">
-  import type { KCLanguage, KCOpEntry, GraphData } from './types.js';
+  import type { KCLanguage, KCOpEntry, GraphData, KCLanguagePropertiesResolved } from './types.js';
+  import { resolveLanguageProperties } from './data/operations.js';
   
   let { selectedLanguage, graphData }: { selectedLanguage: KCLanguage | null, graphData: GraphData } = $props();
+  
+  // Resolve the properties to get full operation entries
+  // Note: If the fill-unknown-operations filter is active, properties will already be resolved,
+  // but we resolve again here for safety in case selectedLanguage comes from unfiltered data
+  let resolvedProperties: KCLanguagePropertiesResolved | null = $derived(
+    selectedLanguage ? resolveLanguageProperties(
+      selectedLanguage.properties.queries,
+      selectedLanguage.properties.transformations
+    ) : null
+  );
 
   let referencesSection: HTMLElement | null = $state(null);
   let copiedRefId: string | null = $state(null);
@@ -87,7 +98,7 @@
           <div>
             <h5 class="font-semibold text-gray-900 mb-2">Queries</h5>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              {#each selectedLanguage.properties.queries ?? [] as q}
+              {#each resolvedProperties?.queries ?? [] as q}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
                   <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(q)}`}></span>
                   <div class="text-sm leading-5">
@@ -110,7 +121,7 @@
           <div>
             <h5 class="font-semibold text-gray-900 mb-2">Transformations</h5>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              {#each selectedLanguage.properties.transformations ?? [] as t}
+              {#each resolvedProperties?.transformations ?? [] as t}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
                   <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(t)}`}></span>
                   <div class="text-sm leading-5">

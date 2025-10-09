@@ -1,61 +1,82 @@
 <script lang="ts">
-  import type { LanguageFilter, FilterCategory } from './types.js';
+  import type { LanguageFilter, FilterCategory, FilterStateMap } from './types.js';
   import { organizeFiltersByCategory } from './data/index.js';
+  import { createDefaultFilterState } from './filter-utils.js';
 
   function getDisplayText(): string {
-    if (selectedFilters.length === 0) {
-      return 'No Filters';
+    const activeCount = countActiveFilters();
+    
+    if (activeCount === 0) {
+      return 'No Active Filters';
     }
     
-    if (selectedFilters.length === 1) {
-      return selectedFilters[0].name;
+    if (activeCount === 1) {
+      // Find the single active filter
+      const activeFilter = visibleFilters.find(f => {
+        const param = filterStates.get(f.id) ?? f.defaultParam;
+        return isFilterActive(f, param);
+      });
+      return activeFilter ? activeFilter.name : '1 filter active';
     }
     
-    return `${selectedFilters.length} filters active`;
+    return `${activeCount} filters active`;
+  }
+  
+  function countActiveFilters(): number {
+    return visibleFilters.filter(f => {
+      const param = filterStates.get(f.id) ?? f.defaultParam;
+      return isFilterActive(f, param);
+    }).length;
+  }
+  
+  function isFilterActive(filter: LanguageFilter, param: any): boolean {
+    // For boolean parameters, true means active
+    if (typeof param === 'boolean') {
+      return param !== filter.defaultParam;
+    }
+    // For other types, any non-default value means active
+    return param !== filter.defaultParam;
   }
 
   let { 
     filters, 
-    selectedFilters = $bindable(), 
+    filterStates = $bindable(), 
     class: className = '' 
   }: {
     filters: LanguageFilter[];
-    selectedFilters: LanguageFilter[];
+    filterStates: FilterStateMap;
     class?: string;
   } = $props();
   
+  // Filter out hidden filters from UI
+  const visibleFilters = $derived(filters.filter(f => !f.hidden));
+  
   // Organize filters by category
-  const categories = $derived(organizeFiltersByCategory(filters));
+  const categories = $derived(organizeFiltersByCategory(visibleFilters));
 
   let isOpen = $state(false);
   let dropdownRef: HTMLDivElement;
 
   function resetAllFilters() {
-    // Reset to filters that are active by default
-    selectedFilters = filters.filter(f => f.activeByDefault);
+    // Reset all filters to their default parameters
+    filterStates = createDefaultFilterState(filters);
   }
 
   function toggleFilter(filter: LanguageFilter) {
-    // Special handling for "Reset Filters" - clear all filters
-    if (filter.id === 'all') {
-      resetAllFilters();
-      return;
-    }
-
-    const existingIndex = selectedFilters.findIndex(f => f.id === filter.id);
-    if (existingIndex >= 0) {
-      // Remove if already selected
-      const newFilters = [...selectedFilters];
-      newFilters.splice(existingIndex, 1);
-      selectedFilters = newFilters;
-    } else {
-      // Add if not selected
-      selectedFilters = [...selectedFilters, filter];
+    const currentParam = filterStates.get(filter.id) ?? filter.defaultParam;
+    
+    // For boolean filters, toggle the value
+    if (typeof currentParam === 'boolean') {
+      const newStates = new Map(filterStates);
+      newStates.set(filter.id, !currentParam);
+      filterStates = newStates;
     }
   }
 
-  function isFilterSelected(filter: LanguageFilter): boolean {
-    return selectedFilters.some(f => f.id === filter.id);
+  function isFilterChecked(filter: LanguageFilter): boolean {
+    const param = filterStates.get(filter.id) ?? filter.defaultParam;
+    // For boolean params, checked means true
+    return param === true;
   }
 
 
@@ -122,17 +143,17 @@
             {#each category.filters as filter}
               <label
                 class="dropdown-item"
-                class:selected={isFilterSelected(filter)}
+                class:selected={isFilterChecked(filter)}
                 title={filter.description}
               >
                 <input
                   type="checkbox"
-                  checked={isFilterSelected(filter)}
+                  checked={isFilterChecked(filter)}
                   onchange={() => toggleFilter(filter)}
                   class="filter-checkbox"
                 />
                 <span class="item-name">{filter.name}</span>
-                {#if isFilterSelected(filter)}
+                {#if isFilterChecked(filter)}
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="check-icon">
                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
                   </svg>

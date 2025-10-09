@@ -6,28 +6,28 @@ export const nnf: KCLanguage = {
   name: 'NNF',
   fullName: 'Negation Normal Form',
   description: 'Boolean formulas where negation appears only at the literal level',
-  descriptionRefs: ['darwiche-2002'], // References the Darwiche & Marquis paper
+  descriptionRefs: ['darwiche-2002'],
   properties: {
-    queries: [
-      { code: 'CO', label: 'Consistency', polytime: 'true', refs: ['darwiche-2002'] },
-      { code: 'VA', label: 'Validity', polytime: 'false', refs: ['darwiche-2002'] },
-      { code: 'CE', label: 'Clausal Entailment', polytime: 'false', refs: ['darwiche-2002'] },
-      { code: 'IM', label: 'Implicant', polytime: 'false', refs: ['darwiche-2002'] },
-      { code: 'EQ', label: 'Equivalence', polytime: 'false', refs: ['darwiche-2002'] },
-      { code: 'SE', label: 'Sentential Entailment', polytime: 'false', refs: ['darwiche-2002'] },
-      { code: 'CT', label: 'Model Counting', polytime: 'false', refs: ['darwiche-2002'] },
-      { code: 'ME', label: 'Model Enumeration', polytime: 'false', refs: ['darwiche-2002'] }
-    ],
-    transformations: [
-      { code: 'CD', label: 'Conditioning', polytime: 'true', refs: ['darwiche-2002'] },
-      { code: 'FO', label: 'Forgetting', polytime: 'true', refs: ['darwiche-2002'] },
-      { code: 'SFO', label: 'Singleton Forgetting', polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
-      { code: '∧C', label: 'Conjunction', polytime: 'true', refs: ['darwiche-2002'] },
-      { code: '∧BC', label: 'Bounded Conjunction', polytime: 'true', refs: ['darwiche-2002'] },
-      { code: '∨C', label: 'Disjunction', polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
-      { code: '∨BC', label: 'Bounded Disjunction', polytime: 'true', refs: ['darwiche-2002'] },
-      { code: '¬C', label: 'Negation', polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] }
-    ]
+    queries: {
+      CO: { polytime: 'true', refs: ['darwiche-2002'] },
+      VA: { polytime: 'false', refs: ['darwiche-2002'] },
+      CE: { polytime: 'false', refs: ['darwiche-2002'] },
+      IM: { polytime: 'false', refs: ['darwiche-2002'] },
+      EQ: { polytime: 'false', refs: ['darwiche-2002'] },
+      SE: { polytime: 'false', refs: ['darwiche-2002'] },
+      CT: { polytime: 'false', refs: ['darwiche-2002'] },
+      ME: { polytime: 'false', refs: ['darwiche-2002'] }
+    },
+    transformations: {
+      CD: { polytime: 'true', refs: ['darwiche-2002'] },
+      FO: { polytime: 'true', refs: ['darwiche-2002'] },
+      SFO: { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
+      '∧C': { polytime: 'true', refs: ['darwiche-2002'] },
+      '∧BC': { polytime: 'true', refs: ['darwiche-2002'] },
+      '∨C': { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] },
+      '∨BC': { polytime: 'true', refs: ['darwiche-2002'] },
+      '¬C': { polytime: 'false', note: 'Unless P=NP', refs: ['darwiche-2002'] }
+    }
   },
   tags: [
     { id: 'normal-form', label: 'Normal Form', color: '#6366f1', refs: ['darwiche-2002'] },

@@ -5,10 +5,13 @@ export const propertyFilters: LanguageFilter[] = [
     id: 'has-decomposability',
     name: 'Decomposability',
     description: 'Languages with decomposability property',
-    category: 'filter by property',
-    activeByDefault: false,
+    category: 'Filter by Property',
+    defaultParam: false,
     controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
+    lambda: (language: KCLanguage, param: boolean) => {
+      // If param is false, pass through all languages
+      if (!param) return language;
+      // If param is true, only show languages with decomposability
       return (language.tags?.some(tag => tag.id === 'decomposability') ?? false) ? language : null;
     }
   },
@@ -16,10 +19,13 @@ export const propertyFilters: LanguageFilter[] = [
     id: 'has-determinism',
     name: 'Determinism',
     description: 'Languages with determinism property',
-    category: 'filter by property',
-    activeByDefault: false,
+    category: 'Filter by Property',
+    defaultParam: false,
     controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
+    lambda: (language: KCLanguage, param: boolean) => {
+      // If param is false, pass through all languages
+      if (!param) return language;
+      // If param is true, only show languages with determinism
       return (language.tags?.some(tag => tag.id === 'determinism') ?? false) ? language : null;
     }
   },
@@ -27,10 +33,13 @@ export const propertyFilters: LanguageFilter[] = [
     id: 'decision-diagrams',
     name: 'Decision Diagrams',
     description: 'Languages in the decision diagram family',
-    category: 'filter by property',
-    activeByDefault: false,
+    category: 'Filter by Property',
+    defaultParam: false,
     controlType: 'checkbox',
-    lambda: (language: KCLanguage) => {
+    lambda: (language: KCLanguage, param: boolean) => {
+      // If param is false, pass through all languages
+      if (!param) return language;
+      // If param is true, only show languages in the decision diagram family
       return (language.tags?.some(tag => tag.id === 'decision') ?? false) ? language : null;
     }
   }

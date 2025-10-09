@@ -7,7 +7,7 @@ export const queryVisualizationFilters: LanguageFilter[] = [
     name: 'Consistency (CO)',
     description: 'Display Consistency (CO) status on nodes',
     category: 'Visualize Queries',
-    activeByDefault: false,
+    defaultParam: false,
     controlType: 'checkbox',
     lambda: createOperationVisualizer('CO', 'query')
   },
@@ -16,7 +16,7 @@ export const queryVisualizationFilters: LanguageFilter[] = [
     name: 'Validity (VA)',
     description: 'Display Validity (VA) status on nodes',
     category: 'Visualize Queries',
-    activeByDefault: false,
+    defaultParam: false,
     controlType: 'checkbox',
     lambda: createOperationVisualizer('VA', 'query')
   },
@@ -25,7 +25,7 @@ export const queryVisualizationFilters: LanguageFilter[] = [
     name: 'Clausal Entailment (CE)',
     description: 'Display Clausal Entailment (CE) status on nodes',
     category: 'Visualize Queries',
-    activeByDefault: false,
+    defaultParam: false,
     controlType: 'checkbox',
     lambda: createOperationVisualizer('CE', 'query')
   },
@@ -34,7 +34,7 @@ export const queryVisualizationFilters: LanguageFilter[] = [
     name: 'Model Counting (CT)',
     description: 'Display Model Counting (CT) status on nodes',
     category: 'Visualize Queries',
-    activeByDefault: false,
+    defaultParam: false,
     controlType: 'checkbox',
     lambda: createOperationVisualizer('CT', 'query')
   }

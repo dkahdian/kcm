@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { KCLanguage, KCOpEntry, GraphData, KCLanguagePropertiesResolved } from './types.js';
   import { resolveLanguageProperties } from './data/operations.js';
+  import { getPolytimeFlag, POLYTIME_COMPLEXITIES } from './data/polytime-complexities.js';
   
   let { selectedLanguage, graphData }: { selectedLanguage: KCLanguage | null, graphData: GraphData } = $props();
   
@@ -18,11 +19,7 @@
   let copiedRefId: string | null = $state(null);
 
   const statusColor = (op: KCOpEntry) => {
-    switch (op.polytime) {
-      case 'true': return '#22c55e';
-      case 'false': return '#ef4444';
-      default: return '#f59e0b';
-    }
+    return getPolytimeFlag(op.polytime).color;
   };
 
   function dash(rt: any) {
@@ -215,18 +212,12 @@
       <!-- Polytime Status Legend -->
       <div class="legend-section">
         <h5>Operation Complexity</h5>
-        <div class="legend-row">
-          <span class="dot" style="background: #22c55e"></span>
-          <span>Polynomial-time operation</span>
-        </div>
-        <div class="legend-row">
-          <span class="dot" style="background: #ef4444"></span>
-          <span>Exponential-time operation</span>
-        </div>
-        <div class="legend-row">
-          <span class="dot" style="background: #f59e0b"></span>
-          <span>Unknown complexity</span>
-        </div>
+        {#each Object.values(POLYTIME_COMPLEXITIES) as complexity}
+          <div class="legend-row">
+            <span class="dot" style="background: {complexity.color}"></span>
+            <span title={complexity.description}>{complexity.label}</span>
+          </div>
+        {/each}
       </div>
     </div>
   </div>

@@ -1,9 +1,10 @@
 import type { KCLanguage, LanguageFilter, GraphData, FilterCategory } from '../../types.js';
 import { resolveLanguageProperties } from '../operations.js';
+import { getPolytimeFlag } from '../polytime-complexities.js';
 
 /**
  * Helper function to create visualization filters for queries and transformations.
- * Adds emoji indicators (🟢🔴🟡) and operation codes to node labels.
+ * Adds emoji indicators and operation codes to node labels.
  */
 export function createOperationVisualizer(
   code: string,
@@ -23,10 +24,10 @@ export function createOperationVisualizer(
     const operation = operations?.find(op => op.code === code);
     if (!operation) return language;
     
-    const colorMap = { 'true': '🟢', 'false': '🔴', 'unknown': '🟡' } as const;
-    const icon = colorMap[operation.polytime];
+    // Get the full polytime flag object
+    const polytimeFlag = getPolytimeFlag(operation.polytime);
     const note = operation.note ? '*' : '';
-    const suffix = `\n${icon}${code}${note}`;
+    const suffix = `\n${polytimeFlag.emoji}${code}${note}`;
     
     return {
       ...language,

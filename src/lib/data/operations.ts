@@ -55,7 +55,7 @@ export function getAllTransformationCodes(): string[] {
 
 /**
  * Resolve operation support map into full operation entries.
- * For operations not specified in the support map, they are marked as 'unknown'.
+ * For operations not specified in the support map, they are marked as 'open' (open problem).
  */
 export function resolveOperations(
   supportMap: KCOpSupportMap | undefined,
@@ -76,11 +76,11 @@ export function resolveOperations(
         refs: support.refs
       });
     } else {
-      // Operation not specified - mark as unknown
+      // Operation not specified - mark as open problem
       result.push({
         code: opDef.code,
         label: opDef.label,
-        polytime: 'unknown',
+        polytime: 'open',
         refs: []
       });
     }

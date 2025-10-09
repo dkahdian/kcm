@@ -1,7 +1,25 @@
 // Types for the Knowledge Compilation Map
 
-// flexible status for whether an operation is polytime
-export type PolytimeFlag = 'true' | 'false' | 'unknown';
+/**
+ * Code identifying a polytime complexity status.
+ */
+export type PolytimeFlagCode = 'true' | 'false' | 'unknown' | 'open';
+
+/**
+ * Full polytime complexity flag with display properties.
+ */
+export interface PolytimeFlag {
+  /** Short code identifier */
+  code: PolytimeFlagCode;
+  /** Full human-readable label */
+  label: string;
+  /** CSS color value (future: could be icon filename) */
+  color: string;
+  /** Emoji icon for text display */
+  emoji: string;
+  /** Optional description for tooltips */
+  description?: string;
+}
 
 export interface VisualOverrides {
   backgroundColor?: string;
@@ -17,8 +35,8 @@ export interface VisualOverrides {
  * The operation code and label come from the canonical operations definition.
  */
 export interface KCOpSupport {
-  /** whether operation is known polynomial-time */
-  polytime: PolytimeFlag;
+  /** polytime complexity code */
+  polytime: PolytimeFlagCode;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
   /** reference IDs pointing to entries in the language's references array */
@@ -34,8 +52,8 @@ export interface KCOpEntry {
   code: string;
   /** human-friendly label, e.g., "Consistency" */
   label: string;
-  /** whether operation is known polynomial-time */
-  polytime: PolytimeFlag;
+  /** polytime complexity code */
+  polytime: PolytimeFlagCode;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
   /** optional visual hint for highlighting this operation */

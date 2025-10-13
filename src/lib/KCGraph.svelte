@@ -24,20 +24,26 @@
     const visibleLanguages = graphData.languages
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
 
-    // Collect all edges from children arrays
+    // Collect all edges from relationships arrays, filtering by defaultVisible
     const edges: cytoscape.ElementDefinition[] = [];
     for (const lang of visibleLanguages) {
-      if (lang.children) {
-        for (const child of lang.children) {
-          // Only include edge if target is also visible
-          if (!isFilteredData || visibleLanguageIds!.has(child.target)) {
+      if (lang.relationships) {
+        for (const rel of lang.relationships) {
+          // Check if this relationship type should be visible by default
+          const relType = graphData.relationTypes.find(rt => rt.id === rel.typeId);
+          const shouldShow = relType?.defaultVisible !== false; // Default to true if not specified
+          
+          // Only include edge if:
+          // 1. Target is visible
+          // 2. Relationship type is set to be shown by default
+          if (shouldShow && (!isFilteredData || visibleLanguageIds!.has(rel.target))) {
             edges.push({
               data: {
-                id: child.id,
+                id: rel.id,
                 source: lang.id,
-                target: child.target,
-                typeId: child.typeId,
-                description: child.description || ''
+                target: rel.target,
+                typeId: rel.typeId,
+                description: rel.description || ''
               }
             });
           }

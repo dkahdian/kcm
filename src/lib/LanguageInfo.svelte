@@ -139,6 +139,38 @@
           </div>
         </div>
         
+        {#if selectedLanguage.relationships?.length}
+          <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+            <h5 class="font-semibold text-gray-900 mb-2">Relationships</h5>
+            <div class="space-y-1 text-sm">
+              {#each selectedLanguage.relationships as rel}
+                {@const relType = graphData.relationTypes.find(rt => rt.id === rel.typeId)}
+                {@const targetLang = graphData.languages.find(l => l.id === rel.target)}
+                <div class="flex items-start gap-2">
+                  <span class="font-mono font-semibold" style="color: {relType?.style?.lineColor || '#6b7280'}">{relType?.label || '?'}</span>
+                  <div class="flex-1">
+                    <span class="font-medium">{targetLang?.name || rel.target}</span>
+                    {#if rel.description}
+                      <span class="text-gray-600">— {rel.description}</span>
+                    {/if}
+                    {#if rel.refs?.length}
+                      {#each rel.refs as refId}
+                        <button 
+                          class="ref-badge"
+                          onclick={scrollToReferences}
+                          title="View reference"
+                        >[{getRefNumber(refId)}]</button>
+                      {/each}
+                    {:else}
+                      <span class="missing-ref" title="Missing reference">[missing ref]</span>
+                    {/if}
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        {/if}
+        
         <div class="mt-4 pt-4 border-t border-gray-200" bind:this={referencesSection}>
           {#if selectedLanguage.references?.length}
             <div class="mb-2">

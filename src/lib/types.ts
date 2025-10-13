@@ -122,8 +122,8 @@ export interface KCLanguage {
   references: KCReference[];
   /** visual overrides applied by filters */
   visual?: VisualOverrides;
-  /** outgoing edges (children) in the DAG */
-  children?: KCRelation[];
+  /** all relationships (edges) to/from this language - full adjacency representation */
+  relationships?: KCRelation[];
 }
 
 export interface KCRelationTypeStyle {
@@ -148,6 +148,8 @@ export interface KCRelationType {
   description?: string;
   /** default style for edges of this type */
   style?: KCRelationTypeStyle;
+  /** whether this relation type is shown by default in the graph */
+  defaultVisible?: boolean;
 }
 
 export interface KCRelation {

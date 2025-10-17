@@ -34,15 +34,5 @@ export const obdd: KCLanguage = {
     { id: 'ordering', label: 'Ordering', color: '#22c55e', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 725, y: 260 },
-  relationships: [
-    {
-      id: 'obdd-obdd-lt',
-      target: 'obdd-lt',
-      forwardStatus: 'poly',
-      backwardStatus: 'no-quasi',
-      description: 'Relationship between OBDD and OBDD<',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 725, y: 260 }
 };

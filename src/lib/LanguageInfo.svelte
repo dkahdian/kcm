@@ -1,5 +1,11 @@
 <script lang="ts">
-  import type { KCLanguage, KCOpEntry, GraphData, KCLanguagePropertiesResolved } from './types.js';
+  import type {
+    KCLanguage,
+    KCOpEntry,
+    GraphData,
+    KCLanguagePropertiesResolved,
+    TransformationStatus
+  } from './types.js';
   import { resolveLanguageProperties } from './data/operations.js';
   import { getPolytimeFlag, POLYTIME_COMPLEXITIES } from './data/polytime-complexities.js';
   import EdgeLegend from './components/EdgeLegend.svelte';
@@ -18,6 +24,81 @@
 
   let referencesSection: HTMLElement | null = $state(null);
   let copiedRefId: string | null = $state(null);
+
+  interface RelationshipStatement {
+    target: string;
+    text: string;
+    refs: string[];
+  }
+
+  const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
+    const lookup = new Map<string, KCLanguage>();
+    for (const language of graphData.languages) {
+      lookup.set(language.id, language);
+    }
+    return lookup;
+  });
+
+  // Helper to generate a descriptive statement from a transformation status
+  function getStatusDescription(status: TransformationStatus, fromLang: string, toLang: string): string {
+    const from = languageLookup.get(fromLang)?.name ?? fromLang;
+    const to = languageLookup.get(toLang)?.name ?? toLang;
+    
+    switch (status) {
+      case 'poly':
+        return `${from} converts to ${to} in polynomial time`;
+      case 'no-quasi':
+        return `Exponential gap between ${from} and ${to}`;
+      case 'no-poly-quasi':
+        return `${from} converts to ${to} in quasi-polynomial time only`;
+      case 'no-poly-unknown-quasi':
+        return `No polynomial transformation from ${from} to ${to}; quasi-polynomial unknown`;
+      case 'unknown-poly-quasi':
+        return `Polynomial transformation unknown from ${from} to ${to}; quasi-polynomial exists`;
+      case 'unknown-both':
+        return `Complexity of transformation from ${from} to ${to} is unknown`;
+      default:
+        return `${from} relates to ${to}`;
+    }
+  }
+
+  const languageRelationships = $derived.by<RelationshipStatement[]>(() => {
+    if (!selectedLanguage) return [];
+    const { id } = selectedLanguage;
+
+    const statements: RelationshipStatement[] = [];
+    
+    for (const edge of graphData.edges) {
+      if (edge.nodeA === id || edge.nodeB === id) {
+        const isSourceNodeA = edge.nodeA === id;
+        const target = isSourceNodeA ? edge.nodeB : edge.nodeA;
+        const forwardStatus = isSourceNodeA ? edge.aToB : edge.bToA;
+        const backwardStatus = isSourceNodeA ? edge.bToA : edge.aToB;
+        
+        // Add forward direction statement
+        statements.push({
+          target,
+          text: getStatusDescription(forwardStatus, id, target),
+          refs: edge.refs ?? []
+        });
+        
+        // Add backward direction statement (unless it's the same as forward)
+        if (forwardStatus !== backwardStatus) {
+          statements.push({
+            target,
+            text: getStatusDescription(backwardStatus, target, id),
+            refs: edge.refs ?? []
+          });
+        }
+      }
+    }
+
+    return statements.sort((a, b) => {
+      const aName = languageLookup.get(a.target)?.name ?? a.target;
+      const bName = languageLookup.get(b.target)?.name ?? b.target;
+      return aName.localeCompare(bName);
+    });
+  });
 
   const statusColor = (op: KCOpEntry) => {
     return getPolytimeFlag(op.polytime).color;
@@ -135,21 +216,16 @@
           </div>
         </div>
         
-        {#if selectedLanguage.relationships?.length}
+        {#if languageRelationships.length}
           <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
             <h5 class="font-semibold text-gray-900 mb-2">Relationships</h5>
             <div class="space-y-1 text-sm">
-              {#each selectedLanguage.relationships as rel}
-                {@const targetLang = graphData.languages.find(l => l.id === rel.target)}
+              {#each languageRelationships as statement}
                 <div class="flex items-start gap-2">
-                  <span class="font-mono font-semibold">{rel.forwardStatus || rel.backwardStatus}</span>
-                  <div class="flex-1">
-                    <span class="font-medium">{targetLang?.name || rel.target}</span>
-                    {#if rel.description}
-                      <span class="text-gray-600">— {rel.description}</span>
-                    {/if}
-                    {#if rel.refs?.length}
-                      {#each rel.refs as refId}
+                  <div class="flex-1 text-gray-700">
+                    {statement.text}
+                    {#if statement.refs?.length}
+                      {#each statement.refs as refId}
                         <button 
                           class="ref-badge"
                           onclick={scrollToReferences}

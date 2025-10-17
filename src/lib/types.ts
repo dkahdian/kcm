@@ -122,8 +122,6 @@ export interface KCLanguage {
   references: KCReference[];
   /** visual overrides applied by filters */
   visual?: VisualOverrides;
-  /** all relationships (edges) to/from this language - full adjacency representation */
-  relationships?: KCRelation[];
 }
 
 /**
@@ -218,26 +216,6 @@ export interface CanonicalEdge {
   /** Optional description of this relationship */
   description?: string;
   /** Reference IDs for citations */
-  refs: string[];
-}
-
-/**
- * @deprecated Legacy relation interface - use CanonicalEdge instead
- * Kept for backward compatibility during migration
- */
-export interface KCRelation {
-  id: string;
-  /** target language id (source is implicit - the parent node) */
-  target: string;
-  /** Transformation status from source to target (forward direction) */
-  forwardStatus: TransformationStatus;
-  /** Transformation status from target to source (backward direction) */
-  backwardStatus: TransformationStatus;
-  /** optional per-edge override label */
-  label?: string;
-  /** optional per-edge description */
-  description?: string;
-  /** reference IDs pointing to entries in the parent language's references array */
   refs: string[];
 }
 

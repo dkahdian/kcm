@@ -34,15 +34,5 @@ export const pi: KCLanguage = {
     { id: 'simple-disjunction', label: 'Simple Disjunction', color: '#0ea5e9', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 500, y: 300 },
-  relationships: [
-    {
-      id: 'pi-mods',
-      target: 'mods',
-      forwardStatus: 'poly',
-      backwardStatus: 'no-quasi',
-      description: 'Relationship between PI and MODS',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 500, y: 300 }
 };

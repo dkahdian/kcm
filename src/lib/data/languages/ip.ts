@@ -34,15 +34,5 @@ export const ip: KCLanguage = {
     { id: 'simple-conjunction', label: 'Simple Conjunction', color: '#14b8a6', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 650, y: 300 },
-  relationships: [
-    {
-      id: 'ip-mods',
-      target: 'mods',
-      forwardStatus: 'poly',
-      backwardStatus: 'no-quasi',
-      description: 'Relationship between IP and MODS',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 650, y: 300 }
 };

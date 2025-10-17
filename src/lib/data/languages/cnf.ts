@@ -35,15 +35,5 @@ export const cnf: KCLanguage = {
     { id: 'simple-disjunction', label: 'Simple Disjunction', color: '#0ea5e9', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 300, y: 300 },
-  relationships: [
-    {
-      id: 'cnf-pi',
-      target: 'pi',
-      forwardStatus: 'poly',  // CNF ≤_p PI
-      backwardStatus: 'no-quasi',  // PI ⊄_q CNF (example - adjust based on actual relationship)
-      description: 'Relationship between CNF and PI',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 300, y: 300 }
 };

@@ -35,15 +35,5 @@ export const dnf: KCLanguage = {
     { id: 'simple-conjunction', label: 'Simple Conjunction', color: '#14b8a6', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 100, y: 300 },
-  relationships: [
-    {
-      id: 'dnf-ip',
-      target: 'ip',
-      forwardStatus: 'poly',  // DNF ≤_p IP
-      backwardStatus: 'no-quasi',  // IP ⊄_q DNF (example - adjust based on actual relationship)
-      description: 'Relationship between DNF and IP',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 100, y: 300 }
 };

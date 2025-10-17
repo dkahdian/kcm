@@ -35,15 +35,5 @@ export const sdDnnf: KCLanguage = {
     { id: 'smoothness', label: 'Smoothness', color: '#06b6d4', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 275, y: 260 },
-  relationships: [
-    {
-      id: 'sd-dnnf-equiv-d-dnnf',
-      target: 'd-dnnf',
-      forwardStatus: 'poly',  // sd-DNNF ≤_p d-DNNF
-      backwardStatus: 'poly',  // d-DNNF ≤_p sd-DNNF (equivalence)
-      description: 'sd-DNNF is equivalent to d-DNNF',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 275, y: 260 }
 };

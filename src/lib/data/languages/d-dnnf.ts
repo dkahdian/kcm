@@ -34,15 +34,5 @@ export const dDnnf: KCLanguage = {
     { id: 'determinism', label: 'Determinism', color: '#ef4444', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 125, y: 260 },
-  relationships: [
-    {
-      id: 'd-dnnf-fbdd',
-      target: 'fbdd',
-      forwardStatus: 'poly',
-      backwardStatus: 'no-quasi',
-      description: 'Relationship between d-DNNF and FBDD',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 125, y: 260 }
 };

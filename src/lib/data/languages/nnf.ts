@@ -34,31 +34,5 @@ export const nnf: KCLanguage = {
     { id: 'general', label: 'General', color: '#10b981', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 200, y: 100 },
-  relationships: [
-    {
-      id: 'nnf-dnnf',
-      target: 'dnnf',
-      forwardStatus: 'poly',  // Type 1: Polynomial transformation exists
-      backwardStatus: 'no-quasi',  // Reverse: No quasi-polynomial
-      description: 'NNF ≤_p DNNF, DNNF ⊄_q NNF',
-      refs: ['Darwiche_2002']
-    },
-    {
-      id: 'nnf-dnf',
-      target: 'dnf',
-      forwardStatus: 'no-poly-unknown-quasi',  // Type 2: No poly, unknown quasi
-      backwardStatus: 'unknown-both',  // Reverse: Both unknown
-      description: 'NNF ⊄_p DNF and ?≤_q DNF, DNF ?≤_p and ?≤_q NNF',
-      refs: ['Darwiche_2002']
-    },
-    {
-      id: 'nnf-cnf',
-      target: 'cnf',
-      forwardStatus: 'no-poly-quasi',  // Type 3: No poly, has quasi
-      backwardStatus: 'unknown-poly-quasi',  // Type 4: Unknown poly, has quasi
-      description: 'NNF ⊄_p but ≤_q CNF, CNF ?≤_p but ≤_q NNF',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 200, y: 100 }
 };

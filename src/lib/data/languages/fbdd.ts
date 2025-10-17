@@ -33,15 +33,5 @@ export const fbdd: KCLanguage = {
     { id: 'decision', label: 'Decision', color: '#f59e0b', refs: ['Darwiche_2002'] }
   ],
   references: getReferences('Darwiche_2002'),
-  position: { x: 575, y: 260 },
-  relationships: [
-    {
-      id: 'fbdd-obdd',
-      target: 'obdd',
-      forwardStatus: 'poly',
-      backwardStatus: 'no-quasi',
-      description: 'Relationship between FBDD and OBDD',
-      refs: ['Darwiche_2002']
-    }
-  ]
+  position: { x: 575, y: 260 }
 };

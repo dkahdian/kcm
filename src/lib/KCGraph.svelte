@@ -437,11 +437,11 @@
 
 <div class="kcm-graph-container">
   <div bind:this={graphContainer} class="w-full h-full"></div>
-  <!-- Y-axis overlay: More succinct (top) to Less succinct (bottom) -->
+  <!-- Y-axis overlay: Less succinct (top) to More succinct (bottom) -->
   <div class="y-axis" aria-hidden="true">
-    <div class="axis-label axis-label-top">More succinct</div>
+    <div class="axis-label axis-label-top">Less succinct</div>
     <div class="axis-line"></div>
-    <div class="axis-label axis-label-bottom">Less succinct</div>
+    <div class="axis-label axis-label-bottom">More succinct</div>
   </div>
 </div>
 

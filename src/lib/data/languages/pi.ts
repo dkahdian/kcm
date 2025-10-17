@@ -36,6 +36,13 @@ export const pi: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 500, y: 300 },
   relationships: [
-    { id: 'pi-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'PI is at least as succinct as MODS', refs: ['Darwiche_2002'] }
+    {
+      id: 'pi-mods',
+      target: 'mods',
+      forwardStatus: 'poly',
+      backwardStatus: 'no-quasi',
+      description: 'Relationship between PI and MODS',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

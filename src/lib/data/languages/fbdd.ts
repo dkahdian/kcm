@@ -35,6 +35,13 @@ export const fbdd: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 575, y: 260 },
   relationships: [
-    { id: 'fbdd-obdd', target: 'obdd', typeId: 'succinctness', label: '≤', description: 'FBDD is at least as succinct as OBDD', refs: ['Darwiche_2002'] }
+    {
+      id: 'fbdd-obdd',
+      target: 'obdd',
+      forwardStatus: 'poly',
+      backwardStatus: 'no-quasi',
+      description: 'Relationship between FBDD and OBDD',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

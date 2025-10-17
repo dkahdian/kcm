@@ -36,6 +36,13 @@ export const dDnnf: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 125, y: 260 },
   relationships: [
-    { id: 'd-dnnf-fbdd', target: 'fbdd', typeId: 'succinctness', label: '≤', description: 'd-DNNF is at least as succinct as FBDD', refs: ['Darwiche_2002'] }
+    {
+      id: 'd-dnnf-fbdd',
+      target: 'fbdd',
+      forwardStatus: 'poly',
+      backwardStatus: 'no-quasi',
+      description: 'Relationship between d-DNNF and FBDD',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

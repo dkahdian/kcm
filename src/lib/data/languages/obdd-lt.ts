@@ -36,6 +36,13 @@ export const obddLt: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 875, y: 260 },
   relationships: [
-    { id: 'obdd-lt-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'OBDD< is at least as succinct as MODS', refs: ['Darwiche_2002'] }
+    {
+      id: 'obdd-lt-mods',
+      target: 'mods',
+      forwardStatus: 'poly',
+      backwardStatus: 'no-quasi',
+      description: 'Relationship between OBDD< and MODS',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

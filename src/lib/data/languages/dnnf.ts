@@ -35,6 +35,13 @@ export const dnnf: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 50, y: 180 },
   relationships: [
-    { id: 'dnnf-d-dnnf', target: 'd-dnnf', typeId: 'succinctness', label: '≤', description: 'DNNF is at least as succinct as d-DNNF', refs: ['Darwiche_2002'] }
+    {
+      id: 'dnnf-d-dnnf',
+      target: 'd-dnnf',
+      forwardStatus: 'unknown-both',  // Type 5: Both unknown (test case)
+      backwardStatus: 'unknown-both',  // Symmetric uncertainty
+      description: 'DNNF ?≤_p and ?≤_q d-DNNF (both directions unknown - test case)',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

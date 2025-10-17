@@ -126,10 +126,45 @@ export interface KCLanguage {
   relationships?: KCRelation[];
 }
 
+/**
+ * Arrow shape types for relation endpoints
+ */
+export type ArrowShape = 
+  | 'none'           // no arrow
+  | 'triangle'       // solid triangle (standard arrow)
+  | 'triangle-tee'   // triangle with perpendicular line
+  | 'triangle-cross' // triangle with cross
+  | 'tee'            // perpendicular line only
+  | 'diamond'        // hollow diamond
+  | 'square'         // square
+  | 'circle'         // circle
+  | 'vee'            // V-shaped arrow
+  | 'chevron'        // chevron arrow
+  | 'triangle-backcurve'; // curved triangle
+
+/**
+ * Style configuration for a single endpoint of an edge
+ */
+export interface EdgeEndpointStyle {
+  /** Arrow shape at this endpoint */
+  arrow: ArrowShape;
+  /** Whether the arrow is dashed (for uncertainty) */
+  dashed?: boolean;
+  /** Whether to render as double parallel lines (for no-quasi relationships) */
+  isDouble?: boolean;
+  /** Color override for this endpoint */
+  color?: string;
+}
+
 export interface KCRelationTypeStyle {
   lineColor?: string; // CSS color
-  lineStyle?: 'solid' | 'dashed' | 'dotted';
+  lineStyle?: 'solid' | 'dashed' | 'dotted' | 'double';
   width?: number; // pixels
+  /** Style for the target (head) end of the edge */
+  targetStyle?: EdgeEndpointStyle;
+  /** Style for the source (tail) end of the edge */
+  sourceStyle?: EdgeEndpointStyle;
+  // Legacy single arrow support (deprecated - use targetStyle/sourceStyle instead)
   targetArrow?: 'none' | 'triangle' | 'vee' | 'triangle-backcurve';
 }
 
@@ -140,9 +175,9 @@ export interface KCRelationTypeStyle {
 export interface KCRelationType {
   /** unique id used to reference this type from relations */
   id: string;
-  /** display name, e.g., "Succinctness" */
+  /** display name, e.g., "Polynomial Transformation" */
   name: string;
-  /** optional short glyph/symbol, e.g., "≤", "≡", "∥" */
+  /** optional short glyph/symbol, e.g., "≤_p", "≤_q" */
   label?: string;
   /** optional description shown in legend/tooltips */
   description?: string;
@@ -152,12 +187,52 @@ export interface KCRelationType {
   defaultVisible?: boolean;
 }
 
+/**
+ * Relationship status between two languages (A -> B direction)
+ */
+export type TransformationStatus = 
+  | 'poly'           // Polynomial transformation exists (A ≤_p B)
+  | 'no-poly-unknown-quasi'  // No poly, unknown quasi (A ⊄_p B and A ?≤_q B)
+  | 'no-poly-quasi'  // No poly, but quasi exists (A ⊄_p B and A ≤_q B)
+  | 'unknown-poly-quasi' // Unknown poly, quasi exists (A ?≤_p B and A ≤_q B)
+  | 'unknown-both'   // Both unknown (A ?≤_p B and A ?≤_q B)
+  | 'no-quasi';      // No quasi-polynomial transformation (A ⊄_q B)
+
+/**
+ * Canonical edge representation - each edge stored exactly once.
+ * Edges are bidirectional with independent status in each direction.
+ * 
+ * Node ordering: nodeA and nodeB are ordered lexicographically (nodeA < nodeB)
+ * to ensure canonical representation.
+ */
+export interface CanonicalEdge {
+  id: string;
+  /** First node (lexicographically lower id) */
+  nodeA: string;
+  /** Second node (lexicographically higher id) */
+  nodeB: string;
+  /** Transformation status from nodeA → nodeB */
+  aToB: TransformationStatus;
+  /** Transformation status from nodeB → nodeA */
+  bToA: TransformationStatus;
+  /** Optional description of this relationship */
+  description?: string;
+  /** Reference IDs for citations */
+  refs: string[];
+}
+
+/**
+ * @deprecated Legacy relation interface - use CanonicalEdge instead
+ * Kept for backward compatibility during migration
+ */
 export interface KCRelation {
   id: string;
   /** target language id (source is implicit - the parent node) */
   target: string;
-  /** relation type id that determines semantics and styling */
-  typeId: string;
+  /** Transformation status from source to target (forward direction) */
+  forwardStatus: TransformationStatus;
+  /** Transformation status from target to source (backward direction) */
+  backwardStatus: TransformationStatus;
   /** optional per-edge override label */
   label?: string;
   /** optional per-edge description */
@@ -168,6 +243,8 @@ export interface KCRelation {
 
 export interface GraphData {
   languages: KCLanguage[];
+  /** Canonical edge registry - single source of truth for all edges */
+  edges: CanonicalEdge[];
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
 }

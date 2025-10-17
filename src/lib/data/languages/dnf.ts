@@ -37,6 +37,13 @@ export const dnf: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 100, y: 300 },
   relationships: [
-    { id: 'dnf-ip', target: 'ip', typeId: 'succinctness', label: '≤', description: 'DNF is at least as succinct as IP', refs: ['Darwiche_2002'] }
+    {
+      id: 'dnf-ip',
+      target: 'ip',
+      forwardStatus: 'poly',  // DNF ≤_p IP
+      backwardStatus: 'no-quasi',  // IP ⊄_q DNF (example - adjust based on actual relationship)
+      description: 'Relationship between DNF and IP',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

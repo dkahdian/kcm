@@ -26,10 +26,10 @@ export const POLYTIME_COMPLEXITIES: Record<PolytimeFlagCode, PolytimeFlag> = {
   },
   'unknown': {
     code: 'unknown',
-    label: 'Unknown to authors',
+    label: 'Unknown to us',
     emoji: '🟡',
     color: '#eab308', // yellow-500
-    description: 'Complexity unknown to the paper authors'
+    description: 'Complexity unknown us'
   },
   'open': {
     code: 'open',

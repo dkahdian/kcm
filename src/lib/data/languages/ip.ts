@@ -36,6 +36,13 @@ export const ip: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 650, y: 300 },
   relationships: [
-    { id: 'ip-mods', target: 'mods', typeId: 'succinctness', label: '≤', description: 'IP is at least as succinct as MODS', refs: ['Darwiche_2002'] }
+    {
+      id: 'ip-mods',
+      target: 'mods',
+      forwardStatus: 'poly',
+      backwardStatus: 'no-quasi',
+      description: 'Relationship between IP and MODS',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

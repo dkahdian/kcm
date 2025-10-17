@@ -2,6 +2,7 @@
   import type { KCLanguage, KCOpEntry, GraphData, KCLanguagePropertiesResolved } from './types.js';
   import { resolveLanguageProperties } from './data/operations.js';
   import { getPolytimeFlag, POLYTIME_COMPLEXITIES } from './data/polytime-complexities.js';
+  import EdgeLegend from './components/EdgeLegend.svelte';
   
   let { selectedLanguage, graphData }: { selectedLanguage: KCLanguage | null, graphData: GraphData } = $props();
   
@@ -21,11 +22,6 @@
   const statusColor = (op: KCOpEntry) => {
     return getPolytimeFlag(op.polytime).color;
   };
-
-  function dash(rt: any) {
-    const style = rt?.style?.lineStyle ?? 'solid';
-    return style === 'dashed' ? '6,4' : style === 'dotted' ? '2,4' : '0';
-  }
 
   function scrollToReferences(e: MouseEvent) {
     e.preventDefault();
@@ -144,10 +140,9 @@
             <h5 class="font-semibold text-gray-900 mb-2">Relationships</h5>
             <div class="space-y-1 text-sm">
               {#each selectedLanguage.relationships as rel}
-                {@const relType = graphData.relationTypes.find(rt => rt.id === rel.typeId)}
                 {@const targetLang = graphData.languages.find(l => l.id === rel.target)}
                 <div class="flex items-start gap-2">
-                  <span class="font-mono font-semibold" style="color: {relType?.style?.lineColor || '#6b7280'}">{relType?.label || '?'}</span>
+                  <span class="font-mono font-semibold">{rel.forwardStatus || rel.backwardStatus}</span>
                   <div class="flex-1">
                     <span class="font-medium">{targetLang?.name || rel.target}</span>
                     {#if rel.description}
@@ -211,46 +206,16 @@
       </div>
     {/if}
     
-    <div class="legend">
-      <h4>Legend</h4>
-      
-      <!-- Relations Legend -->
-      <div class="legend-section">
-        <h5>Relations</h5>
-        {#each graphData.relationTypes as rt}
-          <div class="legend-row">
-            <svg width="56" height="14" viewBox="0 0 56 14" aria-hidden="true">
-              <defs>
-                <marker id={`arrow-end-${rt.id}`} markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
-                  <path d="M0,0 L6,3 L0,6 Z" fill={rt.style?.lineColor ?? '#6b7280'} />
-                </marker>
-                <marker id={`arrow-start-${rt.id}`} markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-                  <path d="M6,0 L0,3 L6,6 Z" fill={rt.style?.lineColor ?? '#6b7280'} />
-                </marker>
-              </defs>
-              <line x1="8" y1="7" x2="48" y2="7"
-                stroke={rt.style?.lineColor ?? '#6b7280'}
-                stroke-width={(rt.style?.width ?? 2) as any}
-                stroke-dasharray={dash(rt)}
-                marker-end={`url(#arrow-end-${rt.id})`}
-                marker-start={rt.id === 'equivalence' ? `url(#arrow-start-${rt.id})` : undefined}
-              />
-            </svg>
-            <span class="legend-label">{rt.name}{rt.label ? ` (${rt.label})` : ''}</span>
-          </div>
-        {/each}
-      </div>
-      
-      <!-- Polytime Status Legend -->
-      <div class="legend-section">
-        <h5>Operation Complexity</h5>
-        {#each Object.values(POLYTIME_COMPLEXITIES) as complexity}
-          <div class="legend-row">
-            <span class="dot" style="background: {complexity.color}"></span>
-            <span title={complexity.description}>{complexity.label}</span>
-          </div>
-        {/each}
-      </div>
+    <EdgeLegend />
+    
+    <div class="legend-section">
+      <h5>Operation Complexity</h5>
+      {#each Object.values(POLYTIME_COMPLEXITIES) as complexity}
+        <div class="legend-row">
+          <span class="dot" style="background: {complexity.color}"></span>
+          <span title={complexity.description}>{complexity.label}</span>
+        </div>
+      {/each}
     </div>
   </div>
 </div>
@@ -322,21 +287,13 @@
       margin-left: 0.25em;
     }
     
-    .legend {
+    .legend-section {
+      margin-bottom: 0.75rem;
       padding: 0.75rem;
       border: 1px solid #e5e7eb;
       border-radius: 0.5rem;
       background: #ffffff;
       margin-top: 1rem;
-    }
-    .legend h4 {
-      margin: 0 0 0.75rem 0;
-      font-weight: 600;
-      color: #111827;
-      font-size: 0.875rem;
-    }
-    .legend-section {
-      margin-bottom: 0.75rem;
     }
     .legend-section:last-child {
       margin-bottom: 0;
@@ -357,9 +314,6 @@
     }
     .legend-row:last-child {
       margin-bottom: 0;
-    }
-    .legend-label {
-      white-space: nowrap;
     }
     .dot {
       display: inline-block;

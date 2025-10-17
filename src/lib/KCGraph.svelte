@@ -3,7 +3,8 @@
   import cytoscape from 'cytoscape';
   // @ts-ignore - dagre doesn't have proper TypeScript types
   import dagre from 'cytoscape-dagre';
-  import type { GraphData, FilteredGraphData, KCLanguage, KCRelationType } from './types.js';
+  import type { GraphData, FilteredGraphData, KCLanguage, CanonicalEdge } from './types.js';
+  import { getEdgeEndpointStyle } from './data/relation-types.js';
 
   let { graphData, selectedNode = $bindable() }: {
     graphData: GraphData | FilteredGraphData;
@@ -12,6 +13,48 @@
 
   let graphContainer: HTMLDivElement;
   let cy: cytoscape.Core;
+
+  /**
+   * Assign rank to nodes to ensure polytime edges point upward.
+   * Uses a simple topological ordering where if A→B is poly and B→A is not,
+   * then A should have higher rank (appear lower in layout).
+   */
+  function assignNodeRanks(edges: CanonicalEdge[], languages: KCLanguage[]): Map<string, number> {
+    const ranks = new Map<string, number>();
+    const languageIds = new Set(languages.map(l => l.id));
+    
+    // Initialize all nodes to rank 0
+    for (const lang of languages) {
+      ranks.set(lang.id, 0);
+    }
+    
+    // For each edge, if one direction is poly and the other isn't,
+    // ensure the non-poly end has higher rank (appears lower)
+    for (const edge of edges) {
+      if (!languageIds.has(edge.nodeA) || !languageIds.has(edge.nodeB)) continue;
+      
+      const aToBPoly = edge.aToB === 'poly';
+      const bToAPoly = edge.bToA === 'poly';
+      
+      if (aToBPoly && !bToAPoly) {
+        // A → B is poly, B → A is not: A should be below B (higher rank number)
+        const rankA = ranks.get(edge.nodeA) || 0;
+        const rankB = ranks.get(edge.nodeB) || 0;
+        if (rankA <= rankB) {
+          ranks.set(edge.nodeA, rankB + 1);
+        }
+      } else if (bToAPoly && !aToBPoly) {
+        // B → A is poly, A → B is not: B should be below A
+        const rankA = ranks.get(edge.nodeA) || 0;
+        const rankB = ranks.get(edge.nodeB) || 0;
+        if (rankB <= rankA) {
+          ranks.set(edge.nodeB, rankA + 1);
+        }
+      }
+    }
+    
+    return ranks;
+  }
 
   // Function to create/update graph
   function createGraph() {
@@ -24,32 +67,39 @@
     const visibleLanguages = graphData.languages
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
 
-    // Collect all edges from relationships arrays, filtering by defaultVisible
+    // Create edges from canonical edge registry
     const edges: cytoscape.ElementDefinition[] = [];
-    for (const lang of visibleLanguages) {
-      if (lang.relationships) {
-        for (const rel of lang.relationships) {
-          // Check if this relationship type should be visible by default
-          const relType = graphData.relationTypes.find(rt => rt.id === rel.typeId);
-          const shouldShow = relType?.defaultVisible !== false; // Default to true if not specified
-          
-          // Only include edge if:
-          // 1. Target is visible
-          // 2. Relationship type is set to be shown by default
-          if (shouldShow && (!isFilteredData || visibleLanguageIds!.has(rel.target))) {
-            edges.push({
-              data: {
-                id: rel.id,
-                source: lang.id,
-                target: rel.target,
-                typeId: rel.typeId,
-                description: rel.description || ''
-              }
-            });
+    for (const edge of graphData.edges) {
+      // Only include edge if both nodes are visible
+      const aVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeA);
+      const bVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeB);
+      
+      if (aVisible && bVisible) {
+        // Get endpoint styles for both directions
+        const aToBStyle = getEdgeEndpointStyle(edge.aToB);
+        const bToAStyle = getEdgeEndpointStyle(edge.bToA);
+        
+        edges.push({
+          data: {
+            id: edge.id,
+            source: edge.nodeA,
+            target: edge.nodeB,
+            aToBStatus: edge.aToB,
+            bToAStatus: edge.bToA,
+            description: edge.description || '',
+            // Store styling info
+            width: 2,
+            sourceArrow: bToAStyle.arrow,
+            sourceDashed: bToAStyle.dashed,
+            targetArrow: aToBStyle.arrow,
+            targetDashed: aToBStyle.dashed
           }
-        }
+        });
       }
     }
+
+    // Assign ranks to ensure polytime edges point upward
+    const nodeRanks = assignNodeRanks(graphData.edges, visibleLanguages);
 
     const elements: cytoscape.ElementDefinition[] = [
       ...visibleLanguages.map((lang) => ({
@@ -64,7 +114,9 @@
           borderColor: lang.visual?.borderColor,
           borderWidth: lang.visual?.borderWidth,
           labelPrefix: lang.visual?.labelPrefix || '',
-          labelSuffix: lang.visual?.labelSuffix || ''
+          labelSuffix: lang.visual?.labelSuffix || '',
+          // Rank for layout ordering
+          rank: nodeRanks.get(lang.id) || 0
         },
         position: lang.position || { x: 0, y: 0 }
       })),
@@ -107,12 +159,23 @@
       {
         selector: 'edge',
         style: {
-          width: 2,
-          'line-color': '#6b7280',
+          width: (ele: any) => ele.data('width') || 2,
+          'line-color': '#6b7280', // Default gray color for all edges
+          'line-style': 'solid', // All edges are solid lines per spec
           'target-arrow-color': '#6b7280',
-          'target-arrow-shape': 'triangle',
+          'target-arrow-shape': (ele: any) => ele.data('targetArrow') || 'none',
+          'target-arrow-fill': (ele: any) => {
+            // Hollow = dashed arrowhead substitute
+            const dashed = ele.data('targetDashed');
+            return dashed ? 'hollow' : 'filled';
+          },
           'source-arrow-color': '#6b7280',
-          'source-arrow-shape': 'none',
+          'source-arrow-shape': (ele: any) => ele.data('sourceArrow') || 'none',
+          'source-arrow-fill': (ele: any) => {
+            // Hollow = dashed arrowhead substitute
+            const dashed = ele.data('sourceDashed');
+            return dashed ? 'hollow' : 'filled';
+          },
           'curve-style': 'bezier',
           // no labels on edges
           'font-size': '0px'
@@ -120,32 +183,18 @@
       }
     ];
 
-  const relationTypeStyles: any[] = (graphData.relationTypes || []).map(
-      (rt: KCRelationType) => {
-        const color = rt.style?.lineColor || '#6b7280';
-        const style: any = {
-          'line-color': color,
-          'target-arrow-color': color,
-          'line-style': rt.style?.lineStyle || 'solid',
-          width: (rt.style?.width ?? 2) as any,
-          'target-arrow-shape': rt.style?.targetArrow || 'triangle'
-        };
-        // Equivalence edges should be double-arrowed (both directions)
-        if (rt.id === 'equivalence') {
-          style['source-arrow-shape'] = 'triangle';
-          style['source-arrow-color'] = color;
-        }
-        return {
-          selector: `edge[typeId = "${rt.id}"]`,
-          style
-        };
-      }
-    );
+  // Arrow shapes:
+  // 1. Solid direct arrowhead: filled triangle
+  // 2. Dashed straight line perpendicular: hollow tee
+  // 3. Solid straight line: filled tee
+  // 4. Solid straight line and dashed arrowhead: hollow triangle-cross
+  // 5. Only dashed arrowhead: hollow triangle-tee
+  // 6. Double solid line ||: filled square
 
     cy = cytoscape({
       container: graphContainer,
       elements,
-      style: [...baseStyles, ...relationTypeStyles],
+      style: baseStyles,
       layout: ({
         name: 'dagre',
         fit: true,
@@ -153,7 +202,9 @@
         rankDir: 'TB', // most succinct at top, least at bottom
         nodeSep: 40,
         edgeSep: 20,
-        rankSep: 80
+        rankSep: 80,
+        // Custom ranking function to ensure solid arrows (poly) point upward
+        ranker: 'network-simplex'
       } as any),
       userZoomingEnabled: true,
       userPanningEnabled: true,

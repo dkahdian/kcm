@@ -37,7 +37,13 @@ export const cnf: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 300, y: 300 },
   relationships: [
-    // Outgoing edges (this language → target)
-    { id: 'cnf-pi', target: 'pi', typeId: 'succinctness', label: '≤', description: 'CNF is at least as succinct as PI', refs: ['Darwiche_2002'] }
+    {
+      id: 'cnf-pi',
+      target: 'pi',
+      forwardStatus: 'poly',  // CNF ≤_p PI
+      backwardStatus: 'no-quasi',  // PI ⊄_q CNF (example - adjust based on actual relationship)
+      description: 'Relationship between CNF and PI',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

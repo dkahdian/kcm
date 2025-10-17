@@ -37,6 +37,13 @@ export const sdDnnf: KCLanguage = {
   references: getReferences('Darwiche_2002'),
   position: { x: 275, y: 260 },
   relationships: [
-    { id: 'sd-dnnf-equiv-d-dnnf', target: 'd-dnnf', typeId: 'equivalence', label: '≡', description: 'sd-DNNF is equivalent to d-DNNF', refs: ['Darwiche_2002'] }
+    {
+      id: 'sd-dnnf-equiv-d-dnnf',
+      target: 'd-dnnf',
+      forwardStatus: 'poly',  // sd-DNNF ≤_p d-DNNF
+      backwardStatus: 'poly',  // d-DNNF ≤_p sd-DNNF (equivalence)
+      description: 'sd-DNNF is equivalent to d-DNNF',
+      refs: ['Darwiche_2002']
+    }
   ]
 };

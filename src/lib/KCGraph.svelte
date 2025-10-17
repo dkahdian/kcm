@@ -15,45 +15,48 @@
   let cy: cytoscape.Core;
 
   /**
-   * Assign rank to nodes to ensure polytime edges point upward.
-   * Uses a simple topological ordering where if A→B is poly and B→A is not,
-   * then A should have higher rank (appear lower in layout).
+   * Build same-layer groups using union-find.
+   * Returns a map from each node to its group representative.
    */
-  function assignNodeRanks(edges: CanonicalEdge[], languages: KCLanguage[]): Map<string, number> {
-    const ranks = new Map<string, number>();
+  function buildSameLayerGroups(edges: CanonicalEdge[], languages: KCLanguage[]): Map<string, string> {
     const languageIds = new Set(languages.map(l => l.id));
+    const parent = new Map<string, string>();
     
-    // Initialize all nodes to rank 0
+    const findRoot = (node: string): string => {
+      if (parent.get(node) === node) return node;
+      const root = findRoot(parent.get(node)!);
+      parent.set(node, root);
+      return root;
+    };
+    
+    const union = (a: string, b: string) => {
+      const rootA = findRoot(a);
+      const rootB = findRoot(b);
+      if (rootA !== rootB) {
+        parent.set(rootB, rootA);
+      }
+    };
+    
+    // Initialize
     for (const lang of languages) {
-      ranks.set(lang.id, 0);
+      parent.set(lang.id, lang.id);
     }
     
-    // For each edge, if one direction is poly and the other isn't,
-    // ensure the non-poly end has higher rank (appears lower)
+    // Union nodes with bidirectional poly edges
     for (const edge of edges) {
       if (!languageIds.has(edge.nodeA) || !languageIds.has(edge.nodeB)) continue;
-      
-      const aToBPoly = edge.aToB === 'poly';
-      const bToAPoly = edge.bToA === 'poly';
-      
-      if (aToBPoly && !bToAPoly) {
-        // A → B is poly, B → A is not: A should be below B (higher rank number)
-        const rankA = ranks.get(edge.nodeA) || 0;
-        const rankB = ranks.get(edge.nodeB) || 0;
-        if (rankA <= rankB) {
-          ranks.set(edge.nodeA, rankB + 1);
-        }
-      } else if (bToAPoly && !aToBPoly) {
-        // B → A is poly, A → B is not: B should be below A
-        const rankA = ranks.get(edge.nodeA) || 0;
-        const rankB = ranks.get(edge.nodeB) || 0;
-        if (rankB <= rankA) {
-          ranks.set(edge.nodeB, rankA + 1);
-        }
+      if (edge.aToB === 'poly' && edge.bToA === 'poly') {
+        union(edge.nodeA, edge.nodeB);
       }
     }
     
-    return ranks;
+    // Return map: nodeId -> groupRepresentative
+    const nodeToGroup = new Map<string, string>();
+    for (const lang of languages) {
+      nodeToGroup.set(lang.id, findRoot(lang.id));
+    }
+    
+    return nodeToGroup;
   }
 
   // Function to create/update graph
@@ -67,19 +70,195 @@
     const visibleLanguages = graphData.languages
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
 
-    // Create edges from canonical edge registry
-    const edges: cytoscape.ElementDefinition[] = [];
+    const BASE_NODE_WIDTH = 80;
+    const BASE_NODE_HEIGHT = 80;
+    const GROUP_MEMBER_SPACING = 200; // Horizontal spacing between nodes in same group
+    const MIN_LAYER_GAP = 80; // Minimum gap between group footprints on same layer
+    const LAYER_KEY_INTERVAL = 10; // Bucketing tolerance for layer alignment
+    // Build same-layer groups (bidirectional poly edges)
+    const nodeToGroup = buildSameLayerGroups(graphData.edges, visibleLanguages);
+    
+    // Get unique groups and their members
+    const groupToMembers = new Map<string, string[]>();
+    for (const lang of visibleLanguages) {
+      const group = nodeToGroup.get(lang.id)!;
+      if (!groupToMembers.has(group)) {
+        groupToMembers.set(group, []);
+      }
+      groupToMembers.get(group)!.push(lang.id);
+    }
+    
+    const groups = Array.from(groupToMembers.keys());
+    
+    // Create representative nodes for dagre layout (one per group)
+    const representativeElements: cytoscape.ElementDefinition[] = groups.map(groupId => {
+      const members = groupToMembers.get(groupId)!;
+      const firstMember = visibleLanguages.find(l => l.id === members[0])!;
+      
+      return {
+        data: {
+          id: `__group_${groupId}`,
+          label: members.length > 1 ? `[${members.join(',')}]` : firstMember.name,
+          isGroupRep: true,
+          groupMembers: members
+        }
+      };
+    });
+    
+    // Create edges between group representatives (skip bidirectional poly edges)
+    const representativeEdges: cytoscape.ElementDefinition[] = [];
+    const addedEdges = new Set<string>();
+    
     for (const edge of graphData.edges) {
-      // Only include edge if both nodes are visible
+      const aVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeA);
+      const bVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeB);
+      
+      if (!aVisible || !bVisible) continue;
+      
+      const groupA = nodeToGroup.get(edge.nodeA)!;
+      const groupB = nodeToGroup.get(edge.nodeB)!;
+      
+      // Skip if same group (these are bidirectional poly edges)
+      if (groupA === groupB) continue;
+      
+      const edgeKey = `${groupA}-${groupB}`;
+      if (addedEdges.has(edgeKey)) continue;
+      addedEdges.add(edgeKey);
+      
+      // Only add edge if there's a poly constraint (for layout purposes)
+      const aToBPoly = edge.aToB === 'poly';
+      const bToAPoly = edge.bToA === 'poly';
+      
+      if (aToBPoly || bToAPoly) {
+        // Determine direction: poly edges point upward (from lower to higher rank)
+        const source = aToBPoly ? `__group_${groupA}` : `__group_${groupB}`;
+        const target = aToBPoly ? `__group_${groupB}` : `__group_${groupA}`;
+        
+        representativeEdges.push({
+          data: {
+            id: `__edge_${edgeKey}`,
+            source,
+            target
+          }
+        });
+      }
+    }
+    
+    // Run dagre layout on representative nodes
+    const tempCy = cytoscape({
+      headless: true,
+      elements: [...representativeElements, ...representativeEdges],
+      layout: {
+        name: 'dagre',
+        rankDir: 'BT',
+        nodeSep: 180,
+        rankSep: 220,
+        ranker: 'network-simplex'
+      } as any
+    });
+
+    const groupDimensions = new Map<string, { width: number; height: number }>();
+    // Inform dagre about node dimensions based on group size so it can reserve space
+    tempCy.nodes().forEach((node: any) => {
+      const members: string[] = node.data('groupMembers') || [];
+      const memberCount = members.length || 1;
+      const width = BASE_NODE_WIDTH + (memberCount - 1) * GROUP_MEMBER_SPACING;
+      node.style({
+        width,
+        height: BASE_NODE_HEIGHT
+      });
+      const groupId = node.id().replace('__group_', '');
+      groupDimensions.set(groupId, { width, height: BASE_NODE_HEIGHT });
+    });
+    
+    const layout = tempCy.layout({
+      name: 'dagre',
+      rankDir: 'BT',
+      nodeSep: 180,
+      rankSep: 220,
+      ranker: 'network-simplex'
+    } as any);
+    
+    layout.run();
+    
+    // Extract positions from representative nodes
+    const groupPositions = new Map<string, { x: number, y: number }>();
+    tempCy.nodes().forEach((node: any) => {
+      const groupId = node.id().replace('__group_', '');
+      groupPositions.set(groupId, node.position());
+    });
+
+    // Ensure group footprints on the same layer do not overlap
+    const layerBuckets = new Map<number, Array<{ groupId: string; x: number; y: number; width: number }>>();
+    for (const [groupId, pos] of groupPositions) {
+      const width = groupDimensions.get(groupId)?.width ?? BASE_NODE_WIDTH;
+      const layerKey = Math.round(pos.y / LAYER_KEY_INTERVAL) * LAYER_KEY_INTERVAL;
+      if (!layerBuckets.has(layerKey)) {
+        layerBuckets.set(layerKey, []);
+      }
+      layerBuckets.get(layerKey)!.push({ groupId, x: pos.x, y: pos.y, width });
+    }
+
+    for (const bucket of layerBuckets.values()) {
+      bucket.sort((a, b) => a.x - b.x);
+      let currentRightEdge = -Infinity;
+      for (const group of bucket) {
+        const halfWidth = group.width / 2;
+        let leftEdge = group.x - halfWidth;
+        if (leftEdge <= currentRightEdge) {
+          const shift = currentRightEdge + MIN_LAYER_GAP - leftEdge;
+          group.x += shift;
+          leftEdge += shift;
+        }
+        currentRightEdge = group.x + halfWidth;
+      }
+      for (const group of bucket) {
+        groupPositions.set(group.groupId, { x: group.x, y: group.y });
+      }
+    }
+    
+    // Now create the actual graph elements with proper positions
+    // For groups with multiple members, spread them horizontally at the same Y
+    const elements: cytoscape.ElementDefinition[] = [];
+    
+    for (const [groupId, members] of groupToMembers) {
+      const centerPos = groupPositions.get(groupId) || { x: 0, y: 0 };
+      const spacing = GROUP_MEMBER_SPACING;
+      const startX = centerPos.x - (members.length - 1) * spacing / 2;
+      
+      members.forEach((nodeId, idx) => {
+        const lang = visibleLanguages.find(l => l.id === nodeId)!;
+        elements.push({
+          data: {
+            id: lang.id,
+            label: lang.name,
+            fullName: lang.fullName,
+            description: lang.description,
+            properties: lang.properties,
+            bgColor: lang.visual?.backgroundColor,
+            borderColor: lang.visual?.borderColor,
+            borderWidth: lang.visual?.borderWidth,
+            labelPrefix: lang.visual?.labelPrefix || '',
+            labelSuffix: lang.visual?.labelSuffix || ''
+          },
+          position: {
+            x: startX + idx * spacing,
+            y: centerPos.y
+          }
+        });
+      });
+    }
+    
+    // Add all edges with proper styling
+    for (const edge of graphData.edges) {
       const aVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeA);
       const bVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeB);
       
       if (aVisible && bVisible) {
-        // Get endpoint styles for both directions
         const aToBStyle = getEdgeEndpointStyle(edge.aToB);
         const bToAStyle = getEdgeEndpointStyle(edge.bToA);
         
-        edges.push({
+        elements.push({
           data: {
             id: edge.id,
             source: edge.nodeA,
@@ -87,7 +266,6 @@
             aToBStatus: edge.aToB,
             bToAStatus: edge.bToA,
             description: edge.description || '',
-            // Store styling info
             width: 2,
             sourceArrow: bToAStyle.arrow,
             sourceDashed: bToAStyle.dashed,
@@ -97,31 +275,6 @@
         });
       }
     }
-
-    // Assign ranks to ensure polytime edges point upward
-    const nodeRanks = assignNodeRanks(graphData.edges, visibleLanguages);
-
-    const elements: cytoscape.ElementDefinition[] = [
-      ...visibleLanguages.map((lang) => ({
-        data: {
-          id: lang.id,
-          label: lang.name,
-          fullName: lang.fullName,
-          description: lang.description,
-          properties: lang.properties,
-          // Store visual overrides if present
-          bgColor: lang.visual?.backgroundColor,
-          borderColor: lang.visual?.borderColor,
-          borderWidth: lang.visual?.borderWidth,
-          labelPrefix: lang.visual?.labelPrefix || '',
-          labelSuffix: lang.visual?.labelSuffix || '',
-          // Rank for layout ordering
-          rank: nodeRanks.get(lang.id) || 0
-        },
-        position: lang.position || { x: 0, y: 0 }
-      })),
-      ...edges
-    ];
 
   const baseStyles: any[] = [
       {
@@ -195,17 +348,11 @@
       container: graphContainer,
       elements,
       style: baseStyles,
-      layout: ({
-        name: 'dagre',
+      layout: {
+        name: 'preset', // Use preset layout since we already have positions
         fit: true,
-        padding: 40,
-        rankDir: 'TB', // most succinct at top, least at bottom
-        nodeSep: 40,
-        edgeSep: 20,
-        rankSep: 80,
-        // Custom ranking function to ensure solid arrows (poly) point upward
-        ranker: 'network-simplex'
-      } as any),
+        padding: 40
+      } as any,
       userZoomingEnabled: true,
       userPanningEnabled: true,
       boxSelectionEnabled: false,

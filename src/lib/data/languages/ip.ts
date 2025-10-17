@@ -33,6 +33,5 @@ export const ip: KCLanguage = {
     { id: 'prime-implicants', label: 'Prime Implicants', color: '#3b82f6', refs: ['Darwiche_2002'] },
     { id: 'simple-conjunction', label: 'Simple Conjunction', color: '#14b8a6', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 650, y: 300 }
+  references: getReferences('Darwiche_2002')
 };

@@ -32,6 +32,5 @@ export const fNnf: KCLanguage = {
   tags: [
     { id: 'flatness', label: 'Flatness', color: '#7c3aed', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 500, y: 180 }
+  references: getReferences('Darwiche_2002')
 };

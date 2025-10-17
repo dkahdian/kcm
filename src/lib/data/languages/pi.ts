@@ -33,6 +33,5 @@ export const pi: KCLanguage = {
     { id: 'prime-implicates', label: 'Prime Implicates', color: '#8b5cf6', refs: ['Darwiche_2002'] },
     { id: 'simple-disjunction', label: 'Simple Disjunction', color: '#0ea5e9', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 500, y: 300 }
+  references: getReferences('Darwiche_2002')
 };

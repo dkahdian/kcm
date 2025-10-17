@@ -32,6 +32,5 @@ export const sNnf: KCLanguage = {
   tags: [
     { id: 'smoothness', label: 'Smoothness', color: '#06b6d4', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 350, y: 180 }
+  references: getReferences('Darwiche_2002')
 };

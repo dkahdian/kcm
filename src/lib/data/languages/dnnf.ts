@@ -32,6 +32,5 @@ export const dnnf: KCLanguage = {
   tags: [
     { id: 'decomposability', label: 'Decomposability', color: '#84cc16', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 50, y: 180 }
+  references: getReferences('Darwiche_2002')
 };

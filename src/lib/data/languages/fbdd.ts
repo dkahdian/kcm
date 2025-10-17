@@ -32,6 +32,5 @@ export const fbdd: KCLanguage = {
   tags: [
     { id: 'decision', label: 'Decision', color: '#f59e0b', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 575, y: 260 }
+  references: getReferences('Darwiche_2002')
 };

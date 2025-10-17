@@ -32,6 +32,5 @@ export const mods: KCLanguage = {
   tags: [
     { id: 'models', label: 'Models', color: '#eab308', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 800, y: 300 }
+  references: getReferences('Darwiche_2002')
 };

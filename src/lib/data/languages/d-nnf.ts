@@ -32,6 +32,5 @@ export const dNnf: KCLanguage = {
   tags: [
     { id: 'determinism', label: 'Determinism', color: '#ef4444', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 200, y: 180 }
+  references: getReferences('Darwiche_2002')
 };

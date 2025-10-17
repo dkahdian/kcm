@@ -34,6 +34,5 @@ export const sdDnnf: KCLanguage = {
     { id: 'determinism', label: 'Determinism', color: '#ef4444', refs: ['Darwiche_2002'] },
     { id: 'smoothness', label: 'Smoothness', color: '#06b6d4', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 275, y: 260 }
+  references: getReferences('Darwiche_2002')
 };

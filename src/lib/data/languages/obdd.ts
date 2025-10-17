@@ -33,6 +33,5 @@ export const obdd: KCLanguage = {
     { id: 'decision', label: 'Decision', color: '#f59e0b', refs: ['Darwiche_2002'] },
     { id: 'ordering', label: 'Ordering', color: '#22c55e', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 725, y: 260 }
+  references: getReferences('Darwiche_2002')
 };

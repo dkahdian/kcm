@@ -34,6 +34,5 @@ export const cnf: KCLanguage = {
     { id: 'flatness', label: 'Flatness', color: '#7c3aed', refs: ['Darwiche_2002'] },
     { id: 'simple-disjunction', label: 'Simple Disjunction', color: '#0ea5e9', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 300, y: 300 }
+  references: getReferences('Darwiche_2002')
 };

@@ -112,8 +112,6 @@ export interface KCLanguage {
   /** reference IDs for the main description */
   descriptionRefs: string[];
   properties: KCLanguageProperties;
-  /** optional manual positioning for static layouts */
-  position?: { x: number; y: number };
   /** ids of languages that are strict subsets of this one */
   subsets?: string[];
   /** badges/tags for quick categorization */

@@ -33,6 +33,5 @@ export const nnf: KCLanguage = {
     { id: 'normal-form', label: 'Normal Form', color: '#6366f1', refs: ['Darwiche_2002'] },
     { id: 'general', label: 'General', color: '#10b981', refs: ['Darwiche_2002'] }
   ],
-  references: getReferences('Darwiche_2002'),
-  position: { x: 200, y: 100 }
+  references: getReferences('Darwiche_2002')
 };

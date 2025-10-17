@@ -109,7 +109,10 @@
 </script>
 
 <div class="legend">
-  <h3>Transformation complexity (A → B)</h3>
+  <h3 class="text-lg font-semibold text-gray-700 mb-2">Succinctness</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        A transforms to B in ...
+      </p>
   <div class="legend-items">
     {#each edgeTypes as edge, i}
       <div class="legend-row">
@@ -155,10 +158,6 @@
     align-items: center;
     gap: 0.5rem;
     min-width: 100px;
-  }
-
-  .node-label {
-    display: none;
   }
 
   .cyto-container {

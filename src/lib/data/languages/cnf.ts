@@ -9,24 +9,24 @@ export const cnf: KCLanguage = {
   descriptionRefs: ['Darwiche_2002'],
   properties: {
     queries: {
-      CO: { polytime: 'false', refs: ['Darwiche_2002'] },
-      VA: { polytime: 'false', refs: ['Darwiche_2002'] },
-      CE: { polytime: 'true', refs: ['Darwiche_2002'] },
-      IM: { polytime: 'false', refs: ['Darwiche_2002'] },
-      EQ: { polytime: 'false', refs: ['Darwiche_2002'] },
-      SE: { polytime: 'false', refs: ['Darwiche_2002'] },
-      CT: { polytime: 'false', refs: ['Darwiche_2002'] },
-      ME: { polytime: 'false', refs: ['Darwiche_2002'] }
+      CO: { polytime: 'exp', refs: ['Darwiche_2002'] },
+      VA: { polytime: 'exp', refs: ['Darwiche_2002'] },
+      CE: { polytime: 'poly', refs: ['Darwiche_2002'] },
+      IM: { polytime: 'exp', refs: ['Darwiche_2002'] },
+      EQ: { polytime: 'exp', refs: ['Darwiche_2002'] },
+      SE: { polytime: 'exp', refs: ['Darwiche_2002'] },
+      CT: { polytime: 'exp', refs: ['Darwiche_2002'] },
+      ME: { polytime: 'exp', refs: ['Darwiche_2002'] }
     },
     transformations: {
-      CD: { polytime: 'true', refs: ['Darwiche_2002'] },
-      FO: { polytime: 'false', note: 'Unless P=NP', refs: ['Darwiche_2002'] },
-      SFO: { polytime: 'true', refs: ['Darwiche_2002'] },
-      AND_C: { polytime: 'true', refs: ['Darwiche_2002'] },
-      AND_BC: { polytime: 'true', refs: ['Darwiche_2002'] },
-      OR_C: { polytime: 'false', note: 'Unless P=NP', refs: ['Darwiche_2002'] },
-      OR_BC: { polytime: 'true', refs: ['Darwiche_2002'] },
-      NOT_C: { polytime: 'false', note: 'Unless P=NP', refs: ['Darwiche_2002'] }
+      CD: { polytime: 'poly', refs: ['Darwiche_2002'] },
+      FO: { polytime: 'not-poly-conditional', note: 'Unless P=NP', refs: ['Darwiche_2002'] },
+      SFO: { polytime: 'poly', refs: ['Darwiche_2002'] },
+      AND_C: { polytime: 'poly', refs: ['Darwiche_2002'] },
+      AND_BC: { polytime: 'poly', refs: ['Darwiche_2002'] },
+      OR_C: { polytime: 'not-poly-conditional', note: 'Unless P=NP', refs: ['Darwiche_2002'] },
+      OR_BC: { polytime: 'poly', refs: ['Darwiche_2002'] },
+      NOT_C: { polytime: 'not-poly-conditional', note: 'Unless P=NP', refs: ['Darwiche_2002'] }
     }
   },
   tags: [

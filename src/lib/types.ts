@@ -1,9 +1,15 @@
 // Types for the Knowledge Compilation Map
 
 /**
- * Code identifying a polytime complexity status.
+ * Polytime complexity flag codes
+ * - 'poly': polynomial time
+ * - 'quasi': quasi-polynomial time
+ * - 'exp': exponential time (proven)
+ * - 'not-poly-conditional': not polynomial under assumption (e.g., 'Unless P=NP')
+ * - 'unknown': complexity unknown
+ * - 'open': open problem
  */
-export type PolytimeFlagCode = 'true' | 'false' | 'unknown' | 'open';
+export type PolytimeFlagCode = 'poly' | 'quasi' | 'exp' | 'not-poly-conditional' | 'unknown' | 'open';
 
 /**
  * Full polytime complexity flag with display properties.

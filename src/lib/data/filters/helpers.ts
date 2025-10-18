@@ -26,8 +26,7 @@ export function createOperationVisualizer(
     
     // Get the full polytime flag object
     const polytimeFlag = getPolytimeFlag(operation.polytime);
-    const note = operation.note ? '*' : '';
-    const suffix = `\n${polytimeFlag.emoji}${code}${note}`;
+    const suffix = `\n${polytimeFlag.emoji}${code}`;
     
     return {
       ...language,

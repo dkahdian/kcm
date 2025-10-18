@@ -100,8 +100,8 @@
     });
   });
 
-  const statusColor = (op: KCOpEntry) => {
-    return getPolytimeFlag(op.polytime).color;
+  const statusEmoji = (op: KCOpEntry) => {
+    return getPolytimeFlag(op.polytime).emoji;
   };
 
   function scrollToReferences(e: MouseEvent) {
@@ -174,7 +174,7 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.queries ?? [] as q}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
-                  <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(q)}`}></span>
+                  <span class="shrink-0 text-base leading-none">{statusEmoji(q)}</span>
                   <div class="text-sm leading-5">
                     <div>
                       <strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''}{#if q.refs?.length}{#each q.refs as refId}<button 
@@ -197,7 +197,7 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.transformations ?? [] as t}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
-                  <span class="inline-block w-3 h-3 rounded-full mt-[2px] shrink-0" style={`background:${statusColor(t)}`}></span>
+                  <span class="shrink-0 text-base leading-none">{statusEmoji(t)}</span>
                   <div class="text-sm leading-5">
                     <div>
                       <strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''}{#if t.refs?.length}{#each t.refs as refId}<button 
@@ -288,7 +288,7 @@
       <h5>Operation Complexity</h5>
       {#each Object.values(POLYTIME_COMPLEXITIES) as complexity}
         <div class="legend-row">
-          <span class="dot" style="background: {complexity.color}"></span>
+          <span class="complexity-emoji">{complexity.emoji}</span>
           <span title={complexity.description}>{complexity.label}</span>
         </div>
       {/each}
@@ -391,11 +391,12 @@
     .legend-row:last-child {
       margin-bottom: 0;
     }
-    .dot {
+    .complexity-emoji {
       display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+      font-size: 0.875rem;
+      line-height: 1;
       flex-shrink: 0;
+      width: 1.25rem;
+      text-align: center;
     }
   </style>

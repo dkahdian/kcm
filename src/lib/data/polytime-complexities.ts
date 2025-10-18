@@ -3,42 +3,55 @@
  * This centralizes the mapping from complexity codes to their display properties.
  */
 
-import type { PolytimeFlag, PolytimeFlagCode } from '../types.js';
+import type { PolytimeFlagCode, PolytimeFlag } from '../types.js';
 
 /**
- * Canonical polytime complexity definitions.
- * Maps complexity codes to their full flag objects.
+ * Canonical polytime complexity flags
  */
 export const POLYTIME_COMPLEXITIES: Record<PolytimeFlagCode, PolytimeFlag> = {
-  'true': {
-    code: 'true',
-    label: 'Polynomial-time',
-    emoji: '🟢',
+  poly: {
+    code: 'poly',
+    label: 'Polynomial',
     color: '#22c55e', // green-500
-    description: 'This operation can be performed in polynomial time'
+    emoji: '🟢',
+    description: 'Operation is polynomial time'
   },
-  'false': {
-    code: 'false',
-    label: 'Not polynomial-time',
-    emoji: '🔴',
-    color: '#ef4444', // red-500
-    description: 'This operation requires exponential time (unless P=NP)'
+  quasi: {
+    code: 'quasi',
+    label: 'Quasi-polynomial',
+    color: '#f97316',
+    emoji: '⚡',
+    description: 'Operation is quasi-polynomial time'
   },
-  'unknown': {
+  exp: {
+    code: 'exp',
+    label: 'Exponential',
+    color: '#ef4444',
+    emoji: '❌',
+    description: 'Operation is exponential time (proven)'
+  },
+  'not-poly-conditional': {
+    code: 'not-poly-conditional',
+    label: 'Not Poly (Conditional)',
+    color: '#f97316',
+    emoji: '⚠️',
+    description: 'Not polynomial under complexity assumption (e.g., Unless P=NP)'
+  },
+  unknown: {
     code: 'unknown',
-    label: 'Unknown to us',
-    emoji: '🟡',
-    color: '#eab308', // yellow-500
-    description: 'Complexity unknown us'
+    label: 'Unknown',
+    color: '#9ca3af',
+    emoji: '❔',
+    description: 'Complexity is unknown'
   },
-  'open': {
+  open: {
     code: 'open',
-    label: 'Open problem',
-    emoji: '🟠',
-    color: '#f97316', // orange-500
-    description: 'This is an open research question'
+    label: 'Open Problem',
+    color: '#9ca3af',
+    emoji: '❓',
+    description: 'Open research problem'
   }
-} as const;
+};
 
 /**
  * Get polytime flag by code.

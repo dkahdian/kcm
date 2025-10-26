@@ -3,25 +3,35 @@
   import LanguageInfo from '$lib/LanguageInfo.svelte';
   import EdgeInfo from '$lib/EdgeInfo.svelte';
   import FilterDropdown from '$lib/FilterDropdown.svelte';
-  import { initialGraphData, getAllFilters } from '$lib/data/index.js';
+  import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters } from '$lib/data/index.js';
   import { applyFiltersWithParams, createDefaultFilterState } from '$lib/filter-utils.js';
   import type { KCLanguage, FilterStateMap, SelectedEdge } from '$lib/types.js';
   
-  const allFilters = getAllFilters();
+  const languageFilters = getAllLanguageFilters();
+  const edgeFilters = getAllEdgeFilters();
   
   let selectedNode: KCLanguage | null = null;
   let selectedEdge: SelectedEdge | null = null;
   // Initialize filter state with default parameter values
-  let filterStates: FilterStateMap = createDefaultFilterState(allFilters);
+  let filterStates: FilterStateMap = createDefaultFilterState(languageFilters, edgeFilters);
   
   // Compute filtered graph data reactively
-  $: filteredGraphData = applyFiltersWithParams(initialGraphData, allFilters, filterStates);
+  $: filteredGraphData = applyFiltersWithParams(initialGraphData, languageFilters, edgeFilters, filterStates);
   
   // Reset selected node if it's no longer visible after filtering
   $: if (selectedNode) {
     const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.id);
     if (!isVisible) {
       selectedNode = null;
+    }
+  }
+  
+  // Reset selected edge if it's no longer visible after filtering
+  $: if (selectedEdge) {
+    const edgeId = `${selectedEdge.source}->${selectedEdge.target}`;
+    const isVisible = filteredGraphData.visibleEdgeIds.has(edgeId);
+    if (!isVisible) {
+      selectedEdge = null;
     }
   }
 </script>
@@ -38,7 +48,8 @@
       <h1 class="title">Knowledge Compilation Map</h1>
       <div class="header-controls">
         <FilterDropdown 
-          filters={allFilters} 
+          languageFilters={languageFilters}
+          edgeFilters={edgeFilters}
           bind:filterStates 
           class="filter-control"
         />
@@ -54,11 +65,11 @@
 
     <aside class="side-panel">
       {#if selectedEdge}
-        <EdgeInfo selectedEdge={selectedEdge} graphData={initialGraphData} />
+        <EdgeInfo selectedEdge={selectedEdge} graphData={filteredGraphData} />
       {:else}
         <LanguageInfo 
           selectedLanguage={selectedNode} 
-          graphData={initialGraphData} 
+          graphData={filteredGraphData} 
           onEdgeSelect={(edge) => { selectedEdge = edge; }}
         />
       {/if}

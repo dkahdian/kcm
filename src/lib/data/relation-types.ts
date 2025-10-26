@@ -3,7 +3,12 @@ import type { KCRelationType } from '../types.js';
 /**
  * Helper to create bidirectional edge endpoint styles based on transformation status
  */
-function getEndpointStyleForStatus(status: string): { arrow: any, dashed?: boolean, isDouble?: boolean } {
+function getEndpointStyleForStatus(status: string | null): { arrow: any, dashed?: boolean, isDouble?: boolean } {
+  if (status === null) {
+    // No edge in this direction - show no arrow
+    return { arrow: 'none', dashed: false };
+  }
+  
   switch (status) {
     case 'poly':
       // 1. Polynomial transformation exists (A ≤_p B)
@@ -133,6 +138,6 @@ export const relationTypes: KCRelationType[] = [
 /**
  * Get the visual style for an edge endpoint based on transformation status
  */
-export function getEdgeEndpointStyle(status: string): { arrow: any, dashed?: boolean, isDouble?: boolean } {
+export function getEdgeEndpointStyle(status: string | null): { arrow: any, dashed?: boolean, isDouble?: boolean } {
   return getEndpointStyleForStatus(status);
 }

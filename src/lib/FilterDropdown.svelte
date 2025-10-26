@@ -1,7 +1,9 @@
 <script lang="ts">
-  import type { LanguageFilter, FilterCategory, FilterStateMap } from './types.js';
+  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap } from './types.js';
   import { organizeFiltersByCategory } from './data/index.js';
   import { createDefaultFilterState } from './filter-utils.js';
+
+  type AnyFilter = LanguageFilter | EdgeFilter;
 
   function getDisplayText(): string {
     const activeCount = countActiveFilters();
@@ -29,7 +31,7 @@
     }).length;
   }
   
-  function isFilterActive(filter: LanguageFilter, param: any): boolean {
+  function isFilterActive(filter: AnyFilter, param: any): boolean {
     // For boolean parameters, true means active
     if (typeof param === 'boolean') {
       return param !== filter.defaultParam;
@@ -39,30 +41,35 @@
   }
 
   let { 
-    filters, 
+    languageFilters = [], 
+    edgeFilters = [],
     filterStates = $bindable(), 
     class: className = '' 
   }: {
-    filters: LanguageFilter[];
+    languageFilters?: LanguageFilter[];
+    edgeFilters?: EdgeFilter[];
     filterStates: FilterStateMap;
     class?: string;
   } = $props();
   
+  // Combine all filters for UI display
+  const allFilters = $derived([...languageFilters, ...edgeFilters]);
+  
   // Filter out hidden filters from UI
-  const visibleFilters = $derived(filters.filter(f => !f.hidden));
+  const visibleFilters = $derived(allFilters.filter(f => !f.hidden));
   
   // Organize filters by category
-  const categories = $derived(organizeFiltersByCategory(visibleFilters));
+  const categories = $derived(organizeFiltersByCategory(visibleFilters as LanguageFilter[]));
 
   let isOpen = $state(false);
   let dropdownRef: HTMLDivElement;
 
   function resetAllFilters() {
     // Reset all filters to their default parameters
-    filterStates = createDefaultFilterState(filters);
+    filterStates = createDefaultFilterState(languageFilters, edgeFilters);
   }
 
-  function toggleFilter(filter: LanguageFilter) {
+  function toggleFilter(filter: AnyFilter) {
     const currentParam = filterStates.get(filter.id) ?? filter.defaultParam;
     
     // For boolean filters, toggle the value
@@ -73,7 +80,7 @@
     }
   }
 
-  function isFilterChecked(filter: LanguageFilter): boolean {
+  function isFilterChecked(filter: AnyFilter): boolean {
     const param = filterStates.get(filter.id) ?? filter.defaultParam;
     // For boolean params, checked means true
     return param === true;

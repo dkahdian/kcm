@@ -1,23 +1,31 @@
 <script lang="ts">
-  import type {
-    KCLanguage,
-    KCOpEntry,
-    GraphData,
+  import type { 
+    KCLanguage, 
+    GraphData, 
+    KCOpEntry, 
+    KCOpSupportMap, 
+    SelectedEdge,
+    FilteredGraphData,
     KCLanguagePropertiesResolved,
-    TransformationStatus,
-    SelectedEdge
+    TransformationStatus
   } from './types.js';
-  import { resolveLanguageProperties } from './data/operations.js';
-  import { getPolytimeFlag, POLYTIME_COMPLEXITIES } from './data/polytime-complexities.js';
+  import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from './data/operations.js';
+  import { POLYTIME_COMPLEXITIES, getPolytimeFlag } from './data/polytime-complexities.js';
   import EdgeLegend from './components/EdgeLegend.svelte';
-  
-  let { selectedLanguage, graphData, onEdgeSelect }: { 
-    selectedLanguage: KCLanguage | null; 
-    graphData: GraphData;
-    onEdgeSelect?: (edge: SelectedEdge) => void;
+  import DynamicLegend from './components/DynamicLegend.svelte';
+
+  let {
+    selectedLanguage,
+    graphData,
+    onEdgeSelect
+  }: {
+    selectedLanguage: KCLanguage | null;
+    graphData: GraphData | FilteredGraphData;
+    onEdgeSelect: (edge: SelectedEdge) => void;
   } = $props();
   
-  // Resolve the properties to get full operation entries
+  // Combine all operations for display
+  const KC_OPERATIONS = { ...QUERIES, ...TRANSFORMATIONS };  // Resolve the properties to get full operation entries
   // Note: If the fill-unknown-operations filter is active, properties will already be resolved,
   // but we resolve again here for safety in case selectedLanguage comes from unfiltered data
   let resolvedProperties: KCLanguagePropertiesResolved | null = $derived(
@@ -340,17 +348,7 @@
       </div>
     {/if}
     
-    <EdgeLegend />
-    
-    <div class="legend-section">
-      <h5>Operation Complexity</h5>
-      {#each Object.values(POLYTIME_COMPLEXITIES) as complexity}
-        <div class="legend-row">
-          <span class="complexity-emoji">{complexity.emoji}</span>
-          <span title={complexity.description}>{complexity.label}</span>
-        </div>
-      {/each}
-    </div>
+    <DynamicLegend graphData={graphData} selectedNode={selectedLanguage} />
   </div>
 </div>
   
@@ -438,42 +436,5 @@
 
     .missing-ref.inline {
       margin-left: 0.25em;
-    }
-    
-    .legend-section {
-      margin-bottom: 0.75rem;
-      padding: 0.75rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5rem;
-      background: #ffffff;
-      margin-top: 1rem;
-    }
-    .legend-section:last-child {
-      margin-bottom: 0;
-    }
-    .legend-section h5 {
-      margin: 0 0 0.5rem 0;
-      font-weight: 500;
-      font-size: 0.8rem;
-      color: #374151;
-    }
-    .legend-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.75rem;
-      color: #374151;
-      margin-bottom: 0.25rem;
-    }
-    .legend-row:last-child {
-      margin-bottom: 0;
-    }
-    .complexity-emoji {
-      display: inline-block;
-      font-size: 0.875rem;
-      line-height: 1;
-      flex-shrink: 0;
-      width: 1.25rem;
-      text-align: center;
     }
   </style>

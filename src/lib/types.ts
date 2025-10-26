@@ -284,6 +284,30 @@ export interface LanguageFilter<T extends FilterParamValue = boolean> {
   lambda: (language: KCLanguage, param: T) => KCLanguage | null;
 }
 
+/**
+ * Edge filter - operates on edges after node filtering
+ * Returns the edge to show it, or null to hide it
+ */
+export interface EdgeFilter<T extends FilterParamValue = boolean> {
+  id: string;
+  name: string;
+  description: string;
+  category?: string;
+  /** Whether this filter is internal/hidden from UI or can be edited by the user */
+  hidden?: boolean;
+  /** Default value for the filter parameter */
+  defaultParam: T;
+  /** UI control type for displaying this filter */
+  controlType?: FilterControlType;
+  /** Filter function: takes edge relation and parameter value, returns relation to show it, or null to hide it */
+  lambda: (
+    relation: DirectedSuccinctnessRelation,
+    sourceId: string,
+    targetId: string,
+    param: T
+  ) => DirectedSuccinctnessRelation | null;
+}
+
 export interface FilterCategory {
   name: string;
   filters: LanguageFilter[];
@@ -304,6 +328,8 @@ export type FilterStateMap = Map<string, FilterParamValue>;
 
 export interface FilteredGraphData extends GraphData {
   visibleLanguageIds: Set<string>;
+  /** Set of visible edge IDs in format "sourceId->targetId" */
+  visibleEdgeIds: Set<string>;
 }
 
 // TODO: Future enhancement - Filter Presets

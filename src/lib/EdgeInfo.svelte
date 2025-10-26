@@ -1,7 +1,11 @@
 <script lang="ts">
-  import type { SelectedEdge, TransformationStatus, GraphData, KCReference } from './types.js';
+  import type { SelectedEdge, TransformationStatus, GraphData, FilteredGraphData, KCReference } from './types.js';
+  import DynamicLegend from './components/DynamicLegend.svelte';
   
-  let { selectedEdge, graphData }: { selectedEdge: SelectedEdge | null; graphData: GraphData } = $props();
+  let { selectedEdge, graphData }: { 
+    selectedEdge: SelectedEdge | null; 
+    graphData: GraphData | FilteredGraphData 
+  } = $props();
   
   let referencesSection: HTMLElement | null = $state(null);
   let copiedRefId: string | null = $state(null);
@@ -188,6 +192,8 @@
         </div>
       </div>
     </div>
+    
+    <DynamicLegend graphData={graphData} selectedEdge={selectedEdge} />
   </div>
 {/if}
 

@@ -27,8 +27,8 @@
     id: string;
     nodeA: string;
     nodeB: string;
-    aToB: TransformationStatus;
-    bToA: TransformationStatus;
+    aToB: TransformationStatus | null;
+    bToA: TransformationStatus | null;
     refs: string[];
     description: string;
     forward: DirectedSuccinctnessRelation | null;
@@ -55,8 +55,8 @@
             id: `${nodeA}-${nodeB}`,
             nodeA,
             nodeB,
-            aToB: 'unknown-both',
-            bToA: 'unknown-both',
+            aToB: null, // Will be set if relation exists
+            bToA: null, // Will be set if relation exists
             refs: [],
             description: '',
             forward: null,

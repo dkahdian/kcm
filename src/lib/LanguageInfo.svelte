@@ -65,32 +65,46 @@
   const languageRelationships = $derived.by<RelationshipStatement[]>(() => {
     if (!selectedLanguage) return [];
     const { id } = selectedLanguage;
+    const { adjacencyMatrix } = graphData;
 
     const statements: RelationshipStatement[] = [];
-    
-    for (const edge of graphData.edges) {
-      if (edge.nodeA === id || edge.nodeB === id) {
-        const isSourceNodeA = edge.nodeA === id;
-        const target = isSourceNodeA ? edge.nodeB : edge.nodeA;
-        const forwardStatus = isSourceNodeA ? edge.aToB : edge.bToA;
-        const backwardStatus = isSourceNodeA ? edge.bToA : edge.aToB;
-        
-        // Add forward direction statement
-        statements.push({
-          target,
-          text: getStatusDescription(forwardStatus, id, target),
-          refs: edge.refs ?? []
-        });
-        
-        // Add backward direction statement (unless it's the same as forward)
-        if (forwardStatus !== backwardStatus) {
-          statements.push({
-            target,
-            text: getStatusDescription(backwardStatus, target, id),
-            refs: edge.refs ?? []
-          });
-        }
+    const forwardStatuses = new Map<string, TransformationStatus>();
+
+    const sourceIndex = adjacencyMatrix.indexByLanguage[id];
+    if (sourceIndex === undefined) return statements;
+
+    const { languageIds, matrix } = adjacencyMatrix;
+
+    for (let targetIndex = 0; targetIndex < languageIds.length; targetIndex += 1) {
+      const relation = matrix[sourceIndex]?.[targetIndex];
+      if (!relation) continue;
+
+      const target = languageIds[targetIndex];
+      forwardStatuses.set(target, relation.status);
+      statements.push({
+        target,
+        text: getStatusDescription(relation.status, id, target),
+        refs: relation.refs ?? []
+      });
+    }
+
+    for (let sourceIndexIter = 0; sourceIndexIter < languageIds.length; sourceIndexIter += 1) {
+      if (sourceIndexIter === sourceIndex) continue;
+
+      const relation = matrix[sourceIndexIter]?.[sourceIndex];
+      if (!relation) continue;
+
+      const source = languageIds[sourceIndexIter];
+      const forwardStatus = forwardStatuses.get(source);
+      if (forwardStatus && forwardStatus === relation.status) {
+        continue;
       }
+
+      statements.push({
+        target: source,
+        text: getStatusDescription(relation.status, source, id),
+        refs: relation.refs ?? []
+      });
     }
 
     return statements.sort((a, b) => {

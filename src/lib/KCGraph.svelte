@@ -3,7 +3,14 @@
   import cytoscape from 'cytoscape';
   // @ts-ignore - dagre doesn't have proper TypeScript types
   import dagre from 'cytoscape-dagre';
-  import type { GraphData, FilteredGraphData, KCLanguage, CanonicalEdge } from './types.js';
+  import type {
+      GraphData,
+      FilteredGraphData,
+      KCLanguage,
+      KCAdjacencyMatrix,
+      DirectedSuccinctnessRelation,
+      TransformationStatus
+    } from './types.js';
   import { getEdgeEndpointStyle } from './data/relation-types.js';
 
   let { graphData, selectedNode = $bindable() }: {
@@ -14,11 +21,84 @@
   let graphContainer: HTMLDivElement;
   let cy: cytoscape.Core;
 
+  interface EdgePair {
+    id: string;
+    nodeA: string;
+    nodeB: string;
+    aToB: TransformationStatus;
+    bToA: TransformationStatus;
+    refs: string[];
+    description: string;
+    forward: DirectedSuccinctnessRelation | null;
+    backward: DirectedSuccinctnessRelation | null;
+  }
+
+  function normalizeEdgePairs(adjacencyMatrix: KCAdjacencyMatrix): EdgePair[] {
+    const pairMap = new Map<string, EdgePair>();
+    const { languageIds, matrix } = adjacencyMatrix;
+
+    for (let i = 0; i < languageIds.length; i += 1) {
+      for (let j = 0; j < languageIds.length; j += 1) {
+        const relation = matrix[i]?.[j];
+        if (!relation) continue;
+
+        const source = languageIds[i];
+        const target = languageIds[j];
+        const [nodeA, nodeB] = source < target ? [source, target] : [target, source];
+        const key = `${nodeA}__${nodeB}`;
+
+        let pair = pairMap.get(key);
+        if (!pair) {
+          pair = {
+            id: `${nodeA}-${nodeB}`,
+            nodeA,
+            nodeB,
+            aToB: 'unknown-both',
+            bToA: 'unknown-both',
+            refs: [],
+            description: '',
+            forward: null,
+            backward: null
+          };
+          pairMap.set(key, pair);
+        }
+
+        if (source === nodeA) {
+          pair.aToB = relation.status;
+          pair.forward = relation;
+        } else {
+          pair.bToA = relation.status;
+          pair.backward = relation;
+        }
+
+        const combinedRefs = new Set(pair.refs);
+        for (const ref of relation.refs) {
+          combinedRefs.add(ref);
+        }
+        pair.refs = Array.from(combinedRefs);
+      }
+    }
+
+    for (const pair of pairMap.values()) {
+      const descriptions: string[] = [];
+      if (pair.forward?.description) {
+        descriptions.push(pair.forward.description);
+      }
+      const backwardDesc = pair.backward?.description;
+      if (backwardDesc && backwardDesc !== pair.forward?.description) {
+        descriptions.push(backwardDesc);
+      }
+      pair.description = descriptions.join(' ').trim();
+    }
+
+    return Array.from(pairMap.values());
+  }
+
   /**
    * Build same-layer groups using union-find.
    * Returns a map from each node to its group representative.
    */
-  function buildSameLayerGroups(edges: CanonicalEdge[], languages: KCLanguage[]): Map<string, string> {
+  function buildSameLayerGroups(edges: EdgePair[], languages: KCLanguage[]): Map<string, string> {
     const languageIds = new Set(languages.map(l => l.id));
     const parent = new Map<string, string>();
     
@@ -75,8 +155,9 @@
     const GROUP_MEMBER_SPACING = 200; // Horizontal spacing between nodes in same group
     const MIN_LAYER_GAP = 80; // Minimum gap between group footprints on same layer
     const LAYER_KEY_INTERVAL = 10; // Bucketing tolerance for layer alignment
-    // Build same-layer groups (bidirectional poly edges)
-    const nodeToGroup = buildSameLayerGroups(graphData.edges, visibleLanguages);
+
+    const edgePairs = normalizeEdgePairs(graphData.adjacencyMatrix);
+    const nodeToGroup = buildSameLayerGroups(edgePairs, visibleLanguages);
     
     // Get unique groups and their members
     const groupToMembers = new Map<string, string[]>();
@@ -109,7 +190,7 @@
     const representativeEdges: cytoscape.ElementDefinition[] = [];
     const addedEdges = new Set<string>();
     
-    for (const edge of graphData.edges) {
+    for (const edge of edgePairs) {
       const aVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeA);
       const bVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeB);
       
@@ -250,7 +331,7 @@
     }
     
     // Add all edges with proper styling
-    for (const edge of graphData.edges) {
+  for (const edge of edgePairs) {
       const aVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeA);
       const bVisible = !isFilteredData || visibleLanguageIds!.has(edge.nodeB);
       
@@ -266,6 +347,9 @@
             aToBStatus: edge.aToB,
             bToAStatus: edge.bToA,
             description: edge.description || '',
+            refs: edge.refs,
+            aToBSeparating: edge.forward?.separatingFunctions?.map(fn => fn.shortName) ?? [],
+            bToASeparating: edge.backward?.separatingFunctions?.map(fn => fn.shortName) ?? [],
             width: 2,
             sourceArrow: bToAStyle.arrow,
             sourceDashed: bToAStyle.dashed,
@@ -276,7 +360,7 @@
       }
     }
 
-  const baseStyles: any[] = [
+    const baseStyles: any[] = [
       {
         selector: 'node',
         style: {

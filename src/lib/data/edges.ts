@@ -1,236 +1,426 @@
-import type { CanonicalEdge } from '../types.js';
+import type { KCAdjacencyMatrix, DirectedSuccinctnessRelation } from '../types.js';
 
-/**
- * Canonical edge registry - single source of truth for all graph edges.
- * 
- * Each edge is stored exactly once with both directions specified.
- * Nodes are ordered lexicographically (nodeA < nodeB) for canonical representation.
- * 
- * Edge orientation rules for layout:
- * - If aToB is 'poly' and bToA is not: A should be below B (arrow points up)
- * - If both are 'poly': bidirectional arrow (A ↔ B)
- * - Otherwise: layout algorithm determines positioning
- */
-export const edges: CanonicalEdge[] = [
-  // CNF relationships
-  {
-    id: 'cnf-dnnf',
-    nodeA: 'cnf',
-    nodeB: 'dnnf',
-    aToB: 'poly',           // CNF → DNNF (polytime, filled triangle)
-    bToA: 'no-quasi',       // DNNF → CNF (exponential gap, filled square)
-    description: 'CNF compiles to DNNF in polytime; reverse is exponential',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'cnf-dnf',
-    nodeA: 'cnf',
-    nodeB: 'dnf',
-    aToB: 'no-poly-unknown-quasi',  // CNF → DNF (no poly, quasi unknown, hollow tee)
-    bToA: 'no-poly-unknown-quasi',  // DNF → CNF (same)
-    description: 'Both conversions lack polynomial algorithms',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'cnf-nnf',
-    nodeA: 'cnf',
-    nodeB: 'nnf',
-    aToB: 'poly',           // CNF → NNF (polytime)
-    bToA: 'no-poly-quasi',  // NNF → CNF (quasipoly only, filled tee)
-    description: 'CNF is subset of NNF; reverse is quasipoly',
-    refs: ['Darwiche_2002']
-  },
-
-  // D-DNNF relationships
-  {
-    id: 'd-dnnf-dnnf',
-    nodeA: 'd-dnnf',
-    nodeB: 'dnnf',
-    aToB: 'poly',           // d-DNNF → DNNF (polytime)
-    bToA: 'poly',           // DNNF → d-DNNF (polytime, bidirectional)
-    description: 'Deterministic DNNF is equivalent to DNNF',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'd-dnnf-dnf',
-    nodeA: 'd-dnnf',
-    nodeB: 'dnf',
-    aToB: 'unknown-poly-quasi',  // d-DNNF → DNF (has quasi, poly unknown, hollow triangle-cross)
-    bToA: 'no-quasi',            // DNF → d-DNNF (exponential gap)
-    description: 'Quasi algorithm exists one way; exponential barrier reverse',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'd-dnnf-pi',
-    nodeA: 'd-dnnf',
-    nodeB: 'pi',
-    aToB: 'no-poly-quasi',  // d-DNNF → PI (quasipoly only)
-    bToA: 'poly',           // PI → d-DNNF (polytime)
-    description: 'PI converts efficiently to d-DNNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // DNNF relationships  
-  {
-    id: 'dnnf-dnf',
-    nodeA: 'dnnf',
-    nodeB: 'dnf',
-    aToB: 'unknown-both',   // DNNF → DNF (both unknown, hollow square)
-    bToA: 'unknown-both',   // DNF → DNNF (both unknown)
-    description: 'Complexity unknown in both directions',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'dnnf-nnf',
-    nodeA: 'dnnf',
-    nodeB: 'nnf',
-    aToB: 'poly',           // DNNF → NNF (polytime)
-    bToA: 'no-quasi',       // NNF → DNNF (exponential gap)
-    description: 'DNNF is subset of NNF; reverse is hard',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'dnnf-fbdd',
-    nodeA: 'dnnf',
-    nodeB: 'fbdd',
-    aToB: 'no-poly-unknown-quasi',  // DNNF → FBDD (no poly, quasi unknown)
-    bToA: 'poly',                   // FBDD → DNNF (polytime)
-    description: 'FBDD converts efficiently to DNNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // DNF relationships
-  {
-    id: 'dnf-nnf',
-    nodeA: 'dnf',
-    nodeB: 'nnf',
-    aToB: 'poly',               // DNF → NNF (polytime)
-    bToA: 'unknown-poly-quasi', // NNF → DNF (has quasi, poly unknown)
-    description: 'DNF is subset of NNF; reverse has quasi algorithm',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'dnf-ip',
-    nodeA: 'dnf',
-    nodeB: 'ip',
-    aToB: 'no-quasi',       // DNF → IP (exponential gap)
-    bToA: 'poly',           // IP → DNF (polytime)
-    description: 'IP converts efficiently to DNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // FBDD relationships
-  {
-    id: 'fbdd-obdd',
-    nodeA: 'fbdd',
-    nodeB: 'obdd',
-    aToB: 'poly',           // FBDD → OBDD (polytime)
-    bToA: 'poly',           // OBDD → FBDD (polytime, bidirectional)
-    description: 'Free BDD and Ordered BDD are equivalent',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'fbdd-nnf',
-    nodeA: 'fbdd',
-    nodeB: 'nnf',
-    aToB: 'poly',               // FBDD → NNF (polytime)
-    bToA: 'no-poly-quasi',      // NNF → FBDD (quasipoly only)
-    description: 'FBDD converts efficiently to NNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // IP relationships
-  {
-    id: 'ip-pi',
-    nodeA: 'ip',
-    nodeB: 'pi',
-    aToB: 'unknown-both',   // IP → PI (both unknown)
-    bToA: 'unknown-both',   // PI → IP (both unknown)
-    description: 'Relationship between IP and PI unclear',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'ip-nnf',
-    nodeA: 'ip',
-    nodeB: 'nnf',
-    aToB: 'poly',                   // IP → NNF (polytime)
-    bToA: 'no-poly-unknown-quasi',  // NNF → IP (no poly, quasi unknown)
-    description: 'IP converts to NNF easily',
-    refs: ['Darwiche_2002']
-  },
-
-  // MODS relationships
-  {
-    id: 'mods-nnf',
-    nodeA: 'mods',
-    nodeB: 'nnf',
-    aToB: 'poly',           // MODS → NNF (polytime)
-    bToA: 'unknown-poly-quasi', // NNF → MODS (has quasi, poly unknown)
-    description: 'MODS subset of NNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // NNF relationships (remaining)
-  {
-    id: 'f-nnf-nnf',
-    nodeA: 'f-nnf',
-    nodeB: 'nnf',
-    aToB: 'poly',               // f-NNF → NNF (polytime)
-    bToA: 'no-poly-quasi',      // NNF → f-NNF (quasipoly only)
-    description: 'Flat NNF subset of NNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // OBDD relationships
-  {
-    id: 'obdd-obdd-lt',
-    nodeA: 'obdd',
-    nodeB: 'obdd-lt',
-    aToB: 'poly',           // OBDD → OBDD<LT (polytime)
-    bToA: 'poly',           // OBDD<LT → OBDD (polytime, bidirectional)
-    description: 'OBDD with linear ordering equivalent to OBDD',
-    refs: ['Darwiche_2002']
-  },
-  {
-    id: 'obdd-pi',
-    nodeA: 'obdd',
-    nodeB: 'pi',
-    aToB: 'no-poly-unknown-quasi',  // OBDD → PI (no poly, quasi unknown)
-    bToA: 'unknown-poly-quasi',     // PI → OBDD (has quasi, poly unknown)
-    description: 'Complex relationship between OBDD and PI',
-    refs: ['Darwiche_2002']
-  },
-
-  // PI relationships
-  {
-    id: 'pi-sd-dnnf',
-    nodeA: 'pi',
-    nodeB: 'sd-dnnf',
-    aToB: 'poly',           // PI → sd-DNNF (polytime)
-    bToA: 'no-quasi',       // sd-DNNF → PI (exponential gap)
-    description: 'PI converts to structured DNNF efficiently',
-    refs: ['Darwiche_2002']
-  },
-
-  // S-NNF relationships
-  {
-    id: 's-nnf-nnf',
-    nodeA: 's-nnf',
-    nodeB: 'nnf',
-    aToB: 'poly',           // s-NNF → NNF (polytime)
-    bToA: 'no-poly-quasi',  // NNF → s-NNF (quasipoly only)
-    description: 'Smooth NNF subset of NNF',
-    refs: ['Darwiche_2002']
-  },
-
-  // SD-DNNF relationships
-  {
-    id: 'sd-dnnf-dnnf',
-    nodeA: 'sd-dnnf',
-    nodeB: 'dnnf',
-    aToB: 'poly',           // sd-DNNF → DNNF (polytime)
-    bToA: 'unknown-both',   // DNNF → sd-DNNF (both unknown)
-    description: 'Structured DNNF subset of DNNF',
-    refs: ['Darwiche_2002']
-  }
+const languageIds = [
+  'cnf',
+  'd-dnnf',
+  'dnnf',
+  'dnf',
+  'fbdd',
+  'nnf',
+  'obdd',
+  'obdd-lt',
+  'pi',
+  'sd-dnnf',
+  'ip',
+  'mods',
+  'f-nnf',
+  's-nnf'
 ];
+
+const indexByLanguage: Record<string, number> = {
+  cnf: 0,
+  'd-dnnf': 1,
+  dnnf: 2,
+  dnf: 3,
+  fbdd: 4,
+  nnf: 5,
+  obdd: 6,
+  'obdd-lt': 7,
+  pi: 8,
+  'sd-dnnf': 9,
+  ip: 10,
+  mods: 11,
+  'f-nnf': 12,
+  's-nnf': 13
+};
+
+const matrix: (DirectedSuccinctnessRelation | null)[][] = [
+    [
+      null,
+      null,
+      { status: 'poly', description: 'CNF to DNNF in polynomial time (placeholder).', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      {
+        status: 'no-poly-unknown-quasi',
+        description: 'CNF to DNF lacks polynomial algorithm; quasi status open.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Clique_n',
+            name: 'Clique Detection Instances',
+            description: 'Clique encodings separate CNF from succinct DNF representations without super-polynomial blowups.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      null,
+      { status: 'poly', description: 'CNF to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      { status: 'poly', description: 'd-DNNF to DNNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      { status: 'unknown-poly-quasi', description: 'd-DNNF to DNF quasi-polynomial; polynomial open.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      { status: 'no-poly-quasi', description: 'd-DNNF to PI only quasi-polynomial.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      {
+        status: 'no-quasi',
+        description: 'DNNF to CNF lacks quasi-polynomial compilation.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Parity',
+            name: 'Parity Constraints',
+            description: 'Families of parity formulas force exponential CNF representations compared with DNNF.',
+            refs: ['Darwiche_2002']
+          },
+          {
+            shortName: 'Tseitin',
+            name: 'Tseitin Grid Formulas',
+            description: 'Tseitin contradictions remain succinct in DNNF but require super-polynomial CNF lower bounds.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      { status: 'poly', description: 'DNNF to d-DNNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      { status: 'unknown-both', description: 'DNNF to DNF complexity unknown.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      { status: 'no-poly-unknown-quasi', description: 'DNNF to FBDD lacks polynomial algorithm; quasi status open.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      { status: 'poly', description: 'DNNF to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      { status: 'unknown-both', description: 'DNNF to structured DNNF complexity unknown.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      {
+        status: 'no-poly-unknown-quasi',
+        description: 'DNF to CNF lacks polynomial algorithm; quasi status open.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Parity_n',
+            name: 'Parity Formulas',
+            description: 'Parity families require exponentially many CNF clauses when starting from compact DNF witnesses.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      {
+        status: 'no-quasi',
+        description: 'DNF to d-DNNF believed exponential.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'HWB',
+            name: 'Hidden Weighted Bit',
+            description: 'Hidden weighted bit functions resist structured DNNF compilation of DNF inputs.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      { status: 'unknown-both', description: 'DNF to DNNF complexity unknown.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      { status: 'poly', description: 'DNF to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      {
+        status: 'no-quasi',
+        description: 'DNF to IP believed exponential.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Knapsack',
+            name: 'Knapsack Constraints',
+            description: 'Knapsack-style pseudo-Boolean constraints separate DNF from succinct integer programming encodings.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      { status: 'poly', description: 'FBDD to DNNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      { status: 'poly', description: 'FBDD to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      { status: 'poly', description: 'FBDD to OBDD in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      {
+        status: 'no-poly-quasi',
+        description: 'NNF to CNF only quasi-polynomial.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Tseitin_n',
+            name: 'Tseitin-style Encodings',
+            description: 'Tseitin grids force super-polynomial CNF blowup from compact NNF representations.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      null,
+      {
+        status: 'no-quasi',
+        description: 'NNF to DNNF lacks quasi-polynomial compilation.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'XOR_tree',
+            name: 'XOR Tree Formulas',
+            description: 'XOR tree structures require decomposition not achievable with quasi-polynomial blowup.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      { status: 'unknown-poly-quasi', description: 'NNF to DNF quasi-polynomial; polynomial open.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      {
+        status: 'no-poly-quasi',
+        description: 'NNF to FBDD requires quasi-polynomial resources.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'AND-tree',
+            name: 'AND-tree Structures',
+            description: 'AND-tree formulas resist FBDD representation with quasi-polynomial overhead.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        status: 'no-poly-unknown-quasi',
+        description: 'NNF to IP lacks polynomial algorithm; quasi status open.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'ILP_hard',
+            name: 'Hard ILP Instances',
+            description: 'Integer programming problems with exponential NNF-to-IP overhead witness superpolynomial separation.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      { status: 'unknown-poly-quasi', description: 'NNF to MODS quasi-polynomial; polynomial open.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      {
+        status: 'no-poly-quasi',
+        description: 'NNF to flat NNF requires quasi-polynomial resources.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Depth_n',
+            name: 'High-Depth Circuits',
+            description: 'High-depth formulas force quasipolynomial overhead when flattening NNF to flat NNF.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      {
+        status: 'no-poly-quasi',
+        description: 'NNF to smooth NNF requires quasi-polynomial resources.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Imbal_NNF',
+            name: 'Imbalanced NNF Formulas',
+            description: 'Imbalanced formulas require quasi-polynomial smoothing overhead.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      }
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      { status: 'poly', description: 'OBDD to FBDD in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      { status: 'poly', description: 'OBDD to OBDD<LT in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      {
+        status: 'no-poly-unknown-quasi',
+        description: 'OBDD to PI lacks polynomial algorithm; quasi status open.',
+        refs: ['Darwiche_2002'],
+        separatingFunctions: [
+          {
+            shortName: 'Adder_n',
+            name: 'Binary Adder Circuits',
+            description: 'Adder circuits resist polynomial OBDD-to-PI transformation.',
+            refs: ['Darwiche_2002']
+          }
+        ]
+      },
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      { status: 'poly', description: 'OBDD<LT to OBDD in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      { status: 'poly', description: 'PI to d-DNNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      { status: 'unknown-poly-quasi', description: 'PI to OBDD quasi-polynomial; polynomial open.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      { status: 'poly', description: 'PI to structured DNNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      { status: 'unknown-both', description: 'PI to IP complexity unknown.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      { status: 'poly', description: 'Structured DNNF to DNNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      { status: 'poly', description: 'IP to DNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      { status: 'poly', description: 'IP to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      { status: 'unknown-both', description: 'IP to PI complexity unknown.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      { status: 'poly', description: 'MODS to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      { status: 'poly', description: 'Flat NNF to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      { status: 'poly', description: 'Smooth NNF to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+];
+
+export function indexForLanguage(id: string): number | undefined {
+  return indexByLanguage[id];
+}
+
+export function languageForIndex(index: number): string | undefined {
+  return languageIds[index];
+}
+
+export const adjacencyMatrixData: KCAdjacencyMatrix = {
+  languageIds,
+  indexByLanguage,
+  matrix
+};

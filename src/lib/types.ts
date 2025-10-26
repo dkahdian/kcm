@@ -207,26 +207,38 @@ export type TransformationStatus =
  * Node ordering: nodeA and nodeB are ordered lexicographically (nodeA < nodeB)
  * to ensure canonical representation.
  */
-export interface CanonicalEdge {
-  id: string;
-  /** First node (lexicographically lower id) */
-  nodeA: string;
-  /** Second node (lexicographically higher id) */
-  nodeB: string;
-  /** Transformation status from nodeA → nodeB */
-  aToB: TransformationStatus;
-  /** Transformation status from nodeB → nodeA */
-  bToA: TransformationStatus;
-  /** Optional description of this relationship */
-  description?: string;
-  /** Reference IDs for citations */
+export interface SeparatingFunction {
+  /** Short label rendered directly on the edge */
+  shortName: string;
+  /** Full human-readable name */
+  name: string;
+  /** Description of what is separated */
+  description: string;
+  /** Supporting references */
   refs: string[];
+}
+
+export interface DirectedSuccinctnessRelation {
+  /** Transformation classification from source → target */
+  status: TransformationStatus;
+  /** Optional descriptive note for this direction */
+  description?: string;
+  /** Supporting references */
+  refs: string[];
+  /** Separating functions that witness this direction */
+  separatingFunctions: SeparatingFunction[];
+}
+
+export interface KCAdjacencyMatrix {
+  languageIds: string[];
+  indexByLanguage: Record<string, number>;
+  matrix: (DirectedSuccinctnessRelation | null)[][];
 }
 
 export interface GraphData {
   languages: KCLanguage[];
-  /** Canonical edge registry - single source of truth for all edges */
-  edges: CanonicalEdge[];
+  /** Directed succinctness relationships stored as an adjacency matrix */
+  adjacencyMatrix: KCAdjacencyMatrix;
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
 }

@@ -229,6 +229,28 @@ export interface DirectedSuccinctnessRelation {
   separatingFunctions: SeparatingFunction[];
 }
 
+/**
+ * Edge selection information for UI display
+ */
+export interface SelectedEdge {
+  /** Edge identifier */
+  id: string;
+  /** Source language ID */
+  source: string;
+  /** Target language ID */
+  target: string;
+  /** Source language name */
+  sourceName: string;
+  /** Target language name */
+  targetName: string;
+  /** Forward direction relation (source → target) */
+  forward: DirectedSuccinctnessRelation | null;
+  /** Backward direction relation (target → source) */
+  backward: DirectedSuccinctnessRelation | null;
+  /** Combined references from both directions */
+  refs: string[];
+}
+
 export interface KCAdjacencyMatrix {
   languageIds: string[];
   indexByLanguage: Record<string, number>;

@@ -4,13 +4,18 @@
     KCOpEntry,
     GraphData,
     KCLanguagePropertiesResolved,
-    TransformationStatus
+    TransformationStatus,
+    SelectedEdge
   } from './types.js';
   import { resolveLanguageProperties } from './data/operations.js';
   import { getPolytimeFlag, POLYTIME_COMPLEXITIES } from './data/polytime-complexities.js';
   import EdgeLegend from './components/EdgeLegend.svelte';
   
-  let { selectedLanguage, graphData }: { selectedLanguage: KCLanguage | null, graphData: GraphData } = $props();
+  let { selectedLanguage, graphData, onEdgeSelect }: { 
+    selectedLanguage: KCLanguage | null; 
+    graphData: GraphData;
+    onEdgeSelect?: (edge: SelectedEdge) => void;
+  } = $props();
   
   // Resolve the properties to get full operation entries
   // Note: If the fill-unknown-operations filter is active, properties will already be resolved,
@@ -27,7 +32,8 @@
 
   interface RelationshipStatement {
     target: string;
-    text: string;
+    linkText: string;
+    suffixText: string;
     refs: string[];
   }
 
@@ -40,25 +46,26 @@
   });
 
   // Helper to generate a descriptive statement from a transformation status
-  function getStatusDescription(status: TransformationStatus, fromLang: string, toLang: string): string {
+  function getStatusDescription(status: TransformationStatus, fromLang: string, toLang: string): { linkText: string; suffixText: string } {
     const from = languageLookup.get(fromLang)?.name ?? fromLang;
     const to = languageLookup.get(toLang)?.name ?? toLang;
+    const linkText = `${from} converts to ${to}`;
     
     switch (status) {
       case 'poly':
-        return `${from} converts to ${to} in polynomial time`;
+        return { linkText, suffixText: ' in polynomial time' };
       case 'no-quasi':
-        return `Exponential gap between ${from} and ${to}`;
+        return { linkText: `Exponential gap between ${from} and ${to}`, suffixText: '' };
       case 'no-poly-quasi':
-        return `${from} converts to ${to} in quasi-polynomial time only`;
+        return { linkText, suffixText: ' in quasi-polynomial time only' };
       case 'no-poly-unknown-quasi':
-        return `No polynomial transformation from ${from} to ${to}; quasi-polynomial unknown`;
+        return { linkText: `No polynomial transformation from ${from} to ${to}`, suffixText: '; quasi-polynomial unknown' };
       case 'unknown-poly-quasi':
-        return `Polynomial transformation unknown from ${from} to ${to}; quasi-polynomial exists`;
+        return { linkText: `Polynomial transformation unknown from ${from} to ${to}`, suffixText: '; quasi-polynomial exists' };
       case 'unknown-both':
-        return `Complexity of transformation from ${from} to ${to} is unknown`;
+        return { linkText: `Complexity of transformation from ${from} to ${to}`, suffixText: ' is unknown' };
       default:
-        return `${from} relates to ${to}`;
+        return { linkText: `${from} relates to ${to}`, suffixText: '' };
     }
   }
 
@@ -81,9 +88,11 @@
 
       const target = languageIds[targetIndex];
       forwardStatuses.set(target, relation.status);
+      const desc = getStatusDescription(relation.status, id, target);
       statements.push({
         target,
-        text: getStatusDescription(relation.status, id, target),
+        linkText: desc.linkText,
+        suffixText: desc.suffixText,
         refs: relation.refs ?? []
       });
     }
@@ -100,9 +109,11 @@
         continue;
       }
 
+      const desc = getStatusDescription(relation.status, source, id);
       statements.push({
         target: source,
-        text: getStatusDescription(relation.status, source, id),
+        linkText: desc.linkText,
+        suffixText: desc.suffixText,
         refs: relation.refs ?? []
       });
     }
@@ -141,6 +152,40 @@
       }, 2000);
     } catch (err) {
       console.error('Failed to copy BibTeX:', err);
+    }
+  }
+
+  function selectEdge(targetId: string) {
+    if (!selectedLanguage || !onEdgeSelect) return;
+    
+    const sourceId = selectedLanguage.id;
+    const nodeA = sourceId < targetId ? sourceId : targetId;
+    const nodeB = sourceId < targetId ? targetId : sourceId;
+    
+    const sourceIndex = graphData.adjacencyMatrix.indexByLanguage[nodeA];
+    const targetIndex = graphData.adjacencyMatrix.indexByLanguage[nodeB];
+    
+    const forwardRelation = sourceIndex !== undefined && targetIndex !== undefined 
+      ? graphData.adjacencyMatrix.matrix[sourceIndex]?.[targetIndex] ?? null
+      : null;
+    const backwardRelation = sourceIndex !== undefined && targetIndex !== undefined
+      ? graphData.adjacencyMatrix.matrix[targetIndex]?.[sourceIndex] ?? null
+      : null;
+    
+    const sourceLang = graphData.languages.find(l => l.id === nodeA);
+    const targetLang = graphData.languages.find(l => l.id === nodeB);
+    
+    if (sourceLang && targetLang) {
+      onEdgeSelect({
+        id: `${nodeA}-${nodeB}`,
+        source: nodeA,
+        target: nodeB,
+        sourceName: sourceLang.name,
+        targetName: targetLang.name,
+        forward: forwardRelation,
+        backward: backwardRelation,
+        refs: [...(forwardRelation?.refs || []), ...(backwardRelation?.refs || [])]
+      });
     }
   }
 </script>
@@ -231,24 +276,24 @@
         </div>
         
         {#if languageRelationships.length}
+          <!-- TODO: Fix multi-line link text causing newline injection before suffix -->
           <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
             <h5 class="font-semibold text-gray-900 mb-2">Relationships</h5>
             <div class="space-y-1 text-sm">
               {#each languageRelationships as statement}
                 <div class="flex items-start gap-2">
                   <div class="flex-1 text-gray-700">
-                    {statement.text}
-                    {#if statement.refs?.length}
-                      {#each statement.refs as refId}
-                        <button 
+                    <button 
+                      class="edge-link"
+                      onclick={() => selectEdge(statement.target)}
+                      title="View edge details"
+                    >
+                      {statement.linkText}
+                    </button>{statement.suffixText}{#if statement.refs?.length}{#each statement.refs as refId}<button 
                           class="ref-badge"
                           onclick={scrollToReferences}
                           title="View reference"
-                        >[{getRefNumber(refId)}]</button>
-                      {/each}
-                    {:else}
-                      <span class="missing-ref" title="Missing reference">[missing ref]</span>
-                    {/if}
+                        >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                   </div>
                 </div>
               {/each}
@@ -284,7 +329,6 @@
               </ol>
             </div>
           {/if}
-          <p class="text-xs text-gray-500 mt-3">Click on other nodes to explore different knowledge compilation languages.</p>
         </div>
       </div>
     {:else}
@@ -356,6 +400,25 @@
 
     .ref-badge.inline {
       margin-left: 0.25em;
+    }
+
+    .edge-link {
+      display: inline;
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: rgba(37, 99, 235, 0.3);
+      transition: text-decoration-color 0.15s ease;
+    }
+    
+    .edge-link:hover {
+      text-decoration-color: rgba(37, 99, 235, 0.8);
     }
 
     .missing-ref {

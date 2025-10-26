@@ -1,14 +1,16 @@
 <script lang="ts">
   import KCGraph from '$lib/KCGraph.svelte';
   import LanguageInfo from '$lib/LanguageInfo.svelte';
+  import EdgeInfo from '$lib/EdgeInfo.svelte';
   import FilterDropdown from '$lib/FilterDropdown.svelte';
   import { initialGraphData, getAllFilters } from '$lib/data/index.js';
   import { applyFiltersWithParams, createDefaultFilterState } from '$lib/filter-utils.js';
-  import type { KCLanguage, FilterStateMap } from '$lib/types.js';
+  import type { KCLanguage, FilterStateMap, SelectedEdge } from '$lib/types.js';
   
   const allFilters = getAllFilters();
   
   let selectedNode: KCLanguage | null = null;
+  let selectedEdge: SelectedEdge | null = null;
   // Initialize filter state with default parameter values
   let filterStates: FilterStateMap = createDefaultFilterState(allFilters);
   
@@ -47,11 +49,19 @@
   <!-- Main Content -->
   <main class="app-main">
     <section class="graph-panel">
-      <KCGraph graphData={filteredGraphData} bind:selectedNode />
+      <KCGraph graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
     </section>
 
     <aside class="side-panel">
-      <LanguageInfo selectedLanguage={selectedNode} graphData={initialGraphData} />
+      {#if selectedEdge}
+        <EdgeInfo selectedEdge={selectedEdge} graphData={initialGraphData} />
+      {:else}
+        <LanguageInfo 
+          selectedLanguage={selectedNode} 
+          graphData={initialGraphData} 
+          onEdgeSelect={(edge) => { selectedEdge = edge; }}
+        />
+      {/if}
     </aside>
   </main>
 </div>

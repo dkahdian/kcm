@@ -9,13 +9,15 @@
       KCLanguage,
       KCAdjacencyMatrix,
       DirectedSuccinctnessRelation,
-      TransformationStatus
+      TransformationStatus,
+      SelectedEdge
     } from './types.js';
   import { getEdgeEndpointStyle } from './data/relation-types.js';
 
-  let { graphData, selectedNode = $bindable() }: {
+  let { graphData, selectedNode = $bindable(), selectedEdge = $bindable() }: {
     graphData: GraphData | FilteredGraphData;
     selectedNode: KCLanguage | null;
+    selectedEdge: SelectedEdge | null;
   } = $props();
 
   let graphContainer: HTMLDivElement;
@@ -414,8 +416,22 @@
             return dashed ? 'hollow' : 'filled';
           },
           'curve-style': 'bezier',
-          // no labels on edges
-          'font-size': '0px'
+          // Show separating function labels
+          label: (ele: any) => {
+            const aToBSep = ele.data('aToBSeparating') || [];
+            const bToASep = ele.data('bToASeparating') || [];
+            const labels: string[] = [];
+            
+            // Show first separating function from each direction if present
+            if (bToASep.length > 0) labels.push(bToASep[0]);
+            if (aToBSep.length > 0) labels.push(aToBSep[0]);
+            
+            return labels.join('                              ');
+          },
+          'font-size': '11px',
+          'text-rotation': 'autorotate',
+          'text-margin-y': -10,
+          color: '#374151'
         }
       }
     ];
@@ -448,6 +464,9 @@
       const id = node.id();
       const language = graphData.languages.find((l) => l.id === id);
       if (language) {
+        // Deselect edge if selecting a node
+        selectedEdge = null;
+        
         // Reset all other nodes to base state before selecting new node
         cy.nodes().forEach(n => {
           if (n.id() !== id) {
@@ -462,9 +481,54 @@
       }
     });
 
+    cy.on('tap', 'edge', (evt) => {
+      const edge = evt.target;
+      const edgeData = edge.data();
+      const sourceNode = graphData.languages.find(l => l.id === edgeData.source);
+      const targetNode = graphData.languages.find(l => l.id === edgeData.target);
+      
+      if (sourceNode && targetNode) {
+        // Deselect node if selecting an edge
+        selectedNode = null;
+        cy.nodes().forEach(n => {
+          n.style({
+            'border-color': '#d1d5db',
+            'border-width': 2,
+            'background-color': '#ffffff'
+          });
+        });
+        
+        // Build edge selection data
+        const nodeA = edgeData.source < edgeData.target ? edgeData.source : edgeData.target;
+        const nodeB = edgeData.source < edgeData.target ? edgeData.target : edgeData.source;
+        
+        const sourceIndex = graphData.adjacencyMatrix.indexByLanguage[nodeA];
+        const targetIndex = graphData.adjacencyMatrix.indexByLanguage[nodeB];
+        
+        const forwardRelation = sourceIndex !== undefined && targetIndex !== undefined 
+          ? graphData.adjacencyMatrix.matrix[sourceIndex]?.[targetIndex] ?? null
+          : null;
+        const backwardRelation = sourceIndex !== undefined && targetIndex !== undefined
+          ? graphData.adjacencyMatrix.matrix[targetIndex]?.[sourceIndex] ?? null
+          : null;
+        
+        selectedEdge = {
+          id: edgeData.id,
+          source: nodeA,
+          target: nodeB,
+          sourceName: sourceNode.name,
+          targetName: targetNode.name,
+          forward: forwardRelation,
+          backward: backwardRelation,
+          refs: edgeData.refs || []
+        };
+      }
+    });
+
     cy.on('tap', (evt) => {
       if (evt.target === cy) {
         selectedNode = null;
+        selectedEdge = null;
         // Reset all node styles to base state when deselecting
         cy.nodes().forEach(node => {
           node.style({
@@ -497,6 +561,28 @@
           'background-color': '#ffffff'
         });
       }
+    });
+
+    cy.on('mouseover', 'edge', (evt) => {
+      const edge = evt.target;
+      edge.style({
+        'line-color': '#3b82f6',
+        'target-arrow-color': '#3b82f6',
+        'source-arrow-color': '#3b82f6',
+        'width': 3
+      });
+      graphContainer.style.cursor = 'pointer';
+    });
+
+    cy.on('mouseout', 'edge', (evt) => {
+      const edge = evt.target;
+      edge.style({
+        'line-color': '#6b7280',
+        'target-arrow-color': '#6b7280',
+        'source-arrow-color': '#6b7280',
+        'width': 2
+      });
+      graphContainer.style.cursor = 'default';
     });
 
   }

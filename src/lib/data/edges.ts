@@ -45,7 +45,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'Clique_n',
+            shortName: 'Clique',
             name: 'Clique Detection Instances',
             description: 'Clique encodings separate CNF from succinct DNF representations without super-polynomial blowups.',
             refs: ['Darwiche_2002']
@@ -120,7 +120,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'Parity_n',
+            shortName: 'Parity',
             name: 'Parity Formulas',
             description: 'Parity families require exponentially many CNF clauses when starting from compact DNF witnesses.',
             refs: ['Darwiche_2002']
@@ -188,7 +188,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'Tseitin_n',
+            shortName: 'Tseitin',
             name: 'Tseitin-style Encodings',
             description: 'Tseitin grids force super-polynomial CNF blowup from compact NNF representations.',
             refs: ['Darwiche_2002']
@@ -202,7 +202,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'XOR_tree',
+            shortName: 'XOR Tree',
             name: 'XOR Tree Formulas',
             description: 'XOR tree structures require decomposition not achievable with quasi-polynomial blowup.',
             refs: ['Darwiche_2002']
@@ -234,7 +234,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'ILP_hard',
+            shortName: 'ILP Hard',
             name: 'Hard ILP Instances',
             description: 'Integer programming problems with exponential NNF-to-IP overhead witness superpolynomial separation.',
             refs: ['Darwiche_2002']
@@ -248,7 +248,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'Depth_n',
+            shortName: 'Depth',
             name: 'High-Depth Circuits',
             description: 'High-depth formulas force quasipolynomial overhead when flattening NNF to flat NNF.',
             refs: ['Darwiche_2002']
@@ -261,7 +261,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'Imbal_NNF',
+            shortName: 'Imbalanced NNF',
             name: 'Imbalanced NNF Formulas',
             description: 'Imbalanced formulas require quasi-polynomial smoothing overhead.',
             refs: ['Darwiche_2002']
@@ -284,7 +284,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
         refs: ['Darwiche_2002'],
         separatingFunctions: [
           {
-            shortName: 'Adder_n',
+            shortName: 'Adder',
             name: 'Binary Adder Circuits',
             description: 'Adder circuits resist polynomial OBDD-to-PI transformation.',
             refs: ['Darwiche_2002']

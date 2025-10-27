@@ -172,7 +172,7 @@ const matrix: (DirectedSuccinctnessRelation | null)[][] = [
       null,
       null,
       { status: 'poly', description: 'FBDD to NNF in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
-      { status: 'poly', description: 'FBDD to OBDD in polynomial time.', refs: ['Darwiche_2002'], separatingFunctions: [] },
+      null,
       null,
       null,
       null,

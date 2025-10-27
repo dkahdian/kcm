@@ -138,10 +138,36 @@ export const treatUnknownsOptimistically: EdgeFilter = {
   }
 };
 
+/**
+ * Omit separator functions - ON BY DEFAULT
+ */
+export const omitSeparatorFunctions: EdgeFilter = {
+  id: 'omit-separator-functions',
+  name: 'Omit Separator Functions',
+  description: 'Hide all separator functions from edges',
+  category: 'Edge Visibility',
+  defaultParam: true, // ON BY DEFAULT
+  controlType: 'checkbox',
+  lambda: (relation, sourceId, targetId, param) => {
+    if (!param) return relation;
+    
+    // Remove all separator functions
+    if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
+      return {
+        ...relation,
+        separatingFunctions: []
+      };
+    }
+    
+    return relation;
+  }
+};
+
 export const edgeFilters: EdgeFilter[] = [
   showPolyOnly,
   showQuasiOnly,
   omitUnknowns,
   treatUnknownsPessimistically,
-  treatUnknownsOptimistically
+  treatUnknownsOptimistically,
+  omitSeparatorFunctions
 ];

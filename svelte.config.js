@@ -17,7 +17,8 @@ const config = {
 			}),
 			prerender: {
 				// Generate the root route as index.html alongside the SPA 404 fallback
-				entries: ['/']
+				entries: ['/'],
+				handleUnseenRoutes: 'ignore'
 			}
 	}
 };

@@ -191,9 +191,9 @@
           {/if}
         </div>
       </div>
+      
+      <DynamicLegend graphData={graphData} selectedEdge={selectedEdge} />
     </div>
-    
-    <DynamicLegend graphData={graphData} selectedEdge={selectedEdge} />
   </div>
 {/if}
 

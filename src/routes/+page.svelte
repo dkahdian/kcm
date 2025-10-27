@@ -47,7 +47,7 @@
     <div class="header-content">
       <h1 class="title">Knowledge Compilation Map</h1>
       <div class="header-controls">
-        <a href="/contribute" class="contribute-link">
+        <a href="/contribute" target="_blank" class="contribute-link">
           Contribute
         </a>
         <FilterDropdown 

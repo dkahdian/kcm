@@ -13,9 +13,8 @@
     }
     
     if (activeCount === 1) {
-      // Find the single active filter
-      const activeFilter = visibleFilters.find(f => {
-        const param = filterStates.get(f.id) ?? f.defaultParam;
+      const activeFilter = visibleFilters.find((f) => {
+        const param = getFilterValue(f);
         return isFilterActive(f, param);
       });
       return activeFilter ? activeFilter.name : '1 filter active';
@@ -26,7 +25,7 @@
   
   function countActiveFilters(): number {
     return visibleFilters.filter(f => {
-      const param = filterStates.get(f.id) ?? f.defaultParam;
+      const param = getFilterValue(f);
       return isFilterActive(f, param);
     }).length;
   }
@@ -38,6 +37,16 @@
     }
     // For other types, any non-default value means active
     return param !== filter.defaultParam;
+  }
+
+  function getFilterValue(filter: AnyFilter): any {
+    return filterStates.get(filter.id) ?? filter.defaultParam;
+  }
+
+  function setFilterValue(filter: AnyFilter, value: any) {
+    const newStates = new Map(filterStates);
+    newStates.set(filter.id, value);
+    filterStates = newStates;
   }
 
   let { 
@@ -70,18 +79,16 @@
   }
 
   function toggleFilter(filter: AnyFilter) {
-    const currentParam = filterStates.get(filter.id) ?? filter.defaultParam;
+    const currentParam = getFilterValue(filter);
     
     // For boolean filters, toggle the value
     if (typeof currentParam === 'boolean') {
-      const newStates = new Map(filterStates);
-      newStates.set(filter.id, !currentParam);
-      filterStates = newStates;
+      setFilterValue(filter, !currentParam);
     }
   }
 
   function isFilterChecked(filter: AnyFilter): boolean {
-    const param = filterStates.get(filter.id) ?? filter.defaultParam;
+    const param = getFilterValue(filter);
     // For boolean params, checked means true
     return param === true;
   }
@@ -148,19 +155,41 @@
           <h3 class="category-title">{category.name}</h3>
           <div class="category-filters">
             {#each category.filters as filter}
-              <label
-                class="dropdown-item"
-                class:selected={isFilterChecked(filter)}
-                title={filter.description}
-              >
-                <input
-                  type="checkbox"
-                  checked={isFilterChecked(filter)}
-                  onchange={() => toggleFilter(filter)}
-                  class="filter-checkbox"
-                />
-                <span class="item-name">{filter.name}</span>
-              </label>
+              {@const value = getFilterValue(filter)}
+              {#if filter.controlType === 'dropdown' && filter.options}
+                <div
+                  class="dropdown-item dropdown-select"
+                  class:selected={isFilterActive(filter, value)}
+                  title={filter.description}
+                >
+                  <span class="item-name">{filter.name}</span>
+                  <select
+                    class="filter-select"
+                    value={value as string}
+                    onchange={(event) => setFilterValue(filter, (event.target as HTMLSelectElement).value)}
+                  >
+                    {#each filter.options as option}
+                      <option value={option.value} title={option.description}>
+                        {option.label}
+                      </option>
+                    {/each}
+                  </select>
+                </div>
+              {:else}
+                <label
+                  class="dropdown-item"
+                  class:selected={isFilterChecked(filter)}
+                  title={filter.description}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isFilterChecked(filter)}
+                    onchange={() => toggleFilter(filter)}
+                    class="filter-checkbox"
+                  />
+                  <span class="item-name">{filter.name}</span>
+                </label>
+              {/if}
             {/each}
           </div>
         </div>
@@ -255,6 +284,27 @@
     height: 16px;
     margin: 0;
     cursor: pointer;
+  }
+
+  .dropdown-select {
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .filter-select {
+    min-width: 140px;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    background-color: white;
+    font-size: 0.875rem;
+    color: #374151;
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px #3b82f6;
   }
 
 

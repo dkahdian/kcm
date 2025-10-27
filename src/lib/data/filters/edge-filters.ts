@@ -1,5 +1,7 @@
 import type { EdgeFilter, DirectedSuccinctnessRelation } from '../../types.js';
 
+type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
+
 /**
  * Show only poly edges (filters out no-poly-unknown-quasi, no-poly-quasi, and no-quasi)
  */
@@ -47,94 +49,55 @@ export const showQuasiOnly: EdgeFilter = {
 };
 
 /**
- * Omit unknowns (only keep poly, no-poly-quasi, and no-quasi) - ON BY DEFAULT
+ * Manage how unknown edges are displayed or transformed
  */
-export const omitUnknowns: EdgeFilter = {
-  id: 'omit-unknowns',
-  name: 'Omit Unknowns',
-  description: 'Hide edges with unknown transformation status',
+export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
+  id: 'manage-unknowns',
+  name: 'Manage Unknowns',
+  description: 'Control how edges with unknown status are treated',
   category: 'Edge Visibility',
-  defaultParam: true, // ON BY DEFAULT
-  controlType: 'checkbox',
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
-    
-    // Keep only poly, no-poly-quasi, and no-quasi
-    if (relation.status === 'poly' || 
-        relation.status === 'no-poly-quasi' || 
-        relation.status === 'no-quasi') {
-      return relation;
+  defaultParam: 'omit-all',
+  controlType: 'dropdown',
+  options: [
+    { value: 'omit-all', label: 'Omit all', description: 'Hide edges with unknown or partially unknown status' },
+    { value: 'expressively', label: 'Expressively', description: 'Show unknown edges without modification' },
+    { value: 'optimistically', label: 'Optimistically', description: 'Assume unknown edges behave as positively as possible' },
+    { value: 'pessimistically', label: 'Pessimistically', description: 'Assume unknown edges behave as restrictively as possible' }
+  ],
+  lambda: (relation, sourceId, targetId, mode) => {
+    switch (mode) {
+      case 'expressively':
+        return relation;
+      case 'omit-all':
+        if (
+          relation.status === 'poly' ||
+          relation.status === 'no-poly-quasi' ||
+          relation.status === 'no-quasi'
+        ) {
+          return relation;
+        }
+        return null;
+      case 'optimistically': {
+        let newStatus = relation.status;
+        if (relation.status === 'no-poly-unknown-quasi') {
+          newStatus = 'no-poly-quasi';
+        } else if (relation.status === 'unknown-poly-quasi' || relation.status === 'unknown-both') {
+          newStatus = 'poly';
+        }
+        return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+      }
+      case 'pessimistically': {
+        let newStatus = relation.status;
+        if (relation.status === 'unknown-both' || relation.status === 'no-poly-unknown-quasi') {
+          newStatus = 'no-quasi';
+        } else if (relation.status === 'unknown-poly-quasi') {
+          newStatus = 'no-poly-quasi';
+        }
+        return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+      }
+      default:
+        return relation;
     }
-    
-    return null;
-  }
-};
-
-/**
- * Treat unknowns pessimistically
- * - unknown-both → no-quasi
- * - unknown-poly-quasi → no-poly-quasi
- * - no-poly-unknown-quasi → no-quasi
- */
-export const treatUnknownsPessimistically: EdgeFilter = {
-  id: 'treat-unknowns-pessimistically',
-  name: 'Treat Unknowns Pessimistically',
-  description: 'Transform unknown edges to their most restrictive interpretation',
-  category: 'Edge Visibility',
-  defaultParam: false,
-  controlType: 'checkbox',
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
-    
-    let newStatus = relation.status;
-    
-    if (relation.status === 'unknown-both') {
-      newStatus = 'no-quasi';
-    } else if (relation.status === 'unknown-poly-quasi') {
-      newStatus = 'no-poly-quasi';
-    } else if (relation.status === 'no-poly-unknown-quasi') {
-      newStatus = 'no-quasi';
-    }
-    
-    if (newStatus !== relation.status) {
-      return { ...relation, status: newStatus };
-    }
-    
-    return relation;
-  }
-};
-
-/**
- * Treat unknowns optimistically
- * - no-poly-unknown-quasi → no-poly-quasi
- * - unknown-poly-quasi → poly
- * - unknown-both → poly
- */
-export const treatUnknownsOptimistically: EdgeFilter = {
-  id: 'treat-unknowns-optimistically',
-  name: 'Treat Unknowns Optimistically',
-  description: 'Transform unknown edges to their most permissive interpretation',
-  category: 'Edge Visibility',
-  defaultParam: false,
-  controlType: 'checkbox',
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
-    
-    let newStatus = relation.status;
-    
-    if (relation.status === 'no-poly-unknown-quasi') {
-      newStatus = 'no-poly-quasi';
-    } else if (relation.status === 'unknown-poly-quasi') {
-      newStatus = 'poly';
-    } else if (relation.status === 'unknown-both') {
-      newStatus = 'poly';
-    }
-    
-    if (newStatus !== relation.status) {
-      return { ...relation, status: newStatus };
-    }
-    
-    return relation;
   }
 };
 
@@ -187,12 +150,10 @@ export const hideMarkedEdges: EdgeFilter = {
   }
 };
 
-export const edgeFilters: EdgeFilter[] = [
+export const edgeFilters: EdgeFilter<any>[] = [
   showPolyOnly,
   showQuasiOnly,
-  omitUnknowns,
-  treatUnknownsPessimistically,
-  treatUnknownsOptimistically,
+  manageUnknowns,
   omitSeparatorFunctions,
   hideMarkedEdges
 ];

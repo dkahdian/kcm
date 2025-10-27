@@ -282,6 +282,12 @@ export interface GraphData {
 export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown';
 export type FilterParamValue = boolean | string | number;
 
+export interface FilterOption {
+  value: string;
+  label: string;
+  description?: string;
+}
+
 export interface LanguageFilter<T extends FilterParamValue = boolean> {
   id: string;
   name: string;
@@ -293,6 +299,8 @@ export interface LanguageFilter<T extends FilterParamValue = boolean> {
   defaultParam: T;
   /** UI control type for displaying this filter */
   controlType?: FilterControlType;
+  /** Optional list of selectable options for dropdown-style filters */
+  options?: FilterOption[];
   /** Filter function: takes language and parameter value, returns modified language to show it, or null to hide it */
   lambda: (language: KCLanguage, param: T) => KCLanguage | null;
 }
@@ -312,6 +320,8 @@ export interface EdgeFilter<T extends FilterParamValue = boolean> {
   defaultParam: T;
   /** UI control type for displaying this filter */
   controlType?: FilterControlType;
+  /** Optional list of selectable options for dropdown-style filters */
+  options?: FilterOption[];
   /** Filter function: takes edge relation and parameter value, returns relation to show it, or null to hide it */
   lambda: (
     relation: DirectedSuccinctnessRelation,

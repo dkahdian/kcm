@@ -339,7 +339,7 @@
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-12">
       <h1 class="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
-        Contribute to the KC Map
+        Contribute to the KC Map **WARNING: UNFINISHED**
       </h1>
       <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
         Help improve the Knowledge Compilation Map by adding new languages or updating existing ones.

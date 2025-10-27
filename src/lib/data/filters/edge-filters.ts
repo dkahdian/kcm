@@ -163,11 +163,36 @@ export const omitSeparatorFunctions: EdgeFilter = {
   }
 };
 
+/**
+ * Hide edges marked as hidden (used by transitive reduction)
+ * This is an internal filter that should always be applied
+ */
+export const hideMarkedEdges: EdgeFilter = {
+  id: 'hide-marked-edges',
+  name: 'Hide Marked Edges',
+  description: 'Hide edges that have been marked as hidden',
+  category: 'Edge Visibility',
+  defaultParam: true,
+  controlType: 'checkbox',
+  hidden: true, // Internal filter, not shown in UI
+  lambda: (relation, sourceId, targetId, param) => {
+    if (!param) return relation;
+    
+    // Hide edges that are marked as hidden
+    if (relation.hidden) {
+      return null;
+    }
+    
+    return relation;
+  }
+};
+
 export const edgeFilters: EdgeFilter[] = [
   showPolyOnly,
   showQuasiOnly,
   omitUnknowns,
   treatUnknownsPessimistically,
   treatUnknownsOptimistically,
-  omitSeparatorFunctions
+  omitSeparatorFunctions,
+  hideMarkedEdges
 ];

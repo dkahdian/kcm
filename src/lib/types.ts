@@ -238,6 +238,8 @@ export interface DirectedSuccinctnessRelation {
   refs: string[];
   /** Separating functions that witness this direction */
   separatingFunctions: SeparatingFunction[];
+  /** Whether this edge is hidden by transitive reduction (always false by default) */
+  hidden?: boolean;
 }
 
 /**

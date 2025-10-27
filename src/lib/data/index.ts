@@ -30,3 +30,4 @@ export { relationTypes } from './relation-types.js';
 export { allLanguages } from './languages/index.js';
 export { allPredefinedFilters } from './filters/index.js';
 export { edgeFilters } from './filters/index.js';
+export { getAllTags, getTags, getTag, CANONICAL_TAGS } from './tags.js';

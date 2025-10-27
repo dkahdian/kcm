@@ -1,45 +1,27 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
+  import { relationTypes } from '$lib/data/relation-types.js';
 
   type EdgeType = {
     arrow: string;
     filled: boolean;
+    label: string;
     description: string;
   };
-  
-  const edgeTypes: EdgeType[] = [
-    {
-      arrow: 'triangle',
-      filled: true,
-      description: 'polytime.'
-    },
-    {
-      arrow: 'tee',
-      filled: true,
-      description: 'quasipoly.'
-    },
-    {
-      arrow: 'tee',
-      filled: false,
-      description: 'quasi (?). Not poly.'
-    },
-    {
-      arrow: 'triangle-cross',
-      filled: false,
-      description: 'quasi. Poly (?).'
-    },
-    {
-      arrow: 'square',
-      filled: false,
-      description: 'unknown.'
-    },
-    {
-      arrow: 'square',
-      filled: true,
-      description: 'exponential only.'
-    }
-  ];
+
+  const hollowStatuses = new Set([
+    'no-poly-unknown-quasi',
+    'unknown-poly-quasi',
+    'unknown-both'
+  ]);
+
+  const edgeTypes: EdgeType[] = relationTypes.map((type) => ({
+    arrow: type.style?.targetStyle?.arrow ?? 'triangle',
+    filled: !hollowStatuses.has(type.id),
+    label: type.name,
+    description: type.description ?? ''
+  }));
 
   let containers: HTMLDivElement[] = [];
 
@@ -110,16 +92,19 @@
 
 <div class="legend">
   <h3 class="text-lg font-semibold text-gray-700 mb-2">Succinctness</h3>
-      <p class="text-gray-600 text-sm mb-4">
-        A transforms to B in ...
-      </p>
+  <p class="text-gray-600 text-sm mb-4">
+    Interpret transformations from A to B using these shared classifications.
+  </p>
   <div class="legend-items">
     {#each edgeTypes as edge, i}
       <div class="legend-row">
         <div class="edge-example">
           <div class="cyto-container" bind:this={containers[i]}></div>
         </div>
-        <p class="description">{edge.description}</p>
+        <div class="description">
+          <p class="font-medium text-gray-800 text-sm">{edge.label}</p>
+          <p class="text-xs text-gray-600">{edge.description}</p>
+        </div>
       </div>
     {/each}
   </div>
@@ -169,8 +154,6 @@
   .description {
     flex: 1;
     margin: 0;
-    font-size: 0.875rem;
-    color: #4b5563;
     line-height: 1.5;
   }
 </style>

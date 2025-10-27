@@ -200,6 +200,17 @@ export type TransformationStatus =
   | 'unknown-both'   // Both unknown (A ?≤_p B and A ?≤_q B)
   | 'no-quasi';      // No quasi-polynomial transformation (A ⊄_q B)
 
+// TEMPORARY: Old flat edge format for contribution system (to be removed)
+export interface CanonicalEdge {
+  id: string;
+  nodeA: string;
+  nodeB: string;
+  aToB: TransformationStatus;
+  bToA: TransformationStatus;
+  description?: string;
+  refs: string[];
+}
+
 /**
  * Canonical edge representation - each edge stored exactly once.
  * Edges are bidirectional with independent status in each direction.

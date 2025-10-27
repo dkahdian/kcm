@@ -47,6 +47,9 @@
     <div class="header-content">
       <h1 class="title">Knowledge Compilation Map</h1>
       <div class="header-controls">
+        <a href="/contribute" class="contribute-link">
+          Contribute
+        </a>
         <FilterDropdown 
           languageFilters={languageFilters}
           edgeFilters={edgeFilters}
@@ -111,6 +114,28 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+  }
+
+  .contribute-link {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .contribute-link:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .contribute-link:active {
+    transform: translateY(0);
   }
 
   .app-main {

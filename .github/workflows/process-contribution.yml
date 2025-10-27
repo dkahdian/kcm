@@ -1,0 +1,49 @@
+name: Process Data Contribution
+
+on:
+  repository_dispatch:
+    types: [data-contribution]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  process-contribution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CONTRIBUTION_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Extract contribution data
+        run: |
+          echo '${{ toJson(github.event.client_payload) }}' > contribution.json
+          cat contribution.json
+
+      - name: Generate contribution files
+        run: npx ts-node --esm .github/scripts/generate-contribution.ts
+
+      - name: Type check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Create branch, commit, and PR
+        env:
+          GH_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
+          CONTRIBUTION_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
+        run: |
+          chmod +x .github/scripts/create-pr.sh
+          .github/scripts/create-pr.sh

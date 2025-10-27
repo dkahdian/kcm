@@ -424,3 +424,6 @@ export const adjacencyMatrixData: KCAdjacencyMatrix = {
   indexByLanguage,
   matrix
 };
+
+// Temporary export for contribution system (to be replaced)
+export const edges: any[] = [];

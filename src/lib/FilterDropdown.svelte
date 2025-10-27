@@ -12,15 +12,7 @@
       return 'No Active Filters';
     }
     
-    if (activeCount === 1) {
-      const activeFilter = visibleFilters.find((f) => {
-        const param = getFilterValue(f);
-        return isFilterActive(f, param);
-      });
-      return activeFilter ? activeFilter.name : '1 filter active';
-    }
-    
-    return `${activeCount} filters active`;
+    return `${activeCount} filter${activeCount > 1? 's' : ''} active`;
   }
   
   function countActiveFilters(): number {

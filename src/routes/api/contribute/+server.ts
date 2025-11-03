@@ -8,7 +8,7 @@ import {
 } from '$lib/utils/validation.js';
 import type { CanonicalEdge, PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
 import { edges as existingEdges } from '$lib/data/edges.js';
-import { GITHUB_TOKEN } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 interface OperationSupportPayload {
   polytime: PolytimeFlagCode;
@@ -405,11 +405,11 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     };
 
     // Check if GitHub token is configured
-    if (!GITHUB_TOKEN) {
-      console.error('GITHUB_TOKEN is not configured');
+    if (!env.CONTRIBUTION_TOKEN) {
+      console.error('CONTRIBUTION_TOKEN is not configured');
       return json({ 
         error: 'GitHub integration not configured. Please contact the administrator.',
-        details: 'GITHUB_TOKEN environment variable is missing'
+        details: 'CONTRIBUTION_TOKEN environment variable is missing'
       }, { status: 500 });
     }
 
@@ -425,7 +425,7 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
       method: 'POST',
       headers: {
         Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        Authorization: `Bearer ${env.CONTRIBUTION_TOKEN}`,
         'X-GitHub-Api-Version': '2022-11-28',
         'Content-Type': 'application/json'
       },

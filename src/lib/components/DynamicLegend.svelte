@@ -48,14 +48,26 @@
     {
       arrow: 'triangle',
       filled: true,
-      description: 'polytime.',
+      description: 'polynomial time.',
       status: 'poly'
+    },
+    {
+      arrow: 'square',
+      filled: true,
+      description: 'exponential time.',
+      status: 'no-quasi'
     },
     {
       arrow: 'tee',
       filled: true,
-      description: 'quasipoly.',
+      description: 'quasipolynomial time.',
       status: 'no-poly-quasi'
+    },
+    {
+      arrow: 'square',
+      filled: true,
+      description: 'not polynomial time.',
+      status: 'not-poly'
     },
     {
       arrow: 'tee',
@@ -74,12 +86,6 @@
       filled: false,
       description: 'unknown.',
       status: 'unknown-both'
-    },
-    {
-      arrow: 'square',
-      filled: true,
-      description: 'exponential only.',
-      status: 'no-quasi'
     }
   ];
 
@@ -228,7 +234,7 @@
     <div class="legend">
       <h3 class="text-lg font-semibold text-gray-700 mb-2">Succinctness</h3>
       <p class="text-gray-600 text-sm mb-4">
-        A transforms to B in ...
+        A transforms to B in _______
       </p>
       <div class="legend-items">
         {#each visibleEdgeTypes as edge (edge.status)}

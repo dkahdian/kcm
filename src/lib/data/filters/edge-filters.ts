@@ -1,50 +1,62 @@
 import type { EdgeFilter, DirectedSuccinctnessRelation } from '../../types.js';
 
 type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
+type PolyDisplayMode = 'include-quasipolynomial' | 'polytime-vs-not';
 
 /**
- * Show only poly edges (filters out no-poly-unknown-quasi, no-poly-quasi, and no-quasi)
+ * Control how polynomial and quasipolynomial edges are displayed
  */
-export const showPolyOnly: EdgeFilter = {
-  id: 'poly-only',
-  name: 'Poly Only',
-  description: 'Show only polynomial transformation edges',
+export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
+  id: 'poly-display',
+  name: 'Polynomial Display',
+  description: 'Control how polynomial and quasipolynomial complexity edges are shown',
   category: 'Edge Visibility',
-  defaultParam: false,
-  controlType: 'checkbox',
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
-    
-    // Filter out edges that don't have poly
-    if (relation.status === 'no-poly-unknown-quasi' || 
-        relation.status === 'no-poly-quasi' || 
-        relation.status === 'no-quasi') {
-      return null;
+  defaultParam: 'polytime-vs-not',
+  controlType: 'dropdown',
+  options: [
+    { value: 'include-quasipolynomial', label: 'Also include quasipolynomial time', description: 'Show all edge types as-is' },
+    { value: 'polytime-vs-not', label: 'Polytime vs not polytime', description: 'Collapse to polynomial, not polynomial, or unknown' }
+  ],
+  lambda: (relation, sourceId, targetId, mode) => {
+    if (sourceId === 'NNF' && targetId === 'f-NNF') {
+      console.log(`[polyDisplay] ${sourceId} -> ${targetId}: mode=${mode}, status=${relation.status}`);
+    }
+    if (mode === 'include-quasipolynomial') {
+      if (sourceId === 'NNF' && targetId === 'f-NNF') {
+        console.log(`[polyDisplay] ${sourceId} -> ${targetId}: mode=include-quasipolynomial, keeping status=${relation.status}`);
+      }
+      return relation;
     }
     
-    return relation;
-  }
-};
-
-/**
- * Show only quasi edges (filters out no-quasi)
- */
-export const showQuasiOnly: EdgeFilter = {
-  id: 'quasi-only',
-  name: 'Quasi Only',
-  description: 'Show only quasi-polynomial transformation edges',
-  category: 'Edge Visibility',
-  defaultParam: false,
-  controlType: 'checkbox',
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
+    // mode === 'polytime-vs-not'
+    // Transform edges to poly, not-poly, or unknown-both
+    let newStatus = relation.status;
     
-    // Filter out no-quasi edges
-    if (relation.status === 'no-quasi') {
-      return null;
+    switch (relation.status) {
+      case 'poly':
+        // poly → poly (keep as-is)
+        break;
+      case 'no-poly-unknown-quasi':
+      case 'no-poly-quasi':
+      case 'no-quasi':
+        newStatus = 'not-poly';
+        break;
+      case 'unknown-poly-quasi':
+      case 'unknown-both':
+        // This remains as unknown-both (truly unknown)
+        newStatus = 'unknown-both';
+        break;
     }
     
-    return relation;
+    if (sourceId === 'NNF' && targetId === 'f-NNF') {
+      if (newStatus !== relation.status) {
+        console.log(`[polyDisplay] ${sourceId} -> ${targetId}: ${relation.status} -> ${newStatus}`);
+      } else {
+        console.log(`[polyDisplay] ${sourceId} -> ${targetId}: keeping status=${relation.status}`);
+      }
+    }
+    
+    return newStatus === relation.status ? relation : { ...relation, status: newStatus };
   }
 };
 
@@ -65,16 +77,26 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
     { value: 'pessimistically', label: 'Pessimistically', description: 'Assume unknown edges behave as restrictively as possible' }
   ],
   lambda: (relation, sourceId, targetId, mode) => {
+    if (sourceId === 'NNF' && targetId === 'f-NNF') {
+      console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: mode=${mode}, status=${relation.status}`);
+    }
     switch (mode) {
       case 'expressively':
+        if (sourceId === 'NNF' && targetId === 'f-NNF') {
+          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: expressively, keeping as-is`);
+        }
         return relation;
       case 'omit-all':
         if (
-          relation.status === 'poly' ||
-          relation.status === 'no-poly-quasi' ||
-          relation.status === 'no-quasi'
+          relation.status !== 'unknown-poly-quasi' && relation.status !== 'unknown-both' && relation.status !== 'no-poly-unknown-quasi'
         ) {
+          if (sourceId === 'NNF' && targetId === 'f-NNF') {
+            console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: omit-all, keeping (not unknown)`);
+          }
           return relation;
+        }
+        if (sourceId === 'NNF' && targetId === 'f-NNF') {
+          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: omit-all, FILTERING OUT (is unknown)`);
         }
         return null;
       case 'optimistically': {
@@ -84,6 +106,9 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
         } else if (relation.status === 'unknown-poly-quasi' || relation.status === 'unknown-both') {
           newStatus = 'poly';
         }
+        if (sourceId === 'NNF' && targetId === 'f-NNF' && newStatus !== relation.status) {
+          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: optimistically, ${relation.status} -> ${newStatus}`);
+        }
         return newStatus === relation.status ? relation : { ...relation, status: newStatus };
       }
       case 'pessimistically': {
@@ -92,6 +117,9 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
           newStatus = 'no-quasi';
         } else if (relation.status === 'unknown-poly-quasi') {
           newStatus = 'no-poly-quasi';
+        }
+        if (sourceId === 'NNF' && targetId === 'f-NNF' && newStatus !== relation.status) {
+          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: pessimistically, ${relation.status} -> ${newStatus}`);
         }
         return newStatus === relation.status ? relation : { ...relation, status: newStatus };
       }
@@ -151,9 +179,8 @@ export const hideMarkedEdges: EdgeFilter = {
 };
 
 export const edgeFilters: EdgeFilter<any>[] = [
-  showPolyOnly,
-  showQuasiOnly,
   manageUnknowns,
+  polyDisplay,
   omitSeparatorFunctions,
   hideMarkedEdges
 ];

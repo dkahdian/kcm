@@ -10,23 +10,43 @@
   let referencesSection: HTMLElement | null = $state(null);
   let copiedRefId: string | null = $state(null);
 
+  // Look up the original (unfiltered) edge data from graphData's adjacency matrix
+  const originalEdge = $derived.by(() => {
+    if (!selectedEdge) return null;
+    
+    const { adjacencyMatrix } = graphData;
+    const sourceIdx = adjacencyMatrix.indexByLanguage[selectedEdge.source];
+    const targetIdx = adjacencyMatrix.indexByLanguage[selectedEdge.target];
+    
+    if (sourceIdx === undefined || targetIdx === undefined) return selectedEdge;
+    
+    const forwardRelation = adjacencyMatrix.matrix[sourceIdx][targetIdx];
+    const backwardRelation = adjacencyMatrix.matrix[targetIdx][sourceIdx];
+    
+    return {
+      ...selectedEdge,
+      forward: forwardRelation,
+      backward: backwardRelation
+    };
+  });
+
   // Collect all unique references from both directions
   const edgeReferences = $derived.by<KCReference[]>(() => {
-    if (!selectedEdge) return [];
+    if (!originalEdge) return [];
     
     const refIds = new Set<string>();
     const refs: KCReference[] = [];
     
-    // Collect ref IDs from both directions and their separating functions
-    if (selectedEdge.forward) {
-      selectedEdge.forward.refs.forEach(id => refIds.add(id));
-      selectedEdge.forward.separatingFunctions.forEach(fn => {
+    // Collect ref IDs from both directions and their separating functions (use originalEdge for true data)
+    if (originalEdge.forward) {
+      originalEdge.forward.refs.forEach(id => refIds.add(id));
+      originalEdge.forward.separatingFunctions.forEach(fn => {
         fn.refs.forEach(id => refIds.add(id));
       });
     }
-    if (selectedEdge.backward) {
-      selectedEdge.backward.refs.forEach(id => refIds.add(id));
-      selectedEdge.backward.separatingFunctions.forEach(fn => {
+    if (originalEdge.backward) {
+      originalEdge.backward.refs.forEach(id => refIds.add(id));
+      originalEdge.backward.separatingFunctions.forEach(fn => {
         fn.refs.forEach(id => refIds.add(id));
       });
     }
@@ -92,25 +112,25 @@
         <h3 class="text-xl font-bold text-gray-900 mb-4">{selectedEdge.sourceName} ↔ {selectedEdge.targetName}</h3>
         
         <div class="space-y-4">
-          {#if selectedEdge.forward}
+          {#if originalEdge && originalEdge.forward}
             <div class="direction-block">
               <h5 class="font-semibold text-gray-900 mb-2">{selectedEdge.sourceName} → {selectedEdge.targetName}</h5>
               <p class="text-sm text-gray-700 mb-2">
-                {getStatusLabel(selectedEdge.forward.status)}{#if selectedEdge.forward.refs.length}{#each selectedEdge.forward.refs as refId}<button 
+                {getStatusLabel(originalEdge.forward.status)}{#if originalEdge.forward.refs.length}{#each originalEdge.forward.refs as refId}<button 
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"
                     >[{getRefNumber(refId)}]</button>{/each}{/if}
               </p>
-              {#if selectedEdge.forward.description}
-                <p class="text-sm text-gray-600 mb-2 italic">{selectedEdge.forward.description}</p>
+              {#if originalEdge.forward.description}
+                <p class="text-sm text-gray-600 mb-2 italic">{originalEdge.forward.description}</p>
               {/if}
               
-              {#if selectedEdge.forward.separatingFunctions.length > 0}
+              {#if originalEdge.forward.separatingFunctions.length > 0}
                 <div class="mt-3">
                   <h6 class="text-sm font-semibold text-gray-900 mb-2">Separating Functions</h6>
                   <div class="space-y-2">
-                    {#each selectedEdge.forward.separatingFunctions as fn}
+                    {#each originalEdge.forward.separatingFunctions as fn}
                       <div class="p-2 bg-blue-50 border border-blue-200 rounded">
                         <div class="font-medium text-sm text-gray-900">{fn.name}{#if fn.refs.length}{#each fn.refs as refId}<button 
                                 class="ref-badge"
@@ -126,25 +146,25 @@
             </div>
           {/if}
           
-          {#if selectedEdge.backward}
+          {#if originalEdge && originalEdge.backward}
             <div class="direction-block">
               <h5 class="font-semibold text-gray-900 mb-2">{selectedEdge.targetName} → {selectedEdge.sourceName}</h5>
               <p class="text-sm text-gray-700 mb-2">
-                {getStatusLabel(selectedEdge.backward.status)}{#if selectedEdge.backward.refs.length}{#each selectedEdge.backward.refs as refId}<button 
+                {getStatusLabel(originalEdge.backward.status)}{#if originalEdge.backward.refs.length}{#each originalEdge.backward.refs as refId}<button 
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"
                     >[{getRefNumber(refId)}]</button>{/each}{/if}
               </p>
-              {#if selectedEdge.backward.description}
-                <p class="text-sm text-gray-600 mb-2 italic">{selectedEdge.backward.description}</p>
+              {#if originalEdge.backward.description}
+                <p class="text-sm text-gray-600 mb-2 italic">{originalEdge.backward.description}</p>
               {/if}
               
-              {#if selectedEdge.backward.separatingFunctions.length > 0}
+              {#if originalEdge.backward.separatingFunctions.length > 0}
                 <div class="mt-3">
                   <h6 class="text-sm font-semibold text-gray-900 mb-2">Separating Functions</h6>
                   <div class="space-y-2">
-                    {#each selectedEdge.backward.separatingFunctions as fn}
+                    {#each originalEdge.backward.separatingFunctions as fn}
                       <div class="p-2 bg-blue-50 border border-blue-200 rounded">
                         <div class="font-medium text-sm text-gray-900">{fn.name}{#if fn.refs.length}{#each fn.refs as refId}<button 
                                 class="ref-badge"

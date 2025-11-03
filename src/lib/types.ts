@@ -198,7 +198,8 @@ export type TransformationStatus =
   | 'no-poly-quasi'  // No poly, but quasi exists (A ⊄_p B and A ≤_q B)
   | 'unknown-poly-quasi' // Unknown poly, quasi exists (A ?≤_p B and A ≤_q B)
   | 'unknown-both'   // Both unknown (A ?≤_p B and A ?≤_q B)
-  | 'no-quasi';      // No quasi-polynomial transformation (A ⊄_q B)
+  | 'no-quasi'       // No quasi-polynomial transformation (A ⊄_q B)
+  | 'not-poly';      // Not polynomial (filter-generated, used when collapsing quasi/no-quasi)
 
 // TEMPORARY: Old flat edge format for contribution system (to be removed)
 export interface CanonicalEdge {

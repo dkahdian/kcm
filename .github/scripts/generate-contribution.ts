@@ -405,7 +405,7 @@ function updateEdges(): void {
   }
 
   const langIdsList = languageIds.map((id) => `  '${id}'`).join(',\n');
-  const indexMap = languageIds.map((id, index) => `  ${id}: ${index}`).join(',\n');
+  const indexMap = languageIds.map((id, index) => `  '${id}': ${index}`).join(',\n');
 
   const fileContent = `import type { KCAdjacencyMatrix, DirectedSuccinctnessRelation } from '../types.js';
 

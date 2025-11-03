@@ -308,11 +308,12 @@ export function validateContribution(submission: ContributionSubmission): Valida
   const hasLanguagesToAdd = submission.languagesToAdd.length > 0;
   const hasLanguagesToEdit = submission.languagesToEdit.length > 0;
   const hasRelationships = submission.relationships.length > 0;
+  const hasNewReferences = submission.newReferences.length > 0;
 
-  if (!hasLanguagesToAdd && !hasLanguagesToEdit && !hasRelationships) {
+  if (!hasLanguagesToAdd && !hasLanguagesToEdit && !hasRelationships && !hasNewReferences) {
     errors.push({ 
       field: 'submission', 
-      message: 'Must add at least one language, edit at least one language, or update at least one relationship' 
+      message: 'Must add at least one item (language, reference, or relationship)' 
     });
   }
 

@@ -115,6 +115,7 @@
   let selectedLanguageToEdit = $state<string>('');
   let showAddReferenceModal = $state(false);
   let showManageRelationshipModal = $state(false);
+  let editReferenceIndex = $state<number | null>(null);
 
   // Track which relationships have been modified from baseline
   const modifiedRelations = new Set<string>();
@@ -179,6 +180,58 @@
 
   function handleAddReference(bibtex: string) {
     newReferences = [...newReferences, bibtex];
+  }
+
+  // Store items that come after the reference being edited
+  let deferredItems = $state<{
+    languages: LanguageToAdd[];
+    editedLanguages: LanguageToAdd[];
+    references: string[];
+    relationships: RelationshipEntry[];
+    tags: typeof customTags;
+  } | null>(null);
+
+  function handleEditReference(index: number) {
+    // Store all items added after this reference
+    deferredItems = {
+      languages: languagesToAdd.slice(index + 1),
+      editedLanguages: languagesToEdit.slice(index + 1),
+      references: newReferences.slice(index + 1),
+      relationships: relationships.filter((_, i) => i > index),
+      tags: customTags.slice(index + 1)
+    };
+
+    // Remove items that come after
+    languagesToAdd = languagesToAdd.slice(0, index + 1);
+    languagesToEdit = languagesToEdit.slice(0, index + 1);
+    newReferences = newReferences.slice(0, index + 1);
+    relationships = relationships.slice(0, index + 1);
+    customTags = customTags.slice(0, index + 1);
+
+    // Open modal with current content
+    editReferenceIndex = index;
+    showAddReferenceModal = true;
+  }
+
+  function handleUpdateReference(bibtex: string) {
+    if (editReferenceIndex !== null) {
+      // Update the reference at the edit index
+      newReferences[editReferenceIndex] = bibtex;
+      newReferences = [...newReferences];
+
+      // Restore deferred items
+      if (deferredItems) {
+        languagesToAdd = [...languagesToAdd, ...deferredItems.languages];
+        languagesToEdit = [...languagesToEdit, ...deferredItems.editedLanguages];
+        newReferences = [...newReferences, ...deferredItems.references];
+        relationships = [...relationships, ...deferredItems.relationships];
+        customTags = [...customTags, ...deferredItems.tags];
+      }
+
+      // Clear edit state
+      editReferenceIndex = null;
+      deferredItems = null;
+    }
   }
 
   function handleSaveRelationship(relationship: RelationshipEntry) {
@@ -256,8 +309,8 @@
       );
 
       // Validate we have something to submit
-      if (languagesToAdd.length === 0 && languagesToEdit.length === 0 && changedRelationships.length === 0) {
-        submitError = 'Please add a language, edit a language, or update at least one relationship before submitting.';
+      if (languagesToAdd.length === 0 && languagesToEdit.length === 0 && changedRelationships.length === 0 && newReferences.length === 0) {
+        submitError = 'Please add at least one item (language, reference, or relationship) before submitting.';
         submitting = false;
         return;
       }
@@ -318,6 +371,8 @@
       const result = await response.json();
 
       if (!response.ok) {
+        console.error('Submission error:', result);
+        console.error('Submission payload:', submission);
         submitError = result.error || 'Submission failed';
         submitting = false;
         return;
@@ -411,25 +466,25 @@
                 <div class="border-2 border-green-300 bg-green-50 rounded-lg p-3">
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-green-800">NEW LANG:</span>
-                      <span class="text-sm text-gray-900">{lang.name} ({lang.id})</span>
+                      <span class="text-sm font-semibold text-green-800">New Language:</span>
+                      <span class="text-sm text-gray-900">{lang.name}</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <button
                         type="button"
                         onclick={() => expandedLanguageToAddIndex = expandedLanguageToAddIndex === index ? null : index}
-                        class="text-green-700 hover:text-green-900 font-bold text-lg"
+                        class="px-2 py-1 text-xs bg-green-100 hover:bg-green-200 text-green-800 rounded border border-green-300"
                         aria-label={expandedLanguageToAddIndex === index ? "Collapse" : "Expand"}
                       >
-                        {expandedLanguageToAddIndex === index ? '∨' : '^'}
+                        {expandedLanguageToAddIndex === index ? 'Collapse' : 'Expand'}
                       </button>
                       <button
                         type="button"
                         onclick={() => languagesToAdd = languagesToAdd.filter((_, i) => i !== index)}
-                        class="text-red-600 hover:text-red-800 font-bold"
+                        class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
                         aria-label="Delete"
                       >
-                        ×
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -448,25 +503,25 @@
                 <div class="border-2 border-yellow-300 bg-yellow-50 rounded-lg p-3">
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-yellow-800">EDIT LANG:</span>
-                      <span class="text-sm text-gray-900">{lang.name} ({lang.id})</span>
+                      <span class="text-sm font-semibold text-yellow-800">Edit Language:</span>
+                      <span class="text-sm text-gray-900">{lang.name}</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <button
                         type="button"
                         onclick={() => expandedLanguageToEditIndex = expandedLanguageToEditIndex === index ? null : index}
-                        class="text-yellow-700 hover:text-yellow-900 font-bold text-lg"
+                        class="px-2 py-1 text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded border border-yellow-300"
                         aria-label={expandedLanguageToEditIndex === index ? "Collapse" : "Expand"}
                       >
-                        {expandedLanguageToEditIndex === index ? '∨' : '^'}
+                        {expandedLanguageToEditIndex === index ? 'Collapse' : 'Expand'}
                       </button>
                       <button
                         type="button"
                         onclick={() => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
-                        class="text-red-600 hover:text-red-800 font-bold"
+                        class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
                         aria-label="Delete"
                       >
-                        ×
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -485,25 +540,32 @@
                 <div class="border-2 border-purple-300 bg-purple-50 rounded-lg p-3">
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-purple-800">REF:</span>
-                      <span class="text-sm text-gray-900">new-{index}</span>
+                      <span class="text-sm font-semibold text-purple-800">Reference</span>
                     </div>
                     <div class="flex items-center gap-2">
                       <button
                         type="button"
                         onclick={() => expandedReferenceIndex = expandedReferenceIndex === index ? null : index}
-                        class="text-purple-700 hover:text-purple-900 font-bold text-lg"
+                        class="px-2 py-1 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded border border-purple-300"
                         aria-label={expandedReferenceIndex === index ? "Collapse" : "Expand"}
                       >
-                        {expandedReferenceIndex === index ? '∨' : '^'}
+                        {expandedReferenceIndex === index ? 'Collapse' : 'Expand'}
+                      </button>
+                      <button
+                        type="button"
+                        onclick={() => handleEditReference(index)}
+                        class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
+                        aria-label="Edit"
+                      >
+                        Edit
                       </button>
                       <button
                         type="button"
                         onclick={() => newReferences = newReferences.filter((_, i) => i !== index)}
-                        class="text-red-600 hover:text-red-800 font-bold"
+                        class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
                         aria-label="Delete"
                       >
-                        ×
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -524,18 +586,17 @@
                   <div class="border-2 border-blue-300 bg-blue-50 rounded-lg p-3">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-2">
-                        <span class="text-sm font-semibold text-blue-800">REL:</span>
+                        <span class="text-sm font-semibold text-blue-800">Relationship:</span>
                         <span class="text-sm text-gray-900">{rel.sourceId} → {rel.targetId}</span>
-                        <span class="text-xs text-gray-600">({rel.status})</span>
                       </div>
                       <div class="flex items-center gap-2">
                         <button
                           type="button"
                           onclick={() => expandedRelationshipIndex = expandedRelationshipIndex === index ? null : index}
-                          class="text-blue-700 hover:text-blue-900 font-bold text-lg"
+                          class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
                           aria-label={expandedRelationshipIndex === index ? "Collapse" : "Expand"}
                         >
-                          {expandedRelationshipIndex === index ? '∨' : '^'}
+                          {expandedRelationshipIndex === index ? 'Collapse' : 'Expand'}
                         </button>
                         <button
                           type="button"
@@ -543,10 +604,10 @@
                             relationships = relationships.filter((_, i) => i !== index);
                             clearModificationByKey(key);
                           }}
-                          class="text-red-600 hover:text-red-800 font-bold"
+                          class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
                           aria-label="Delete"
                         >
-                          ×
+                          Delete
                         </button>
                       </div>
                     </div>
@@ -724,8 +785,14 @@
 
 <AddReferenceModal
   bind:isOpen={showAddReferenceModal}
-  onClose={() => showAddReferenceModal = false}
-  onAdd={handleAddReference}
+  onClose={() => {
+    showAddReferenceModal = false;
+    editReferenceIndex = null;
+    deferredItems = null;
+  }}
+  onAdd={editReferenceIndex !== null ? handleUpdateReference : handleAddReference}
+  initialValue={editReferenceIndex !== null ? newReferences[editReferenceIndex] : ''}
+  isEditMode={editReferenceIndex !== null}
 />
 
 <ManageRelationshipModal

@@ -31,8 +31,11 @@ jobs:
           echo '${{ toJson(github.event.client_payload) }}' > contribution.json
           cat contribution.json
 
+      - name: Install tsx
+        run: npm install -D tsx
+
       - name: Generate contribution files
-        run: npx ts-node --esm .github/scripts/generate-contribution.ts
+        run: npx tsx .github/scripts/generate-contribution.ts
 
       - name: Type check
         run: npm run check

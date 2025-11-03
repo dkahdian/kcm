@@ -404,6 +404,23 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
       contributorGithub: submission.contributorGithub?.trim() || undefined
     };
 
+    // Check if GitHub token is configured
+    if (!GITHUB_TOKEN) {
+      console.error('GITHUB_TOKEN is not configured');
+      return json({ 
+        error: 'GitHub integration not configured. Please contact the administrator.',
+        details: 'GITHUB_TOKEN environment variable is missing'
+      }, { status: 500 });
+    }
+
+    console.log('Dispatching contribution to GitHub...');
+    console.log('Payload summary:', {
+      languagesToAdd: languagesToAdd.length,
+      languagesToEdit: languagesToEdit.length,
+      newReferences: newReferences.length,
+      edgeUpdates: edgeUpdates.length
+    });
+
     const response = await fetch('https://api.github.com/repos/dkahdian/kcm/dispatches', {
       method: 'POST',
       headers: {
@@ -420,9 +437,14 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('GitHub API error:', errorText);
-      return json({ error: 'Failed to trigger contribution workflow' }, { status: 500 });
+      console.error('GitHub API error:', response.status, errorText);
+      return json({ 
+        error: 'Failed to trigger contribution workflow',
+        details: `GitHub API returned ${response.status}: ${errorText}`
+      }, { status: 500 });
     }
+
+    console.log('Successfully dispatched contribution to GitHub');
 
     return json({
       success: true,

@@ -3,11 +3,20 @@
     isOpen: boolean;
     onClose: () => void;
     onAdd: (bibtex: string) => void;
+    initialValue?: string;
+    isEditMode?: boolean;
   };
 
-  let { isOpen = $bindable(false), onClose, onAdd }: Props = $props();
+  let { isOpen = $bindable(false), onClose, onAdd, initialValue = '', isEditMode = false }: Props = $props();
 
-  let bibtexInput = $state('');
+  let bibtexInput = $state(initialValue);
+
+  // Update bibtexInput when initialValue changes (for edit mode)
+  $effect(() => {
+    if (isOpen && initialValue) {
+      bibtexInput = initialValue;
+    }
+  });
 
   const bibtexPlaceholder = `@article{Darwiche_2002,
   title={A Knowledge Compilation Map},
@@ -24,7 +33,9 @@
   }
 
   function handleCancel() {
-    bibtexInput = '';
+    if (!isEditMode) {
+      bibtexInput = '';
+    }
     onClose();
   }
 </script>
@@ -37,8 +48,8 @@
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onclick={(e) => e.stopPropagation()}>
       <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
-        <h2 class="text-2xl font-bold text-white">Add New Reference</h2>
-        <p class="text-purple-100 mt-1">Paste BibTeX citation</p>
+        <h2 class="text-2xl font-bold text-white">{isEditMode ? 'Edit Reference' : 'Add New Reference'}</h2>
+        <p class="text-purple-100 mt-1">{isEditMode ? 'Update BibTeX citation' : 'Paste BibTeX citation'}</p>
       </div>
 
       <div class="p-6 space-y-4">
@@ -72,7 +83,7 @@
             disabled={!bibtexInput.trim()}
             class="px-4 py-2 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
           >
-            Add Reference
+            {isEditMode ? 'Update Reference' : 'Add Reference'}
           </button>
         </div>
       </div>

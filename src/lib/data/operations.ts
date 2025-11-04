@@ -56,6 +56,21 @@ export function getAllTransformationCodes(): string[] {
 }
 
 /**
+ * Convert a display code (∧C, ∨C, ¬C) to its safe identifier (AND_C, OR_C, NOT_C).
+ * Returns the input if it's already a safe identifier or if no mapping exists.
+ */
+export function displayCodeToSafeKey(code: string): string {
+  // Find the safe key that has this display code
+  for (const [safeKey, opDef] of Object.entries(TRANSFORMATIONS)) {
+    if (opDef.code === code) {
+      return safeKey;
+    }
+  }
+  // No mapping found - return as-is (likely already safe or a query code)
+  return code;
+}
+
+/**
  * Resolve operation support map into full operation entries.
  * For operations not specified in the support map, they are marked as 'open' (open problem).
  * Supports both safe keys (AND_C) and display codes (∧C) for lookup.

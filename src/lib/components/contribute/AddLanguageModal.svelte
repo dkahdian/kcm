@@ -198,7 +198,27 @@
     if (isEdit && initialData && transformations.length > 0 && Object.keys(initialData.transformations).length > 0) {
       const merged: typeof transformationSupport = {};
       transformations.forEach(t => {
-        merged[t.code] = initialData.transformations[t.code] || { polytime: 'unknown', note: '', refs: [] };
+        // Try both display code (∧C) and check all safe keys to find matching display code
+        let support = initialData.transformations[t.code];
+        if (!support) {
+          // Look for safe key that maps to this display code
+          const safeKey = Object.keys(initialData.transformations).find(key => {
+            // Check if any existing key matches, or if it's a safe identifier version
+            // Safe identifiers: AND_C, OR_C, NOT_C, AND_BC, OR_BC
+            return initialData.transformations[key] !== undefined && (
+              key === t.code || // Exact match
+              (t.code === '∧C' && key === 'AND_C') ||
+              (t.code === '∧BC' && key === 'AND_BC') ||
+              (t.code === '∨C' && key === 'OR_C') ||
+              (t.code === '∨BC' && key === 'OR_BC') ||
+              (t.code === '¬C' && key === 'NOT_C')
+            );
+          });
+          if (safeKey) {
+            support = initialData.transformations[safeKey];
+          }
+        }
+        merged[t.code] = support || { polytime: 'unknown', note: '', refs: [] };
       });
       if (JSON.stringify(merged) !== JSON.stringify(transformationSupport)) {
         transformationSupport = merged;

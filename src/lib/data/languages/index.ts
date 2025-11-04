@@ -4,6 +4,7 @@ export { dDnnf } from './d-dnnf.js';
 export { dnf } from './dnf.js';
 export { dnnf } from './dnnf.js';
 export { dNnf } from './d-nnf.js';
+export { fakeLang } from './fake-lang.js';
 export { fbdd } from './fbdd.js';
 export { fNnf } from './f-nnf.js';
 export { ip } from './ip.js';
@@ -21,6 +22,7 @@ import { dDnnf } from './d-dnnf.js';
 import { dnf } from './dnf.js';
 import { dnnf } from './dnnf.js';
 import { dNnf } from './d-nnf.js';
+import { fakeLang } from './fake-lang.js';
 import { fbdd } from './fbdd.js';
 import { fNnf } from './f-nnf.js';
 import { ip } from './ip.js';
@@ -41,6 +43,7 @@ export const allLanguages: KCLanguage[] = [
   dnf,
   dnnf,
   dNnf,
+  fakeLang,
   fbdd,
   fNnf,
   ip,

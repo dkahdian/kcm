@@ -102,7 +102,21 @@ const allBibtexEntries: string[] = [
    publisher={AI Access Foundation},
    author={Darwiche, A. and Marquis, P.},
    year={2002},
-   month=sep, pages={229–264} }`
+   month=sep, pages={229–264} }`,
+  `@article{DBLP:journals/corr/abs-1106-1819,
+  author       = {Adnan Darwiche and
+                  Pierre Marquis},
+  title        = {A Knowledge Compilation Map},
+  journal      = {CoRR},
+  volume       = {abs/1106.1819},
+  year         = {2011},
+  url          = {http://arxiv.org/abs/1106.1819},
+  eprinttype    = {arXiv},
+  eprint       = {1106.1819},
+  timestamp    = {Mon, 13 Aug 2018 16:48:47 +0200},
+  biburl       = {https://dblp.org/rec/journals/corr/abs-1106-1819.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}`
 ];
 
 /**

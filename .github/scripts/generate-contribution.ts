@@ -407,13 +407,41 @@ function updateEdges(): void {
     
     const matrixContent = matrixMatch[1];
     
-    // Split into rows - each row is wrapped in []
-    const rowRegex = /\[\s*\n([\s\S]*?)\n\s*\]/g;
+    // Split into rows - each row is a top-level [ ... ] block in the matrix
+    // We need to carefully extract only the top-level rows, not nested arrays
     const rows: string[] = [];
-    let rowMatch;
+    let currentRow = '';
+    let bracketDepth = 0;
+    let inRow = false;
     
-    while ((rowMatch = rowRegex.exec(matrixContent)) !== null) {
-      rows.push(rowMatch[1]);
+    for (let i = 0; i < matrixContent.length; i++) {
+      const char = matrixContent[i];
+      
+      if (char === '[' && bracketDepth === 0) {
+        // Start of a new row
+        inRow = true;
+        bracketDepth = 1;
+        currentRow = '';
+        continue;
+      }
+      
+      if (inRow) {
+        if (char === '[') {
+          bracketDepth++;
+        } else if (char === ']') {
+          bracketDepth--;
+          
+          if (bracketDepth === 0) {
+            // End of current row
+            rows.push(currentRow);
+            inRow = false;
+            currentRow = '';
+            continue;
+          }
+        }
+        
+        currentRow += char;
+      }
     }
     
     if (rows.length !== languageIds.length) {
@@ -422,7 +450,34 @@ function updateEdges(): void {
     
     // Parse the target row and replace the specific cell
     const rowContent = rows[sourceIdx];
-    const cells = rowContent.split(',\n').map(c => c.trim());
+    
+    // Split by commas, but need to be careful about nested objects
+    const cells: string[] = [];
+    let currentCell = '';
+    let cellBraceDepth = 0;
+    let cellBracketDepth = 0;
+    
+    for (let i = 0; i < rowContent.length; i++) {
+      const char = rowContent[i];
+      
+      if (char === '{') cellBraceDepth++;
+      if (char === '}') cellBraceDepth--;
+      if (char === '[') cellBracketDepth++;
+      if (char === ']') cellBracketDepth--;
+      
+      if (char === ',' && cellBraceDepth === 0 && cellBracketDepth === 0) {
+        cells.push(currentCell.trim());
+        currentCell = '';
+        continue;
+      }
+      
+      currentCell += char;
+    }
+    
+    // Don't forget the last cell
+    if (currentCell.trim()) {
+      cells.push(currentCell.trim());
+    }
     
     if (cells.length !== languageIds.length) {
       throw new Error(`Row ${sourceIdx} cell count (${cells.length}) doesn't match language count (${languageIds.length})`);

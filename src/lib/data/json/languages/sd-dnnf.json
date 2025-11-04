@@ -8,25 +8,20 @@
   ],
   "properties": {
     "queries": {
-      "CO": {
-        "polytime": "poly",
-        "refs": [
-          "Darwiche_2002"
-        ]
-      },
-      "VA": {
-        "polytime": "poly",
-        "refs": [
-          "Darwiche_2002"
-        ]
-      },
       "CE": {
         "polytime": "poly",
         "refs": [
           "Darwiche_2002"
         ]
       },
-      "IM": {
+      "CO": {
+        "note": "NOTE",
+        "polytime": "not-poly-conditional",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
+      "CT": {
         "polytime": "poly",
         "refs": [
           "Darwiche_2002"
@@ -38,13 +33,7 @@
           "Darwiche_2002"
         ]
       },
-      "SE": {
-        "polytime": "exp",
-        "refs": [
-          "Darwiche_2002"
-        ]
-      },
-      "CT": {
+      "IM": {
         "polytime": "poly",
         "refs": [
           "Darwiche_2002"
@@ -55,9 +44,34 @@
         "refs": [
           "Darwiche_2002"
         ]
+      },
+      "SE": {
+        "polytime": "exp",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
+      "VA": {
+        "polytime": "poly",
+        "refs": [
+          "Darwiche_2002"
+        ]
       }
     },
     "transformations": {
+      "AND_BC": {
+        "polytime": "poly",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
+      "AND_C": {
+        "note": "Unless P=NP",
+        "polytime": "not-poly-conditional",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
       "CD": {
         "polytime": "poly",
         "refs": [
@@ -70,28 +84,9 @@
           "Darwiche_2002"
         ]
       },
-      "SFO": {
-        "polytime": "poly",
-        "refs": [
-          "Darwiche_2002"
-        ]
-      },
-      "AND_C": {
-        "polytime": "not-poly-conditional",
+      "NOT_C": {
         "note": "Unless P=NP",
-        "refs": [
-          "Darwiche_2002"
-        ]
-      },
-      "AND_BC": {
-        "polytime": "poly",
-        "refs": [
-          "Darwiche_2002"
-        ]
-      },
-      "OR_C": {
         "polytime": "not-poly-conditional",
-        "note": "Unless P=NP",
         "refs": [
           "Darwiche_2002"
         ]
@@ -102,9 +97,15 @@
           "Darwiche_2002"
         ]
       },
-      "NOT_C": {
-        "polytime": "not-poly-conditional",
+      "OR_C": {
         "note": "Unless P=NP",
+        "polytime": "not-poly-conditional",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
+      "SFO": {
+        "polytime": "poly",
         "refs": [
           "Darwiche_2002"
         ]
@@ -113,25 +114,25 @@
   },
   "tags": [
     {
+      "color": "#84cc16",
       "id": "decomposability",
       "label": "Decomposability",
-      "color": "#84cc16",
       "refs": [
         "Darwiche_2002"
       ]
     },
     {
+      "color": "#ef4444",
       "id": "determinism",
       "label": "Determinism",
-      "color": "#ef4444",
       "refs": [
         "Darwiche_2002"
       ]
     },
     {
+      "color": "#06b6d4",
       "id": "smoothness",
       "label": "Smoothness",
-      "color": "#06b6d4",
       "refs": [
         "Darwiche_2002"
       ]

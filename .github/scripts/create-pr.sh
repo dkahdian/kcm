@@ -15,12 +15,12 @@ EDGE_UPDATES=$(node -p "require('./contribution.json').edgeUpdates?.length || 0"
 # Determine primary action and slug
 if [[ "$LANGS_TO_ADD" -gt 0 ]]; then
   ACTION="add"
-  LANG_SLUG=$(node -p "require('./contribution.json').languagesToAdd[0]?.slug || 'language'")
-  LANG_NAME=$(node -p "require('./contribution.json').languagesToAdd[0]?.data?.name || 'language'")
+  LANG_SLUG=$(node -p "require('./contribution.json').languagesToAdd[0]?.id || 'language'")
+  LANG_NAME=$(node -p "require('./contribution.json').languagesToAdd[0]?.name || 'language'")
 elif [[ "$LANGS_TO_EDIT" -gt 0 ]]; then
   ACTION="edit"
-  LANG_SLUG=$(node -p "require('./contribution.json').languagesToEdit[0]?.slug || 'language'")
-  LANG_NAME=$(node -p "require('./contribution.json').languagesToEdit[0]?.data?.name || 'language'")
+  LANG_SLUG=$(node -p "require('./contribution.json').languagesToEdit[0]?.id || 'language'")
+  LANG_NAME=$(node -p "require('./contribution.json').languagesToEdit[0]?.name || 'language'")
 elif [[ "$EDGE_UPDATES" -gt 0 ]]; then
   ACTION="relations"
   LANG_SLUG="relations"

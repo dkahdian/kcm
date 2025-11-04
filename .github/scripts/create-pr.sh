@@ -58,40 +58,11 @@ if [[ "$ACTION" == "add" ]]; then
   PR_TITLE="Add new language: ${LANG_NAME}"
 elif [[ "$ACTION" == "relations" ]]; then
   PR_TITLE="Update knowledge map relationships"
+elif [[ "$ACTION" == "references" ]]; then
+  PR_TITLE="Add new references"
 else
   PR_TITLE="Update language: ${LANG_NAME}"
 fi
-
-PR_BODY="## Data Contribution
-
-**Contributor Email:** ${CONTRIBUTOR_EMAIL}
-
-### Changes Summary
-- Languages added: ${LANGS_TO_ADD}
-- Languages edited: ${LANGS_TO_EDIT}
-- New references: ${NEW_REFS}
-- Edge updates: ${EDGE_UPDATES}"
-
-if [[ "$ACTION" != "relations" ]] && [[ "$ACTION" != "references" ]]; then
-  PR_BODY+="
-
-**Primary Language:** ${LANG_NAME} (\`${LANG_SLUG}\`)"
-fi
-
-if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
-  PR_BODY+="\n\n**GitHub:** @${CONTRIBUTOR_GITHUB}"
-fi
-
-PR_BODY+="\n\n### Files Changed
-\n\n\`\`\`\n$(git diff --name-only main..."$BRANCH_NAME")\n\`\`\`
-\n### Review Checklist
-- [ ] Data accuracy verified
-- [ ] References valid
-- [ ] No syntax errors
-- [ ] Builds successfully
-- [ ] Graph renders correctly
-
-*This PR was automatically generated from a community contribution.*"
 
 if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
   PR_TITLE+=" (by @${CONTRIBUTOR_GITHUB})"
@@ -99,15 +70,68 @@ fi
 
 export GH_TOKEN=${GH_TOKEN:-$CONTRIBUTION_TOKEN}
 
+# Get list of changed files
+CHANGED_FILES=$(git diff --name-only main..."$BRANCH_NAME")
+
+# Build PR body using a temporary file for proper formatting
+PR_BODY_FILE=$(mktemp)
+cat > "$PR_BODY_FILE" <<EOF
+## Data Contribution
+
+**Contributor Email:** ${CONTRIBUTOR_EMAIL}
+EOF
+
+if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
+  echo "**GitHub:** @${CONTRIBUTOR_GITHUB}" >> "$PR_BODY_FILE"
+  echo "" >> "$PR_BODY_FILE"
+fi
+
+cat >> "$PR_BODY_FILE" <<EOF
+
+### Changes Summary
+- Languages added: ${LANGS_TO_ADD}
+- Languages edited: ${LANGS_TO_EDIT}
+- New references: ${NEW_REFS}
+- Edge updates: ${EDGE_UPDATES}
+EOF
+
+if [[ "$ACTION" != "relations" ]] && [[ "$ACTION" != "references" ]]; then
+  cat >> "$PR_BODY_FILE" <<EOF
+
+**Primary Language:** ${LANG_NAME} (\`${LANG_SLUG}\`)
+EOF
+fi
+
+cat >> "$PR_BODY_FILE" <<EOF
+
+### Files Changed
+
+\`\`\`
+${CHANGED_FILES}
+\`\`\`
+
+### Review Checklist
+- [ ] Data accuracy verified
+- [ ] References valid
+- [ ] No syntax errors
+- [ ] Builds successfully
+- [ ] Graph renders correctly
+
+*This PR was automatically generated from a community contribution.*
+EOF
+
 # Create PR without labels first (labels may not exist)
 gh pr create \
   --title "$PR_TITLE" \
-  --body "$PR_BODY" \
+  --body-file "$PR_BODY_FILE" \
   --base main \
   --head "$BRANCH_NAME" || {
+    rm "$PR_BODY_FILE"
     echo "Failed to create PR"
     exit 1
   }
+
+rm "$PR_BODY_FILE"
 
 # Try to add labels if they exist, but don't fail if they don't
 for label in "${LABELS[@]}"; do

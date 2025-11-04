@@ -41,6 +41,7 @@
     statusOptions: StatusOption[];
     availableRefs?: string[];
     baselineRelations?: Map<string, BaselineRelationship>; // key is "sourceId->targetId"
+    initialData?: Relationship; // For editing existing relationships
   };
 
   let { 
@@ -50,7 +51,8 @@
     languages, 
     statusOptions, 
     availableRefs = [],
-    baselineRelations = new Map()
+    baselineRelations = new Map(),
+    initialData
   }: Props = $props();
 
   let sourceId = $state('');
@@ -58,6 +60,19 @@
   let status = $state<TransformationStatus | ''>('');
   let selectedRefs = $state<string[]>([]);
   let separatingFunctions = $state<SeparatingFunction[]>([]);
+
+  // Populate form when initialData is provided (edit mode)
+  $effect(() => {
+    if (isOpen && initialData) {
+      sourceId = initialData.sourceId;
+      targetId = initialData.targetId;
+      status = initialData.status;
+      selectedRefs = [...initialData.refs];
+      separatingFunctions = initialData.separatingFunctions 
+        ? initialData.separatingFunctions.map(sf => ({ ...sf }))
+        : [];
+    }
+  });
 
   // Auto-populate when source and target are selected
   $effect(() => {

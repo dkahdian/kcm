@@ -117,6 +117,9 @@
   let showAddReferenceModal = $state(false);
   let showManageRelationshipModal = $state(false);
   let editReferenceIndex = $state<number | null>(null);
+  let editLanguageToAddIndex = $state<number | null>(null);
+  let editLanguageToEditIndex = $state<number | null>(null);
+  let editRelationshipIndex = $state<number | null>(null);
 
   // Track which relationships have been modified from baseline
   const modifiedRelations = new Set<string>();
@@ -184,6 +187,12 @@
   }
 
   // Store items that come after the reference being edited
+  // NOTE: This queue management system has a conceptual issue - it assumes items at the same
+  // numerical index across different arrays were added at the same "queue position", which is
+  // only true if items are added in synchronized batches. The current implementation only supports
+  // this deferred/re-validation logic for references. Languages and relationships use simpler
+  // in-place editing without queue revalidation.
+  // TODO: Consider implementing a proper unified queue with global ordering and validation.
   let deferredItems = $state<{
     languages: LanguageToAdd[];
     editedLanguages: LanguageToAdd[];
@@ -235,8 +244,66 @@
     }
   }
 
+  function handleEditLanguageToAdd(index: number) {
+    // Open modal with current content
+    editLanguageToAddIndex = index;
+    showAddLanguageModal = true;
+  }
+
+  function handleUpdateLanguageToAdd(language: LanguageToAdd) {
+    if (editLanguageToAddIndex !== null) {
+      // Update the language at the edit index
+      languagesToAdd[editLanguageToAddIndex] = language;
+      languagesToAdd = [...languagesToAdd];
+
+      // Clear edit state
+      editLanguageToAddIndex = null;
+    }
+  }
+
+  function handleEditLanguageToEdit(index: number) {
+    // Open modal with current content
+    editLanguageToEditIndex = index;
+    showEditLanguageModal = true;
+  }
+
+  function handleUpdateLanguageToEdit(language: LanguageToAdd) {
+    if (editLanguageToEditIndex !== null) {
+      // Update the language at the edit index
+      languagesToEdit[editLanguageToEditIndex] = language;
+      languagesToEdit = [...languagesToEdit];
+
+      // Clear edit state
+      editLanguageToEditIndex = null;
+    }
+  }
+
+  function handleEditRelationship(index: number) {
+    // Open modal with current content
+    editRelationshipIndex = index;
+    showManageRelationshipModal = true;
+  }
+
+  function handleUpdateRelationship(relationship: RelationshipEntry) {
+    if (editRelationshipIndex !== null) {
+      // Update the relationship at the edit index
+      relationships[editRelationshipIndex] = relationship;
+      relationships = [...relationships];
+      recordModification(relationship);
+
+      // Clear edit state
+      editRelationshipIndex = null;
+    }
+  }
+
   function handleSaveRelationship(relationship: RelationshipEntry) {
-    // Check if this relationship already exists (editing)
+    // If we're in edit mode, use the update handler
+    if (editRelationshipIndex !== null) {
+      handleUpdateRelationship(relationship);
+      return;
+    }
+
+    // Check if this relationship already exists (adding)
     const key = relationKey(relationship.sourceId, relationship.targetId);
     const existingIndex = relationships.findIndex(r => 
       relationKey(r.sourceId, r.targetId) === key
@@ -521,6 +588,14 @@
                       </button>
                       <button
                         type="button"
+                        onclick={() => handleEditLanguageToAdd(index)}
+                        class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
+                        aria-label="Edit"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
                         onclick={() => languagesToAdd = languagesToAdd.filter((_, i) => i !== index)}
                         class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
                         aria-label="Delete"
@@ -531,9 +606,53 @@
                   </div>
                   
                   {#if expandedLanguageToAddIndex === index}
-                    <div class="mt-4 pt-4 border-t border-green-200 space-y-4">
-                      <p class="text-xs text-gray-600 italic">Full language form would go here (all queries, transformations, tags, etc.)</p>
-                      <!-- TODO: Full language form -->
+                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3 text-xs">
+                      <div>
+                        <div class="font-semibold text-gray-700 mb-1">Full Name:</div>
+                        <div class="text-gray-900">{lang.fullName}</div>
+                      </div>
+                      <div>
+                        <div class="font-semibold text-gray-700 mb-1">Description:</div>
+                        <div class="text-gray-900">{lang.description}</div>
+                      </div>
+                      {#if lang.queries && Object.keys(lang.queries).length > 0}
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Query Support ({Object.keys(lang.queries).length}):</div>
+                          <div class="grid grid-cols-2 gap-2">
+                            {#each Object.entries(lang.queries) as [code, support]}
+                              <div class="bg-white p-2 rounded border">
+                                <div class="font-medium">{code}</div>
+                                <div class="text-gray-600">{support.polytime}</div>
+                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
+                              </div>
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
+                      {#if lang.transformations && Object.keys(lang.transformations).length > 0}
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Transformation Support ({Object.keys(lang.transformations).length}):</div>
+                          <div class="grid grid-cols-2 gap-2">
+                            {#each Object.entries(lang.transformations) as [code, support]}
+                              <div class="bg-white p-2 rounded border">
+                                <div class="font-medium">{code}</div>
+                                <div class="text-gray-600">{support.polytime}</div>
+                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
+                              </div>
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
+                      {#if lang.tags && lang.tags.length > 0}
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Tags:</div>
+                          <div class="flex flex-wrap gap-1">
+                            {#each lang.tags as tag}
+                              <span class="px-2 py-1 rounded text-white text-xs" style="background-color: {tag.color}">{tag.label}</span>
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
                     </div>
                   {/if}
                 </div>
@@ -558,6 +677,14 @@
                       </button>
                       <button
                         type="button"
+                        onclick={() => handleEditLanguageToEdit(index)}
+                        class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
+                        aria-label="Edit"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
                         onclick={() => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
                         class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
                         aria-label="Delete"
@@ -568,9 +695,53 @@
                   </div>
                   
                   {#if expandedLanguageToEditIndex === index}
-                    <div class="mt-4 pt-4 border-t border-yellow-200 space-y-4">
-                      <p class="text-xs text-gray-600 italic">Full language form would go here</p>
-                      <!-- TODO: Full language form -->
+                    <div class="mt-4 pt-4 border-t border-yellow-200 space-y-3 text-xs">
+                      <div>
+                        <div class="font-semibold text-gray-700 mb-1">Full Name:</div>
+                        <div class="text-gray-900">{lang.fullName}</div>
+                      </div>
+                      <div>
+                        <div class="font-semibold text-gray-700 mb-1">Description:</div>
+                        <div class="text-gray-900">{lang.description}</div>
+                      </div>
+                      {#if lang.queries && Object.keys(lang.queries).length > 0}
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Query Support ({Object.keys(lang.queries).length}):</div>
+                          <div class="grid grid-cols-2 gap-2">
+                            {#each Object.entries(lang.queries) as [code, support]}
+                              <div class="bg-white p-2 rounded border">
+                                <div class="font-medium">{code}</div>
+                                <div class="text-gray-600">{support.polytime}</div>
+                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
+                              </div>
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
+                      {#if lang.transformations && Object.keys(lang.transformations).length > 0}
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Transformation Support ({Object.keys(lang.transformations).length}):</div>
+                          <div class="grid grid-cols-2 gap-2">
+                            {#each Object.entries(lang.transformations) as [code, support]}
+                              <div class="bg-white p-2 rounded border">
+                                <div class="font-medium">{code}</div>
+                                <div class="text-gray-600">{support.polytime}</div>
+                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
+                              </div>
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
+                      {#if lang.tags && lang.tags.length > 0}
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Tags:</div>
+                          <div class="flex flex-wrap gap-1">
+                            {#each lang.tags as tag}
+                              <span class="px-2 py-1 rounded text-white text-xs" style="background-color: {tag.color}">{tag.label}</span>
+                            {/each}
+                          </div>
+                        </div>
+                      {/if}
                     </div>
                   {/if}
                 </div>
@@ -641,6 +812,14 @@
                         </button>
                         <button
                           type="button"
+                          onclick={() => handleEditRelationship(index)}
+                          class="px-2 py-1 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded border border-purple-300"
+                          aria-label="Edit"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
                           onclick={() => {
                             relationships = relationships.filter((_, i) => i !== index);
                             clearModificationByKey(key);
@@ -654,9 +833,36 @@
                     </div>
                     
                     {#if expandedRelationshipIndex === index}
-                      <div class="mt-4 pt-4 border-t border-blue-200 space-y-4">
-                        <p class="text-xs text-gray-600 italic">Relationship editing form would go here (status, refs, separating functions)</p>
-                        <!-- TODO: Full relationship form -->
+                      <div class="mt-4 pt-4 border-t border-blue-200 space-y-3 text-xs">
+                        <div>
+                          <div class="font-semibold text-gray-700 mb-1">Transformation Status:</div>
+                          <div class="bg-white p-2 rounded border">
+                            <span class="font-mono text-gray-900">{rel.status}</span>
+                          </div>
+                        </div>
+                        {#if rel.separatingFunctions && rel.separatingFunctions.length > 0}
+                          <div>
+                            <div class="font-semibold text-gray-700 mb-1">Separating Functions ({rel.separatingFunctions.length}):</div>
+                            <div class="space-y-2">
+                              {#each rel.separatingFunctions as fn}
+                                <div class="bg-white p-2 rounded border">
+                                  <div class="font-medium">{fn.name}</div>
+                                  <div class="text-gray-600 text-xs">Short: {fn.shortName}</div>
+                                  <div class="text-gray-500 italic text-xs">{fn.description}</div>
+                                  {#if fn.refs && fn.refs.length > 0}
+                                    <div class="text-gray-500 text-xs mt-1">Refs: [{fn.refs.join(', ')}]</div>
+                                  {/if}
+                                </div>
+                              {/each}
+                            </div>
+                          </div>
+                        {/if}
+                        {#if rel.refs && rel.refs.length > 0}
+                          <div>
+                            <div class="font-semibold text-gray-700 mb-1">References:</div>
+                            <div class="text-gray-600">{rel.refs.join(', ')}</div>
+                          </div>
+                        {/if}
                       </div>
                     {/if}
                   </div>
@@ -741,8 +947,13 @@
 <!-- Modals -->
 <AddLanguageModal
   bind:isOpen={showAddLanguageModal}
-  onClose={() => showAddLanguageModal = false}
-  onAdd={handleAddLanguage}
+  onClose={() => {
+    showAddLanguageModal = false;
+    editLanguageToAddIndex = null;
+  }}
+  onAdd={editLanguageToAddIndex !== null ? handleUpdateLanguageToAdd : handleAddLanguage}
+  isEdit={editLanguageToAddIndex !== null}
+  initialData={editLanguageToAddIndex !== null ? languagesToAdd[editLanguageToAddIndex] : undefined}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
@@ -755,10 +966,11 @@
   onClose={() => {
     showEditLanguageModal = false;
     selectedLanguageToEdit = '';
+    editLanguageToEditIndex = null;
   }}
-  onAdd={handleEditLanguage}
+  onAdd={editLanguageToEditIndex !== null ? handleUpdateLanguageToEdit : handleEditLanguage}
   isEdit={true}
-  initialData={selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.id === selectedLanguageToEdit)!) : undefined}
+  initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex] : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.id === selectedLanguageToEdit)!) : undefined)}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
@@ -838,8 +1050,12 @@
 
 <ManageRelationshipModal
   bind:isOpen={showManageRelationshipModal}
-  onClose={() => showManageRelationshipModal = false}
+  onClose={() => {
+    showManageRelationshipModal = false;
+    editRelationshipIndex = null;
+  }}
   onSave={handleSaveRelationship}
+  initialData={editRelationshipIndex !== null ? relationships[editRelationshipIndex] : undefined}
   languages={availableLanguages()}
   {statusOptions}
   availableRefs={availableReferenceIds()}

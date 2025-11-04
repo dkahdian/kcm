@@ -245,13 +245,13 @@
     top: 100%;
     right: 0;
     z-index: 50;
-    width: 660px; /* 3x wider than original ~220px */
+    max-width: 80vh;
     margin-top: 0.25rem;
     background: white;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    max-height: 400px;
+    max-height: 85vh;
     overflow-y: auto;
     padding: 0.5rem 0;
   }

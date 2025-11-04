@@ -93,18 +93,22 @@
   const visibleEdgeTypes = $derived.by(() => {
     const statusesInGraph = new Set<TransformationStatus>();
     
-    // Collect statuses from adjacency matrix (visible nodes only)
+    // Collect statuses from adjacency matrix (only for visible edges)
     const { matrix, languageIds } = filteredData.adjacencyMatrix;
     for (let i = 0; i < languageIds.length; i++) {
       for (let j = 0; j < languageIds.length; j++) {
         const relation = matrix[i][j];
         if (relation) {
-          statusesInGraph.add(relation.status);
+          // Check if this edge is actually visible (respects edge filters)
+          const edgeId = `${languageIds[i]}->${languageIds[j]}`;
+          if (filteredData.visibleEdgeIds.has(edgeId)) {
+            statusesInGraph.add(relation.status);
+          }
         }
       }
     }
     
-    // Return only edge types that appear in the graph
+    // Return only edge types that appear in the visible graph
     return allEdgeTypes.filter(et => statusesInGraph.has(et.status));
   });
 

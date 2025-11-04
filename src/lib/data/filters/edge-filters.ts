@@ -18,13 +18,7 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
     { value: 'polytime-vs-not', label: 'Polytime vs not polytime', description: 'Collapse to polynomial, not polynomial, or unknown' }
   ],
   lambda: (relation, sourceId, targetId, mode) => {
-    if (sourceId === 'NNF' && targetId === 'f-NNF') {
-      console.log(`[polyDisplay] ${sourceId} -> ${targetId}: mode=${mode}, status=${relation.status}`);
-    }
     if (mode === 'include-quasipolynomial') {
-      if (sourceId === 'NNF' && targetId === 'f-NNF') {
-        console.log(`[polyDisplay] ${sourceId} -> ${targetId}: mode=include-quasipolynomial, keeping status=${relation.status}`);
-      }
       return relation;
     }
     
@@ -48,14 +42,6 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
         break;
     }
     
-    if (sourceId === 'NNF' && targetId === 'f-NNF') {
-      if (newStatus !== relation.status) {
-        console.log(`[polyDisplay] ${sourceId} -> ${targetId}: ${relation.status} -> ${newStatus}`);
-      } else {
-        console.log(`[polyDisplay] ${sourceId} -> ${targetId}: keeping status=${relation.status}`);
-      }
-    }
-    
     return newStatus === relation.status ? relation : { ...relation, status: newStatus };
   }
 };
@@ -77,26 +63,14 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
     { value: 'pessimistically', label: 'Pessimistically', description: 'Assume unknown edges behave as restrictively as possible' }
   ],
   lambda: (relation, sourceId, targetId, mode) => {
-    if (sourceId === 'NNF' && targetId === 'f-NNF') {
-      console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: mode=${mode}, status=${relation.status}`);
-    }
     switch (mode) {
       case 'expressively':
-        if (sourceId === 'NNF' && targetId === 'f-NNF') {
-          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: expressively, keeping as-is`);
-        }
         return relation;
       case 'omit-all':
         if (
           relation.status !== 'unknown-poly-quasi' && relation.status !== 'unknown-both' && relation.status !== 'no-poly-unknown-quasi'
         ) {
-          if (sourceId === 'NNF' && targetId === 'f-NNF') {
-            console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: omit-all, keeping (not unknown)`);
-          }
           return relation;
-        }
-        if (sourceId === 'NNF' && targetId === 'f-NNF') {
-          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: omit-all, FILTERING OUT (is unknown)`);
         }
         return null;
       case 'optimistically': {
@@ -106,9 +80,6 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
         } else if (relation.status === 'unknown-poly-quasi' || relation.status === 'unknown-both') {
           newStatus = 'poly';
         }
-        if (sourceId === 'NNF' && targetId === 'f-NNF' && newStatus !== relation.status) {
-          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: optimistically, ${relation.status} -> ${newStatus}`);
-        }
         return newStatus === relation.status ? relation : { ...relation, status: newStatus };
       }
       case 'pessimistically': {
@@ -117,9 +88,6 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
           newStatus = 'no-quasi';
         } else if (relation.status === 'unknown-poly-quasi') {
           newStatus = 'no-poly-quasi';
-        }
-        if (sourceId === 'NNF' && targetId === 'f-NNF' && newStatus !== relation.status) {
-          console.log(`[manageUnknowns] ${sourceId} -> ${targetId}: pessimistically, ${relation.status} -> ${newStatus}`);
         }
         return newStatus === relation.status ? relation : { ...relation, status: newStatus };
       }

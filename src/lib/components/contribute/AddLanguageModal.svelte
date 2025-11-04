@@ -91,6 +91,8 @@
     transformationSupport = {};
     selectedTags = [];
     selectedExistingRefs = [];
+    queriesInitialized = false;
+    transformationsInitialized = false;
   }
 
   function handleSubmit() {
@@ -163,66 +165,64 @@
     transformationSupport = { ...transformationSupport };
   }
 
+  let queriesInitialized = $state(false);
+  let transformationsInitialized = $state(false);
+
   // Initialize support records for all queries/transformations
   $effect(() => {
-    // Only initialize if we have queries/transformations but support is empty
-    if (Object.keys(querySupport).length === 0 && queries.length > 0) {
-      const initial: typeof querySupport = {};
+    if (queries.length > 0 && !queriesInitialized) {
+      const merged: typeof querySupport = {};
       queries.forEach(q => {
-        initial[q.code] = { polytime: 'unknown', note: '', refs: [] };
+        if (isEdit && initialData && initialData.queries[q.code]) {
+          // Copy data from initialData, creating new objects for reactivity
+          const source = initialData.queries[q.code];
+          merged[q.code] = { 
+            polytime: source.polytime, 
+            note: source.note || '', 
+            refs: [...source.refs] 
+          };
+        } else {
+          merged[q.code] = { polytime: 'unknown', note: '', refs: [] };
+        }
       });
-      querySupport = initial;
-    }
-
-    if (Object.keys(transformationSupport).length === 0 && transformations.length > 0) {
-      const initial: typeof transformationSupport = {};
-      transformations.forEach(t => {
-        initial[t.code] = { polytime: 'unknown', note: '', refs: [] };
-      });
-      transformationSupport = initial;
+      querySupport = merged;
+      queriesInitialized = true;
     }
   });
 
-  // Merge loaded data with all required codes when editing
   $effect(() => {
-    if (isEdit && initialData && queries.length > 0 && Object.keys(initialData.queries).length > 0) {
-      const merged: typeof querySupport = {};
-      queries.forEach(q => {
-        merged[q.code] = initialData.queries[q.code] || { polytime: 'unknown', note: '', refs: [] };
-      });
-      if (JSON.stringify(merged) !== JSON.stringify(querySupport)) {
-        querySupport = merged;
-      }
-    }
-
-    if (isEdit && initialData && transformations.length > 0 && Object.keys(initialData.transformations).length > 0) {
+    if (transformations.length > 0 && !transformationsInitialized) {
       const merged: typeof transformationSupport = {};
       transformations.forEach(t => {
-        // Try both display code (∧C) and check all safe keys to find matching display code
-        let support = initialData.transformations[t.code];
-        if (!support) {
-          // Look for safe key that maps to this display code
-          const safeKey = Object.keys(initialData.transformations).find(key => {
-            // Check if any existing key matches, or if it's a safe identifier version
-            // Safe identifiers: AND_C, OR_C, NOT_C, AND_BC, OR_BC
-            return initialData.transformations[key] !== undefined && (
-              key === t.code || // Exact match
-              (t.code === '∧C' && key === 'AND_C') ||
-              (t.code === '∧BC' && key === 'AND_BC') ||
-              (t.code === '∨C' && key === 'OR_C') ||
-              (t.code === '∨BC' && key === 'OR_BC') ||
-              (t.code === '¬C' && key === 'NOT_C')
-            );
-          });
-          if (safeKey) {
-            support = initialData.transformations[safeKey];
+        if (isEdit && initialData) {
+          // Try both display code (∧C) and safe keys to find matching data
+          let source = initialData.transformations[t.code];
+          if (!source) {
+            // Look for safe key that maps to this display code
+            const safeKey = Object.keys(initialData.transformations).find(key => {
+              return initialData.transformations[key] !== undefined && (
+                key === t.code ||
+                (t.code === '∧C' && key === 'AND_C') ||
+                (t.code === '∧BC' && key === 'AND_BC') ||
+                (t.code === '∨C' && key === 'OR_C') ||
+                (t.code === '∨BC' && key === 'OR_BC') ||
+                (t.code === '¬C' && key === 'NOT_C')
+              );
+            });
+            if (safeKey) {
+              source = initialData.transformations[safeKey];
+            }
           }
+          // Copy data, creating new objects for reactivity
+          merged[t.code] = source
+            ? { polytime: source.polytime, note: source.note || '', refs: [...source.refs] }
+            : { polytime: 'unknown', note: '', refs: [] };
+        } else {
+          merged[t.code] = { polytime: 'unknown', note: '', refs: [] };
         }
-        merged[t.code] = support || { polytime: 'unknown', note: '', refs: [] };
       });
-      if (JSON.stringify(merged) !== JSON.stringify(transformationSupport)) {
-        transformationSupport = merged;
-      }
+      transformationSupport = merged;
+      transformationsInitialized = true;
     }
   });
 </script>
@@ -315,49 +315,51 @@
           <h3 class="text-lg font-bold text-gray-900">Query Support</h3>
           <div class="space-y-3">
             {#each queries as query}
-              <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label for="query-{query.code}-polytime" class="block text-xs font-medium text-gray-700 mb-1">{query.name}</label>
-                    <select
-                      id="query-{query.code}-polytime"
-                      bind:value={querySupport[query.code].polytime}
-                      class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
-                    >
-                      {#each polytimeOptions as option}
-                        <option value={option.value}>{option.label}</option>
-                      {/each}
-                    </select>
-                  </div>
-                  <div>
-                    <label for="query-{query.code}-note" class="block text-xs font-medium text-gray-700 mb-1">Note</label>
-                    <input
-                      id="query-{query.code}-note"
-                      type="text"
-                      bind:value={querySupport[query.code].note}
-                      placeholder="Optional note..."
-                      class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
-                    />
+              {#if querySupport[query.code]}
+                <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label for="query-{query.code}-polytime" class="block text-xs font-medium text-gray-700 mb-1">{query.name}</label>
+                      <select
+                        id="query-{query.code}-polytime"
+                        bind:value={querySupport[query.code].polytime}
+                        class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
+                      >
+                        {#each polytimeOptions as option}
+                          <option value={option.value}>{option.label}</option>
+                        {/each}
+                      </select>
+                    </div>
+                    <div>
+                      <label for="query-{query.code}-note" class="block text-xs font-medium text-gray-700 mb-1">Note</label>
+                      <input
+                        id="query-{query.code}-note"
+                        type="text"
+                        bind:value={querySupport[query.code].note}
+                        placeholder="Optional note..."
+                        class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
+                      />
                   </div>
                 </div>
-                {#if availableRefs.length > 0}
-                  <div class="mt-2 flex flex-wrap gap-1">
-                    {#each availableRefs as refId}
-                      <button
-                        type="button"
-                        onclick={() => toggleQueryRef(query.code, refId)}
-                        class={`px-2 py-0.5 text-xs rounded ${
-                          querySupport[query.code].refs.includes(refId)
-                            ? 'bg-green-600 text-white'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        {refId}
-                      </button>
-                    {/each}
-                  </div>
-                {/if}
-              </div>
+                  {#if availableRefs.length > 0}
+                    <div class="mt-2 flex flex-wrap gap-1">
+                      {#each availableRefs as refId}
+                        <button
+                          type="button"
+                          onclick={() => toggleQueryRef(query.code, refId)}
+                          class={`px-2 py-0.5 text-xs rounded ${
+                            querySupport[query.code].refs.includes(refId)
+                              ? 'bg-green-600 text-white'
+                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }`}
+                        >
+                          {refId}
+                        </button>
+                      {/each}
+                    </div>
+                  {/if}
+                </div>
+              {/if}
             {/each}
           </div>
         </div>
@@ -367,49 +369,51 @@
           <h3 class="text-lg font-bold text-gray-900">Transformation Support</h3>
           <div class="space-y-3">
             {#each transformations as transform}
-              <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label for="transform-{transform.code}-polytime" class="block text-xs font-medium text-gray-700 mb-1">{transform.name}</label>
-                    <select
-                      id="transform-{transform.code}-polytime"
-                      bind:value={transformationSupport[transform.code].polytime}
-                      class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
-                    >
-                      {#each polytimeOptions as option}
-                        <option value={option.value}>{option.label}</option>
-                      {/each}
-                    </select>
-                  </div>
-                  <div>
-                    <label for="transform-{transform.code}-note" class="block text-xs font-medium text-gray-700 mb-1">Note</label>
-                    <input
-                      id="transform-{transform.code}-note"
-                      type="text"
-                      bind:value={transformationSupport[transform.code].note}
-                      placeholder="Optional note..."
-                      class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
-                    />
+              {#if transformationSupport[transform.code]}
+                <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label for="transform-{transform.code}-polytime" class="block text-xs font-medium text-gray-700 mb-1">{transform.name}</label>
+                      <select
+                        id="transform-{transform.code}-polytime"
+                        bind:value={transformationSupport[transform.code].polytime}
+                        class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
+                      >
+                        {#each polytimeOptions as option}
+                          <option value={option.value}>{option.label}</option>
+                        {/each}
+                      </select>
+                    </div>
+                    <div>
+                      <label for="transform-{transform.code}-note" class="block text-xs font-medium text-gray-700 mb-1">Note</label>
+                      <input
+                        id="transform-{transform.code}-note"
+                        type="text"
+                        bind:value={transformationSupport[transform.code].note}
+                        placeholder="Optional note..."
+                        class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
+                      />
                   </div>
                 </div>
-                {#if availableRefs.length > 0}
-                  <div class="mt-2 flex flex-wrap gap-1">
-                    {#each availableRefs as refId}
-                      <button
-                        type="button"
-                        onclick={() => toggleTransformRef(transform.code, refId)}
-                        class={`px-2 py-0.5 text-xs rounded ${
-                          transformationSupport[transform.code].refs.includes(refId)
-                            ? 'bg-green-600 text-white'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        {refId}
-                      </button>
-                    {/each}
-                  </div>
-                {/if}
-              </div>
+                  {#if availableRefs.length > 0}
+                    <div class="mt-2 flex flex-wrap gap-1">
+                      {#each availableRefs as refId}
+                        <button
+                          type="button"
+                          onclick={() => toggleTransformRef(transform.code, refId)}
+                          class={`px-2 py-0.5 text-xs rounded ${
+                            transformationSupport[transform.code].refs.includes(refId)
+                              ? 'bg-green-600 text-white'
+                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                          }`}
+                        >
+                          {refId}
+                        </button>
+                      {/each}
+                    </div>
+                  {/if}
+                </div>
+              {/if}
             {/each}
           </div>
         </div>

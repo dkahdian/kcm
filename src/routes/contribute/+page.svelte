@@ -299,6 +299,39 @@
     });
   }
 
+  // Helper function to clone operation support maps and convert display codes to safe keys
+  function cloneOperationSupport(operations: Record<string, any> | undefined, convertToSafeKeys = false): Record<string, any> {
+    const cloned: Record<string, any> = {};
+    if (operations) {
+      for (const [code, support] of Object.entries(operations)) {
+        const key = convertToSafeKeys ? displayCodeToSafeKey(code) : code;
+        cloned[key] = {
+          polytime: support.polytime,
+          note: support.note,
+          refs: Array.isArray(support.refs) ? [...support.refs] : []
+        };
+      }
+    }
+    return cloned;
+  }
+
+  // Helper function to format language data for submission
+  function formatLanguageForSubmission(lang: any) {
+    return {
+      id: lang.id,
+      name: lang.name,
+      fullName: lang.fullName,
+      description: lang.description,
+      descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
+      properties: {
+        queries: cloneOperationSupport(lang.queries),
+        transformations: cloneOperationSupport(lang.transformations, true) // Convert to safe keys
+      },
+      tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
+      existingReferences: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
+    };
+  }
+
   async function handleSubmit(event: Event) {
     event.preventDefault();
     submitError = '';
@@ -325,93 +358,8 @@
       }));
 
       // Transform languages to match backend expected format (deep clone to avoid Proxy issues)
-      const formattedLanguagesToAdd = languagesToAdd.map(lang => {
-        // Deep clone and ensure refs arrays exist
-        const clonedQueries: Record<string, any> = {};
-        if (lang.queries) {
-          for (const [code, support] of Object.entries(lang.queries)) {
-            clonedQueries[code] = {
-              polytime: support.polytime,
-              note: support.note,
-              refs: Array.isArray(support.refs) ? [...support.refs] : []
-            };
-          }
-        }
-        
-        const clonedTransformations: Record<string, any> = {};
-        if (lang.transformations) {
-          for (const [code, support] of Object.entries(lang.transformations)) {
-            // Convert display code to safe key for backend
-            const safeKey = displayCodeToSafeKey(code);
-            clonedTransformations[safeKey] = {
-              polytime: support.polytime,
-              note: support.note,
-              refs: Array.isArray(support.refs) ? [...support.refs] : []
-            };
-          }
-        }
-        
-        return {
-          id: lang.id,
-          name: lang.name,
-          fullName: lang.fullName,
-          description: lang.description,
-          descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
-          properties: {
-            queries: clonedQueries,
-            transformations: clonedTransformations
-          },
-          tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
-          existingReferences: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
-        };
-      });
-
-      const formattedLanguagesToEdit = languagesToEdit.map(lang => {
-        // Debug: Check what's in the original object
-        console.log('Original lang.transformations:', lang.transformations);
-        
-        // Deep clone and ensure refs arrays exist
-        const clonedQueries: Record<string, any> = {};
-        if (lang.queries) {
-          for (const [code, support] of Object.entries(lang.queries)) {
-            clonedQueries[code] = {
-              polytime: support.polytime,
-              note: support.note,
-              refs: Array.isArray(support.refs) ? [...support.refs] : []
-            };
-          }
-        }
-        
-        const clonedTransformations: Record<string, any> = {};
-        if (lang.transformations) {
-          for (const [code, support] of Object.entries(lang.transformations)) {
-            console.log(`Transformation ${code}:`, support, 'refs:', support.refs);
-            // Convert display code to safe key for backend
-            const safeKey = displayCodeToSafeKey(code);
-            clonedTransformations[safeKey] = {
-              polytime: support.polytime,
-              note: support.note,
-              refs: Array.isArray(support.refs) ? [...support.refs] : []
-            };
-          }
-        }
-        
-        console.log('Cloned transformations:', clonedTransformations);
-        
-        return {
-          id: lang.id,
-          name: lang.name,
-          fullName: lang.fullName,
-          description: lang.description,
-          descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
-          properties: {
-            queries: clonedQueries,
-            transformations: clonedTransformations
-          },
-          tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
-          existingReferences: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
-        };
-      });
+      const formattedLanguagesToAdd = languagesToAdd.map(formatLanguageForSubmission);
+      const formattedLanguagesToEdit = languagesToEdit.map(formatLanguageForSubmission);
 
       const submission = {
         contributorEmail,

@@ -78,22 +78,20 @@ const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 60 * 60 * 1000;
 
 function checkRateLimit(ip: string): boolean {
-  // Override for development environment
+  const now = Date.now();
+  const record = rateLimitStore.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_WINDOW_MS });
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT) {
+    return false;
+  }
+
+  record.count += 1;
   return true;
-  // const now = Date.now();
-  // const record = rateLimitStore.get(ip);
-
-  // if (!record || now > record.resetTime) {
-  //   rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_WINDOW_MS });
-  //   return true;
-  // }
-
-  // if (record.count >= RATE_LIMIT) {
-  //   return false;
-  // }
-
-  // record.count += 1;
-  // return true;
 }
 
 function toModuleIdentifier(slug: string): string {

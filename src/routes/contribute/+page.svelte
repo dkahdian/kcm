@@ -33,17 +33,8 @@
     description: type.description ?? ''
   }));
 
-  const languageLookup = new Map(data.languages.map((lang) => [lang.id, lang]));
-
   // Build baseline relations from adjacency matrix
   const baselineRelations = buildBaselineRelations(data.adjacencyMatrix);
-  
-  const bibtexPlaceholder = `@article{Darwiche_2002,
-  title={A Knowledge Compilation Map},
-  author={Darwiche, Adnan and Marquis, Pierre},
-  journal={Journal of AI Research},
-  year={2002}
-}`;
 
   // Contributor information
   let contributorEmail = $state('');
@@ -61,7 +52,6 @@
   let expandedLanguageToEditIndex = $state<number | null>(null);
   let expandedRelationshipIndex = $state<number | null>(null);
   let expandedReferenceIndex = $state<number | null>(null);
-  let expandedTagIndex = $state<number | null>(null);
 
   // Modal visibility state
   let showAddLanguageModal = $state(false);

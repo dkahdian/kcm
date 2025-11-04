@@ -5,510 +5,143 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../..');
+const dataDir = path.join(rootDir, 'src/lib/data/json');
 
-export type PolytimeFlagCode = 'poly' | 'quasi' | 'exp' | 'not-poly-conditional' | 'unknown' | 'open';
-export type TransformationStatus =
-  | 'poly'
-  | 'no-poly-unknown-quasi'
-  | 'no-poly-quasi'
-  | 'unknown-poly-quasi'
-  | 'unknown-both'
-  | 'no-quasi';
+// Load contribution data
+const contributionPath = path.join(rootDir, 'contribution.json');
+const contribution = JSON.parse(fs.readFileSync(contributionPath, 'utf8'));
 
-interface OperationSupport {
-  polytime: PolytimeFlagCode;
-  note?: string;
-  refs: string[];
-}
-
-interface TagEntry {
-  id: string;
-  label: string;
-  color?: string;
-  description?: string;
-  refs: string[];
-}
-
-interface LanguageData {
-  id: string;
-  name: string;
-  fullName: string;
-  description: string;
-  descriptionRefs: string[];
-  properties: {
-    queries: Record<string, OperationSupport>;
-    transformations: Record<string, OperationSupport>;
-  };
-  tags: TagEntry[];
-  references: string[];
-}
-
-interface RelationshipUpdate {
-  sourceId: string;
-  targetId: string;
-  status: TransformationStatus;
-  description?: string;
-  refs: string[];
-  separatingFunctions: SeparatingFunctionData[];
-}
-
-interface SeparatingFunctionData {
-  shortName: string;
-  name: string;
-  description: string;
-  refs: string[];
-}
-
-interface Contribution {
-  languagesToAdd: Array<{
-    slug: string;
-    module: string;
-    data: LanguageData;
-  }>;
-  languagesToEdit: Array<{
-    slug: string;
-    module: string;
-    data: LanguageData;
-  }>;
-  newReferences: Array<{ citationKey: string; bibtex: string }>;
-  relationships: RelationshipUpdate[];
-  contributorEmail: string;
-  contributorGithub?: string;
-}
-
-function toModuleIdentifier(slug: string): string {
-  return slug
-    .split('-')
-    .map((segment, index) => (index === 0 ? segment : segment.charAt(0).toUpperCase() + segment.slice(1)))
-    .join('');
-}
-
-// Load and transform contribution data
-const rawContribution: any = JSON.parse(fs.readFileSync('contribution.json', 'utf8'));
-
-// Transform languages to expected format
-const contribution: Contribution = {
-  ...rawContribution,
-  languagesToAdd: rawContribution.languagesToAdd?.map((lang: any) => ({
-    slug: lang.id,
-    module: toModuleIdentifier(lang.id),
-    data: lang
-  })) || [],
-  languagesToEdit: rawContribution.languagesToEdit?.map((lang: any) => ({
-    slug: lang.id,
-    module: toModuleIdentifier(lang.id),
-    data: lang
-  })) || [],
-  relationships: rawContribution.relationships || []
-};
-
-function escapeSingleQuotes(value: string): string {
-  return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-}
-
-function formatOperationMap(map: Record<string, OperationSupport>, indent: string): string {
-  const entries = Object.entries(map);
-  if (entries.length === 0) {
-    return '{}';
-  }
-
-  const lines = entries.map(([code, support]) => {
-    const parts = [`polytime: '${escapeSingleQuotes(support.polytime)}'`];
-    if (support.note) {
-      parts.push(`note: '${escapeSingleQuotes(support.note)}'`);
-    }
-    const refs = support.refs.map((ref) => `'${escapeSingleQuotes(ref)}'`).join(', ');
-    parts.push(`refs: [${refs}]`);
-    return `${indent}  ${code}: { ${parts.join(', ')} }`;
-  });
-
-  return `{
-${lines.join(',\n')}
-${indent}}`;
-}
-
-function formatTags(tags: TagEntry[]): string {
-  if (tags.length === 0) {
-    return '  tags: [],';
-  }
-
-  const lines = tags.map((tag) => {
-    const props = [`id: '${escapeSingleQuotes(tag.id)}'`, `label: '${escapeSingleQuotes(tag.label)}'`];
-    if (tag.color) {
-      props.push(`color: '${escapeSingleQuotes(tag.color)}'`);
-    }
-    if (tag.description) {
-      props.push(`description: '${escapeSingleQuotes(tag.description)}'`);
-    }
-    const refs = tag.refs.map((ref) => `'${escapeSingleQuotes(ref)}'`).join(', ');
-    props.push(`refs: [${refs}]`);
-    return `    { ${props.join(', ')} }`;
-  });
-
-  return `  tags: [
-${lines.join(',\n')}
-  ],`;
-}
-
-function generateLanguageFile(moduleName: string, data: LanguageData): string {
-  const descriptionRefs = data.descriptionRefs.map((ref) => `'${escapeSingleQuotes(ref)}'`).join(', ');
-  const referenceCall = data.references.length
-    ? `getReferences(${data.references.map((ref) => `'${escapeSingleQuotes(ref)}'`).join(', ')})`
-    : '[]';
-
-  const content = `import type { KCLanguage } from '../../types.js';
-import { getReferences } from '../references.js';
-
-export const ${moduleName}: KCLanguage = {
-  id: '${escapeSingleQuotes(data.id)}',
-  name: '${escapeSingleQuotes(data.name)}',
-  fullName: '${escapeSingleQuotes(data.fullName)}',
-  description: '${escapeSingleQuotes(data.description)}',
-  descriptionRefs: [${descriptionRefs}],
-  properties: {
-    queries: ${formatOperationMap(data.properties.queries, '    ')},
-    transformations: ${formatOperationMap(data.properties.transformations, '    ')}
-  },
-${formatTags(data.tags)}
-  references: ${referenceCall}
-};
-`;
-
-  return content;
-}
-
-function updateLanguageFiles(): void {
-  // Process languages to add
-  for (const lang of contribution.languagesToAdd) {
-    const languagePath = path.join(rootDir, 'src/lib/data/languages', `${lang.slug}.ts`);
-    const content = generateLanguageFile(lang.module, lang.data);
-    fs.writeFileSync(languagePath, content, 'utf8');
-    console.log(`Added ${lang.slug}.ts`);
-  }
-
-  // Process languages to edit
-  for (const lang of contribution.languagesToEdit) {
-    const languagePath = path.join(rootDir, 'src/lib/data/languages', `${lang.slug}.ts`);
-    const content = generateLanguageFile(lang.module, lang.data);
-    fs.writeFileSync(languagePath, content, 'utf8');
-    console.log(`Updated ${lang.slug}.ts`);
-  }
-}
-
-function updateLanguagesIndex(): void {
-  const indexPath = path.join(rootDir, 'src/lib/data/languages/index.ts');
-  let exportMap = new Map<string, string>();
-
-  // Read existing exports
-  if (fs.existsSync(indexPath)) {
-    const current = fs.readFileSync(indexPath, 'utf8');
-    const exportRegex = /export \{ (\w+) \} from '.\/(.+?)\.js';/g;
-    let match: RegExpExecArray | null;
-    while ((match = exportRegex.exec(current)) !== null) {
-      exportMap.set(match[1], match[2]);
-    }
-  }
-
-  // Add new languages
-  for (const lang of contribution.languagesToAdd) {
-    exportMap.set(lang.module, lang.slug);
-  }
-
-  // Update edited languages (they should already be in the map, but ensure they're there)
-  for (const lang of contribution.languagesToEdit) {
-    exportMap.set(lang.module, lang.slug);
-  }
-
-  const sorted = Array.from(exportMap.entries()).sort(([a], [b]) => a.localeCompare(b));
-
-  const exportLines = sorted
-    .map(([module, file]) => `export { ${module} } from './${file}.js';`)
-    .join('\n');
-  const importLines = sorted
-    .map(([module, file]) => `import { ${module} } from './${file}.js';`)
-    .join('\n');
-  const arrayLines = sorted.map(([module]) => `  ${module}`).join(',\n');
-
-  const newContent = `${exportLines}
-
-${importLines}
-
-import type { KCLanguage } from '../../types.js';
-
-export const allLanguages: KCLanguage[] = [
-${arrayLines}
-];
-`;
-
-  fs.writeFileSync(indexPath, newContent, 'utf8');
-  console.log('Updated languages/index.ts');
-}
-
-function extractCitationKey(bibtex: string): string | null {
-  const match = bibtex.match(/@\w+\{([^,\s]+)/);
-  return match ? match[1] : null;
-}
-
-function updateReferences(): void {
-  if (!contribution.newReferences.length) {
-    return;
-  }
-
-  const refsPath = path.join(rootDir, 'src/lib/data/references.ts');
-  const content = fs.readFileSync(refsPath, 'utf8');
-  const arrayMatch = content.match(/const allBibtexEntries: string\[\] = \[([\s\S]*?)\];/);
-
-  if (!arrayMatch) {
-    throw new Error('Unable to locate allBibtexEntries array in references.ts');
-  }
-
-  const existingEntries: string[] = new Function(`return [${arrayMatch[1]}];`)();
-  const entryByKey = new Map<string, string>();
-
-  for (const entry of existingEntries) {
-    const key = extractCitationKey(entry);
-    if (key) {
-      entryByKey.set(key, entry);
-    }
-  }
-
-  let added = 0;
-  for (const ref of contribution.newReferences) {
-    if (!entryByKey.has(ref.citationKey)) {
-      entryByKey.set(ref.citationKey, ref.bibtex);
-      added += 1;
-    }
-  }
-
-  if (added === 0) {
-    console.log('No new references to add');
-    return;
-  }
-
-  const combined = Array.from(entryByKey.values());
-  const formatted = combined
-    .map((entry) => `  \`${entry.replace(/`/g, '\\`')}\``)
-    .join(',\n');
-  const updatedContent = content.replace(
-    /const allBibtexEntries: string\[\] = \[[\s\S]*?\];/,
-    `const allBibtexEntries: string[] = [\n${formatted}\n];`
-  );
-
-  fs.writeFileSync(refsPath, updatedContent, 'utf8');
-  console.log(`Added ${added} new reference(s)`);
-}
-
-function formatSeparatingFunction(fn: SeparatingFunctionData, indent: string): string {
-  const refs = fn.refs.map((ref) => `'${escapeSingleQuotes(ref)}'`).join(', ');
-  return `${indent}{
-${indent}  shortName: '${escapeSingleQuotes(fn.shortName)}',
-${indent}  name: '${escapeSingleQuotes(fn.name)}',
-${indent}  description: '${escapeSingleQuotes(fn.description)}',
-${indent}  refs: [${refs}]
-${indent}}`;
-}
-
-function formatDirectedRelation(relation: RelationshipUpdate | null, indent: string): string {
-  if (!relation) {
-    return 'null';
-  }
-
-  const refs = relation.refs.map((ref: string) => `'${escapeSingleQuotes(ref)}'`).join(', ');
-  const lines: string[] = [
-    `{ status: '${escapeSingleQuotes(relation.status)}',`,
-    `  description: '${escapeSingleQuotes(relation.description || '')}',`,
-    `  refs: [${refs}],`
-  ];
-
-  if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
-    const fns = relation.separatingFunctions
-      .map((fn: SeparatingFunctionData) => formatSeparatingFunction(fn, indent + '    '))
-      .join(',\n');
-    lines.push(`  separatingFunctions: [\n${fns}\n${indent}  ]`);
-  } else {
-    lines.push(`  separatingFunctions: []`);
-  }
-
-  lines.push('}');
-  return indent + lines.join(`\n${indent}`);
-}
-
-function updateEdges(): void {
-  // Only update edges if there are relationship updates in the contribution
-  if (!contribution.relationships || contribution.relationships.length === 0) {
-    console.log('No relationship updates in contribution, skipping edges.ts update');
-    return;
-  }
-
-  const edgesPath = path.join(rootDir, 'src/lib/data/edges.ts');
-  
-  if (!fs.existsSync(edgesPath)) {
-    console.error('edges.ts file not found');
-    return;
-  }
-
-  const content = fs.readFileSync(edgesPath, 'utf8');
-
-  // Extract language IDs
-  const langIdsMatch = content.match(/const languageIds = \[([\s\S]*?)\];/);
-  if (!langIdsMatch) {
-    throw new Error('Could not find languageIds in edges.ts');
-  }
-  
-  // Parse language IDs from the array literal
-  const languageIds: string[] = eval(`[${langIdsMatch[1]}]`);
-  
-  // Check if any new languages need to be added to the matrix
-  const allLanguageIds = new Set([...languageIds]);
-  for (const lang of contribution.languagesToAdd) {
-    allLanguageIds.add(lang.slug);
-  }
-  
-  // Check if relationship references any unknown languages
-  for (const rel of contribution.relationships) {
-    if (!allLanguageIds.has(rel.sourceId)) {
-      throw new Error(`Relationship references unknown source language: ${rel.sourceId}`);
-    }
-    if (!allLanguageIds.has(rel.targetId)) {
-      throw new Error(`Relationship references unknown target language: ${rel.targetId}`);
-    }
-  }
-  
-  // Build index mapping for existing languages
-  const oldIndexByLang: Record<string, number> = {};
-  languageIds.forEach((id, idx) => {
-    oldIndexByLang[id] = idx;
-  });
-
-  // For each relationship, find and replace the specific matrix cell
-  let modifiedContent = content;
-  
-  for (const rel of contribution.relationships) {
-    const sourceIdx = oldIndexByLang[rel.sourceId];
-    const targetIdx = oldIndexByLang[rel.targetId];
-
-    if (sourceIdx === undefined || targetIdx === undefined) {
-      throw new Error(`Relationship references unknown languages: ${rel.sourceId} -> ${rel.targetId}`);
-    }
-
-    console.log(`Updating edge: ${rel.sourceId}[${sourceIdx}] -> ${rel.targetId}[${targetIdx}] (${rel.status})`);
-
-    // Format the new relationship
-    const formattedRel = formatDirectedRelation(rel, '      ');
-    
-    // Find the specific matrix row for sourceIdx
-    // Extract matrix content
-    const matrixRegex = /const matrix:.*?\[([\s\S]*?)\n\];/;
-    const matrixMatch = modifiedContent.match(matrixRegex);
-    
-    if (!matrixMatch) {
-      throw new Error('Could not find matrix in edges.ts');
-    }
-    
-    const matrixContent = matrixMatch[1];
-    
-    // Split into rows - each row is a top-level [ ... ] block in the matrix
-    // We need to carefully extract only the top-level rows, not nested arrays
-    const rows: string[] = [];
-    let currentRow = '';
-    let bracketDepth = 0;
-    let inRow = false;
-    
-    for (let i = 0; i < matrixContent.length; i++) {
-      const char = matrixContent[i];
-      
-      if (char === '[' && bracketDepth === 0) {
-        // Start of a new row
-        inRow = true;
-        bracketDepth = 1;
-        currentRow = '';
-        continue;
-      }
-      
-      if (inRow) {
-        if (char === '[') {
-          bracketDepth++;
-        } else if (char === ']') {
-          bracketDepth--;
-          
-          if (bracketDepth === 0) {
-            // End of current row
-            rows.push(currentRow);
-            inRow = false;
-            currentRow = '';
-            continue;
-          }
-        }
-        
-        currentRow += char;
-      }
-    }
-    
-    if (rows.length !== languageIds.length) {
-      throw new Error(`Matrix row count (${rows.length}) doesn't match language count (${languageIds.length})`);
-    }
-    
-    // Parse the target row and replace the specific cell
-    const rowContent = rows[sourceIdx];
-    
-    // Split by commas, but need to be careful about nested objects
-    const cells: string[] = [];
-    let currentCell = '';
-    let cellBraceDepth = 0;
-    let cellBracketDepth = 0;
-    
-    for (let i = 0; i < rowContent.length; i++) {
-      const char = rowContent[i];
-      
-      if (char === '{') cellBraceDepth++;
-      if (char === '}') cellBraceDepth--;
-      if (char === '[') cellBracketDepth++;
-      if (char === ']') cellBracketDepth--;
-      
-      if (char === ',' && cellBraceDepth === 0 && cellBracketDepth === 0) {
-        cells.push(currentCell.trim());
-        currentCell = '';
-        continue;
-      }
-      
-      currentCell += char;
-    }
-    
-    // Don't forget the last cell
-    if (currentCell.trim()) {
-      cells.push(currentCell.trim());
-    }
-    
-    if (cells.length !== languageIds.length) {
-      throw new Error(`Row ${sourceIdx} cell count (${cells.length}) doesn't match language count (${languageIds.length})`);
-    }
-    
-    // Replace the target cell
-    cells[targetIdx] = formattedRel.trim();
-    
-    // Rebuild the row
-    const newRowContent = cells.map(c => `      ${c}`).join(',\n');
-    rows[sourceIdx] = newRowContent;
-    
-    // Rebuild the matrix
-    const newMatrixContent = rows.map(row => `    [\n${row}\n    ]`).join(',\n');
-    
-    // Replace in content
-    modifiedContent = modifiedContent.replace(matrixRegex, `const matrix: (DirectedSuccinctnessRelation | null)[][] = [\n${newMatrixContent}\n];`);
-  }
-
-  // Write the modified content back
-  fs.writeFileSync(edgesPath, modifiedContent, 'utf8');
-  console.log('Updated edges.ts with relationship changes');
-}
+console.log('Processing contribution...');
 
 try {
-  updateLanguageFiles();
-  updateLanguagesIndex();
-  updateReferences();
-  updateEdges();
-  console.log('Contribution processing complete.');
-} catch (error) {
-  console.error('Error generating contribution:', error);
+  // ============================================================================
+  // 1. HANDLE NEW LANGUAGES
+  // ============================================================================
+  
+  if (contribution.languagesToAdd && contribution.languagesToAdd.length > 0) {
+    console.log(`\nAdding ${contribution.languagesToAdd.length} new language(s)...`);
+    
+    const languageIndexPath = path.join(dataDir, 'languages/index.json');
+    const languageIds = JSON.parse(fs.readFileSync(languageIndexPath, 'utf8'));
+    
+    for (const lang of contribution.languagesToAdd) {
+      console.log(`  - Adding language: ${lang.id}`);
+      
+      // Write language JSON file
+      const langFilePath = path.join(dataDir, 'languages', `${lang.id}.json`);
+      
+      // Remove references field (it's generated at runtime)
+      const { references, slug, ...langData } = lang;
+      
+      fs.writeFileSync(langFilePath, JSON.stringify(langData, null, 2), 'utf8');
+      
+      // Add to index if not already present
+      if (!languageIds.includes(lang.id)) {
+        languageIds.push(lang.id);
+        languageIds.sort();
+        fs.writeFileSync(languageIndexPath, JSON.stringify(languageIds, null, 2), 'utf8');
+      }
+    }
+    
+    console.log('Updated languages/index.json');
+  }
+  
+  // ============================================================================
+  // 2. HANDLE LANGUAGE EDITS
+  // ============================================================================
+  
+  if (contribution.languagesToEdit && contribution.languagesToEdit.length > 0) {
+    console.log(`\nEditing ${contribution.languagesToEdit.length} language(s)...`);
+    
+    for (const langUpdate of contribution.languagesToEdit) {
+      console.log(`  - Updating language: ${langUpdate.id}`);
+      
+      const langFilePath = path.join(dataDir, 'languages', `${langUpdate.id}.json`);
+      
+      if (!fs.existsSync(langFilePath)) {
+        throw new Error(`Language file not found: ${langUpdate.id}.json`);
+      }
+      
+      const existing = JSON.parse(fs.readFileSync(langFilePath, 'utf8'));
+      
+      // Remove references and slug fields
+      const { references, slug, ...updateData } = langUpdate;
+      
+      // Merge updates into existing
+      const merged = { ...existing, ...updateData };
+      
+      fs.writeFileSync(langFilePath, JSON.stringify(merged, null, 2), 'utf8');
+    }
+  }
+  
+  // ============================================================================
+  // 3. HANDLE EDGES/RELATIONSHIPS
+  // ============================================================================
+  
+  if (contribution.relationships && contribution.relationships.length > 0) {
+    console.log(`\nUpdating ${contribution.relationships.length} relationship(s)...`);
+    
+    const edgesPath = path.join(dataDir, 'edges.json');
+    const edges = JSON.parse(fs.readFileSync(edgesPath, 'utf8'));
+    
+    for (const rel of contribution.relationships) {
+      const sourceIdx = edges.languageIds.indexOf(rel.sourceId);
+      const targetIdx = edges.languageIds.indexOf(rel.targetId);
+      
+      if (sourceIdx === -1 || targetIdx === -1) {
+        throw new Error(`Unknown language in relationship: ${rel.sourceId} -> ${rel.targetId}`);
+      }
+      
+      console.log(`  - ${rel.sourceId} -> ${rel.targetId} (${rel.status})`);
+      
+      edges.matrix[sourceIdx][targetIdx] = {
+        status: rel.status,
+        description: rel.description || '',
+        refs: rel.refs || [],
+        separatingFunctions: rel.separatingFunctions || []
+      };
+    }
+    
+    fs.writeFileSync(edgesPath, JSON.stringify(edges, null, 2), 'utf8');
+    console.log('Updated edges.json');
+  }
+  
+  // ============================================================================
+  // 4. HANDLE NEW REFERENCES
+  // ============================================================================
+  
+  if (contribution.newReferences && contribution.newReferences.length > 0) {
+    console.log(`\nAdding ${contribution.newReferences.length} new reference(s)...`);
+    
+    const refPath = path.join(dataDir, 'references.json');
+    const refs = JSON.parse(fs.readFileSync(refPath, 'utf8'));
+    
+    for (const newRef of contribution.newReferences) {
+      console.log(`  - Adding reference: ${newRef.id}`);
+      
+      // Check if reference already exists
+      const existing = refs.find((r: any) => r.id === newRef.id);
+      if (existing) {
+        console.log(`    (already exists, skipping)`);
+        continue;
+      }
+      
+      refs.push({
+        id: newRef.id,
+        bibtex: newRef.bibtex
+      });
+    }
+    
+    // Sort references by ID for consistency
+    refs.sort((a: any, b: any) => a.id.localeCompare(b.id));
+    
+    fs.writeFileSync(refPath, JSON.stringify(refs, null, 2), 'utf8');
+    console.log('Updated references.json');
+  }
+  
+  console.log('\n✅ Contribution processed successfully!');
+  
+} catch (error: any) {
+  console.error('\n❌ Error generating contribution:', error?.message || error);
   process.exit(1);
 }

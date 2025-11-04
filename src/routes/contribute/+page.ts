@@ -1,5 +1,5 @@
-import type { PageLoad } from './$types';
-import { allLanguages } from '$lib/data/languages/index.js';
+import type { PageLoad } from './$types.js';
+import { allLanguages } from '$lib/data/languages.js';
 import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
 import { POLYTIME_COMPLEXITIES } from '$lib/data/polytime-complexities.js';
 import { adjacencyMatrixData } from '$lib/data/edges.js';

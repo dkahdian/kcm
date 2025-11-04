@@ -1,0 +1,18 @@
+[
+  "bdd",
+  "cnf",
+  "d-dnnf",
+  "d-nnf",
+  "dnf",
+  "dnnf",
+  "f-nnf",
+  "fbdd",
+  "ip",
+  "mods",
+  "nnf",
+  "obdd",
+  "obdd-lt",
+  "pi",
+  "s-nnf",
+  "sd-dnnf"
+]

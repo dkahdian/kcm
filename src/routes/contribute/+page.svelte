@@ -323,19 +323,19 @@
         separatingFunctions: rel.separatingFunctions || []
       }));
 
-      // Transform languages to match backend expected format
+      // Transform languages to match backend expected format (deep clone to avoid Proxy issues)
       const formattedLanguagesToAdd = languagesToAdd.map(lang => ({
         id: lang.id,
         name: lang.name,
         fullName: lang.fullName,
         description: lang.description,
-        descriptionRefs: lang.descriptionRefs,
+        descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
         properties: {
-          queries: lang.queries,
-          transformations: lang.transformations
+          queries: lang.queries ? JSON.parse(JSON.stringify(lang.queries)) : {},
+          transformations: lang.transformations ? JSON.parse(JSON.stringify(lang.transformations)) : {}
         },
-        tags: lang.tags,
-        existingReferences: lang.existingReferences
+        tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
+        existingReferences: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
       }));
 
       const formattedLanguagesToEdit = languagesToEdit.map(lang => ({
@@ -343,13 +343,13 @@
         name: lang.name,
         fullName: lang.fullName,
         description: lang.description,
-        descriptionRefs: lang.descriptionRefs,
+        descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
         properties: {
-          queries: lang.queries,
-          transformations: lang.transformations
+          queries: lang.queries ? JSON.parse(JSON.stringify(lang.queries)) : {},
+          transformations: lang.transformations ? JSON.parse(JSON.stringify(lang.transformations)) : {}
         },
-        tags: lang.tags,
-        existingReferences: lang.existingReferences
+        tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
+        existingReferences: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
       }));
 
       const submission = {

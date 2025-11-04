@@ -84,13 +84,47 @@ try {
     const edgesPath = path.join(dataDir, 'edges.json');
     const edges = JSON.parse(fs.readFileSync(edgesPath, 'utf8'));
     
+    // Load the full list of existing languages from the language index
+    const languageIndexPath = path.join(dataDir, 'languages/index.json');
+    const existingLanguageIds = JSON.parse(fs.readFileSync(languageIndexPath, 'utf8'));
+    
+    // Build list of all available language IDs (existing + newly added in this contribution)
+    const newLanguageIds = (contribution.languagesToAdd || []).map((l: any) => l.id);
+    const allAvailableLanguageIds = [...existingLanguageIds, ...newLanguageIds];
+    
     for (const rel of contribution.relationships) {
+      // Check if languages exist (either already in languages index or being added in this contribution)
+      if (!allAvailableLanguageIds.includes(rel.sourceId)) {
+        throw new Error(`Unknown source language in relationship: ${rel.sourceId} (not in existing languages or being added)`);
+      }
+      if (!allAvailableLanguageIds.includes(rel.targetId)) {
+        throw new Error(`Unknown target language in relationship: ${rel.targetId} (not in existing languages or being added)`);
+      }
+      
+      // Add language IDs to edges.languageIds if they're not already there
+      if (!edges.languageIds.includes(rel.sourceId)) {
+        edges.languageIds.push(rel.sourceId);
+      }
+      if (!edges.languageIds.includes(rel.targetId)) {
+        edges.languageIds.push(rel.targetId);
+      }
+      
+      // Sort to maintain consistent order
+      edges.languageIds.sort();
+      
+      // Expand matrix if needed
+      const requiredSize = edges.languageIds.length;
+      while (edges.matrix.length < requiredSize) {
+        edges.matrix.push(new Array(requiredSize).fill(null));
+      }
+      for (let i = 0; i < edges.matrix.length; i++) {
+        while (edges.matrix[i].length < requiredSize) {
+          edges.matrix[i].push(null);
+        }
+      }
+      
       const sourceIdx = edges.languageIds.indexOf(rel.sourceId);
       const targetIdx = edges.languageIds.indexOf(rel.targetId);
-      
-      if (sourceIdx === -1 || targetIdx === -1) {
-        throw new Error(`Unknown language in relationship: ${rel.sourceId} -> ${rel.targetId}`);
-      }
       
       console.log(`  - ${rel.sourceId} -> ${rel.targetId} (${rel.status})`);
       

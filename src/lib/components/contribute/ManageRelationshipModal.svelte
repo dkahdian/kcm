@@ -17,6 +17,7 @@
     sourceId: string;
     targetId: string;
     status: TransformationStatus;
+    description?: string;
     refs: string[];
     separatingFunctions?: SeparatingFunction[];
   };
@@ -58,6 +59,7 @@
   let sourceId = $state('');
   let targetId = $state('');
   let status = $state<TransformationStatus | ''>('');
+  let description = $state('');
   let selectedRefs = $state<string[]>([]);
   let separatingFunctions = $state<SeparatingFunction[]>([]);
 
@@ -67,6 +69,7 @@
       sourceId = initialData.sourceId;
       targetId = initialData.targetId;
       status = initialData.status;
+      description = initialData.description || '';
       selectedRefs = [...initialData.refs];
       separatingFunctions = initialData.separatingFunctions 
         ? initialData.separatingFunctions.map(sf => ({ ...sf }))
@@ -94,6 +97,7 @@
     sourceId = '';
     targetId = '';
     status = '';
+    description = '';
     selectedRefs = [];
     separatingFunctions = [];
   }
@@ -105,6 +109,7 @@
       sourceId,
       targetId,
       status,
+      description: description || undefined,
       refs: selectedRefs,
       separatingFunctions: separatingFunctions.length > 0 ? separatingFunctions : undefined
     });
@@ -204,6 +209,20 @@
               <p class="text-xs text-gray-500 mt-1">{selectedOption.description}</p>
             {/if}
           {/if}
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="rel-description" class="block text-sm font-medium text-gray-700 mb-1">
+            Description
+          </label>
+          <textarea
+            id="rel-description"
+            bind:value={description}
+            rows="3"
+            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+            placeholder="Describe this transformation relationship (optional)..."
+          ></textarea>
         </div>
 
         <!-- References -->

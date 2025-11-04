@@ -374,120 +374,77 @@ function updateEdges(): void {
     }
   }
   
-  const finalLanguageIds = Array.from(allLanguageIds).sort();
-  const indexByLanguage: Record<string, number> = {};
-  finalLanguageIds.forEach((id, index) => {
-    indexByLanguage[id] = index;
+  // Build index mapping for existing languages
+  const oldIndexByLang: Record<string, number> = {};
+  languageIds.forEach((id, idx) => {
+    oldIndexByLang[id] = idx;
   });
+
+  // For each relationship, find and replace the specific matrix cell
+  let modifiedContent = content;
   
-  // Initialize matrix - start with all nulls
-  // TODO: Parse existing matrix to preserve edges when adding new languages
-  // For now, we only support adding edges to existing language pairs
-  const matrix: (RelationshipUpdate | null)[][] = [];
-  for (let i = 0; i < finalLanguageIds.length; i++) {
-    matrix[i] = [];
-    for (let j = 0; j < finalLanguageIds.length; j++) {
-      matrix[i][j] = null;
-    }
-  }
-
-  // Parse existing matrix from the file content
-  // This is a simplified parser that only extracts non-null entries
-  const matrixMatch = content.match(/const matrix:.*?\[([\s\S]*?)\n\];/);
-  if (matrixMatch) {
-    // Try to preserve existing edges by matching their positions
-    // This regex-based approach is fragile but works for now
-    const oldIndexByLang: Record<string, number> = {};
-    languageIds.forEach((id, idx) => {
-      oldIndexByLang[id] = idx;
-    });
-    
-    // For each language pair that exists in both old and new, try to preserve the edge
-    // This is a best-effort approach
-    for (let i = 0; i < languageIds.length; i++) {
-      const sourceId = languageIds[i];
-      const newSourceIdx = indexByLanguage[sourceId];
-      if (newSourceIdx === undefined) continue;
-      
-      for (let j = 0; j < languageIds.length; j++) {
-        const targetId = languageIds[j];
-        const newTargetIdx = indexByLanguage[targetId];
-        if (newTargetIdx === undefined) continue;
-        
-        // Mark that this position needs to be parsed from old matrix
-        // For now, we'll just leave it as null and let contribution updates override
-        // A full implementation would parse the TypeScript object literal
-      }
-    }
-  }
-
-  // Apply updates from contribution
   for (const rel of contribution.relationships) {
-    const sourceIdx = indexByLanguage[rel.sourceId];
-    const targetIdx = indexByLanguage[rel.targetId];
+    const sourceIdx = oldIndexByLang[rel.sourceId];
+    const targetIdx = oldIndexByLang[rel.targetId];
 
     if (sourceIdx === undefined || targetIdx === undefined) {
-      console.warn(`Skipping update for unknown languages: ${rel.sourceId} -> ${rel.targetId}`);
-      continue;
+      throw new Error(`Relationship references unknown languages: ${rel.sourceId} -> ${rel.targetId}`);
     }
 
-    // Update matrix[sourceIdx][targetIdx] with the unidirectional relationship
-    matrix[sourceIdx][targetIdx] = rel;
-    console.log(`Updated edge: ${rel.sourceId} -> ${rel.targetId} (${rel.status})`);
-  }
+    console.log(`Updating edge: ${rel.sourceId}[${sourceIdx}] -> ${rel.targetId}[${targetIdx}] (${rel.status})`);
 
-  // Generate formatted matrix
-  const matrixLines: string[] = [];
-  for (let i = 0; i < languageIds.length; i++) {
-    const rowLines: string[] = [];
-    for (let j = 0; j < languageIds.length; j++) {
-      const cell = matrix[i][j];
-      if (cell === null) {
-        rowLines.push('null');
-      } else {
-        rowLines.push(formatDirectedRelation(cell, '      '));
-      }
+    // Format the new relationship
+    const formattedRel = formatDirectedRelation(rel, '      ');
+    
+    // Find the specific matrix row for sourceIdx
+    // Extract matrix content
+    const matrixRegex = /const matrix:.*?\[([\s\S]*?)\n\];/;
+    const matrixMatch = modifiedContent.match(matrixRegex);
+    
+    if (!matrixMatch) {
+      throw new Error('Could not find matrix in edges.ts');
     }
-    matrixLines.push(`    [\n      ${rowLines.join(',\n      ')}\n    ]`);
+    
+    const matrixContent = matrixMatch[1];
+    
+    // Split into rows - each row is wrapped in []
+    const rowRegex = /\[\s*\n([\s\S]*?)\n\s*\]/g;
+    const rows: string[] = [];
+    let rowMatch;
+    
+    while ((rowMatch = rowRegex.exec(matrixContent)) !== null) {
+      rows.push(rowMatch[1]);
+    }
+    
+    if (rows.length !== languageIds.length) {
+      throw new Error(`Matrix row count (${rows.length}) doesn't match language count (${languageIds.length})`);
+    }
+    
+    // Parse the target row and replace the specific cell
+    const rowContent = rows[sourceIdx];
+    const cells = rowContent.split(',\n').map(c => c.trim());
+    
+    if (cells.length !== languageIds.length) {
+      throw new Error(`Row ${sourceIdx} cell count (${cells.length}) doesn't match language count (${languageIds.length})`);
+    }
+    
+    // Replace the target cell
+    cells[targetIdx] = formattedRel.trim();
+    
+    // Rebuild the row
+    const newRowContent = cells.map(c => `      ${c}`).join(',\n');
+    rows[sourceIdx] = newRowContent;
+    
+    // Rebuild the matrix
+    const newMatrixContent = rows.map(row => `    [\n${row}\n    ]`).join(',\n');
+    
+    // Replace in content
+    modifiedContent = modifiedContent.replace(matrixRegex, `const matrix: (DirectedSuccinctnessRelation | null)[][] = [\n${newMatrixContent}\n];`);
   }
 
-  const langIdsList = languageIds.map((id: string) => `  '${id}'`).join(',\n');
-  const indexMap = languageIds.map((id: string, index: number) => `  '${id}': ${index}`).join(',\n');
-
-  const fileContent = `import type { KCAdjacencyMatrix, DirectedSuccinctnessRelation } from '../types.js';
-
-const languageIds = [
-${langIdsList}
-];
-
-const indexByLanguage: Record<string, number> = {
-${indexMap}
-};
-
-const matrix: (DirectedSuccinctnessRelation | null)[][] = [
-${matrixLines.join(',\n')}
-];
-
-export function indexForLanguage(id: string): number | undefined {
-  return indexByLanguage[id];
-}
-
-export function languageForIndex(index: number): string | undefined {
-  return languageIds[index];
-}
-
-export const adjacencyMatrixData: KCAdjacencyMatrix = {
-  languageIds,
-  indexByLanguage,
-  matrix
-};
-
-// Temporary export for contribution system (to be replaced)
-export const edges: any[] = [];
-`;
-
-  fs.writeFileSync(edgesPath, fileContent, 'utf8');
-  console.log('Updated edges.ts');
+  // Write the modified content back
+  fs.writeFileSync(edgesPath, modifiedContent, 'utf8');
+  console.log('Updated edges.ts with relationship changes');
 }
 
 try {

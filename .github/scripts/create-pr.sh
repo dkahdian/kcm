@@ -10,7 +10,7 @@ TIMESTAMP=$(date +%s)
 LANGS_TO_ADD=$(node -p "require('./contribution.json').languagesToAdd?.length || 0")
 LANGS_TO_EDIT=$(node -p "require('./contribution.json').languagesToEdit?.length || 0")
 NEW_REFS=$(node -p "require('./contribution.json').newReferences?.length || 0")
-EDGE_UPDATES=$(node -p "require('./contribution.json').edgeUpdates?.length || 0")
+EDGE_UPDATES=$(node -p "require('./contribution.json').relationships?.length || 0")
 
 # Determine primary action and slug
 if [[ "$LANGS_TO_ADD" -gt 0 ]]; then
@@ -66,7 +66,7 @@ git push origin "$BRANCH_NAME"
 if [[ "$ACTION" == "add" ]]; then
   PR_TITLE="Add new language: ${LANG_NAME}"
 elif [[ "$ACTION" == "relations" ]]; then
-  PR_TITLE="Update knowledge map relationships"
+  PR_TITLE="Update edges: ${EDGE_UPDATES} relationship(s)"
 elif [[ "$ACTION" == "references" ]]; then
   PR_TITLE="Add new references"
 else

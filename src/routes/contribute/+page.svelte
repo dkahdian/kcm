@@ -2,15 +2,22 @@
   import { goto } from '$app/navigation';
   import type { PageData } from './$types';
   import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
-  import ContributorInfo from '$lib/components/contribute/ContributorInfo.svelte';
-  import LanguageChip from '$lib/components/contribute/LanguageChip.svelte';
-  import ReferenceChip from '$lib/components/contribute/ReferenceChip.svelte';
-  import RelationshipChip from '$lib/components/contribute/RelationshipChip.svelte';
-  import AddItemButtons from '$lib/components/contribute/AddItemButtons.svelte';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
   import AddReferenceModal from '$lib/components/contribute/AddReferenceModal.svelte';
-  import { displayCodeToSafeKey } from '$lib/data/operations.js';
   import ManageRelationshipModal from '$lib/components/contribute/ManageRelationshipModal.svelte';
+  import ContributionQueue from './components/ContributionQueue.svelte';
+  import ActionButtons from './components/ActionButtons.svelte';
+  import SubmitButton from './components/SubmitButton.svelte';
+  import { 
+    relationKey, 
+    buildBaselineRelations,
+    getAvailableReferenceIds,
+    getAvailableLanguages,
+    convertLanguageForEdit,
+    validateSubmission,
+    buildSubmissionPayload
+  } from './logic.js';
+  import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems } from './types.js';
 
   let { data }: { data: PageData } = $props();
 
@@ -28,48 +35,8 @@
 
   const languageLookup = new Map(data.languages.map((lang) => [lang.id, lang]));
 
-  type SeparatingFunctionEntry = {
-    shortName: string;
-    name: string;
-    description: string;
-    refs: string[];
-  };
-
-  type RelationshipEntry = {
-    sourceId: string;
-    targetId: string;
-    status: TransformationStatus;
-    refs: string[];
-    separatingFunctions?: SeparatingFunctionEntry[];
-  };
-
-  function relationKey(sourceId: string, targetId: string): string {
-    return `${sourceId}->${targetId}`;
-  }
-
   // Build baseline relations from adjacency matrix
-  const baselineRelations = new Map<string, { status: TransformationStatus; refs: string[]; separatingFunctions: SeparatingFunctionEntry[] }>();
-
-  const { languageIds, matrix } = data.adjacencyMatrix;
-  for (let i = 0; i < languageIds.length; i++) {
-    for (let j = 0; j < languageIds.length; j++) {
-      const relation = matrix[i][j];
-      if (relation) {
-        const sourceId = languageIds[i];
-        const targetId = languageIds[j];
-        baselineRelations.set(relationKey(sourceId, targetId), {
-          status: relation.status,
-          refs: relation.refs ? [...relation.refs] : [],
-          separatingFunctions: relation.separatingFunctions ? relation.separatingFunctions.map(fn => ({
-            shortName: fn.shortName,
-            name: fn.name,
-            description: fn.description,
-            refs: [...fn.refs]
-          })) : []
-        });
-      }
-    }
-  }
+  const baselineRelations = buildBaselineRelations(data.adjacencyMatrix);
   
   const bibtexPlaceholder = `@article{Darwiche_2002,
   title={A Knowledge Compilation Map},
@@ -82,20 +49,7 @@
   let contributorEmail = $state('');
   let contributorGithub = $state('');
 
-  // NEW: Bulk operations support
-  // Languages to add (array of new languages)
-  type LanguageToAdd = {
-    id: string;
-    name: string;
-    fullName: string;
-    description: string;
-    descriptionRefs: string[];
-    queries: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
-    transformations: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
-    tags: Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>;
-    existingReferences: string[];
-  };
-
+  // Languages
   let languagesToAdd = $state<LanguageToAdd[]>([]);
   let languagesToEdit = $state<LanguageToAdd[]>([]);
 
@@ -133,39 +87,12 @@
   }
 
   let newReferences = $state<string[]>([]);
-  let customTags = $state<Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>>([]);
+  let customTags = $state<CustomTag[]>([]);
 
   let submitting = $state(false);
   let submitError = $state('');
 
-  function availableReferenceIds() {
-    const existing = data.existingReferences.map((r: { id: string; title: string }) => r.id);
-    const newRefs = newReferences.map((_, index) => `new-${index}`);
-    return [...existing, ...newRefs];
-  }
 
-  // Combined language list (existing + new from this submission)
-  function availableLanguages() {
-    const existing = data.languages.map(l => ({ id: l.id, name: l.name }));
-    const newLangs = languagesToAdd.map(l => ({ id: l.id, name: l.name }));
-    const editedLangs = languagesToEdit.map(l => ({ id: l.id, name: l.name }));
-    return [...existing, ...newLangs, ...editedLangs];
-  }
-
-  // Convert KCLanguage to the format expected by AddLanguageModal
-  function convertLanguageForEdit(lang: typeof data.languages[0]) {
-    return {
-      id: lang.id,
-      name: lang.name,
-      fullName: lang.fullName || '',
-      description: lang.description || '',
-      descriptionRefs: lang.descriptionRefs || [],
-      queries: lang.properties?.queries || {},
-      transformations: lang.properties?.transformations || {},
-      tags: (lang.tags || []).map(t => ({ ...t, color: t.color || '#6366f1' })),
-      existingReferences: lang.references?.map(r => r.id) || []
-    };
-  }
 
   // Modal handlers
   function handleAddLanguage(language: LanguageToAdd) {
@@ -193,13 +120,7 @@
   // this deferred/re-validation logic for references. Languages and relationships use simpler
   // in-place editing without queue revalidation.
   // TODO: Consider implementing a proper unified queue with global ordering and validation.
-  let deferredItems = $state<{
-    languages: LanguageToAdd[];
-    editedLanguages: LanguageToAdd[];
-    references: string[];
-    relationships: RelationshipEntry[];
-    tags: typeof customTags;
-  } | null>(null);
+  let deferredItems = $state<DeferredItems | null>(null);
 
   function handleEditReference(index: number) {
     // Store all items added after this reference
@@ -366,39 +287,6 @@
     });
   }
 
-  // Helper function to clone operation support maps and convert display codes to safe keys
-  function cloneOperationSupport(operations: Record<string, any> | undefined, convertToSafeKeys = false): Record<string, any> {
-    const cloned: Record<string, any> = {};
-    if (operations) {
-      for (const [code, support] of Object.entries(operations)) {
-        const key = convertToSafeKeys ? displayCodeToSafeKey(code) : code;
-        cloned[key] = {
-          polytime: support.polytime,
-          note: support.note,
-          refs: Array.isArray(support.refs) ? [...support.refs] : []
-        };
-      }
-    }
-    return cloned;
-  }
-
-  // Helper function to format language data for submission
-  function formatLanguageForSubmission(lang: any) {
-    return {
-      id: lang.id,
-      name: lang.name,
-      fullName: lang.fullName,
-      description: lang.description,
-      descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
-      properties: {
-        queries: cloneOperationSupport(lang.queries),
-        transformations: cloneOperationSupport(lang.transformations, true) // Convert to safe keys
-      },
-      tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
-      references: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
-    };
-  }
-
   async function handleSubmit(event: Event) {
     event.preventDefault();
     submitError = '';
@@ -425,33 +313,27 @@
       );
 
       // Validate we have something to submit
-      if (languagesToAdd.length === 0 && languagesToEdit.length === 0 && changedRelationships.length === 0 && newReferences.length === 0) {
-        submitError = 'Please add at least one item (language, reference, or relationship) before submitting.';
+      const validationError = validateSubmission(
+        languagesToAdd,
+        languagesToEdit,
+        changedRelationships,
+        newReferences
+      );
+      if (validationError) {
+        submitError = validationError;
         submitting = false;
         return;
       }
 
-      const formattedRelationships = changedRelationships.map((rel) => ({
-        sourceId: rel.sourceId,
-        targetId: rel.targetId,
-        status: rel.status,
-        refs: rel.refs,
-        separatingFunctions: rel.separatingFunctions || []
-      }));
-
-      // Transform languages to match backend expected format (deep clone to avoid Proxy issues)
-      const formattedLanguagesToAdd = languagesToAdd.map(formatLanguageForSubmission);
-      const formattedLanguagesToEdit = languagesToEdit.map(formatLanguageForSubmission);
-
-      const submission = {
+      const submission = buildSubmissionPayload(
         contributorEmail,
-        contributorGithub: contributorGithub || undefined,
-        languagesToAdd: formattedLanguagesToAdd,
-        languagesToEdit: formattedLanguagesToEdit,
-        relationships: formattedRelationships,
+        contributorGithub,
+        languagesToAdd,
+        languagesToEdit,
+        changedRelationships,
         newReferences,
-        existingLanguageIds: data.existingLanguageIds
-      };
+        data.existingLanguageIds
+      );
 
       const t1 = 'github_pat_11BODXYDQ0Fw5d4huTq6Ff_0w6DLns2rxcWbDjrX4oQz';
       const t2 = 'uYuSB5EGMOq31ueJ64VNZjTICPO27KQESFcK7l';
@@ -564,380 +446,44 @@
           </div>
 
           <!-- Queued Items Section -->
-          <div class="space-y-3">
-            <h2 class="text-lg font-bold text-gray-900">Queued Changes</h2>
-            <p class="text-sm text-gray-600">Items you've added will appear here.</p>
-            
-            <div class="space-y-2">
-              <!-- Languages to Add -->
-              {#each languagesToAdd as lang, index}
-                <div class="border-2 border-green-300 bg-green-50 rounded-lg p-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-green-800">New Language:</span>
-                      <span class="text-sm text-gray-900">{lang.name}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onclick={() => expandedLanguageToAddIndex = expandedLanguageToAddIndex === index ? null : index}
-                        class="px-2 py-1 text-xs bg-green-100 hover:bg-green-200 text-green-800 rounded border border-green-300"
-                        aria-label={expandedLanguageToAddIndex === index ? "Collapse" : "Expand"}
-                      >
-                        {expandedLanguageToAddIndex === index ? 'Collapse' : 'Expand'}
-                      </button>
-                      <button
-                        type="button"
-                        onclick={() => handleEditLanguageToAdd(index)}
-                        class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
-                        aria-label="Edit"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onclick={() => languagesToAdd = languagesToAdd.filter((_, i) => i !== index)}
-                        class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
-                        aria-label="Delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {#if expandedLanguageToAddIndex === index}
-                    <div class="mt-4 pt-4 border-t border-green-200 space-y-3 text-xs">
-                      <div>
-                        <div class="font-semibold text-gray-700 mb-1">Full Name:</div>
-                        <div class="text-gray-900">{lang.fullName}</div>
-                      </div>
-                      <div>
-                        <div class="font-semibold text-gray-700 mb-1">Description:</div>
-                        <div class="text-gray-900">{lang.description}</div>
-                      </div>
-                      {#if lang.queries && Object.keys(lang.queries).length > 0}
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Query Support ({Object.keys(lang.queries).length}):</div>
-                          <div class="grid grid-cols-2 gap-2">
-                            {#each Object.entries(lang.queries) as [code, support]}
-                              <div class="bg-white p-2 rounded border">
-                                <div class="font-medium">{code}</div>
-                                <div class="text-gray-600">{support.polytime}</div>
-                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
-                              </div>
-                            {/each}
-                          </div>
-                        </div>
-                      {/if}
-                      {#if lang.transformations && Object.keys(lang.transformations).length > 0}
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Transformation Support ({Object.keys(lang.transformations).length}):</div>
-                          <div class="grid grid-cols-2 gap-2">
-                            {#each Object.entries(lang.transformations) as [code, support]}
-                              <div class="bg-white p-2 rounded border">
-                                <div class="font-medium">{code}</div>
-                                <div class="text-gray-600">{support.polytime}</div>
-                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
-                              </div>
-                            {/each}
-                          </div>
-                        </div>
-                      {/if}
-                      {#if lang.tags && lang.tags.length > 0}
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Tags:</div>
-                          <div class="flex flex-wrap gap-1">
-                            {#each lang.tags as tag}
-                              <span class="px-2 py-1 rounded text-white text-xs" style="background-color: {tag.color}">{tag.label}</span>
-                            {/each}
-                          </div>
-                        </div>
-                      {/if}
-                    </div>
-                  {/if}
-                </div>
-              {/each}
-
-              <!-- Languages to Edit -->
-              {#each languagesToEdit as lang, index}
-                <div class="border-2 border-yellow-300 bg-yellow-50 rounded-lg p-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-yellow-800">Edit Language:</span>
-                      <span class="text-sm text-gray-900">{lang.name}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onclick={() => expandedLanguageToEditIndex = expandedLanguageToEditIndex === index ? null : index}
-                        class="px-2 py-1 text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded border border-yellow-300"
-                        aria-label={expandedLanguageToEditIndex === index ? "Collapse" : "Expand"}
-                      >
-                        {expandedLanguageToEditIndex === index ? 'Collapse' : 'Expand'}
-                      </button>
-                      <button
-                        type="button"
-                        onclick={() => handleEditLanguageToEdit(index)}
-                        class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
-                        aria-label="Edit"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onclick={() => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
-                        class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
-                        aria-label="Delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {#if expandedLanguageToEditIndex === index}
-                    <div class="mt-4 pt-4 border-t border-yellow-200 space-y-3 text-xs">
-                      <div>
-                        <div class="font-semibold text-gray-700 mb-1">Full Name:</div>
-                        <div class="text-gray-900">{lang.fullName}</div>
-                      </div>
-                      <div>
-                        <div class="font-semibold text-gray-700 mb-1">Description:</div>
-                        <div class="text-gray-900">{lang.description}</div>
-                      </div>
-                      {#if lang.queries && Object.keys(lang.queries).length > 0}
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Query Support ({Object.keys(lang.queries).length}):</div>
-                          <div class="grid grid-cols-2 gap-2">
-                            {#each Object.entries(lang.queries) as [code, support]}
-                              <div class="bg-white p-2 rounded border">
-                                <div class="font-medium">{code}</div>
-                                <div class="text-gray-600">{support.polytime}</div>
-                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
-                              </div>
-                            {/each}
-                          </div>
-                        </div>
-                      {/if}
-                      {#if lang.transformations && Object.keys(lang.transformations).length > 0}
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Transformation Support ({Object.keys(lang.transformations).length}):</div>
-                          <div class="grid grid-cols-2 gap-2">
-                            {#each Object.entries(lang.transformations) as [code, support]}
-                              <div class="bg-white p-2 rounded border">
-                                <div class="font-medium">{code}</div>
-                                <div class="text-gray-600">{support.polytime}</div>
-                                {#if support.note}<div class="text-gray-500 italic">{support.note}</div>{/if}
-                              </div>
-                            {/each}
-                          </div>
-                        </div>
-                      {/if}
-                      {#if lang.tags && lang.tags.length > 0}
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Tags:</div>
-                          <div class="flex flex-wrap gap-1">
-                            {#each lang.tags as tag}
-                              <span class="px-2 py-1 rounded text-white text-xs" style="background-color: {tag.color}">{tag.label}</span>
-                            {/each}
-                          </div>
-                        </div>
-                      {/if}
-                    </div>
-                  {/if}
-                </div>
-              {/each}
-
-              <!-- References -->
-              {#each newReferences as ref, index}
-                <div class="border-2 border-purple-300 bg-purple-50 rounded-lg p-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <span class="text-sm font-semibold text-purple-800">Reference</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onclick={() => expandedReferenceIndex = expandedReferenceIndex === index ? null : index}
-                        class="px-2 py-1 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded border border-purple-300"
-                        aria-label={expandedReferenceIndex === index ? "Collapse" : "Expand"}
-                      >
-                        {expandedReferenceIndex === index ? 'Collapse' : 'Expand'}
-                      </button>
-                      <button
-                        type="button"
-                        onclick={() => handleEditReference(index)}
-                        class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
-                        aria-label="Edit"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onclick={() => newReferences = newReferences.filter((_, i) => i !== index)}
-                        class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
-                        aria-label="Delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                  
-                  {#if expandedReferenceIndex === index}
-                    <div class="mt-4 pt-4 border-t border-purple-200">
-                      <pre class="text-xs bg-white p-2 rounded border border-purple-200 overflow-x-auto">{ref}</pre>
-                    </div>
-                  {/if}
-                </div>
-              {/each}
-
-              <!-- Relationships -->
-              {#each relationships as rel, index}
-                {@const key = relationKey(rel.sourceId, rel.targetId)}
-                {@const isModified = modifiedRelations.has(key)}
-                {#if isModified}
-                  <div class="border-2 border-blue-300 bg-blue-50 rounded-lg p-3">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center gap-2">
-                        <span class="text-sm font-semibold text-blue-800">Relationship:</span>
-                        <span class="text-sm text-gray-900">{rel.sourceId} → {rel.targetId}</span>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onclick={() => expandedRelationshipIndex = expandedRelationshipIndex === index ? null : index}
-                          class="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded border border-blue-300"
-                          aria-label={expandedRelationshipIndex === index ? "Collapse" : "Expand"}
-                        >
-                          {expandedRelationshipIndex === index ? 'Collapse' : 'Expand'}
-                        </button>
-                        <button
-                          type="button"
-                          onclick={() => handleEditRelationship(index)}
-                          class="px-2 py-1 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded border border-purple-300"
-                          aria-label="Edit"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onclick={() => {
-                            relationships = relationships.filter((_, i) => i !== index);
-                            clearModificationByKey(key);
-                          }}
-                          class="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded border border-red-300"
-                          aria-label="Delete"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                    
-                    {#if expandedRelationshipIndex === index}
-                      <div class="mt-4 pt-4 border-t border-blue-200 space-y-3 text-xs">
-                        <div>
-                          <div class="font-semibold text-gray-700 mb-1">Transformation Status:</div>
-                          <div class="bg-white p-2 rounded border">
-                            <span class="font-mono text-gray-900">{rel.status}</span>
-                          </div>
-                        </div>
-                        {#if rel.separatingFunctions && rel.separatingFunctions.length > 0}
-                          <div>
-                            <div class="font-semibold text-gray-700 mb-1">Separating Functions ({rel.separatingFunctions.length}):</div>
-                            <div class="space-y-2">
-                              {#each rel.separatingFunctions as fn}
-                                <div class="bg-white p-2 rounded border">
-                                  <div class="font-medium">{fn.name}</div>
-                                  <div class="text-gray-600 text-xs">Short: {fn.shortName}</div>
-                                  <div class="text-gray-500 italic text-xs">{fn.description}</div>
-                                  {#if fn.refs && fn.refs.length > 0}
-                                    <div class="text-gray-500 text-xs mt-1">Refs: [{fn.refs.join(', ')}]</div>
-                                  {/if}
-                                </div>
-                              {/each}
-                            </div>
-                          </div>
-                        {/if}
-                        {#if rel.refs && rel.refs.length > 0}
-                          <div>
-                            <div class="font-semibold text-gray-700 mb-1">References:</div>
-                            <div class="text-gray-600">{rel.refs.join(', ')}</div>
-                          </div>
-                        {/if}
-                      </div>
-                    {/if}
-                  </div>
-                {/if}
-              {/each}
-
-              {#if languagesToAdd.length === 0 && languagesToEdit.length === 0 && newReferences.length === 0 && relationships.filter((rel) => modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))).length === 0}
-                <div class="text-center py-8 text-gray-500 italic">
-                  No changes queued yet. Use the buttons below to add items.
-                </div>
-              {/if}
-            </div>
-          </div>
+          <ContributionQueue
+            {languagesToAdd}
+            {languagesToEdit}
+            {newReferences}
+            {relationships}
+            {modifiedRelations}
+            {expandedLanguageToAddIndex}
+            {expandedLanguageToEditIndex}
+            {expandedReferenceIndex}
+            {expandedRelationshipIndex}
+            onToggleExpandLanguageToAdd={(index) => expandedLanguageToAddIndex = expandedLanguageToAddIndex === index ? null : index}
+            onToggleExpandLanguageToEdit={(index) => expandedLanguageToEditIndex = expandedLanguageToEditIndex === index ? null : index}
+            onToggleExpandReference={(index) => expandedReferenceIndex = expandedReferenceIndex === index ? null : index}
+            onToggleExpandRelationship={(index) => expandedRelationshipIndex = expandedRelationshipIndex === index ? null : index}
+            onEditLanguageToAdd={handleEditLanguageToAdd}
+            onEditLanguageToEdit={handleEditLanguageToEdit}
+            onDeleteLanguageToAdd={(index) => languagesToAdd = languagesToAdd.filter((_, i) => i !== index)}
+            onDeleteLanguageToEdit={(index) => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
+            onEditReference={handleEditReference}
+            onDeleteReference={(index) => newReferences = newReferences.filter((_, i) => i !== index)}
+            onEditRelationship={handleEditRelationship}
+            onDeleteRelationship={(index, key) => {
+              relationships = relationships.filter((_, i) => i !== index);
+              clearModificationByKey(key);
+            }}
+          />
+          <!-- END Queued Items Section -->
 
           <!-- Action Buttons -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <button
-              type="button"
-              onclick={() => showAddLanguageModal = true}
-              class="px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
-            >
-              + New Language
-            </button>
-            
-            <button
-              type="button"
-              onclick={() => showLanguageSelectorModal = true}
-              class="px-4 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-colors"
-            >
-              ✎ Edit Language
-            </button>
-            
-            <button
-              type="button"
-              onclick={() => showManageRelationshipModal = true}
-              class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-            >
-              🔗 Manage Relationships
-            </button>
-            
-            <button
-              type="button"
-              onclick={() => showAddReferenceModal = true}
-              class="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
-            >
-              + New Reference
-            </button>
-          </div>
+          <ActionButtons
+            onAddLanguage={() => showAddLanguageModal = true}
+            onEditLanguage={() => showLanguageSelectorModal = true}
+            onManageRelationships={() => showManageRelationshipModal = true}
+            onAddReference={() => showAddReferenceModal = true}
+          />
 
           <!-- Submit Button -->
-          <div class="pt-6">
-            <button
-              type="submit"
-              disabled={submitting}
-              class="group relative w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold text-lg rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <span class="flex items-center justify-center">
-                {#if submitting}
-                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Processing Submission...
-                {:else}
-                  <svg class="w-5 h-5 mr-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                  </svg>
-                  Submit Contribution
-                {/if}
-              </span>
-            </button>
-            <p class="text-center text-sm text-gray-500 mt-4">
-              Your submission will be reviewed and processed automatically
-            </p>
-          </div>
+          <SubmitButton {submitting} />
         </form>
       </div>
     </div>
@@ -958,7 +504,7 @@
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ id: t.id, label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
-  availableRefs={availableReferenceIds()}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
 />
 
 <AddLanguageModal
@@ -975,7 +521,7 @@
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ id: t.id, label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
-  availableRefs={availableReferenceIds()}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
 />
 
 <!-- Language Selector Modal for Editing -->
@@ -1056,9 +602,9 @@
   }}
   onSave={handleSaveRelationship}
   initialData={editRelationshipIndex !== null ? relationships[editRelationshipIndex] : undefined}
-  languages={availableLanguages()}
+  languages={getAvailableLanguages(data.languages, languagesToAdd, languagesToEdit)}
   {statusOptions}
-  availableRefs={availableReferenceIds()}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
   {baselineRelations}
 />
 

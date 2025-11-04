@@ -354,7 +354,11 @@ export function validateContribution(submission: ContributionSubmission): Valida
     }
 
     const queryCodes = new Set(Object.keys(QUERIES));
-    const transformationCodes = new Set(Object.keys(TRANSFORMATIONS));
+    // For transformations, accept both safe keys (AND_C) and display codes (∧C)
+    const transformationCodes = new Set([
+      ...Object.keys(TRANSFORMATIONS),
+      ...Object.values(TRANSFORMATIONS).map(t => t.code)
+    ]);
 
     errors.push(
       ...validateOperationSupport(language.properties.queries, queryCodes, `${prefix}.properties.queries`)
@@ -398,7 +402,11 @@ export function validateContribution(submission: ContributionSubmission): Valida
     }
 
     const queryCodes = new Set(Object.keys(QUERIES));
-    const transformationCodes = new Set(Object.keys(TRANSFORMATIONS));
+    // For transformations, accept both safe keys (AND_C) and display codes (∧C)
+    const transformationCodes = new Set([
+      ...Object.keys(TRANSFORMATIONS),
+      ...Object.values(TRANSFORMATIONS).map(t => t.code)
+    ]);
 
     errors.push(
       ...validateOperationSupport(language.properties.queries, queryCodes, `${prefix}.properties.queries`)

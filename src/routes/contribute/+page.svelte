@@ -39,6 +39,7 @@
   // Contributor information
   let contributorEmail = $state('');
   let contributorGithub = $state('');
+  let contributorNote = $state('');
 
   // Languages
   let languagesToAdd = $state<LanguageToAdd[]>([]);
@@ -318,6 +319,7 @@
       const submission = buildSubmissionPayload(
         contributorEmail,
         contributorGithub,
+        contributorNote,
         languagesToAdd,
         languagesToEdit,
         changedRelationships,
@@ -432,6 +434,19 @@
                   placeholder="@username"
                 />
               </div>
+            </div>
+            <div class="mt-4">
+              <label for="contributor-note" class="block text-sm font-medium text-gray-700 mb-1">
+                Note (optional)
+              </label>
+              <textarea
+                id="contributor-note"
+                bind:value={contributorNote}
+                rows="3"
+                class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+                placeholder="Add any clarifications or additional context for your contribution..."
+              ></textarea>
+              <p class="mt-1 text-xs text-gray-500">This note will be included in the pull request description.</p>
             </div>
           </div>
 

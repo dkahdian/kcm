@@ -4,6 +4,7 @@ set -euo pipefail
 # Extract contributor info
 CONTRIBUTOR_EMAIL=$(node -p "require('./contribution.json').contributorEmail || 'anonymous'")
 CONTRIBUTOR_GITHUB=$(node -p "require('./contribution.json').contributorGithub || ''")
+CONTRIBUTOR_NOTE=$(node -p "require('./contribution.json').contributorNote || ''")
 TIMESTAMP=$(date +%s)
 
 # Determine action and descriptive info based on what's in the payload
@@ -93,6 +94,14 @@ EOF
 if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
   echo "**GitHub:** @${CONTRIBUTOR_GITHUB}" >> "$PR_BODY_FILE"
   echo "" >> "$PR_BODY_FILE"
+fi
+
+if [[ -n "$CONTRIBUTOR_NOTE" ]]; then
+  cat >> "$PR_BODY_FILE" <<EOF
+
+### Contributor Note
+${CONTRIBUTOR_NOTE}
+EOF
 fi
 
 cat >> "$PR_BODY_FILE" <<EOF

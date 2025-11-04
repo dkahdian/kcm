@@ -156,6 +156,7 @@ export function validateSubmission(
 export function buildSubmissionPayload(
   contributorEmail: string,
   contributorGithub: string,
+  contributorNote: string,
   languagesToAdd: LanguageToAdd[],
   languagesToEdit: LanguageToAdd[],
   changedRelationships: RelationshipEntry[],
@@ -176,6 +177,7 @@ export function buildSubmissionPayload(
   return {
     contributorEmail,
     contributorGithub: contributorGithub || undefined,
+    contributorNote: contributorNote || undefined,
     languagesToAdd: formattedLanguagesToAdd,
     languagesToEdit: formattedLanguagesToEdit,
     relationships: formattedRelationships,

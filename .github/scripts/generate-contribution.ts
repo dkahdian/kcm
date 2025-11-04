@@ -82,14 +82,30 @@ interface Contribution {
   contributorGithub?: string;
 }
 
-const contribution: Contribution = JSON.parse(fs.readFileSync('contribution.json', 'utf8'));
-
 function toModuleIdentifier(slug: string): string {
   return slug
     .split('-')
     .map((segment, index) => (index === 0 ? segment : segment.charAt(0).toUpperCase() + segment.slice(1)))
     .join('');
 }
+
+// Load and transform contribution data
+const rawContribution: any = JSON.parse(fs.readFileSync('contribution.json', 'utf8'));
+
+// Transform languages to expected format
+const contribution: Contribution = {
+  ...rawContribution,
+  languagesToAdd: rawContribution.languagesToAdd?.map((lang: any) => ({
+    slug: lang.id,
+    module: toModuleIdentifier(lang.id),
+    data: lang
+  })) || [],
+  languagesToEdit: rawContribution.languagesToEdit?.map((lang: any) => ({
+    slug: lang.id,
+    module: toModuleIdentifier(lang.id),
+    data: lang
+  })) || []
+};
 
 function escapeSingleQuotes(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");

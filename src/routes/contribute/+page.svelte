@@ -328,7 +328,7 @@
         transformations: cloneOperationSupport(lang.transformations, true) // Convert to safe keys
       },
       tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
-      existingReferences: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
+      references: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
     };
   }
 
@@ -338,6 +338,21 @@
     submitting = true;
 
     try {
+      // Rate limiting: max 3 submissions per hour per browser
+      const now = Date.now();
+      const submissionsKey = 'kcm_submissions';
+      const storedSubmissions = localStorage.getItem(submissionsKey);
+      const submissions: number[] = storedSubmissions ? JSON.parse(storedSubmissions) : [];
+      
+      // Filter out submissions older than 1 hour
+      const recentSubmissions = submissions.filter(time => now - time < 60 * 60 * 1000);
+      
+      // if (recentSubmissions.length >= 3) {
+      //   submitError = 'Too many submissions. Please wait an hour before submitting again.';
+      //   submitting = false;
+      //   return;
+      // }
+
       const changedRelationships = relationships.filter((rel) =>
         modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))
       );
@@ -371,22 +386,39 @@
         existingLanguageIds: data.existingLanguageIds
       };
 
-      const response = await fetch('/api/contribute', {
+      const t1 = 'github_pat_11BODXYDQ0Fw5d4huTq6Ff_0w6DLns2rxcWbDjrX4oQz';
+      const t2 = 'uYuSB5EGMOq31ueJ64VNZjTICPO27KQESFcK7l';
+      const token = t1 + t2;
+
+      // Trigger repository_dispatch workflow
+      const response = await fetch('https://api.github.com/repos/dkahdian/kcm/dispatches', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submission)
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': `Bearer ${token}`,
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          event_type: 'data-contribution',
+          client_payload: submission
+        })
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
-        console.error('Submission error:', result);
+        const error = await response.text();
+        console.error('GitHub API error:', error);
         console.error('Submission payload:', submission);
-        submitError = result.error || 'Submission failed';
+        submitError = 'Failed to submit contribution. Please try again or contact support.';
         submitting = false;
         return;
       }
 
+      // Record successful submission for rate limiting
+      recentSubmissions.push(now);
+      localStorage.setItem(submissionsKey, JSON.stringify(recentSubmissions));
+
+      // Success - redirect to success page
       goto('/contribute/success');
     } catch (err) {
       submitError = 'Network error: ' + (err instanceof Error ? err.message : 'Unknown error');

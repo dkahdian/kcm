@@ -1,0 +1,98 @@
+{
+  "description": "TEST TEST TEST",
+  "descriptionRefs": [
+    "Darwiche_2002"
+  ],
+  "fullName": "Test 1",
+  "id": "test-lang",
+  "name": "Test-lang",
+  "properties": {
+    "queries": {
+      "CE": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CO": {
+        "note": "NOTE NOTE NOTE",
+        "polytime": "quasi",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
+      "CT": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "EQ": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "IM": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "ME": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "SE": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "VA": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      }
+    },
+    "transformations": {
+      "AND_BC": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "AND_C": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CD": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "FO": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "NOT_C": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "OR_BC": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "OR_C": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "SFO": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      }
+    }
+  },
+  "tags": []
+}

@@ -14,5 +14,6 @@
   "obdd-lt",
   "pi",
   "s-nnf",
-  "sd-dnnf"
+  "sd-dnnf",
+  "test-lang"
 ]

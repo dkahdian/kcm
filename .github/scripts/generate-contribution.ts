@@ -323,6 +323,12 @@ function formatDirectedRelation(relation: DirectedRelation | null, indent: strin
 }
 
 function updateEdges(): void {
+  // Only update edges if there are edge updates in the contribution
+  if (!contribution.edgeUpdates || contribution.edgeUpdates.length === 0) {
+    console.log('No edge updates in contribution, skipping edges.ts update');
+    return;
+  }
+
   const edgesPath = path.join(rootDir, 'src/lib/data/edges.ts');
   
   if (!fs.existsSync(edgesPath)) {

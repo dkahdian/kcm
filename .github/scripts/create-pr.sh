@@ -44,6 +44,15 @@ git config user.email "b@o.t"
 
 git add src/lib/data/
 
+# Check if there are any changes to commit
+if git diff --cached --quiet; then
+  echo "ERROR: No files were modified by the contribution generation script."
+  echo "This likely means the contribution data was invalid or already exists."
+  echo "Contribution payload:"
+  cat contribution.json
+  exit 1
+fi
+
 declare -a LABELS=("data-contribution" "needs-review")
 COMMIT_MSG="Data contribution: ${ACTION} ${LANG_SLUG}"
 if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then

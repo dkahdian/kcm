@@ -67,6 +67,18 @@
   <p class="text-sm text-gray-600">Items you've added will appear here.</p>
   
   <div class="space-y-2">
+    <!-- References -->
+    {#each newReferences as ref, index}
+      <ReferenceQueueItem
+        reference={ref}
+        {index}
+        isExpanded={expandedReferenceIndex === index}
+        onToggleExpand={onToggleExpandReference}
+        onEdit={onEditReference}
+        onDelete={onDeleteReference}
+      />
+    {/each}
+
     <!-- Languages to Add -->
     {#each languagesToAdd as lang, index}
       <LanguageQueueItem
@@ -90,18 +102,6 @@
         onToggleExpand={onToggleExpandLanguageToEdit}
         onEdit={onEditLanguageToEdit}
         onDelete={onDeleteLanguageToEdit}
-      />
-    {/each}
-
-    <!-- References -->
-    {#each newReferences as ref, index}
-      <ReferenceQueueItem
-        reference={ref}
-        {index}
-        isExpanded={expandedReferenceIndex === index}
-        onToggleExpand={onToggleExpandReference}
-        onEdit={onEditReference}
-        onDelete={onDeleteReference}
       />
     {/each}
 

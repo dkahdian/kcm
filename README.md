@@ -20,3 +20,7 @@ The project will support the following features:
 - Filtering options for users to customize desired polytime queries and transformations.
 - Responsive design to ensure usability across various devices and screen sizes.
 - Accessibility features to make the website usable for individuals with disabilities.
+
+## Docs
+
+- Contribution pipeline specification: see `docs/contribution-pipeline.md` for the unified GraphData model, queue processing, validation rules, preview semantics, and PR generation.

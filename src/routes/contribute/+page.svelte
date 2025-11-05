@@ -19,6 +19,8 @@
   } from './logic.js';
   import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems } from './types.js';
 
+  type OperationResult = { success: boolean; error?: string };
+
   let { data }: { data: PageData } = $props();
 
   const polytimeOptions = Object.values(data.polytimeOptions);
@@ -86,11 +88,12 @@
 
 
   // Modal handlers
-  function handleAddLanguage(language: LanguageToAdd) {
+  function handleAddLanguage(language: LanguageToAdd): OperationResult {
     languagesToAdd = [...languagesToAdd, language];
+    return { success: true };
   }
 
-  function handleEditLanguage(language: LanguageToAdd) {
+  function handleEditLanguage(language: LanguageToAdd): OperationResult {
     const index = languagesToEdit.findIndex(l => l.id === language.id);
     if (index >= 0) {
       languagesToEdit[index] = language;
@@ -98,6 +101,7 @@
     } else {
       languagesToEdit = [...languagesToEdit, language];
     }
+    return { success: true };
   }
 
   function handleAddReference(bibtex: string) {
@@ -162,7 +166,7 @@
     showAddLanguageModal = true;
   }
 
-  function handleUpdateLanguageToAdd(language: LanguageToAdd) {
+  function handleUpdateLanguageToAdd(language: LanguageToAdd): OperationResult {
     if (editLanguageToAddIndex !== null) {
       // Update the language at the edit index
       languagesToAdd[editLanguageToAddIndex] = language;
@@ -171,6 +175,7 @@
       // Clear edit state
       editLanguageToAddIndex = null;
     }
+    return { success: true };
   }
 
   function handleEditLanguageToEdit(index: number) {
@@ -179,7 +184,7 @@
     showEditLanguageModal = true;
   }
 
-  function handleUpdateLanguageToEdit(language: LanguageToAdd) {
+  function handleUpdateLanguageToEdit(language: LanguageToAdd): OperationResult {
     if (editLanguageToEditIndex !== null) {
       // Update the language at the edit index
       languagesToEdit[editLanguageToEditIndex] = language;
@@ -188,6 +193,7 @@
       // Clear edit state
       editLanguageToEditIndex = null;
     }
+    return { success: true };
   }
 
   function handleEditRelationship(index: number) {

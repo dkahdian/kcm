@@ -18,10 +18,17 @@
   type PolytimeOption = { value: PolytimeFlagCode; label: string; description: string };
   type Tag = { id: string; label: string; color: string; description?: string; refs: string[] };
 
+  type OperationResult = {
+    success: boolean;
+    error?: string;
+  };
+
+  type MaybePromise<T> = T | Promise<T>;
+
   type Props = {
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (language: Language) => void;
+    onAdd: (language: Language) => MaybePromise<void | OperationResult>;
     queries: Query[];
     transformations: Transformation[];
     polytimeOptions: PolytimeOption[];
@@ -53,6 +60,7 @@
   let transformationSupport = $state<Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>>({});
   let selectedTags = $state<Tag[]>([]);
   let selectedExistingRefs = $state<string[]>([]);
+  let errorMessage = $state<string | null>(null);
 
   // Auto-generate ID from name
   $effect(() => {
@@ -78,6 +86,7 @@
       transformationSupport = { ...initialData.transformations };
       selectedTags = [...initialData.tags];
       selectedExistingRefs = [...initialData.existingReferences];
+      errorMessage = null;
     }
   });
 
@@ -93,25 +102,44 @@
     selectedExistingRefs = [];
     queriesInitialized = false;
     transformationsInitialized = false;
+    errorMessage = null;
   }
 
-  function handleSubmit() {
-    if (!id.trim() || !name.trim() || !fullName.trim() || !description.trim()) return;
+  async function handleSubmit() {
+    if (!id.trim() || !name.trim() || !fullName.trim() || !description.trim()) {
+      errorMessage = 'Please fill out all required fields.';
+      return;
+    }
 
-    onAdd({
-      id: id.trim(),
-      name: name.trim(),
-      fullName: fullName.trim(),
-      description: description.trim(),
-      descriptionRefs,
-      queries: querySupport,
-      transformations: transformationSupport,
-      tags: selectedTags,
-      existingReferences: selectedExistingRefs
-    });
+    try {
+      const result = await onAdd({
+        id: id.trim(),
+        name: name.trim(),
+        fullName: fullName.trim(),
+        description: description.trim(),
+        descriptionRefs,
+        queries: querySupport,
+        transformations: transformationSupport,
+        tags: selectedTags,
+        existingReferences: selectedExistingRefs
+      });
 
-    resetForm();
-    isOpen = false;
+      const operationResult: OperationResult | undefined =
+        result && typeof result === 'object' && 'success' in result
+          ? result as OperationResult
+          : undefined;
+
+      if (operationResult && !operationResult.success) {
+        errorMessage = operationResult.error ?? 'Unable to add language. Please review your input.';
+        return;
+      }
+
+      errorMessage = null;
+      resetForm();
+      onClose?.();
+    } catch (error) {
+      errorMessage = error instanceof Error ? error.message : 'Unexpected error while adding the language.';
+    }
   }
 
   function handleCancel() {
@@ -240,6 +268,12 @@
       </div>
 
       <div class="p-6 space-y-6">
+        {#if errorMessage}
+          <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            {errorMessage}
+          </div>
+        {/if}
+
         <!-- Basic Information -->
         <div class="space-y-4">
           <h3 class="text-lg font-bold text-gray-900">Basic Information</h3>

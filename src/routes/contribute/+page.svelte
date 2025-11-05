@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
   import type { PageData } from './$types';
   import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
@@ -17,9 +18,127 @@
     validateSubmission,
     buildSubmissionPayload
   } from './logic.js';
-  import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems } from './types.js';
+  import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems, SeparatingFunctionEntry } from './types.js';
+  import { onMount } from 'svelte';
 
   type OperationResult = { success: boolean; error?: string };
+
+  const QUEUE_STORAGE_KEY = 'kcm_contribute_queue_v1';
+
+  interface PersistedQueueState {
+    languagesToAdd: LanguageToAdd[];
+    languagesToEdit: LanguageToAdd[];
+    relationships: RelationshipEntry[];
+    newReferences: string[];
+    customTags: CustomTag[];
+    modifiedRelations: string[];
+  }
+
+  const isString = (value: unknown): value is string => typeof value === 'string';
+
+  const sanitizeStringArray = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter(isString) : [];
+
+  function sanitizeOperationSupportRecord(
+    value: unknown
+  ): Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }> {
+    if (!value || typeof value !== 'object') return {};
+    const result: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }> = {};
+    for (const [key, raw] of Object.entries(value as Record<string, any>)) {
+      if (!raw || typeof raw !== 'object') continue;
+      const polytime = isString(raw.polytime) ? (raw.polytime as PolytimeFlagCode) : 'unknown';
+      const note = isString(raw.note) ? raw.note : undefined;
+      const refs = sanitizeStringArray(raw.refs);
+      const entry: { polytime: PolytimeFlagCode; note?: string; refs: string[] } = {
+        polytime,
+        refs
+      };
+      if (note) entry.note = note;
+      result[key] = entry;
+    }
+    return result;
+  }
+
+  function sanitizeTags(value: unknown): CustomTag[] {
+    if (!Array.isArray(value)) return [];
+    const results: CustomTag[] = [];
+    for (const item of value) {
+      if (!item || typeof item !== 'object') continue;
+      const raw = item as Record<string, any>;
+      if (!isString(raw.id) || !isString(raw.label)) continue;
+      results.push({
+        id: raw.id,
+        label: raw.label,
+        color: isString(raw.color) ? raw.color : '#6366f1',
+        description: isString(raw.description) ? raw.description : undefined,
+        refs: sanitizeStringArray(raw.refs)
+      });
+    }
+    return results;
+  }
+
+  function sanitizeLanguages(value: unknown): LanguageToAdd[] {
+    if (!Array.isArray(value)) return [];
+    return value
+      .map((entry) => {
+        if (!entry || typeof entry !== 'object') return null;
+        const raw = entry as Record<string, any>;
+        if (!isString(raw.id) || !isString(raw.name) || !isString(raw.fullName) || !isString(raw.description)) {
+          return null;
+        }
+        return {
+          id: raw.id,
+          name: raw.name,
+          fullName: raw.fullName,
+          description: raw.description,
+          descriptionRefs: sanitizeStringArray(raw.descriptionRefs),
+          queries: sanitizeOperationSupportRecord(raw.queries),
+          transformations: sanitizeOperationSupportRecord(raw.transformations),
+          tags: sanitizeTags(raw.tags),
+          existingReferences: sanitizeStringArray(raw.existingReferences)
+        } satisfies LanguageToAdd;
+      })
+      .filter((item): item is LanguageToAdd => item !== null);
+  }
+
+  function sanitizeSeparatingFunctions(value: unknown): SeparatingFunctionEntry[] {
+    if (!Array.isArray(value)) return [];
+    const results: SeparatingFunctionEntry[] = [];
+    for (const entry of value) {
+      if (!entry || typeof entry !== 'object') continue;
+      const raw = entry as Record<string, any>;
+      if (!isString(raw.shortName) || !isString(raw.name) || !isString(raw.description)) continue;
+      results.push({
+        shortName: raw.shortName,
+        name: raw.name,
+        description: raw.description,
+        refs: sanitizeStringArray(raw.refs)
+      });
+    }
+    return results;
+  }
+
+  function sanitizeRelationships(value: unknown): RelationshipEntry[] {
+    if (!Array.isArray(value)) return [];
+    return value
+      .map((entry) => {
+        if (!entry || typeof entry !== 'object') return null;
+        const raw = entry as Record<string, any>;
+        if (!isString(raw.sourceId) || !isString(raw.targetId) || !isString(raw.status)) return null;
+        const separatingFunctions = sanitizeSeparatingFunctions(raw.separatingFunctions);
+        const relationship: RelationshipEntry = {
+          sourceId: raw.sourceId,
+          targetId: raw.targetId,
+          status: raw.status as TransformationStatus,
+          refs: sanitizeStringArray(raw.refs)
+        };
+        if (separatingFunctions.length > 0) {
+          relationship.separatingFunctions = separatingFunctions;
+        }
+        return relationship;
+      })
+      .filter((item): item is RelationshipEntry => item !== null);
+  }
 
   let { data }: { data: PageData } = $props();
 
@@ -69,15 +188,89 @@
   let editRelationshipIndex = $state<number | null>(null);
 
   // Track which relationships have been modified from baseline
-  const modifiedRelations = new Set<string>();
+  let modifiedRelations = $state(new Set<string>());
+  let queuePersistenceReady = $state(false);
+
+  onMount(() => {
+    if (!browser) {
+      queuePersistenceReady = true;
+      return;
+    }
+
+    try {
+      const stored = localStorage.getItem(QUEUE_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as Partial<PersistedQueueState>;
+        languagesToAdd = sanitizeLanguages(parsed?.languagesToAdd);
+        languagesToEdit = sanitizeLanguages(parsed?.languagesToEdit);
+        relationships = sanitizeRelationships(parsed?.relationships);
+        newReferences = sanitizeStringArray(parsed?.newReferences);
+        customTags = sanitizeTags(parsed?.customTags);
+        modifiedRelations = new Set(sanitizeStringArray(parsed?.modifiedRelations));
+      }
+    } catch (error) {
+      console.warn('Failed to restore queued changes from storage', error);
+    } finally {
+      queuePersistenceReady = true;
+    }
+  });
+
+  function updateModifiedRelations(updater: (current: Set<string>) => Set<string>) {
+    const next = updater(modifiedRelations);
+    modifiedRelations = new Set(next);
+  }
 
   function recordModification(rel: RelationshipEntry) {
-    modifiedRelations.add(relationKey(rel.sourceId, rel.targetId));
+    const key = relationKey(rel.sourceId, rel.targetId);
+    updateModifiedRelations((current) => {
+      const updated = new Set(current);
+      updated.add(key);
+      return updated;
+    });
   }
 
   function clearModificationByKey(key: string) {
-    modifiedRelations.delete(key);
+    updateModifiedRelations((current) => {
+      if (!current.has(key)) return current;
+      const updated = new Set(current);
+      updated.delete(key);
+      return updated;
+    });
   }
+
+  $effect(() => {
+  if (!queuePersistenceReady || !browser) return;
+    const isEmptyQueue =
+      languagesToAdd.length === 0 &&
+      languagesToEdit.length === 0 &&
+      relationships.length === 0 &&
+      newReferences.length === 0 &&
+      customTags.length === 0 &&
+      modifiedRelations.size === 0;
+
+    if (isEmptyQueue) {
+      try {
+        localStorage.removeItem(QUEUE_STORAGE_KEY);
+      } catch (error) {
+        console.warn('Failed to clear queued changes from storage', error);
+      }
+      return;
+    }
+
+    const snapshot: PersistedQueueState = {
+      languagesToAdd,
+      languagesToEdit,
+      relationships,
+      newReferences,
+      customTags,
+      modifiedRelations: Array.from(modifiedRelations)
+    };
+    try {
+      localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(snapshot));
+    } catch (error) {
+      console.warn('Failed to persist queued changes', error);
+    }
+  });
 
   let newReferences = $state<string[]>([]);
   let customTags = $state<CustomTag[]>([]);
@@ -252,9 +445,21 @@
     }
     
     // Remove any relationships involving this language
-    relationships = relationships.filter(rel => 
+    const remaining = relationships.filter(rel => 
       rel.sourceId !== langId && rel.targetId !== langId
     );
+    relationships = remaining;
+
+    updateModifiedRelations((current) => {
+      if (current.size === 0) return current;
+      const updated = new Set(current);
+      for (const key of Array.from(updated)) {
+        if (key.startsWith(`${langId}->`) || key.endsWith(`->${langId}`)) {
+          updated.delete(key);
+        }
+      }
+      return updated;
+    });
   }
 
   // Cascade delete: when a reference is deleted, remove it from all dependencies
@@ -282,6 +487,11 @@
     customTags.forEach(tag => {
       tag.refs = tag.refs.filter(r => r !== refId);
     });
+
+    languagesToAdd = [...languagesToAdd];
+    languagesToEdit = [...languagesToEdit];
+    relationships = [...relationships];
+    customTags = [...customTags];
   }
 
   async function handleSubmit(event: Event) {
@@ -364,6 +574,14 @@
       // Record successful submission for rate limiting
       recentSubmissions.push(now);
       localStorage.setItem(submissionsKey, JSON.stringify(recentSubmissions));
+
+  // Reset contribution queue state after successful submission
+  languagesToAdd = [];
+  languagesToEdit = [];
+  relationships = [];
+  newReferences = [];
+  customTags = [];
+  updateModifiedRelations(() => new Set<string>());
 
       // Success - redirect to success page
       goto('/contribute/success');

@@ -245,7 +245,7 @@
     top: 100%;
     right: 0;
     z-index: 50;
-    max-width: 80vh;
+    max-width: 80vw;
     margin-top: 0.25rem;
     background: white;
     border: 1px solid #d1d5db;

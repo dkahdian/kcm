@@ -6,17 +6,55 @@
   import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters } from '$lib/data/index.js';
   import { applyFiltersWithParams, createDefaultFilterState } from '$lib/filter-utils.js';
   import type { KCLanguage, FilterStateMap, SelectedEdge } from '$lib/types.js';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   
   const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
+  const FILTER_STORAGE_KEY = 'kcm_filter_state_v1';
   
   let selectedNode: KCLanguage | null = null;
   let selectedEdge: SelectedEdge | null = null;
   // Initialize filter state with default parameter values
   let filterStates: FilterStateMap = createDefaultFilterState(languageFilters, edgeFilters);
+  let filterPersistenceReady = false;
+
+  onMount(() => {
+    if (!browser) {
+      filterPersistenceReady = true;
+      return;
+    }
+
+    try {
+      const stored = localStorage.getItem(FILTER_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          filterStates = new Map(parsed);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to restore filter state from storage', error);
+    } finally {
+      filterPersistenceReady = true;
+    }
+  });
   
   // Compute filtered graph data reactively
   $: filteredGraphData = applyFiltersWithParams(initialGraphData, languageFilters, edgeFilters, filterStates);
+
+  $: if (filterPersistenceReady && browser) {
+    try {
+      const entries = Array.from(filterStates.entries());
+      if (entries.length === 0) {
+        localStorage.removeItem(FILTER_STORAGE_KEY);
+      } else {
+        localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(entries));
+      }
+    } catch (error) {
+      console.warn('Failed to persist filter state', error);
+    }
+  }
   
   // Reset selected node if it's no longer visible after filtering
   $: if (selectedNode) {

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   import cytoscape from 'cytoscape';
   // @ts-ignore - dagre doesn't have proper TypeScript types
   import dagre from 'cytoscape-dagre';
@@ -13,6 +14,51 @@
       SelectedEdge
     } from './types.js';
   import { getEdgeEndpointStyle } from './data/relation-types.js';
+
+  const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions_v1';
+
+  interface NodePosition {
+    x: number;
+    y: number;
+  }
+
+  type StoredNodePositions = Record<string, NodePosition>;
+
+  function loadStoredNodePositions(): StoredNodePositions {
+    if (!browser) return {};
+    try {
+      const raw = localStorage.getItem(NODE_POSITIONS_STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return {};
+      const result: StoredNodePositions = {};
+      for (const [key, value] of Object.entries(parsed as Record<string, any>)) {
+        if (!value || typeof value !== 'object') continue;
+        const x = typeof (value as any).x === 'number' ? (value as any).x : null;
+        const y = typeof (value as any).y === 'number' ? (value as any).y : null;
+        if (x === null || y === null) continue;
+        result[key] = { x, y };
+      }
+      return result;
+    } catch (error) {
+      console.warn('Failed to load stored node positions', error);
+      return {};
+    }
+  }
+
+  function persistNodePositions(nodes: cytoscape.NodeCollection) {
+    if (!browser) return;
+    try {
+      const existing = loadStoredNodePositions();
+      nodes.forEach((node) => {
+        const pos = node.position();
+        existing[node.id()] = { x: pos.x, y: pos.y };
+      });
+      localStorage.setItem(NODE_POSITIONS_STORAGE_KEY, JSON.stringify(existing));
+    } catch (error) {
+      console.warn('Failed to persist node positions', error);
+    }
+  }
 
   let { graphData, selectedNode = $bindable(), selectedEdge = $bindable() }: {
     graphData: GraphData | FilteredGraphData;
@@ -151,6 +197,8 @@
     
     const visibleLanguages = graphData.languages
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
+
+    const storedPositions = loadStoredNodePositions();
 
     const BASE_NODE_WIDTH = 80;
     const BASE_NODE_HEIGHT = 80;
@@ -311,6 +359,11 @@
       
       members.forEach((nodeId, idx) => {
         const lang = visibleLanguages.find(l => l.id === nodeId)!;
+        const defaultPosition = {
+          x: startX + idx * spacing,
+          y: centerPos.y
+        };
+        const storedPosition = storedPositions[lang.id];
         elements.push({
           data: {
             id: lang.id,
@@ -324,10 +377,7 @@
             labelPrefix: lang.visual?.labelPrefix || '',
             labelSuffix: lang.visual?.labelSuffix || ''
           },
-          position: {
-            x: startX + idx * spacing,
-            y: centerPos.y
-          }
+          position: storedPosition ?? defaultPosition
         });
       });
     }
@@ -458,6 +508,13 @@
       boxSelectionEnabled: false,
       selectionType: 'single'
     });
+
+    if (browser) {
+      persistNodePositions(cy.nodes());
+      cy.on('free', 'node', () => {
+        persistNodePositions(cy.nodes());
+      });
+    }
 
     cy.on('tap', 'node', (evt) => {
       const node = evt.target;

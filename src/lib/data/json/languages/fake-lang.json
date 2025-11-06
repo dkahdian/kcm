@@ -1,0 +1,80 @@
+{
+  "description": "poin",
+  "descriptionRefs": [
+    "Darwiche_2002"
+  ],
+  "fullName": "FAKE",
+  "id": "fake-lang",
+  "name": "fake-lang",
+  "properties": {
+    "queries": {
+      "CE": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CO": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CT": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "EQ": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "IM": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "ME": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "SE": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "VA": {
+        "polytime": "unknown",
+        "refs": []
+      }
+    },
+    "transformations": {
+      "AND_BC": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "AND_C": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CD": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "FO": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "NOT_C": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "OR_BC": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "OR_C": {
+        "polytime": "unknown",
+        "refs": []
+      },
+      "SFO": {
+        "polytime": "unknown",
+        "refs": []
+      }
+    }
+  },
+  "tags": []
+}

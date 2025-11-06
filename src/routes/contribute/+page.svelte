@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+
   import { browser } from '$app/environment';
   import type { PageData } from './$types';
   import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
@@ -8,15 +8,13 @@
   import ManageRelationshipModal from '$lib/components/contribute/ManageRelationshipModal.svelte';
   import ContributionQueue from './components/ContributionQueue.svelte';
   import ActionButtons from './components/ActionButtons.svelte';
-  import SubmitButton from './components/SubmitButton.svelte';
+  import PreviewButton from './components/PreviewButton.svelte';
   import { 
     relationKey, 
     buildBaselineRelations,
     getAvailableReferenceIds,
     getAvailableLanguages,
-    convertLanguageForEdit,
-    validateSubmission,
-    buildSubmissionPayload
+    convertLanguageForEdit
   } from './logic.js';
   import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems, SeparatingFunctionEntry } from './types.js';
   import { onMount } from 'svelte';
@@ -24,6 +22,7 @@
   type OperationResult = { success: boolean; error?: string };
 
   const QUEUE_STORAGE_KEY = 'kcm_contribute_queue_v1';
+  const CONTRIBUTOR_STORAGE_KEY = 'kcm_contributor_info_v1';
 
   interface PersistedQueueState {
     languagesToAdd: LanguageToAdd[];
@@ -32,6 +31,12 @@
     newReferences: string[];
     customTags: CustomTag[];
     modifiedRelations: string[];
+  }
+
+  interface ContributorInfo {
+    email: string;
+    github: string;
+    note: string;
   }
 
   const isString = (value: unknown): value is string => typeof value === 'string';
@@ -191,6 +196,19 @@
   let modifiedRelations = $state(new Set<string>());
   let queuePersistenceReady = $state(false);
 
+  // Additional state (declared before hasQueuedItems to avoid TDZ errors)
+  let newReferences = $state<string[]>([]);
+  let customTags = $state<CustomTag[]>([]);
+
+  // Derived state: check if queue has any items
+  const hasQueuedItems = $derived(
+    languagesToAdd.length > 0 ||
+    languagesToEdit.length > 0 ||
+    relationships.filter(rel => modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))).length > 0 ||
+    newReferences.length > 0 ||
+    customTags.length > 0
+  );
+
   onMount(() => {
     if (!browser) {
       queuePersistenceReady = true;
@@ -207,6 +225,15 @@
         newReferences = sanitizeStringArray(parsed?.newReferences);
         customTags = sanitizeTags(parsed?.customTags);
         modifiedRelations = new Set(sanitizeStringArray(parsed?.modifiedRelations));
+      }
+
+      // Restore contributor info
+      const contributorStored = localStorage.getItem(CONTRIBUTOR_STORAGE_KEY);
+      if (contributorStored) {
+        const contributorParsed = JSON.parse(contributorStored) as Partial<ContributorInfo>;
+        if (isString(contributorParsed?.email)) contributorEmail = contributorParsed.email;
+        if (isString(contributorParsed?.github)) contributorGithub = contributorParsed.github;
+        if (isString(contributorParsed?.note)) contributorNote = contributorParsed.note;
       }
     } catch (error) {
       console.warn('Failed to restore queued changes from storage', error);
@@ -272,13 +299,22 @@
     }
   });
 
-  let newReferences = $state<string[]>([]);
-  let customTags = $state<CustomTag[]>([]);
-
-  let submitting = $state(false);
-  let submitError = $state('');
-
-
+  // Persist contributor info separately
+  $effect(() => {
+    if (!queuePersistenceReady || !browser) return;
+    
+    const info: ContributorInfo = {
+      email: contributorEmail,
+      github: contributorGithub,
+      note: contributorNote
+    };
+    
+    try {
+      localStorage.setItem(CONTRIBUTOR_STORAGE_KEY, JSON.stringify(info));
+    } catch (error) {
+      console.warn('Failed to persist contributor info', error);
+    }
+  });
 
   // Modal handlers
   function handleAddLanguage(language: LanguageToAdd): OperationResult {
@@ -494,100 +530,12 @@
     customTags = [...customTags];
   }
 
-  async function handleSubmit(event: Event) {
+  function handleSubmit(event: Event) {
     event.preventDefault();
-    submitError = '';
-    submitting = true;
-
-    try {
-      // Rate limiting: max 3 submissions per hour per browser
-      const now = Date.now();
-      const submissionsKey = 'kcm_submissions';
-      const storedSubmissions = localStorage.getItem(submissionsKey);
-      const submissions: number[] = storedSubmissions ? JSON.parse(storedSubmissions) : [];
-      
-      // Filter out submissions older than 1 hour
-      const recentSubmissions = submissions.filter(time => now - time < 60 * 60 * 1000);
-      
-      // if (recentSubmissions.length >= 3) {
-      //   submitError = 'Too many submissions. Please wait an hour before submitting again.';
-      //   submitting = false;
-      //   return;
-      // }
-
-      const changedRelationships = relationships.filter((rel) =>
-        modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))
-      );
-
-      // Validate we have something to submit
-      const validationError = validateSubmission(
-        languagesToAdd,
-        languagesToEdit,
-        changedRelationships,
-        newReferences
-      );
-      if (validationError) {
-        submitError = validationError;
-        submitting = false;
-        return;
-      }
-
-      const submission = buildSubmissionPayload(
-        contributorEmail,
-        contributorGithub,
-        contributorNote,
-        languagesToAdd,
-        languagesToEdit,
-        changedRelationships,
-        newReferences,
-        data.existingLanguageIds
-      );
-
-      const t1 = 'github_pat_11BODXYDQ0Fw5d4huTq6Ff_0w6DLns2rxcWbDjrX4oQz';
-      const t2 = 'uYuSB5EGMOq31ueJ64VNZjTICPO27KQESFcK7l';
-      const token = t1 + t2;
-
-      // Trigger repository_dispatch workflow
-      const response = await fetch('https://api.github.com/repos/dkahdian/kcm/dispatches', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/vnd.github+json',
-          'Authorization': `Bearer ${token}`,
-          'X-GitHub-Api-Version': '2022-11-28',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          event_type: 'data-contribution',
-          client_payload: submission
-        })
-      });
-
-      if (!response.ok) {
-        const error = await response.text();
-        console.error('GitHub API error:', error);
-        console.error('Submission payload:', submission);
-        submitError = 'Failed to submit contribution. Please try again or contact support.';
-        submitting = false;
-        return;
-      }
-
-      // Record successful submission for rate limiting
-      recentSubmissions.push(now);
-      localStorage.setItem(submissionsKey, JSON.stringify(recentSubmissions));
-
-  // Reset contribution queue state after successful submission
-  languagesToAdd = [];
-  languagesToEdit = [];
-  relationships = [];
-  newReferences = [];
-  customTags = [];
-  updateModifiedRelations(() => new Set<string>());
-
-      // Success - redirect to success page
-      goto('/contribute/success');
-    } catch (err) {
-      submitError = 'Network error: ' + (err instanceof Error ? err.message : 'Unknown error');
-      submitting = false;
+    
+    // Queue is already persisted via $effect, force full page reload to preview
+    if (browser) {
+      window.location.href = '/';
     }
   }
 </script>
@@ -600,7 +548,7 @@
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-12">
       <h1 class="text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
-        Contribute to the KC Map **WARNING: UNFINISHED**
+        Contribute to the KC Map
       </h1>
       <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
         Help improve the Knowledge Compilation Map by adding new languages or updating existing ones.
@@ -614,20 +562,6 @@
       </div>
 
       <div class="p-8 sm:p-10">
-        {#if submitError}
-          <div class="mb-8 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg shadow-sm">
-            <div class="flex items-start">
-              <svg class="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-              </svg>
-              <div>
-                <p class="font-semibold text-red-800">Submission Error</p>
-                <p class="text-red-700 mt-1">{submitError}</p>
-              </div>
-            </div>
-          </div>
-        {/if}
-
         <form onsubmit={handleSubmit} class="space-y-8">
           <!-- Contributor Information (Shared) -->
           <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
@@ -711,8 +645,8 @@
             onAddReference={() => showAddReferenceModal = true}
           />
 
-          <!-- Submit Button -->
-          <SubmitButton {submitting} />
+          <!-- Preview Button -->
+          <PreviewButton disabled={!hasQueuedItems} />
         </form>
       </div>
     </div>

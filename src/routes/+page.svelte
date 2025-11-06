@@ -194,6 +194,9 @@
       </div>
       <div class="header-controls">
         {#if isPreviewMode}
+          <a href="/contribute" class="btn btn-edit">
+            Edit Contribution
+          </a>
           <button
             type="button"
             onclick={handleDiscardPreview}
@@ -318,11 +321,23 @@
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
   }
 
   .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  .btn-edit {
+    background: #6366f1;
+    color: white;
+  }
+
+  .btn-edit:hover {
+    background: #4f46e5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .btn-discard {

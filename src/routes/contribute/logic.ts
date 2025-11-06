@@ -88,14 +88,96 @@ export function buildBaselineRelations(adjacencyMatrix: {
 }
 
 /**
- * Get available reference IDs (existing + new)
+ * Parse BibTeX entry to extract author and year for generating reference ID
+ */
+function parseBibtexForId(bibtex: string): { author: string; year: string } | null {
+  // Try to extract author - look for author = {...} or author = "..."
+  const authorMatch = bibtex.match(/author\s*=\s*[{"']([^}"']+)[}"']/i);
+  let author = 'Unknown';
+  
+  if (authorMatch) {
+    const authorStr = authorMatch[1];
+    // Extract last name - handle "Last, First" or "First Last" format
+    // Also handle multiple authors by taking the first one
+    const firstAuthor = authorStr.split(/\s+and\s+/i)[0].trim();
+    
+    // Check if it's "Last, First" format
+    if (firstAuthor.includes(',')) {
+      author = firstAuthor.split(',')[0].trim();
+    } else {
+      // Assume "First Last" format - take the last word
+      const words = firstAuthor.trim().split(/\s+/);
+      author = words[words.length - 1];
+    }
+    
+    // Clean up any remaining braces or special characters
+    author = author.replace(/[{}]/g, '').trim();
+  }
+  
+  // Try to extract year
+  const yearMatch = bibtex.match(/year\s*=\s*[{"']?(\d{4})[}"']?/i);
+  const year = yearMatch ? yearMatch[1] : 'XXXX';
+  
+  return { author, year };
+}
+
+/**
+ * Generate a reference ID from BibTeX (format: Author_Year)
+ */
+export function generateReferenceId(bibtex: string, existingIds: Set<string>): string {
+  const parsed = parseBibtexForId(bibtex);
+  
+  if (!parsed) {
+    // Fallback to generic ID if parsing fails
+    let fallbackId = 'Reference_Unknown';
+    let counter = 1;
+    while (existingIds.has(fallbackId)) {
+      fallbackId = `Reference_Unknown_${counter}`;
+      counter++;
+    }
+    return fallbackId;
+  }
+  
+  const baseId = `${parsed.author}_${parsed.year}`;
+  
+  // Check for duplicates and append suffix if needed
+  if (!existingIds.has(baseId)) {
+    return baseId;
+  }
+  
+  // Try with suffixes: _a, _b, _c, etc.
+  const suffixes = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  for (const suffix of suffixes) {
+    const idWithSuffix = `${baseId}_${suffix}`;
+    if (!existingIds.has(idWithSuffix)) {
+      return idWithSuffix;
+    }
+  }
+  
+  // If all 26 letters are taken, fall back to numbers
+  let counter = 1;
+  while (existingIds.has(`${baseId}_${counter}`)) {
+    counter++;
+  }
+  return `${baseId}_${counter}`;
+}
+
+/**
+ * Get available reference IDs (existing + new with meaningful names)
  */
 export function getAvailableReferenceIds(
   existingReferences: Array<{ id: string; title: string }>,
   newReferences: string[]
 ): string[] {
   const existing = existingReferences.map((r) => r.id);
-  const newRefs = newReferences.map((_, index) => `new-${index}`);
+  const existingSet = new Set(existing);
+  
+  const newRefs = newReferences.map((bibtex) => {
+    const newId = generateReferenceId(bibtex, existingSet);
+    existingSet.add(newId); // Add to set to prevent duplicates within new references
+    return newId;
+  });
+  
   return [...existing, ...newRefs];
 }
 

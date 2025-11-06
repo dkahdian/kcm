@@ -14,7 +14,8 @@
     buildBaselineRelations,
     getAvailableReferenceIds,
     getAvailableLanguages,
-    convertLanguageForEdit
+    convertLanguageForEdit,
+    generateReferenceId
   } from './logic.js';
   import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems, SeparatingFunctionEntry } from './types.js';
   import { onMount } from 'svelte';
@@ -500,7 +501,19 @@
 
   // Cascade delete: when a reference is deleted, remove it from all dependencies
   function deleteReference(index: number) {
-    const refId = `new-${index}`;
+    // Compute the reference ID for the reference being deleted
+    const existingIds = new Set(data.existingReferences.map(r => r.id));
+    
+    // Add IDs of all previous new references to maintain consistent ID generation
+    for (let i = 0; i < index; i++) {
+      const id = generateReferenceId(newReferences[i], existingIds);
+      existingIds.add(id);
+    }
+    
+    // Get the ID of the reference being deleted
+    const refId = generateReferenceId(newReferences[index], existingIds);
+    
+    // Remove the reference from the array
     newReferences = newReferences.filter((_, i) => i !== index);
     
     // Remove from language description refs
@@ -628,7 +641,7 @@
             onDeleteLanguageToAdd={(index) => languagesToAdd = languagesToAdd.filter((_, i) => i !== index)}
             onDeleteLanguageToEdit={(index) => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
             onEditReference={handleEditReference}
-            onDeleteReference={(index) => newReferences = newReferences.filter((_, i) => i !== index)}
+            onDeleteReference={deleteReference}
             onEditRelationship={handleEditRelationship}
             onDeleteRelationship={(index, key) => {
               relationships = relationships.filter((_, i) => i !== index);

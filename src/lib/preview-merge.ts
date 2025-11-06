@@ -6,6 +6,7 @@
 
 import type { GraphData, KCLanguage, KCReference, KCAdjacencyMatrix, DirectedSuccinctnessRelation } from './types.js';
 import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionEntry } from '../routes/contribute/types.js';
+import { generateReferenceId } from '../routes/contribute/logic.js';
 
 export interface QueuedChanges {
   languagesToAdd: LanguageToAdd[];
@@ -68,30 +69,28 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
     relationTypes: baseline.relationTypes
   };
 
-  // Step 1: Process new references
+  // Step 1: Process new references with meaningful IDs
   const allReferences: KCReference[] = [...baseline.languages.flatMap(l => l.references)];
-  const newRefMap = new Map<string, KCReference>();
+  const existingRefIds = new Set(allReferences.map(r => r.id));
+  const newRefIdMap = new Map<string, string>(); // Maps generated ID -> generated ID (for consistency)
   
-  queue.newReferences.forEach((bibtex, index) => {
-    const citationKey = extractCitationKey(bibtex);
-    if (!citationKey) return;
+  queue.newReferences.forEach((bibtex) => {
+    const generatedId = generateReferenceId(bibtex, existingRefIds);
+    existingRefIds.add(generatedId);
     
-    const placeholderId = `new-${index}`;
+    const citationKey = extractCitationKey(bibtex);
     const ref: KCReference = {
-      id: citationKey,
-      title: citationKey, // Placeholder - real parsing would extract title
+      id: generatedId,
+      title: citationKey || generatedId, // Use citation key as title if available
       href: '', // Would extract URL from bibtex
       bibtex
     };
-    newRefMap.set(placeholderId, ref);
+    newRefIdMap.set(generatedId, generatedId);
     allReferences.push(ref);
   });
 
-  // Helper to resolve reference IDs (converts new-X to actual IDs)
-  const resolveRefId = (refId: string): string => {
-    const resolved = newRefMap.get(refId);
-    return resolved ? resolved.id : refId;
-  };
+  // Helper to resolve reference IDs (identity function since IDs are already final)
+  const resolveRefId = (refId: string): string => refId;
 
   // Step 2: Add new languages
   for (const langToAdd of queue.languagesToAdd) {

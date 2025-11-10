@@ -26,7 +26,7 @@ if (!fs.existsSync(html404Path)) {
 let content = fs.readFileSync(html404Path, 'utf8');
 
 // Find the sveltekit config object with base and assets
-const configRegex = /(__sveltekit_\w+\s*=\s*\{[^}]*\})/s;
+const configRegex = /(?<varName>__sveltekit_\w+)\s*=\s*\{(?<objectBody>[^}]*)\}\s*;/s;
 const configMatch = content.match(configRegex);
 
 if (!configMatch) {
@@ -34,16 +34,35 @@ if (!configMatch) {
   process.exit(1);
 }
 
-const originalConfig = configMatch[1];
+const { varName, objectBody } = configMatch.groups ?? {};
+
+if (!varName || !objectBody) {
+	console.error('Unable to extract SvelteKit config details');
+	process.exit(1);
+}
+
+const updatedObjectBody = objectBody
+	.replace(/base:\s*"[^"]*"/, 'base: __basePath')
+	.replace(/assets:\s*"[^"]*"/, 'assets: __basePath');
+
+const sanitizedObjectBody = updatedObjectBody
+	.split('\n')
+	.map((line) => line.trim())
+	.filter((line) => line.length > 0)
+	.map((line) => `\t${line}`)
+	.join('\n');
+
 console.log('Found SvelteKit config');
 
 // Create dynamic config that detects base path at runtime
 const dynamicConfig = `const __basePath = (() => {
-							const path = window.location.pathname;
-							const match = path.match(/^\\/previews\\/pr-\\d+/);
-							return match ? match[0] : "";
-						})();
-					${originalConfig.replace(/__sveltekit_\w+/, '__sveltekit_config').replace(/base:\s*"[^"]*"/, 'base: __basePath').replace(/assets:\s*"[^"]*"/, 'assets: __basePath')}`;
+	const path = window.location.pathname;
+	const match = path.match(/^\\/previews\\/pr-\\d+/);
+	return match ? match[0] : "";
+})();
+${varName} = {
+${sanitizedObjectBody}
+};`;
 
 console.log('Replacing with dynamic detection...');
 

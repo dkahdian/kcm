@@ -14,9 +14,9 @@
     buildBaselineRelations,
     getAvailableReferenceIds,
     getAvailableLanguages,
-    convertLanguageForEdit,
-    generateReferenceId
+    convertLanguageForEdit
   } from './logic.js';
+  import { generateReferenceId } from '$lib/utils/reference-id.js';
   import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems, SeparatingFunctionEntry } from './types.js';
   import { onMount } from 'svelte';
 

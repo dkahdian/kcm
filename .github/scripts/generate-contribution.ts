@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { generateReferenceId } from '../../src/lib/utils/reference-id.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -148,25 +149,32 @@ try {
     console.log(`\nAdding ${contribution.newReferences.length} new reference(s)...`);
     
     const refPath = path.join(dataDir, 'references.json');
-    const refs = JSON.parse(fs.readFileSync(refPath, 'utf8'));
-    
-    for (const newRef of contribution.newReferences) {
-      console.log(`  - Adding reference: ${newRef.id}`);
+  const refs = JSON.parse(fs.readFileSync(refPath, 'utf8'));
+  const existingIds = new Set<string>(refs.map((r: any) => String(r.id)));
+
+    for (const rawRef of contribution.newReferences as Array<any>) {
+      if (typeof rawRef !== 'string') {
+        console.warn('  ! Skipping non-string reference payload:', rawRef);
+        continue;
+      }
+
+  const generatedId = generateReferenceId(rawRef, existingIds);
+  existingIds.add(generatedId);
+
+  console.log(`  - Adding reference: ${generatedId}`);
       
-      // Check if reference already exists
-      const existing = refs.find((r: any) => r.id === newRef.id);
+  const existing = refs.find((r: any) => r.id === generatedId);
       if (existing) {
-        console.log(`    (already exists, skipping)`);
+        console.log('    (already exists, skipping)');
         continue;
       }
       
       refs.push({
-        id: newRef.id,
-        bibtex: newRef.bibtex
+        id: generatedId,
+        bibtex: rawRef
       });
     }
     
-    // Sort references by ID for consistency
     refs.sort((a: any, b: any) => a.id.localeCompare(b.id));
     
     fs.writeFileSync(refPath, JSON.stringify(refs, null, 2), 'utf8');

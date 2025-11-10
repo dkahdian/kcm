@@ -6,7 +6,7 @@
 
 import type { GraphData, KCLanguage, KCReference, KCAdjacencyMatrix, DirectedSuccinctnessRelation } from './types.js';
 import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionEntry } from '../routes/contribute/types.js';
-import { generateReferenceId } from '../routes/contribute/logic.js';
+import { generateReferenceId } from './utils/reference-id.js';
 
 export interface QueuedChanges {
   languagesToAdd: LanguageToAdd[];

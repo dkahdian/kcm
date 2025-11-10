@@ -27,7 +27,8 @@ const config = {
 			}),
 		paths: {
 			base: basePath,
-			assets: basePath
+			// assets must be absolute or undefined - empty string causes error
+			assets: basePath || undefined
 		},
 			prerender: {
 				// Generate the root route as index.html alongside the SPA 404 fallback

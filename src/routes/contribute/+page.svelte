@@ -562,141 +562,12 @@
     customTags = [...customTags];
   }
 
-  let isSubmitting = $state(false);
-  let submitError = $state<string | null>(null);
-
-  async function handleSubmit(event: Event) {
+  function handleSubmit(event: Event) {
     event.preventDefault();
-    
-    if (!browser || isSubmitting) return;
 
-    // Validate required fields
-    if (!contributorEmail) {
-      submitError = 'Email address is required';
-      return;
-    }
-
-    if (!hasQueuedItems) {
-      submitError = 'Please add at least one change before submitting';
-      return;
-    }
-
-    isSubmitting = true;
-    submitError = null;
-
-    try {
-      // Generate or reuse submission ID
-      if (!currentSubmissionId) {
-        currentSubmissionId = generateSubmissionId();
-      }
-
-      // Create queue snapshot
-      const queueSnapshot: PersistedQueueState = {
-        languagesToAdd,
-        languagesToEdit,
-        relationships,
-        newReferences,
-        customTags,
-        modifiedRelations: Array.from(modifiedRelations)
-      };
-
-      // Create history entry (optimistic)
-      const historyEntry: ContributionHistoryEntry = {
-        submissionId: currentSubmissionId,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        contributor: {
-          email: contributorEmail,
-          github: contributorGithub || undefined
-        },
-        status: 'pending',
-        queueSnapshot
-      };
-
-      addHistoryEntry(historyEntry);
-      contributionHistory = loadHistory();
-
-      // Build API payload
-      const payload = {
-        submissionId: currentSubmissionId,
-        contributorEmail,
-        contributorGithub: contributorGithub || undefined,
-        contributorNote: contributorNote || undefined,
-        languagesToAdd,
-        languagesToEdit,
-        relationships: relationships.filter(rel => 
-          modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))
-        ),
-        newReferences,
-        customTags
-      };
-
-      // For update, add branch name
-      if (isUpdatingExisting && historyEntry.branchName) {
-        (payload as any).branchName = historyEntry.branchName;
-      }
-
-      // Call GitHub API directly (token split for basic obfuscation)
-      const t1 = 'github_pat_11BODXYDQ0Fw5d4huTq6Ff_0w6DLns2rxcWbDjrX4oQz';
-      const t2 = 'uYuSB5EGMOq31ueJ64VNZjTICPO27KQESFcK7l';
-      const token = t1 + t2;
-
-      const eventType = isUpdatingExisting ? 'update-data-contribution' : 'data-contribution';
-
-      const response = await fetch('https://api.github.com/repos/dkahdian/kcm/dispatches', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/vnd.github+json',
-          'Authorization': `Bearer ${token}`,
-          'X-GitHub-Api-Version': '2022-11-28',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          event_type: eventType,
-          client_payload: payload
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to submit contribution: ${response.statusText}`);
-      }
-
-      // Update history entry with optimistic data
-      // repository_dispatch returns 204 No Content, so we estimate the values
-      updateHistoryEntry(currentSubmissionId, {
-        status: 'pending', // Will be updated to 'open' once PR is created
-        branchName: `contribution/${currentSubmissionId}`
-        // prNumber and previewUrl will be updated by workflow
-      });
-
-      // Clear queue state
-      languagesToAdd = [];
-      languagesToEdit = [];
-      relationships = [];
-      newReferences = [];
-      customTags = [];
-      modifiedRelations = new Set();
-      currentSubmissionId = null;
-      isUpdatingExisting = false;
-
-      // Redirect to success page
-      window.location.href = '/contribute/success';
-
-    } catch (error) {
-      console.error('Submission error:', error);
-      
-      submitError = error instanceof Error ? error.message : 'Failed to submit contribution. Please try again.';
-      
-      // Update history with error
-      if (currentSubmissionId) {
-        updateHistoryEntry(currentSubmissionId, {
-          status: 'error',
-          errorMessage: submitError
-        });
-        contributionHistory = loadHistory();
-      }
-      
-      isSubmitting = false;
+    // Queue is already persisted via $effect, force full page reload to preview
+    if (browser) {
+      window.location.href = '/';
     }
   }
 
@@ -880,7 +751,7 @@
           />
 
           <!-- Submit Button -->
-          <PreviewButton disabled={!hasQueuedItems} isSubmitting={isSubmitting} error={submitError} />
+          <PreviewButton disabled={!hasQueuedItems || !contributorEmail} />
         </form>
       </div>
     </div>

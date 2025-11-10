@@ -26,9 +26,8 @@ const config = {
 				fallback: '404.html'
 			}),
 		paths: {
-			base: basePath,
-			// assets must be absolute or undefined - empty string causes error
-			assets: basePath || undefined
+			base: basePath
+			// Note: assets defaults to base path, no need to set explicitly
 		},
 			prerender: {
 				// Generate the root route as index.html alongside the SPA 404 fallback

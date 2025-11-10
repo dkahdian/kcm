@@ -5,6 +5,7 @@ set -euo pipefail
 CONTRIBUTOR_EMAIL=$(node -p "require('./contribution.json').contributorEmail || 'anonymous'")
 CONTRIBUTOR_GITHUB=$(node -p "require('./contribution.json').contributorGithub || ''")
 CONTRIBUTOR_NOTE=$(node -p "require('./contribution.json').contributorNote || ''")
+SUBMISSION_ID=$(node -p "require('./contribution.json').submissionId || ''")
 TIMESTAMP=$(date +%s)
 
 # Determine action and descriptive info based on what's in the payload
@@ -36,7 +37,12 @@ else
   LANG_NAME="data update"
 fi
 
-BRANCH_NAME="contribution/${ACTION}-${LANG_SLUG}-${TIMESTAMP}"
+# Use submission ID for branch name if available, otherwise fall back to timestamp
+if [[ -n "$SUBMISSION_ID" ]]; then
+  BRANCH_NAME="contribution/${SUBMISSION_ID}"
+else
+  BRANCH_NAME="contribution/${ACTION}-${LANG_SLUG}-${TIMESTAMP}"
+fi
 
 git checkout -b "$BRANCH_NAME"
 
@@ -85,7 +91,13 @@ CHANGED_FILES=$(git diff --name-only main..."$BRANCH_NAME")
 
 # Build PR body using a temporary file for proper formatting
 PR_BODY_FILE=$(mktemp)
-cat > "$PR_BODY_FILE" <<EOF
+
+# Add hidden submission ID marker if available
+if [[ -n "$SUBMISSION_ID" ]]; then
+  echo "<!-- submission-id: ${SUBMISSION_ID} -->" > "$PR_BODY_FILE"
+fi
+
+cat >> "$PR_BODY_FILE" <<EOF
 ## Data Contribution
 
 **Contributor Email:** ${CONTRIBUTOR_EMAIL}
@@ -139,15 +151,37 @@ ${CHANGED_FILES}
 EOF
 
 # Create PR without labels first (labels may not exist)
-gh pr create \
+PR_URL=$(gh pr create \
   --title "$PR_TITLE" \
   --body-file "$PR_BODY_FILE" \
   --base main \
-  --head "$BRANCH_NAME" || {
+  --head "$BRANCH_NAME" 2>&1) || {
     rm "$PR_BODY_FILE"
     echo "Failed to create PR"
     exit 1
   }
+
+# Extract PR number from URL
+PR_NUMBER=$(echo "$PR_URL" | grep -oP 'pull/\K\d+' || echo "")
+
+# Add deployment info to PR body
+if [[ -n "$PR_NUMBER" ]]; then
+  PREVIEW_URL="https://kcm.kahdian.com/previews/pr-${PR_NUMBER}/"
+  
+  cat >> "$PR_BODY_FILE" <<EOF
+
+---
+
+### 🚀 Preview Deployment
+
+Preview URL will be available after the build completes:
+${PREVIEW_URL}
+
+EOF
+
+  # Update PR with preview info
+  gh pr edit "$PR_NUMBER" --body-file "$PR_BODY_FILE" 2>/dev/null || echo "Note: Could not update PR body with preview URL"
+fi
 
 rm "$PR_BODY_FILE"
 

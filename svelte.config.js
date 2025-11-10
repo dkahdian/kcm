@@ -1,6 +1,16 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+const normalizeBasePath = (raw) => {
+	if (!raw) return '';
+	const trimmed = raw.trim();
+	if (!trimmed || trimmed === '/') return '';
+	const withLeading = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+	return withLeading.replace(/\/$/, '');
+};
+
+const basePath = normalizeBasePath(process.env.DEPLOY_BASE_PATH);
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://svelte.dev/docs/kit/integrations
@@ -15,6 +25,10 @@ const config = {
 				// GitHub Pages SPA: generate index.html and use 404.html as the fallback for deep links
 				fallback: '404.html'
 			}),
+		paths: {
+			base: basePath,
+			assets: basePath
+		},
 			prerender: {
 				// Generate the root route as index.html alongside the SPA 404 fallback
 				entries: ['/'],

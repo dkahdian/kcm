@@ -1,0 +1,120 @@
+name: Update Data Contribution
+
+on:
+  repository_dispatch:
+    types: [update-data-contribution]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-contribution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CONTRIBUTION_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Extract contribution data
+        run: |
+          echo '${{ toJson(github.event.client_payload) }}' > contribution.json
+          cat contribution.json
+
+      - name: Get branch name from submission ID
+        id: branch-info
+        run: |
+          SUBMISSION_ID="${{ github.event.client_payload.submissionId }}"
+          BRANCH_NAME="contribution/${SUBMISSION_ID}"
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "submission_id=${SUBMISSION_ID}" >> $GITHUB_OUTPUT
+
+      - name: Checkout and update branch
+        run: |
+          git fetch origin
+          BRANCH_NAME="${{ steps.branch-info.outputs.branch_name }}"
+          
+          # Check if branch exists
+          if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
+            echo "Branch exists, checking out..."
+            git checkout "$BRANCH_NAME"
+            git pull origin "$BRANCH_NAME"
+          else
+            echo "ERROR: Branch $BRANCH_NAME does not exist"
+            exit 1
+          fi
+
+      - name: Generate contribution files
+        run: npx tsx@latest .github/scripts/generate-contribution.ts
+
+      - name: Type check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Commit and push updates
+        env:
+          SUBMISSION_ID: ${{ steps.branch-info.outputs.submission_id }}
+        run: |
+          git config user.name "bot"
+          git config user.email "b@o.t"
+          
+          git add src/lib/data/
+          
+          # Check if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git commit -m "Update submission ${SUBMISSION_ID}"
+          git push origin "${{ steps.branch-info.outputs.branch_name }}"
+
+      - name: Get PR number
+        id: pr-info
+        run: |
+          BRANCH_NAME="${{ steps.branch-info.outputs.branch_name }}"
+          PR_NUMBER=$(gh pr list --head "$BRANCH_NAME" --json number --jq '.[0].number')
+          echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
+
+      - name: Comment on PR
+        if: steps.pr-info.outputs.pr_number != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.CONTRIBUTION_TOKEN }}
+          script: |
+            const prNumber = parseInt('${{ steps.pr-info.outputs.pr_number }}');
+            const submissionId = '${{ steps.branch-info.outputs.submission_id }}';
+            const sha = context.sha.substring(0, 7);
+            const previewUrl = `https://kcm.kahdian.com/previews/pr-${prNumber}/`;
+            
+            const marker = '<!-- update-notification-comment -->';
+            const body = `${marker}
+            ## 🔄 Contribution Updated
+            
+            Submission ID: \`${submissionId}\`
+            Commit: ${sha}
+            Updated: ${new Date().toISOString()}
+            Preview: ${previewUrl}
+            
+            *The preview deployment will be updated shortly.*`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body
+            });

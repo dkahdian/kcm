@@ -1,10 +1,20 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { loadHistory, type ContributionHistoryEntry } from '$lib/utils/history.js';
 
   let countdown = $state(10);
+  let latestSubmission = $state<ContributionHistoryEntry | null>(null);
 
   onMount(() => {
+    // Load the most recent submission from history
+    const history = loadHistory();
+    if (history.length > 0) {
+      // Sort by updatedAt to get the most recent
+      const sorted = [...history].sort((a, b) => b.updatedAt - a.updatedAt);
+      latestSubmission = sorted[0];
+    }
+
     const interval = setInterval(() => {
       countdown--;
       if (countdown <= 0) {
@@ -15,6 +25,10 @@
 
     return () => clearInterval(interval);
   });
+
+  function copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
+  }
 </script>
 
 <svelte:head>
@@ -35,6 +49,64 @@
       <p class="text-lg text-gray-700 mb-6">
         Your contribution has been successfully submitted and is now being processed.
       </p>
+
+      {#if latestSubmission}
+        <div class="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200 rounded-lg p-6 mb-6 text-left">
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">Submission Details</h2>
+          <div class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Submission ID:</span>
+              <div class="flex items-center gap-2">
+                <code class="px-2 py-1 bg-white rounded font-mono text-xs">
+                  {latestSubmission.submissionId.substring(0, 8)}...
+                </code>
+                <button
+                  onclick={() => copyToClipboard(latestSubmission!.submissionId)}
+                  class="p-1 hover:bg-indigo-100 rounded transition-colors"
+                  title="Copy full ID"
+                  aria-label="Copy submission ID to clipboard"
+                >
+                  <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {#if latestSubmission.prNumber}
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Pull Request:</span>
+                <a
+                  href="https://github.com/dkahdian/kcm/pull/{latestSubmission.prNumber}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-indigo-600 hover:text-indigo-800 font-medium"
+                >
+                  #{latestSubmission.prNumber} ↗
+                </a>
+              </div>
+            {/if}
+            {#if latestSubmission.previewUrl}
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Preview:</span>
+                <a
+                  href={latestSubmission.previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-indigo-600 hover:text-indigo-800 font-medium"
+                >
+                  View Preview ↗
+                </a>
+              </div>
+            {/if}
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Status:</span>
+              <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">
+                {latestSubmission.status === 'pending' ? 'Processing' : latestSubmission.status}
+              </span>
+            </div>
+          </div>
+        </div>
+      {/if}
 
       <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
         <h2 class="text-xl font-semibold text-gray-900 mb-4">What happens next?</h2>

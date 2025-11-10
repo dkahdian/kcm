@@ -44,6 +44,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
           CONTRIBUTION_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
+          SUBMISSION_ID: ${{ github.event.client_payload.submissionId }}
         run: |
           chmod +x .github/scripts/create-pr.sh
           .github/scripts/create-pr.sh

@@ -2,18 +2,19 @@
   "languageIds": [
     "cnf",
     "d-dnnf",
-    "dnnf",
+    "d-nnf",
     "dnf",
+    "dnnf",
+    "f-nnf",
     "fbdd",
+    "ip",
+    "mods",
     "nnf",
     "obdd",
     "obdd-lt",
     "pi",
-    "sd-dnnf",
-    "ip",
-    "mods",
-    "f-nnf",
-    "s-nnf"
+    "s-nnf",
+    "sd-dnnf"
   ],
   "matrix": [
     [
@@ -60,6 +61,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -97,33 +99,15 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
       {
-        "status": "no-quasi",
-        "description": "DNNF to CNF lacks quasi-polynomial compilation.",
-        "refs": [
-          "Darwiche_2002"
-        ],
-        "separatingFunctions": [
-          {
-            "shortName": "Parity",
-            "name": "Parity Constraints",
-            "description": "Families of parity formulas force exponential CNF representations compared with DNNF.",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
-          {
-            "shortName": "Tseitin",
-            "name": "Tseitin Grid Formulas",
-            "description": "Tseitin contradictions remain succinct in DNNF but require super-polynomial CNF lower bounds.",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          }
-        ]
+        "status": "no-poly-unknown-quasi",
+        "description": "",
+        "refs": [],
+        "separatingFunctions": []
       },
       {
         "status": "poly",
@@ -169,6 +153,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -250,6 +235,7 @@
       },
       null,
       null,
+      null,
       null
     ],
     [
@@ -273,6 +259,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -406,7 +393,8 @@
             ]
           }
         ]
-      }
+      },
+      null
     ],
     [
       null,
@@ -452,6 +440,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -467,6 +456,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -519,6 +509,7 @@
       },
       null,
       null,
+      null,
       null
     ],
     [
@@ -532,6 +523,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -579,6 +571,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -595,6 +588,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -625,6 +619,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -641,6 +636,24 @@
         ],
         "separatingFunctions": []
       },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,

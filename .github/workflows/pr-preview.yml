@@ -46,7 +46,8 @@ jobs:
     environment:
       name: github-pages
     outputs:
-      page_url: ${{ steps.deployment.outputs.page_url }}
+      preview_url: ${{ steps.deployment.outputs.preview_url }}
+      fallback_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages (preview)
         id: deployment
@@ -56,10 +57,10 @@ jobs:
 
   comment:
     needs: deploy
-    if: needs.deploy.outputs.page_url != ''
+    if: needs.deploy.outputs.preview_url != '' || needs.deploy.outputs.fallback_url != ''
     runs-on: ubuntu-latest
     env:
-      PREVIEW_URL: ${{ needs.deploy.outputs.page_url }}
+      PREVIEW_URL: ${{ needs.deploy.outputs.preview_url || needs.deploy.outputs.fallback_url }}
     steps:
       - name: Share preview link
         uses: actions/github-script@v7
@@ -73,7 +74,7 @@ jobs:
             }
 
             const marker = '<!-- preview-link -->';
-            const body = `${marker}\n Preview available: ${PREVIEW_URL}`;
+            const body = `${marker}\n🚀 Preview available: ${PREVIEW_URL}`;
             const { owner, repo } = context.repo;
             const issueNumber = context.issue.number;
 

@@ -29,6 +29,7 @@ const config = {
 			base: basePath
 			// Note: assets defaults to base path, no need to set explicitly
 		},
+		trailingSlash: 'ignore', // Let GitHub Pages handle trailing slashes
 			prerender: {
 				// Generate the root route as index.html alongside the SPA 404 fallback
 				entries: ['/'],

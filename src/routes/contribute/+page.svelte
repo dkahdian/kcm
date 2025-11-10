@@ -1,6 +1,7 @@
 <script lang="ts">
 
   import { browser } from '$app/environment';
+  import { base } from '$app/paths';
   import type { PageData } from './$types';
   import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
@@ -567,7 +568,7 @@
 
     // Queue is already persisted via $effect, force full page reload to preview
     if (browser) {
-      window.location.href = '/';
+      window.location.href = `${base}/`;
     }
   }
 

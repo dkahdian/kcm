@@ -9,6 +9,7 @@
   import type { KCLanguage, FilterStateMap, SelectedEdge, GraphData } from '$lib/types.js';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
+  import { base } from '$app/paths';
 
   import { hasQueuedChanges, loadQueuedChanges, mergeQueueIntoBaseline, clearQueuedChanges, loadContributorInfo } from '$lib/preview-merge.js';
   import { buildSubmissionPayload } from './contribute/logic.js';
@@ -61,7 +62,7 @@
   function handleDiscardPreview() {
     clearQueuedChanges();
     if (browser) {
-      window.location.href = '/';
+      window.location.href = `${base}/`;
     }
   }
 
@@ -122,7 +123,7 @@
 
       // Success - clear queue and redirect to success page
       clearQueuedChanges();
-      window.location.href = '/contribute/success';
+      window.location.href = `${base}/contribute/success`;
     } catch (error) {
       console.error('Submission error:', error);
       alert('Failed to submit contribution: ' + (error instanceof Error ? error.message : 'Unknown error'));
@@ -194,7 +195,7 @@
       </div>
       <div class="header-controls">
         {#if isPreviewMode}
-          <a href="/contribute" class="btn btn-edit">
+          <a href="{base}/contribute" class="btn btn-edit">
             Edit Contribution
           </a>
           <button
@@ -214,7 +215,7 @@
             {submittingPreview ? 'Submitting...' : 'Submit'}
           </button>
         {:else}
-          <a href="/contribute" target="_blank" class="contribute-link">
+          <a href="{base}/contribute" target="_blank" class="contribute-link">
             Contribute
           </a>
         {/if}

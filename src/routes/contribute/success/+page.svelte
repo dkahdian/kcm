@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
   import { loadHistory, type ContributionHistoryEntry } from '$lib/utils/history.js';
 
   let countdown = $state(10);
@@ -158,13 +159,13 @@
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
-          href="/"
+          href="{base}/"
           class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium transition-colors"
         >
           Return to Home
         </a>
         <a
-          href="/contribute"
+          href="{base}/contribute"
           class="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 font-medium transition-colors"
         >
           Submit Another Contribution

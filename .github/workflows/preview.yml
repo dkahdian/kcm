@@ -31,7 +31,10 @@ jobs:
         env:
           DEPLOY_BASE_PATH: /previews/pr-${{ github.event.number }}
 
-      - name: Deploy to gh-pages
+      - name: Fix 404.html base path for subdirectory deployment
+        run: node .github/scripts/fix-404-base.js
+
+      - name: Deploy to gh-pages subdirectory
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

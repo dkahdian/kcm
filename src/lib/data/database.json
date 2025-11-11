@@ -2409,7 +2409,14 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,

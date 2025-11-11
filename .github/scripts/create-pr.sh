@@ -173,8 +173,8 @@ NEW_PR_NUMBER=$(gh pr view "$BRANCH_NAME" --json number --jq '.number')
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
   SUPERSEDED_PR=$(gh pr list --state open --search "${SUPERSEDES_SUBMISSION_ID} in:body" --json number --jq '.[0].number' 2>/dev/null || true)
   if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "null" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
-    gh pr comment "$SUPERSEDED_PR" --body "This submission has been superseded by #${NEW_PR_NUMBER}."
-    gh pr close "$SUPERSEDED_PR" --comment "Superseded by #${NEW_PR_NUMBER}."
+    NEW_PR_URL=$(gh pr view "$BRANCH_NAME" --json url --jq '.url')
+    gh pr close "$SUPERSEDED_PR" --comment "Superseded by ${NEW_PR_URL}."
   else
     echo "No open PR found for Supersedes Submission ID ${SUPERSEDES_SUBMISSION_ID}" >&2
   fi

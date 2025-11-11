@@ -1,24 +1,32 @@
 {
   "languageIds": [
+    "bdd",
     "cnf",
     "d-dnnf",
-    "dnnf",
     "dnf",
+    "dnnf",
+    "f-nnf",
     "fbdd",
+    "ip",
+    "mods",
     "nnf",
     "obdd",
     "obdd-lt",
     "pi",
-    "sd-dnnf",
-    "ip",
-    "mods",
-    "f-nnf",
-    "s-nnf"
+    "s-nnf",
+    "sd-dnnf"
   ],
   "matrix": [
     [
       null,
-      null,
+      {
+        "status": "poly",
+        "description": "",
+        "refs": [
+          "Darwiche_2002"
+        ],
+        "separatingFunctions": []
+      },
       {
         "status": "poly",
         "description": "CNF to DNNF in polynomial time (placeholder).",
@@ -60,6 +68,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -93,6 +102,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -169,6 +179,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -250,6 +261,7 @@
       },
       null,
       null,
+      null,
       null
     ],
     [
@@ -273,6 +285,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -406,7 +419,8 @@
             ]
           }
         ]
-      }
+      },
+      null
     ],
     [
       null,
@@ -452,6 +466,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -467,6 +482,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -519,6 +535,7 @@
       },
       null,
       null,
+      null,
       null
     ],
     [
@@ -532,6 +549,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -579,6 +597,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -595,6 +614,7 @@
         ],
         "separatingFunctions": []
       },
+      null,
       null,
       null,
       null,
@@ -625,6 +645,7 @@
       null,
       null,
       null,
+      null,
       null
     ],
     [
@@ -641,6 +662,24 @@
         ],
         "separatingFunctions": []
       },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,

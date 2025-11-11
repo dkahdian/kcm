@@ -1,13 +1,11 @@
-name: Preview Deployment
+name: PR Preview
 
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
   pull-requests: write
 
 concurrency:
@@ -15,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  preview:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
@@ -23,63 +21,49 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node.js
+        if: github.event.action != 'closed'
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - name: Install dependencies
+        if: github.event.action != 'closed'
         run: npm ci
 
-      - name: Build
+      - name: Build site
+        if: github.event.action != 'closed'
         run: npm run build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy PR preview
+        id: preview
+        uses: rossjrw/pr-preview-action@v1
         with:
-          path: build
+          source-dir: ./build
+          action: deploy
+          comment: false
 
-  deploy:
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-    outputs:
-      preview_url: ${{ steps.deployment.outputs.preview_url }}
-      fallback_url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages (preview)
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          preview: true
-
-  comment:
-    needs: deploy
-    if: needs.deploy.outputs.preview_url != '' || needs.deploy.outputs.fallback_url != ''
-    runs-on: ubuntu-latest
-    env:
-      PREVIEW_URL: ${{ needs.deploy.outputs.preview_url || needs.deploy.outputs.fallback_url }}
-    steps:
-      - name: Share preview link
+      - name: Upsert preview comment
+        if: steps.preview.outputs.deployment-action == 'deploy'
         uses: actions/github-script@v7
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs['preview-url'] }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { PREVIEW_URL } = process.env;
-            if (!PREVIEW_URL) {
-              core.info('No preview URL available.');
+            const marker = '<!-- preview-link -->';
+            const url = process.env.PREVIEW_URL;
+            if (!url) {
+              core.info('Preview URL missing; skip comment update.');
               return;
             }
 
-            const marker = '<!-- preview-link -->';
-            const body = `${marker}\n🚀 Preview available: ${PREVIEW_URL}`;
+            const body = `${marker}\nPreview available: ${url}`;
             const { owner, repo } = context.repo;
             const issueNumber = context.issue.number;
 
-            const comments = await github.rest.issues.listComments({ owner, repo, issue_number: issueNumber, per_page: 100 });
-            const existing = comments.data.find((comment) => comment.body && comment.body.includes(marker));
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: issueNumber, per_page: 100 });
+            const existing = comments.find((comment) => comment.body && comment.body.includes(marker));
 
             if (existing) {
               await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
@@ -88,3 +72,4 @@ jobs:
               await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber, body });
               core.info('Created preview comment.');
             }
+

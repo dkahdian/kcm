@@ -908,6 +908,86 @@
       ]
     },
     {
+      "description": "FAKE",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "fullName": "FAKE",
+      "id": "fake-2",
+      "name": "FAKE-2",
+      "properties": {
+        "queries": {
+          "CE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
       "id": "fbdd",
       "name": "FBDD",
       "fullName": "Free Binary Decision Diagram",
@@ -2395,6 +2475,7 @@
       "dnf",
       "dnnf",
       "f-nnf",
+      "fake-2",
       "fbdd",
       "ip",
       "mods",
@@ -2417,6 +2498,7 @@
           ],
           "separatingFunctions": []
         },
+        null,
         null,
         null,
         null,
@@ -2465,6 +2547,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "poly",
           "description": "CNF to NNF in polynomial time.",
@@ -2507,6 +2590,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "no-poly-quasi",
           "description": "d-DNNF to PI only quasi-polynomial.",
@@ -2519,6 +2603,7 @@
         null
       ],
       [
+        null,
         null,
         null,
         null,
@@ -2582,6 +2667,7 @@
           ],
           "separatingFunctions": []
         },
+        null,
         null,
         null,
         {
@@ -2662,6 +2748,7 @@
         },
         null,
         null,
+        null,
         {
           "status": "no-poly-unknown-quasi",
           "description": "DNNF to FBDD lacks polynomial algorithm; quasi status open.",
@@ -2704,6 +2791,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "poly",
           "description": "Flat NNF to NNF in polynomial time.",
@@ -2724,6 +2812,25 @@
         null,
         null,
         null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
         {
           "status": "poly",
           "description": "FBDD to DNNF in polynomial time.",
@@ -2732,6 +2839,7 @@
           ],
           "separatingFunctions": []
         },
+        null,
         null,
         null,
         null,
@@ -2768,6 +2876,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "poly",
           "description": "IP to NNF in polynomial time.",
@@ -2790,6 +2899,7 @@
         null
       ],
       [
+        null,
         null,
         null,
         null,
@@ -2877,6 +2987,7 @@
             }
           ]
         },
+        null,
         {
           "status": "no-poly-quasi",
           "description": "NNF to FBDD requires quasi-polynomial resources.",
@@ -2950,6 +3061,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "poly",
           "description": "OBDD to FBDD in polynomial time.",
@@ -2998,6 +3110,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "poly",
           "description": "OBDD<LT to OBDD in polynomial time.",
@@ -3026,6 +3139,7 @@
           ],
           "separatingFunctions": []
         },
+        null,
         null,
         null,
         null,
@@ -3072,6 +3186,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "poly",
           "description": "Smooth NNF to NNF in polynomial time.",
@@ -3100,6 +3215,7 @@
           ],
           "separatingFunctions": []
         },
+        null,
         null,
         null,
         null,

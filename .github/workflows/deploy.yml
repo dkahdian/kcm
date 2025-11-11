@@ -6,12 +6,13 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment: github-pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,14 +26,30 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Build
+      - name: Build site
         run: npm run build
 
-      - name: Publish to gh-pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Restore persistent PR previews
+        shell: bash
+        run: |
+          git fetch origin gh-pages
+          if git ls-tree --full-tree -d origin/gh-pages pr-preview >/dev/null 2>&1; then
+            mkdir -p build
+            git archive origin/gh-pages pr-preview | tar -x -C build
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: build
-          clean: true
-          clean-exclude: pr-preview/
-          force: false
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

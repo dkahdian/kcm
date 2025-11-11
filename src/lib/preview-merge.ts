@@ -15,6 +15,8 @@ export interface QueuedChanges {
   newReferences: string[];
   customTags: Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>;
   modifiedRelations: string[];
+  submissionId?: string;
+  supersedesSubmissionId?: string | null;
 }
 
 /**
@@ -255,7 +257,9 @@ export function loadQueuedChanges(): QueuedChanges | null {
       relationships: parsed.relationships || [],
       newReferences: parsed.newReferences || [],
       customTags: parsed.customTags || [],
-      modifiedRelations: parsed.modifiedRelations || []
+      modifiedRelations: parsed.modifiedRelations || [],
+      submissionId: typeof parsed.submissionId === 'string' ? parsed.submissionId : undefined,
+      supersedesSubmissionId: typeof parsed.supersedesSubmissionId === 'string' ? parsed.supersedesSubmissionId : null
     };
   } catch (error) {
     console.error('Failed to load queued changes:', error);

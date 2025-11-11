@@ -1,6 +1,7 @@
 <script lang="ts">
 
   import { browser } from '$app/environment';
+  import { v4 as uuidv4 } from 'uuid';
   import type { PageData } from './$types';
   import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
@@ -17,8 +18,17 @@
     convertLanguageForEdit
   } from './logic.js';
   import { generateReferenceId } from '$lib/utils/reference-id.js';
-  import type { LanguageToAdd, RelationshipEntry, CustomTag, DeferredItems, SeparatingFunctionEntry } from './types.js';
+  import type {
+    LanguageToAdd,
+    RelationshipEntry,
+    CustomTag,
+    DeferredItems,
+    SeparatingFunctionEntry,
+    SubmissionHistoryEntry,
+    ContributorInfo
+  } from './types.js';
   import { onMount } from 'svelte';
+  import { loadSubmissionHistory } from '$lib/utils/submission-history.js';
 
   type OperationResult = { success: boolean; error?: string };
 
@@ -32,18 +42,24 @@
     newReferences: string[];
     customTags: CustomTag[];
     modifiedRelations: string[];
-  }
-
-  interface ContributorInfo {
-    email: string;
-    github: string;
-    note: string;
+    submissionId?: string;
+    supersedesSubmissionId?: string | null;
   }
 
   const isString = (value: unknown): value is string => typeof value === 'string';
 
   const sanitizeStringArray = (value: unknown): string[] =>
     Array.isArray(value) ? value.filter(isString) : [];
+
+  const createSubmissionId = (): string => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return uuidv4();
+  };
+
+  const sanitizeSubmissionId = (value: unknown): string | null =>
+    typeof value === 'string' && value.trim().length > 0 ? value : null;
 
   function sanitizeOperationSupportRecord(
     value: unknown
@@ -146,6 +162,55 @@
       .filter((item): item is RelationshipEntry => item !== null);
   }
 
+  const cloneLanguageEntry = (language: LanguageToAdd): LanguageToAdd => ({
+    ...language,
+    descriptionRefs: [...language.descriptionRefs],
+    queries: Object.fromEntries(
+      Object.entries(language.queries).map(([code, support]) => [code, { ...support, refs: [...support.refs] }])
+    ),
+    transformations: Object.fromEntries(
+      Object.entries(language.transformations).map(([code, support]) => [code, { ...support, refs: [...support.refs] }])
+    ),
+    tags: language.tags.map((tag) => ({ ...tag, refs: [...tag.refs] })),
+    existingReferences: [...language.existingReferences]
+  });
+
+  const cloneRelationshipEntry = (relationship: RelationshipEntry): RelationshipEntry => ({
+    ...relationship,
+    refs: [...relationship.refs],
+    separatingFunctions: relationship.separatingFunctions
+      ? relationship.separatingFunctions.map((fn) => ({ ...fn, refs: [...fn.refs] }))
+      : undefined
+  });
+
+  const cloneCustomTag = (tag: CustomTag): CustomTag => ({ ...tag, refs: [...tag.refs] });
+
+  const formatHistoryTimestamp = (iso: string): string => {
+    try {
+      return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
+    } catch {
+      return iso;
+    }
+  };
+
+  const formatHistorySummary = (entry: SubmissionHistoryEntry): string => {
+    const segments: string[] = [];
+    if (entry.summary.languagesToAdd) {
+      segments.push(`${entry.summary.languagesToAdd} new ${entry.summary.languagesToAdd === 1 ? 'language' : 'languages'}`);
+    }
+    if (entry.summary.languagesToEdit) {
+      segments.push(`${entry.summary.languagesToEdit} edit${entry.summary.languagesToEdit === 1 ? '' : 's'}`);
+    }
+    if (entry.summary.relationships) {
+      segments.push(`${entry.summary.relationships} relation${entry.summary.relationships === 1 ? '' : 's'}`);
+    }
+    if (entry.summary.newReferences) {
+      segments.push(`${entry.summary.newReferences} reference${entry.summary.newReferences === 1 ? '' : 's'}`);
+    }
+
+    return segments.length > 0 ? segments.join(' · ') : 'No changes';
+  };
+
   let { data }: { data: PageData } = $props();
 
   const polytimeOptions = Object.values(data.polytimeOptions);
@@ -201,6 +266,12 @@
   let newReferences = $state<string[]>([]);
   let customTags = $state<CustomTag[]>([]);
 
+  // Submission metadata & history
+  let activeSubmissionId = $state('');
+  let supersedesSubmissionId = $state<string | null>(null);
+  let submissionHistory = $state<SubmissionHistoryEntry[]>([]);
+  let isHistoryOpen = $state(false);
+
   // Derived state: check if queue has any items
   const hasQueuedItems = $derived(
     languagesToAdd.length > 0 ||
@@ -210,11 +281,32 @@
     customTags.length > 0
   );
 
+  let previousHasQueuedItems = false;
+
+  $effect(() => {
+    if (!browser) return;
+
+    const currentlyQueued = hasQueuedItems;
+
+    if (currentlyQueued && !previousHasQueuedItems && !activeSubmissionId) {
+      activeSubmissionId = createSubmissionId();
+    }
+
+    if (!currentlyQueued && previousHasQueuedItems) {
+      activeSubmissionId = createSubmissionId();
+      supersedesSubmissionId = null;
+    }
+
+    previousHasQueuedItems = currentlyQueued;
+  });
+
   onMount(() => {
     if (!browser) {
       queuePersistenceReady = true;
       return;
     }
+
+    submissionHistory = loadSubmissionHistory();
 
     try {
       const stored = localStorage.getItem(QUEUE_STORAGE_KEY);
@@ -226,6 +318,8 @@
         newReferences = sanitizeStringArray(parsed?.newReferences);
         customTags = sanitizeTags(parsed?.customTags);
         modifiedRelations = new Set(sanitizeStringArray(parsed?.modifiedRelations));
+        activeSubmissionId = sanitizeSubmissionId(parsed?.submissionId) ?? '';
+        supersedesSubmissionId = sanitizeSubmissionId(parsed?.supersedesSubmissionId);
       }
 
       // Restore contributor info
@@ -240,6 +334,10 @@
       console.warn('Failed to restore queued changes from storage', error);
     } finally {
       queuePersistenceReady = true;
+    }
+
+    if (!activeSubmissionId) {
+      activeSubmissionId = createSubmissionId();
     }
   });
 
@@ -267,7 +365,12 @@
   }
 
   $effect(() => {
-  if (!queuePersistenceReady || !browser) return;
+    if (!queuePersistenceReady || !browser) return;
+
+    if (!activeSubmissionId) {
+      activeSubmissionId = createSubmissionId();
+    }
+
     const isEmptyQueue =
       languagesToAdd.length === 0 &&
       languagesToEdit.length === 0 &&
@@ -282,6 +385,7 @@
       } catch (error) {
         console.warn('Failed to clear queued changes from storage', error);
       }
+      supersedesSubmissionId = null;
       return;
     }
 
@@ -291,7 +395,9 @@
       relationships,
       newReferences,
       customTags,
-      modifiedRelations: Array.from(modifiedRelations)
+      modifiedRelations: Array.from(modifiedRelations),
+      submissionId: activeSubmissionId,
+      supersedesSubmissionId: supersedesSubmissionId ?? null
     };
     try {
       localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(snapshot));
@@ -543,6 +649,50 @@
     customTags = [...customTags];
   }
 
+  function toggleHistoryPanel() {
+    const nextOpen = !isHistoryOpen;
+    isHistoryOpen = nextOpen;
+    if (nextOpen) {
+      submissionHistory = loadSubmissionHistory();
+    }
+  }
+
+  function loadSubmissionFromHistory(entry: SubmissionHistoryEntry) {
+    const payload = entry.payload;
+
+    languagesToAdd = payload.languagesToAdd.map(cloneLanguageEntry);
+    languagesToEdit = payload.languagesToEdit.map(cloneLanguageEntry);
+    relationships = payload.relationships.map(cloneRelationshipEntry);
+    newReferences = [...payload.newReferences];
+    customTags = payload.customTags.map(cloneCustomTag);
+    modifiedRelations = new Set(payload.modifiedRelations);
+
+    contributorEmail = payload.contributor.email;
+    contributorGithub = payload.contributor.github;
+    contributorNote = payload.contributor.note;
+
+    supersedesSubmissionId = payload.submissionId;
+    activeSubmissionId = createSubmissionId();
+
+    submissionHistory = loadSubmissionHistory();
+    isHistoryOpen = false;
+
+    // Reset transient UI state
+    editReferenceIndex = null;
+    deferredItems = null;
+    editLanguageToAddIndex = null;
+    editLanguageToEditIndex = null;
+    editRelationshipIndex = null;
+    expandedLanguageToAddIndex = null;
+    expandedLanguageToEditIndex = null;
+    expandedRelationshipIndex = null;
+    expandedReferenceIndex = null;
+  }
+
+  function clearSupersedeLink() {
+    supersedesSubmissionId = null;
+  }
+
   function handleSubmit(event: Event) {
     event.preventDefault();
     
@@ -620,6 +770,77 @@
               <p class="mt-1 text-xs text-gray-500">This note will be included in the pull request description.</p>
             </div>
           </div>
+
+          <div class="flex justify-end">
+            {#if supersedesSubmissionId}
+              <div class="mr-auto mb-3 flex items-center gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 shadow-sm">
+                <span class="font-medium">Editing prior submission</span>
+                <button
+                  type="button"
+                  onclick={clearSupersedeLink}
+                  class="rounded-md border border-amber-400 px-2 py-1 text-xs font-semibold text-amber-700 transition-colors hover:bg-amber-100"
+                >
+                  Stop
+                </button>
+              </div>
+            {/if}
+            <button
+              type="button"
+              onclick={toggleHistoryPanel}
+              class="mb-3 inline-flex items-center gap-2 rounded-full border border-gray-300 px-3 py-1 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-blue-400 hover:text-blue-600"
+            >
+              <span aria-hidden="true">🗂️</span>
+              Submission history
+              <svg class={`h-3 w-3 transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+
+          {#if isHistoryOpen}
+            <div class="mb-6 rounded-lg border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-4 shadow-sm">
+              <div class="mb-3 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-gray-800">Previous submissions</h3>
+                <button
+                  type="button"
+                  onclick={toggleHistoryPanel}
+                  class="rounded-md px-2 py-1 text-xs font-medium text-gray-500 hover:bg-gray-200/70 hover:text-gray-700"
+                >
+                  Close
+                </button>
+              </div>
+              {#if submissionHistory.length === 0}
+                <p class="text-sm text-gray-500">No saved submissions yet. Submit once to keep a snapshot.</p>
+              {:else}
+                <ul class="space-y-3 max-h-64 overflow-y-auto pr-1">
+                  {#each submissionHistory as entry}
+                    {@const summary = formatHistorySummary(entry)}
+                    {@const timestamp = formatHistoryTimestamp(entry.createdAt)}
+                    <li class="rounded-md border border-gray-200 bg-white px-3 py-2 shadow-sm">
+                      <div class="flex items-start justify-between gap-3">
+                        <div class="space-y-1">
+                          <div class="text-sm font-medium text-gray-800">{timestamp}</div>
+                          <div class="text-xs text-gray-600">{summary}</div>
+                          {#if entry.supersededBySubmissionId}
+                            <div class="text-xs font-medium text-amber-600">Superseded</div>
+                          {:else if entry.payload.submissionId === supersedesSubmissionId}
+                            <div class="text-xs font-medium text-emerald-600">Currently editing clone</div>
+                          {/if}
+                        </div>
+                        <button
+                          type="button"
+                          onclick={() => loadSubmissionFromHistory(entry)}
+                          class="rounded-md border border-blue-500 px-3 py-1 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-50"
+                        >
+                          Load
+                        </button>
+                      </div>
+                    </li>
+                  {/each}
+                </ul>
+              {/if}
+            </div>
+          {/if}
 
           <!-- Queued Items Section -->
           <ContributionQueue

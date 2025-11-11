@@ -42,3 +42,35 @@ export type DeferredItems = {
   relationships: RelationshipEntry[];
   tags: CustomTag[];
 };
+
+export type ContributorInfo = {
+  email: string;
+  github: string;
+  note: string;
+};
+
+export type SubmissionHistoryPayload = {
+  submissionId: string;
+  supersedesSubmissionId?: string | null;
+  languagesToAdd: LanguageToAdd[];
+  languagesToEdit: LanguageToAdd[];
+  relationships: RelationshipEntry[];
+  newReferences: string[];
+  customTags: CustomTag[];
+  modifiedRelations: string[];
+  contributor: ContributorInfo;
+};
+
+export type SubmissionHistoryEntry = {
+  id: string;
+  createdAt: string;
+  summary: {
+    languagesToAdd: number;
+    languagesToEdit: number;
+    relationships: number;
+    newReferences: number;
+  };
+  payload: SubmissionHistoryPayload;
+  supersedesSubmissionId?: string | null;
+  supersededBySubmissionId?: string;
+};

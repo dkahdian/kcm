@@ -7,6 +7,9 @@ CONTRIBUTOR_GITHUB=$(node -p "require('./contribution.json').contributorGithub |
 CONTRIBUTOR_NOTE=$(node -p "require('./contribution.json').contributorNote || ''")
 TIMESTAMP=$(date +%s)
 
+SUBMISSION_ID=$(node -p "require('./contribution.json').submissionId || ''")
+SUPERSEDES_SUBMISSION_ID=$(node -p "require('./contribution.json').supersedesSubmissionId || ''")
+
 # Determine action and descriptive info based on what's in the payload
 LANGS_TO_ADD=$(node -p "require('./contribution.json').languagesToAdd?.length || 0")
 LANGS_TO_EDIT=$(node -p "require('./contribution.json').languagesToEdit?.length || 0")
@@ -91,6 +94,20 @@ cat > "$PR_BODY_FILE" <<EOF
 **Contributor Email:** ${CONTRIBUTOR_EMAIL}
 EOF
 
+if [[ -n "$SUBMISSION_ID" ]]; then
+  {
+    echo "Submission-ID: ${SUBMISSION_ID}"
+    echo ""
+  } >> "$PR_BODY_FILE"
+fi
+
+if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
+  {
+    echo "Supersedes-Submission-ID: ${SUPERSEDES_SUBMISSION_ID}"
+    echo ""
+  } >> "$PR_BODY_FILE"
+fi
+
 if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
   echo "**GitHub:** @${CONTRIBUTOR_GITHUB}" >> "$PR_BODY_FILE"
   echo "" >> "$PR_BODY_FILE"
@@ -150,6 +167,18 @@ gh pr create \
   }
 
 rm "$PR_BODY_FILE"
+
+NEW_PR_NUMBER=$(gh pr view "$BRANCH_NAME" --json number --jq '.number')
+
+if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
+  SUPERSEDED_PR=$(gh pr list --state open --search "\"Submission-ID: ${SUPERSEDES_SUBMISSION_ID}\" in:body" --json number --jq '.[0].number' 2>/dev/null || true)
+  if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "null" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
+    gh pr comment "$SUPERSEDED_PR" --body "This submission has been superseded by #${NEW_PR_NUMBER}."
+    gh pr close "$SUPERSEDED_PR" --comment "Superseded by #${NEW_PR_NUMBER}."
+  else
+    echo "No open PR found for Supersedes Submission ID ${SUPERSEDES_SUBMISSION_ID}" >&2
+  fi
+fi
 
 # Try to add labels if they exist, but don't fail if they don't
 for label in "${LABELS[@]}"; do

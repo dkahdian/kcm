@@ -169,7 +169,11 @@ export function buildSubmissionPayload(
   languagesToEdit: LanguageToAdd[],
   changedRelationships: RelationshipEntry[],
   newReferences: string[],
-  existingLanguageIds: string[]
+  existingLanguageIds: string[],
+  metadata: {
+    submissionId: string;
+    supersedesSubmissionId?: string | null;
+  }
 ) {
   const formattedRelationships = changedRelationships.map((rel) => ({
     sourceId: rel.sourceId,
@@ -182,7 +186,8 @@ export function buildSubmissionPayload(
   const formattedLanguagesToAdd = languagesToAdd.map(formatLanguageForSubmission);
   const formattedLanguagesToEdit = languagesToEdit.map(formatLanguageForSubmission);
 
-  return {
+  const payload: Record<string, unknown> = {
+    submissionId: metadata.submissionId,
     contributorEmail,
     contributorGithub: contributorGithub || undefined,
     contributorNote: contributorNote || undefined,
@@ -192,4 +197,10 @@ export function buildSubmissionPayload(
     newReferences,
     existingLanguageIds
   };
+
+  if (metadata.supersedesSubmissionId) {
+    payload.supersedesSubmissionId = metadata.supersedesSubmissionId;
+  }
+
+  return payload;
 }

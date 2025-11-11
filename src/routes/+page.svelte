@@ -10,12 +10,22 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
 
+  import { v4 as uuidv4 } from 'uuid';
   import { hasQueuedChanges, loadQueuedChanges, mergeQueueIntoBaseline, clearQueuedChanges, loadContributorInfo } from '$lib/preview-merge.js';
+  import { recordSubmissionHistory } from '$lib/utils/submission-history.js';
+  import type { SubmissionHistoryPayload } from './contribute/types.js';
   import { buildSubmissionPayload } from './contribute/logic.js';
 
   const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
   const FILTER_STORAGE_KEY = 'kcm_filter_state_v1';
+
+  const createSubmissionId = (): string => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return uuidv4();
+  };
 
   let selectedNode = $state<KCLanguage | null>(null);
   let selectedEdge = $state<SelectedEdge | null>(null);
@@ -85,6 +95,15 @@
         return;
       }
 
+      const submissionId = typeof queue.submissionId === 'string' && queue.submissionId.length > 0
+        ? queue.submissionId
+        : createSubmissionId();
+      const supersedesSubmissionId = typeof queue.supersedesSubmissionId === 'string' && queue.supersedesSubmissionId.length > 0
+        ? queue.supersedesSubmissionId
+        : null;
+
+      const modifiedRelationKeys: string[] = Array.isArray(queue.modifiedRelations) ? queue.modifiedRelations : [];
+
       // Build submission payload
       const submission = buildSubmissionPayload(
         contributorInfo.email,
@@ -92,9 +111,13 @@
         contributorInfo.note,
         queue.languagesToAdd,
         queue.languagesToEdit,
-        queue.relationships.filter(rel => queue.modifiedRelations.includes(`${rel.sourceId}->${rel.targetId}`)),
+        queue.relationships.filter((rel) => modifiedRelationKeys.includes(`${rel.sourceId}->${rel.targetId}`)),
         queue.newReferences,
-        initialGraphData.languages.map(l => l.id)
+        initialGraphData.languages.map(l => l.id),
+        {
+          submissionId,
+          supersedesSubmissionId
+        }
       );
 
       // Submit via GitHub API
@@ -119,6 +142,20 @@
       if (!response.ok) {
         throw new Error('Failed to submit contribution');
       }
+
+      const historyPayload: SubmissionHistoryPayload = {
+        submissionId,
+        supersedesSubmissionId,
+        languagesToAdd: queue.languagesToAdd,
+        languagesToEdit: queue.languagesToEdit,
+        relationships: queue.relationships,
+        newReferences: queue.newReferences,
+        customTags: queue.customTags,
+        modifiedRelations: modifiedRelationKeys,
+        contributor: contributorInfo
+      };
+
+      recordSubmissionHistory(historyPayload);
 
       // Success - clear queue and redirect to success page
       clearQueuedChanges();

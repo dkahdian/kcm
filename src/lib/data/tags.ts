@@ -1,9 +1,9 @@
 import type { KCTag } from '../types.js';
-import tagsData from './json/tags.json';
+import database from './database.json';
 
 export type BaseTag = Omit<KCTag, 'refs'> & { refs?: string[] };
 
-export const CANONICAL_TAGS: Record<string, BaseTag> = tagsData as Record<string, BaseTag>;
+export const CANONICAL_TAGS: Record<string, BaseTag> = database.tags as Record<string, BaseTag>;
 
 export function getTag(id: string): BaseTag | undefined {
   return CANONICAL_TAGS[id];

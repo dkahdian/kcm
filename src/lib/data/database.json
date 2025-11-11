@@ -1,0 +1,3043 @@
+{
+  "languages": [
+    {
+      "id": "bdd",
+      "name": "BDD",
+      "fullName": "Binary Decision Diagram",
+      "description": "Decision DAGs with boolean branching on variables",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decision",
+          "label": "Decision",
+          "color": "#f59e0b",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cnf",
+      "name": "CNF",
+      "fullName": "Conjunctive Normal Form",
+      "description": "Conjunction of disjunctions of literals",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "cnf",
+          "label": "CNF",
+          "color": "#ef4444",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "flatness",
+          "label": "Flatness",
+          "color": "#7c3aed",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "simple-disjunction",
+          "label": "Simple Disjunction",
+          "color": "#0ea5e9",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d-dnnf",
+      "name": "d-DNNF",
+      "fullName": "Deterministic Decomposable Negation Normal Form",
+      "description": "DNNF with determinism",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decomposability",
+          "label": "Decomposability",
+          "color": "#84cc16",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "determinism",
+          "label": "Determinism",
+          "color": "#ef4444",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d-nnf",
+      "name": "d-NNF",
+      "fullName": "Deterministic Negation Normal Form",
+      "description": "NNF with determinism: disjuncts are logically disjoint",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "determinism",
+          "label": "Determinism",
+          "color": "#ef4444",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dnf",
+      "name": "DNF",
+      "fullName": "Disjunctive Normal Form",
+      "description": "Disjunction of conjunctions of literals",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "dnf",
+          "label": "DNF",
+          "color": "#f59e0b",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "flatness",
+          "label": "Flatness",
+          "color": "#7c3aed",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "simple-conjunction",
+          "label": "Simple Conjunction",
+          "color": "#14b8a6",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dnnf",
+      "name": "DNNF",
+      "fullName": "Decomposable Negation Normal Form",
+      "description": "NNF with decomposability: conjuncts do not share variables",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decomposability",
+          "label": "Decomposability",
+          "color": "#84cc16",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f-nnf",
+      "name": "f-NNF",
+      "fullName": "Flat Negation Normal Form",
+      "description": "NNF with flatness: height at most 2",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "flatness",
+          "label": "Flatness",
+          "color": "#7c3aed",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fbdd",
+      "name": "FBDD",
+      "fullName": "Free Binary Decision Diagram",
+      "description": "BDD without a fixed variable ordering (free order)",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decision",
+          "label": "Decision",
+          "color": "#f59e0b",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip",
+      "name": "IP",
+      "fullName": "Prime Implicants",
+      "description": "Representation by the set of prime implicants",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "prime-implicants",
+          "label": "Prime Implicants",
+          "color": "#3b82f6",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "simple-conjunction",
+          "label": "Simple Conjunction",
+          "color": "#14b8a6",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mods",
+      "name": "MODS",
+      "fullName": "Models",
+      "description": "Representation by models (complete assignments)",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "models",
+          "label": "Models",
+          "color": "#eab308",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nnf",
+      "name": "NNF",
+      "fullName": "Negation Normal Form",
+      "description": "Boolean formulas where negation appears only at the literal level",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "normal-form",
+          "label": "Normal Form",
+          "color": "#6366f1",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "general",
+          "label": "General",
+          "color": "#10b981",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "obdd",
+      "name": "OBDD",
+      "fullName": "Ordered Binary Decision Diagram",
+      "description": "BDD with a fixed variable ordering",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decision",
+          "label": "Decision",
+          "color": "#f59e0b",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "ordering",
+          "label": "Ordering",
+          "color": "#22c55e",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "obdd-lt",
+      "name": "OBDD<",
+      "fullName": "Ordered Binary Decision Diagram (using order <)",
+      "description": "OBDDs under a specific ordering constraint (<)",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decision",
+          "label": "Decision",
+          "color": "#f59e0b",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "ordering",
+          "label": "Ordering",
+          "color": "#22c55e",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pi",
+      "name": "PI",
+      "fullName": "Prime Implicates",
+      "description": "Representation by the set of prime implicates",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "prime-implicates",
+          "label": "Prime Implicates",
+          "color": "#8b5cf6",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "simple-disjunction",
+          "label": "Simple Disjunction",
+          "color": "#0ea5e9",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-nnf",
+      "name": "s-NNF",
+      "fullName": "Smooth Negation Normal Form",
+      "description": "NNF with smoothness: disjuncts mention the same set of variables",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "smoothness",
+          "label": "Smoothness",
+          "color": "#06b6d4",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sd-dnnf",
+      "name": "sd-DNNF",
+      "fullName": "Smooth Deterministic Decomposable Negation Normal Form",
+      "description": "d-DNNF with smoothness",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CE": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CT": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        },
+        "transformations": {
+          "CD": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "FO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "OR_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "polytime": "not-poly-conditional",
+            "note": "Unless P=NP",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": [
+        {
+          "id": "decomposability",
+          "label": "Decomposability",
+          "color": "#84cc16",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "determinism",
+          "label": "Determinism",
+          "color": "#ef4444",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "id": "smoothness",
+          "label": "Smoothness",
+          "color": "#06b6d4",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "Darwiche_2002",
+      "bibtex": "@article{Darwiche_2002,\n   title={A Knowledge Compilation Map},\n   volume={17},\n   ISSN={1076-9757},\n   url={http://dx.doi.org/10.1613/jair.989},\n   DOI={10.1613/jair.989},\n   journal={Journal of Artificial Intelligence Research},\n   publisher={AI Access Foundation},\n   author={Darwiche, A. and Marquis, P.},\n   year={2002},\n   month=sep, pages={229–264} }"
+    }
+  ],
+  "relationTypes": [
+    {
+      "id": "poly",
+      "name": "Polynomial Transformation",
+      "label": "≤_p",
+      "description": "Polynomial-time transformation exists (A ≤_p B)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "triangle",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "no-poly-unknown-quasi",
+      "name": "No Poly, Unknown Quasi",
+      "label": "⊄_p, ?≤_q",
+      "description": "No polynomial transformation, quasi-polynomial unknown (A ⊄_p B and A ?≤_q B)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "tee",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "no-poly-quasi",
+      "name": "No Poly, Has Quasi",
+      "label": "⊄_p, ≤_q",
+      "description": "No polynomial but quasi-polynomial exists (A ⊄_p B and A ≤_q B)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "tee",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "unknown-poly-quasi",
+      "name": "Unknown Poly, Has Quasi",
+      "label": "?≤_p, ≤_q",
+      "description": "Polynomial unknown but quasi-polynomial exists (A ?≤_p B and A ≤_q B)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "triangle-cross",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "unknown-both",
+      "name": "Both Unknown",
+      "label": "?≤_p, ?≤_q",
+      "description": "Both polynomial and quasi-polynomial unknown (A ?≤_p B and A ?≤_q B)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "square",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "no-quasi",
+      "name": "No Quasi-Polynomial",
+      "label": "⊄_q",
+      "description": "No quasi-polynomial transformation exists (A ⊄_q B)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "square",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "not-poly",
+      "name": "Not Polynomial",
+      "label": "⊄_p",
+      "description": "Not polynomial (generated by \"Polytime vs not polytime\" filter)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "square",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    }
+  ],
+  "tags": {
+    "decomposability": {
+      "id": "decomposability",
+      "label": "Decomposability",
+      "color": "#84cc16",
+      "description": "Conjunctions have disjoint variable scopes"
+    },
+    "determinism": {
+      "id": "determinism",
+      "label": "Determinism",
+      "color": "#ef4444",
+      "description": "Disjunctions are mutually exclusive"
+    },
+    "smoothness": {
+      "id": "smoothness",
+      "label": "Smoothness",
+      "color": "#06b6d4",
+      "description": "All disjuncts mention the same variables"
+    },
+    "flatness": {
+      "id": "flatness",
+      "label": "Flatness",
+      "color": "#7c3aed",
+      "description": "Formula has bounded height"
+    },
+    "ordering": {
+      "id": "ordering",
+      "label": "Ordering",
+      "color": "#f97316",
+      "description": "Variables follow a fixed ordering"
+    },
+    "read-once": {
+      "id": "read-once",
+      "label": "Read-Once",
+      "color": "#ec4899",
+      "description": "Each variable appears at most once on any path"
+    },
+    "decision": {
+      "id": "decision",
+      "label": "Decision",
+      "color": "#8b5cf6",
+      "description": "Based on decision diagram structure"
+    },
+    "structured": {
+      "id": "structured",
+      "label": "Structured",
+      "color": "#10b981",
+      "description": "Decomposition follows a structured pattern"
+    }
+  },
+  "operations": {
+    "queries": {
+      "CO": {
+        "code": "CO",
+        "label": "Consistency",
+        "description": "Check if the formula is satisfiable"
+      },
+      "VA": {
+        "code": "VA",
+        "label": "Validity",
+        "description": "Check if the formula is a tautology"
+      },
+      "CE": {
+        "code": "CE",
+        "label": "Clausal Entailment",
+        "description": "Check if a clause is entailed"
+      },
+      "IM": {
+        "code": "IM",
+        "label": "Implicant",
+        "description": "Find an implicant of the formula"
+      },
+      "EQ": {
+        "code": "EQ",
+        "label": "Equivalence",
+        "description": "Check logical equivalence of two formulas"
+      },
+      "SE": {
+        "code": "SE",
+        "label": "Sentential Entailment",
+        "description": "Check if one formula entails another"
+      },
+      "CT": {
+        "code": "CT",
+        "label": "Model Counting",
+        "description": "Count the number of satisfying assignments"
+      },
+      "ME": {
+        "code": "ME",
+        "label": "Model Enumeration",
+        "description": "Enumerate all satisfying assignments"
+      }
+    },
+    "transformations": {
+      "CD": {
+        "code": "CD",
+        "label": "Conditioning",
+        "description": "Restrict formula given variable assignments"
+      },
+      "FO": {
+        "code": "FO",
+        "label": "Forgetting",
+        "description": "Existentially quantify out variables"
+      },
+      "SFO": {
+        "code": "SFO",
+        "label": "Singleton Forgetting",
+        "description": "Forget a single variable"
+      },
+      "AND_C": {
+        "code": "∧C",
+        "label": "Conjunction",
+        "description": "Compute conjunction of formulas"
+      },
+      "AND_BC": {
+        "code": "∧BC",
+        "label": "Bounded Conjunction",
+        "description": "Conjunction with bounded result size"
+      },
+      "OR_C": {
+        "code": "∨C",
+        "label": "Disjunction",
+        "description": "Compute disjunction of formulas"
+      },
+      "OR_BC": {
+        "code": "∨BC",
+        "label": "Bounded Disjunction",
+        "description": "Disjunction with bounded result size"
+      },
+      "NOT_C": {
+        "code": "¬C",
+        "label": "Negation",
+        "description": "Negate the formula"
+      }
+    }
+  },
+  "polytimeComplexities": {
+    "poly": {
+      "code": "poly",
+      "label": "Polynomial",
+      "color": "#22c55e",
+      "emoji": "🟢",
+      "description": "Operation is polynomial time"
+    },
+    "quasi": {
+      "code": "quasi",
+      "label": "Quasi-polynomial",
+      "color": "#f97316",
+      "emoji": "⚡",
+      "description": "Operation is quasi-polynomial time"
+    },
+    "exp": {
+      "code": "exp",
+      "label": "Exponential",
+      "color": "#ef4444",
+      "emoji": "❌",
+      "description": "Operation is exponential time (proven)"
+    },
+    "not-poly-conditional": {
+      "code": "not-poly-conditional",
+      "label": "Not Poly (Conditional)",
+      "color": "#f97316",
+      "emoji": "⚠️",
+      "description": "Not polynomial under complexity assumption (e.g., Unless P=NP)"
+    },
+    "unknown": {
+      "code": "unknown",
+      "label": "Unknown",
+      "color": "#9ca3af",
+      "emoji": "❔",
+      "description": "Complexity is unknown"
+    },
+    "open": {
+      "code": "open",
+      "label": "Open Problem",
+      "color": "#9ca3af",
+      "emoji": "❓",
+      "description": "Open research problem"
+    }
+  },
+  "adjacencyMatrix": {
+    "languageIds": [
+      "cnf",
+      "d-dnnf",
+      "dnnf",
+      "dnf",
+      "fbdd",
+      "nnf",
+      "obdd",
+      "obdd-lt",
+      "pi",
+      "sd-dnnf",
+      "ip",
+      "mods",
+      "f-nnf",
+      "s-nnf"
+    ],
+    "matrix": [
+      [
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "CNF to DNNF in polynomial time (placeholder).",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "CNF to DNF lacks polynomial algorithm; quasi status open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Clique",
+              "name": "Clique Detection Instances",
+              "description": "Clique encodings separate CNF from succinct DNF representations without super-polynomial blowups.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "CNF to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "d-DNNF to DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "unknown-poly-quasi",
+          "description": "d-DNNF to DNF quasi-polynomial; polynomial open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-poly-quasi",
+          "description": "d-DNNF to PI only quasi-polynomial.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "status": "no-quasi",
+          "description": "DNNF to CNF lacks quasi-polynomial compilation.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity Constraints",
+              "description": "Families of parity formulas force exponential CNF representations compared with DNNF.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            },
+            {
+              "shortName": "Tseitin",
+              "name": "Tseitin Grid Formulas",
+              "description": "Tseitin contradictions remain succinct in DNNF but require super-polynomial CNF lower bounds.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "poly",
+          "description": "DNNF to d-DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        {
+          "status": "unknown-both",
+          "description": "DNNF to DNF complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "DNNF to FBDD lacks polynomial algorithm; quasi status open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "poly",
+          "description": "DNNF to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        {
+          "status": "unknown-both",
+          "description": "DNNF to structured DNNF complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "DNF to CNF lacks polynomial algorithm; quasi status open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity Formulas",
+              "description": "Parity families require exponentially many CNF clauses when starting from compact DNF witnesses.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "no-quasi",
+          "description": "DNF to d-DNNF believed exponential.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "HWB",
+              "name": "Hidden Weighted Bit",
+              "description": "Hidden weighted bit functions resist structured DNNF compilation of DNF inputs.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "unknown-both",
+          "description": "DNF to DNNF complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "DNF to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "description": "DNF to IP believed exponential.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Knapsack",
+              "name": "Knapsack Constraints",
+              "description": "Knapsack-style pseudo-Boolean constraints separate DNF from succinct integer programming encodings.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "FBDD to DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "FBDD to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        {
+          "status": "no-poly-quasi",
+          "description": "NNF to CNF only quasi-polynomial.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Tseitin",
+              "name": "Tseitin-style Encodings",
+              "description": "Tseitin grids force super-polynomial CNF blowup from compact NNF representations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "description": "NNF to DNNF lacks quasi-polynomial compilation.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "XOR Tree",
+              "name": "XOR Tree Formulas",
+              "description": "XOR tree structures require decomposition not achievable with quasi-polynomial blowup.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "unknown-poly-quasi",
+          "description": "NNF to DNF quasi-polynomial; polynomial open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "no-poly-quasi",
+          "description": "NNF to FBDD requires quasi-polynomial resources.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "AND-tree",
+              "name": "AND-tree Structures",
+              "description": "AND-tree formulas resist FBDD representation with quasi-polynomial overhead.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "NNF to IP lacks polynomial algorithm; quasi status open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "ILP Hard",
+              "name": "Hard ILP Instances",
+              "description": "Integer programming problems with exponential NNF-to-IP overhead witness superpolynomial separation.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "unknown-poly-quasi",
+          "description": "NNF to MODS quasi-polynomial; polynomial open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "no-poly-quasi",
+          "description": "NNF to flat NNF requires quasi-polynomial resources.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Depth",
+              "name": "High-Depth Circuits",
+              "description": "High-depth formulas force quasipolynomial overhead when flattening NNF to flat NNF.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "no-poly-quasi",
+          "description": "NNF to smooth NNF requires quasi-polynomial resources.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Imbalanced NNF",
+              "name": "Imbalanced NNF Formulas",
+              "description": "Imbalanced formulas require quasi-polynomial smoothing overhead.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        }
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "OBDD to FBDD in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "OBDD to OBDD<LT in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "OBDD to PI lacks polynomial algorithm; quasi status open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Adder",
+              "name": "Binary Adder Circuits",
+              "description": "Adder circuits resist polynomial OBDD-to-PI transformation.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "OBDD<LT to OBDD in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        {
+          "status": "poly",
+          "description": "PI to d-DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "unknown-poly-quasi",
+          "description": "PI to OBDD quasi-polynomial; polynomial open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "PI to structured DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "unknown-both",
+          "description": "PI to IP complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "Structured DNNF to DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "IP to DNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "IP to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "unknown-both",
+          "description": "IP to PI complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "MODS to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "Flat NNF to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "Smooth NNF to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    ]
+  }
+}

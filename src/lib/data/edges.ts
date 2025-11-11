@@ -1,8 +1,13 @@
 import type { KCAdjacencyMatrix, DirectedSuccinctnessRelation } from '../types.js';
-import edgesData from './json/edges.json';
+import database from './database.json';
 
-const languageIds = edgesData.languageIds;
-const matrix = edgesData.matrix as (DirectedSuccinctnessRelation | null)[][];
+const adjacency = database.adjacencyMatrix as {
+  languageIds: string[];
+  matrix: (DirectedSuccinctnessRelation | null)[][];
+};
+
+const languageIds = adjacency.languageIds;
+const matrix = adjacency.matrix;
 
 const indexByLanguage: Record<string, number> = Object.fromEntries(
   languageIds.map((id, idx) => [id, idx])

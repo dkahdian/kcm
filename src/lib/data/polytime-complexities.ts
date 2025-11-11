@@ -1,7 +1,7 @@
 import type { PolytimeFlagCode, PolytimeFlag } from '../types.js';
-import complexitiesData from './json/polytime-complexities.json';
+import database from './database.json';
 
-export const POLYTIME_COMPLEXITIES: Record<PolytimeFlagCode, PolytimeFlag> = complexitiesData as Record<PolytimeFlagCode, PolytimeFlag>;
+export const POLYTIME_COMPLEXITIES: Record<PolytimeFlagCode, PolytimeFlag> = database.polytimeComplexities as Record<PolytimeFlagCode, PolytimeFlag>;
 
 export function getPolytimeFlag(code: string): PolytimeFlag {
   return POLYTIME_COMPLEXITIES[code as PolytimeFlagCode] || POLYTIME_COMPLEXITIES['open'];

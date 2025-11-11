@@ -1,11 +1,16 @@
 import type { KCOpEntry, KCOpSupportMap, KCLanguagePropertiesResolved } from '../types.js';
-import operationsData from './json/operations.json';
+import database from './database.json';
 
 export interface KCOperation {
   code: string;
   label: string;
   description?: string;
 }
+
+const operationsData = database.operations as {
+  queries: Record<string, KCOperation>;
+  transformations: Record<string, KCOperation>;
+};
 
 export const QUERIES: Record<string, KCOperation> = operationsData.queries;
 export const TRANSFORMATIONS: Record<string, KCOperation> = operationsData.transformations;

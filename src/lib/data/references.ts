@@ -1,5 +1,5 @@
 import type { KCReference } from '../types.js';
-import referencesData from './json/references.json';
+import database from './database.json';
 
 /**
  * Extract citation key from BibTeX entry
@@ -84,6 +84,8 @@ function parseBibtex(bibtex: string): { id: string; title: string; href: string 
 
 // Build reference map from JSON data
 const referencesMap: Record<string, KCReference> = {};
+
+const referencesData = database.references as Array<{ id: string; bibtex: string }>;
 
 for (const ref of referencesData) {
   const parsed = parseBibtex(ref.bibtex);

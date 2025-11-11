@@ -1,5 +1,5 @@
 import type { KCRelationType } from '../types.js';
-import relationTypesData from './json/relation-types.json';
+import database from './database.json';
 
 function getEndpointStyleForStatus(status: string | null): { arrow: any, dashed?: boolean, isDouble?: boolean } {
   if (status === null) {
@@ -26,7 +26,7 @@ function getEndpointStyleForStatus(status: string | null): { arrow: any, dashed?
   }
 }
 
-export const relationTypes: KCRelationType[] = relationTypesData as KCRelationType[];
+export const relationTypes: KCRelationType[] = database.relationTypes as KCRelationType[];
 
 export function getEdgeEndpointStyle(status: string | null): { arrow: any, dashed?: boolean, isDouble?: boolean } {
   return getEndpointStyleForStatus(status);

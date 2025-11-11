@@ -2388,33 +2388,47 @@
   },
   "adjacencyMatrix": {
     "languageIds": [
+      "bdd",
       "cnf",
       "d-dnnf",
-      "dnnf",
+      "d-nnf",
       "dnf",
+      "dnnf",
+      "f-nnf",
       "fbdd",
+      "ip",
+      "mods",
       "nnf",
       "obdd",
       "obdd-lt",
       "pi",
-      "sd-dnnf",
-      "ip",
-      "mods",
-      "f-nnf",
-      "s-nnf"
+      "s-nnf",
+      "sd-dnnf"
     ],
     "matrix": [
       [
         null,
         null,
-        {
-          "status": "poly",
-          "description": "CNF to DNNF in polynomial time (placeholder).",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
         {
           "status": "no-poly-unknown-quasi",
           "description": "CNF to DNF lacks polynomial algorithm; quasi status open.",
@@ -2432,6 +2446,17 @@
             }
           ]
         },
+        {
+          "status": "poly",
+          "description": "CNF to DNNF in polynomial time (placeholder).",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
         null,
         {
           "status": "poly",
@@ -2445,22 +2470,13 @@
         null,
         null,
         null,
-        null,
-        null,
-        null,
         null
       ],
       [
         null,
         null,
-        {
-          "status": "poly",
-          "description": "d-DNNF to DNNF in polynomial time.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
+        null,
+        null,
         {
           "status": "unknown-poly-quasi",
           "description": "d-DNNF to DNF quasi-polynomial; polynomial open.",
@@ -2469,6 +2485,17 @@
           ],
           "separatingFunctions": []
         },
+        {
+          "status": "poly",
+          "description": "d-DNNF to DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
         null,
         null,
         null,
@@ -2482,12 +2509,108 @@
           "separatingFunctions": []
         },
         null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null,
         null,
         null,
         null
       ],
       [
+        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "DNF to CNF lacks polynomial algorithm; quasi status open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity Formulas",
+              "description": "Parity families require exponentially many CNF clauses when starting from compact DNF witnesses.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        {
+          "status": "no-quasi",
+          "description": "DNF to d-DNNF believed exponential.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "HWB",
+              "name": "Hidden Weighted Bit",
+              "description": "Hidden weighted bit functions resist structured DNNF compilation of DNF inputs.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        null,
+        {
+          "status": "unknown-both",
+          "description": "DNF to DNNF complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "description": "DNF to IP believed exponential.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Knapsack",
+              "name": "Knapsack Constraints",
+              "description": "Knapsack-style pseudo-Boolean constraints separate DNF from succinct integer programming encodings.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "DNF to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
         {
           "status": "no-quasi",
           "description": "DNNF to CNF lacks quasi-polynomial compilation.",
@@ -2530,6 +2653,8 @@
           ],
           "separatingFunctions": []
         },
+        null,
+        null,
         {
           "status": "no-poly-unknown-quasi",
           "description": "DNNF to FBDD lacks polynomial algorithm; quasi status open.",
@@ -2538,6 +2663,8 @@
           ],
           "separatingFunctions": []
         },
+        null,
+        null,
         {
           "status": "poly",
           "description": "DNNF to NNF in polynomial time.",
@@ -2549,6 +2676,7 @@
         null,
         null,
         null,
+        null,
         {
           "status": "unknown-both",
           "description": "DNNF to structured DNNF complexity unknown.",
@@ -2556,60 +2684,22 @@
             "Darwiche_2002"
           ],
           "separatingFunctions": []
-        },
-        null,
-        null,
-        null,
-        null
+        }
       ],
       [
-        {
-          "status": "no-poly-unknown-quasi",
-          "description": "DNF to CNF lacks polynomial algorithm; quasi status open.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity Formulas",
-              "description": "Parity families require exponentially many CNF clauses when starting from compact DNF witnesses.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
-          ]
-        },
-        {
-          "status": "no-quasi",
-          "description": "DNF to d-DNNF believed exponential.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": [
-            {
-              "shortName": "HWB",
-              "name": "Hidden Weighted Bit",
-              "description": "Hidden weighted bit functions resist structured DNNF compilation of DNF inputs.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
-          ]
-        },
-        {
-          "status": "unknown-both",
-          "description": "DNF to DNNF complexity unknown.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null,
         null,
         {
           "status": "poly",
-          "description": "DNF to NNF in polynomial time.",
+          "description": "Flat NNF to NNF in polynomial time.",
           "refs": [
             "Darwiche_2002"
           ],
@@ -2619,28 +2709,12 @@
         null,
         null,
         null,
-        {
-          "status": "no-quasi",
-          "description": "DNF to IP believed exponential.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": [
-            {
-              "shortName": "Knapsack",
-              "name": "Knapsack Constraints",
-              "description": "Knapsack-style pseudo-Boolean constraints separate DNF from succinct integer programming encodings.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
-          ]
-        },
-        null,
-        null,
         null
       ],
       [
+        null,
+        null,
+        null,
         null,
         null,
         {
@@ -2651,6 +2725,8 @@
           ],
           "separatingFunctions": []
         },
+        null,
+        null,
         null,
         null,
         {
@@ -2665,12 +2741,74 @@
         null,
         null,
         null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "IP to DNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "IP to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "unknown-both",
+          "description": "IP to PI complexity unknown.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "MODS to NNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
         null,
         null,
         null,
         null
       ],
       [
+        null,
         {
           "status": "no-poly-quasi",
           "description": "NNF to CNF only quasi-polynomial.",
@@ -2689,6 +2827,15 @@
           ]
         },
         null,
+        null,
+        {
+          "status": "unknown-poly-quasi",
+          "description": "NNF to DNF quasi-polynomial; polynomial open.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "NNF to DNNF lacks quasi-polynomial compilation.",
@@ -2707,12 +2854,21 @@
           ]
         },
         {
-          "status": "unknown-poly-quasi",
-          "description": "NNF to DNF quasi-polynomial; polynomial open.",
+          "status": "no-poly-quasi",
+          "description": "NNF to flat NNF requires quasi-polynomial resources.",
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": []
+          "separatingFunctions": [
+            {
+              "shortName": "Depth",
+              "name": "High-Depth Circuits",
+              "description": "High-depth formulas force quasipolynomial overhead when flattening NNF to flat NNF.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
         },
         {
           "status": "no-poly-quasi",
@@ -2731,11 +2887,6 @@
             }
           ]
         },
-        null,
-        null,
-        null,
-        null,
-        null,
         {
           "status": "no-poly-unknown-quasi",
           "description": "NNF to IP lacks polynomial algorithm; quasi status open.",
@@ -2761,23 +2912,10 @@
           ],
           "separatingFunctions": []
         },
-        {
-          "status": "no-poly-quasi",
-          "description": "NNF to flat NNF requires quasi-polynomial resources.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": [
-            {
-              "shortName": "Depth",
-              "name": "High-Depth Circuits",
-              "description": "High-depth formulas force quasipolynomial overhead when flattening NNF to flat NNF.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
-          ]
-        },
+        null,
+        null,
+        null,
+        null,
         {
           "status": "no-poly-quasi",
           "description": "NNF to smooth NNF requires quasi-polynomial resources.",
@@ -2794,9 +2932,13 @@
               ]
             }
           ]
-        }
+        },
+        null
       ],
       [
+        null,
+        null,
+        null,
         null,
         null,
         null,
@@ -2809,6 +2951,8 @@
           ],
           "separatingFunctions": []
         },
+        null,
+        null,
         null,
         null,
         {
@@ -2837,12 +2981,12 @@
           ]
         },
         null,
-        null,
-        null,
-        null,
         null
       ],
       [
+        null,
+        null,
+        null,
         null,
         null,
         null,
@@ -2862,10 +3006,10 @@
         null,
         null,
         null,
-        null,
         null
       ],
       [
+        null,
         null,
         {
           "status": "poly",
@@ -2879,24 +3023,7 @@
         null,
         null,
         null,
-        {
-          "status": "unknown-poly-quasi",
-          "description": "PI to OBDD quasi-polynomial; polynomial open.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
         null,
-        null,
-        {
-          "status": "poly",
-          "description": "PI to structured DNNF in polynomial time.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
         {
           "status": "unknown-both",
           "description": "PI to IP complexity unknown.",
@@ -2907,67 +3034,25 @@
         },
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
         {
-          "status": "poly",
-          "description": "Structured DNNF to DNNF in polynomial time.",
+          "status": "unknown-poly-quasi",
+          "description": "PI to OBDD quasi-polynomial; polynomial open.",
           "refs": [
             "Darwiche_2002"
           ],
           "separatingFunctions": []
         },
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
         {
           "status": "poly",
-          "description": "IP to DNF in polynomial time.",
+          "description": "PI to structured DNNF in polynomial time.",
           "refs": [
             "Darwiche_2002"
           ],
           "separatingFunctions": []
-        },
-        null,
-        {
-          "status": "poly",
-          "description": "IP to NNF in polynomial time.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
-        null,
-        null,
-        {
-          "status": "unknown-both",
-          "description": "IP to PI complexity unknown.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
-        null,
-        null,
-        null,
-        null,
-        null
+        }
       ],
       [
         null,
@@ -2975,47 +3060,6 @@
         null,
         null,
         null,
-        {
-          "status": "poly",
-          "description": "MODS to NNF in polynomial time.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        {
-          "status": "poly",
-          "description": "Flat NNF to NNF in polynomial time.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -3029,6 +3073,28 @@
           ],
           "separatingFunctions": []
         },
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "Structured DNNF to DNNF in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
         null,
         null,
         null,

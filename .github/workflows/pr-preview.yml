@@ -47,19 +47,24 @@ jobs:
         if: steps.preview.outputs.deployment-action == 'deploy'
         uses: actions/github-script@v7
         env:
-          PREVIEW_URL: ${{ steps.preview.outputs['preview-url'] }}
+          PREVIEW_PATH: ${{ steps.preview.outputs['preview-url-path'] }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const marker = '<!-- preview-link -->';
-            const url = process.env.PREVIEW_URL;
-            if (!url) {
-              core.info('Preview URL missing; skip comment update.');
+            const previewPath = process.env.PREVIEW_PATH;
+            if (!previewPath) {
+              core.info('Preview path missing; skip comment update.');
               return;
             }
 
-            const body = `${marker}\nPreview available: ${url}`;
-            const { owner, repo } = context.repo;
+              const repoOwner = context.repo.owner;
+              const repoName = context.repo.repo;
+            const normalizedPath = previewPath.endsWith('/') ? previewPath : `${previewPath}/`;
+              const url = `https://rawcdn.githack.com/${repoOwner}/${repoName}/gh-pages/${normalizedPath}index.html`;
+
+            const body = `${marker}\n🚀 Preview available: ${url}`;
+              const { owner, repo } = context.repo;
             const issueNumber = context.issue.number;
 
             const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: issueNumber, per_page: 100 });

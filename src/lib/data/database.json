@@ -1934,25 +1934,20 @@
       ],
       "properties": {
         "queries": {
-          "CO": {
-            "polytime": "poly",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
-          "VA": {
-            "polytime": "poly",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
           "CE": {
             "polytime": "poly",
             "refs": [
               "Darwiche_2002"
             ]
           },
-          "IM": {
+          "CO": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002",
+              "Bryant_2025"
+            ]
+          },
+          "CT": {
             "polytime": "poly",
             "refs": [
               "Darwiche_2002"
@@ -1964,13 +1959,7 @@
               "Darwiche_2002"
             ]
           },
-          "SE": {
-            "polytime": "exp",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
-          "CT": {
+          "IM": {
             "polytime": "poly",
             "refs": [
               "Darwiche_2002"
@@ -1981,9 +1970,34 @@
             "refs": [
               "Darwiche_2002"
             ]
+          },
+          "SE": {
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
           }
         },
         "transformations": {
+          "AND_BC": {
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "AND_C": {
+            "note": "Unless P=NP",
+            "polytime": "not-poly-conditional",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
           "CD": {
             "polytime": "poly",
             "refs": [
@@ -1996,28 +2010,9 @@
               "Darwiche_2002"
             ]
           },
-          "SFO": {
-            "polytime": "poly",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
-          "AND_C": {
-            "polytime": "not-poly-conditional",
+          "NOT_C": {
             "note": "Unless P=NP",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
-          "AND_BC": {
-            "polytime": "poly",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          },
-          "OR_C": {
             "polytime": "not-poly-conditional",
-            "note": "Unless P=NP",
             "refs": [
               "Darwiche_2002"
             ]
@@ -2028,9 +2023,15 @@
               "Darwiche_2002"
             ]
           },
-          "NOT_C": {
-            "polytime": "not-poly-conditional",
+          "OR_C": {
             "note": "Unless P=NP",
+            "polytime": "not-poly-conditional",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "polytime": "poly",
             "refs": [
               "Darwiche_2002"
             ]
@@ -2039,25 +2040,25 @@
       },
       "tags": [
         {
+          "color": "#84cc16",
           "id": "decomposability",
           "label": "Decomposability",
-          "color": "#84cc16",
           "refs": [
             "Darwiche_2002"
           ]
         },
         {
+          "color": "#ef4444",
           "id": "determinism",
           "label": "Determinism",
-          "color": "#ef4444",
           "refs": [
             "Darwiche_2002"
           ]
         },
         {
+          "color": "#06b6d4",
           "id": "smoothness",
           "label": "Smoothness",
-          "color": "#06b6d4",
           "refs": [
             "Darwiche_2002"
           ]
@@ -2066,6 +2067,10 @@
     }
   ],
   "references": [
+    {
+      "id": "Bryant_2025",
+      "bibtex": "@misc{bryant2025certifiedknowledgecompilationapplication,\n      title={Certified Knowledge Compilation with Application to Formally Verified Model Counting}, \n      author={Randal E. Bryant and Wojciech Nawrocki and Jeremy Avigad and Marijn J. H. Heule},\n      year={2025},\n      eprint={2501.12906},\n      archivePrefix={arXiv},\n      primaryClass={cs.LO},\n      url={https://arxiv.org/abs/2501.12906}, \n}"
+    },
     {
       "id": "Darwiche_2002",
       "bibtex": "@article{Darwiche_2002,\n   title={A Knowledge Compilation Map},\n   volume={17},\n   ISSN={1076-9757},\n   url={http://dx.doi.org/10.1613/jair.989},\n   DOI={10.1613/jair.989},\n   journal={Journal of Artificial Intelligence Research},\n   publisher={AI Access Foundation},\n   author={Darwiche, A. and Marquis, P.},\n   year={2002},\n   month=sep, pages={229–264} }"
@@ -2696,7 +2701,14 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "unknown-both",
+          "description": "",
+          "refs": [
+            "Bryant_2025"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,

@@ -2,18 +2,18 @@
   "languageIds": [
     "cnf",
     "d-dnnf",
-    "dnnf",
     "dnf",
+    "dnnf",
+    "f-nnf",
     "fbdd",
+    "ip",
+    "mods",
     "nnf",
     "obdd",
     "obdd-lt",
     "pi",
-    "sd-dnnf",
-    "ip",
-    "mods",
-    "f-nnf",
-    "s-nnf"
+    "s-nnf",
+    "sd-dnnf"
   ],
   "matrix": [
     [
@@ -28,21 +28,12 @@
         "separatingFunctions": []
       },
       {
-        "status": "no-poly-unknown-quasi",
-        "description": "CNF to DNF lacks polynomial algorithm; quasi status open.",
+        "status": "poly",
+        "description": "",
         "refs": [
           "Darwiche_2002"
         ],
-        "separatingFunctions": [
-          {
-            "shortName": "Clique",
-            "name": "Clique Detection Instances",
-            "description": "Clique encodings separate CNF from succinct DNF representations without super-polynomial blowups.",
-            "refs": [
-              "Darwiche_2002"
-            ]
-          }
-        ]
+        "separatingFunctions": []
       },
       null,
       {

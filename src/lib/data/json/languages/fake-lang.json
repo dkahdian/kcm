@@ -1,0 +1,115 @@
+{
+  "description": "FAKE LANGUAGE FOR TESTING",
+  "descriptionRefs": [
+    "Darwiche_2002"
+  ],
+  "fullName": "FAKE",
+  "id": "fake-lang",
+  "name": "FAKE-LANG",
+  "properties": {
+    "queries": {
+      "CE": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CO": {
+        "note": "",
+        "polytime": "poly",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      },
+      "CT": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "EQ": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "IM": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "ME": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "SE": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "VA": {
+        "note": "",
+        "polytime": "poly",
+        "refs": [
+          "Darwiche_2002"
+        ]
+      }
+    },
+    "transformations": {
+      "AND_BC": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "AND_C": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "CD": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "FO": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "NOT_C": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "OR_BC": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "OR_C": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      },
+      "SFO": {
+        "note": "",
+        "polytime": "unknown",
+        "refs": []
+      }
+    }
+  },
+  "tags": [
+    {
+      "color": "#f59e0b",
+      "description": "",
+      "id": "decision",
+      "label": "Decision",
+      "refs": []
+    },
+    {
+      "color": "#ef4444",
+      "description": "",
+      "id": "cnf",
+      "label": "CNF",
+      "refs": []
+    }
+  ]
+}

@@ -69,6 +69,28 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
     relationTypes: baseline.relationTypes
   };
 
+  const ensureLanguageInMatrix = (id: string) => {
+    if (id in merged.adjacencyMatrix.indexByLanguage) {
+      return;
+    }
+
+    const newIndex = merged.adjacencyMatrix.languageIds.length;
+    merged.adjacencyMatrix.languageIds.push(id);
+    merged.adjacencyMatrix.indexByLanguage[id] = newIndex;
+
+    for (const row of merged.adjacencyMatrix.matrix) {
+      row.push(null);
+    }
+
+    const newRow = new Array(merged.adjacencyMatrix.languageIds.length).fill(null);
+    merged.adjacencyMatrix.matrix.push(newRow);
+  };
+
+  // Ensure all baseline languages are represented in the adjacency matrix
+  for (const language of merged.languages) {
+    ensureLanguageInMatrix(language.id);
+  }
+
   // Step 1: Process new references with meaningful IDs
   const allReferences: KCReference[] = [...baseline.languages.flatMap(l => l.references)];
   const existingRefIds = new Set(allReferences.map(r => r.id));
@@ -125,19 +147,7 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
     );
     
     merged.languages.push(kcLang);
-    
-    // Expand adjacency matrix
-    const newIndex = merged.adjacencyMatrix.languageIds.length;
-    merged.adjacencyMatrix.languageIds.push(langToAdd.id);
-    merged.adjacencyMatrix.indexByLanguage[langToAdd.id] = newIndex;
-    
-    // Add new row
-    merged.adjacencyMatrix.matrix.push(new Array(newIndex + 1).fill(null));
-    
-    // Add new column to all rows
-    for (let i = 0; i < merged.adjacencyMatrix.matrix.length - 1; i++) {
-      merged.adjacencyMatrix.matrix[i].push(null);
-    }
+    ensureLanguageInMatrix(langToAdd.id);
   }
 
   // Step 3: Edit existing languages
@@ -182,7 +192,10 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
   const modifiedSet = new Set(queue.modifiedRelations);
   
   for (const rel of queue.relationships) {
-    const relationKey = `${rel.sourceId}->${rel.targetId}`;
+  ensureLanguageInMatrix(rel.sourceId);
+  ensureLanguageInMatrix(rel.targetId);
+
+  const relationKey = `${rel.sourceId}->${rel.targetId}`;
     if (!modifiedSet.has(relationKey)) continue; // Skip unmodified relationships
     
     const sourceIdx = merged.adjacencyMatrix.indexByLanguage[rel.sourceId];

@@ -195,13 +195,18 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
   ensureLanguageInMatrix(rel.sourceId);
   ensureLanguageInMatrix(rel.targetId);
 
-  const relationKey = `${rel.sourceId}->${rel.targetId}`;
-    if (!modifiedSet.has(relationKey)) continue; // Skip unmodified relationships
-    
     const sourceIdx = merged.adjacencyMatrix.indexByLanguage[rel.sourceId];
     const targetIdx = merged.adjacencyMatrix.indexByLanguage[rel.targetId];
     
     if (sourceIdx === undefined || targetIdx === undefined) continue;
+
+    const relationKey = `${rel.sourceId}->${rel.targetId}`;
+    if (modifiedSet.size > 0 && !modifiedSet.has(relationKey)) {
+      const existing = merged.adjacencyMatrix.matrix[sourceIdx]?.[targetIdx];
+      if (existing) {
+        continue; // unchanged relationship already present
+      }
+    }
     
     // Resolve reference IDs
     const resolvedRefs = rel.refs.map(resolveRefId);

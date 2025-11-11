@@ -68,6 +68,8 @@
 
   let graphContainer: HTMLDivElement;
   let cy: cytoscape.Core;
+  let showResetButton = $state(false);
+  let defaultPositions = new Map<string, NodePosition>();
 
   interface EdgePair {
     id: string;
@@ -187,6 +189,37 @@
     return nodeToGroup;
   }
 
+  function checkIfPositionsModified(): boolean {
+    if (!browser) return false;
+    const stored = loadStoredNodePositions();
+    if (Object.keys(stored).length === 0) return false;
+    
+    // Check if any stored position differs from default
+    for (const [nodeId, storedPos] of Object.entries(stored)) {
+      const defaultPos = defaultPositions.get(nodeId);
+      if (!defaultPos) continue;
+      
+      // Consider positions different if they vary by more than 1 pixel (to account for floating point)
+      if (Math.abs(storedPos.x - defaultPos.x) > 1 || Math.abs(storedPos.y - defaultPos.y) > 1) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  function resetGraphPositions() {
+    if (!browser) return;
+    localStorage.removeItem(NODE_POSITIONS_STORAGE_KEY);
+    showResetButton = false;
+    
+    // Recreate the graph with default positions
+    if (cy) {
+      cy.destroy();
+      createGraph();
+    }
+  }
+
   // Function to create/update graph
   function createGraph() {
     if (!graphContainer) return;
@@ -199,6 +232,9 @@
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
 
     const storedPositions = loadStoredNodePositions();
+    
+    // Clear default positions map for this rebuild
+    defaultPositions.clear();
 
     const BASE_NODE_WIDTH = 80;
     const BASE_NODE_HEIGHT = 80;
@@ -363,6 +399,10 @@
           x: startX + idx * spacing,
           y: centerPos.y
         };
+        
+        // Store default position
+        defaultPositions.set(lang.id, defaultPosition);
+        
         const storedPosition = storedPositions[lang.id];
         elements.push({
           data: {
@@ -513,6 +553,8 @@
       persistNodePositions(cy.nodes());
       cy.on('free', 'node', () => {
         persistNodePositions(cy.nodes());
+        // Check if we should show reset button after user moves a node
+        showResetButton = checkIfPositionsModified();
       });
     }
 
@@ -642,6 +684,10 @@
       graphContainer.style.cursor = 'default';
     });
 
+    // Check if we should show reset button after building/rebuilding the graph
+    if (browser) {
+      showResetButton = checkIfPositionsModified();
+    }
   }
 
   onMount(() => {
@@ -670,6 +716,17 @@
     <div class="axis-line"></div>
     <div class="axis-label axis-label-bottom">More succinct</div>
   </div>
+  
+  {#if showResetButton}
+    <button 
+      class="reset-positions-btn"
+      onclick={resetGraphPositions}
+      type="button"
+      title="Reset node positions to default layout"
+    >
+      Reset Layout
+    </button>
+  {/if}
 </div>
 
 <style>
@@ -723,5 +780,33 @@
 
   .axis-label-bottom {
     margin-top: 6px;
+  }
+
+  .reset-positions-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .reset-positions-btn:hover {
+    background-color: #2563eb;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .reset-positions-btn:active {
+    background-color: #1d4ed8;
+    transform: translateY(0);
   }
 </style>

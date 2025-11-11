@@ -90,7 +90,7 @@ const referencesData = database.references as Array<{ id: string; bibtex: string
 for (const ref of referencesData) {
   const parsed = parseBibtex(ref.bibtex);
   referencesMap[ref.id] = {
-    id: parsed.id,
+    id: ref.id,
     title: parsed.title,
     href: parsed.href,
     bibtex: ref.bibtex

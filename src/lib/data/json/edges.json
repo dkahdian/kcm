@@ -2,30 +2,39 @@
   "languageIds": [
     "cnf",
     "d-dnnf",
-    "dnnf",
     "dnf",
+    "dnnf",
+    "f-nnf",
     "fbdd",
+    "ip",
+    "mods",
     "nnf",
     "obdd",
     "obdd-lt",
     "pi",
-    "sd-dnnf",
-    "ip",
-    "mods",
-    "f-nnf",
-    "s-nnf"
+    "s-nnf",
+    "sd-dnnf"
   ],
   "matrix": [
     [
       null,
       null,
       {
-        "status": "poly",
-        "description": "CNF to DNNF in polynomial time (placeholder).",
+        "status": "no-poly-quasi",
+        "description": "",
         "refs": [
           "Darwiche_2002"
         ],
-        "separatingFunctions": []
+        "separatingFunctions": [
+          {
+            "description": "Clique encodings separate CNF from succinct DNF representations without super-polynomial blowups.",
+            "name": "Clique Detection Instances",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "shortName": "Clique"
+          }
+        ]
       },
       {
         "status": "no-poly-unknown-quasi",

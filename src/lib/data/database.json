@@ -1,9 +1,146 @@
 {
-  "languages": [],
+  "languages": [
+    {
+      "description": "Ordered Binary Decision Diagram with respect to a fixed variable order",
+      "descriptionRefs": [
+        "Bryant_1986"
+      ],
+      "fullName": "Ordered Binary Decision Diagram (wrt a fixed variable order)",
+      "id": "obdd",
+      "name": "OBDD_<",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CO": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "CT": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "IM": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "ME": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "SE": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "VA": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "CD": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "FO": {
+            "note": "",
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Bryant_1986"
+            ]
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "exp",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ]
+          }
+        }
+      },
+      "tags": []
+    }
+  ],
   "references": [
+    {
+      "id": "Bryant_1986",
+      "bibtex": "@article{bryant1986graph,\n  title={Graph-based algorithms for boolean function manipulation},\n  author={Bryant, Randal E},\n  journal={Computers, IEEE Transactions on},\n  volume={100},\n  number={8},\n  pages={677--691},\n  year={1986},\n  publisher={IEEE}\n}"
+    },
     {
       "id": "Darwiche_2002",
       "bibtex": "@article{Darwiche_2002,\n   title={A Knowledge Compilation Map},\n   volume={17},\n   ISSN={1076-9757},\n   url={http://dx.doi.org/10.1613/jair.989},\n   DOI={10.1613/jair.989},\n   journal={Journal of Artificial Intelligence Research},\n   publisher={AI Access Foundation},\n   author={Darwiche, A. and Marquis, P.},\n   year={2002},\n   month=sep, pages={229–264} }"
+    },
+    {
+      "id": "Darwiche_2002_a",
+      "bibtex": "@article{darwiche2002knowledge,\n  title={A knowledge compilation map},\n  author={Darwiche, Adnan and Marquis, Pierre},\n  journal={Journal of Artificial Intelligence Research},\n  volume={17},\n  pages={229--264},\n  year={2002}\n}"
     }
   ],
   "relationTypes": [
@@ -322,7 +459,13 @@
     }
   },
   "adjacencyMatrix": {
-    "languageIds": [],
-    "matrix": []
+    "languageIds": [
+      "obdd"
+    ],
+    "matrix": [
+      [
+        null
+      ]
+    ]
   }
 }

@@ -1,6 +1,1368 @@
 {
   "languages": [
     {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "anf",
+      "name": "ANF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "bdd",
+      "name": "BDD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "cnf",
+      "name": "CNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "csdd",
+      "name": "cSDD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "d-dnnf",
+      "name": "d-DNNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "d-sdnnf",
+      "name": "d-SDNNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "d-sdnnft",
+      "name": "d-SDNNF_T",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "dnf",
+      "name": "DNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "dnnf",
+      "name": "DNNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "fbbd",
+      "name": "FBBD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "ip",
+      "name": "IP",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "mods",
+      "name": "MODS",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "nfbbd",
+      "name": "nFBBD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "nnf",
+      "name": "NNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "nobbd",
+      "name": "nOBBD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
       "description": "Ordered Binary Decision Diagram with respect to a fixed variable order",
       "descriptionRefs": [
         "Bryant_1986"
@@ -123,6 +1485,648 @@
             "refs": [
               "Darwiche_2002"
             ]
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "pi",
+      "name": "PI",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "sdd",
+      "name": "SDD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "sddt",
+      "name": "SDD_T",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "sdnnf",
+      "name": "SDNNF",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "sdnnft",
+      "name": "SDNNF_T",
+      "properties": {
+        "queries": {
+          "CE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "ufbdd",
+      "name": "uFBDD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "id": "uobbd",
+      "name": "uOBBD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
           }
         }
       },
@@ -460,10 +2464,604 @@
   },
   "adjacencyMatrix": {
     "languageIds": [
-      "obdd"
+      "anf",
+      "bdd",
+      "cnf",
+      "csdd",
+      "d-dnnf",
+      "d-sdnnf",
+      "d-sdnnft",
+      "dnf",
+      "dnnf",
+      "fbbd",
+      "ip",
+      "mods",
+      "nfbbd",
+      "nnf",
+      "nobbd",
+      "obdd",
+      "pi",
+      "sdd",
+      "sddt",
+      "sdnnf",
+      "sdnnft",
+      "ufbdd",
+      "uobbd"
     ],
     "matrix": [
       [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null
       ]
     ]

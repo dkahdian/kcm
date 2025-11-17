@@ -1348,6 +1348,192 @@
       "tags": []
     },
     {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "name": "nOBBD<",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "name": "OBBD",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
       "description": "Ordered Binary Decision Diagram with respect to a fixed variable order",
       "descriptionRefs": [
         "Bryant_1986"
@@ -2108,6 +2294,99 @@
         }
       },
       "tags": []
+    },
+    {
+      "description": "-",
+      "descriptionRefs": [],
+      "fullName": "-",
+      "name": "uOBBD<",
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "AND_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "AND_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "NOT_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "OR_C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
     }
   ],
   "references": [
@@ -2448,6 +2727,8 @@
       "nFBBD",
       "NNF",
       "nOBBD",
+      "nOBBD<",
+      "OBBD",
       "OBDD_<",
       "PI",
       "SDD",
@@ -2455,7 +2736,8 @@
       "SDNNF",
       "SDNNF_T",
       "uFBDD",
-      "uOBBD"
+      "uOBBD",
+      "uOBBD<"
     ],
     "matrix": [
       [
@@ -2481,28 +2763,6 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null,
         null,
@@ -2512,28 +2772,6 @@
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2581,28 +2819,6 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null,
         null,
@@ -2612,28 +2828,6 @@
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2681,28 +2875,6 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null,
         null,
@@ -2712,28 +2884,6 @@
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2781,28 +2931,6 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null,
         null,
@@ -2812,28 +2940,6 @@
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2881,28 +2987,6 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null,
         null,
@@ -2912,28 +2996,6 @@
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2981,6 +3043,37 @@
         null,
         null,
         null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null
       ],
       [
@@ -3006,9 +3099,351 @@
         null,
         null,
         null,
+        null,
+        null,
+        null,
         null
       ],
       [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
         null,
         null,
         null,

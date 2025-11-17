@@ -4,7 +4,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "anf",
       "name": "ANF",
       "properties": {
         "queries": {
@@ -98,7 +97,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "bdd",
       "name": "BDD",
       "properties": {
         "queries": {
@@ -176,7 +174,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "cnf",
       "name": "CNF",
       "properties": {
         "queries": {
@@ -270,7 +267,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "csdd",
       "name": "cSDD",
       "properties": {
         "queries": {
@@ -364,7 +360,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "d-dnnf",
       "name": "d-DNNF",
       "properties": {
         "queries": {
@@ -458,7 +453,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "d-sdnnf",
       "name": "d-SDNNF",
       "properties": {
         "queries": {
@@ -552,7 +546,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "d-sdnnft",
       "name": "d-SDNNF_T",
       "properties": {
         "queries": {
@@ -646,7 +639,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "dnf",
       "name": "DNF",
       "properties": {
         "queries": {
@@ -740,7 +732,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "dnnf",
       "name": "DNNF",
       "properties": {
         "queries": {
@@ -818,7 +809,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "fbbd",
       "name": "FBBD",
       "properties": {
         "queries": {
@@ -912,7 +902,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "ip",
       "name": "IP",
       "properties": {
         "queries": {
@@ -1006,7 +995,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "mods",
       "name": "MODS",
       "properties": {
         "queries": {
@@ -1100,7 +1088,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "nfbbd",
       "name": "nFBBD",
       "properties": {
         "queries": {
@@ -1194,7 +1181,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "nnf",
       "name": "NNF",
       "properties": {
         "queries": {
@@ -1272,7 +1258,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "nobbd",
       "name": "nOBBD",
       "properties": {
         "queries": {
@@ -1368,7 +1353,6 @@
         "Bryant_1986"
       ],
       "fullName": "Ordered Binary Decision Diagram (wrt a fixed variable order)",
-      "id": "obdd",
       "name": "OBDD_<",
       "properties": {
         "queries": {
@@ -1494,7 +1478,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "pi",
       "name": "PI",
       "properties": {
         "queries": {
@@ -1588,7 +1571,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "sdd",
       "name": "SDD",
       "properties": {
         "queries": {
@@ -1682,7 +1664,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "sddt",
       "name": "SDD_T",
       "properties": {
         "queries": {
@@ -1776,7 +1757,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "sdnnf",
       "name": "SDNNF",
       "properties": {
         "queries": {
@@ -1870,7 +1850,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "sdnnft",
       "name": "SDNNF_T",
       "properties": {
         "queries": {
@@ -1948,7 +1927,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "ufbdd",
       "name": "uFBDD",
       "properties": {
         "queries": {
@@ -2042,7 +2020,6 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "id": "uobbd",
       "name": "uOBBD",
       "properties": {
         "queries": {
@@ -2284,49 +2261,41 @@
   ],
   "tags": {
     "decomposability": {
-      "id": "decomposability",
       "label": "Decomposability",
       "color": "#84cc16",
       "description": "Conjunctions have disjoint variable scopes"
     },
     "determinism": {
-      "id": "determinism",
       "label": "Determinism",
       "color": "#ef4444",
       "description": "Disjunctions are mutually exclusive"
     },
     "smoothness": {
-      "id": "smoothness",
       "label": "Smoothness",
       "color": "#06b6d4",
       "description": "All disjuncts mention the same variables"
     },
     "flatness": {
-      "id": "flatness",
       "label": "Flatness",
       "color": "#7c3aed",
       "description": "Formula has bounded height"
     },
     "ordering": {
-      "id": "ordering",
       "label": "Ordering",
       "color": "#f97316",
       "description": "Variables follow a fixed ordering"
     },
     "read-once": {
-      "id": "read-once",
       "label": "Read-Once",
       "color": "#ec4899",
       "description": "Each variable appears at most once on any path"
     },
     "decision": {
-      "id": "decision",
       "label": "Decision",
       "color": "#8b5cf6",
       "description": "Based on decision diagram structure"
     },
     "structured": {
-      "id": "structured",
       "label": "Structured",
       "color": "#10b981",
       "description": "Decomposition follows a structured pattern"
@@ -2464,29 +2433,29 @@
   },
   "adjacencyMatrix": {
     "languageIds": [
-      "anf",
-      "bdd",
-      "cnf",
-      "csdd",
-      "d-dnnf",
-      "d-sdnnf",
-      "d-sdnnft",
-      "dnf",
-      "dnnf",
-      "fbbd",
-      "ip",
-      "mods",
-      "nfbbd",
-      "nnf",
-      "nobbd",
-      "obdd",
-      "pi",
-      "sdd",
-      "sddt",
-      "sdnnf",
-      "sdnnft",
-      "ufbdd",
-      "uobbd"
+      "ANF",
+      "BDD",
+      "CNF",
+      "cSDD",
+      "d-DNNF",
+      "d-SDNNF",
+      "d-SDNNF_T",
+      "DNF",
+      "DNNF",
+      "FBBD",
+      "IP",
+      "MODS",
+      "nFBBD",
+      "NNF",
+      "nOBBD",
+      "OBDD_<",
+      "PI",
+      "SDD",
+      "SDD_T",
+      "SDNNF",
+      "SDNNF_T",
+      "uFBDD",
+      "uOBBD"
     ],
     "matrix": [
       [

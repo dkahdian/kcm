@@ -87,9 +87,8 @@
     for (const item of value) {
       if (!item || typeof item !== 'object') continue;
       const raw = item as Record<string, any>;
-      if (!isString(raw.id) || !isString(raw.label)) continue;
+      if (!isString(raw.label)) continue;
       results.push({
-        id: raw.id,
         label: raw.label,
         color: isString(raw.color) ? raw.color : '#6366f1',
         description: isString(raw.description) ? raw.description : undefined,
@@ -105,11 +104,10 @@
       .map((entry) => {
         if (!entry || typeof entry !== 'object') return null;
         const raw = entry as Record<string, any>;
-        if (!isString(raw.id) || !isString(raw.name) || !isString(raw.fullName) || !isString(raw.description)) {
+        if (!isString(raw.name) || !isString(raw.fullName) || !isString(raw.description)) {
           return null;
         }
         return {
-          id: raw.id,
           name: raw.name,
           fullName: raw.fullName,
           description: raw.description,
@@ -430,7 +428,7 @@
   }
 
   function handleEditLanguage(language: LanguageToAdd): OperationResult {
-    const index = languagesToEdit.findIndex(l => l.id === language.id);
+    const index = languagesToEdit.findIndex(l => l.name === language.name);
     if (index >= 0) {
       languagesToEdit[index] = language;
       languagesToEdit = [...languagesToEdit];
@@ -575,21 +573,21 @@
     recordModification(relationship);
   }
 
-  function handleAddTag(tag: { id: string; label: string; color: string; description?: string; refs: string[] }) {
+  function handleAddTag(tag: { label: string; color: string; description?: string; refs: string[] }) {
     customTags = [...customTags, tag];
   }
 
   // Cascade delete: when a language is deleted, remove its relationships
-  function deleteLanguage(langId: string, isNew: boolean) {
+  function deleteLanguage(langName: string, isNew: boolean) {
     if (isNew) {
-      languagesToAdd = languagesToAdd.filter(l => l.id !== langId);
+      languagesToAdd = languagesToAdd.filter(l => l.name !== langName);
     } else {
-      languagesToEdit = languagesToEdit.filter(l => l.id !== langId);
+      languagesToEdit = languagesToEdit.filter(l => l.name !== langName);
     }
     
     // Remove any relationships involving this language
     const remaining = relationships.filter(rel => 
-      rel.sourceId !== langId && rel.targetId !== langId
+      rel.sourceId !== langName && rel.targetId !== langName
     );
     relationships = remaining;
 
@@ -597,7 +595,7 @@
       if (current.size === 0) return current;
       const updated = new Set(current);
       for (const key of Array.from(updated)) {
-        if (key.startsWith(`${langId}->`) || key.endsWith(`->${langId}`)) {
+        if (key.startsWith(`${langName}->`) || key.endsWith(`->${langName}`)) {
           updated.delete(key);
         }
       }
@@ -908,7 +906,7 @@
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
-  existingTags={[...data.existingTags, ...customTags].map(t => ({ id: t.id, label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
+  existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
   availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
 />
 
@@ -921,11 +919,11 @@
   }}
   onAdd={editLanguageToEditIndex !== null ? handleUpdateLanguageToEdit : handleEditLanguage}
   isEdit={true}
-  initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex] : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.id === selectedLanguageToEdit)!) : undefined)}
+  initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex] : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.name === selectedLanguageToEdit)!) : undefined)}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
-  existingTags={[...data.existingTags, ...customTags].map(t => ({ id: t.id, label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
+  existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
   availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
 />
 
@@ -953,7 +951,7 @@
         >
           <option value="">Choose a language...</option>
           {#each data.languages as lang}
-            <option value={lang.id}>{lang.name} ({lang.id})</option>
+            <option value={lang.name}>{lang.name}</option>
           {/each}
         </select>
         

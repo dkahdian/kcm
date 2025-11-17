@@ -36,7 +36,6 @@ export function cloneOperationSupport(
  */
 export function formatLanguageForSubmission(lang: any) {
   return {
-    id: lang.id,
     name: lang.name,
     fullName: lang.fullName,
     description: lang.description,
@@ -111,13 +110,13 @@ export function getAvailableReferenceIds(
  * Get available languages (existing + new + edited)
  */
 export function getAvailableLanguages(
-  existingLanguages: Array<{ id: string; name: string }>,
+  existingLanguages: Array<{ name: string }>,
   languagesToAdd: LanguageToAdd[],
   languagesToEdit: LanguageToAdd[]
-): Array<{ id: string; name: string }> {
-  const existing = existingLanguages.map((l) => ({ id: l.id, name: l.name }));
-  const newLangs = languagesToAdd.map((l) => ({ id: l.id, name: l.name }));
-  const editedLangs = languagesToEdit.map((l) => ({ id: l.id, name: l.name }));
+): Array<{ name: string }> {
+  const existing = existingLanguages.map((l) => ({ name: l.name }));
+  const newLangs = languagesToAdd.map((l) => ({ name: l.name }));
+  const editedLangs = languagesToEdit.map((l) => ({ name: l.name }));
   return [...existing, ...newLangs, ...editedLangs];
 }
 
@@ -126,7 +125,6 @@ export function getAvailableLanguages(
  */
 export function convertLanguageForEdit(lang: any): LanguageToAdd {
   return {
-    id: lang.id,
     name: lang.name,
     fullName: lang.fullName || '',
     description: lang.description || '',

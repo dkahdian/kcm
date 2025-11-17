@@ -13,7 +13,7 @@ export interface QueuedChanges {
   languagesToEdit: LanguageToAdd[];
   relationships: RelationshipEntry[];
   newReferences: string[];
-  customTags: Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>;
+  customTags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   modifiedRelations: string[];
   submissionId?: string;
   supersedesSubmissionId?: string | null;
@@ -42,7 +42,6 @@ function convertToKCLanguage(lang: LanguageToAdd, existingReferences: KCReferenc
   }
 
   return {
-    id: lang.id,
     name: lang.name,
     fullName: lang.fullName,
     description: lang.description,
@@ -71,14 +70,14 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
     relationTypes: baseline.relationTypes
   };
 
-  const ensureLanguageInMatrix = (id: string) => {
-    if (id in merged.adjacencyMatrix.indexByLanguage) {
+  const ensureLanguageInMatrix = (name: string) => {
+    if (name in merged.adjacencyMatrix.indexByLanguage) {
       return;
     }
 
     const newIndex = merged.adjacencyMatrix.languageIds.length;
-    merged.adjacencyMatrix.languageIds.push(id);
-    merged.adjacencyMatrix.indexByLanguage[id] = newIndex;
+    merged.adjacencyMatrix.languageIds.push(name);
+    merged.adjacencyMatrix.indexByLanguage[name] = newIndex;
 
     for (const row of merged.adjacencyMatrix.matrix) {
       row.push(null);
@@ -90,7 +89,7 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
 
   // Ensure all baseline languages are represented in the adjacency matrix
   for (const language of merged.languages) {
-    ensureLanguageInMatrix(language.id);
+    ensureLanguageInMatrix(language.name);
   }
 
   // Step 1: Process new references with meaningful IDs
@@ -149,12 +148,12 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
     );
     
     merged.languages.push(kcLang);
-    ensureLanguageInMatrix(langToAdd.id);
+    ensureLanguageInMatrix(langToAdd.name);
   }
 
   // Step 3: Edit existing languages
   for (const langToEdit of queue.languagesToEdit) {
-    const index = merged.languages.findIndex(l => l.id === langToEdit.id);
+    const index = merged.languages.findIndex(l => l.name === langToEdit.name);
     if (index < 0) continue;
     
     // Resolve reference IDs

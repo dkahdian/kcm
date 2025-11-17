@@ -44,7 +44,7 @@ export function createOperationVisualizer(
  */
 export function generateLanguageSelectionFilters(graphData: GraphData): LanguageFilter[] {
   return graphData.languages.map(lang => ({
-    id: `select-${lang.id}`,
+    id: `select-${lang.name}`,
     name: lang.name,
     description: `Show ${lang.fullName}`,
     category: 'Show Languages',
@@ -53,7 +53,7 @@ export function generateLanguageSelectionFilters(graphData: GraphData): Language
     lambda: (language: KCLanguage, param: boolean) => {
       // If param is true, pass the language through if it matches
       // If param is false, filter out (hide) the language if it matches
-      if (language.id === lang.id) {
+      if (language.name === lang.name) {
         return param ? language : null;
       }
       return language;

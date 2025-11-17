@@ -113,7 +113,7 @@
         queue.languagesToEdit,
         queue.relationships.filter((rel) => modifiedRelationKeys.includes(`${rel.sourceId}->${rel.targetId}`)),
         queue.newReferences,
-        initialGraphData.languages.map(l => l.id),
+        initialGraphData.languages.map(l => l.name),
         {
           submissionId,
           supersedesSubmissionId
@@ -190,7 +190,7 @@
   // Reset selected node if it's no longer visible after filtering
   $effect(() => {
     if (selectedNode) {
-      const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.id);
+      const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.name);
       if (!isVisible) {
         selectedNode = null;
       }

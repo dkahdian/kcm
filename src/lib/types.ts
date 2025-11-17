@@ -95,7 +95,6 @@ export interface KCLanguagePropertiesResolved {
 }
 
 export interface KCTag {
-  id: string;
   label: string;
   color?: string; // CSS color for badge
   description?: string;
@@ -111,14 +110,13 @@ export interface KCReference {
 }
 
 export interface KCLanguage {
-  id: string;
   name: string;
   fullName: string;
   description: string;
   /** reference IDs for the main description */
   descriptionRefs: string[];
   properties: KCLanguageProperties;
-  /** ids of languages that are strict subsets of this one */
+  /** names of languages that are strict subsets of this one */
   subsets?: string[];
   /** badges/tags for quick categorization */
   tags?: KCTag[];
@@ -266,8 +264,8 @@ export interface SelectedEdge {
 }
 
 export interface KCAdjacencyMatrix {
-  languageIds: string[];
-  indexByLanguage: Record<string, number>;
+  languageIds: string[]; // Now contains language names (unique identifiers)
+  indexByLanguage: Record<string, number>; // Maps language name to matrix index
   matrix: (DirectedSuccinctnessRelation | null)[][];
 }
 

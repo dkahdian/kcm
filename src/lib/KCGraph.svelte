@@ -149,7 +149,7 @@
    * Returns a map from each node to its group representative.
    */
   function buildSameLayerGroups(edges: EdgePair[], languages: KCLanguage[]): Map<string, string> {
-    const languageIds = new Set(languages.map(l => l.id));
+    const languageIds = new Set(languages.map(l => l.name));
     const parent = new Map<string, string>();
     
     const findRoot = (node: string): string => {
@@ -169,7 +169,7 @@
     
     // Initialize
     for (const lang of languages) {
-      parent.set(lang.id, lang.id);
+      parent.set(lang.name, lang.name);
     }
     
     // Union nodes with bidirectional poly edges
@@ -183,7 +183,7 @@
     // Return map: nodeId -> groupRepresentative
     const nodeToGroup = new Map<string, string>();
     for (const lang of languages) {
-      nodeToGroup.set(lang.id, findRoot(lang.id));
+      nodeToGroup.set(lang.name, findRoot(lang.name));
     }
     
     return nodeToGroup;
@@ -229,7 +229,7 @@
     const visibleLanguageIds = isFilteredData ? graphData.visibleLanguageIds : null;
     
     const visibleLanguages = graphData.languages
-      .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
+      .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.name));
 
     const storedPositions = loadStoredNodePositions();
     
@@ -248,11 +248,11 @@
     // Get unique groups and their members
     const groupToMembers = new Map<string, string[]>();
     for (const lang of visibleLanguages) {
-      const group = nodeToGroup.get(lang.id)!;
+      const group = nodeToGroup.get(lang.name)!;
       if (!groupToMembers.has(group)) {
         groupToMembers.set(group, []);
       }
-      groupToMembers.get(group)!.push(lang.id);
+      groupToMembers.get(group)!.push(lang.name);
     }
     
     const groups = Array.from(groupToMembers.keys());
@@ -260,7 +260,7 @@
     // Create representative nodes for dagre layout (one per group)
     const representativeElements: cytoscape.ElementDefinition[] = groups.map(groupId => {
       const members = groupToMembers.get(groupId)!;
-      const firstMember = visibleLanguages.find(l => l.id === members[0])!;
+      const firstMember = visibleLanguages.find(l => l.name === members[0])!;
       
       return {
         data: {
@@ -394,19 +394,19 @@
       const startX = centerPos.x - (members.length - 1) * spacing / 2;
       
       members.forEach((nodeId, idx) => {
-        const lang = visibleLanguages.find(l => l.id === nodeId)!;
+        const lang = visibleLanguages.find(l => l.name === nodeId)!;
         const defaultPosition = {
           x: startX + idx * spacing,
           y: centerPos.y
         };
         
         // Store default position
-        defaultPositions.set(lang.id, defaultPosition);
+        defaultPositions.set(lang.name, defaultPosition);
         
-        const storedPosition = storedPositions[lang.id];
+        const storedPosition = storedPositions[lang.name];
         elements.push({
           data: {
-            id: lang.id,
+            id: lang.name,
             label: lang.name,
             fullName: lang.fullName,
             description: lang.description,
@@ -561,7 +561,7 @@
     cy.on('tap', 'node', (evt) => {
       const node = evt.target;
       const id = node.id();
-      const language = graphData.languages.find((l) => l.id === id);
+      const language = graphData.languages.find((l) => l.name === id);
       if (language) {
         // Deselect edge if selecting a node
         selectedEdge = null;
@@ -583,8 +583,8 @@
     cy.on('tap', 'edge', (evt) => {
       const edge = evt.target;
       const edgeData = edge.data();
-      const sourceNode = graphData.languages.find(l => l.id === edgeData.source);
-      const targetNode = graphData.languages.find(l => l.id === edgeData.target);
+      const sourceNode = graphData.languages.find(l => l.name === edgeData.source);
+      const targetNode = graphData.languages.find(l => l.name === edgeData.target);
       
       if (sourceNode && targetNode) {
         // Deselect node if selecting an edge

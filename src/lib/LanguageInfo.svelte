@@ -48,7 +48,7 @@
   const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
     const lookup = new Map<string, KCLanguage>();
     for (const language of graphData.languages) {
-      lookup.set(language.id, language);
+      lookup.set(language.name, language);
     }
     return lookup;
   });
@@ -79,13 +79,13 @@
 
   const languageRelationships = $derived.by<RelationshipStatement[]>(() => {
     if (!selectedLanguage) return [];
-    const { id } = selectedLanguage;
+    const { name } = selectedLanguage;
     const { adjacencyMatrix } = graphData;
 
     const statements: RelationshipStatement[] = [];
     const forwardStatuses = new Map<string, TransformationStatus>();
 
-    const sourceIndex = adjacencyMatrix.indexByLanguage[id];
+    const sourceIndex = adjacencyMatrix.indexByLanguage[name];
     if (sourceIndex === undefined) return statements;
 
     const { languageIds, matrix } = adjacencyMatrix;
@@ -96,7 +96,7 @@
 
       const target = languageIds[targetIndex];
       forwardStatuses.set(target, relation.status);
-      const desc = getStatusDescription(relation.status, id, target);
+      const desc = getStatusDescription(relation.status, name, target);
       statements.push({
         target,
         linkText: desc.linkText,
@@ -117,7 +117,7 @@
         continue;
       }
 
-      const desc = getStatusDescription(relation.status, source, id);
+      const desc = getStatusDescription(relation.status, source, name);
       statements.push({
         target: source,
         linkText: desc.linkText,
@@ -166,7 +166,7 @@
   function selectEdge(targetId: string) {
     if (!selectedLanguage || !onEdgeSelect) return;
     
-    const sourceId = selectedLanguage.id;
+    const sourceId = selectedLanguage.name;
     const nodeA = sourceId < targetId ? sourceId : targetId;
     const nodeB = sourceId < targetId ? targetId : sourceId;
     
@@ -180,8 +180,8 @@
       ? graphData.adjacencyMatrix.matrix[targetIndex]?.[sourceIndex] ?? null
       : null;
     
-    const sourceLang = graphData.languages.find(l => l.id === nodeA);
-    const targetLang = graphData.languages.find(l => l.id === nodeB);
+    const sourceLang = graphData.languages.find(l => l.name === nodeA);
+    const targetLang = graphData.languages.find(l => l.name === nodeB);
     
     if (sourceLang && targetLang) {
       onEdgeSelect({

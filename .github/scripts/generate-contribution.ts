@@ -9,7 +9,7 @@ const rootDir = path.resolve(__dirname, '../..');
 const dataDir = path.join(rootDir, 'src/lib/data');
 const databasePath = path.join(dataDir, 'database.json');
 
-type RawLanguage = Record<string, any> & { id: string };
+type RawLanguage = Record<string, any> & { name: string };
 type DirectedRelation = {
   status: string;
   description?: string;
@@ -44,7 +44,7 @@ try {
   // ============================================================================
   
   const existingLanguageMap = new Map<string, RawLanguage>(
-    database.languages.map((lang) => [lang.id, lang])
+    database.languages.map((lang) => [lang.name, lang])
   );
 
   const sanitizeLanguagePayload = (raw: any): RawLanguage => {
@@ -56,14 +56,14 @@ try {
     console.log(`\nAdding ${contribution.languagesToAdd.length} new language(s)...`);
 
     for (const lang of contribution.languagesToAdd) {
-      console.log(`  - Adding language: ${lang.id}`);
-      if (existingLanguageMap.has(lang.id)) {
-        throw new Error(`Language already exists: ${lang.id}`);
+      console.log(`  - Adding language: ${lang.name}`);
+      if (existingLanguageMap.has(lang.name)) {
+        throw new Error(`Language already exists: ${lang.name}`);
       }
 
       const sanitized = sanitizeLanguagePayload(lang);
       database.languages.push(sanitized);
-      existingLanguageMap.set(sanitized.id, sanitized);
+      existingLanguageMap.set(sanitized.name, sanitized);
     }
   }
   
@@ -75,18 +75,18 @@ try {
     console.log(`\nEditing ${contribution.languagesToEdit.length} language(s)...`);
     
     for (const langUpdate of contribution.languagesToEdit) {
-      console.log(`  - Updating language: ${langUpdate.id}`);
-      const existing = existingLanguageMap.get(langUpdate.id);
+      console.log(`  - Updating language: ${langUpdate.name}`);
+      const existing = existingLanguageMap.get(langUpdate.name);
       if (!existing) {
-        throw new Error(`Language not found: ${langUpdate.id}`);
+        throw new Error(`Language not found: ${langUpdate.name}`);
       }
 
       const sanitized = sanitizeLanguagePayload(langUpdate);
       const merged = { ...existing, ...sanitized } as RawLanguage;
 
-      existingLanguageMap.set(langUpdate.id, merged);
+      existingLanguageMap.set(langUpdate.name, merged);
 
-      const index = database.languages.findIndex((lang) => lang.id === langUpdate.id);
+      const index = database.languages.findIndex((lang) => lang.name === langUpdate.name);
       if (index !== -1) {
         database.languages[index] = merged;
       }
@@ -121,15 +121,15 @@ try {
   if (contribution.relationships && contribution.relationships.length > 0) {
     console.log(`\nUpdating ${contribution.relationships.length} relationship(s)...`);
 
-    const newlyAddedIds = (contribution.languagesToAdd || []).map((lang: any) => lang.id);
-    const allKnownIds = new Set(existingLanguageMap.keys());
-    newlyAddedIds.forEach((id) => allKnownIds.add(id));
+    const newlyAddedNames = (contribution.languagesToAdd || []).map((lang: any) => lang.name);
+    const allKnownNames = new Set(existingLanguageMap.keys());
+    newlyAddedNames.forEach((name) => allKnownNames.add(name));
 
     for (const rel of contribution.relationships) {
-      if (!allKnownIds.has(rel.sourceId)) {
+      if (!allKnownNames.has(rel.sourceId)) {
         throw new Error(`Unknown source language in relationship: ${rel.sourceId}`);
       }
-      if (!allKnownIds.has(rel.targetId)) {
+      if (!allKnownNames.has(rel.targetId)) {
         throw new Error(`Unknown target language in relationship: ${rel.targetId}`);
       }
 
@@ -183,10 +183,10 @@ try {
     console.log('Prepared reference updates');
   }
 
-  // Sort languages for deterministic ordering
-  database.languages.sort((a, b) => a.id.localeCompare(b.id));
+  // Sort languages for deterministic ordering (by name)
+  database.languages.sort((a, b) => a.name.localeCompare(b.name));
 
-  const orderedLanguageIds = database.languages.map((lang) => lang.id);
+  const orderedLanguageIds = database.languages.map((lang) => lang.name);
 
   // Ensure any languages mentioned in relations are included
   for (const key of relationMap.keys()) {

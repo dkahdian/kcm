@@ -2,21 +2,20 @@
   import type { PolytimeFlagCode } from '$lib/types.js';
 
   type Language = {
-    id: string;
     name: string;
     fullName: string;
     description: string;
     descriptionRefs: string[];
     queries: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
     transformations: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
-    tags: Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>;
+    tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
     existingReferences: string[];
   };
 
   type Query = { code: string; name: string };
   type Transformation = { code: string; name: string };
   type PolytimeOption = { value: PolytimeFlagCode; label: string; description: string };
-  type Tag = { id: string; label: string; color: string; description?: string; refs: string[] };
+  type Tag = { label: string; color: string; description?: string; refs: string[] };
 
   type OperationResult = {
     success: boolean;
@@ -51,7 +50,6 @@
     initialData
   }: Props = $props();
 
-  let id = $state('');
   let name = $state('');
   let fullName = $state('');
   let description = $state('');
@@ -62,22 +60,9 @@
   let selectedExistingRefs = $state<string[]>([]);
   let errorMessage = $state<string | null>(null);
 
-  // Auto-generate ID from name
-  $effect(() => {
-    if (!isEdit && name) {
-      // Convert name to lowercase, remove special chars, replace spaces with hyphens
-      id = name.toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
-    }
-  });
-
   // Initialize from initial data if editing
   $effect(() => {
     if (isEdit && initialData) {
-      id = initialData.id;
       name = initialData.name;
       fullName = initialData.fullName;
       description = initialData.description;
@@ -91,7 +76,6 @@
   });
 
   function resetForm() {
-    id = '';
     name = '';
     fullName = '';
     description = '';
@@ -106,14 +90,13 @@
   }
 
   async function handleSubmit() {
-    if (!id.trim() || !name.trim() || !fullName.trim() || !description.trim()) {
+    if (!name.trim() || !fullName.trim() || !description.trim()) {
       errorMessage = 'Please fill out all required fields.';
       return;
     }
 
     try {
       const result = await onAdd({
-        id: id.trim(),
         name: name.trim(),
         fullName: fullName.trim(),
         description: description.trim(),
@@ -164,8 +147,8 @@
   }
 
   function toggleTag(tag: Tag) {
-    if (selectedTags.some(t => t.id === tag.id)) {
-      selectedTags = selectedTags.filter(t => t.id !== tag.id);
+    if (selectedTags.some(t => t.label === tag.label)) {
+      selectedTags = selectedTags.filter(t => t.label !== tag.label);
     } else {
       selectedTags = [...selectedTags, tag];
     }
@@ -290,9 +273,6 @@
                 placeholder="e.g., 'OBDD', 'd-DNNF'"
                 class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
               />
-              {#if id && !isEdit}
-                <p class="text-xs text-gray-500 mt-1">ID will be: <code class="bg-gray-100 px-1 rounded">{id}</code></p>
-              {/if}
             </div>
 
             <div>
@@ -462,11 +442,11 @@
                   type="button"
                   onclick={() => toggleTag(tag)}
                   class={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                    selectedTags.some(t => t.id === tag.id)
+                    selectedTags.some(t => t.label === tag.label)
                       ? 'ring-2 ring-offset-2'
                       : 'opacity-60 hover:opacity-100'
                   }`}
-                  style="background-color: {tag.color}; color: white; {selectedTags.some(t => t.id === tag.id) ? `ring-color: ${tag.color};` : ''}"
+                  style="background-color: {tag.color}; color: white; {selectedTags.some(t => t.label === tag.label) ? `ring-color: ${tag.color};` : ''}"
                 >
                   {tag.label}
                 </button>
@@ -487,7 +467,7 @@
           <button
             type="button"
             onclick={handleSubmit}
-            disabled={!id.trim() || !name.trim() || !fullName.trim() || !description.trim()}
+            disabled={!name.trim() || !fullName.trim() || !description.trim()}
             class="px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
           >
             {isEdit ? 'Update' : 'Add'} Language

@@ -20,7 +20,7 @@
       return graphData as FilteredGraphData;
     }
     // Convert GraphData to FilteredGraphData by adding all nodes/edges as visible
-    const allLanguageIds = new Set(graphData.languages.map(l => l.id));
+    const allLanguageIds = new Set(graphData.languages.map(l => l.name));
     const allEdgeIds = new Set<string>();
     const { matrix, languageIds } = graphData.adjacencyMatrix;
     for (let i = 0; i < languageIds.length; i++) {

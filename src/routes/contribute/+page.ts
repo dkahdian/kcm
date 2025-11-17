@@ -6,7 +6,7 @@ import { adjacencyMatrixData } from '$lib/data/edges.js';
 import { relationTypes } from '$lib/data/relation-types.js';
 
 export const load: PageLoad = () => {
-  const existingLanguageIds = allLanguages.map((lang) => lang.id);
+  const existingLanguageIds = allLanguages.map((lang) => lang.name);
 
   const referenceLookup = new Map<string, string>();
   for (const language of allLanguages) {
@@ -23,12 +23,12 @@ export const load: PageLoad = () => {
     title
   }));
 
-  const tagLookup = new Map<string, { id: string; label: string; color?: string }>();
+  const tagLookup = new Map<string, { label: string; color?: string }>();
   for (const language of allLanguages) {
     if (!language.tags) continue;
     for (const tag of language.tags) {
-      if (!tagLookup.has(tag.id)) {
-        tagLookup.set(tag.id, { id: tag.id, label: tag.label, color: tag.color });
+      if (!tagLookup.has(tag.label)) {
+        tagLookup.set(tag.label, { label: tag.label, color: tag.color });
       }
     }
   }

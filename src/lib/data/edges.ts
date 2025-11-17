@@ -10,11 +10,11 @@ const languageIds = adjacency.languageIds;
 const matrix = adjacency.matrix;
 
 const indexByLanguage: Record<string, number> = Object.fromEntries(
-  languageIds.map((id, idx) => [id, idx])
+  languageIds.map((name, idx) => [name, idx])
 );
 
-export function indexForLanguage(id: string): number | undefined {
-  return indexByLanguage[id];
+export function indexForLanguage(name: string): number | undefined {
+  return indexByLanguage[name];
 }
 
 export function languageForIndex(index: number): string | undefined {

@@ -16,19 +16,17 @@ export type RelationshipEntry = {
 };
 
 export type LanguageToAdd = {
-  id: string;
   name: string;
   fullName: string;
   description: string;
   descriptionRefs: string[];
   queries: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
   transformations: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
-  tags: Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>;
+  tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   existingReferences: string[];
 };
 
 export type CustomTag = {
-  id: string;
   label: string;
   color: string;
   description?: string;

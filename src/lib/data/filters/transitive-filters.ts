@@ -34,7 +34,7 @@ export const omitTransitiveEdges: LanguageFilter<boolean> = {
   controlType: 'checkbox',
   lambda: (language: KCLanguage, param: boolean) => {
     const matrix = adjacencyMatrixData;
-    const nodeIndex = matrix.indexByLanguage[language.id];
+    const nodeIndex = matrix.indexByLanguage[language.name];
     if (nodeIndex === undefined) return language;
 
     const row = matrix.matrix[nodeIndex];

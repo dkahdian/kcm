@@ -28,29 +28,17 @@ export function isPlaceholderReference(id: string): boolean {
   return PLACEHOLDER_REF_REGEX.test(id);
 }
 
-export function validateLanguageId(id: string): ValidationError | null {
-  if (!id || id.trim().length === 0) {
-    return { field: 'languageData.id', message: 'Language ID is required' };
+export function validateLanguageName(name: string): ValidationError | null {
+  if (!name || name.trim().length === 0) {
+    return { field: 'languageData.name', message: 'Language name is required' };
   }
 
-  if (!/^[a-z0-9-]+$/.test(id)) {
+  // Names can contain any characters except escape chars like \", \', \\
+  // But we still want to prevent some problematic patterns
+  if (name.includes('\\"') || name.includes("\\'") || name.includes('\\\\')) {
     return {
-      field: 'languageData.id',
-      message: 'Language ID must contain only lowercase letters, numbers, and hyphens'
-    };
-  }
-
-  if (id.startsWith('-') || id.endsWith('-')) {
-    return {
-      field: 'languageData.id',
-      message: 'Language ID cannot start or end with a hyphen'
-    };
-  }
-
-  if (id.includes('--')) {
-    return {
-      field: 'languageData.id',
-      message: 'Language ID cannot contain consecutive hyphens'
+      field: 'languageData.name',
+      message: 'Language name cannot contain escape characters'
     };
   }
 
@@ -174,16 +162,12 @@ function validateTags(tags: TagInput[]): ValidationError[] {
     const tag = tags[i];
     const prefix = `languageData.tags[${i}]`;
 
-    if (!tag.id || !tag.id.trim()) {
-      errors.push({ field: `${prefix}.id`, message: 'Tag ID is required' });
-    } else if (seenIds.has(tag.id)) {
-      errors.push({ field: `${prefix}.id`, message: 'Duplicate tag ID' });
-    } else {
-      seenIds.add(tag.id);
-    }
-
     if (!tag.label || !tag.label.trim()) {
       errors.push({ field: `${prefix}.label`, message: 'Tag label is required' });
+    } else if (seenIds.has(tag.label)) {
+      errors.push({ field: `${prefix}.label`, message: 'Duplicate tag label' });
+    } else {
+      seenIds.add(tag.label);
     }
 
     if (!Array.isArray(tag.refs)) {
@@ -325,16 +309,16 @@ export function validateContribution(submission: ContributionSubmission): Valida
   submission.languagesToAdd.forEach((language, index) => {
     const prefix = `languagesToAdd[${index}]`;
 
-    const idError = validateLanguageId(language.id);
-    if (idError) {
-      errors.push({ ...idError, field: `${prefix}.id` });
-    } else if (submission.existingLanguageIds.includes(language.id)) {
-      errors.push({ field: `${prefix}.id`, message: 'Language ID already exists' });
-    } else if (addedLanguageIds.has(language.id)) {
-      errors.push({ field: `${prefix}.id`, message: 'Duplicate language ID in this submission' });
+    const nameError = validateLanguageName(language.name);
+    if (nameError) {
+      errors.push({ ...nameError, field: `${prefix}.name` });
+    } else if (submission.existingLanguageIds.includes(language.name)) {
+      errors.push({ field: `${prefix}.name`, message: 'Language name already exists' });
+    } else if (addedLanguageIds.has(language.name)) {
+      errors.push({ field: `${prefix}.name`, message: 'Duplicate language name in this submission' });
     } else {
-      addedLanguageIds.add(language.id);
-      validLanguageIds.add(language.id);
+      addedLanguageIds.add(language.name);
+      validLanguageIds.add(language.name);
     }
 
     if (!language.name || !language.name.trim()) {
@@ -378,11 +362,11 @@ export function validateContribution(submission: ContributionSubmission): Valida
   submission.languagesToEdit.forEach((language, index) => {
     const prefix = `languagesToEdit[${index}]`;
 
-    const idError = validateLanguageId(language.id);
-    if (idError) {
-      errors.push({ ...idError, field: `${prefix}.id` });
-    } else if (!submission.existingLanguageIds.includes(language.id)) {
-      errors.push({ field: `${prefix}.id`, message: 'Cannot edit non-existent language' });
+    const nameError = validateLanguageName(language.name);
+    if (nameError) {
+      errors.push({ ...nameError, field: `${prefix}.name` });
+    } else if (!submission.existingLanguageIds.includes(language.name)) {
+      errors.push({ field: `${prefix}.name`, message: 'Cannot edit non-existent language' });
     }
 
     if (!language.name || !language.name.trim()) {

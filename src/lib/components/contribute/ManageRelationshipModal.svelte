@@ -2,7 +2,6 @@
   import type { TransformationStatus } from '$lib/types.js';
 
   type Language = {
-    id: string;
     name: string;
   };
 
@@ -166,7 +165,7 @@
             >
               <option value="">Select source...</option>
               {#each languages as lang}
-                <option value={lang.id}>{lang.name} ({lang.id})</option>
+                <option value={lang.name}>{lang.name}</option>
               {/each}
             </select>
           </div>
@@ -182,7 +181,7 @@
             >
               <option value="">Select target...</option>
               {#each languages as lang}
-                <option value={lang.id} disabled={lang.id === sourceId}>{lang.name} ({lang.id})</option>
+                <option value={lang.name} disabled={lang.name === sourceId}>{lang.name}</option>
               {/each}
             </select>
           </div>

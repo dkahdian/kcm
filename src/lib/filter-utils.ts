@@ -44,7 +44,7 @@ export function applyFiltersWithParams(
     }
   }
 
-  const visibleLanguageIds = new Set(transformedLanguages.map(l => l.id));
+  const visibleLanguageIds = new Set(transformedLanguages.map(l => l.name));
 
   // Step 2 & 3: Filter edges
   // First, build a new adjacency matrix with only visible nodes

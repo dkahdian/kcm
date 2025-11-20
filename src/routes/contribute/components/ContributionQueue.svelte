@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { LanguageToAdd, RelationshipEntry } from '../types.js';
+  import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionToAdd } from '../types.js';
   import { relationKey } from '../logic.js';
   import LanguageQueueItem from './LanguageQueueItem.svelte';
   import ReferenceQueueItem from './ReferenceQueueItem.svelte';
+  import SeparatingFunctionQueueItem from './SeparatingFunctionQueueItem.svelte';
   import RelationshipQueueItem from './RelationshipQueueItem.svelte';
 
   /**
@@ -12,15 +13,18 @@
     languagesToAdd,
     languagesToEdit,
     newReferences,
+    newSeparatingFunctions,
     relationships,
     modifiedRelations,
     expandedLanguageToAddIndex,
     expandedLanguageToEditIndex,
     expandedReferenceIndex,
+    expandedSeparatingFunctionIndex,
     expandedRelationshipIndex,
     onToggleExpandLanguageToAdd,
     onToggleExpandLanguageToEdit,
     onToggleExpandReference,
+    onToggleExpandSeparatingFunction,
     onToggleExpandRelationship,
     onEditLanguageToAdd,
     onEditLanguageToEdit,
@@ -28,21 +32,26 @@
     onDeleteLanguageToEdit,
     onEditReference,
     onDeleteReference,
+    onEditSeparatingFunction,
+    onDeleteSeparatingFunction,
     onEditRelationship,
     onDeleteRelationship
   }: {
     languagesToAdd: LanguageToAdd[];
     languagesToEdit: LanguageToAdd[];
     newReferences: string[];
+    newSeparatingFunctions: SeparatingFunctionToAdd[];
     relationships: RelationshipEntry[];
     modifiedRelations: Set<string>;
     expandedLanguageToAddIndex: number | null;
     expandedLanguageToEditIndex: number | null;
     expandedReferenceIndex: number | null;
+    expandedSeparatingFunctionIndex: number | null;
     expandedRelationshipIndex: number | null;
     onToggleExpandLanguageToAdd: (index: number) => void;
     onToggleExpandLanguageToEdit: (index: number) => void;
     onToggleExpandReference: (index: number) => void;
+    onToggleExpandSeparatingFunction: (index: number) => void;
     onToggleExpandRelationship: (index: number) => void;
     onEditLanguageToAdd: (index: number) => void;
     onEditLanguageToEdit: (index: number) => void;
@@ -50,6 +59,8 @@
     onDeleteLanguageToEdit: (index: number) => void;
     onEditReference: (index: number) => void;
     onDeleteReference: (index: number) => void;
+    onEditSeparatingFunction: (index: number) => void;
+    onDeleteSeparatingFunction: (index: number) => void;
     onEditRelationship: (index: number) => void;
     onDeleteRelationship: (index: number, key: string) => void;
   } = $props();
@@ -58,6 +69,7 @@
     languagesToAdd.length > 0 ||
     languagesToEdit.length > 0 ||
     newReferences.length > 0 ||
+    newSeparatingFunctions.length > 0 ||
     relationships.filter((rel) => modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))).length > 0
   );
 </script>
@@ -76,6 +88,18 @@
         onToggleExpand={onToggleExpandReference}
         onEdit={onEditReference}
         onDelete={onDeleteReference}
+      />
+    {/each}
+
+    <!-- Separating Functions -->
+    {#each newSeparatingFunctions as sf, index}
+      <SeparatingFunctionQueueItem
+        separatingFunction={sf}
+        {index}
+        isExpanded={expandedSeparatingFunctionIndex === index}
+        onToggleExpand={onToggleExpandSeparatingFunction}
+        onEdit={onEditSeparatingFunction}
+        onDelete={onDeleteSeparatingFunction}
       />
     {/each}
 

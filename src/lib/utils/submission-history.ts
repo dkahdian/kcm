@@ -77,6 +77,12 @@ function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
       ? cloneTags(value.filter((item): item is CustomTag => !!item && typeof item === 'object') as CustomTag[])
       : [];
 
+  const asSeparatingFunctionArray = (value: unknown) =>
+    isArray(value)
+      ? value.filter((item): item is { shortName: string; name: string; description: string; refs: string[] } => 
+          !!item && typeof item === 'object' && 'shortName' in item)
+      : [];
+
   const payload: SubmissionHistoryPayload = {
     submissionId,
     supersedesSubmissionId,
@@ -84,6 +90,7 @@ function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
     languagesToEdit: asLanguageArray(payloadRaw.languagesToEdit),
     relationships: asRelationshipArray(payloadRaw.relationships),
     newReferences: asStringArray(payloadRaw.newReferences),
+    newSeparatingFunctions: asSeparatingFunctionArray(payloadRaw.newSeparatingFunctions),
     customTags: asTagArray(payloadRaw.customTags),
     modifiedRelations: asStringArray(payloadRaw.modifiedRelations),
     contributor

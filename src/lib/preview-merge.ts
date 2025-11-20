@@ -4,8 +4,8 @@
  * Merges baseline graph data with queued contribution changes for preview
  */
 
-import type { GraphData, KCLanguage, KCReference, KCAdjacencyMatrix, DirectedSuccinctnessRelation } from './types.js';
-import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionEntry } from '../routes/contribute/types.js';
+import type { GraphData, KCLanguage, KCReference, KCAdjacencyMatrix, DirectedSuccinctnessRelation, KCSeparatingFunction } from './types.js';
+import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionEntry, SeparatingFunctionToAdd } from '../routes/contribute/types.js';
 import { generateReferenceId } from './utils/reference-id.js';
 
 export interface QueuedChanges {
@@ -13,6 +13,7 @@ export interface QueuedChanges {
   languagesToEdit: LanguageToAdd[];
   relationships: RelationshipEntry[];
   newReferences: string[];
+  newSeparatingFunctions: SeparatingFunctionToAdd[];
   customTags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   modifiedRelations: string[];
   submissionId?: string;
@@ -115,6 +116,44 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
   // Helper to resolve reference IDs (identity function since IDs are already final)
   const resolveRefId = (refId: string): string => refId;
 
+  // Build separating function lookup map (existing from baseline + newly queued)
+  const separatingFunctionMap = new Map<string, KCSeparatingFunction>();
+  
+  // Add existing separating functions from baseline (if any exist in the future)
+  // Currently baseline.separatingFunctions doesn't exist yet, so this is future-proofing
+  // @ts-expect-error - separatingFunctions will be added to GraphData type later
+  if (baseline.separatingFunctions && Array.isArray(baseline.separatingFunctions)) {
+    // @ts-expect-error
+    for (const sf of baseline.separatingFunctions) {
+      separatingFunctionMap.set(sf.shortName, sf);
+    }
+  }
+  
+  // Add newly queued separating functions with resolved reference IDs
+  for (const sf of queue.newSeparatingFunctions) {
+    const resolvedSF: KCSeparatingFunction = {
+      shortName: sf.shortName,
+      name: sf.name,
+      description: sf.description,
+      refs: sf.refs.map(resolveRefId)
+    };
+    separatingFunctionMap.set(sf.shortName, resolvedSF);
+  }
+  
+  // Helper to resolve separating function IDs to full objects
+  const resolveSeparatingFunctionIds = (ids: string[] | undefined): SeparatingFunctionEntry[] => {
+    if (!ids || ids.length === 0) return [];
+    return ids
+      .map(id => separatingFunctionMap.get(id))
+      .filter((sf): sf is KCSeparatingFunction => sf !== undefined)
+      .map(sf => ({
+        shortName: sf.shortName,
+        name: sf.name,
+        description: sf.description,
+        refs: [...sf.refs]
+      }));
+  };
+
   // Step 2: Add new languages
   for (const langToAdd of queue.languagesToAdd) {
     // Resolve reference IDs in description
@@ -211,12 +250,19 @@ export function mergeQueueIntoBaseline(baseline: GraphData, queue: QueuedChanges
     
     // Resolve reference IDs
     const resolvedRefs = rel.refs.map(resolveRefId);
-    const resolvedSepFns: SeparatingFunctionEntry[] = rel.separatingFunctions
-      ? rel.separatingFunctions.map(fn => ({
-          ...fn,
-          refs: fn.refs.map(resolveRefId)
-        }))
-      : [];
+    
+    // Resolve separating function IDs (new format) or use inline objects (old format for backward compat)
+    let resolvedSepFns: SeparatingFunctionEntry[] = [];
+    if (rel.separatingFunctionIds && rel.separatingFunctionIds.length > 0) {
+      // New format: resolve IDs to full objects
+      resolvedSepFns = resolveSeparatingFunctionIds(rel.separatingFunctionIds);
+    } else if (rel.separatingFunctions && rel.separatingFunctions.length > 0) {
+      // Old format: use inline objects with resolved refs
+      resolvedSepFns = rel.separatingFunctions.map(fn => ({
+        ...fn,
+        refs: fn.refs.map(resolveRefId)
+      }));
+    }
 
     const relation: DirectedSuccinctnessRelation = {
       status: rel.status,
@@ -255,6 +301,7 @@ export function loadQueuedChanges(): QueuedChanges | null {
       languagesToEdit: parsed.languagesToEdit || [],
       relationships: parsed.relationships || [],
       newReferences: parsed.newReferences || [],
+      newSeparatingFunctions: parsed.newSeparatingFunctions || [],
       customTags: parsed.customTags || [],
       modifiedRelations: parsed.modifiedRelations || [],
       submissionId: typeof parsed.submissionId === 'string' ? parsed.submissionId : undefined,

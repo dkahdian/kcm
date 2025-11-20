@@ -5,6 +5,7 @@
     onAddRelationship,
     onEditRelationship,
     onAddReference,
+    onAddSeparatingFunction,
     onAddTag
   }: {
     onAddLanguage: () => void;
@@ -12,6 +13,7 @@
     onAddRelationship: () => void;
     onEditRelationship: () => void;
     onAddReference: () => void;
+    onAddSeparatingFunction: () => void;
     onAddTag: () => void;
   } = $props();
 </script>
@@ -55,6 +57,14 @@
     class="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
   >
     + New Reference
+  </button>
+  
+  <button
+    type="button"
+    onclick={onAddSeparatingFunction}
+    class="px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors"
+  >
+    + New Separating Function
   </button>
   
   <button

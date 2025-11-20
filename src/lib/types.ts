@@ -217,6 +217,25 @@ export interface CanonicalEdge {
  * Node ordering: nodeA and nodeB are ordered lexicographically (nodeA < nodeB)
  * to ensure canonical representation.
  */
+
+/**
+ * Separating function stored in top-level database array.
+ * shortName serves as the unique identifier for referencing from relationships.
+ */
+export interface KCSeparatingFunction {
+  /** Short label rendered directly on the edge (also serves as unique ID) */
+  shortName: string;
+  /** Full human-readable name */
+  name: string;
+  /** Description of what is separated */
+  description: string;
+  /** Supporting references */
+  refs: string[];
+}
+
+/**
+ * Separating function without ID (for backward compatibility and inline usage)
+ */
 export interface SeparatingFunction {
   /** Short label rendered directly on the edge */
   shortName: string;
@@ -235,8 +254,10 @@ export interface DirectedSuccinctnessRelation {
   description?: string;
   /** Supporting references */
   refs: string[];
-  /** Separating functions that witness this direction */
-  separatingFunctions: SeparatingFunction[];
+  /** Separating function shortNames (new format - references top-level separatingFunctions array by shortName) */
+  separatingFunctionIds?: string[];
+  /** Separating functions that witness this direction (deprecated - use separatingFunctionIds) */
+  separatingFunctions?: SeparatingFunction[];
   /** Whether this edge is hidden by transitive reduction (always false by default) */
   hidden?: boolean;
 }

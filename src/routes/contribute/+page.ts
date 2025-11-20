@@ -4,6 +4,7 @@ import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
 import { POLYTIME_COMPLEXITIES } from '$lib/data/polytime-complexities.js';
 import { adjacencyMatrixData } from '$lib/data/edges.js';
 import { relationTypes } from '$lib/data/relation-types.js';
+import { allSeparatingFunctions } from '$lib/data/separating-functions.js';
 
 export const load: PageLoad = () => {
   const existingLanguageIds = allLanguages.map((lang) => lang.name);
@@ -35,9 +36,16 @@ export const load: PageLoad = () => {
 
   const existingTags = Array.from(tagLookup.values());
 
+  const existingSeparatingFunctions = allSeparatingFunctions.map(sf => ({
+    shortName: sf.shortName,
+    name: sf.name,
+    description: sf.description
+  }));
+
   return {
     existingLanguageIds,
     existingReferences,
+    existingSeparatingFunctions,
     existingTags,
     languages: allLanguages,
     queries: QUERIES,

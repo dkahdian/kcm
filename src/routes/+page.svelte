@@ -113,6 +113,7 @@
         queue.languagesToEdit,
         queue.relationships.filter((rel) => modifiedRelationKeys.includes(`${rel.sourceId}->${rel.targetId}`)),
         queue.newReferences,
+        queue.newSeparatingFunctions,
         initialGraphData.languages.map(l => l.name),
         {
           submissionId,
@@ -150,6 +151,7 @@
         languagesToEdit: queue.languagesToEdit,
         relationships: queue.relationships,
         newReferences: queue.newReferences,
+        newSeparatingFunctions: [], // TODO: Add separating functions support to main page
         customTags: queue.customTags,
         modifiedRelations: modifiedRelationKeys,
         contributor: contributorInfo

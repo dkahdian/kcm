@@ -40,13 +40,13 @@
     // Collect ref IDs from both directions and their separating functions (use originalEdge for true data)
     if (originalEdge.forward) {
       originalEdge.forward.refs.forEach(id => refIds.add(id));
-      originalEdge.forward.separatingFunctions.forEach(fn => {
+      originalEdge.forward.separatingFunctions?.forEach(fn => {
         fn.refs.forEach(id => refIds.add(id));
       });
     }
     if (originalEdge.backward) {
       originalEdge.backward.refs.forEach(id => refIds.add(id));
-      originalEdge.backward.separatingFunctions.forEach(fn => {
+      originalEdge.backward.separatingFunctions?.forEach(fn => {
         fn.refs.forEach(id => refIds.add(id));
       });
     }
@@ -126,7 +126,7 @@
                 <p class="text-sm text-gray-600 mb-2 italic">{originalEdge.forward.description}</p>
               {/if}
               
-              {#if originalEdge.forward.separatingFunctions.length > 0}
+              {#if originalEdge.forward.separatingFunctions && originalEdge.forward.separatingFunctions.length > 0}
                 <div class="mt-3">
                   <h6 class="text-sm font-semibold text-gray-900 mb-2">Separating Functions</h6>
                   <div class="space-y-2">
@@ -160,7 +160,7 @@
                 <p class="text-sm text-gray-600 mb-2 italic">{originalEdge.backward.description}</p>
               {/if}
               
-              {#if originalEdge.backward.separatingFunctions.length > 0}
+              {#if originalEdge.backward.separatingFunctions && originalEdge.backward.separatingFunctions.length > 0}
                 <div class="mt-3">
                   <h6 class="text-sm font-semibold text-gray-900 mb-2">Separating Functions</h6>
                   <div class="space-y-2">

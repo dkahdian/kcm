@@ -7,12 +7,20 @@ export type SeparatingFunctionEntry = {
   refs: string[];
 };
 
+export type SeparatingFunctionToAdd = {
+  shortName: string;
+  name: string;
+  description: string;
+  refs: string[];
+};
+
 export type RelationshipEntry = {
   sourceId: string;
   targetId: string;
   status: TransformationStatus;
   refs: string[];
-  separatingFunctions?: SeparatingFunctionEntry[];
+  separatingFunctionIds?: string[]; // New format: array of shortNames
+  separatingFunctions?: SeparatingFunctionEntry[]; // Deprecated: inline format
 };
 
 export type LanguageToAdd = {
@@ -37,6 +45,7 @@ export type DeferredItems = {
   languages: LanguageToAdd[];
   editedLanguages: LanguageToAdd[];
   references: string[];
+  separatingFunctions: SeparatingFunctionToAdd[];
   relationships: RelationshipEntry[];
   tags: CustomTag[];
 };
@@ -54,6 +63,7 @@ export type SubmissionHistoryPayload = {
   languagesToEdit: LanguageToAdd[];
   relationships: RelationshipEntry[];
   newReferences: string[];
+  newSeparatingFunctions: SeparatingFunctionToAdd[];
   customTags: CustomTag[];
   modifiedRelations: string[];
   contributor: ContributorInfo;

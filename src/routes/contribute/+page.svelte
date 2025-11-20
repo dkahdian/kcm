@@ -6,6 +6,7 @@
   import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
   import AddReferenceModal from '$lib/components/contribute/AddReferenceModal.svelte';
+  import AddSeparatingFunctionModal from '$lib/components/contribute/AddSeparatingFunctionModal.svelte';
   import ManageRelationshipModal from '$lib/components/contribute/ManageRelationshipModal.svelte';
   import ContributionQueue from './components/ContributionQueue.svelte';
   import ActionButtons from './components/ActionButtons.svelte';
@@ -15,6 +16,7 @@
     buildBaselineRelations,
     getAvailableReferenceIds,
     getAvailableLanguages,
+    getAvailableSeparatingFunctions,
     convertLanguageForEdit
   } from './logic.js';
   import { generateReferenceId } from '$lib/utils/reference-id.js';
@@ -24,6 +26,7 @@
     CustomTag,
     DeferredItems,
     SeparatingFunctionEntry,
+    SeparatingFunctionToAdd,
     SubmissionHistoryEntry,
     ContributorInfo
   } from './types.js';
@@ -40,6 +43,7 @@
     languagesToEdit: LanguageToAdd[];
     relationships: RelationshipEntry[];
     newReferences: string[];
+    newSeparatingFunctions: SeparatingFunctionToAdd[];
     customTags: CustomTag[];
     modifiedRelations: string[];
     submissionId?: string;
@@ -124,6 +128,23 @@
   function sanitizeSeparatingFunctions(value: unknown): SeparatingFunctionEntry[] {
     if (!Array.isArray(value)) return [];
     const results: SeparatingFunctionEntry[] = [];
+    for (const entry of value) {
+      if (!entry || typeof entry !== 'object') continue;
+      const raw = entry as Record<string, any>;
+      if (!isString(raw.shortName) || !isString(raw.name) || !isString(raw.description)) continue;
+      results.push({
+        shortName: raw.shortName,
+        name: raw.name,
+        description: raw.description,
+        refs: sanitizeStringArray(raw.refs)
+      });
+    }
+    return results;
+  }
+
+  function sanitizeSeparatingFunctionToAddArray(value: unknown): SeparatingFunctionToAdd[] {
+    if (!Array.isArray(value)) return [];
+    const results: SeparatingFunctionToAdd[] = [];
     for (const entry of value) {
       if (!entry || typeof entry !== 'object') continue;
       const raw = entry as Record<string, any>;
@@ -243,6 +264,7 @@
   let expandedLanguageToEditIndex = $state<number | null>(null);
   let expandedRelationshipIndex = $state<number | null>(null);
   let expandedReferenceIndex = $state<number | null>(null);
+  let expandedSeparatingFunctionIndex = $state<number | null>(null);
 
   // Modal visibility state
   let showAddLanguageModal = $state(false);
@@ -250,8 +272,10 @@
   let showLanguageSelectorModal = $state(false);
   let selectedLanguageToEdit = $state<string>('');
   let showAddReferenceModal = $state(false);
+  let showAddSeparatingFunctionModal = $state(false);
   let showManageRelationshipModal = $state(false);
   let editReferenceIndex = $state<number | null>(null);
+  let editSeparatingFunctionIndex = $state<number | null>(null);
   let editLanguageToAddIndex = $state<number | null>(null);
   let editLanguageToEditIndex = $state<number | null>(null);
   let editRelationshipIndex = $state<number | null>(null);
@@ -262,6 +286,7 @@
 
   // Additional state (declared before hasQueuedItems to avoid TDZ errors)
   let newReferences = $state<string[]>([]);
+  let newSeparatingFunctions = $state<SeparatingFunctionToAdd[]>([]);
   let customTags = $state<CustomTag[]>([]);
 
   // Submission metadata & history
@@ -276,6 +301,7 @@
     languagesToEdit.length > 0 ||
     relationships.filter(rel => modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))).length > 0 ||
     newReferences.length > 0 ||
+    newSeparatingFunctions.length > 0 ||
     customTags.length > 0
   );
 
@@ -314,6 +340,7 @@
         languagesToEdit = sanitizeLanguages(parsed?.languagesToEdit);
         relationships = sanitizeRelationships(parsed?.relationships);
         newReferences = sanitizeStringArray(parsed?.newReferences);
+        newSeparatingFunctions = sanitizeSeparatingFunctionToAddArray(parsed?.newSeparatingFunctions);
         customTags = sanitizeTags(parsed?.customTags);
         modifiedRelations = new Set(sanitizeStringArray(parsed?.modifiedRelations));
         activeSubmissionId = sanitizeSubmissionId(parsed?.submissionId) ?? '';
@@ -392,6 +419,7 @@
       languagesToEdit,
       relationships,
       newReferences,
+      newSeparatingFunctions,
       customTags,
       modifiedRelations: Array.from(modifiedRelations),
       submissionId: activeSubmissionId,
@@ -442,6 +470,23 @@
     newReferences = [...newReferences, bibtex];
   }
 
+  function handleAddSeparatingFunction(sf: SeparatingFunctionToAdd) {
+    newSeparatingFunctions = [...newSeparatingFunctions, sf];
+  }
+
+  function handleEditSeparatingFunction(index: number) {
+    editSeparatingFunctionIndex = index;
+    showAddSeparatingFunctionModal = true;
+  }
+
+  function handleUpdateSeparatingFunction(sf: SeparatingFunctionToAdd) {
+    if (editSeparatingFunctionIndex !== null) {
+      newSeparatingFunctions[editSeparatingFunctionIndex] = sf;
+      newSeparatingFunctions = [...newSeparatingFunctions];
+      editSeparatingFunctionIndex = null;
+    }
+  }
+
   // Store items that come after the reference being edited
   // NOTE: This queue management system has a conceptual issue - it assumes items at the same
   // numerical index across different arrays were added at the same "queue position", which is
@@ -457,6 +502,7 @@
       languages: languagesToAdd.slice(index + 1),
       editedLanguages: languagesToEdit.slice(index + 1),
       references: newReferences.slice(index + 1),
+      separatingFunctions: [], // TODO: Implement deferred items for separating functions
       relationships: relationships.filter((_, i) => i > index),
       tags: customTags.slice(index + 1)
     };
@@ -641,10 +687,33 @@
       tag.refs = tag.refs.filter(r => r !== refId);
     });
 
+    // Remove from separating functions
+    newSeparatingFunctions.forEach(sf => {
+      sf.refs = sf.refs.filter(r => r !== refId);
+    });
+
     languagesToAdd = [...languagesToAdd];
     languagesToEdit = [...languagesToEdit];
     relationships = [...relationships];
     customTags = [...customTags];
+    newSeparatingFunctions = [...newSeparatingFunctions];
+  }
+
+  function deleteSeparatingFunction(index: number) {
+    const sf = newSeparatingFunctions[index];
+    const shortName = sf.shortName;
+
+    // Remove the separating function from the array
+    newSeparatingFunctions = newSeparatingFunctions.filter((_, i) => i !== index);
+
+    // Remove from relationships (from separatingFunctionIds arrays)
+    relationships.forEach(rel => {
+      if (rel.separatingFunctionIds) {
+        rel.separatingFunctionIds = rel.separatingFunctionIds.filter(id => id !== shortName);
+      }
+    });
+
+    relationships = [...relationships];
   }
 
   function toggleHistoryPanel() {
@@ -853,15 +922,18 @@
             {languagesToAdd}
             {languagesToEdit}
             {newReferences}
+            {newSeparatingFunctions}
             {relationships}
             {modifiedRelations}
             {expandedLanguageToAddIndex}
             {expandedLanguageToEditIndex}
             {expandedReferenceIndex}
+            {expandedSeparatingFunctionIndex}
             {expandedRelationshipIndex}
             onToggleExpandLanguageToAdd={(index) => expandedLanguageToAddIndex = expandedLanguageToAddIndex === index ? null : index}
             onToggleExpandLanguageToEdit={(index) => expandedLanguageToEditIndex = expandedLanguageToEditIndex === index ? null : index}
             onToggleExpandReference={(index) => expandedReferenceIndex = expandedReferenceIndex === index ? null : index}
+            onToggleExpandSeparatingFunction={(index) => expandedSeparatingFunctionIndex = expandedSeparatingFunctionIndex === index ? null : index}
             onToggleExpandRelationship={(index) => expandedRelationshipIndex = expandedRelationshipIndex === index ? null : index}
             onEditLanguageToAdd={handleEditLanguageToAdd}
             onEditLanguageToEdit={handleEditLanguageToEdit}
@@ -869,6 +941,8 @@
             onDeleteLanguageToEdit={(index) => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
             onEditReference={handleEditReference}
             onDeleteReference={deleteReference}
+            onEditSeparatingFunction={handleEditSeparatingFunction}
+            onDeleteSeparatingFunction={deleteSeparatingFunction}
             onEditRelationship={handleEditRelationship}
             onDeleteRelationship={(index, key) => {
               relationships = relationships.filter((_, i) => i !== index);
@@ -883,6 +957,7 @@
             onEditLanguage={() => showLanguageSelectorModal = true}
             onManageRelationships={() => showManageRelationshipModal = true}
             onAddReference={() => showAddReferenceModal = true}
+            onAddSeparatingFunction={() => showAddSeparatingFunctionModal = true}
           />
 
           <!-- Preview Button -->
@@ -997,6 +1072,18 @@
   isEditMode={editReferenceIndex !== null}
 />
 
+<AddSeparatingFunctionModal
+  bind:isOpen={showAddSeparatingFunctionModal}
+  onClose={() => {
+    showAddSeparatingFunctionModal = false;
+    editSeparatingFunctionIndex = null;
+  }}
+  onAdd={editSeparatingFunctionIndex !== null ? handleUpdateSeparatingFunction : handleAddSeparatingFunction}
+  initialValue={editSeparatingFunctionIndex !== null ? newSeparatingFunctions[editSeparatingFunctionIndex] : undefined}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
+  isEditMode={editSeparatingFunctionIndex !== null}
+/>
+
 <ManageRelationshipModal
   bind:isOpen={showManageRelationshipModal}
   onClose={() => {
@@ -1008,6 +1095,7 @@
   languages={getAvailableLanguages(data.languages, languagesToAdd, languagesToEdit)}
   {statusOptions}
   availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
+  availableSeparatingFunctions={getAvailableSeparatingFunctions(data.existingSeparatingFunctions, newSeparatingFunctions)}
   {baselineRelations}
 />
 

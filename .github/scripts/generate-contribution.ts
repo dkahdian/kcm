@@ -14,12 +14,14 @@ type DirectedRelation = {
   status: string;
   description?: string;
   refs: string[];
-  separatingFunctions: any[];
+  separatingFunctionIds?: string[]; // NEW: Store IDs instead of full objects
+  separatingFunctions?: any[]; // DEPRECATED: Keep for backward compatibility
 };
 
 interface DatabaseShape {
   languages: RawLanguage[];
   references: Array<{ id: string; bibtex: string }>;
+  separatingFunctions: Array<{ shortName: string; name: string; description: string; refs: string[] }>;
   relationTypes: unknown;
   tags: unknown;
   operations: unknown;
@@ -108,12 +110,20 @@ try {
     for (let j = 0; j < baseLanguageIds.length; j++) {
       const relation = baseMatrix[i]?.[j] || null;
       if (relation) {
-        relationMap.set(relationKey(baseLanguageIds[i], baseLanguageIds[j]), {
+        const baseRel: DirectedRelation = {
           status: relation.status,
           description: relation.description,
-          refs: relation.refs || [],
-          separatingFunctions: relation.separatingFunctions || []
-        });
+          refs: relation.refs || []
+        };
+        
+        // Support both old and new formats
+        if (relation.separatingFunctionIds) {
+          baseRel.separatingFunctionIds = relation.separatingFunctionIds;
+        } else if (relation.separatingFunctions) {
+          baseRel.separatingFunctions = relation.separatingFunctions;
+        }
+        
+        relationMap.set(relationKey(baseLanguageIds[i], baseLanguageIds[j]), baseRel);
       }
     }
   }
@@ -123,7 +133,7 @@ try {
 
     const newlyAddedNames = (contribution.languagesToAdd || []).map((lang: any) => lang.name);
     const allKnownNames = new Set(existingLanguageMap.keys());
-    newlyAddedNames.forEach((name) => allKnownNames.add(name));
+    newlyAddedNames.forEach((name: string) => allKnownNames.add(name));
 
     for (const rel of contribution.relationships) {
       if (!allKnownNames.has(rel.sourceId)) {
@@ -135,12 +145,20 @@ try {
 
       console.log(`  - ${rel.sourceId} -> ${rel.targetId} (${rel.status})`);
 
-      relationMap.set(relationKey(rel.sourceId, rel.targetId), {
+      const updatedRel: DirectedRelation = {
         status: rel.status,
         description: rel.description || '',
-        refs: rel.refs || [],
-        separatingFunctions: rel.separatingFunctions || []
-      });
+        refs: rel.refs || []
+      };
+      
+      // Support both old and new formats, prefer new format
+      if (rel.separatingFunctionIds && rel.separatingFunctionIds.length > 0) {
+        updatedRel.separatingFunctionIds = rel.separatingFunctionIds;
+      } else if (rel.separatingFunctions && rel.separatingFunctions.length > 0) {
+        updatedRel.separatingFunctions = rel.separatingFunctions;
+      }
+
+      relationMap.set(relationKey(rel.sourceId, rel.targetId), updatedRel);
     }
 
     console.log('Updated adjacency relationships in memory');
@@ -182,6 +200,49 @@ try {
     refs.sort((a, b) => a.id.localeCompare(b.id));
     console.log('Prepared reference updates');
   }
+  
+  // ============================================================================
+  // 5. HANDLE NEW SEPARATING FUNCTIONS
+  // ============================================================================
+  
+  // Initialize separatingFunctions array if it doesn't exist
+  if (!database.separatingFunctions) {
+    database.separatingFunctions = [];
+  }
+  
+  if (contribution.newSeparatingFunctions && contribution.newSeparatingFunctions.length > 0) {
+    console.log(`\nAdding ${contribution.newSeparatingFunctions.length} new separating function(s)...`);
+    
+    const existingShortNames = new Set<string>(
+      database.separatingFunctions.map((sf) => sf.shortName)
+    );
+
+    for (const rawSF of contribution.newSeparatingFunctions as Array<any>) {
+      if (!rawSF || typeof rawSF !== 'object' || !rawSF.shortName) {
+        console.warn('  ! Skipping invalid separating function payload:', rawSF);
+        continue;
+      }
+
+      console.log(`  - Adding separating function: ${rawSF.shortName}`);
+
+      if (existingShortNames.has(rawSF.shortName)) {
+        console.log('    (already exists, skipping)');
+        continue;
+      }
+
+      database.separatingFunctions.push({
+        shortName: rawSF.shortName,
+        name: rawSF.name || '',
+        description: rawSF.description || '',
+        refs: rawSF.refs || []
+      });
+      
+      existingShortNames.add(rawSF.shortName);
+    }
+
+    database.separatingFunctions.sort((a, b) => a.shortName.localeCompare(b.shortName));
+    console.log('Prepared separating function updates');
+  }
 
   // Sort languages for deterministic ordering (by name)
   database.languages.sort((a, b) => a.name.localeCompare(b.name));
@@ -211,12 +272,21 @@ try {
       const key = relationKey(uniqueLanguageIds[i], uniqueLanguageIds[j]);
       const relation = relationMap.get(key) || null;
       if (relation) {
-        rebuiltMatrix[i][j] = {
+        const outputRel: any = {
           status: relation.status,
           description: relation.description || '',
-          refs: [...new Set(relation.refs)],
-          separatingFunctions: relation.separatingFunctions || []
+          refs: [...new Set(relation.refs)]
         };
+        
+        // Output both formats for backward compatibility during transition
+        if (relation.separatingFunctionIds && relation.separatingFunctionIds.length > 0) {
+          outputRel.separatingFunctionIds = relation.separatingFunctionIds;
+        }
+        if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
+          outputRel.separatingFunctions = relation.separatingFunctions;
+        }
+        
+        rebuiltMatrix[i][j] = outputRel;
       }
     }
   }

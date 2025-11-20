@@ -5,6 +5,12 @@
     name: string;
   };
 
+  type SeparatingFunctionForDropdown = {
+    shortName: string;
+    name: string;
+    description: string;
+  };
+
   type SeparatingFunction = {
     shortName: string;
     name: string;
@@ -18,12 +24,14 @@
     status: TransformationStatus;
     description?: string;
     refs: string[];
-    separatingFunctions?: SeparatingFunction[];
+    separatingFunctionIds?: string[]; // NEW: Store only IDs
+    separatingFunctions?: SeparatingFunction[]; // DEPRECATED: Keep for backward compat
   };
 
   type BaselineRelationship = {
     status: TransformationStatus;
     refs: string[];
+    separatingFunctionIds?: string[];
     separatingFunctions: SeparatingFunction[];
   };
 
@@ -40,6 +48,7 @@
     languages: Language[];
     statusOptions: StatusOption[];
     availableRefs?: string[];
+    availableSeparatingFunctions?: SeparatingFunctionForDropdown[];
     baselineRelations?: Map<string, BaselineRelationship>; // key is "sourceId->targetId"
     initialData?: Relationship; // For editing existing relationships
   };
@@ -51,6 +60,7 @@
     languages, 
     statusOptions, 
     availableRefs = [],
+    availableSeparatingFunctions = [],
     baselineRelations = new Map(),
     initialData
   }: Props = $props();
@@ -60,7 +70,7 @@
   let status = $state<TransformationStatus | ''>('');
   let description = $state('');
   let selectedRefs = $state<string[]>([]);
-  let separatingFunctions = $state<SeparatingFunction[]>([]);
+  let selectedSeparatingFunctionIds = $state<string[]>([]);
 
   // Populate form when initialData is provided (edit mode)
   $effect(() => {
@@ -70,9 +80,15 @@
       status = initialData.status;
       description = initialData.description || '';
       selectedRefs = [...initialData.refs];
-      separatingFunctions = initialData.separatingFunctions 
-        ? initialData.separatingFunctions.map(sf => ({ ...sf }))
-        : [];
+      
+      // Handle both old format (separatingFunctions) and new format (separatingFunctionIds)
+      if (initialData.separatingFunctionIds) {
+        selectedSeparatingFunctionIds = [...initialData.separatingFunctionIds];
+      } else if (initialData.separatingFunctions) {
+        selectedSeparatingFunctionIds = initialData.separatingFunctions.map(sf => sf.shortName);
+      } else {
+        selectedSeparatingFunctionIds = [];
+      }
     }
   });
 
@@ -86,7 +102,15 @@
         // Relationship exists - populate with existing data
         status = baseline.status;
         selectedRefs = [...baseline.refs];
-        separatingFunctions = baseline.separatingFunctions.map(sf => ({ ...sf }));
+        
+        // Handle both old and new format
+        if (baseline.separatingFunctionIds) {
+          selectedSeparatingFunctionIds = [...baseline.separatingFunctionIds];
+        } else if (baseline.separatingFunctions) {
+          selectedSeparatingFunctionIds = baseline.separatingFunctions.map(sf => sf.shortName);
+        } else {
+          selectedSeparatingFunctionIds = [];
+        }
       }
       // If no baseline exists, keep current values (defaults)
     }
@@ -98,7 +122,7 @@
     status = '';
     description = '';
     selectedRefs = [];
-    separatingFunctions = [];
+    selectedSeparatingFunctionIds = [];
   }
 
   function handleSubmit() {
@@ -110,7 +134,7 @@
       status,
       description: description || undefined,
       refs: selectedRefs,
-      separatingFunctions: separatingFunctions.length > 0 ? separatingFunctions : undefined
+      separatingFunctionIds: selectedSeparatingFunctionIds.length > 0 ? selectedSeparatingFunctionIds : undefined
     });
     
     resetForm();
@@ -130,12 +154,12 @@
     }
   }
 
-  function addSeparatingFunction() {
-    separatingFunctions = [...separatingFunctions, { shortName: '', name: '', description: '', refs: [] }];
-  }
-
-  function removeSeparatingFunction(index: number) {
-    separatingFunctions = separatingFunctions.filter((_, i) => i !== index);
+  function toggleSeparatingFunction(shortName: string) {
+    if (selectedSeparatingFunctionIds.includes(shortName)) {
+      selectedSeparatingFunctionIds = selectedSeparatingFunctionIds.filter(id => id !== shortName);
+    } else {
+      selectedSeparatingFunctionIds = [...selectedSeparatingFunctionIds, shortName];
+    }
   }
 </script>
 
@@ -247,58 +271,34 @@
         {/if}
 
         <!-- Separating Functions -->
-        <fieldset class="border-t pt-4">
-          <div class="flex items-center justify-between mb-3">
-            <legend class="block text-sm font-medium text-gray-700">
+        {#if availableSeparatingFunctions.length > 0}
+          <fieldset class="border-t pt-4">
+            <legend class="block text-sm font-medium text-gray-700 mb-2">
               Separating Functions (optional)
             </legend>
-            <button
-              type="button"
-              onclick={addSeparatingFunction}
-              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              + Add Function
-            </button>
-          </div>
-
-          {#if separatingFunctions.length > 0}
-            <div class="space-y-3">
-              {#each separatingFunctions as func, index}
-                <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
-                  <div class="flex items-start justify-between gap-2">
-                    <input
-                      type="text"
-                      bind:value={func.shortName}
-                      placeholder="Short name (e.g., 'Clique')"
-                      class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    <button
-                      type="button"
-                      onclick={() => removeSeparatingFunction(index)}
-                      class="text-red-600 hover:text-red-800 font-bold"
-                    >
-                      ×
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    bind:value={func.name}
-                    placeholder="Full name (e.g., 'Clique Detection Instances')"
-                    class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <textarea
-                    bind:value={func.description}
-                    placeholder="Description..."
-                    rows="2"
-                    class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  ></textarea>
-                </div>
+            <div class="flex flex-wrap gap-2">
+              {#each availableSeparatingFunctions as sf}
+                <button
+                  type="button"
+                  onclick={() => toggleSeparatingFunction(sf.shortName)}
+                  class={`px-3 py-1 text-sm rounded-lg border-2 transition-colors ${
+                    selectedSeparatingFunctionIds.includes(sf.shortName)
+                      ? 'bg-orange-600 text-white border-orange-600'
+                      : 'bg-white text-gray-700 border-gray-300 hover:border-orange-300'
+                  }`}
+                  title={sf.name}
+                >
+                  {sf.shortName}
+                </button>
               {/each}
             </div>
-          {:else}
-            <p class="text-sm text-gray-500 italic">No separating functions added yet.</p>
-          {/if}
-        </fieldset>
+            {#if selectedSeparatingFunctionIds.length > 0}
+              <p class="text-xs text-gray-500 mt-2">
+                Selected: {selectedSeparatingFunctionIds.join(', ')}
+              </p>
+            {/if}
+          </fieldset>
+        {/if}
 
         <!-- Actions -->
         <div class="flex gap-3 justify-end pt-4 border-t">

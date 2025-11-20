@@ -192,7 +192,9 @@
   function checkIfPositionsModified(): boolean {
     if (!browser) return false;
     const stored = loadStoredNodePositions();
-    if (Object.keys(stored).length === 0) return false;
+    if (Object.keys(stored).length === 0) {
+      return false;
+    }
     
     // Check if any stored position differs from default
     for (const [nodeId, storedPos] of Object.entries(stored)) {
@@ -399,11 +401,14 @@
           x: startX + idx * spacing,
           y: centerPos.y
         };
-        
-        // Store default position
-        defaultPositions.set(lang.name, defaultPosition);
+        const defaultPositionClone = { ...defaultPosition };
+        // Store default position (clone to prevent later mutation)
+        defaultPositions.set(lang.name, defaultPositionClone);
         
         const storedPosition = storedPositions[lang.name];
+        const initialPosition = storedPosition
+          ? { x: storedPosition.x, y: storedPosition.y }
+          : { ...defaultPositionClone };
         elements.push({
           data: {
             id: lang.name,
@@ -417,7 +422,7 @@
             labelPrefix: lang.visual?.labelPrefix || '',
             labelSuffix: lang.visual?.labelSuffix || ''
           },
-          position: storedPosition ?? defaultPosition
+          position: initialPosition
         });
       });
     }
@@ -551,8 +556,12 @@
 
     if (browser) {
       persistNodePositions(cy.nodes());
-      cy.on('free', 'node', () => {
-        persistNodePositions(cy.nodes());
+      
+      cy.on('free', 'node', (evt) => {
+        // After a reset, only persist the positions of nodes that were actually moved
+        // to avoid overwriting the empty localStorage with all default positions
+        const movedNode = evt.target;
+        persistNodePositions(movedNode);
         // Check if we should show reset button after user moves a node
         showResetButton = checkIfPositionsModified();
       });
@@ -699,9 +708,11 @@
     };
   });
 
-  // Recreate graph when data changes
+  // Recreate graph when graphData changes
+  let lastGraphData = graphData;
   $effect(() => {
-    if (graphContainer) {
+    if (graphData !== lastGraphData && graphContainer) {
+      lastGraphData = graphData;
       cy?.destroy();
       createGraph();
     }

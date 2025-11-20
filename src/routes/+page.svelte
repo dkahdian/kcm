@@ -233,7 +233,7 @@
       </div>
       <div class="header-controls">
         {#if isPreviewMode}
-          <a href="/contribute" class="btn btn-edit">
+          <a href="/contribute" class="btn btn-edit" data-sveltekit-reload>
             Edit Contribution
           </a>
           <button

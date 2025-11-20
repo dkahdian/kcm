@@ -23,7 +23,7 @@
     onclick={onAddLanguage}
     class="px-3 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
   >
-    New Lang
+    New Language
   </button>
   
   <button
@@ -31,7 +31,7 @@
     onclick={onEditLanguage}
     class="px-3 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-colors"
   >
-    Edit Lang
+    Edit Language
   </button>
   
   <button
@@ -39,7 +39,7 @@
     onclick={onManageRelationships}
     class="px-3 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
   >
-    Relationships
+    Relationship
   </button>
   
   <button
@@ -55,6 +55,6 @@
     onclick={onAddSeparatingFunction}
     class="px-3 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors"
   >
-    SF
+    Separator
   </button>
 </div>

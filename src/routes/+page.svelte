@@ -11,7 +11,7 @@
   import { browser } from '$app/environment';
 
   import { v4 as uuidv4 } from 'uuid';
-  import { hasQueuedChanges, loadQueuedChanges, mergeQueueIntoBaseline, clearQueuedChanges, loadContributorInfo } from '$lib/preview-merge.js';
+  import { hasQueuedChanges, loadQueuedChanges, clearQueuedChanges, loadContributorInfo, loadPreviewDataset } from '$lib/contribution-storage.js';
   import { recordSubmissionHistory } from '$lib/utils/submission-history.js';
   import type { SubmissionHistoryPayload } from './contribute/types.js';
   import { buildSubmissionPayload } from './contribute/logic.js';
@@ -42,14 +42,12 @@
 
     // Check for preview mode
     if (hasQueuedChanges()) {
-      const queue = loadQueuedChanges();
-      if (queue) {
-        try {
-          previewGraphData = mergeQueueIntoBaseline(initialGraphData, queue);
-          isPreviewMode = true;
-        } catch (error) {
-          console.error('Failed to merge preview data:', error);
-        }
+      const dataset = loadPreviewDataset();
+      if (dataset) {
+        previewGraphData = dataset;
+        isPreviewMode = true;
+      } else {
+        console.warn('Queued changes detected but preview dataset is missing');
       }
     }
 

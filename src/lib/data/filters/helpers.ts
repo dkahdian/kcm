@@ -1,6 +1,7 @@
-import type { KCLanguage, LanguageFilter, GraphData, FilterCategory } from '../../types.js';
+import type { LanguageFilter, GraphData, FilterCategory, CanonicalKCData } from '../../types.js';
 import { resolveLanguageProperties } from '../operations.js';
 import { getPolytimeFlag } from '../polytime-complexities.js';
+import { mapLanguagesInDataset } from '../transforms.js';
 
 /**
  * Helper function to create visualization filters for queries and transformations.
@@ -9,32 +10,30 @@ import { getPolytimeFlag } from '../polytime-complexities.js';
 export function createOperationVisualizer(
   code: string,
   type: 'query' | 'transformation'
-): (language: KCLanguage, param: boolean) => KCLanguage {
-  return (language: KCLanguage, param: boolean) => {
-    // If param is false, return immediately without adding visualization
-    if (!param) return language;
-    
-    // Resolve the language properties to get full operation entries
-    const resolved = resolveLanguageProperties(
-      language.properties.queries,
-      language.properties.transformations
-    );
-    
-    const operations = type === 'query' ? resolved.queries : resolved.transformations;
-    const operation = operations?.find(op => op.code === code);
-    if (!operation) return language;
-    
-    // Get the full polytime flag object
-    const polytimeFlag = getPolytimeFlag(operation.polytime);
-    const suffix = `\n${polytimeFlag.emoji}${code}`;
-    
-    return {
-      ...language,
-      visual: {
-        ...language.visual,
-        labelSuffix: (language.visual?.labelSuffix || '') + suffix
-      }
-    };
+): (data: CanonicalKCData, param: boolean) => CanonicalKCData {
+  return (data: CanonicalKCData, param: boolean) => {
+    if (!param) return data;
+    return mapLanguagesInDataset(data, (language) => {
+      const resolved = resolveLanguageProperties(
+        language.properties.queries,
+        language.properties.transformations
+      );
+
+      const operations = type === 'query' ? resolved.queries : resolved.transformations;
+      const operation = operations?.find((op) => op.code === code);
+      if (!operation) return language;
+
+      const polytimeFlag = getPolytimeFlag(operation.polytime);
+      const suffix = `\n${polytimeFlag.emoji}${code}`;
+
+      return {
+        ...language,
+        visual: {
+          ...language.visual,
+          labelSuffix: (language.visual?.labelSuffix || '') + suffix
+        }
+      };
+    });
   };
 }
 
@@ -50,13 +49,11 @@ export function generateLanguageSelectionFilters(graphData: GraphData): Language
     category: 'Show Languages',
     defaultParam: true, // All languages visible by default
     controlType: 'checkbox' as const,
-    lambda: (language: KCLanguage, param: boolean) => {
-      // If param is true, pass the language through if it matches
-      // If param is false, filter out (hide) the language if it matches
-      if (language.name === lang.name) {
-        return param ? language : null;
-      }
-      return language;
+    lambda: (data: CanonicalKCData, param: boolean) => {
+      if (param) return data;
+      return mapLanguagesInDataset(data, (language) => {
+        return language.name === lang.name ? null : language;
+      });
     }
   }));
 }
@@ -73,43 +70,40 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
     description: 'Automatically adds missing operations as "unknown" complexity',
     hidden: true, // This is an internal filter - not shown in UI
     defaultParam: true,
-    lambda: (language: KCLanguage, param: boolean) => {
-      // If param is false, return language unchanged
-      if (!param) return language;
-      
-      // Resolve operations to fill in any missing ones with 'unknown'
-      const resolved = resolveLanguageProperties(
-        language.properties.queries,
-        language.properties.transformations
-      );
-      
-      // Convert resolved arrays back to map format
-      const queriesMap: any = {};
-      for (const op of resolved.queries) {
-        queriesMap[op.code] = {
-          polytime: op.polytime,
-          ...(op.note && { note: op.note }),
-          refs: op.refs
-        };
-      }
-      
-      const transformationsMap: any = {};
-      for (const op of resolved.transformations) {
-        transformationsMap[op.code] = {
-          polytime: op.polytime,
-          ...(op.note && { note: op.note }),
-          refs: op.refs
-        };
-      }
-      
-      // Return language with fully resolved properties
-      return {
-        ...language,
-        properties: {
-          queries: queriesMap,
-          transformations: transformationsMap
+    lambda: (data: CanonicalKCData, param: boolean) => {
+      if (!param) return data;
+      return mapLanguagesInDataset(data, (language) => {
+        const resolved = resolveLanguageProperties(
+          language.properties.queries,
+          language.properties.transformations
+        );
+
+        const queriesMap: any = {};
+        for (const op of resolved.queries) {
+          queriesMap[op.code] = {
+            polytime: op.polytime,
+            ...(op.note && { note: op.note }),
+            refs: op.refs
+          };
         }
-      };
+
+        const transformationsMap: any = {};
+        for (const op of resolved.transformations) {
+          transformationsMap[op.code] = {
+            polytime: op.polytime,
+            ...(op.note && { note: op.note }),
+            refs: op.refs
+          };
+        }
+
+        return {
+          ...language,
+          properties: {
+            queries: queriesMap,
+            transformations: transformationsMap
+          }
+        };
+      });
     }
   };
 }

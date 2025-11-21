@@ -296,6 +296,20 @@ export interface GraphData {
   adjacencyMatrix: KCAdjacencyMatrix;
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
+  /** optional separating function registry */
+  separatingFunctions?: KCSeparatingFunction[];
+  /** optional metadata copied from database.json */
+  metadata?: Record<string, unknown>;
+}
+
+export interface CanonicalKCData extends GraphData {
+  /** canonical datasets must always carry separating functions */
+  separatingFunctions: KCSeparatingFunction[];
+}
+
+export interface TransformValidationResult {
+  ok: boolean;
+  errors?: string[];
 }
 
 // Filter system types
@@ -321,8 +335,8 @@ export interface LanguageFilter<T extends FilterParamValue = boolean> {
   controlType?: FilterControlType;
   /** Optional list of selectable options for dropdown-style filters */
   options?: FilterOption[];
-  /** Filter function: takes language and parameter value, returns modified language to show it, or null to hide it */
-  lambda: (language: KCLanguage, param: T) => KCLanguage | null;
+  /** Filter function operating on the entire dataset */
+  lambda: (data: CanonicalKCData, param: T) => CanonicalKCData;
 }
 
 /**
@@ -342,13 +356,8 @@ export interface EdgeFilter<T extends FilterParamValue = boolean> {
   controlType?: FilterControlType;
   /** Optional list of selectable options for dropdown-style filters */
   options?: FilterOption[];
-  /** Filter function: takes edge relation and parameter value, returns relation to show it, or null to hide it */
-  lambda: (
-    relation: DirectedSuccinctnessRelation,
-    sourceId: string,
-    targetId: string,
-    param: T
-  ) => DirectedSuccinctnessRelation | null;
+  /** Filter function operating on the entire dataset */
+  lambda: (data: CanonicalKCData, param: T) => CanonicalKCData;
 }
 
 export interface FilterCategory {

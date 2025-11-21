@@ -1,15 +1,9 @@
-import type { GraphData, LanguageFilter, EdgeFilter } from '../types.js';
-import { relationTypes } from './relation-types.js';
-import { allLanguages } from './languages.js';
-import { adjacencyMatrixData } from './edges.js';
+import type { CanonicalKCData, LanguageFilter, EdgeFilter } from '../types.js';
+import { canonicalDataset } from './canonical.js';
 import { allPredefinedFilters, generateLanguageSelectionFilters, organizeFiltersByCategory, edgeFilters } from './filters/index.js';
 
 // Export main GraphData object
-export const initialGraphData: GraphData = {
-  relationTypes,
-  languages: allLanguages,
-  adjacencyMatrix: adjacencyMatrixData
-};
+export const initialGraphData: CanonicalKCData = canonicalDataset;
 
 // Export all language filters combined (predefined + dynamic language selection)
 export function getAllLanguageFilters(): LanguageFilter[] {
@@ -31,3 +25,4 @@ export { allLanguages } from './languages.js';
 export { allPredefinedFilters } from './filters/index.js';
 export { edgeFilters } from './filters/index.js';
 export { getAllTags, getTags, getTag, CANONICAL_TAGS } from './tags.js';
+export { canonicalDataset } from './canonical.js';

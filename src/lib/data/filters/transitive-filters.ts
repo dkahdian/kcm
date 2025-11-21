@@ -1,5 +1,5 @@
-import type { LanguageFilter, KCLanguage, TransformationStatus } from '../../types.js';
-import { adjacencyMatrixData } from '../edges.js';
+import type { LanguageFilter, TransformationStatus, CanonicalKCData, KCAdjacencyMatrix } from '../../types.js';
+import { cloneDataset } from '../transforms.js';
 
 /**
  * Helper function to check if a status is poly or quasi
@@ -32,54 +32,46 @@ export const omitTransitiveEdges: LanguageFilter<boolean> = {
   category: 'Edge Visibility',
   defaultParam: true, // ON BY DEFAULT
   controlType: 'checkbox',
-  lambda: (language: KCLanguage, param: boolean) => {
-    const matrix = adjacencyMatrixData;
-    const nodeIndex = matrix.indexByLanguage[language.name];
-    if (nodeIndex === undefined) return language;
+  lambda: (data: CanonicalKCData, param: boolean) => {
+    const working = cloneDataset(data);
+    const { adjacencyMatrix } = working;
 
-    const row = matrix.matrix[nodeIndex];
-    if (!row) return language;
+    for (let nodeIndex = 0; nodeIndex < adjacencyMatrix.languageIds.length; nodeIndex += 1) {
+      const row = adjacencyMatrix.matrix[nodeIndex];
+      if (!row) continue;
 
-    // If filter is disabled, unhide all edges from this node
-    if (!param) {
-      row.forEach((relation) => {
-        if (relation) {
-          relation.hidden = false;
+      if (!param) {
+        row.forEach((relation) => {
+          if (relation) {
+            relation.hidden = false;
+          }
+        });
+        continue;
+      }
+
+      const directEdges: Array<{ targetIndex: number; edgeType: 'poly' | 'quasi' }> = [];
+      row.forEach((relation, targetIndex) => {
+        if (!relation || targetIndex === nodeIndex) return;
+        const edgeType = isPolyOrQuasi(relation.status);
+        if (edgeType) {
+          directEdges.push({ targetIndex, edgeType });
         }
       });
-      return language;
-    }
 
-    // Filter is enabled - mark transitive edges as hidden
-    // Get all direct edges from this node
-    const directEdges: Array<{targetIndex: number, edgeType: 'poly' | 'quasi'}> = [];
-    row.forEach((relation, targetIndex) => {
-      if (!relation || targetIndex === nodeIndex) return;
-      const edgeType = isPolyOrQuasi(relation.status);
-      if (edgeType) {
-        directEdges.push({ targetIndex, edgeType });
-      }
-    });
+      for (const { targetIndex, edgeType } of directEdges) {
+        const edge = adjacencyMatrix.matrix[nodeIndex][targetIndex];
+        if (!edge) continue;
 
-    // For each direct edge, check if it's transitive
-    for (const {targetIndex, edgeType} of directEdges) {
-      const edge = matrix.matrix[nodeIndex][targetIndex];
-      if (!edge) continue;
-
-      // Temporarily hide this edge
-      edge.hidden = true;
-
-      // Check if target is still reachable via BFS
-      const isStillReachable = canReach(nodeIndex, targetIndex, edgeType);
-
-      // If still reachable, edge is transitive - keep it hidden
-      // If not reachable, edge is needed - unhide it
-      if (!isStillReachable) {
-        edge.hidden = false;
+        const previousHidden = edge.hidden ?? false;
+        edge.hidden = true;
+        const reachable = canReach(adjacencyMatrix, nodeIndex, targetIndex, edgeType);
+        if (!reachable) {
+          edge.hidden = previousHidden;
+        }
       }
     }
 
-    return language;
+    return working;
   }
 };
 
@@ -90,11 +82,11 @@ export const omitTransitiveEdges: LanguageFilter<boolean> = {
  * @param edgeType - Type of edge we're checking ('poly' or 'quasi')
  */
 function canReach(
+  matrix: KCAdjacencyMatrix,
   sourceIndex: number,
   targetIndex: number,
   edgeType: 'poly' | 'quasi'
 ): boolean {
-  const matrix = adjacencyMatrixData;
   const visited = new Set<number>();
   const queue: number[] = [sourceIndex];
   visited.add(sourceIndex);

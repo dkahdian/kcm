@@ -1,120 +1,99 @@
 #!/bin/bash
 set -euo pipefail
 
-# Extract contributor info
-CONTRIBUTOR_EMAIL=$(node -p "require('./contribution.json').contributorEmail || 'anonymous'")
-CONTRIBUTOR_GITHUB=$(node -p "require('./contribution.json').contributorGithub || ''")
-CONTRIBUTOR_NOTE=$(node -p "require('./contribution.json').contributorNote || ''")
-TIMESTAMP=$(date +%s)
+mapfile -t META < <(node <<'EOF'
+const payload = require('./contribution.json');
+const fields = [
+	payload.contributorEmail || 'anonymous',
+	payload.contributorGithub || '',
+	payload.contributorNote || '',
+	payload.submissionId || '',
+	payload.supersedesSubmissionId || ''
+];
+for (const value of fields) {
+	console.log(String(value));
+}
+EOF
+)
 
-SUBMISSION_ID=$(node -p "require('./contribution.json').submissionId || ''")
-SUPERSEDES_SUBMISSION_ID=$(node -p "require('./contribution.json').supersedesSubmissionId || ''")
+CONTRIBUTOR_EMAIL=${META[0]}
+CONTRIBUTOR_GITHUB=${META[1]}
+CONTRIBUTOR_NOTE=${META[2]}
+SUBMISSION_ID=${META[3]}
+SUPERSEDES_SUBMISSION_ID=${META[4]}
 
-# Determine action and descriptive info based on what's in the payload
-LANGS_TO_ADD=$(node -p "require('./contribution.json').languagesToAdd?.length || 0")
-LANGS_TO_EDIT=$(node -p "require('./contribution.json').languagesToEdit?.length || 0")
-NEW_REFS=$(node -p "require('./contribution.json').newReferences?.length || 0")
-EDGE_UPDATES=$(node -p "require('./contribution.json').relationships?.length || 0")
 
-# Determine primary action and slug
-if [[ "$LANGS_TO_ADD" -gt 0 ]]; then
-  ACTION="add"
-  LANG_SLUG=$(node -p "require('./contribution.json').languagesToAdd[0]?.id || 'language'")
-  LANG_NAME=$(node -p "require('./contribution.json').languagesToAdd[0]?.name || 'language'")
-elif [[ "$LANGS_TO_EDIT" -gt 0 ]]; then
-  ACTION="edit"
-  LANG_SLUG=$(node -p "require('./contribution.json').languagesToEdit[0]?.id || 'language'")
-  LANG_NAME=$(node -p "require('./contribution.json').languagesToEdit[0]?.name || 'language'")
-elif [[ "$EDGE_UPDATES" -gt 0 ]]; then
-  ACTION="relations"
-  LANG_SLUG="relations"
-  LANG_NAME="relations update"
-elif [[ "$NEW_REFS" -gt 0 ]]; then
-  ACTION="references"
-  LANG_SLUG="references"
-  LANG_NAME="references update"
+sanitize_slug() {
+	local raw="$1"
+	local cleaned
+	cleaned=$(echo "$raw" | tr -c '[:alnum:]._- ' '-')
+	cleaned=${cleaned// /-}
+	cleaned=${cleaned//--/-}
+	cleaned=${cleaned#-}
+	cleaned=${cleaned%-}
+	if [[ -z "$cleaned" ]]; then
+		cleaned=$(date +%s)
+	fi
+	printf '%s' "$cleaned"
+}
+
+RAW_SLUG=${SUBMISSION_ID:-$(date +%s)}
+BRANCH_SLUG=$(sanitize_slug "$RAW_SLUG")
+BRANCH_NAME="contribution/${BRANCH_SLUG}"
+
+declare -a LABELS=("data-contribution" "needs-review")
+
+if git rev-parse --verify "$BRANCH_NAME" >/dev/null 2>&1; then
+	git checkout "$BRANCH_NAME"
 else
-  ACTION="update"
-  LANG_SLUG="data"
-  LANG_NAME="data update"
+	git checkout -b "$BRANCH_NAME"
 fi
-
-BRANCH_NAME="contribution/${ACTION}-${LANG_SLUG}-${TIMESTAMP}"
-
-git checkout -b "$BRANCH_NAME"
 
 git config user.name "bot"
 git config user.email "b@o.t"
 
 git add src/lib/data/
 
-# Check if there are any changes to commit
 if git diff --cached --quiet; then
-  echo "ERROR: No files were modified by the contribution generation script."
-  echo "This likely means the contribution data was invalid or already exists."
-  echo "Contribution payload:"
-  cat contribution.json
-  exit 1
+	echo "ERROR: No files were modified by the contribution generation script."
+	cat contribution.json
+	exit 1
 fi
 
-declare -a LABELS=("data-contribution" "needs-review")
-COMMIT_MSG="Data contribution: ${ACTION} ${LANG_SLUG}"
+COMMIT_MSG="Data contribution ${BRANCH_SLUG}"
 if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
-  COMMIT_MSG+=" (by @${CONTRIBUTOR_GITHUB})"
+	COMMIT_MSG+=" (by @${CONTRIBUTOR_GITHUB})"
 fi
 
 git commit -m "$COMMIT_MSG"
 
 git push origin "$BRANCH_NAME"
 
-if [[ "$ACTION" == "add" ]]; then
-  PR_TITLE="Add new language: ${LANG_NAME}"
-elif [[ "$ACTION" == "relations" ]]; then
-  PR_TITLE="Update edges: ${EDGE_UPDATES} relationship(s)"
-elif [[ "$ACTION" == "references" ]]; then
-  PR_TITLE="Add new references"
-else
-  PR_TITLE="Update language: ${LANG_NAME}"
-fi
-
+PR_TITLE="Data contribution ${BRANCH_SLUG}"
 if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
-  PR_TITLE+=" (by @${CONTRIBUTOR_GITHUB})"
+	PR_TITLE+=" (by @${CONTRIBUTOR_GITHUB})"
 fi
 
 export GH_TOKEN=${GH_TOKEN:-$CONTRIBUTION_TOKEN}
 
-# Get list of changed files
-CHANGED_FILES=$(git diff --name-only main..."$BRANCH_NAME")
-
-# Build PR body using a temporary file for proper formatting
 PR_BODY_FILE=$(mktemp)
 cat > "$PR_BODY_FILE" <<EOF
-## Data Contribution
+## Submission Details
 
-**Contributor Email:** ${CONTRIBUTOR_EMAIL}
+- Submission ID: ${SUBMISSION_ID:-${BRANCH_SLUG}}
+- Contributor Email: ${CONTRIBUTOR_EMAIL}
 EOF
 
-if [[ -n "$SUBMISSION_ID" ]]; then
-  {
-    echo "Submission-ID: ${SUBMISSION_ID}"
-    echo ""
-  } >> "$PR_BODY_FILE"
+if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
+	echo "- GitHub: @${CONTRIBUTOR_GITHUB}" >> "$PR_BODY_FILE"
 fi
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
-  {
-    echo "Supersedes-Submission-ID: ${SUPERSEDES_SUBMISSION_ID}"
-    echo ""
-  } >> "$PR_BODY_FILE"
-fi
-
-if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
-  echo "**GitHub:** @${CONTRIBUTOR_GITHUB}" >> "$PR_BODY_FILE"
-  echo "" >> "$PR_BODY_FILE"
+	echo "- Supersedes Submission ID: ${SUPERSEDES_SUBMISSION_ID}" >> "$PR_BODY_FILE"
 fi
 
 if [[ -n "$CONTRIBUTOR_NOTE" ]]; then
-  cat >> "$PR_BODY_FILE" <<EOF
+	cat >> "$PR_BODY_FILE" <<EOF
 
 ### Contributor Note
 ${CONTRIBUTOR_NOTE}
@@ -123,64 +102,37 @@ fi
 
 cat >> "$PR_BODY_FILE" <<EOF
 
-### Changes Summary
-- Languages added: ${LANGS_TO_ADD}
-- Languages edited: ${LANGS_TO_EDIT}
-- New references: ${NEW_REFS}
-- Edge updates: ${EDGE_UPDATES}
-EOF
+## Automation
 
-if [[ "$ACTION" != "relations" ]] && [[ "$ACTION" != "references" ]]; then
-  cat >> "$PR_BODY_FILE" <<EOF
-
-**Primary Language:** ${LANG_NAME} (\`${LANG_SLUG}\`)
-EOF
-fi
-
-cat >> "$PR_BODY_FILE" <<EOF
-
-### Files Changed
-
-\`\`\`
-${CHANGED_FILES}
-\`\`\`
-
-### Review Checklist
-- [ ] Data accuracy verified
-- [ ] References valid
-- [ ] No syntax errors
-- [ ] Builds successfully
-- [ ] Graph renders correctly
+This PR was generated from the ordered contribution queue. Validation and build checks already ran in the workflow before opening this pull request.
 
 *This PR was automatically generated from a community contribution.*
 EOF
 
-# Create PR without labels first (labels may not exist)
 gh pr create \
-  --title "$PR_TITLE" \
-  --body-file "$PR_BODY_FILE" \
-  --base main \
-  --head "$BRANCH_NAME" || {
-    rm "$PR_BODY_FILE"
-    echo "Failed to create PR"
-    exit 1
-  }
+	--title "$PR_TITLE" \
+	--body-file "$PR_BODY_FILE" \
+	--base main \
+	--head "$BRANCH_NAME" || {
+		rm "$PR_BODY_FILE"
+		echo "Failed to create PR"
+		exit 1
+	}
 
 rm "$PR_BODY_FILE"
 
 NEW_PR_NUMBER=$(gh pr view "$BRANCH_NAME" --json number --jq '.number')
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
-  SUPERSEDED_PR=$(gh pr list --state open --search "${SUPERSEDES_SUBMISSION_ID} in:body" --json number --jq '.[0].number' 2>/dev/null || true)
-  if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "null" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
-    NEW_PR_URL=$(gh pr view "$BRANCH_NAME" --json url --jq '.url')
-    gh pr close "$SUPERSEDED_PR" --comment "Superseded by ${NEW_PR_URL}."
-  else
-    echo "No open PR found for Supersedes Submission ID ${SUPERSEDES_SUBMISSION_ID}" >&2
-  fi
+	SUPERSEDED_PR=$(gh pr list --state open --search "${SUPERSEDES_SUBMISSION_ID} in:body" --json number --jq '.[0].number' 2>/dev/null || true)
+	if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "null" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
+		NEW_PR_URL=$(gh pr view "$BRANCH_NAME" --json url --jq '.url')
+		gh pr close "$SUPERSEDED_PR" --comment "Superseded by ${NEW_PR_URL}."
+	else
+		echo "No open PR found for Supersedes Submission ID ${SUPERSEDES_SUBMISSION_ID}" >&2
+	fi
 fi
 
-# Try to add labels if they exist, but don't fail if they don't
 for label in "${LABELS[@]}"; do
-  gh pr edit --add-label "$label" "$BRANCH_NAME" 2>/dev/null || echo "Note: Label '$label' not found, skipping"
+	gh pr edit --add-label "$label" "$BRANCH_NAME" 2>/dev/null || echo "Note: Label '$label' not found, skipping"
 done

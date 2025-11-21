@@ -35,20 +35,11 @@
 
   type OperationResult = { success: boolean; error?: string };
 
-  const QUEUE_STORAGE_KEY = 'kcm_contribute_queue_v1';
-  const CONTRIBUTOR_STORAGE_KEY = 'kcm_contributor_info_v1';
+  import { initialGraphData } from '$lib/data/index.js';
+  import { applyContributionQueue, type ContributionQueueState } from '$lib/data/contribution-transforms.js';
+  import { QUEUE_STORAGE_KEY, CONTRIBUTOR_STORAGE_KEY, savePreviewDataset } from '$lib/contribution-storage.js';
 
-  interface PersistedQueueState {
-    languagesToAdd: LanguageToAdd[];
-    languagesToEdit: LanguageToAdd[];
-    relationships: RelationshipEntry[];
-    newReferences: string[];
-    newSeparatingFunctions: SeparatingFunctionToAdd[];
-    customTags: CustomTag[];
-    modifiedRelations: string[];
-    submissionId?: string;
-    supersedesSubmissionId?: string | null;
-  }
+  type PersistedQueueState = ContributionQueueState;
 
   const isString = (value: unknown): value is string => typeof value === 'string';
 
@@ -198,9 +189,19 @@
   const cloneRelationshipEntry = (relationship: RelationshipEntry): RelationshipEntry => ({
     ...relationship,
     refs: [...relationship.refs],
+    separatingFunctionIds: relationship.separatingFunctionIds
+      ? [...relationship.separatingFunctionIds]
+      : undefined,
     separatingFunctions: relationship.separatingFunctions
       ? relationship.separatingFunctions.map((fn) => ({ ...fn, refs: [...fn.refs] }))
       : undefined
+  });
+
+  const cloneSeparatingFunctionToAdd = (sf: SeparatingFunctionToAdd): SeparatingFunctionToAdd => ({
+    shortName: sf.shortName,
+    name: sf.name,
+    description: sf.description,
+    refs: [...sf.refs]
   });
 
   const cloneCustomTag = (tag: CustomTag): CustomTag => ({ ...tag, refs: [...tag.refs] });
@@ -295,6 +296,7 @@
   let supersedesSubmissionId = $state<string | null>(null);
   let submissionHistory = $state<SubmissionHistoryEntry[]>([]);
   let isHistoryOpen = $state(false);
+
 
   // Derived state: check if queue has any items
   const hasQueuedItems = $derived(
@@ -402,6 +404,7 @@
       languagesToEdit.length === 0 &&
       relationships.length === 0 &&
       newReferences.length === 0 &&
+      newSeparatingFunctions.length === 0 &&
       customTags.length === 0 &&
       modifiedRelations.size === 0;
 
@@ -416,12 +419,12 @@
     }
 
     const snapshot: PersistedQueueState = {
-      languagesToAdd,
-      languagesToEdit,
-      relationships,
-      newReferences,
-      newSeparatingFunctions,
-      customTags,
+      languagesToAdd: languagesToAdd.map(cloneLanguageEntry),
+      languagesToEdit: languagesToEdit.map(cloneLanguageEntry),
+      relationships: relationships.map(cloneRelationshipEntry),
+      newReferences: [...newReferences],
+      newSeparatingFunctions: newSeparatingFunctions.map(cloneSeparatingFunctionToAdd),
+      customTags: customTags.map(cloneCustomTag),
       modifiedRelations: Array.from(modifiedRelations),
       submissionId: activeSubmissionId,
       supersedesSubmissionId: supersedesSubmissionId ?? null
@@ -447,6 +450,35 @@
       localStorage.setItem(CONTRIBUTOR_STORAGE_KEY, JSON.stringify(info));
     } catch (error) {
       console.warn('Failed to persist contributor info', error);
+    }
+  });
+
+  // Build preview dataset snapshot for the main map
+  $effect(() => {
+    if (!queuePersistenceReady || !browser) return;
+
+    if (!hasQueuedItems) {
+      savePreviewDataset(null);
+      return;
+    }
+
+    const queuePayload: ContributionQueueState = {
+      languagesToAdd: languagesToAdd.map(cloneLanguageEntry),
+      languagesToEdit: languagesToEdit.map(cloneLanguageEntry),
+      relationships: relationships.map(cloneRelationshipEntry),
+      newReferences: [...newReferences],
+      newSeparatingFunctions: newSeparatingFunctions.map(cloneSeparatingFunctionToAdd),
+      customTags: customTags.map(cloneCustomTag),
+      modifiedRelations: Array.from(modifiedRelations),
+      submissionId: activeSubmissionId,
+      supersedesSubmissionId: supersedesSubmissionId ?? null
+    };
+
+    try {
+      const dataset = applyContributionQueue(initialGraphData, queuePayload);
+      savePreviewDataset(dataset);
+    } catch (error) {
+      console.error('Failed to build preview dataset:', error);
     }
   });
 

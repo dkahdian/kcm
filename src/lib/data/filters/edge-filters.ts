@@ -1,4 +1,5 @@
-import type { EdgeFilter, DirectedSuccinctnessRelation } from '../../types.js';
+import type { EdgeFilter } from '../../types.js';
+import { mapRelationsInDataset } from '../transforms.js';
 
 type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
 type PolyDisplayMode = 'include-quasipolynomial' | 'polytime-vs-not';
@@ -17,32 +18,28 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
     { value: 'include-quasipolynomial', label: 'Also include quasipolynomial time', description: 'Show all edge types as-is' },
     { value: 'polytime-vs-not', label: 'Polytime vs not polytime', description: 'Collapse to polynomial, not polynomial, or unknown' }
   ],
-  lambda: (relation, sourceId, targetId, mode) => {
+  lambda: (data, mode) => {
     if (mode === 'include-quasipolynomial') {
-      return relation;
+      return data;
     }
-    
-    // mode === 'polytime-vs-not'
-    // Transform edges to poly, not-poly, or unknown-both
-    let newStatus = relation.status;
-    
-    switch (relation.status) {
-      case 'poly':
-        // poly → poly (keep as-is)
-        break;
-      case 'no-poly-unknown-quasi':
-      case 'no-poly-quasi':
-      case 'no-quasi':
-        newStatus = 'not-poly';
-        break;
-      case 'unknown-poly-quasi':
-      case 'unknown-both':
-        // This remains as unknown-both (truly unknown)
-        newStatus = 'unknown-both';
-        break;
-    }
-    
-    return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      let newStatus = relation.status;
+      switch (relation.status) {
+        case 'poly':
+          break;
+        case 'no-poly-unknown-quasi':
+        case 'no-poly-quasi':
+        case 'no-quasi':
+          newStatus = 'not-poly';
+          break;
+        case 'unknown-poly-quasi':
+        case 'unknown-both':
+          newStatus = 'unknown-both';
+          break;
+      }
+      return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+    });
   }
 };
 
@@ -62,38 +59,49 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
     { value: 'optimistically', label: 'Optimistically', description: 'Assume unknown edges behave as positively as possible' },
     { value: 'pessimistically', label: 'Pessimistically', description: 'Assume unknown edges behave as restrictively as possible' }
   ],
-  lambda: (relation, sourceId, targetId, mode) => {
-    switch (mode) {
-      case 'expressively':
-        return relation;
-      case 'omit-all':
-        if (
-          relation.status !== 'unknown-poly-quasi' && relation.status !== 'unknown-both' && relation.status !== 'no-poly-unknown-quasi'
-        ) {
-          return relation;
-        }
-        return null;
-      case 'optimistically': {
-        let newStatus = relation.status;
-        if (relation.status === 'no-poly-unknown-quasi') {
-          newStatus = 'no-poly-quasi';
-        } else if (relation.status === 'unknown-poly-quasi' || relation.status === 'unknown-both') {
-          newStatus = 'poly';
-        }
-        return newStatus === relation.status ? relation : { ...relation, status: newStatus };
-      }
-      case 'pessimistically': {
-        let newStatus = relation.status;
-        if (relation.status === 'unknown-both' || relation.status === 'no-poly-unknown-quasi') {
-          newStatus = 'no-quasi';
-        } else if (relation.status === 'unknown-poly-quasi') {
-          newStatus = 'no-poly-quasi';
-        }
-        return newStatus === relation.status ? relation : { ...relation, status: newStatus };
-      }
-      default:
-        return relation;
+  lambda: (data, mode) => {
+    if (mode === 'expressively') {
+      return data;
     }
+
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+
+      switch (mode) {
+        case 'omit-all':
+          if (
+            relation.status !== 'unknown-poly-quasi' &&
+            relation.status !== 'unknown-both' &&
+            relation.status !== 'no-poly-unknown-quasi'
+          ) {
+            return relation;
+          }
+          return null;
+        case 'optimistically': {
+          let newStatus = relation.status;
+          if (relation.status === 'no-poly-unknown-quasi') {
+            newStatus = 'no-poly-quasi';
+          } else if (
+            relation.status === 'unknown-poly-quasi' ||
+            relation.status === 'unknown-both'
+          ) {
+            newStatus = 'poly';
+          }
+          return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+        }
+        case 'pessimistically': {
+          let newStatus = relation.status;
+          if (relation.status === 'unknown-both' || relation.status === 'no-poly-unknown-quasi') {
+            newStatus = 'no-quasi';
+          } else if (relation.status === 'unknown-poly-quasi') {
+            newStatus = 'no-poly-quasi';
+          }
+          return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+        }
+        default:
+          return relation;
+      }
+    });
   }
 };
 
@@ -107,18 +115,18 @@ export const omitSeparatorFunctions: EdgeFilter = {
   category: 'Edge Visibility',
   defaultParam: true, // ON BY DEFAULT
   controlType: 'checkbox',
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
-    
-    // Remove all separator functions
-    if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
-      return {
-        ...relation,
-        separatingFunctions: []
-      };
-    }
-    
-    return relation;
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
+        return {
+          ...relation,
+          separatingFunctions: []
+        };
+      }
+      return relation;
+    });
   }
 };
 
@@ -134,15 +142,15 @@ export const hideMarkedEdges: EdgeFilter = {
   defaultParam: true,
   controlType: 'checkbox',
   hidden: true, // Internal filter, not shown in UI
-  lambda: (relation, sourceId, targetId, param) => {
-    if (!param) return relation;
-    
-    // Hide edges that are marked as hidden
-    if (relation.hidden) {
-      return null;
-    }
-    
-    return relation;
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      if (relation.hidden) {
+        return null;
+      }
+      return relation;
+    });
   }
 };
 

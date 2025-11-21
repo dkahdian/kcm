@@ -1,22 +1,30 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+import { canonicalDataset } from '../../src/lib/data/canonical.js';
+import {
+  applyContributionQueue,
+  type ContributionQueueState,
+  type ContributionQueueEntry
+} from '../../src/lib/data/contribution-transforms.js';
 import { generateReferenceId } from '../../src/lib/utils/reference-id.js';
+import type { KCLanguage, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../../src/lib/types.js';
+import type {
+  LanguageToAdd,
+  RelationshipEntry,
+  SeparatingFunctionToAdd,
+  CustomTag
+} from '../../src/routes/contribute/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../..');
 const dataDir = path.join(rootDir, 'src/lib/data');
 const databasePath = path.join(dataDir, 'database.json');
+const contributionPath = path.join(rootDir, 'contribution.json');
 
-type RawLanguage = Record<string, any> & { name: string };
-type DirectedRelation = {
-  status: string;
-  description?: string;
-  refs: string[];
-  separatingFunctionIds?: string[]; // NEW: Store IDs instead of full objects
-  separatingFunctions?: any[]; // DEPRECATED: Keep for backward compatibility
-};
+type RawLanguage = Omit<KCLanguage, 'references' | 'visual'>;
 
 interface DatabaseShape {
   languages: RawLanguage[];
@@ -26,281 +34,221 @@ interface DatabaseShape {
   tags: unknown;
   operations: unknown;
   polytimeComplexities: unknown;
+  metadata?: Record<string, unknown>;
   adjacencyMatrix: {
     languageIds: string[];
-    matrix: (DirectedRelation | null)[][];
+    matrix: (DirectedSuccinctnessRelation | null)[][];
   };
 }
 
-const database = JSON.parse(fs.readFileSync(databasePath, 'utf8')) as DatabaseShape;
+type ContributionPayload = {
+  queue?: Partial<ContributionQueueState> & { entries?: ContributionQueueEntry[] };
+  queueEntries?: ContributionQueueEntry[];
+  entries?: ContributionQueueEntry[];
+  languagesToAdd?: LanguageToAdd[];
+  languagesToEdit?: LanguageToAdd[];
+  relationships?: RelationshipEntry[];
+  newReferences?: string[];
+  newSeparatingFunctions?: SeparatingFunctionToAdd[];
+  customTags?: CustomTag[];
+  modifiedRelations?: string[];
+  submissionId?: string;
+  supersedesSubmissionId?: string | null;
+};
 
-// Load contribution data
-const contributionPath = path.join(rootDir, 'contribution.json');
-const contribution = JSON.parse(fs.readFileSync(contributionPath, 'utf8'));
+function assertContributionExists(payload: ContributionPayload): void {
+  if (!payload) {
+    throw new Error('Contribution payload is missing or unreadable.');
+  }
+}
 
-console.log('Processing contribution...');
+function deriveRelationshipKeys(entries: ContributionQueueEntry[]): string[] {
+  const keys = new Set<string>();
+  for (const entry of entries) {
+    if (entry.kind === 'relationship') {
+      keys.add(`${entry.payload.sourceId}->${entry.payload.targetId}`);
+    }
+  }
+  return Array.from(keys);
+}
+
+function legacyEntriesFromArrays(payload: ContributionPayload): ContributionQueueEntry[] {
+  const entries: ContributionQueueEntry[] = [];
+  (payload.newReferences ?? []).forEach((bibtex, idx) => {
+    entries.push({ id: `legacy-ref-${idx}`, kind: 'reference', payload: bibtex });
+  });
+  (payload.newSeparatingFunctions ?? []).forEach((sf, idx) => {
+    entries.push({ id: `legacy-sep-${idx}`, kind: 'separator', payload: sf });
+  });
+  (payload.languagesToAdd ?? []).forEach((lang, idx) => {
+    entries.push({ id: `legacy-lang-add-${idx}`, kind: 'language:new', payload: lang });
+  });
+  (payload.languagesToEdit ?? []).forEach((lang, idx) => {
+    entries.push({ id: `legacy-lang-edit-${idx}`, kind: 'language:edit', payload: lang });
+  });
+  (payload.relationships ?? []).forEach((rel, idx) => {
+    entries.push({ id: `legacy-rel-${idx}`, kind: 'relationship', payload: rel });
+  });
+  return entries;
+}
+
+function normalizeQueueState(payload: ContributionPayload): ContributionQueueState {
+  const candidateEntryLists: Array<ContributionQueueEntry[] | undefined> = [
+    payload.queue?.entries,
+    payload.queueEntries,
+    payload.entries
+  ];
+  let entries = candidateEntryLists.find((list): list is ContributionQueueEntry[] => Array.isArray(list));
+
+  if (!entries) {
+    entries = legacyEntriesFromArrays(payload);
+  }
+
+  if (!entries || entries.length === 0) {
+    throw new Error('No contribution queue entries were provided.');
+  }
+
+  const modifiedRelationsCandidate = payload.queue?.modifiedRelations ?? payload.modifiedRelations;
+  const modifiedRelations = Array.isArray(modifiedRelationsCandidate) && modifiedRelationsCandidate.length > 0
+    ? modifiedRelationsCandidate
+    : deriveRelationshipKeys(entries);
+
+  const customTags = Array.isArray(payload.queue?.customTags)
+    ? payload.queue?.customTags
+    : Array.isArray(payload.customTags)
+    ? payload.customTags
+    : [];
+
+  const submissionId = typeof payload.queue?.submissionId === 'string'
+    ? payload.queue?.submissionId
+    : typeof payload.submissionId === 'string'
+    ? payload.submissionId
+    : undefined;
+
+  const supersedes = payload.queue?.supersedesSubmissionId ?? payload.supersedesSubmissionId;
+
+  return {
+    entries,
+    customTags,
+    modifiedRelations,
+    submissionId,
+    supersedesSubmissionId:
+      typeof supersedes === 'string'
+        ? supersedes
+        : supersedes === null
+        ? null
+        : undefined
+  };
+}
+
+function toRawLanguage(language: KCLanguage): RawLanguage {
+  const { references: _references, visual: _visual, ...rest } = language;
+  const properties = {
+    queries: rest.properties?.queries ?? {},
+    transformations: rest.properties?.transformations ?? {}
+  };
+  return {
+    ...structuredClone({ ...rest, properties })
+  };
+}
+
+function normalizeAdjacencyMatrix(matrix: KCAdjacencyMatrix) {
+  const sortedIds = [...matrix.languageIds].sort((a, b) => a.localeCompare(b));
+  const rebuilt = sortedIds.map((sourceId) =>
+    sortedIds.map((targetId) => {
+      const sourceIdx = matrix.indexByLanguage[sourceId];
+      const targetIdx = matrix.indexByLanguage[targetId];
+      if (sourceIdx === undefined || targetIdx === undefined) {
+        return null;
+      }
+      const relation = matrix.matrix[sourceIdx]?.[targetIdx] ?? null;
+      if (!relation) return null;
+      const output: DirectedSuccinctnessRelation = {
+        status: relation.status,
+        refs: [...(relation.refs ?? [])]
+      };
+      if (relation.description) {
+        output.description = relation.description;
+      }
+      if (relation.separatingFunctionIds?.length) {
+        output.separatingFunctionIds = [...relation.separatingFunctionIds];
+      }
+      if (relation.separatingFunctions?.length) {
+        output.separatingFunctions = relation.separatingFunctions.map((fn) => ({
+          shortName: fn.shortName,
+          name: fn.name,
+          description: fn.description,
+          refs: [...fn.refs]
+        }));
+      }
+      return output;
+    })
+  );
+
+  return { languageIds: sortedIds, matrix: rebuilt };
+}
+
+function mergeReferences(
+  existing: Array<{ id: string; bibtex: string }>,
+  entries: ContributionQueueEntry[]
+): { references: Array<{ id: string; bibtex: string }>; created: number } {
+  const updated = [...existing];
+  const existingIds = new Set(updated.map((ref) => ref.id));
+  const existingBibtex = new Set(updated.map((ref) => ref.bibtex.trim()));
+  let created = 0;
+
+  for (const entry of entries) {
+    if (entry.kind !== 'reference') continue;
+    const raw = typeof entry.payload === 'string' ? entry.payload.trim() : '';
+    if (!raw) {
+      console.warn('Skipping empty reference payload in queue entry', entry.id);
+      continue;
+    }
+    if (existingBibtex.has(raw)) {
+      continue;
+    }
+    const generatedId = generateReferenceId(raw, existingIds);
+    existingIds.add(generatedId);
+    existingBibtex.add(raw);
+    updated.push({ id: generatedId, bibtex: raw });
+    created++;
+  }
+
+  updated.sort((a, b) => a.id.localeCompare(b.id));
+  return { references: updated, created };
+}
 
 try {
-  // ============================================================================
-  // 1. HANDLE NEW LANGUAGES
-  // ============================================================================
-  
-  const existingLanguageMap = new Map<string, RawLanguage>(
-    database.languages.map((lang) => [lang.name, lang])
+  const database = JSON.parse(fs.readFileSync(databasePath, 'utf8')) as DatabaseShape;
+  const contribution = JSON.parse(fs.readFileSync(contributionPath, 'utf8')) as ContributionPayload;
+
+  assertContributionExists(contribution);
+
+  console.log('Processing contribution via ordered queue...');
+
+  const queueState = normalizeQueueState(contribution);
+  console.log(`- Queue entries: ${queueState.entries.length}`);
+
+  const merged = applyContributionQueue(canonicalDataset, queueState);
+
+  const rawLanguages = merged.languages.map(toRawLanguage).sort((a, b) => a.name.localeCompare(b.name));
+  database.languages = rawLanguages;
+
+  const normalizedMatrix = normalizeAdjacencyMatrix(merged.adjacencyMatrix);
+  database.adjacencyMatrix = normalizedMatrix;
+
+  database.separatingFunctions = [...merged.separatingFunctions].sort((a, b) =>
+    a.shortName.localeCompare(b.shortName)
   );
 
-  const sanitizeLanguagePayload = (raw: any): RawLanguage => {
-    const { references, slug, existingReferences, ...rest } = raw;
-    return rest as RawLanguage;
-  };
-
-  if (contribution.languagesToAdd && contribution.languagesToAdd.length > 0) {
-    console.log(`\nAdding ${contribution.languagesToAdd.length} new language(s)...`);
-
-    for (const lang of contribution.languagesToAdd) {
-      console.log(`  - Adding language: ${lang.name}`);
-      if (existingLanguageMap.has(lang.name)) {
-        throw new Error(`Language already exists: ${lang.name}`);
-      }
-
-      const sanitized = sanitizeLanguagePayload(lang);
-      database.languages.push(sanitized);
-      existingLanguageMap.set(sanitized.name, sanitized);
-    }
-  }
-  
-  // ============================================================================
-  // 2. HANDLE LANGUAGE EDITS
-  // ============================================================================
-  
-  if (contribution.languagesToEdit && contribution.languagesToEdit.length > 0) {
-    console.log(`\nEditing ${contribution.languagesToEdit.length} language(s)...`);
-    
-    for (const langUpdate of contribution.languagesToEdit) {
-      console.log(`  - Updating language: ${langUpdate.name}`);
-      const existing = existingLanguageMap.get(langUpdate.name);
-      if (!existing) {
-        throw new Error(`Language not found: ${langUpdate.name}`);
-      }
-
-      const sanitized = sanitizeLanguagePayload(langUpdate);
-      const merged = { ...existing, ...sanitized } as RawLanguage;
-
-      existingLanguageMap.set(langUpdate.name, merged);
-
-      const index = database.languages.findIndex((lang) => lang.name === langUpdate.name);
-      if (index !== -1) {
-        database.languages[index] = merged;
-      }
-    }
-  }
-  
-  // ============================================================================
-  // 3. HANDLE EDGES/RELATIONSHIPS
-  // ============================================================================
-  
-  const relationKey = (sourceId: string, targetId: string) => `${sourceId}→${targetId}`;
-
-  const relationMap = new Map<string, DirectedRelation>();
-
-  const baseLanguageIds = database.adjacencyMatrix.languageIds || [];
-  const baseMatrix = database.adjacencyMatrix.matrix || [];
-
-  for (let i = 0; i < baseLanguageIds.length; i++) {
-    for (let j = 0; j < baseLanguageIds.length; j++) {
-      const relation = baseMatrix[i]?.[j] || null;
-      if (relation) {
-        const baseRel: DirectedRelation = {
-          status: relation.status,
-          description: relation.description,
-          refs: relation.refs || []
-        };
-        
-        // Support both old and new formats
-        if (relation.separatingFunctionIds) {
-          baseRel.separatingFunctionIds = relation.separatingFunctionIds;
-        } else if (relation.separatingFunctions) {
-          baseRel.separatingFunctions = relation.separatingFunctions;
-        }
-        
-        relationMap.set(relationKey(baseLanguageIds[i], baseLanguageIds[j]), baseRel);
-      }
-    }
-  }
-
-  if (contribution.relationships && contribution.relationships.length > 0) {
-    console.log(`\nUpdating ${contribution.relationships.length} relationship(s)...`);
-
-    const newlyAddedNames = (contribution.languagesToAdd || []).map((lang: any) => lang.name);
-    const allKnownNames = new Set(existingLanguageMap.keys());
-    newlyAddedNames.forEach((name: string) => allKnownNames.add(name));
-
-    for (const rel of contribution.relationships) {
-      if (!allKnownNames.has(rel.sourceId)) {
-        throw new Error(`Unknown source language in relationship: ${rel.sourceId}`);
-      }
-      if (!allKnownNames.has(rel.targetId)) {
-        throw new Error(`Unknown target language in relationship: ${rel.targetId}`);
-      }
-
-      console.log(`  - ${rel.sourceId} -> ${rel.targetId} (${rel.status})`);
-
-      const updatedRel: DirectedRelation = {
-        status: rel.status,
-        description: rel.description || '',
-        refs: rel.refs || []
-      };
-      
-      // Support both old and new formats, prefer new format
-      if (rel.separatingFunctionIds && rel.separatingFunctionIds.length > 0) {
-        updatedRel.separatingFunctionIds = rel.separatingFunctionIds;
-      } else if (rel.separatingFunctions && rel.separatingFunctions.length > 0) {
-        updatedRel.separatingFunctions = rel.separatingFunctions;
-      }
-
-      relationMap.set(relationKey(rel.sourceId, rel.targetId), updatedRel);
-    }
-
-    console.log('Updated adjacency relationships in memory');
-  }
-  
-  // ============================================================================
-  // 4. HANDLE NEW REFERENCES
-  // ============================================================================
-  
-  if (contribution.newReferences && contribution.newReferences.length > 0) {
-    console.log(`\nAdding ${contribution.newReferences.length} new reference(s)...`);
-    
-    const refs = database.references;
-    const existingIds = new Set<string>(refs.map((r) => String(r.id)));
-
-    for (const rawRef of contribution.newReferences as Array<any>) {
-      if (typeof rawRef !== 'string') {
-        console.warn('  ! Skipping non-string reference payload:', rawRef);
-        continue;
-      }
-
-      const generatedId = generateReferenceId(rawRef, existingIds);
-      existingIds.add(generatedId);
-
-      console.log(`  - Adding reference: ${generatedId}`);
-
-      const existing = refs.find((r) => r.id === generatedId);
-      if (existing) {
-        console.log('    (already exists, skipping)');
-        continue;
-      }
-
-      refs.push({
-        id: generatedId,
-        bibtex: rawRef
-      });
-    }
-
-    refs.sort((a, b) => a.id.localeCompare(b.id));
-    console.log('Prepared reference updates');
-  }
-  
-  // ============================================================================
-  // 5. HANDLE NEW SEPARATING FUNCTIONS
-  // ============================================================================
-  
-  // Initialize separatingFunctions array if it doesn't exist
-  if (!database.separatingFunctions) {
-    database.separatingFunctions = [];
-  }
-  
-  if (contribution.newSeparatingFunctions && contribution.newSeparatingFunctions.length > 0) {
-    console.log(`\nAdding ${contribution.newSeparatingFunctions.length} new separating function(s)...`);
-    
-    const existingShortNames = new Set<string>(
-      database.separatingFunctions.map((sf) => sf.shortName)
-    );
-
-    for (const rawSF of contribution.newSeparatingFunctions as Array<any>) {
-      if (!rawSF || typeof rawSF !== 'object' || !rawSF.shortName) {
-        console.warn('  ! Skipping invalid separating function payload:', rawSF);
-        continue;
-      }
-
-      console.log(`  - Adding separating function: ${rawSF.shortName}`);
-
-      if (existingShortNames.has(rawSF.shortName)) {
-        console.log('    (already exists, skipping)');
-        continue;
-      }
-
-      database.separatingFunctions.push({
-        shortName: rawSF.shortName,
-        name: rawSF.name || '',
-        description: rawSF.description || '',
-        refs: rawSF.refs || []
-      });
-      
-      existingShortNames.add(rawSF.shortName);
-    }
-
-    database.separatingFunctions.sort((a, b) => a.shortName.localeCompare(b.shortName));
-    console.log('Prepared separating function updates');
-  }
-
-  // Sort languages for deterministic ordering (by name)
-  database.languages.sort((a, b) => a.name.localeCompare(b.name));
-
-  const orderedLanguageIds = database.languages.map((lang) => lang.name);
-
-  // Ensure any languages mentioned in relations are included
-  for (const key of relationMap.keys()) {
-    const [sourceId, targetId] = key.split('→');
-    if (!orderedLanguageIds.includes(sourceId)) {
-      orderedLanguageIds.push(sourceId);
-    }
-    if (!orderedLanguageIds.includes(targetId)) {
-      orderedLanguageIds.push(targetId);
-    }
-  }
-
-  const uniqueLanguageIds = Array.from(new Set(orderedLanguageIds)).sort((a, b) => a.localeCompare(b));
-
-  const size = uniqueLanguageIds.length;
-  const rebuiltMatrix: (DirectedRelation | null)[][] = Array.from({ length: size }, () =>
-    Array.from({ length: size }, () => null)
-  );
-
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      const key = relationKey(uniqueLanguageIds[i], uniqueLanguageIds[j]);
-      const relation = relationMap.get(key) || null;
-      if (relation) {
-        const outputRel: any = {
-          status: relation.status,
-          description: relation.description || '',
-          refs: [...new Set(relation.refs)]
-        };
-        
-        // Output both formats for backward compatibility during transition
-        if (relation.separatingFunctionIds && relation.separatingFunctionIds.length > 0) {
-          outputRel.separatingFunctionIds = relation.separatingFunctionIds;
-        }
-        if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
-          outputRel.separatingFunctions = relation.separatingFunctions;
-        }
-        
-        rebuiltMatrix[i][j] = outputRel;
-      }
-    }
-  }
-
-  database.adjacencyMatrix = {
-    languageIds: uniqueLanguageIds,
-    matrix: rebuiltMatrix
-  };
+  const referenceResult = mergeReferences(database.references ?? [], queueState.entries);
+  database.references = referenceResult.references;
 
   fs.writeFileSync(databasePath, JSON.stringify(database, null, 2), 'utf8');
-  console.log('Wrote consolidated database.json');
-  
-  console.log('\n✅ Contribution processed successfully!');
-  
+  console.log('✅ Wrote updated database.json');
+  console.log(`   Languages total: ${database.languages.length}`);
+  console.log(`   References added: ${referenceResult.created}`);
+  console.log(`   Separating functions total: ${database.separatingFunctions.length}`);
 } catch (error: any) {
   console.error('\n❌ Error generating contribution:', error?.message || error);
   process.exit(1);

@@ -546,7 +546,7 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "name": "d-SDNNF_T",
+      "name": "d-SDNNF$_T$",
       "properties": {
         "queries": {
           "CE": {
@@ -1353,7 +1353,7 @@
         "Bryant_1986"
       ],
       "fullName": "Ordered Binary Decision Diagram (wrt a fixed variable order)",
-      "name": "OBDD_<",
+      "name": "OBDD$_<$",
       "properties": {
         "queries": {
           "CE": {
@@ -1664,7 +1664,7 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "name": "SDD_T",
+      "name": "SDD$_T$",
       "properties": {
         "queries": {
           "CE": {
@@ -1850,7 +1850,7 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "name": "SDNNF_T",
+      "name": "SDNNF$_T$",
       "properties": {
         "queries": {
           "CE": {

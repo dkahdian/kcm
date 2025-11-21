@@ -125,6 +125,7 @@
       .filter((item): item is LanguageToAdd => item !== null);
   }
 
+
   function sanitizeSeparatingFunctions(value: unknown): SeparatingFunctionEntry[] {
     if (!Array.isArray(value)) return [];
     const results: SeparatingFunctionEntry[] = [];
@@ -548,7 +549,6 @@
 
   function handleUpdateLanguageToAdd(language: LanguageToAdd): OperationResult {
     if (editLanguageToAddIndex !== null) {
-      // Update the language at the edit index
       languagesToAdd[editLanguageToAddIndex] = language;
       languagesToAdd = [...languagesToAdd];
 
@@ -566,7 +566,6 @@
 
   function handleUpdateLanguageToEdit(language: LanguageToAdd): OperationResult {
     if (editLanguageToEditIndex !== null) {
-      // Update the language at the edit index
       languagesToEdit[editLanguageToEditIndex] = language;
       languagesToEdit = [...languagesToEdit];
 

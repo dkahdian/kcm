@@ -4,6 +4,8 @@
   import cytoscape from 'cytoscape';
   // @ts-ignore - dagre doesn't have proper TypeScript types
   import dagre from 'cytoscape-dagre';
+  // @ts-ignore - plugin has no types
+  import nodeEdgeHtmlLabel from 'cytoscape-node-edge-html-label';
   import type {
       GraphData,
       FilteredGraphData,
@@ -14,8 +16,18 @@
       SelectedEdge
     } from './types.js';
   import { getEdgeEndpointStyle } from './data/relation-types.js';
+  import { renderMathText, escapeHtml } from './utils/math-text.js';
 
   const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions_v1';
+
+  let pluginsRegistered = false;
+
+  function ensureCytoscapePluginsRegistered() {
+    if (pluginsRegistered) return;
+    cytoscape.use(dagre);
+    nodeEdgeHtmlLabel(cytoscape as any);
+    pluginsRegistered = true;
+  }
 
   interface NodePosition {
     x: number;
@@ -58,6 +70,30 @@
     } catch (error) {
       console.warn('Failed to persist node positions', error);
     }
+  }
+
+  function getRenderableContent(value: string | null | undefined) {
+    const normalized = value ?? '';
+    const result = renderMathText(normalized);
+    return {
+      html: result.html,
+      text: normalized
+    };
+  }
+
+  function buildLabelContainer(
+    innerHtml: string,
+    classNames: string[] = [],
+    markEmpty = false
+  ) {
+    const trimmed = innerHtml?.trim() ?? '';
+    const effectiveHtml = trimmed ? innerHtml : '&nbsp;';
+    const classes = classNames.filter(Boolean);
+    if (!trimmed && markEmpty) {
+      classes.push('edge-label-wrapper--empty');
+    }
+    const classAttr = classes.length ? ` class="${classes.join(' ')}"` : '';
+    return `<div${classAttr}>${effectiveHtml}</div>`;
   }
 
   let { graphData, selectedNode = $bindable(), selectedEdge = $bindable() }: {
@@ -404,23 +440,30 @@
         const defaultPositionClone = { ...defaultPosition };
         // Store default position (clone to prevent later mutation)
         defaultPositions.set(lang.name, defaultPositionClone);
-        
+
         const storedPosition = storedPositions[lang.name];
         const initialPosition = storedPosition
           ? { x: storedPosition.x, y: storedPosition.y }
           : { ...defaultPositionClone };
+
+        const labelPrefix = lang.visual?.labelPrefix || '';
+        const labelSuffix = lang.visual?.labelSuffix || '';
+        const nodeLabel = `${labelPrefix}${lang.name}${labelSuffix}`;
+        const labelContent = getRenderableContent(nodeLabel);
         elements.push({
           data: {
             id: lang.name,
-            label: lang.name,
+            label: nodeLabel,
+            labelHtml: labelContent.html,
+            labelText: labelContent.text,
             fullName: lang.fullName,
             description: lang.description,
             properties: lang.properties,
             bgColor: lang.visual?.backgroundColor,
             borderColor: lang.visual?.borderColor,
             borderWidth: lang.visual?.borderWidth,
-            labelPrefix: lang.visual?.labelPrefix || '',
-            labelSuffix: lang.visual?.labelSuffix || ''
+            labelPrefix: labelPrefix,
+            labelSuffix: labelSuffix
           },
           position: initialPosition
         });
@@ -435,6 +478,11 @@
       if (aVisible && bVisible) {
         const aToBStyle = getEdgeEndpointStyle(edge.aToB);
         const bToAStyle = getEdgeEndpointStyle(edge.bToA);
+
+        const forwardSeparator = edge.forward?.separatingFunctions?.[0]?.shortName ?? '';
+        const backwardSeparator = edge.backward?.separatingFunctions?.[0]?.shortName ?? '';
+        const forwardLabelContent = getRenderableContent(forwardSeparator);
+        const backwardLabelContent = getRenderableContent(backwardSeparator);
         
         elements.push({
           data: {
@@ -447,6 +495,10 @@
             refs: edge.refs,
             aToBSeparating: edge.forward?.separatingFunctions?.map(fn => fn.shortName) ?? [],
             bToASeparating: edge.backward?.separatingFunctions?.map(fn => fn.shortName) ?? [],
+            forwardLabel: forwardLabelContent.text,
+            forwardLabelHtml: forwardLabelContent.html,
+            backwardLabel: backwardLabelContent.text,
+            backwardLabelHtml: backwardLabelContent.html,
             width: 2,
             sourceArrow: bToAStyle.arrow,
             sourceDashed: bToAStyle.dashed,
@@ -465,11 +517,7 @@
           'border-color': (ele: any) => ele.data('borderColor') || '#d1d5db',
           'border-width': (ele: any) => ele.data('borderWidth') || 2,
           color: '#1f2937',
-          label: (ele: any) => {
-            const prefix = ele.data('labelPrefix') || '';
-            const suffix = ele.data('labelSuffix') || '';
-            return prefix + ele.data('label') + suffix;
-          },
+          label: '',
           'text-valign': 'center',
           'text-halign': 'center',
           'font-size': '14px',
@@ -511,22 +559,17 @@
             return dashed ? 'hollow' : 'filled';
           },
           'curve-style': 'bezier',
-          // Show separating function labels
-          label: (ele: any) => {
-            const aToBSep = ele.data('aToBSeparating') || [];
-            const bToASep = ele.data('bToASeparating') || [];
-            const labels: string[] = [];
-            
-            // Show first separating function from each direction if present
-            if (bToASep.length > 0) labels.push(bToASep[0]);
-            if (aToBSep.length > 0) labels.push(aToBSep[0]);
-            
-            return labels.join('                              ');
-          },
-          'font-size': '11px',
-          'text-rotation': 'autorotate',
-          'text-margin-y': -10,
+          label: '',
           color: '#374151'
+        }
+      },
+      {
+        selector: 'edge.edge-hovered',
+        style: {
+          'line-color': '#3b82f6',
+          'target-arrow-color': '#3b82f6',
+          'source-arrow-color': '#3b82f6',
+          width: 3
         }
       }
     ];
@@ -553,6 +596,29 @@
       boxSelectionEnabled: false,
       selectionType: 'single'
     });
+
+    const htmlLabelOptions = [
+      {
+        query: 'node',
+        valign: 'center',
+        halign: 'center',
+        halignBox: 'center',
+        valignBox: 'center',
+        cssClass: 'cy-node-html-label',
+        tpl: (data: any) => {
+          const rawHtml = data.labelHtml ?? escapeHtml(data.labelText ?? '');
+          return buildLabelContainer(rawHtml);
+        }
+      },
+      {
+        query: 'edge',
+        cssClass: 'cy-edge-html-label',
+        tpl: (data: any) => buildEdgeLabelTemplate(data)
+      }
+    ];
+
+    // @ts-ignore - provided by plugin
+    cy.nodeHtmlLabel(htmlLabelOptions);
 
     if (browser) {
       persistNodePositions(cy.nodes());
@@ -673,23 +739,13 @@
 
     cy.on('mouseover', 'edge', (evt) => {
       const edge = evt.target;
-      edge.style({
-        'line-color': '#3b82f6',
-        'target-arrow-color': '#3b82f6',
-        'source-arrow-color': '#3b82f6',
-        'width': 3
-      });
+      edge.addClass('edge-hovered');
       graphContainer.style.cursor = 'pointer';
     });
 
     cy.on('mouseout', 'edge', (evt) => {
       const edge = evt.target;
-      edge.style({
-        'line-color': '#6b7280',
-        'target-arrow-color': '#6b7280',
-        'source-arrow-color': '#6b7280',
-        'width': 2
-      });
+      edge.removeClass('edge-hovered');
       graphContainer.style.cursor = 'default';
     });
 
@@ -699,8 +755,29 @@
     }
   }
 
+  function buildEdgeLabelTemplate(data: any): string {
+    const backward = data?.backwardLabelHtml ?? (data?.backwardLabel ? escapeHtml(data.backwardLabel) : '');
+    const forward = data?.forwardLabelHtml ?? (data?.forwardLabel ? escapeHtml(data.forwardLabel) : '');
+
+    if (!backward && !forward) {
+      return buildLabelContainer('', ['edge-label-wrapper'], true);
+    }
+
+    const backwardBlock = backward
+      ? `<div class="edge-label edge-label--backward">${backward}</div>`
+      : '';
+    const forwardBlock = forward
+      ? `<div class="edge-label edge-label--forward">${forward}</div>`
+      : '';
+
+    return buildLabelContainer(
+      `${backwardBlock}${forwardBlock}`,
+      ['edge-label-wrapper']
+    );
+  }
+
   onMount(() => {
-    cytoscape.use(dagre);
+    ensureCytoscapePluginsRegistered();
     createGraph();
     
     return () => {
@@ -819,5 +896,51 @@
   .reset-positions-btn:active {
     background-color: #1d4ed8;
     transform: translateY(0);
+  }
+
+  :global(.cy-node-html-label) {
+    pointer-events: none;
+    text-align: center;
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 14px;
+  }
+
+  :global(.cy-node-html-label .katex-display) {
+    margin: 0;
+  }
+
+  :global(.cy-edge-html-label) {
+    pointer-events: none;
+    font-size: 11px;
+    color: #374151;
+  }
+
+  :global(.edge-label-wrapper) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+  }
+
+  :global(.edge-label-wrapper--empty) {
+    display: none;
+  }
+
+  :global(.edge-label) {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 2px 4px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  :global(.edge-label--forward) {
+    border-color: #2563eb;
+  }
+
+  :global(.edge-label--backward) {
+    border-color: #059669;
   }
 </style>

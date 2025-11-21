@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MathText from './components/MathText.svelte';
   import type { SelectedEdge, TransformationStatus, GraphData, FilteredGraphData, KCReference } from './types.js';
   import DynamicLegend from './components/DynamicLegend.svelte';
   
@@ -109,12 +110,20 @@
   <div class="content-wrapper">
     <div class="scrollable-content">
       <div class="edge-details">
-        <h3 class="text-xl font-bold text-gray-900 mb-4">{selectedEdge.sourceName} ↔ {selectedEdge.targetName}</h3>
+        <h3 class="text-xl font-bold text-gray-900 mb-4">
+          <MathText text={selectedEdge.sourceName} className="inline" />
+          <span> ↔ </span>
+          <MathText text={selectedEdge.targetName} className="inline" />
+        </h3>
         
         <div class="space-y-4">
           {#if originalEdge && originalEdge.forward}
             <div class="direction-block">
-              <h5 class="font-semibold text-gray-900 mb-2">{selectedEdge.sourceName} → {selectedEdge.targetName}</h5>
+              <h5 class="font-semibold text-gray-900 mb-2">
+                <MathText text={selectedEdge.sourceName} className="inline" />
+                <span> → </span>
+                <MathText text={selectedEdge.targetName} className="inline" />
+              </h5>
               <p class="text-sm text-gray-700 mb-2">
                 {getStatusLabel(originalEdge.forward.status)}{#if originalEdge.forward.refs.length}{#each originalEdge.forward.refs as refId}<button 
                       class="ref-badge"
@@ -123,7 +132,7 @@
                     >[{getRefNumber(refId)}]</button>{/each}{/if}
               </p>
               {#if originalEdge.forward.description}
-                <p class="text-sm text-gray-600 mb-2 italic">{originalEdge.forward.description}</p>
+                <MathText text={originalEdge.forward.description} className="text-sm text-gray-600 mb-2 italic block" />
               {/if}
               
               {#if originalEdge.forward.separatingFunctions && originalEdge.forward.separatingFunctions.length > 0}
@@ -132,12 +141,14 @@
                   <div class="space-y-2">
                     {#each originalEdge.forward.separatingFunctions as fn}
                       <div class="p-2 bg-blue-50 border border-blue-200 rounded">
-                        <div class="font-medium text-sm text-gray-900">{fn.name}{#if fn.refs.length}{#each fn.refs as refId}<button 
+                        <div class="font-medium text-sm text-gray-900">
+                          <MathText text={fn.name} className="inline" />{#if fn.refs.length}{#each fn.refs as refId}<button 
                                 class="ref-badge"
                                 onclick={scrollToReferences}
                                 title="View reference"
-                              >[{getRefNumber(refId)}]</button>{/each}{/if}</div>
-                        <div class="text-xs text-gray-600 mt-1">{fn.description}</div>
+                              >[{getRefNumber(refId)}]</button>{/each}{/if}
+                        </div>
+                        <MathText text={fn.description} className="text-xs text-gray-600 mt-1 block" />
                       </div>
                     {/each}
                   </div>
@@ -148,7 +159,11 @@
           
           {#if originalEdge && originalEdge.backward}
             <div class="direction-block">
-              <h5 class="font-semibold text-gray-900 mb-2">{selectedEdge.targetName} → {selectedEdge.sourceName}</h5>
+              <h5 class="font-semibold text-gray-900 mb-2">
+                <MathText text={selectedEdge.targetName} className="inline" />
+                <span> → </span>
+                <MathText text={selectedEdge.sourceName} className="inline" />
+              </h5>
               <p class="text-sm text-gray-700 mb-2">
                 {getStatusLabel(originalEdge.backward.status)}{#if originalEdge.backward.refs.length}{#each originalEdge.backward.refs as refId}<button 
                       class="ref-badge"
@@ -157,7 +172,7 @@
                     >[{getRefNumber(refId)}]</button>{/each}{/if}
               </p>
               {#if originalEdge.backward.description}
-                <p class="text-sm text-gray-600 mb-2 italic">{originalEdge.backward.description}</p>
+                <MathText text={originalEdge.backward.description} className="text-sm text-gray-600 mb-2 italic block" />
               {/if}
               
               {#if originalEdge.backward.separatingFunctions && originalEdge.backward.separatingFunctions.length > 0}
@@ -166,12 +181,14 @@
                   <div class="space-y-2">
                     {#each originalEdge.backward.separatingFunctions as fn}
                       <div class="p-2 bg-blue-50 border border-blue-200 rounded">
-                        <div class="font-medium text-sm text-gray-900">{fn.name}{#if fn.refs.length}{#each fn.refs as refId}<button 
+                        <div class="font-medium text-sm text-gray-900">
+                          <MathText text={fn.name} className="inline" />{#if fn.refs.length}{#each fn.refs as refId}<button 
                                 class="ref-badge"
                                 onclick={scrollToReferences}
                                 title="View reference"
-                              >[{getRefNumber(refId)}]</button>{/each}{/if}</div>
-                        <div class="text-xs text-gray-600 mt-1">{fn.description}</div>
+                              >[{getRefNumber(refId)}]</button>{/each}{/if}
+                        </div>
+                        <MathText text={fn.description} className="text-xs text-gray-600 mt-1 block" />
                       </div>
                     {/each}
                   </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MathText from './components/MathText.svelte';
   import type { 
     KCLanguage, 
     GraphData, 
@@ -202,11 +203,11 @@
   <div class="scrollable-content">
     {#if selectedLanguage}
       <div class="language-details">
-        <h3 class="text-xl font-bold text-gray-900 mb-2">{selectedLanguage.name}</h3>
-        <h4 class="text-sm text-gray-600 mb-4">{selectedLanguage.fullName}</h4>
+        <MathText as="h3" className="text-xl font-bold text-gray-900 mb-2" text={selectedLanguage.name} />
+        <MathText as="h4" className="text-sm text-gray-600 mb-4" text={selectedLanguage.fullName} />
         
         <p class="text-gray-700 mb-6">
-          {selectedLanguage.description}{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
+          <MathText text={selectedLanguage.description} className="inline" />{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
                 class="ref-badge"
                 onclick={scrollToReferences}
                 title="View reference"
@@ -244,14 +245,20 @@
                   <span class="shrink-0 text-base leading-none">{statusEmoji(q)}</span>
                   <div class="text-sm leading-5">
                     <div>
-                      <strong>{q.code}</strong>{q.label ? ` (${q.label})` : ''}{#if q.refs?.length}{#each q.refs as refId}<button 
+                      <strong>{q.code}</strong>
+                      {#if q.label}
+                        <span> (</span>
+                        <MathText text={q.label} className="inline" />
+                        <span>)</span>
+                      {/if}
+                      {#if q.refs?.length}{#each q.refs as refId}<button 
                             class="ref-badge"
                             onclick={scrollToReferences}
                             title="View reference"
                           >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
                     {#if q.note}
-                      <div class="text-xs text-gray-500">{q.note}</div>
+                      <MathText text={q.note} className="text-xs text-gray-500" />
                     {/if}
                   </div>
                 </div>
@@ -267,14 +274,20 @@
                   <span class="shrink-0 text-base leading-none">{statusEmoji(t)}</span>
                   <div class="text-sm leading-5">
                     <div>
-                      <strong>{t.code}</strong>{t.label ? ` (${t.label})` : ''}{#if t.refs?.length}{#each t.refs as refId}<button 
+                      <strong>{t.code}</strong>
+                      {#if t.label}
+                        <span> (</span>
+                        <MathText text={t.label} className="inline" />
+                        <span>)</span>
+                      {/if}
+                      {#if t.refs?.length}{#each t.refs as refId}<button 
                             class="ref-badge"
                             onclick={scrollToReferences}
                             title="View reference"
                           >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
                     {#if t.note}
-                      <div class="text-xs text-gray-500">{t.note}</div>
+                      <MathText text={t.note} className="text-xs text-gray-500" />
                     {/if}
                   </div>
                 </div>
@@ -282,7 +295,6 @@
             </div>
           </div>
         </div>
-        
         {#if languageRelationships.length}
           <!-- TODO: Fix multi-line link text causing newline injection before suffix -->
           <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
@@ -296,12 +308,21 @@
                       onclick={() => selectEdge(statement.target)}
                       title="View edge details"
                     >
-                      {statement.linkText}
-                    </button>{statement.suffixText}{#if statement.refs?.length}{#each statement.refs as refId}<button 
+                      <MathText text={statement.linkText} className="inline" />
+                    </button>
+                    <span> </span>
+                    <MathText text={statement.suffixText} className="inline" />
+                    {#if statement.refs?.length}
+                      {#each statement.refs as refId}
+                        <button 
                           class="ref-badge"
                           onclick={scrollToReferences}
                           title="View reference"
-                        >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                        >[{getRefNumber(refId)}]</button>
+                      {/each}
+                    {:else}
+                      <span class="missing-ref" title="Missing reference">[missing ref]</span>
+                    {/if}
                   </div>
                 </div>
               {/each}

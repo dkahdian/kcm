@@ -30,7 +30,9 @@
 		"cytoscape": "^3.33.1",
 		"cytoscape-dagre": "^2.5.0",
 		"cytoscape-elk": "^2.3.0",
+		"cytoscape-node-edge-html-label": "^1.0.6",
 		"elkjs": "^0.11.0",
+		"katex": "^0.16.25",
 		"uuid": "^13.0.0"
 	}
 }

@@ -2,6 +2,8 @@
   /**
    * Generic queue item component that can display any type of contribution item
    */
+  import MathText from '$lib/components/MathText.svelte';
+
   let {
     type,
     title,
@@ -12,7 +14,9 @@
     onToggleExpand,
     onEdit,
     onDelete,
-    children
+    children,
+    renderMathTitle = true,
+    renderMathSubtitle = true
   }: {
     type: string;
     title: string;
@@ -24,6 +28,8 @@
     onEdit: (index: number) => void;
     onDelete: (index: number) => void;
     children?: import('svelte').Snippet;
+    renderMathTitle?: boolean;
+    renderMathSubtitle?: boolean;
   } = $props();
 
   const colorMap = {
@@ -71,9 +77,21 @@
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
       <span class="text-sm font-semibold {colors.text}">{type}:</span>
-      <span class="text-sm font-bold text-gray-900">{title}</span>
+      {#if renderMathTitle}
+        <MathText text={title} className="text-sm font-bold text-gray-900" />
+      {:else}
+        <span class="text-sm font-bold text-gray-900">{title}</span>
+      {/if}
       {#if subtitle}
-        <span class="text-sm text-gray-600">({subtitle})</span>
+        <span class="text-sm text-gray-600">
+          (
+          {#if renderMathSubtitle}
+            <MathText text={subtitle} className="inline" />
+          {:else}
+            {subtitle}
+          {/if}
+          )
+        </span>
       {/if}
     </div>
     <div class="flex items-center gap-2">

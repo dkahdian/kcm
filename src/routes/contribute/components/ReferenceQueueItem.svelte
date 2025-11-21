@@ -24,6 +24,8 @@
 <GenericQueueItem
   type="Reference"
   title="new-{index}"
+  renderMathTitle={false}
+  renderMathSubtitle={false}
   colorScheme="purple"
   {index}
   {isExpanded}

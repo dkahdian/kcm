@@ -1,4 +1,6 @@
 <script lang="ts">
+	import MathText from '$lib/components/MathText.svelte';
+
 	/**
 	 * Generic expandable chip component for contribution items
 	 */
@@ -10,7 +12,9 @@
 		index,
 		expanded = $bindable(false),
 		onDelete,
-		children
+		children,
+		renderMathTitle = true,
+		renderMathSubtitle = true
 	}: {
 		type: string;
 		title: string;
@@ -20,6 +24,8 @@
 		expanded?: boolean;
 		onDelete: () => void;
 		children?: import('svelte').Snippet;
+		renderMathTitle?: boolean;
+		renderMathSubtitle?: boolean;
 	} = $props();
 
 	const colorMap = {
@@ -62,9 +68,21 @@
 			<span class="text-sm font-semibold {colors.text}">
 				{type}:
 			</span>
-			<span class="text-sm text-gray-900">{title}</span>
+			{#if renderMathTitle}
+				<MathText text={title} className="text-sm text-gray-900" />
+			{:else}
+				<span class="text-sm text-gray-900">{title}</span>
+			{/if}
 			{#if subtitle}
-				<span class="text-xs text-gray-600">({subtitle})</span>
+				<span class="text-xs text-gray-600">
+					(
+					{#if renderMathSubtitle}
+						<MathText text={subtitle} className="inline" />
+					{:else}
+						{subtitle}
+					{/if}
+					)
+				</span>
 			{/if}
 		</div>
 		<div class="flex items-center gap-2">

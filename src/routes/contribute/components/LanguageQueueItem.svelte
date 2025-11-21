@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MathText from '$lib/components/MathText.svelte';
 	import type { LanguageToAdd } from '../types.js';
 	import GenericQueueItem from './GenericQueueItem.svelte';
 
@@ -41,11 +42,11 @@
 		<div class="space-y-3 text-xs">
 			<div>
 				<div class="font-semibold text-gray-700 mb-1">Full Name:</div>
-				<div class="text-gray-900">{language.fullName}</div>
+				<MathText text={language.fullName} className="text-gray-900 block" />
 			</div>
 			<div>
 				<div class="font-semibold text-gray-700 mb-1">Description:</div>
-				<div class="text-gray-900">{language.description}</div>
+				<MathText text={language.description} className="text-gray-900 block" />
 			</div>
 			{#if language.queries && Object.keys(language.queries).length > 0}
 				<div>
@@ -54,12 +55,12 @@
 					</div>
 					<div class="grid grid-cols-2 gap-2">
 						{#each Object.entries(language.queries) as [code, support]}
-							<div class="bg-white p-2 rounded border">
-								<div class="font-medium">{code}</div>
-								<div class="text-gray-600">{support.polytime}</div>
-								{#if support.note}
-									<div class="text-gray-500 italic text-xs">{support.note}</div>
-								{/if}
+								<div class="bg-white p-2 rounded border">
+									<div class="font-medium">{code}</div>
+									<div class="text-gray-600">{support.polytime}</div>
+									{#if support.note}
+										<MathText text={support.note} className="text-gray-500 italic text-xs block" />
+									{/if}
 								{#if support.refs.length > 0}
 									<div class="text-gray-500 text-xs">Refs: [{support.refs.join(', ')}]</div>
 								{/if}
@@ -75,12 +76,12 @@
 					</div>
 					<div class="grid grid-cols-2 gap-2">
 						{#each Object.entries(language.transformations) as [code, support]}
-							<div class="bg-white p-2 rounded border">
-								<div class="font-medium">{code}</div>
-								<div class="text-gray-600">{support.polytime}</div>
-								{#if support.note}
-									<div class="text-gray-500 italic text-xs">{support.note}</div>
-								{/if}
+								<div class="bg-white p-2 rounded border">
+									<div class="font-medium">{code}</div>
+									<div class="text-gray-600">{support.polytime}</div>
+									{#if support.note}
+										<MathText text={support.note} className="text-gray-500 italic text-xs block" />
+									{/if}
 								{#if support.refs.length > 0}
 									<div class="text-gray-500 text-xs">Refs: [{support.refs.join(', ')}]</div>
 								{/if}

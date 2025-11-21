@@ -2439,7 +2439,7 @@
       "cSDD",
       "d-DNNF",
       "d-SDNNF",
-      "d-SDNNF_T",
+      "d-SDNNF$_T$",
       "DNF",
       "DNNF",
       "FBBD",
@@ -2448,19 +2448,28 @@
       "nFBBD",
       "NNF",
       "nOBBD",
-      "OBDD_<",
+      "OBDD$_<$",
       "PI",
       "SDD",
-      "SDD_T",
+      "SDD$_T$",
       "SDNNF",
-      "SDNNF_T",
+      "SDNNF$_T$",
       "uFBDD",
       "uOBBD"
     ],
     "matrix": [
       [
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "$a<=b_t$"
+          ]
+        },
         null,
         null,
         null,
@@ -3035,5 +3044,14 @@
       ]
     ]
   },
-  "separatingFunctions": []
+  "separatingFunctions": [
+    {
+      "shortName": "$a<=b_t$",
+      "name": "-",
+      "description": "-",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    }
+  ]
 }

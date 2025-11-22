@@ -35,45 +35,13 @@ jobs:
         run: |
           node <<'EOF'
           const fs = require('fs');
-          const payload = JSON.parse(fs.readFileSync('contribution.json', 'utf8'));
-          function entriesFromPayload(data) {
-            if (Array.isArray(data?.queue?.entries)) return data.queue.entries;
-            if (Array.isArray(data?.queueEntries)) return data.queueEntries;
-            if (Array.isArray(data?.entries)) return data.entries;
-            return [];
+          const raw = fs.readFileSync('contribution.json', 'utf8');
+          if (!raw.trim()) {
+            throw new Error('Contribution payload is empty.');
           }
-          const entries = entriesFromPayload(payload);
-          if (!entries.length) {
-            throw new Error('Contribution queue is empty or missing. Ordered entries are required.');
-          }
-          const counts = { newLanguages: 0, editedLanguages: 0, relationships: 0, references: 0, separators: 0 };
-          for (const entry of entries) {
-            switch (entry.kind) {
-              case 'language:new':
-                counts.newLanguages++;
-                break;
-              case 'language:edit':
-                counts.editedLanguages++;
-                break;
-              case 'relationship':
-                counts.relationships++;
-                break;
-              case 'reference':
-                counts.references++;
-                break;
-              case 'separator':
-                counts.separators++;
-                break;
-              default:
-                break;
-            }
-          }
-          console.log('Queue entries:', entries.length);
-          console.log('Languages to add:', counts.newLanguages);
-          console.log('Languages to edit:', counts.editedLanguages);
-          console.log('Relationships:', counts.relationships);
-          console.log('New references:', counts.references);
-          console.log('New separating functions:', counts.separators);
+          const payload = JSON.parse(raw);
+          const summary = Object.keys(payload || {});
+          console.log('✅ Loaded contribution payload with keys:', summary.join(', ') || '(none)');
           EOF
 
       - name: Generate contribution files

@@ -181,8 +181,13 @@ rm "$CREATE_STDOUT" "$CREATE_STDERR" "$PR_BODY_FILE"
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
 	QUERY="repo:${REPOSITORY} state:open is:pr ${SUPERSEDES_SUBMISSION_ID} in:body"
-	SUPERSEDED_PR=$(gh api search/issues -f q="$QUERY" --jq '.items[0].number // empty' 2>/dev/null || true)
-	if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
+	LOOKUP_STDERR=$(mktemp)
+	if ! SUPERSEDED_PR=$(gh search prs "$QUERY" --json number --limit 1 --jq '.[0].number' 2>"$LOOKUP_STDERR"); then
+		echo "Note: Unable to look up superseded PR: $(<"$LOOKUP_STDERR")" >&2
+		SUPERSEDED_PR=""
+	fi
+	rm "$LOOKUP_STDERR"
+	if [[ "$SUPERSEDED_PR" =~ ^[0-9]+$ && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
 		CLOSE_PAYLOAD=$(jq -n '{state: "closed"}')
 		printf '%s' "$CLOSE_PAYLOAD" | gh api "repos/${REPOSITORY}/pulls/${SUPERSEDED_PR}" --method PATCH --input - >/dev/null
 		COMMENT_PAYLOAD=$(jq -n --arg body "Superseded by ${NEW_PR_URL}." '{body: $body}')

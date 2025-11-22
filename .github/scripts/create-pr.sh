@@ -23,6 +23,15 @@ CONTRIBUTOR_NOTE=${META[2]}
 SUBMISSION_ID=${META[3]}
 SUPERSEDES_SUBMISSION_ID=${META[4]}
 
+REPOSITORY=${GITHUB_REPOSITORY:-}
+if [[ -z "$REPOSITORY" ]]; then
+	REPOSITORY=$(git config --get remote.origin.url | sed -E 's#(git@|https://)github.com[:/](.+)\.git#\2#')
+fi
+if [[ -z "$REPOSITORY" ]]; then
+	echo "Unable to determine repository for PR creation" >&2
+	exit 1
+fi
+
 
 sanitize_slug() {
 	local raw="$1"
@@ -110,23 +119,17 @@ This PR was generated from the ordered contribution queue. Validation and build 
 *This PR was automatically generated from a community contribution.*
 EOF
 
-TITLE_JSON=$(printf '%s' "$PR_TITLE" | jq -Rs .)
-HEAD_JSON=$(printf '%s' "$BRANCH_NAME" | jq -Rs .)
-BODY_JSON=$(jq -Rs . < "$PR_BODY_FILE")
+PAYLOAD_FILE=$(mktemp)
+jq -n \
+	--arg title "$PR_TITLE" \
+	--arg head "$BRANCH_NAME" \
+	--arg base "main" \
+	--rawfile body "$PR_BODY_FILE" \
+	'{title: $title, head: $head, base: $base, body: $body}' > "$PAYLOAD_FILE"
 
-REQUEST_PAYLOAD=$(cat <<EOF
-{
-  "title": ${TITLE_JSON},
-  "head": ${HEAD_JSON},
-  "base": "main",
-  "body": ${BODY_JSON}
-}
-EOF
-)
+PR_RESPONSE=$(gh api "repos/${REPOSITORY}/pulls" --method POST --input "$PAYLOAD_FILE")
 
-PR_RESPONSE=$(printf '%s' "$REQUEST_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/pulls" --method POST --input -)
-
-rm "$PR_BODY_FILE"
+rm "$PR_BODY_FILE" "$PAYLOAD_FILE"
 
 NEW_PR_NUMBER=$(echo "$PR_RESPONSE" | jq '.number')
 NEW_PR_URL=$(echo "$PR_RESPONSE" | jq -r '.html_url')
@@ -137,13 +140,13 @@ if [[ -z "$NEW_PR_NUMBER" || "$NEW_PR_NUMBER" == "null" ]]; then
 fi
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
-	QUERY="repo:${GITHUB_REPOSITORY} state:open is:pr ${SUPERSEDES_SUBMISSION_ID} in:body"
+	QUERY="repo:${REPOSITORY} state:open is:pr ${SUPERSEDES_SUBMISSION_ID} in:body"
 	SUPERSEDED_PR=$(gh api search/issues -f q="$QUERY" --jq '.items[0].number // empty' 2>/dev/null || true)
 	if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
 		CLOSE_PAYLOAD=$(jq -n '{state: "closed"}')
-		printf '%s' "$CLOSE_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/pulls/${SUPERSEDED_PR}" --method PATCH --input - >/dev/null
+		printf '%s' "$CLOSE_PAYLOAD" | gh api "repos/${REPOSITORY}/pulls/${SUPERSEDED_PR}" --method PATCH --input - >/dev/null
 		COMMENT_PAYLOAD=$(jq -n --arg body "Superseded by ${NEW_PR_URL}." '{body: $body}')
-		printf '%s' "$COMMENT_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/issues/${SUPERSEDED_PR}/comments" --method POST --input - >/dev/null
+		printf '%s' "$COMMENT_PAYLOAD" | gh api "repos/${REPOSITORY}/issues/${SUPERSEDED_PR}/comments" --method POST --input - >/dev/null
 	else
 		echo "No open PR found for Supersedes Submission ID ${SUPERSEDES_SUBMISSION_ID}" >&2
 	fi
@@ -151,6 +154,6 @@ fi
 
 for label in "${LABELS[@]}"; do
 	LABEL_PAYLOAD=$(jq -n --arg label "$label" '{labels: [$label]}')
-	printf '%s' "$LABEL_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/issues/${NEW_PR_NUMBER}/labels" --method POST --input - >/dev/null || \
+	printf '%s' "$LABEL_PAYLOAD" | gh api "repos/${REPOSITORY}/issues/${NEW_PR_NUMBER}/labels" --method POST --input - >/dev/null || \
 		echo "Note: Label '$label' not found, skipping"
 done

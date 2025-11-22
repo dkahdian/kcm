@@ -11,13 +11,9 @@ permissions:
 jobs:
   process-contribution:
     runs-on: ubuntu-latest
-    env:
-      CONTRIBUTION_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ env.CONTRIBUTION_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -71,8 +67,7 @@ jobs:
 
       - name: Create branch, commit, and PR
         env:
-          GH_TOKEN: ${{ env.CONTRIBUTION_TOKEN }}
-          CONTRIBUTION_TOKEN: ${{ env.CONTRIBUTION_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           chmod +x .github/scripts/create-pr.sh
           .github/scripts/create-pr.sh

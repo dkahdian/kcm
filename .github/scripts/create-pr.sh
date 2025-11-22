@@ -110,30 +110,47 @@ This PR was generated from the ordered contribution queue. Validation and build 
 *This PR was automatically generated from a community contribution.*
 EOF
 
-gh pr create \
-	--title "$PR_TITLE" \
-	--body-file "$PR_BODY_FILE" \
-	--base main \
-	--head "$BRANCH_NAME" || {
-		rm "$PR_BODY_FILE"
-		echo "Failed to create PR"
-		exit 1
-	}
+TITLE_JSON=$(printf '%s' "$PR_TITLE" | jq -Rs .)
+HEAD_JSON=$(printf '%s' "$BRANCH_NAME" | jq -Rs .)
+BODY_JSON=$(jq -Rs . < "$PR_BODY_FILE")
+
+REQUEST_PAYLOAD=$(cat <<EOF
+{
+  "title": ${TITLE_JSON},
+  "head": ${HEAD_JSON},
+  "base": "main",
+  "body": ${BODY_JSON}
+}
+EOF
+)
+
+PR_RESPONSE=$(printf '%s' "$REQUEST_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/pulls" --method POST --input -)
 
 rm "$PR_BODY_FILE"
 
-NEW_PR_NUMBER=$(gh pr view "$BRANCH_NAME" --json number --jq '.number')
+NEW_PR_NUMBER=$(echo "$PR_RESPONSE" | jq '.number')
+NEW_PR_URL=$(echo "$PR_RESPONSE" | jq -r '.html_url')
+
+if [[ -z "$NEW_PR_NUMBER" || "$NEW_PR_NUMBER" == "null" ]]; then
+	echo "Failed to create PR" >&2
+	exit 1
+fi
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
-	SUPERSEDED_PR=$(gh pr list --state open --search "${SUPERSEDES_SUBMISSION_ID} in:body" --json number --jq '.[0].number' 2>/dev/null || true)
-	if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "null" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
-		NEW_PR_URL=$(gh pr view "$BRANCH_NAME" --json url --jq '.url')
-		gh pr close "$SUPERSEDED_PR" --comment "Superseded by ${NEW_PR_URL}."
+	QUERY="repo:${GITHUB_REPOSITORY} state:open is:pr ${SUPERSEDES_SUBMISSION_ID} in:body"
+	SUPERSEDED_PR=$(gh api search/issues -f q="$QUERY" --jq '.items[0].number // empty' 2>/dev/null || true)
+	if [[ -n "$SUPERSEDED_PR" && "$SUPERSEDED_PR" != "$NEW_PR_NUMBER" ]]; then
+		CLOSE_PAYLOAD=$(jq -n '{state: "closed"}')
+		printf '%s' "$CLOSE_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/pulls/${SUPERSEDED_PR}" --method PATCH --input - >/dev/null
+		COMMENT_PAYLOAD=$(jq -n --arg body "Superseded by ${NEW_PR_URL}." '{body: $body}')
+		printf '%s' "$COMMENT_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/issues/${SUPERSEDED_PR}/comments" --method POST --input - >/dev/null
 	else
 		echo "No open PR found for Supersedes Submission ID ${SUPERSEDES_SUBMISSION_ID}" >&2
 	fi
 fi
 
 for label in "${LABELS[@]}"; do
-	gh pr edit --add-label "$label" "$BRANCH_NAME" 2>/dev/null || echo "Note: Label '$label' not found, skipping"
+	LABEL_PAYLOAD=$(jq -n --arg label "$label" '{labels: [$label]}')
+	printf '%s' "$LABEL_PAYLOAD" | gh api "repos/${GITHUB_REPOSITORY}/issues/${NEW_PR_NUMBER}/labels" --method POST --input - >/dev/null || \
+		echo "Note: Label '$label' not found, skipping"
 done

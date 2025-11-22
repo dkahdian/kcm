@@ -1,3 +1,4 @@
+import type { ContributionQueueEntry } from '$lib/data/contribution-transforms.js';
 import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
 
 export type SeparatingFunctionEntry = {
@@ -41,15 +42,6 @@ export type CustomTag = {
   refs: string[];
 };
 
-export type DeferredItems = {
-  languages: LanguageToAdd[];
-  editedLanguages: LanguageToAdd[];
-  references: string[];
-  separatingFunctions: SeparatingFunctionToAdd[];
-  relationships: RelationshipEntry[];
-  tags: CustomTag[];
-};
-
 export type ContributorInfo = {
   email: string;
   github: string;
@@ -67,6 +59,7 @@ export type SubmissionHistoryPayload = {
   customTags: CustomTag[];
   modifiedRelations: string[];
   contributor: ContributorInfo;
+  queueEntries?: ContributionQueueEntry[];
 };
 
 export type SubmissionHistoryEntry = {

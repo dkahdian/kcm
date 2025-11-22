@@ -1,9 +1,42 @@
-import type { CustomTag, LanguageToAdd, RelationshipEntry, SubmissionHistoryEntry, SubmissionHistoryPayload } from '../../routes/contribute/types.js';
+import type {
+  CustomTag,
+  LanguageToAdd,
+  RelationshipEntry,
+  SeparatingFunctionToAdd,
+  SubmissionHistoryEntry,
+  SubmissionHistoryPayload
+} from '../../routes/contribute/types.js';
+import type { ContributionQueueEntry } from '../data/contribution-transforms.js';
 
 const HISTORY_STORAGE_KEY = 'kcm_submission_history_v1';
 const MAX_ENTRIES = 10;
 
 const isArray = Array.isArray;
+const isObject = (value: unknown): value is Record<string, any> => !!value && typeof value === 'object';
+
+function isLanguageLike(value: unknown): value is LanguageToAdd {
+  return isObject(value) && typeof value.name === 'string';
+}
+
+function isRelationshipLike(value: unknown): value is RelationshipEntry {
+  return (
+    isObject(value) &&
+    typeof value.sourceId === 'string' &&
+    typeof value.targetId === 'string' &&
+    typeof value.status === 'string' &&
+    Array.isArray(value.refs)
+  );
+}
+
+function isSeparatingFunctionLike(value: unknown): value is SeparatingFunctionToAdd {
+  return (
+    isObject(value) &&
+    typeof value.shortName === 'string' &&
+    typeof value.name === 'string' &&
+    typeof value.description === 'string' &&
+    Array.isArray(value.refs)
+  );
+}
 
 function cloneLanguages(items: LanguageToAdd[]): LanguageToAdd[] {
   return items.map((item) => ({
@@ -24,6 +57,7 @@ function cloneRelationships(items: RelationshipEntry[]): RelationshipEntry[] {
   return items.map((item) => ({
     ...item,
     refs: [...item.refs],
+    separatingFunctionIds: item.separatingFunctionIds ? [...item.separatingFunctionIds] : undefined,
     separatingFunctions: item.separatingFunctions
       ? item.separatingFunctions.map((fn) => ({ ...fn, refs: [...fn.refs] }))
       : undefined
@@ -32,6 +66,65 @@ function cloneRelationships(items: RelationshipEntry[]): RelationshipEntry[] {
 
 function cloneTags(items: CustomTag[]): CustomTag[] {
   return items.map((tag) => ({ ...tag, refs: [...tag.refs] }));
+}
+
+function cloneSeparatingFunctions(items: SeparatingFunctionToAdd[]): SeparatingFunctionToAdd[] {
+  return items.map((item) => ({ ...item, refs: [...item.refs] }));
+}
+
+function cloneQueueEntries(entries: ContributionQueueEntry[]): ContributionQueueEntry[] {
+  return entries.map((entry) => {
+    switch (entry.kind) {
+      case 'language:new':
+      case 'language:edit':
+        return { ...entry, payload: cloneLanguages([entry.payload])[0] };
+      case 'relationship':
+        return { ...entry, payload: cloneRelationships([entry.payload])[0] };
+      case 'separator':
+        return { ...entry, payload: cloneSeparatingFunctions([entry.payload])[0] };
+      case 'reference':
+      default:
+        return { ...entry, payload: entry.payload };
+    }
+  });
+}
+
+function sanitizeQueueEntries(value: unknown): ContributionQueueEntry[] {
+  if (!isArray(value)) return [];
+  const entries: ContributionQueueEntry[] = [];
+  let fallbackIndex = 0;
+  for (const item of value) {
+    if (!isObject(item)) continue;
+    const raw = item as Record<string, unknown>;
+    const id = typeof raw.id === 'string' ? raw.id : `history-entry-${fallbackIndex++}`;
+    const kind = raw.kind;
+    switch (kind) {
+      case 'language:new':
+      case 'language:edit':
+        if (isLanguageLike(raw.payload)) {
+          entries.push({ id, kind, payload: cloneLanguages([raw.payload])[0] });
+        }
+        break;
+      case 'relationship':
+        if (isRelationshipLike(raw.payload)) {
+          entries.push({ id, kind, payload: cloneRelationships([raw.payload])[0] });
+        }
+        break;
+      case 'separator':
+        if (isSeparatingFunctionLike(raw.payload)) {
+          entries.push({ id, kind, payload: cloneSeparatingFunctions([raw.payload])[0] });
+        }
+        break;
+      case 'reference':
+        if (typeof raw.payload === 'string') {
+          entries.push({ id, kind, payload: raw.payload });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  return entries;
 }
 
 function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
@@ -77,10 +170,11 @@ function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
       ? cloneTags(value.filter((item): item is CustomTag => !!item && typeof item === 'object') as CustomTag[])
       : [];
 
-  const asSeparatingFunctionArray = (value: unknown) =>
+  const asSeparatingFunctionArray = (value: unknown): SeparatingFunctionToAdd[] =>
     isArray(value)
-      ? value.filter((item): item is { shortName: string; name: string; description: string; refs: string[] } => 
-          !!item && typeof item === 'object' && 'shortName' in item)
+      ? cloneSeparatingFunctions(
+          value.filter((item): item is SeparatingFunctionToAdd => isSeparatingFunctionLike(item))
+        )
       : [];
 
   const payload: SubmissionHistoryPayload = {
@@ -93,8 +187,16 @@ function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
     newSeparatingFunctions: asSeparatingFunctionArray(payloadRaw.newSeparatingFunctions),
     customTags: asTagArray(payloadRaw.customTags),
     modifiedRelations: asStringArray(payloadRaw.modifiedRelations),
-    contributor
+    contributor,
+    queueEntries: undefined
   };
+
+  const sanitizedQueueEntries = sanitizeQueueEntries(payloadRaw.queueEntries);
+  if (sanitizedQueueEntries.length === 0) {
+    console.warn('Skipping submission history entry without queue entries', id);
+    return null;
+  }
+  payload.queueEntries = sanitizedQueueEntries;
 
   const summaryRaw = entry.summary as Record<string, unknown> | undefined;
   const summary = summaryRaw && typeof summaryRaw === 'object'
@@ -171,9 +273,11 @@ export function createSubmissionHistoryEntry(payload: SubmissionHistoryPayload):
       languagesToEdit: cloneLanguages(payload.languagesToEdit),
       relationships: cloneRelationships(payload.relationships),
       newReferences: [...payload.newReferences],
+      newSeparatingFunctions: cloneSeparatingFunctions(payload.newSeparatingFunctions),
       customTags: cloneTags(payload.customTags),
       modifiedRelations: [...payload.modifiedRelations],
-      contributor: { ...payload.contributor }
+      contributor: { ...payload.contributor },
+      queueEntries: payload.queueEntries ? cloneQueueEntries(payload.queueEntries) : undefined
     },
     supersedesSubmissionId: payload.supersedesSubmissionId ?? null,
     supersededBySubmissionId: undefined

@@ -10,12 +10,7 @@ import {
 } from '../../src/lib/data/contribution-transforms.js';
 import { generateReferenceId } from '../../src/lib/utils/reference-id.js';
 import type { KCLanguage, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../../src/lib/types.js';
-import type {
-  LanguageToAdd,
-  RelationshipEntry,
-  SeparatingFunctionToAdd,
-  CustomTag
-} from '../../src/routes/contribute/types.js';
+import type { CustomTag } from '../../src/routes/contribute/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,11 +40,6 @@ type ContributionPayload = {
   queue?: Partial<ContributionQueueState> & { entries?: ContributionQueueEntry[] };
   queueEntries?: ContributionQueueEntry[];
   entries?: ContributionQueueEntry[];
-  languagesToAdd?: LanguageToAdd[];
-  languagesToEdit?: LanguageToAdd[];
-  relationships?: RelationshipEntry[];
-  newReferences?: string[];
-  newSeparatingFunctions?: SeparatingFunctionToAdd[];
   customTags?: CustomTag[];
   modifiedRelations?: string[];
   submissionId?: string;
@@ -72,26 +62,6 @@ function deriveRelationshipKeys(entries: ContributionQueueEntry[]): string[] {
   return Array.from(keys);
 }
 
-function legacyEntriesFromArrays(payload: ContributionPayload): ContributionQueueEntry[] {
-  const entries: ContributionQueueEntry[] = [];
-  (payload.newReferences ?? []).forEach((bibtex, idx) => {
-    entries.push({ id: `legacy-ref-${idx}`, kind: 'reference', payload: bibtex });
-  });
-  (payload.newSeparatingFunctions ?? []).forEach((sf, idx) => {
-    entries.push({ id: `legacy-sep-${idx}`, kind: 'separator', payload: sf });
-  });
-  (payload.languagesToAdd ?? []).forEach((lang, idx) => {
-    entries.push({ id: `legacy-lang-add-${idx}`, kind: 'language:new', payload: lang });
-  });
-  (payload.languagesToEdit ?? []).forEach((lang, idx) => {
-    entries.push({ id: `legacy-lang-edit-${idx}`, kind: 'language:edit', payload: lang });
-  });
-  (payload.relationships ?? []).forEach((rel, idx) => {
-    entries.push({ id: `legacy-rel-${idx}`, kind: 'relationship', payload: rel });
-  });
-  return entries;
-}
-
 function normalizeQueueState(payload: ContributionPayload): ContributionQueueState {
   const candidateEntryLists: Array<ContributionQueueEntry[] | undefined> = [
     payload.queue?.entries,
@@ -100,12 +70,8 @@ function normalizeQueueState(payload: ContributionPayload): ContributionQueueSta
   ];
   let entries = candidateEntryLists.find((list): list is ContributionQueueEntry[] => Array.isArray(list));
 
-  if (!entries) {
-    entries = legacyEntriesFromArrays(payload);
-  }
-
   if (!entries || entries.length === 0) {
-    throw new Error('No contribution queue entries were provided.');
+    throw new Error('Contribution payload must include an ordered queue.');
   }
 
   const modifiedRelationsCandidate = payload.queue?.modifiedRelations ?? payload.modifiedRelations;

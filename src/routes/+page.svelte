@@ -13,12 +13,60 @@
   import { v4 as uuidv4 } from 'uuid';
   import { hasQueuedChanges, loadQueuedChanges, clearQueuedChanges, loadContributorInfo, loadPreviewDataset } from '$lib/contribution-storage.js';
   import { recordSubmissionHistory } from '$lib/utils/submission-history.js';
-  import type { SubmissionHistoryPayload } from './contribute/types.js';
+  import type {
+    LanguageToAdd,
+    RelationshipEntry,
+    SeparatingFunctionToAdd,
+    SubmissionHistoryPayload
+  } from './contribute/types.js';
+  import type { ContributionQueueEntry } from '$lib/data/contribution-transforms.js';
   import { buildSubmissionPayload } from './contribute/logic.js';
 
   const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
   const FILTER_STORAGE_KEY = 'kcm_filter_state_v1';
+
+  type DerivedQueueCollections = {
+    languagesToAdd: LanguageToAdd[];
+    languagesToEdit: LanguageToAdd[];
+    relationships: RelationshipEntry[];
+    newReferences: string[];
+    newSeparatingFunctions: SeparatingFunctionToAdd[];
+  };
+
+  function deriveQueueCollections(entries: ContributionQueueEntry[]): DerivedQueueCollections {
+    const collections: DerivedQueueCollections = {
+      languagesToAdd: [],
+      languagesToEdit: [],
+      relationships: [],
+      newReferences: [],
+      newSeparatingFunctions: []
+    };
+
+    for (const entry of entries) {
+      switch (entry.kind) {
+        case 'language:new':
+          collections.languagesToAdd.push(entry.payload);
+          break;
+        case 'language:edit':
+          collections.languagesToEdit.push(entry.payload);
+          break;
+        case 'relationship':
+          collections.relationships.push(entry.payload);
+          break;
+        case 'reference':
+          collections.newReferences.push(entry.payload);
+          break;
+        case 'separator':
+          collections.newSeparatingFunctions.push(entry.payload);
+          break;
+        default:
+          break;
+      }
+    }
+
+    return collections;
+  }
 
   const createSubmissionId = (): string => {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -102,17 +150,29 @@
 
       const modifiedRelationKeys: string[] = Array.isArray(queue.modifiedRelations) ? queue.modifiedRelations : [];
 
+      const {
+        languagesToAdd,
+        languagesToEdit,
+        relationships,
+        newReferences,
+        newSeparatingFunctions
+      } = deriveQueueCollections(queue.entries ?? []);
+
+      const changedRelationships = relationships.filter((rel) =>
+        modifiedRelationKeys.includes(`${rel.sourceId}->${rel.targetId}`)
+      );
+
       // Build submission payload
       const submission = buildSubmissionPayload(
         contributorInfo.email,
         contributorInfo.github,
         contributorInfo.note,
-        queue.languagesToAdd,
-        queue.languagesToEdit,
-        queue.relationships.filter((rel) => modifiedRelationKeys.includes(`${rel.sourceId}->${rel.targetId}`)),
-        queue.newReferences,
-        queue.newSeparatingFunctions,
-        initialGraphData.languages.map(l => l.name),
+        languagesToAdd,
+        languagesToEdit,
+        changedRelationships,
+        newReferences,
+        newSeparatingFunctions,
+        initialGraphData.languages.map((l) => l.name),
         {
           submissionId,
           supersedesSubmissionId
@@ -145,14 +205,15 @@
       const historyPayload: SubmissionHistoryPayload = {
         submissionId,
         supersedesSubmissionId,
-        languagesToAdd: queue.languagesToAdd,
-        languagesToEdit: queue.languagesToEdit,
-        relationships: queue.relationships,
-        newReferences: queue.newReferences,
-        newSeparatingFunctions: [], // TODO: Add separating functions support to main page
+        languagesToAdd,
+        languagesToEdit,
+        relationships,
+        newReferences,
+        newSeparatingFunctions,
         customTags: queue.customTags,
         modifiedRelations: modifiedRelationKeys,
-        contributor: contributorInfo
+        contributor: contributorInfo,
+        queueEntries: queue.entries
       };
 
       recordSubmissionHistory(historyPayload);

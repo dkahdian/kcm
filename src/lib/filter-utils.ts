@@ -71,24 +71,6 @@ function collectVisibleEdgeIds(matrix: KCAdjacencyMatrix): Set<string> {
 }
 
 /**
- * Legacy compatibility: Applies filters that are "active" (assuming boolean params)
- * @deprecated Use applyFiltersWithParams instead
- */
-export function applyFilters(
-  graphData: GraphData, 
-  activeFilters: LanguageFilter[]
-): FilteredGraphData {
-  // Create a filter state map from active filters
-  const filterStates: FilterStateMap = new Map();
-  for (const filter of activeFilters) {
-    filterStates.set(filter.id, true);
-  }
-  
-  // Get all unique filters (no edge filters in legacy mode)
-  return applyFiltersWithParams(graphData, activeFilters, [], filterStates);
-}
-
-/**
  * Creates initial filter state map with all filters set to their defaults
  */
 export function createDefaultFilterState(

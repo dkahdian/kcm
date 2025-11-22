@@ -138,10 +138,10 @@ This model ensures every mutation pipeline stays deterministic, debuggable, and 
 | --- | --- | --- |
 | Canonical dataset (`canonicalDataset`, `CanonicalKCData`) | ✅ Fully implemented | Canonical loader now exports a single dataset with languages, edges, relation types, separating functions, and metadata. |
 | `transformData` core + helpers (`mapLanguagesInDataset`, `mapRelationsInDataset`) | ✅ Fully implemented | Filter pipeline and contribution transforms leverage the new dataset-level transform utilities. |
-| Validity checks (`validateDatasetStructure`) | ⚠️ Partially implemented | Stub exists but does not yet enforce structural rules (unique IDs, matrix consistency, reference resolution). |
-| Implicit propagation (`propagateImplicitRelations`) | ⏳ Not implemented | Placeholder returns data unchanged; no transitive closure or derived metadata steps yet. |
+| Validity checks (`validateDatasetStructure`) | ✅ Fully implemented | Validator now enforces adjacency consistency, ID uniqueness, reference resolution, and separating-function integrity. |
+| Implicit propagation (`propagateImplicitRelations`) | ⚠️ Partially implemented | Transitive poly closure plus index rebuild now run automatically; additional derived metadata steps still pending. |
 | Dataset-based filters | ✅ Fully implemented | Language and edge filters now operate on whole datasets and compose via `applyFiltersWithParams`. |
-| Contribution queue replay & preview snapshot | ⚠️ Partially implemented | Queue applies via `applyContributionQueue` and stores serialized preview datasets, but full validator/provenance workflow is still evolving. |
-| GitHub submission workflow alignment | ⏳ Not implemented | Workflow still expects legacy `database.json` edits; needs ordered queue replay + validator in CI. |
+| Contribution queue replay & preview snapshot | ⚠️ Partially implemented | Queue replay now runs the validator + propagation before persisting previews, but provenance workflow is still evolving. |
+| GitHub submission workflow alignment | ⚠️ In progress | CI now replays ordered queues with validation; remaining work is provenance + automated review gates. |
 
 Legend: ✅ ready, ⚠️ exists but incomplete, ⏳ not started.

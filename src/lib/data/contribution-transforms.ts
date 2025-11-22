@@ -12,6 +12,8 @@ import type {
   CustomTag
 } from '../../routes/contribute/types.js';
 import { cloneDataset } from './transforms.js';
+import { validateDatasetStructure } from './validation.js';
+import { propagateImplicitRelations } from './propagation.js';
 import { generateReferenceId } from '../utils/reference-id.js';
 
 export type ContributionQueueEntry =
@@ -203,5 +205,11 @@ export function applyContributionQueue(
     }
   }
 
-  return merged;
+  const validation = validateDatasetStructure(merged);
+  if (!validation.ok) {
+    const detail = validation.errors?.join('; ') ?? 'unknown structural error';
+    throw new Error(`Contribution queue produced an invalid dataset: ${detail}`);
+  }
+
+  return propagateImplicitRelations(merged);
 }

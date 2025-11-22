@@ -1,11 +1,6 @@
 import type { CanonicalKCData } from './types.js';
 import type { ContributionQueueEntry, ContributionQueueState } from './data/contribution-transforms.js';
-import type {
-  ContributorInfo,
-  LanguageToAdd,
-  RelationshipEntry,
-  SeparatingFunctionToAdd
-} from '../routes/contribute/types.js';
+import type { ContributorInfo } from '../routes/contribute/types.js';
 
 export const QUEUE_STORAGE_KEY = 'kcm_contribute_queue_v1';
 export const CONTRIBUTOR_STORAGE_KEY = 'kcm_contributor_info_v1';
@@ -30,43 +25,13 @@ export function hasQueuedChanges(): boolean {
   return getStoredValue(QUEUE_STORAGE_KEY) !== null;
 }
 
-export interface ContributionQueueSnapshot extends ContributionQueueState {
-  languagesToAdd: LanguageToAdd[];
-  languagesToEdit: LanguageToAdd[];
-  relationships: RelationshipEntry[];
-  newReferences: string[];
-  newSeparatingFunctions: SeparatingFunctionToAdd[];
-}
+export type ContributionQueueSnapshot = ContributionQueueState;
 
 function normalizeEntries(parsed: any): ContributionQueueEntry[] {
-  if (Array.isArray(parsed?.entries)) {
-    return parsed.entries as ContributionQueueEntry[];
+  if (!Array.isArray(parsed?.entries) || parsed.entries.length === 0) {
+    throw new Error('Stored queue is missing ordered entries.');
   }
-
-  const legacyEntries: ContributionQueueEntry[] = [];
-  const push = (entry: ContributionQueueEntry) => legacyEntries.push(entry);
-
-  (parsed?.newReferences || []).forEach((bibtex: string, idx: number) => {
-    push({ id: `legacy-ref-${idx}`, kind: 'reference', payload: bibtex });
-  });
-  (parsed?.newSeparatingFunctions || []).forEach((sf: SeparatingFunctionToAdd, idx: number) => {
-    push({ id: `legacy-sep-${idx}`, kind: 'separator', payload: sf });
-  });
-  (parsed?.languagesToAdd || []).forEach((lang: LanguageToAdd, idx: number) => {
-    push({ id: `legacy-lang-add-${idx}`, kind: 'language:new', payload: lang });
-  });
-  (parsed?.languagesToEdit || []).forEach((lang: LanguageToAdd, idx: number) => {
-    push({ id: `legacy-lang-edit-${idx}`, kind: 'language:edit', payload: lang });
-  });
-  (parsed?.relationships || []).forEach((rel: RelationshipEntry, idx: number) => {
-    push({ id: `legacy-rel-${idx}`, kind: 'relationship', payload: rel });
-  });
-
-  if (legacyEntries.length > 0) {
-    console.warn('Loaded queue data without ordered entries; falling back to best-effort legacy ordering.');
-  }
-
-  return legacyEntries;
+  return parsed.entries as ContributionQueueEntry[];
 }
 
 export function loadQueuedChanges(): ContributionQueueSnapshot | null {
@@ -76,11 +41,6 @@ export function loadQueuedChanges(): ContributionQueueSnapshot | null {
     const parsed = JSON.parse(stored);
     const snapshot: ContributionQueueSnapshot = {
       entries: normalizeEntries(parsed),
-      languagesToAdd: parsed.languagesToAdd || [],
-      languagesToEdit: parsed.languagesToEdit || [],
-      relationships: parsed.relationships || [],
-      newReferences: parsed.newReferences || [],
-      newSeparatingFunctions: parsed.newSeparatingFunctions || [],
       customTags: parsed.customTags || [],
       modifiedRelations: parsed.modifiedRelations || [],
       submissionId: typeof parsed.submissionId === 'string' ? parsed.submissionId : undefined,

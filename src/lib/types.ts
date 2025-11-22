@@ -164,8 +164,6 @@ export interface KCRelationTypeStyle {
   targetStyle?: EdgeEndpointStyle;
   /** Style for the source (tail) end of the edge */
   sourceStyle?: EdgeEndpointStyle;
-  // Legacy single arrow support (deprecated - use targetStyle/sourceStyle instead)
-  targetArrow?: 'none' | 'triangle' | 'vee' | 'triangle-backcurve';
 }
 
 /**

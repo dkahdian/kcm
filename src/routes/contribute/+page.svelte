@@ -24,10 +24,10 @@
     LanguageToAdd,
     RelationshipEntry,
     CustomTag,
-    DeferredItems,
     SeparatingFunctionEntry,
     SeparatingFunctionToAdd,
     SubmissionHistoryEntry,
+    SubmissionHistoryPayload,
     ContributorInfo
   } from './types.js';
   import { onMount } from 'svelte';
@@ -36,8 +36,22 @@
   type OperationResult = { success: boolean; error?: string };
 
   import { initialGraphData } from '$lib/data/index.js';
-  import { applyContributionQueue, type ContributionQueueState } from '$lib/data/contribution-transforms.js';
-  import { QUEUE_STORAGE_KEY, CONTRIBUTOR_STORAGE_KEY, savePreviewDataset } from '$lib/contribution-storage.js';
+  import {
+    applyContributionQueue,
+    type ContributionQueueEntry,
+    type ContributionQueueState
+  } from '$lib/data/contribution-transforms.js';
+  import {
+    QUEUE_STORAGE_KEY,
+    CONTRIBUTOR_STORAGE_KEY,
+    savePreviewDataset,
+    loadQueuedChanges
+  } from '$lib/contribution-storage.js';
+
+  type QueueLanguage = { queueEntryId: string; payload: LanguageToAdd };
+  type QueueRelationship = { queueEntryId: string; payload: RelationshipEntry };
+  type QueueSeparatingFunction = { queueEntryId: string; payload: SeparatingFunctionToAdd };
+  type QueueReference = { queueEntryId: string; bibtex: string };
 
   type PersistedQueueState = ContributionQueueState;
 
@@ -134,23 +148,6 @@
     return results;
   }
 
-  function sanitizeSeparatingFunctionToAddArray(value: unknown): SeparatingFunctionToAdd[] {
-    if (!Array.isArray(value)) return [];
-    const results: SeparatingFunctionToAdd[] = [];
-    for (const entry of value) {
-      if (!entry || typeof entry !== 'object') continue;
-      const raw = entry as Record<string, any>;
-      if (!isString(raw.shortName) || !isString(raw.name) || !isString(raw.description)) continue;
-      results.push({
-        shortName: raw.shortName,
-        name: raw.name,
-        description: raw.description,
-        refs: sanitizeStringArray(raw.refs)
-      });
-    }
-    return results;
-  }
-
   function sanitizeRelationships(value: unknown): RelationshipEntry[] {
     if (!Array.isArray(value)) return [];
     return value
@@ -204,6 +201,57 @@
     refs: [...sf.refs]
   });
 
+  const cloneQueueEntry = (entry: ContributionQueueEntry): ContributionQueueEntry => {
+    switch (entry.kind) {
+      case 'language:new':
+      case 'language:edit':
+        return { ...entry, payload: cloneLanguageEntry(entry.payload) };
+      case 'relationship':
+        return { ...entry, payload: cloneRelationshipEntry(entry.payload) };
+      case 'separator':
+        return { ...entry, payload: cloneSeparatingFunctionToAdd(entry.payload) };
+      case 'reference':
+      default:
+        return { ...entry, payload: entry.payload };
+    }
+  };
+
+  function deriveQueueEntriesFromHistory(payload: SubmissionHistoryPayload): ContributionQueueEntry[] {
+    if (!Array.isArray(payload.queueEntries) || payload.queueEntries.length === 0) {
+      throw new Error('Submission history entry is missing queueEntries.');
+    }
+    return payload.queueEntries.map(cloneQueueEntry);
+  }
+
+  const createQueueEntryId = (): string => {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return uuidv4();
+  };
+
+  function addQueueEntry(entry: ContributionQueueEntry) {
+    queueEntries = [...queueEntries, entry];
+  }
+
+  function updateQueueEntry<K extends ContributionQueueEntry['kind']>(
+    entryId: string,
+    kind: K,
+    payload: Extract<ContributionQueueEntry, { kind: K }>['payload']
+  ) {
+    queueEntries = queueEntries.map((entry) => {
+      if (entry.id === entryId && entry.kind === kind) {
+        const updated = { ...entry, payload } as Extract<ContributionQueueEntry, { kind: K }>;
+        return updated;
+      }
+      return entry;
+    });
+  }
+
+  function removeQueueEntry(entryId: string) {
+    queueEntries = queueEntries.filter((entry) => entry.id !== entryId);
+  }
+
   const cloneCustomTag = (tag: CustomTag): CustomTag => ({ ...tag, refs: [...tag.refs] });
 
   const formatHistoryTimestamp = (iso: string): string => {
@@ -254,12 +302,15 @@
   let contributorGithub = $state('');
   let contributorNote = $state('');
 
-  // Languages
-  let languagesToAdd = $state<LanguageToAdd[]>([]);
-  let languagesToEdit = $state<LanguageToAdd[]>([]);
+  // Ordered queue of all contribution entries
+  let queueEntries = $state<ContributionQueueEntry[]>([]);
+
+  // Languages (derived from queue entries)
+  let languagesToAdd = $state<QueueLanguage[]>([]);
+  let languagesToEdit = $state<QueueLanguage[]>([]);
 
   // Relationships (always visible, works with existing + new languages)
-  let relationships = $state<RelationshipEntry[]>([]);
+  let relationships = $state<QueueRelationship[]>([]);
 
   // Track expanded state for chip UI
   let expandedLanguageToAddIndex = $state<number | null>(null);
@@ -287,9 +338,15 @@
   let queuePersistenceReady = $state(false);
 
   // Additional state (declared before hasQueuedItems to avoid TDZ errors)
-  let newReferences = $state<string[]>([]);
-  let newSeparatingFunctions = $state<SeparatingFunctionToAdd[]>([]);
+  let newReferences = $state<QueueReference[]>([]);
+  let newSeparatingFunctions = $state<QueueSeparatingFunction[]>([]);
   let customTags = $state<CustomTag[]>([]);
+
+  const languageAddPayloads = $derived(languagesToAdd.map((entry) => entry.payload));
+  const languageEditPayloads = $derived(languagesToEdit.map((entry) => entry.payload));
+  const referenceValues = $derived(newReferences.map((entry) => entry.bibtex));
+  const separatingFunctionPayloads = $derived(newSeparatingFunctions.map((entry) => entry.payload));
+  const relationshipPayloads = $derived(relationships.map((entry) => entry.payload));
 
   // Submission metadata & history
   let activeSubmissionId = $state('');
@@ -300,12 +357,9 @@
 
   // Derived state: check if queue has any items
   const hasQueuedItems = $derived(
-    languagesToAdd.length > 0 ||
-    languagesToEdit.length > 0 ||
-    relationships.filter(rel => modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))).length > 0 ||
-    newReferences.length > 0 ||
-    newSeparatingFunctions.length > 0 ||
-    customTags.length > 0
+    queueEntries.length > 0 ||
+    customTags.length > 0 ||
+    modifiedRelations.size > 0
   );
 
   let previousHasQueuedItems = false;
@@ -336,18 +390,13 @@
     submissionHistory = loadSubmissionHistory();
 
     try {
-      const stored = localStorage.getItem(QUEUE_STORAGE_KEY);
+      const stored = loadQueuedChanges();
       if (stored) {
-        const parsed = JSON.parse(stored) as Partial<PersistedQueueState>;
-        languagesToAdd = sanitizeLanguages(parsed?.languagesToAdd);
-        languagesToEdit = sanitizeLanguages(parsed?.languagesToEdit);
-        relationships = sanitizeRelationships(parsed?.relationships);
-        newReferences = sanitizeStringArray(parsed?.newReferences);
-        newSeparatingFunctions = sanitizeSeparatingFunctionToAddArray(parsed?.newSeparatingFunctions);
-        customTags = sanitizeTags(parsed?.customTags);
-        modifiedRelations = new Set(sanitizeStringArray(parsed?.modifiedRelations));
-        activeSubmissionId = sanitizeSubmissionId(parsed?.submissionId) ?? '';
-        supersedesSubmissionId = sanitizeSubmissionId(parsed?.supersedesSubmissionId);
+        queueEntries = stored.entries.map(cloneQueueEntry);
+        customTags = sanitizeTags(stored.customTags);
+        modifiedRelations = new Set(sanitizeStringArray(stored.modifiedRelations));
+        activeSubmissionId = sanitizeSubmissionId(stored.submissionId) ?? '';
+        supersedesSubmissionId = sanitizeSubmissionId(stored.supersedesSubmissionId);
       }
 
       // Restore contributor info
@@ -393,6 +442,42 @@
   }
 
   $effect(() => {
+    const nextLanguagesToAdd: QueueLanguage[] = [];
+    const nextLanguagesToEdit: QueueLanguage[] = [];
+    const nextRelationships: QueueRelationship[] = [];
+    const nextReferences: QueueReference[] = [];
+    const nextSeparators: QueueSeparatingFunction[] = [];
+
+    for (const entry of queueEntries) {
+      switch (entry.kind) {
+        case 'language:new':
+          nextLanguagesToAdd.push({ queueEntryId: entry.id, payload: cloneLanguageEntry(entry.payload) });
+          break;
+        case 'language:edit':
+          nextLanguagesToEdit.push({ queueEntryId: entry.id, payload: cloneLanguageEntry(entry.payload) });
+          break;
+        case 'relationship':
+          nextRelationships.push({ queueEntryId: entry.id, payload: cloneRelationshipEntry(entry.payload) });
+          break;
+        case 'reference':
+          nextReferences.push({ queueEntryId: entry.id, bibtex: entry.payload });
+          break;
+        case 'separator':
+          nextSeparators.push({ queueEntryId: entry.id, payload: cloneSeparatingFunctionToAdd(entry.payload) });
+          break;
+        default:
+          break;
+      }
+    }
+
+    languagesToAdd = nextLanguagesToAdd;
+    languagesToEdit = nextLanguagesToEdit;
+    relationships = nextRelationships;
+    newReferences = nextReferences;
+    newSeparatingFunctions = nextSeparators;
+  });
+
+  $effect(() => {
     if (!queuePersistenceReady || !browser) return;
 
     if (!activeSubmissionId) {
@@ -400,11 +485,7 @@
     }
 
     const isEmptyQueue =
-      languagesToAdd.length === 0 &&
-      languagesToEdit.length === 0 &&
-      relationships.length === 0 &&
-      newReferences.length === 0 &&
-      newSeparatingFunctions.length === 0 &&
+      queueEntries.length === 0 &&
       customTags.length === 0 &&
       modifiedRelations.size === 0;
 
@@ -419,11 +500,7 @@
     }
 
     const snapshot: PersistedQueueState = {
-      languagesToAdd: languagesToAdd.map(cloneLanguageEntry),
-      languagesToEdit: languagesToEdit.map(cloneLanguageEntry),
-      relationships: relationships.map(cloneRelationshipEntry),
-      newReferences: [...newReferences],
-      newSeparatingFunctions: newSeparatingFunctions.map(cloneSeparatingFunctionToAdd),
+      entries: queueEntries.map(cloneQueueEntry),
       customTags: customTags.map(cloneCustomTag),
       modifiedRelations: Array.from(modifiedRelations),
       submissionId: activeSubmissionId,
@@ -463,11 +540,7 @@
     }
 
     const queuePayload: ContributionQueueState = {
-      languagesToAdd: languagesToAdd.map(cloneLanguageEntry),
-      languagesToEdit: languagesToEdit.map(cloneLanguageEntry),
-      relationships: relationships.map(cloneRelationshipEntry),
-      newReferences: [...newReferences],
-      newSeparatingFunctions: newSeparatingFunctions.map(cloneSeparatingFunctionToAdd),
+      entries: queueEntries.map(cloneQueueEntry),
       customTags: customTags.map(cloneCustomTag),
       modifiedRelations: Array.from(modifiedRelations),
       submissionId: activeSubmissionId,
@@ -484,27 +557,26 @@
 
   // Modal handlers
   function handleAddLanguage(language: LanguageToAdd): OperationResult {
-    languagesToAdd = [...languagesToAdd, language];
+    addQueueEntry({ id: createQueueEntryId(), kind: 'language:new', payload: cloneLanguageEntry(language) });
     return { success: true };
   }
 
   function handleEditLanguage(language: LanguageToAdd): OperationResult {
-    const index = languagesToEdit.findIndex(l => l.name === language.name);
-    if (index >= 0) {
-      languagesToEdit[index] = language;
-      languagesToEdit = [...languagesToEdit];
+    const existing = languagesToEdit.find((entry) => entry.payload.name === language.name);
+    if (existing) {
+      updateQueueEntry(existing.queueEntryId, 'language:edit', cloneLanguageEntry(language));
     } else {
-      languagesToEdit = [...languagesToEdit, language];
+      addQueueEntry({ id: createQueueEntryId(), kind: 'language:edit', payload: cloneLanguageEntry(language) });
     }
     return { success: true };
   }
 
   function handleAddReference(bibtex: string) {
-    newReferences = [...newReferences, bibtex];
+    addQueueEntry({ id: createQueueEntryId(), kind: 'reference', payload: bibtex });
   }
 
   function handleAddSeparatingFunction(sf: SeparatingFunctionToAdd) {
-    newSeparatingFunctions = [...newSeparatingFunctions, sf];
+    addQueueEntry({ id: createQueueEntryId(), kind: 'separator', payload: cloneSeparatingFunctionToAdd(sf) });
   }
 
   function handleEditSeparatingFunction(index: number) {
@@ -514,62 +586,26 @@
 
   function handleUpdateSeparatingFunction(sf: SeparatingFunctionToAdd) {
     if (editSeparatingFunctionIndex !== null) {
-      newSeparatingFunctions[editSeparatingFunctionIndex] = sf;
-      newSeparatingFunctions = [...newSeparatingFunctions];
+      const entry = newSeparatingFunctions[editSeparatingFunctionIndex];
+      if (entry) {
+        updateQueueEntry(entry.queueEntryId, 'separator', cloneSeparatingFunctionToAdd(sf));
+      }
       editSeparatingFunctionIndex = null;
     }
   }
 
-  // Store items that come after the reference being edited
-  // NOTE: This queue management system has a conceptual issue - it assumes items at the same
-  // numerical index across different arrays were added at the same "queue position", which is
-  // only true if items are added in synchronized batches. The current implementation only supports
-  // this deferred/re-validation logic for references. Languages and relationships use simpler
-  // in-place editing without queue revalidation.
-  // TODO: Consider implementing a proper unified queue with global ordering and validation.
-  let deferredItems = $state<DeferredItems | null>(null);
-
   function handleEditReference(index: number) {
-    // Store all items added after this reference
-    deferredItems = {
-      languages: languagesToAdd.slice(index + 1),
-      editedLanguages: languagesToEdit.slice(index + 1),
-      references: newReferences.slice(index + 1),
-      separatingFunctions: [], // TODO: Implement deferred items for separating functions
-      relationships: relationships.filter((_, i) => i > index),
-      tags: customTags.slice(index + 1)
-    };
-
-    // Remove items that come after
-    languagesToAdd = languagesToAdd.slice(0, index + 1);
-    languagesToEdit = languagesToEdit.slice(0, index + 1);
-    newReferences = newReferences.slice(0, index + 1);
-    relationships = relationships.slice(0, index + 1);
-    customTags = customTags.slice(0, index + 1);
-
-    // Open modal with current content
     editReferenceIndex = index;
     showAddReferenceModal = true;
   }
 
   function handleUpdateReference(bibtex: string) {
     if (editReferenceIndex !== null) {
-      // Update the reference at the edit index
-      newReferences[editReferenceIndex] = bibtex;
-      newReferences = [...newReferences];
-
-      // Restore deferred items
-      if (deferredItems) {
-        languagesToAdd = [...languagesToAdd, ...deferredItems.languages];
-        languagesToEdit = [...languagesToEdit, ...deferredItems.editedLanguages];
-        newReferences = [...newReferences, ...deferredItems.references];
-        relationships = [...relationships, ...deferredItems.relationships];
-        customTags = [...customTags, ...deferredItems.tags];
+      const entry = newReferences[editReferenceIndex];
+      if (entry) {
+        updateQueueEntry(entry.queueEntryId, 'reference', bibtex);
       }
-
-      // Clear edit state
       editReferenceIndex = null;
-      deferredItems = null;
     }
   }
 
@@ -581,9 +617,10 @@
 
   function handleUpdateLanguageToAdd(language: LanguageToAdd): OperationResult {
     if (editLanguageToAddIndex !== null) {
-      languagesToAdd[editLanguageToAddIndex] = language;
-      languagesToAdd = [...languagesToAdd];
-
+      const entry = languagesToAdd[editLanguageToAddIndex];
+      if (entry) {
+        updateQueueEntry(entry.queueEntryId, 'language:new', cloneLanguageEntry(language));
+      }
       // Clear edit state
       editLanguageToAddIndex = null;
     }
@@ -598,9 +635,10 @@
 
   function handleUpdateLanguageToEdit(language: LanguageToAdd): OperationResult {
     if (editLanguageToEditIndex !== null) {
-      languagesToEdit[editLanguageToEditIndex] = language;
-      languagesToEdit = [...languagesToEdit];
-
+      const entry = languagesToEdit[editLanguageToEditIndex];
+      if (entry) {
+        updateQueueEntry(entry.queueEntryId, 'language:edit', cloneLanguageEntry(language));
+      }
       // Clear edit state
       editLanguageToEditIndex = null;
     }
@@ -615,10 +653,11 @@
 
   function handleUpdateRelationship(relationship: RelationshipEntry) {
     if (editRelationshipIndex !== null) {
-      // Update the relationship at the edit index
-      relationships[editRelationshipIndex] = relationship;
-      relationships = [...relationships];
-      recordModification(relationship);
+      const entry = relationships[editRelationshipIndex];
+      if (entry) {
+        updateQueueEntry(entry.queueEntryId, 'relationship', cloneRelationshipEntry(relationship));
+        recordModification(relationship);
+      }
 
       // Clear edit state
       editRelationshipIndex = null;
@@ -634,19 +673,14 @@
 
     // Check if this relationship already exists (adding)
     const key = relationKey(relationship.sourceId, relationship.targetId);
-    const existingIndex = relationships.findIndex(r => 
-      relationKey(r.sourceId, r.targetId) === key
-    );
-    
-    if (existingIndex >= 0) {
-      // Update existing relationship
-      relationships[existingIndex] = relationship;
-      relationships = [...relationships];
+    const existing = relationships.find((entry) => relationKey(entry.payload.sourceId, entry.payload.targetId) === key);
+
+    if (existing) {
+      updateQueueEntry(existing.queueEntryId, 'relationship', cloneRelationshipEntry(relationship));
     } else {
-      // Add new relationship
-      relationships = [...relationships, relationship];
+      addQueueEntry({ id: createQueueEntryId(), kind: 'relationship', payload: cloneRelationshipEntry(relationship) });
     }
-    
+
     recordModification(relationship);
   }
 
@@ -654,19 +688,33 @@
     customTags = [...customTags, tag];
   }
 
+  function handleDeleteLanguageToAdd(index: number) {
+    const entry = languagesToAdd[index];
+    if (!entry) return;
+    deleteLanguage(entry.queueEntryId, entry.payload.name);
+  }
+
+  function handleDeleteLanguageToEdit(index: number) {
+    const entry = languagesToEdit[index];
+    if (!entry) return;
+    deleteLanguage(entry.queueEntryId, entry.payload.name);
+  }
+
+  function handleDeleteRelationship(index: number) {
+    const entry = relationships[index];
+    if (!entry) return;
+    removeQueueEntry(entry.queueEntryId);
+    clearModificationByKey(relationKey(entry.payload.sourceId, entry.payload.targetId));
+  }
+
   // Cascade delete: when a language is deleted, remove its relationships
-  function deleteLanguage(langName: string, isNew: boolean) {
-    if (isNew) {
-      languagesToAdd = languagesToAdd.filter(l => l.name !== langName);
-    } else {
-      languagesToEdit = languagesToEdit.filter(l => l.name !== langName);
-    }
-    
-    // Remove any relationships involving this language
-    const remaining = relationships.filter(rel => 
-      rel.sourceId !== langName && rel.targetId !== langName
-    );
-    relationships = remaining;
+  function deleteLanguage(queueEntryId: string, langName: string) {
+    const relatedRelationshipIds = relationships
+      .filter((entry) => entry.payload.sourceId === langName || entry.payload.targetId === langName)
+      .map((entry) => entry.queueEntryId);
+
+    const idsToRemove = new Set([queueEntryId, ...relatedRelationshipIds]);
+    queueEntries = queueEntries.filter((entry) => !idsToRemove.has(entry.id));
 
     updateModifiedRelations((current) => {
       if (current.size === 0) return current;
@@ -682,69 +730,75 @@
 
   // Cascade delete: when a reference is deleted, remove it from all dependencies
   function deleteReference(index: number) {
-    // Compute the reference ID for the reference being deleted
-    const existingIds = new Set(data.existingReferences.map(r => r.id));
-    
-    // Add IDs of all previous new references to maintain consistent ID generation
+    const referenceEntry = newReferences[index];
+    if (!referenceEntry) return;
+
+    const existingIds = new Set(data.existingReferences.map((r) => r.id));
     for (let i = 0; i < index; i++) {
-      const id = generateReferenceId(newReferences[i], existingIds);
+      const id = generateReferenceId(newReferences[i].bibtex, existingIds);
       existingIds.add(id);
     }
-    
-    // Get the ID of the reference being deleted
-    const refId = generateReferenceId(newReferences[index], existingIds);
-    
-    // Remove the reference from the array
-    newReferences = newReferences.filter((_, i) => i !== index);
-    
-    // Remove from language description refs
-    languagesToAdd.forEach(lang => {
-      lang.descriptionRefs = lang.descriptionRefs.filter(r => r !== refId);
-    });
-    languagesToEdit.forEach(lang => {
-      lang.descriptionRefs = lang.descriptionRefs.filter(r => r !== refId);
-    });
-    
-    // Remove from relationships
-    relationships.forEach(rel => {
-      rel.refs = rel.refs.filter(r => r !== refId);
-      rel.separatingFunctions?.forEach(fn => {
-        fn.refs = fn.refs.filter(r => r !== refId);
-      });
-    });
-    
-    // Remove from tags
-    customTags.forEach(tag => {
-      tag.refs = tag.refs.filter(r => r !== refId);
+
+    const refId = generateReferenceId(referenceEntry.bibtex, existingIds);
+
+    queueEntries = queueEntries.map((entry) => {
+      if (entry.kind === 'language:new' || entry.kind === 'language:edit') {
+        if (!entry.payload.descriptionRefs.includes(refId)) return entry;
+        const updated = cloneLanguageEntry(entry.payload);
+        updated.descriptionRefs = updated.descriptionRefs.filter((r) => r !== refId);
+        return { ...entry, payload: updated };
+      }
+
+      if (entry.kind === 'relationship') {
+        if (!entry.payload.refs.includes(refId) && !entry.payload.separatingFunctions?.some((fn) => fn.refs.includes(refId))) {
+          return entry;
+        }
+        const updated = cloneRelationshipEntry(entry.payload);
+        updated.refs = updated.refs.filter((r) => r !== refId);
+        if (updated.separatingFunctions) {
+          updated.separatingFunctions = updated.separatingFunctions.map((fn) => ({
+            ...fn,
+            refs: fn.refs.filter((r) => r !== refId)
+          }));
+        }
+        return { ...entry, payload: updated };
+      }
+
+      if (entry.kind === 'separator') {
+        if (!entry.payload.refs.includes(refId)) return entry;
+        const updated = cloneSeparatingFunctionToAdd(entry.payload);
+        updated.refs = updated.refs.filter((r) => r !== refId);
+        return { ...entry, payload: updated };
+      }
+
+      return entry;
     });
 
-    // Remove from separating functions
-    newSeparatingFunctions.forEach(sf => {
-      sf.refs = sf.refs.filter(r => r !== refId);
-    });
+    removeQueueEntry(referenceEntry.queueEntryId);
 
-    languagesToAdd = [...languagesToAdd];
-    languagesToEdit = [...languagesToEdit];
-    relationships = [...relationships];
-    customTags = [...customTags];
-    newSeparatingFunctions = [...newSeparatingFunctions];
+    customTags = customTags.map((tag) => ({ ...tag, refs: tag.refs.filter((r) => r !== refId) }));
   }
 
   function deleteSeparatingFunction(index: number) {
-    const sf = newSeparatingFunctions[index];
-    const shortName = sf.shortName;
+    const entry = newSeparatingFunctions[index];
+    if (!entry) return;
 
-    // Remove the separating function from the array
-    newSeparatingFunctions = newSeparatingFunctions.filter((_, i) => i !== index);
+    const shortName = entry.payload.shortName;
+    removeQueueEntry(entry.queueEntryId);
 
-    // Remove from relationships (from separatingFunctionIds arrays)
-    relationships.forEach(rel => {
-      if (rel.separatingFunctionIds) {
-        rel.separatingFunctionIds = rel.separatingFunctionIds.filter(id => id !== shortName);
+    queueEntries = queueEntries.map((queueEntry) => {
+      if (queueEntry.kind !== 'relationship' || !queueEntry.payload.separatingFunctionIds) {
+        return queueEntry;
       }
-    });
 
-    relationships = [...relationships];
+      if (!queueEntry.payload.separatingFunctionIds.includes(shortName)) {
+        return queueEntry;
+      }
+
+      const updated = cloneRelationshipEntry(queueEntry.payload);
+      updated.separatingFunctionIds = (updated.separatingFunctionIds || []).filter((id) => id !== shortName);
+      return { ...queueEntry, payload: updated };
+    });
   }
 
   function toggleHistoryPanel() {
@@ -756,35 +810,36 @@
   }
 
   function loadSubmissionFromHistory(entry: SubmissionHistoryEntry) {
-    const payload = entry.payload;
+    try {
+      const payload = entry.payload;
 
-    languagesToAdd = payload.languagesToAdd.map(cloneLanguageEntry);
-    languagesToEdit = payload.languagesToEdit.map(cloneLanguageEntry);
-    relationships = payload.relationships.map(cloneRelationshipEntry);
-    newReferences = [...payload.newReferences];
-    customTags = payload.customTags.map(cloneCustomTag);
-    modifiedRelations = new Set(payload.modifiedRelations);
+      queueEntries = deriveQueueEntriesFromHistory(payload);
+      customTags = payload.customTags.map(cloneCustomTag);
+      modifiedRelations = new Set(payload.modifiedRelations);
 
-    contributorEmail = payload.contributor.email;
-    contributorGithub = payload.contributor.github;
-    contributorNote = payload.contributor.note;
+      contributorEmail = payload.contributor.email;
+      contributorGithub = payload.contributor.github;
+      contributorNote = payload.contributor.note;
 
-    supersedesSubmissionId = payload.submissionId;
-    activeSubmissionId = createSubmissionId();
+      supersedesSubmissionId = payload.submissionId;
+      activeSubmissionId = createSubmissionId();
 
-    submissionHistory = loadSubmissionHistory();
-    isHistoryOpen = false;
+      submissionHistory = loadSubmissionHistory();
+      isHistoryOpen = false;
 
-    // Reset transient UI state
-    editReferenceIndex = null;
-    deferredItems = null;
-    editLanguageToAddIndex = null;
-    editLanguageToEditIndex = null;
-    editRelationshipIndex = null;
-    expandedLanguageToAddIndex = null;
-    expandedLanguageToEditIndex = null;
-    expandedRelationshipIndex = null;
-    expandedReferenceIndex = null;
+      // Reset transient UI state
+      editReferenceIndex = null;
+      editLanguageToAddIndex = null;
+      editLanguageToEditIndex = null;
+      editRelationshipIndex = null;
+      expandedLanguageToAddIndex = null;
+      expandedLanguageToEditIndex = null;
+      expandedRelationshipIndex = null;
+      expandedReferenceIndex = null;
+    } catch (error) {
+      console.error('Failed to load submission from history', error);
+      alert('Unable to load this submission. It was saved before ordered queues were supported.');
+    }
   }
 
   function clearSupersedeLink() {
@@ -950,11 +1005,11 @@
 
           <!-- Queued Items Section -->
           <ContributionQueue
-            {languagesToAdd}
-            {languagesToEdit}
-            {newReferences}
-            {newSeparatingFunctions}
-            {relationships}
+            languagesToAdd={languageAddPayloads}
+            languagesToEdit={languageEditPayloads}
+            newReferences={referenceValues}
+            newSeparatingFunctions={separatingFunctionPayloads}
+            relationships={relationshipPayloads}
             {modifiedRelations}
             {expandedLanguageToAddIndex}
             {expandedLanguageToEditIndex}
@@ -968,17 +1023,14 @@
             onToggleExpandRelationship={(index) => expandedRelationshipIndex = expandedRelationshipIndex === index ? null : index}
             onEditLanguageToAdd={handleEditLanguageToAdd}
             onEditLanguageToEdit={handleEditLanguageToEdit}
-            onDeleteLanguageToAdd={(index) => languagesToAdd = languagesToAdd.filter((_, i) => i !== index)}
-            onDeleteLanguageToEdit={(index) => languagesToEdit = languagesToEdit.filter((_, i) => i !== index)}
+            onDeleteLanguageToAdd={handleDeleteLanguageToAdd}
+            onDeleteLanguageToEdit={handleDeleteLanguageToEdit}
             onEditReference={handleEditReference}
             onDeleteReference={deleteReference}
             onEditSeparatingFunction={handleEditSeparatingFunction}
             onDeleteSeparatingFunction={deleteSeparatingFunction}
             onEditRelationship={handleEditRelationship}
-            onDeleteRelationship={(index, key) => {
-              relationships = relationships.filter((_, i) => i !== index);
-              clearModificationByKey(key);
-            }}
+            onDeleteRelationship={(index) => handleDeleteRelationship(index)}
           />
           <!-- END Queued Items Section -->
 
@@ -1008,12 +1060,12 @@
   }}
   onAdd={editLanguageToAddIndex !== null ? handleUpdateLanguageToAdd : handleAddLanguage}
   isEdit={editLanguageToAddIndex !== null}
-  initialData={editLanguageToAddIndex !== null ? languagesToAdd[editLanguageToAddIndex] : undefined}
+  initialData={editLanguageToAddIndex !== null ? languagesToAdd[editLanguageToAddIndex]?.payload : undefined}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
 />
 
 <AddLanguageModal
@@ -1025,12 +1077,12 @@
   }}
   onAdd={editLanguageToEditIndex !== null ? handleUpdateLanguageToEdit : handleEditLanguage}
   isEdit={true}
-  initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex] : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.name === selectedLanguageToEdit)!) : undefined)}
+  initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex]?.payload : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.name === selectedLanguageToEdit)!) : undefined)}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
 />
 
 <!-- Language Selector Modal for Editing -->
@@ -1096,10 +1148,9 @@
   onClose={() => {
     showAddReferenceModal = false;
     editReferenceIndex = null;
-    deferredItems = null;
   }}
   onAdd={editReferenceIndex !== null ? handleUpdateReference : handleAddReference}
-  initialValue={editReferenceIndex !== null ? newReferences[editReferenceIndex] : ''}
+  initialValue={editReferenceIndex !== null ? newReferences[editReferenceIndex]?.bibtex ?? '' : ''}
   isEditMode={editReferenceIndex !== null}
 />
 
@@ -1110,8 +1161,8 @@
     editSeparatingFunctionIndex = null;
   }}
   onAdd={editSeparatingFunctionIndex !== null ? handleUpdateSeparatingFunction : handleAddSeparatingFunction}
-  initialValue={editSeparatingFunctionIndex !== null ? newSeparatingFunctions[editSeparatingFunctionIndex] : undefined}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
+  initialValue={editSeparatingFunctionIndex !== null ? newSeparatingFunctions[editSeparatingFunctionIndex]?.payload : undefined}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
   isEditMode={editSeparatingFunctionIndex !== null}
 />
 
@@ -1122,11 +1173,11 @@
     editRelationshipIndex = null;
   }}
   onSave={handleSaveRelationship}
-  initialData={editRelationshipIndex !== null ? relationships[editRelationshipIndex] : undefined}
-  languages={getAvailableLanguages(data.languages, languagesToAdd, languagesToEdit)}
+  initialData={editRelationshipIndex !== null ? relationships[editRelationshipIndex]?.payload : undefined}
+  languages={getAvailableLanguages(data.languages, languageAddPayloads, languageEditPayloads)}
   {statusOptions}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, newReferences)}
-  availableSeparatingFunctions={getAvailableSeparatingFunctions(data.existingSeparatingFunctions, newSeparatingFunctions)}
+  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
+  availableSeparatingFunctions={getAvailableSeparatingFunctions(data.existingSeparatingFunctions, separatingFunctionPayloads)}
   {baselineRelations}
 />
 

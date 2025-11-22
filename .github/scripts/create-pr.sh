@@ -27,7 +27,7 @@ SUPERSEDES_SUBMISSION_ID=${META[4]}
 sanitize_slug() {
 	local raw="$1"
 	local cleaned
-	cleaned=$(echo "$raw" | tr -c '[:alnum:]._- ' '-')
+	cleaned=$(echo "$raw" | tr -c '[:alnum:]._ -' '-')
 	cleaned=${cleaned// /-}
 	cleaned=${cleaned//--/-}
 	cleaned=${cleaned#-}

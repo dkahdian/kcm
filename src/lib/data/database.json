@@ -2460,7 +2460,22 @@
     "matrix": [
       [
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Bryant_1986"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "$F_X$",
+              "name": "-",
+              "description": "-",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -3035,5 +3050,14 @@
       ]
     ]
   },
-  "separatingFunctions": []
+  "separatingFunctions": [
+    {
+      "shortName": "$F_X$",
+      "name": "-",
+      "description": "-",
+      "refs": [
+        "Bryant_1986"
+      ]
+    }
+  ]
 }

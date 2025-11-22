@@ -119,45 +119,54 @@ This PR was generated from the ordered contribution queue. Validation and build 
 *This PR was automatically generated from a community contribution.*
 EOF
 
+CREATE_STDOUT=$(mktemp)
 CREATE_STDERR=$(mktemp)
-PR_RESPONSE=""
-if PR_RESPONSE=$(gh pr create \
+if gh pr create \
 	--repo "$REPOSITORY" \
 	--base main \
 	--head "$BRANCH_NAME" \
 	--title "$PR_TITLE" \
 	--body-file "$PR_BODY_FILE" \
-	--json number,url,permalink 2>"$CREATE_STDERR"); then
+	>"$CREATE_STDOUT" 2>"$CREATE_STDERR"; then
 	echo "Opened PR for ${BRANCH_NAME}"
 else
 	if grep -qi "already exists" "$CREATE_STDERR"; then
-		PR_RESPONSE=$(gh pr list --repo "$REPOSITORY" --state open --head "$BRANCH_NAME" --json number,url,permalink --jq '.[0]' || true)
-		if [[ -z "$PR_RESPONSE" || "$PR_RESPONSE" == "null" ]]; then
-			echo "PR already exists but could not fetch details" >&2
-			cat "$CREATE_STDERR" >&2
-			rm "$CREATE_STDERR" "$PR_BODY_FILE"
-			exit 1
-		fi
-		printf "Using existing PR for %s\n" "$BRANCH_NAME"
+		printf "Reusing existing PR for %s\n" "$BRANCH_NAME"
 	else
 		cat "$CREATE_STDERR" >&2
-		rm "$CREATE_STDERR" "$PR_BODY_FILE"
+		rm "$CREATE_STDOUT" "$CREATE_STDERR" "$PR_BODY_FILE"
 		exit 1
 	fi
 fi
 
-rm "$CREATE_STDERR" "$PR_BODY_FILE"
+rm "$CREATE_STDOUT" "$CREATE_STDERR" "$PR_BODY_FILE"
 
-NEW_PR_NUMBER=$(echo "$PR_RESPONSE" | jq '.number')
-NEW_PR_URL=$(echo "$PR_RESPONSE" | jq -r '.permalink // .url // .html_url // empty')
+REPO_OWNER=${REPOSITORY%%/*}
+HEAD_QUERY="${REPO_OWNER}:${BRANCH_NAME}"
+PR_RESPONSE=$(gh api \
+	"/repos/${REPOSITORY}/pulls" \
+	-f head="$HEAD_QUERY" \
+	-f state="open" \
+	--jq '.[0]' 2>/dev/null || true)
 
-if [[ -z "$NEW_PR_NUMBER" || "$NEW_PR_NUMBER" == "null" ]]; then
-	echo "Failed to create or retrieve PR" >&2
+if [[ -z "$PR_RESPONSE" || "$PR_RESPONSE" == "null" ]]; then
+	PR_RESPONSE=$(gh api \
+		"/repos/${REPOSITORY}/pulls" \
+		-f head="$HEAD_QUERY" \
+		-f state="all" \
+		--jq '.[0]' 2>/dev/null || true)
+fi
+
+NEW_PR_NUMBER=$(echo "$PR_RESPONSE" | jq '.number // empty')
+NEW_PR_URL=$(echo "$PR_RESPONSE" | jq -r '.html_url // .url // empty')
+
+if [[ -z "$NEW_PR_NUMBER" ]]; then
+	echo "Unable to locate PR metadata for branch ${BRANCH_NAME}" >&2
 	exit 1
 fi
 
 if [[ -z "$NEW_PR_URL" ]]; then
-	NEW_PR_URL=$(gh pr view "$NEW_PR_NUMBER" --repo "$REPOSITORY" --json url,permalink --jq '.permalink // .url')
+	NEW_PR_URL="https://github.com/${REPOSITORY}/pull/${NEW_PR_NUMBER}"
 fi
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then

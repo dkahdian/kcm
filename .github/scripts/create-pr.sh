@@ -139,26 +139,34 @@ else
 	fi
 fi
 
-rm "$CREATE_STDOUT" "$CREATE_STDERR" "$PR_BODY_FILE"
-
 REPO_OWNER=${REPOSITORY%%/*}
-HEAD_QUERY="${REPO_OWNER}:${BRANCH_NAME}"
-PR_RESPONSE=$(gh api \
-	"/repos/${REPOSITORY}/pulls" \
-	-f head="$HEAD_QUERY" \
-	-f state="open" \
-	--jq '.[0]' 2>/dev/null || true)
+REPO_NAME=${REPOSITORY#*/}
 
-if [[ -z "$PR_RESPONSE" || "$PR_RESPONSE" == "null" ]]; then
-	PR_RESPONSE=$(gh api \
-		"/repos/${REPOSITORY}/pulls" \
-		-f head="$HEAD_QUERY" \
-		-f state="all" \
-		--jq '.[0]' 2>/dev/null || true)
+PR_RESPONSE=""
+PR_URL_FROM_OUTPUT=$(grep -Eo "https://github.com/${REPOSITORY}/pull/[0-9]+" "$CREATE_STDOUT" | tail -n 1 || true)
+
+if [[ -n "$PR_URL_FROM_OUTPUT" ]]; then
+	NEW_PR_NUMBER=${PR_URL_FROM_OUTPUT##*/}
+	NEW_PR_URL=$PR_URL_FROM_OUTPUT
 fi
 
-NEW_PR_NUMBER=$(echo "$PR_RESPONSE" | jq '.number // empty')
-NEW_PR_URL=$(echo "$PR_RESPONSE" | jq -r '.html_url // .url // empty')
+if [[ -z "${NEW_PR_NUMBER:-}" ]]; then
+	PR_RESPONSE=$(gh api graphql \
+		-f owner="$REPO_OWNER" \
+		-f name="$REPO_NAME" \
+		-f headRef="$BRANCH_NAME" \
+		-f query='query($owner: String!, $name: String!, $headRef: String!) {
+			repository(owner: $owner, name: $name) {
+				pullRequests(headRefName: $headRef, last: 1, states: [OPEN, MERGED, CLOSED]) {
+					nodes { number url }
+				}
+			}
+		}' \
+		--jq '.data.repository.pullRequests.nodes[0]' 2>/dev/null || true)
+
+	NEW_PR_NUMBER=$(echo "$PR_RESPONSE" | jq '.number // empty')
+	NEW_PR_URL=$(echo "$PR_RESPONSE" | jq -r '.url // empty')
+fi
 
 if [[ -z "$NEW_PR_NUMBER" ]]; then
 	echo "Unable to locate PR metadata for branch ${BRANCH_NAME}" >&2
@@ -168,6 +176,8 @@ fi
 if [[ -z "$NEW_PR_URL" ]]; then
 	NEW_PR_URL="https://github.com/${REPOSITORY}/pull/${NEW_PR_NUMBER}"
 fi
+
+rm "$CREATE_STDOUT" "$CREATE_STDERR" "$PR_BODY_FILE"
 
 if [[ -n "$SUPERSEDES_SUBMISSION_ID" ]]; then
 	QUERY="repo:${REPOSITORY} state:open is:pr ${SUPERSEDES_SUBMISSION_ID} in:body"

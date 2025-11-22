@@ -11,11 +11,13 @@ permissions:
 jobs:
   process-contribution:
     runs-on: ubuntu-latest
+    env:
+      CONTRIBUTION_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.CONTRIBUTION_TOKEN }}
+          token: ${{ env.CONTRIBUTION_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -40,8 +42,22 @@ jobs:
             throw new Error('Contribution payload is empty.');
           }
           const payload = JSON.parse(raw);
-          const summary = Object.keys(payload || {});
-          console.log('✅ Loaded contribution payload with keys:', summary.join(', ') || '(none)');
+          if (!payload || typeof payload !== 'object') {
+            throw new Error('Contribution payload is malformed.');
+          }
+          if (!payload.submissionId) {
+            throw new Error('submissionId is required.');
+          }
+          if (!payload.contributor || typeof payload.contributor.email !== 'string') {
+            throw new Error('Contributor email is missing.');
+          }
+          const entries = payload.queue && Array.isArray(payload.queue.entries)
+            ? payload.queue.entries.length
+            : 0;
+          if (entries === 0) {
+            throw new Error('Contribution queue must include ordered entries.');
+          }
+          console.log(`✅ Loaded submission ${payload.submissionId} with ${entries} queue entries.`);
           EOF
 
       - name: Generate contribution files
@@ -55,8 +71,8 @@ jobs:
 
       - name: Create branch, commit, and PR
         env:
-          GH_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
-          CONTRIBUTION_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
+          GH_TOKEN: ${{ env.CONTRIBUTION_TOKEN }}
+          CONTRIBUTION_TOKEN: ${{ env.CONTRIBUTION_TOKEN }}
         run: |
           chmod +x .github/scripts/create-pr.sh
           .github/scripts/create-pr.sh

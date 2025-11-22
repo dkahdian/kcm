@@ -32,24 +32,6 @@ export function cloneOperationSupport(
 }
 
 /**
- * Helper function to format language data for submission
- */
-export function formatLanguageForSubmission(lang: any) {
-  return {
-    name: lang.name,
-    fullName: lang.fullName,
-    description: lang.description,
-    descriptionRefs: Array.isArray(lang.descriptionRefs) ? [...lang.descriptionRefs] : [],
-    properties: {
-      queries: cloneOperationSupport(lang.queries),
-      transformations: cloneOperationSupport(lang.transformations, true) // Convert to safe keys
-    },
-    tags: lang.tags ? JSON.parse(JSON.stringify(lang.tags)) : [],
-    references: Array.isArray(lang.existingReferences) ? [...lang.existingReferences] : []
-  };
-}
-
-/**
  * Build baseline relations from adjacency matrix
  */
 export function buildBaselineRelations(adjacencyMatrix: {
@@ -169,54 +151,6 @@ export function validateSubmission(
 /**
  * Build submission payload
  */
-export function buildSubmissionPayload(
-  contributorEmail: string,
-  contributorGithub: string,
-  contributorNote: string,
-  languagesToAdd: LanguageToAdd[],
-  languagesToEdit: LanguageToAdd[],
-  changedRelationships: RelationshipEntry[],
-  newReferences: string[],
-  newSeparatingFunctions: Array<{ shortName: string; name: string; description: string; refs: string[] }>,
-  existingLanguageIds: string[],
-  metadata: {
-    submissionId: string;
-    supersedesSubmissionId?: string | null;
-  }
-) {
-  const formattedRelationships = changedRelationships.map((rel) => ({
-    sourceId: rel.sourceId,
-    targetId: rel.targetId,
-    status: rel.status,
-    refs: rel.refs,
-    separatingFunctionIds: rel.separatingFunctionIds || [],
-    // Keep old format for backward compatibility during transition
-    separatingFunctions: rel.separatingFunctions || []
-  }));
-
-  const formattedLanguagesToAdd = languagesToAdd.map(formatLanguageForSubmission);
-  const formattedLanguagesToEdit = languagesToEdit.map(formatLanguageForSubmission);
-
-  const payload: Record<string, unknown> = {
-    submissionId: metadata.submissionId,
-    contributorEmail,
-    contributorGithub: contributorGithub || undefined,
-    contributorNote: contributorNote || undefined,
-    languagesToAdd: formattedLanguagesToAdd,
-    languagesToEdit: formattedLanguagesToEdit,
-    relationships: formattedRelationships,
-    newReferences,
-    newSeparatingFunctions,
-    existingLanguageIds
-  };
-
-  if (metadata.supersedesSubmissionId) {
-    payload.supersedesSubmissionId = metadata.supersedesSubmissionId;
-  }
-
-  return payload;
-}
-
 /**
  * Get available separating functions (existing + new) for dropdown selection
  */

@@ -3,10 +3,11 @@ set -euo pipefail
 
 mapfile -t META < <(node <<'EOF'
 const payload = require('./contribution.json');
+const contributor = payload.contributor || {};
 const fields = [
-	payload.contributorEmail || 'anonymous',
-	payload.contributorGithub || '',
-	payload.contributorNote || '',
+	contributor.email || 'anonymous',
+	contributor.github || '',
+	contributor.note || '',
 	payload.submissionId || '',
 	payload.supersedesSubmissionId || ''
 ];

@@ -31,6 +31,17 @@ export interface ContributionQueueState {
   supersedesSubmissionId?: string | null;
 }
 
+export interface ContributionSubmissionPayload {
+  submissionId: string;
+  supersedesSubmissionId?: string | null;
+  contributor: {
+    email: string;
+    github?: string;
+    note?: string;
+  };
+  queue: ContributionQueueState;
+}
+
 function extractCitationKey(bibtex: string): string | null {
   const match = bibtex.match(/@\w+\{([^,\s]+)/);
   return match ? match[1] : null;

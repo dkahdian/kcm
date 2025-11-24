@@ -2589,12 +2589,24 @@
         null,
         null,
         null,
+        {
+          "status": "poly",
+          "description": "BDD is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "poly",
+          "refs": [],
+          "hidden": true,
+          "description": "Derived via polynomial transitive closure"
+        },
         null,
         null,
         null,
@@ -2622,7 +2634,12 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": [],
+          "hidden": true,
+          "description": "Derived via polynomial transitive closure"
+        },
         null,
         null,
         null,
@@ -2766,7 +2783,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "DNF is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -2832,7 +2856,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "FBBD is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -2865,7 +2896,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "IP is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -2898,7 +2936,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "MODS is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3009,7 +3054,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "OBBD$<_$ is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3231,7 +3283,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "OBBD is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,

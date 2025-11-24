@@ -185,6 +185,7 @@
 
   const cloneRelationshipEntry = (relationship: RelationshipEntry): RelationshipEntry => ({
     ...relationship,
+    description: relationship.description,
     refs: [...relationship.refs],
     separatingFunctionIds: relationship.separatingFunctionIds
       ? [...relationship.separatingFunctionIds]

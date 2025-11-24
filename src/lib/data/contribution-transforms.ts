@@ -165,6 +165,7 @@ export function applyContributionQueue(
 
     const relation: DirectedSuccinctnessRelation = {
       status: rel.status,
+      description: rel.description,
       refs: [...rel.refs],
       separatingFunctions: resolvedSeparatingFunctions
     };

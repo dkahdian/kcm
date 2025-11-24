@@ -19,6 +19,7 @@ export type RelationshipEntry = {
   sourceId: string;
   targetId: string;
   status: TransformationStatus;
+  description?: string;
   refs: string[];
   separatingFunctionIds?: string[]; // New format: array of shortNames
   separatingFunctions?: SeparatingFunctionEntry[]; // Deprecated: inline format

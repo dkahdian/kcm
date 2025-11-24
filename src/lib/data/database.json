@@ -94,10 +94,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "BDD",
+      "fullName": "Binary Decision Diagram",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -171,10 +173,10 @@
       "tags": []
     },
     {
+      "name": "CNF",
+      "fullName": "Conjunctive Normal Form",
       "description": "-",
       "descriptionRefs": [],
-      "fullName": "-",
-      "name": "CNF",
       "properties": {
         "queries": {
           "CE": {
@@ -357,10 +359,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "d-DNNF",
+      "fullName": "Deterministic Decomposable Negation Normal Form",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -636,10 +640,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "DNF",
+      "fullName": "Disjunctive Normal Form",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -729,10 +735,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "DNNF",
+      "fullName": "Decomposable Negation Normal Form",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -806,10 +814,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "FBBD",
+      "fullName": "Free Binary Decision Diagram",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -899,10 +909,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "IP",
+      "fullName": "Prime Implicants",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -992,10 +1004,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "MODS",
+      "fullName": "Models",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -1178,10 +1192,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "NNF",
+      "fullName": "Negation Normal Form",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -1475,10 +1491,12 @@
       "tags": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
-      "fullName": "-",
       "name": "PI",
+      "fullName": "Prime Implicates",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
       "properties": {
         "queries": {
           "CE": {
@@ -2108,6 +2126,101 @@
         }
       },
       "tags": []
+    },
+    {
+      "name": "OBDD",
+      "fullName": "Ordered Binary Decision Diagram",
+      "description": "-",
+      "descriptionRefs": [
+        "Darwiche_2002"
+      ],
+      "properties": {
+        "queries": {
+          "CE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "CT": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "EQ": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "IM": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "ME": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SE": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "VA": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "CD": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "FO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "SFO": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "¬C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "∧BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "∧C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "∨BC": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          },
+          "∨C": {
+            "note": "",
+            "polytime": "unknown",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
     }
   ],
   "references": [
@@ -2455,7 +2568,8 @@
       "SDNNF",
       "SDNNF_T",
       "uFBDD",
-      "uOBBD"
+      "uOBBD",
+      "OBDD"
     ],
     "matrix": [
       [
@@ -2481,59 +2595,11 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null
       ],
       [
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2581,59 +2647,11 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null
       ],
       [
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2681,59 +2699,11 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null
       ],
       [
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2781,59 +2751,11 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null
       ],
       [
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2881,59 +2803,11 @@
         null,
         null,
         null,
-        null
-      ],
-      [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         null,
         null
       ],
       [
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
-      [
         null,
         null,
         null,
@@ -2981,6 +2855,33 @@
         null,
         null,
         null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null
       ],
       [
@@ -3006,9 +2907,271 @@
         null,
         null,
         null,
+        null,
         null
       ],
       [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
         null,
         null,
         null,

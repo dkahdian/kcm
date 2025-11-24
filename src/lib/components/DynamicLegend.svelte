@@ -20,7 +20,7 @@
       return graphData as FilteredGraphData;
     }
     // Convert GraphData to FilteredGraphData by adding all nodes/edges as visible
-    const allLanguageIds = new Set(graphData.languages.map(l => l.name));
+    const allLanguageIds = new Set(graphData.languages.map(l => l.id));
     const allEdgeIds = new Set<string>();
     const { matrix, languageIds } = graphData.adjacencyMatrix;
     for (let i = 0; i < languageIds.length; i++) {
@@ -151,7 +151,7 @@
     return Object.values(POLYTIME_COMPLEXITIES).filter(c => codesInUse.has(c.code));
   });
 
-  let containerRefs: { [status: string]: HTMLDivElement | null } = {};
+  let containerRefs = $state<{ [status: string]: HTMLDivElement | null }>({});
 
   onMount(() => {
     setTimeout(() => {

@@ -20,6 +20,7 @@
     convertLanguageForEdit
   } from './logic.js';
   import { generateReferenceId } from '$lib/utils/reference-id.js';
+  import { generateLanguageId } from '$lib/utils/language-id.js';
   import type {
     LanguageToAdd,
     RelationshipEntry,
@@ -710,8 +711,10 @@
 
   // Cascade delete: when a language is deleted, remove its relationships
   function deleteLanguage(queueEntryId: string, langName: string) {
+    // Generate the language ID from the name to match against relationships
+    const langId = generateLanguageId(langName);
     const relatedRelationshipIds = relationships
-      .filter((entry) => entry.payload.sourceId === langName || entry.payload.targetId === langName)
+      .filter((entry) => entry.payload.sourceId === langId || entry.payload.targetId === langId)
       .map((entry) => entry.queueEntryId);
 
     const idsToRemove = new Set([queueEntryId, ...relatedRelationshipIds]);
@@ -1006,6 +1009,7 @@
 
           <!-- Queued Items Section -->
           <ContributionQueue
+            languages={initialGraphData.languages}
             languagesToAdd={languageAddPayloads}
             languagesToEdit={languageEditPayloads}
             newReferences={referenceValues}

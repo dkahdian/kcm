@@ -7,6 +7,7 @@
 	 * Display a single queued relationship
 	 */
 	let {
+		languages,
 		relationship,
 		index,
 		isExpanded = false,
@@ -15,6 +16,7 @@
 		onEdit,
 		onDelete
 	}: {
+		languages: Array<{ id: string; name: string }>;
 		relationship: RelationshipEntry;
 		index: number;
 		isExpanded?: boolean;
@@ -24,8 +26,11 @@
 		onDelete: (index: number, key: string) => void;
 	} = $props();
 
+	const idToName = new Map(languages.map(lang => [lang.id, lang.name]));
 	const key = relationKey(relationship.sourceId, relationship.targetId);
-	const subtitle = `${relationship.sourceId} → ${relationship.targetId}`;
+	const sourceName = idToName.get(relationship.sourceId) ?? relationship.sourceId;
+	const targetName = idToName.get(relationship.targetId) ?? relationship.targetId;
+	const subtitle = `${sourceName} → ${targetName}`;
 </script>
 
 {#if isModified}

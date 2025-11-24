@@ -43,7 +43,7 @@ export function applyFiltersWithParams(
   const afterLanguageFilters = applyStageList(dataset, languageFilters);
   const afterEdgeFilters = applyStageList(afterLanguageFilters, edgeFilters);
 
-  const visibleLanguageIds = new Set(afterEdgeFilters.languages.map((language) => language.name));
+  const visibleLanguageIds = new Set(afterEdgeFilters.languages.map((language) => language.id));
   const visibleEdgeIds = collectVisibleEdgeIds(afterEdgeFilters.adjacencyMatrix);
 
   return {

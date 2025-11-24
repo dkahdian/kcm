@@ -2,6 +2,7 @@ import type { TransformationStatus } from '$lib/types.js';
 import type { LanguageToAdd, SeparatingFunctionEntry, RelationshipEntry } from './types.js';
 import { displayCodeToSafeKey } from '$lib/data/operations.js';
 import { generateReferenceId } from '$lib/utils/reference-id.js';
+import { generateLanguageId } from '$lib/utils/language-id.js';
 
 /**
  * Generate a unique key for a relationship
@@ -102,13 +103,13 @@ export function getAvailableReferenceIds(
  * Get available languages (existing + new + edited)
  */
 export function getAvailableLanguages(
-  existingLanguages: Array<{ name: string }>,
+  existingLanguages: Array<{ id: string; name: string }>,
   languagesToAdd: LanguageToAdd[],
   languagesToEdit: LanguageToAdd[]
-): Array<{ name: string }> {
-  const existing = existingLanguages.map((l) => ({ name: l.name }));
-  const newLangs = languagesToAdd.map((l) => ({ name: l.name }));
-  const editedLangs = languagesToEdit.map((l) => ({ name: l.name }));
+): Array<{ id: string; name: string }> {
+  const existing = existingLanguages.map((l) => ({ id: l.id, name: l.name }));
+  const newLangs = languagesToAdd.map((l) => ({ id: generateLanguageId(l.name), name: l.name }));
+  const editedLangs = languagesToEdit.map((l) => ({ id: generateLanguageId(l.name), name: l.name }));
   return [...existing, ...newLangs, ...editedLangs];
 }
 

@@ -91,7 +91,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_8f666aa0"
     },
     {
       "name": "BDD",
@@ -168,7 +169,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_bb65ddb5"
     },
     {
       "name": "CNF",
@@ -261,7 +263,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_89649e36"
     },
     {
       "description": "-",
@@ -354,7 +357,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_83e3b023"
     },
     {
       "name": "d-DNNF",
@@ -447,7 +451,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_6c130090"
     },
     {
       "description": "-",
@@ -540,7 +545,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_ea9b5299"
     },
     {
       "description": "-",
@@ -633,7 +639,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_91f812d0"
     },
     {
       "name": "DNF",
@@ -726,7 +733,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_4c204bf3"
     },
     {
       "name": "DNNF",
@@ -803,7 +811,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_3bebcab7"
     },
     {
       "name": "FBBD",
@@ -896,7 +905,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_684b1ca7"
     },
     {
       "name": "IP",
@@ -989,7 +999,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_6ae90adc"
     },
     {
       "name": "MODS",
@@ -1082,7 +1093,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_e02902d0"
     },
     {
       "description": "-",
@@ -1175,7 +1187,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_1df07cc3"
     },
     {
       "name": "NNF",
@@ -1252,7 +1265,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_5bf00851"
     },
     {
       "description": "-",
@@ -1345,7 +1359,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_d24efe0e"
     },
     {
       "description": "Ordered Binary Decision Diagram with respect to a fixed variable order",
@@ -1472,7 +1487,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_d69995dd"
     },
     {
       "name": "PI",
@@ -1565,7 +1581,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_27fffab2"
     },
     {
       "description": "-",
@@ -1658,7 +1675,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_1afefbe2"
     },
     {
       "description": "-",
@@ -1751,7 +1769,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_9c84a267"
     },
     {
       "description": "-",
@@ -1844,7 +1863,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_b13b0d78"
     },
     {
       "description": "-",
@@ -1921,7 +1941,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_3c803ba1"
     },
     {
       "description": "-",
@@ -2014,7 +2035,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_4e62a038"
     },
     {
       "description": "-",
@@ -2107,7 +2129,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_c2df8c2b"
     },
     {
       "name": "OBDD",
@@ -2202,7 +2225,8 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "id": "lang_b9d72a7c"
     }
   ],
   "references": [
@@ -2528,30 +2552,30 @@
   },
   "adjacencyMatrix": {
     "languageIds": [
-      "ANF",
-      "BDD",
-      "CNF",
-      "cSDD",
-      "d-DNNF",
-      "d-SDNNF",
-      "d-SDNNF_T",
-      "DNF",
-      "DNNF",
-      "FBBD",
-      "IP",
-      "MODS",
-      "nFBBD",
-      "NNF",
-      "nOBBD",
-      "OBDD$_<$",
-      "PI",
-      "SDD",
-      "SDD_T",
-      "SDNNF",
-      "SDNNF_T",
-      "uFBDD",
-      "uOBBD",
-      "OBDD"
+      "lang_8f666aa0",
+      "lang_bb65ddb5",
+      "lang_89649e36",
+      "lang_83e3b023",
+      "lang_6c130090",
+      "lang_ea9b5299",
+      "lang_91f812d0",
+      "lang_4c204bf3",
+      "lang_3bebcab7",
+      "lang_684b1ca7",
+      "lang_6ae90adc",
+      "lang_e02902d0",
+      "lang_1df07cc3",
+      "lang_5bf00851",
+      "lang_d24efe0e",
+      "lang_d69995dd",
+      "lang_27fffab2",
+      "lang_1afefbe2",
+      "lang_9c84a267",
+      "lang_b13b0d78",
+      "lang_3c803ba1",
+      "lang_4e62a038",
+      "lang_c2df8c2b",
+      "lang_b9d72a7c"
     ],
     "matrix": [
       [

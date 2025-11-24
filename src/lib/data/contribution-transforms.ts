@@ -5,6 +5,7 @@ import type {
   DirectedSuccinctnessRelation,
   KCSeparatingFunction
 } from '../types.js';
+import { generateLanguageId } from '../utils/language-id.js';
 import type {
   LanguageToAdd,
   RelationshipEntry,
@@ -60,6 +61,7 @@ function convertToKCLanguage(
   }
 
   return {
+    id: generateLanguageId(language.name),
     name: language.name,
     fullName: language.fullName,
     description: language.description,
@@ -79,15 +81,15 @@ export function applyContributionQueue(
 ): CanonicalKCData {
   const merged = cloneDataset(base);
 
-  const ensureLanguageInMatrix = (name: string) => {
+  const ensureLanguageInMatrix = (id: string) => {
     const { adjacencyMatrix } = merged;
-    if (name in adjacencyMatrix.indexByLanguage) {
+    if (id in adjacencyMatrix.indexByLanguage) {
       return;
     }
 
     const newIndex = adjacencyMatrix.languageIds.length;
-    adjacencyMatrix.languageIds.push(name);
-    adjacencyMatrix.indexByLanguage[name] = newIndex;
+    adjacencyMatrix.languageIds.push(id);
+    adjacencyMatrix.indexByLanguage[id] = newIndex;
     for (const row of adjacencyMatrix.matrix) {
       row.push(null);
     }
@@ -195,16 +197,17 @@ export function applyContributionQueue(
       case 'language:new': {
         const kcLanguage = convertToKCLanguage(entry.payload, referenceLookup);
         merged.languages.push(kcLanguage);
-        ensureLanguageInMatrix(entry.payload.name);
+        ensureLanguageInMatrix(kcLanguage.id);
         break;
       }
       case 'language:edit': {
-        const index = merged.languages.findIndex((existing) => existing.name === entry.payload.name);
+        const langId = generateLanguageId(entry.payload.name);
+        const index = merged.languages.findIndex((existing) => existing.id === langId);
         if (index === -1) {
           // If language not present yet, treat as addition to keep queue idempotent
           const kcLanguage = convertToKCLanguage(entry.payload, referenceLookup);
           merged.languages.push(kcLanguage);
-          ensureLanguageInMatrix(entry.payload.name);
+          ensureLanguageInMatrix(kcLanguage.id);
         } else {
           merged.languages[index] = convertToKCLanguage(entry.payload, referenceLookup);
         }

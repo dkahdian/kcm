@@ -80,6 +80,7 @@
 
   let selectedNode = $state<KCLanguage | null>(null);
   let selectedEdge = $state<SelectedEdge | null>(null);
+  
   // Initialize filter state with default parameter values
   let filterStates = $state<FilterStateMap>(createDefaultFilterState(languageFilters, edgeFilters));
   let filterPersistenceReady = $state(false);
@@ -259,7 +260,7 @@
   // Reset selected node if it's no longer visible after filtering
   $effect(() => {
     if (selectedNode) {
-      const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.name);
+      const isVisible = filteredGraphData.visibleLanguageIds.has(selectedNode.id);
       if (!isVisible) {
         selectedNode = null;
       }
@@ -270,7 +271,8 @@
   $effect(() => {
     if (selectedEdge) {
       const edgeId = `${selectedEdge.source}->${selectedEdge.target}`;
-      const isVisible = filteredGraphData.visibleEdgeIds.has(edgeId);
+      const reverseEdgeId = `${selectedEdge.target}->${selectedEdge.source}`;
+      const isVisible = filteredGraphData.visibleEdgeIds.has(edgeId) || filteredGraphData.visibleEdgeIds.has(reverseEdgeId);
       if (!isVisible) {
         selectedEdge = null;
       }
@@ -343,11 +345,23 @@
     <aside class="side-panel">
       {#if selectedEdge}
         <EdgeInfo selectedEdge={selectedEdge} graphData={filteredGraphData} />
-      {:else}
+      {:else if selectedNode}
         <LanguageInfo 
           selectedLanguage={selectedNode} 
           graphData={filteredGraphData} 
-          onEdgeSelect={(edge) => { selectedEdge = edge; }}
+          onEdgeSelect={(edge) => { 
+            console.log('[+page] onEdgeSelect called with edge:', edge);
+            selectedEdge = edge; 
+          }}
+        />
+      {:else}
+        <LanguageInfo 
+          selectedLanguage={null} 
+          graphData={filteredGraphData} 
+          onEdgeSelect={(edge) => { 
+            console.log('[+page] onEdgeSelect called with edge (no node):', edge);
+            selectedEdge = edge; 
+          }}
         />
       {/if}
     </aside>

@@ -49,7 +49,7 @@
   const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
     const lookup = new Map<string, KCLanguage>();
     for (const language of graphData.languages) {
-      lookup.set(language.name, language);
+      lookup.set(language.id, language);
     }
     return lookup;
   });
@@ -80,13 +80,13 @@
 
   const languageRelationships = $derived.by<RelationshipStatement[]>(() => {
     if (!selectedLanguage) return [];
-    const { name } = selectedLanguage;
+    const { id, name } = selectedLanguage;
     const { adjacencyMatrix } = graphData;
 
     const statements: RelationshipStatement[] = [];
     const forwardStatuses = new Map<string, TransformationStatus>();
 
-    const sourceIndex = adjacencyMatrix.indexByLanguage[name];
+    const sourceIndex = adjacencyMatrix.indexByLanguage[id];
     if (sourceIndex === undefined) return statements;
 
     const { languageIds, matrix } = adjacencyMatrix;
@@ -167,7 +167,7 @@
   function selectEdge(targetId: string) {
     if (!selectedLanguage || !onEdgeSelect) return;
     
-    const sourceId = selectedLanguage.name;
+    const sourceId = selectedLanguage.id;
     const nodeA = sourceId < targetId ? sourceId : targetId;
     const nodeB = sourceId < targetId ? targetId : sourceId;
     

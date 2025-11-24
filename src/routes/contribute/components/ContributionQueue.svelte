@@ -10,6 +10,7 @@
    * Display all queued contribution items
    */
   let {
+    languages,
     languagesToAdd,
     languagesToEdit,
     newReferences,
@@ -37,6 +38,7 @@
     onEditRelationship,
     onDeleteRelationship
   }: {
+    languages: Array<{ id: string; name: string }>;
     languagesToAdd: LanguageToAdd[];
     languagesToEdit: LanguageToAdd[];
     newReferences: string[];
@@ -133,6 +135,7 @@
     {#each relationships as rel, index}
       {@const isModified = modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))}
       <RelationshipQueueItem
+        {languages}
         relationship={rel}
         {index}
         {isModified}

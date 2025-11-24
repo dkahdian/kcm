@@ -110,6 +110,9 @@ export interface KCReference {
 }
 
 export interface KCLanguage {
+  /** Unique internal identifier (URL-safe, no special chars) */
+  id: string;
+  /** Display name (may contain LaTeX like OBDD$_<$) */
   name: string;
   fullName: string;
   description: string;
@@ -283,8 +286,8 @@ export interface SelectedEdge {
 }
 
 export interface KCAdjacencyMatrix {
-  languageIds: string[]; // Now contains language names (unique identifiers)
-  indexByLanguage: Record<string, number>; // Maps language name to matrix index
+  languageIds: string[]; // Contains language IDs (unique internal identifiers)
+  indexByLanguage: Record<string, number>; // Maps language ID to matrix index
   matrix: (DirectedSuccinctnessRelation | null)[][];
 }
 

@@ -3080,34 +3080,46 @@
         null,
         {
           "status": "poly",
-          "description": "OBBD$<_$ is a subset of DNNF",
+          "description": "OBDD$_<$ is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
           ],
           "separatingFunctions": []
         },
+        {
+          "status": "poly",
+          "description": "OBDD$_<$ is a subset of FBDD",
+          "refs": [],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "OBDD$_<$ is a subset of NNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        null,
         null,
         null,
         null,
         null,
         {
           "status": "poly",
-          "description": "OBBD$_<$ is a subset of NNF",
+          "description": "OBDD$_<$ is a subset of OBDD",
           "refs": [
             "Darwiche_2002"
           ],
           "separatingFunctions": []
-        },
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        }
       ],
       [
         null,
@@ -3309,7 +3321,15 @@
         null,
         {
           "status": "poly",
-          "description": "OBBD is a subset of DNNF",
+          "description": "OBDD is a subset of DNNF",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "poly",
+          "description": "OBDD is a subset of FBDD",
           "refs": [
             "Darwiche_2002"
           ],
@@ -3318,10 +3338,9 @@
         null,
         null,
         null,
-        null,
         {
           "status": "poly",
-          "description": "OBBD is a subset of NNF.",
+          "description": "OBDD is a subset of NNF",
           "refs": [
             "Darwiche_2002"
           ],

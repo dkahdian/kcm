@@ -63,19 +63,23 @@ function ensureRefsExist(
 function collectLanguageIdentifiers(languages: KCLanguage[], errors: string[]): Map<string, string> {
   const identifiers = new Map<string, string>();
   for (const language of languages) {
+    if (!language.id || typeof language.id !== 'string') {
+      errors.push(`Encountered language without a valid id (name: ${language.name})`);
+      continue;
+    }
     if (!language.name || typeof language.name !== 'string') {
       errors.push('Encountered language without a valid name');
       continue;
     }
-    const normalized = normalizeLanguageId(language.name);
+    const normalized = normalizeLanguageId(language.id);
     if (!normalized) {
-      errors.push(`Language "${language.name}" resolves to an empty identifier after normalization`);
+      errors.push(`Language "${language.name}" (id: "${language.id}") resolves to an empty identifier after normalization`);
       continue;
     }
     if (identifiers.has(normalized)) {
       const collision = identifiers.get(normalized);
       errors.push(
-        `Language name collision: "${language.name}" conflicts with "${collision}" after normalization`
+        `Language ID collision: "${language.id}" (${language.name}) conflicts with "${collision}" after normalization`
       );
     } else {
       identifiers.set(normalized, language.name);

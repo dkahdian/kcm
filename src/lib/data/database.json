@@ -815,7 +815,7 @@
       "id": "lang_3bebcab7"
     },
     {
-      "name": "FBBD",
+      "name": "FBDD",
       "fullName": "Free Binary Decision Diagram",
       "description": "-",
       "descriptionRefs": [],
@@ -1100,7 +1100,7 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "name": "nFBBD",
+      "name": "nFBDD",
       "properties": {
         "queries": {
           "CE": {
@@ -1272,7 +1272,7 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "name": "nOBBD",
+      "name": "nOBDD",
       "properties": {
         "queries": {
           "CE": {
@@ -2042,7 +2042,7 @@
       "description": "-",
       "descriptionRefs": [],
       "fullName": "-",
-      "name": "uOBBD",
+      "name": "uOBDD",
       "properties": {
         "queries": {
           "CE": {
@@ -2882,7 +2882,7 @@
         null,
         {
           "status": "poly",
-          "description": "FBBD is a subset of DNNF",
+          "description": "FBDD is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
           ],
@@ -2894,7 +2894,7 @@
         null,
         {
           "status": "poly",
-          "description": "FBBD is a subset of NNF",
+          "description": "FBDD is a subset of NNF",
           "refs": [
             "Darwiche_2002"
           ],

@@ -2241,6 +2241,14 @@
     {
       "id": "Gogic_1995",
       "bibtex": "@article{Gogic_1995,\n   title={The Comparative Study of Knowledge Compilation},\n   journal={Journal of Artificial Intelligence Research},\n   volume={2},\n   pages={147--182},\n   url={https://doi.org/10.1613/jair.110},\n   DOI={10.1613/jair.110},\n   author={Gogic, Goran and Kautz, Henry and Papadimitriou, Christos H. and Selman, Bart},\n   year={1995},\n   publisher={AI Access Foundation}\n }"
+    },
+    {
+      "id": "Gergov_1994",
+      "bibtex": "@ARTICLE{324545,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197-1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}"
+    },
+    {
+      "id": "Darwiche_2000",
+      "bibtex": "@misc{darwiche2000tractablecountingtheorymodels,\n      title={On the tractable counting of theory models and its application to belief revision and truth maintenance}, \n      author={Adnan Darwiche},\n      year={2000},\n      eprint={cs/0003044},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/cs/0003044}, \n}"
     }
   ],
   "relationTypes": [
@@ -2632,6 +2640,14 @@
           "description": "Derived via polynomial transitive closure"
         },
         null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -2639,8 +2655,22 @@
         null,
         null,
         null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Gergov_1994",
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "HWB",
+              "name": "Hidden Weighted Bit",
+              "description": "-",
+              "refs": []
+            }
+          ]
+        }
       ],
       [
         null,
@@ -2978,7 +3008,15 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "It can be shown that a sentence in d-DNNF has exponential FBDD representations.",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2000"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "This holds due to transitivity.",
@@ -3007,7 +3045,14 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "This holds due to transitivity.",
@@ -3031,7 +3076,14 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,
@@ -3111,7 +3163,22 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively since OBDD$_<$ is a subset of OBDD",
+          "refs": [
+            "Darwiche_2002",
+            "Gergov_1994"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "HWB",
+              "name": "Hidden Weighted Bit",
+              "description": "-",
+              "refs": []
+            }
+          ]
+        },
         {
           "status": "no-quasi",
           "description": "Holds transitively",
@@ -3135,7 +3202,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Hidden weighed bit functions can be represented by quadratic size FBDD but require exponential size OBDD's.",
+          "refs": [
+            "Gergov_1994",
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,
@@ -3301,7 +3376,15 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "It can be shown that a sentence in d-DNNF has exponential FBDD representations.",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2000"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "This holds due to transitivity.",
@@ -3323,7 +3406,22 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Gergov_1994"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "HWB",
+              "name": "Hidden Weighted Bit",
+              "description": "-",
+              "refs": []
+            }
+          ]
+        },
         {
           "status": "no-quasi",
           "description": "This holds due to transitivity.",
@@ -3338,7 +3436,22 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Hidden weighed bit functions can be represented by quadratic size FBDD but require exponential size OBDD's. Since an FBDD is an NNF formula this holds.",
+          "refs": [
+            "Darwiche_2002",
+            "Gergov_1994"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "HWB",
+              "name": "Hidden Weighted Bit",
+              "description": "-",
+              "refs": []
+            }
+          ]
+        }
       ],
       [
         null,
@@ -3788,7 +3901,23 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Pairwise equivalence has an OBBD$_<$ of size polynomial for the order $<$ if $x_1<y_1<x_2<...<x_n<y_n$ but exponential if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise equivalence",
+              "name": "$\\Sigma_n = \\bigwedge_{i=1}^n (x_i \\leftrightarrow y_i)$",
+              "description": "-",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         {
           "status": "no-quasi",
           "description": "Holds transitively",
@@ -3831,6 +3960,20 @@
       "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
       "refs": [
         "Bryant_1986"
+      ]
+    },
+    {
+      "shortName": "HWB",
+      "name": "Hidden Weighted Bit",
+      "description": "-",
+      "refs": []
+    },
+    {
+      "shortName": "Pairwise equivalence",
+      "name": "$\\Sigma_n = \\bigwedge_{i=1}^n (x_i \\leftrightarrow y_i)$",
+      "description": "-",
+      "refs": [
+        "Darwiche_2002"
       ]
     }
   ]

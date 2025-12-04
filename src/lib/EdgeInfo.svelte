@@ -65,7 +65,7 @@
       case 'poly':
         return 'Polynomial time';
       case 'no-quasi':
-        return 'Exponential gap (no quasi-polynomial)';
+        return 'No quasipolynomial transformation';
       case 'no-poly-quasi':
         return 'Quasi-polynomial only (no polynomial)';
       case 'no-poly-unknown-quasi':
@@ -74,6 +74,8 @@
         return 'Quasi-polynomial exists; polynomial unknown';
       case 'unknown-both':
         return 'Complexity unknown';
+      case 'not-poly':
+        return 'No polynomial transformation';
       default:
         return 'Unknown';
     }

@@ -2257,6 +2257,10 @@
     {
       "id": "Cadoli_1997",
       "bibtex": "@article{Cadoli1997ASO,\n  title={A survey on knowledge compilation},\n  author={Marco Cadoli and Francesco M. Donini},\n  journal={AI Communications},\n  year={1997},\n  volume={10},\n  pages={137 - 150},\n  url={https://api.semanticscholar.org/CorpusID:16746005}\n}"
+    },
+    {
+      "id": "Wegener_1987",
+      "bibtex": "@book{Wegener1987-WEGTCO-3,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987}\n}"
     }
   ],
   "relationTypes": [
@@ -2919,7 +2923,15 @@
           ],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "\"In (Wegener, 1987) (Theorem 6.2, p. 436), a family of $n^2$-variable Boolean functions $\\Sigma$ is defined. Every interpretation $I$ over these $n^2$ variables represents an $n$-vertex digraph (as for every $1 \\le i,j \\le n$, we have $I(x_{i,j}) = 1$ iff $(i,j)$ is an arc of the digraph).\nThen $\\Sigma(I) = 1$ iff the digraph represented by $I$ contains a $k$-clique of a special kind\n($k$ is a parameter of the family).\n\nIt is shown that for certain values of $k$ (depending on $n$), every FBDD representation of\n$\\Sigma$ has exponential size. Moreover, it is shown that $\\Sigma$ has only a cubic number of\nprime implicants. This implies that\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{IP},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{DNF}.\n$$\n\nBecause FBDD satisfies $\\neg C$ (see Proposition 5.1), it cannot be the case that $\\neg\\Sigma$\nhas a polynomial-size FBDD. Since $\\neg\\Sigma$ has only a cubic number of prime implicates, we obtain\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{PI},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{CNF}.\n$$\n\nThe remaining results ... follow since\n$$\n\\mathrm{FBDD} \\le \\mathrm{OBDD} \\le \\mathrm{OBDD}< .\n$$\"\n",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "See the proof in Darwiche 2002 page 247",

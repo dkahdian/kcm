@@ -2249,6 +2249,14 @@
     {
       "id": "Darwiche_2000",
       "bibtex": "@misc{darwiche2000tractablecountingtheorymodels,\n      title={On the tractable counting of theory models and its application to belief revision and truth maintenance}, \n      author={Adnan Darwiche},\n      year={2000},\n      eprint={cs/0003044},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/cs/0003044}, \n}"
+    },
+    {
+      "id": "Selman_1996",
+      "bibtex": "@article{10.1145/226643.226644,\nauthor = {Selman, Bart and Kautz, Henry},\ntitle = {Knowledge compilation and theory approximation},\nyear = {1996},\nissue_date = {March 1996},\npublisher = {Association for Computing Machinery},\naddress = {New York, NY, USA},\nvolume = {43},\nnumber = {2},\nissn = {0004-5411},\nurl = {https://doi.org/10.1145/226643.226644},\ndoi = {10.1145/226643.226644},\nabstract = {Computational efficiency is a central concern in the design of knowledge representation systems. In order to obtain efficient systems, it has been suggested that one should limit the form of the statements in the knowledge base or use an incomplete inference mechanism. The former approach is often too restrictive for practical applications, whereas the latter leads to uncertainty about exactly what can and cannot be inferred from the knowledge base. We present a third alternative, in which knowledge given in a general representation language is translated (compiled) into a tractable form—allowing for efficient subsequent query answering.We show how propositional logical theories can be compiled into Horn theories that approximate the original information. The approximations bound the original theory from below and above in terms of logical strength. The procedures are extended to other tractable languages (for example, binary clauses) and to the first-order case. Finally, we demonstrate the generality of our approach by compiling concept descriptions in a general frame-based language into a tractable form.},\njournal = {J. ACM},\nmonth = mar,\npages = {193–224},\nnumpages = {32},\nkeywords = {Horn clauses, efficient reasoning methods, knowledge compilation, knowledge-base optimization, query evaluation, theory approximation}\n}"
+    },
+    {
+      "id": "Cadoli_1997",
+      "bibtex": "@article{Cadoli1997ASO,\n  title={A survey on knowledge compilation},\n  author={Marco Cadoli and Francesco M. Donini},\n  journal={AI Communications},\n  year={1997},\n  volume={10},\n  pages={137 - 150},\n  url={https://api.semanticscholar.org/CorpusID:16746005}\n}"
     }
   ],
   "relationTypes": [
@@ -2706,10 +2714,10 @@
           ]
         },
         {
-          "status": "poly",
+          "status": "no-quasi",
+          "description": "Unless the polynomial hierarchy collapses:\n\n\"If $\\mathrm{DNNF} \\le \\mathrm{CNF}$, then for each sentence $\\Sigma$ in $\\mathrm{CNF}$ there exists a poly-size equivalent sentence $\\Gamma$ in $\\mathrm{DNNF}$. Therefore, we can test whether a clause is entailed by $\\Sigma$ in polynomial time by testing whether the clause is entailed by $\\Gamma$. This proves the existence of poly-size knowledge-compilation functions for clausal entailment, leading to the collapse of the polynomial hierarchy $\\mathrm{PH}$.\n\nThe same is true for $\\mathrm{d\\text{-}DNNF}$ and $\\mathrm{sd\\text{-}DNNF}$ since all these languages support a polytime clausal‐entailment test.\"\n",
           "refs": [],
-          "hidden": true,
-          "description": "Derived via polynomial transitive closure"
+          "separatingFunctions": []
         },
         null,
         {
@@ -3375,7 +3383,16 @@
           ],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Unless the polynomial hierarchy collapses.",
+          "refs": [
+            "Selman_1996",
+            "Darwiche_2002",
+            "Cadoli_1997"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "It can be shown that a sentence in d-DNNF has exponential FBDD representations.",

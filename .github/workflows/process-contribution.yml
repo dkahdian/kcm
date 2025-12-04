@@ -28,7 +28,9 @@ jobs:
 
       - name: Extract contribution data
         run: |
-          echo '${{ toJson(github.event.client_payload) }}' > contribution.json
+          cat <<'JSON' > contribution.json
+          ${{ toJson(github.event.client_payload) }}
+          JSON
           cat contribution.json
 
       - name: Validate contribution queue payload

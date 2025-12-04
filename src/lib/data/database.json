@@ -2653,7 +2653,24 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247.",
+          "refs": [
+            "Darwiche_2002",
+            "Gogic_1995"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         {
           "status": "poly",
           "refs": [],
@@ -2661,7 +2678,23 @@
           "description": "Derived via polynomial transitive closure"
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -2674,7 +2707,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 p. 247",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -2797,7 +2846,24 @@
           ],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof on page 247 of Darwiche 2002.",
+          "refs": [
+            "Darwiche_2002",
+            "Gogic_1995"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -2812,7 +2878,23 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -2825,7 +2907,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -2837,6 +2935,23 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -2844,8 +2959,23 @@
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -2858,7 +2988,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -2910,7 +3056,23 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -2938,7 +3100,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -3016,21 +3194,60 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002",
+            "Gogic_1995"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002",
+            "Gogic_1995"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "This holds due to transitivity.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3125,10 +3342,42 @@
         null,
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "See the proof in Darwiche 2002 page 247.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Pairwise OR CNF",
+              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+              "description": "This formula helps separate PI from IP, among other important separations.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -3355,5 +3604,14 @@
       ]
     ]
   },
-  "separatingFunctions": []
+  "separatingFunctions": [
+    {
+      "shortName": "Pairwise OR CNF",
+      "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
+      "description": "This formula helps separate PI from IP, among other important separations.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    }
+  ]
 }

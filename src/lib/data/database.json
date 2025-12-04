@@ -2237,6 +2237,10 @@
     {
       "id": "Darwiche_2002",
       "bibtex": "@article{Darwiche_2002,\n   title={A Knowledge Compilation Map},\n   volume={17},\n   ISSN={1076-9757},\n   url={http://dx.doi.org/10.1613/jair.989},\n   DOI={10.1613/jair.989},\n   journal={Journal of Artificial Intelligence Research},\n   publisher={AI Access Foundation},\n   author={Darwiche, A. and Marquis, P.},\n   year={2002},\n   month=sep, pages={229–264} }"
+    },
+    {
+      "id": "Gogic_1995",
+      "bibtex": "@article{Gogic_1995,\n   title={The Comparative Study of Knowledge Compilation},\n   journal={Journal of Artificial Intelligence Research},\n   volume={2},\n   pages={147--182},\n   url={https://doi.org/10.1613/jair.110},\n   DOI={10.1613/jair.110},\n   author={Gogic, Goran and Kautz, Henry and Papadimitriou, Christos H. and Selman, Bart},\n   year={1995},\n   publisher={AI Access Foundation}\n }"
     }
   ],
   "relationTypes": [

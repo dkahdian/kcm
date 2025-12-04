@@ -145,3 +145,7 @@ This model ensures every mutation pipeline stays deterministic, debuggable, and 
 | GitHub submission workflow alignment | ⚠️ In progress | CI now replays ordered queues with validation; remaining work is provenance + automated review gates. |
 
 Legend: ✅ ready, ⚠️ exists but incomplete, ⏳ not started.
+
+## Notes (Dec 2025)
+
+- Reference registry persistence now reads from the canonical dataset instead of inferring references from individual languages. The GitHub Action script (`.github/scripts/generate-contribution.ts`) serializes `dataset.references`, which prevents contributions like `Gogic_1995` from disappearing when `database.json` is regenerated.

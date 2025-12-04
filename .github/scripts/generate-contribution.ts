@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import type { CanonicalKCData, KCLanguage } from '../../src/lib/types.js';
+import type { CanonicalKCData, KCLanguage, KCReference } from '../../src/lib/types.js';
 import {
   applyContributionQueue,
   type ContributionQueueState,
@@ -110,25 +110,33 @@ function serializeLanguages(languages: KCLanguage[]): unknown[] {
   });
 }
 
-function mergeReferences(languages: KCLanguage[], existing: RawReference[] = []): RawReference[] {
-  const ordered: RawReference[] = existing.map((ref) => ({ ...ref }));
-  const seen = new Set(existing.map((ref) => ref.id));
+function serializeReferences(
+  references: KCReference[],
+  existing: RawReference[] = []
+): RawReference[] {
+  const ordered: RawReference[] = [];
+  const seen = new Set<string>();
+  const lookup = new Map(references.map((ref) => [ref.id, ref]));
 
-  for (const language of languages) {
-    if (!language.references) continue;
-    for (const ref of language.references) {
-      if (!ref || typeof ref.id !== 'string' || !ref.id) continue;
-      if (seen.has(ref.id)) continue;
-      ordered.push({ id: ref.id, bibtex: ref.bibtex });
-      seen.add(ref.id);
-    }
+  for (const ref of existing) {
+    const updated = lookup.get(ref.id);
+    if (!updated || seen.has(ref.id)) continue;
+    ordered.push({ id: updated.id, bibtex: updated.bibtex });
+    seen.add(ref.id);
+    lookup.delete(ref.id);
+  }
+
+  for (const ref of references) {
+    if (seen.has(ref.id)) continue;
+    ordered.push({ id: ref.id, bibtex: ref.bibtex });
+    seen.add(ref.id);
   }
 
   return ordered;
 }
 
 function buildDatabasePayload(current: RawDatabase, dataset: CanonicalKCData): RawDatabase {
-  const references = mergeReferences(dataset.languages, current.references ?? []);
+  const references = serializeReferences(dataset.references, current.references ?? []);
   const languages = serializeLanguages(dataset.languages);
 
   return {

@@ -614,6 +614,12 @@
         query: 'edge',
         cssClass: 'cy-edge-html-label',
         tpl: (data: any) => buildEdgeLabelTemplate(data)
+      },
+      {
+        query: 'edge.edge-hovered',
+        cssClass: 'cy-edge-html-label',
+        tpl: (data: any) => buildEdgeLabelTemplate(data)
+
       }
     ];
 
@@ -914,6 +920,7 @@
     pointer-events: none;
     font-size: 11px;
     color: #374151;
+    z-index: 10;
   }
 
   :global(.edge-label-wrapper) {

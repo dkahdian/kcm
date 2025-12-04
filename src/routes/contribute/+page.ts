@@ -5,24 +5,12 @@ import { POLYTIME_COMPLEXITIES } from '$lib/data/polytime-complexities.js';
 import { adjacencyMatrixData } from '$lib/data/edges.js';
 import { relationTypes } from '$lib/data/relation-types.js';
 import { allSeparatingFunctions } from '$lib/data/separating-functions.js';
+import { allReferences } from '$lib/data/references.js';
 
 export const load: PageLoad = () => {
   const existingLanguageIds = allLanguages.map((lang) => lang.name);
 
-  const referenceLookup = new Map<string, string>();
-  for (const language of allLanguages) {
-    if (!language.references) continue;
-    for (const ref of language.references) {
-      if (!referenceLookup.has(ref.id)) {
-        referenceLookup.set(ref.id, ref.title);
-      }
-    }
-  }
-
-  const existingReferences = Array.from(referenceLookup.entries()).map(([id, title]) => ({
-    id,
-    title
-  }));
+  const existingReferences = allReferences.map((ref) => ({ id: ref.id, title: ref.title }));
 
   const tagLookup = new Map<string, { label: string; color?: string }>();
   for (const language of allLanguages) {

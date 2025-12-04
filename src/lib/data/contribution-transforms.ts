@@ -97,9 +97,8 @@ export function applyContributionQueue(
   };
 
   const referenceLookup = new Map<string, KCReference>();
-  for (const language of merged.languages) {
-    if (!language.references) continue;
-    for (const reference of language.references) {
+  if (merged.references) {
+    for (const reference of merged.references) {
       referenceLookup.set(reference.id, reference);
     }
   }
@@ -188,6 +187,7 @@ export function applyContributionQueue(
           bibtex
         };
         referenceLookup.set(generatedId, reference);
+        merged.references = [...(merged.references ?? []), reference];
         break;
       }
       case 'separator': {

@@ -297,6 +297,8 @@ export interface GraphData {
   adjacencyMatrix: KCAdjacencyMatrix;
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
+  /** global registry of references used across the dataset */
+  references: KCReference[];
   /** optional separating function registry */
   separatingFunctions?: KCSeparatingFunction[];
   /** optional metadata copied from database.json */

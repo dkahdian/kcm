@@ -34,33 +34,29 @@
   // Collect all unique references from both directions
   const edgeReferences = $derived.by<KCReference[]>(() => {
     if (!originalEdge) return [];
-    
+
     const refIds = new Set<string>();
     const refs: KCReference[] = [];
-    
-    // Collect ref IDs from both directions and their separating functions (use originalEdge for true data)
-    if (originalEdge.forward) {
-      originalEdge.forward.refs.forEach(id => refIds.add(id));
-      originalEdge.forward.separatingFunctions?.forEach(fn => {
-        fn.refs.forEach(id => refIds.add(id));
+
+    const collectRefs = (relation: typeof originalEdge.forward) => {
+      if (!relation) return;
+      relation.refs.forEach((id) => refIds.add(id));
+      relation.separatingFunctions?.forEach((fn) => {
+        fn.refs.forEach((id) => refIds.add(id));
       });
-    }
-    if (originalEdge.backward) {
-      originalEdge.backward.refs.forEach(id => refIds.add(id));
-      originalEdge.backward.separatingFunctions?.forEach(fn => {
-        fn.refs.forEach(id => refIds.add(id));
-      });
-    }
-    
-    // Get full reference objects from all languages
-    for (const lang of graphData.languages) {
-      for (const ref of lang.references) {
-        if (refIds.has(ref.id) && !refs.find(r => r.id === ref.id)) {
-          refs.push(ref);
-        }
+    };
+
+    collectRefs(originalEdge.forward);
+    collectRefs(originalEdge.backward);
+
+    const referenceMap = new Map(graphData.references.map((ref) => [ref.id, ref]));
+    for (const id of refIds) {
+      const ref = referenceMap.get(id);
+      if (ref) {
+        refs.push(ref);
       }
     }
-    
+
     return refs;
   });
 

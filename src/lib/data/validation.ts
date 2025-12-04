@@ -5,6 +5,7 @@ import type {
   KCLanguage,
   KCOpSupport,
   KCSeparatingFunction,
+  KCReference,
   TransformValidationResult,
   TransformationStatus
 } from '../types.js';
@@ -88,14 +89,12 @@ function collectLanguageIdentifiers(languages: KCLanguage[], errors: string[]): 
   return identifiers;
 }
 
-function collectReferenceRegistry(languages: KCLanguage[]): Set<string> {
+function collectReferenceRegistry(references: KCReference[] | undefined): Set<string> {
   const registry = new Set<string>();
-  for (const language of languages) {
-    if (!Array.isArray(language.references)) continue;
-    for (const reference of language.references) {
-      if (reference?.id) {
-        registry.add(reference.id);
-      }
+  if (!references) return registry;
+  for (const reference of references) {
+    if (reference?.id) {
+      registry.add(reference.id);
     }
   }
   return registry;
@@ -204,21 +203,22 @@ function validateLanguage(
   globalRefs: Set<string>,
   errors: string[]
 ): void {
-  const referenceIds = new Set<string>();
   if (Array.isArray(language.references)) {
     for (const reference of language.references) {
       if (!reference?.id) {
         errors.push(`Language "${language.name}" contains a reference without an id`);
-      } else {
-        referenceIds.add(reference.id);
+        continue;
+      }
+      if (!globalRefs.has(reference.id)) {
+        errors.push(`Language "${language.name}" references unknown id "${reference.id}"`);
       }
     }
   }
 
-  ensureRefsExist(language.descriptionRefs, `Language "${language.name}" descriptionRefs`, referenceIds, errors);
+  ensureRefsExist(language.descriptionRefs, `Language "${language.name}" descriptionRefs`, globalRefs, errors);
 
-  validateOperationMap(language.name, 'query', language.properties?.queries, referenceIds, errors);
-  validateOperationMap(language.name, 'transformation', language.properties?.transformations, referenceIds, errors);
+  validateOperationMap(language.name, 'query', language.properties?.queries, globalRefs, errors);
+  validateOperationMap(language.name, 'transformation', language.properties?.transformations, globalRefs, errors);
 
   if (Array.isArray(language.tags)) {
     const seenLabels = new Set<string>();
@@ -232,7 +232,7 @@ function validateLanguage(
       } else {
         seenLabels.add(tag.label);
       }
-      ensureRefsExist(tag.refs, `Language "${language.name}" tag "${tag.label}" refs`, referenceIds, errors);
+      ensureRefsExist(tag.refs, `Language "${language.name}" tag "${tag.label}" refs`, globalRefs, errors);
     }
   }
 
@@ -243,10 +243,6 @@ function validateLanguage(
         errors.push(`Language "${language.name}" subset "${subsetId}" does not reference a known language`);
       }
     }
-  }
-
-  for (const refId of referenceIds) {
-    globalRefs.add(refId);
   }
 }
 
@@ -342,7 +338,7 @@ export function validateDatasetStructure(data: CanonicalKCData): TransformValida
   const knownLanguages = collectLanguageIdentifiers(data.languages, errors);
   validateAdjacencyMatrix(data.adjacencyMatrix, knownLanguages, errors);
 
-  const globalReferenceRegistry = collectReferenceRegistry(data.languages);
+  const globalReferenceRegistry = collectReferenceRegistry(data.references);
   for (const language of data.languages) {
     validateLanguage(language, knownLanguages, globalReferenceRegistry, errors);
   }

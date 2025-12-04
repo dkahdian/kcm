@@ -350,7 +350,6 @@
           selectedLanguage={selectedNode} 
           graphData={filteredGraphData} 
           onEdgeSelect={(edge) => { 
-            console.log('[+page] onEdgeSelect called with edge:', edge);
             selectedEdge = edge; 
           }}
         />
@@ -359,7 +358,6 @@
           selectedLanguage={null} 
           graphData={filteredGraphData} 
           onEdgeSelect={(edge) => { 
-            console.log('[+page] onEdgeSelect called with edge (no node):', edge);
             selectedEdge = edge; 
           }}
         />

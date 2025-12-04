@@ -2723,7 +2723,15 @@
           "refs": [],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "\"In (Wegener, 1987) (Theorem 6.2, p. 436), a family of $n^2$-variable Boolean functions $\\Sigma$ is defined. Every interpretation $I$ over these $n^2$ variables represents an $n$-vertex digraph (as for every $1 \\le i,j \\le n$, we have $I(x_{i,j}) = 1$ iff $(i,j)$ is an arc of the digraph).\nThen $\\Sigma(I) = 1$ iff the digraph represented by $I$ contains a $k$-clique of a special kind\n($k$ is a parameter of the family).\n\nIt is shown that for certain values of $k$ (depending on $n$), every FBDD representation of\n$\\Sigma$ has exponential size. Moreover, it is shown that $\\Sigma$ has only a cubic number of\nprime implicants. This implies that\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{IP},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{DNF}.\n$$\n\nBecause FBDD satisfies $\\neg C$ (see Proposition 5.1), it cannot be the case that $\\neg\\Sigma$\nhas a polynomial-size FBDD. Since $\\neg\\Sigma$ has only a cubic number of prime implicates, we obtain\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{PI},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{CNF}.\n$$\n\nThe remaining results ... follow since\n$$\n\\mathrm{FBDD} \\le \\mathrm{OBDD} \\le \\mathrm{OBDD}_< .\n$$\"",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "See the proof in Darwiche 2002 page 247",
@@ -2752,7 +2760,15 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "See the proof in Darwiche 2002 p. 247",
@@ -2776,7 +2792,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,
@@ -2925,7 +2949,7 @@
         },
         {
           "status": "no-quasi",
-          "description": "\"In (Wegener, 1987) (Theorem 6.2, p. 436), a family of $n^2$-variable Boolean functions $\\Sigma$ is defined. Every interpretation $I$ over these $n^2$ variables represents an $n$-vertex digraph (as for every $1 \\le i,j \\le n$, we have $I(x_{i,j}) = 1$ iff $(i,j)$ is an arc of the digraph).\nThen $\\Sigma(I) = 1$ iff the digraph represented by $I$ contains a $k$-clique of a special kind\n($k$ is a parameter of the family).\n\nIt is shown that for certain values of $k$ (depending on $n$), every FBDD representation of\n$\\Sigma$ has exponential size. Moreover, it is shown that $\\Sigma$ has only a cubic number of\nprime implicants. This implies that\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{IP},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{DNF}.\n$$\n\nBecause FBDD satisfies $\\neg C$ (see Proposition 5.1), it cannot be the case that $\\neg\\Sigma$\nhas a polynomial-size FBDD. Since $\\neg\\Sigma$ has only a cubic number of prime implicates, we obtain\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{PI},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{CNF}.\n$$\n\nThe remaining results ... follow since\n$$\n\\mathrm{FBDD} \\le \\mathrm{OBDD} \\le \\mathrm{OBDD}< .\n$$\"\n",
+          "description": "\"In (Wegener, 1987) (Theorem 6.2, p. 436), a family of $n^2$-variable Boolean functions $\\Sigma$ is defined. Every interpretation $I$ over these $n^2$ variables represents an $n$-vertex digraph (as for every $1 \\le i,j \\le n$, we have $I(x_{i,j}) = 1$ iff $(i,j)$ is an arc of the digraph).\nThen $\\Sigma(I) = 1$ iff the digraph represented by $I$ contains a $k$-clique of a special kind\n($k$ is a parameter of the family).\n\nIt is shown that for certain values of $k$ (depending on $n$), every FBDD representation of\n$\\Sigma$ has exponential size. Moreover, it is shown that $\\Sigma$ has only a cubic number of\nprime implicants. This implies that\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{IP},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{DNF}.\n$$\n\nBecause FBDD satisfies $\\neg C$ (see Proposition 5.1), it cannot be the case that $\\neg\\Sigma$\nhas a polynomial-size FBDD. Since $\\neg\\Sigma$ has only a cubic number of prime implicates, we obtain\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{PI},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{CNF}.\n$$\n\nThe remaining results ... follow since\n$$\n\\mathrm{FBDD} \\le \\mathrm{OBDD} \\le \\mathrm{OBDD}_< .\n$$\"",
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
@@ -2960,7 +2984,15 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "See the proof in Darwiche 2002 page 247",
@@ -2984,7 +3016,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,
@@ -3265,7 +3305,15 @@
           ],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "\"In (Wegener, 1987) (Theorem 6.2, p. 436), a family of $n^2$-variable Boolean functions $\\Sigma$ is defined. Every interpretation $I$ over these $n^2$ variables represents an $n$-vertex digraph (as for every $1 \\le i,j \\le n$, we have $I(x_{i,j}) = 1$ iff $(i,j)$ is an arc of the digraph).\nThen $\\Sigma(I) = 1$ iff the digraph represented by $I$ contains a $k$-clique of a special kind\n($k$ is a parameter of the family).\n\nIt is shown that for certain values of $k$ (depending on $n$), every FBDD representation of\n$\\Sigma$ has exponential size. Moreover, it is shown that $\\Sigma$ has only a cubic number of\nprime implicants. This implies that\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{IP},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{DNF}.\n$$\n\nBecause FBDD satisfies $\\neg C$ (see Proposition 5.1), it cannot be the case that $\\neg\\Sigma$\nhas a polynomial-size FBDD. Since $\\neg\\Sigma$ has only a cubic number of prime implicates, we obtain\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{PI},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{CNF}.\n$$\n\nThe remaining results ... follow since\n$$\n\\mathrm{FBDD} \\le \\mathrm{OBDD} \\le \\mathrm{OBDD}_< .\n$$\"",
+          "refs": [
+            "Wegener_1987",
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3278,7 +3326,15 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "See the proof in Darwiche 2002 page 247.",
@@ -3302,7 +3358,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,
@@ -3650,7 +3714,15 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "\"In (Wegener, 1987) (Theorem 6.2, p. 436), a family of $n^2$-variable Boolean functions $\\Sigma$ is defined. Every interpretation $I$ over these $n^2$ variables represents an $n$-vertex digraph (as for every $1 \\le i,j \\le n$, we have $I(x_{i,j}) = 1$ iff $(i,j)$ is an arc of the digraph).\nThen $\\Sigma(I) = 1$ iff the digraph represented by $I$ contains a $k$-clique of a special kind\n($k$ is a parameter of the family).\n\nIt is shown that for certain values of $k$ (depending on $n$), every FBDD representation of\n$\\Sigma$ has exponential size. Moreover, it is shown that $\\Sigma$ has only a cubic number of\nprime implicants. This implies that\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{IP},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{DNF}.\n$$\n\nBecause FBDD satisfies $\\neg C$ (see Proposition 5.1), it cannot be the case that $\\neg\\Sigma$\nhas a polynomial-size FBDD. Since $\\neg\\Sigma$ has only a cubic number of prime implicates, we obtain\n$$\n\\mathrm{FBDD} \\not\\le \\mathrm{PI},\n\\quad\\text{hence}\\quad\n\\mathrm{FBDD} \\not\\le \\mathrm{CNF}.\n$$\n\nThe remaining results ... follow since\n$$\n\\mathrm{FBDD} \\le \\mathrm{OBDD} \\le \\mathrm{OBDD}_< .\n$$\"",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         {
           "status": "no-quasi",
           "description": "See the proof in Darwiche 2002 page 247.",
@@ -3679,6 +3751,15 @@
           "separatingFunctions": []
         },
         null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3686,8 +3767,15 @@
         null,
         null,
         null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,

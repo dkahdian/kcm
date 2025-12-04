@@ -2960,7 +2960,23 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -3020,12 +3036,44 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         {
           "status": "poly",
           "description": "FBDD is a subset of DNNF",
@@ -3035,7 +3083,23 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -3048,7 +3112,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -3289,12 +3369,44 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "The parity function has a linear size representation in OBBD$_<$ but has $2^n$ essential prime implicates, a lower bound on the size of CNF.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "The parity function is linear size in OBBD$_<$ but has $2^n$ essential prime implicants, a lower bound on the total size of the DNF.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         {
           "status": "poly",
           "description": "OBDD$_<$ is a subset of DNNF",
@@ -3309,7 +3421,23 @@
           "refs": [],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "The parity function has a linear size representation in OBBD$_<$ but has $2^n$ essential prime implicants, a lower bound on the size of CNF.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -3322,7 +3450,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "The parity function has a linear size representation in OBBD$_<$ but has $2^n$ essential prime implicates, a lower bound on the size of PI.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -3562,12 +3706,44 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         {
           "status": "poly",
           "description": "OBDD is a subset of DNNF",
@@ -3584,7 +3760,23 @@
           ],
           "separatingFunctions": []
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         {
@@ -3597,7 +3789,23 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "Parity",
+              "name": "Parity function",
+              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+              "refs": [
+                "Bryant_1986"
+              ]
+            }
+          ]
+        },
         null,
         null,
         null,
@@ -3615,6 +3823,14 @@
       "description": "This formula helps separate PI from IP, among other important separations.",
       "refs": [
         "Darwiche_2002"
+      ]
+    },
+    {
+      "shortName": "Parity",
+      "name": "Parity function",
+      "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
+      "refs": [
+        "Bryant_1986"
       ]
     }
   ]

@@ -91,7 +91,7 @@ export function mapLanguagesInDataset(
 
   cloned.languages = updatedLanguages;
   if (anyRemoved) {
-    const nextLanguageIds = updatedLanguages.map((lang) => lang.name);
+    const nextLanguageIds = updatedLanguages.map((lang) => lang.id);
     cloned.adjacencyMatrix = rebuildAdjacencyMatrix(cloned.adjacencyMatrix, nextLanguageIds);
   }
   return cloned;

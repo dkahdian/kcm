@@ -2749,7 +2749,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         {
           "status": "poly",
@@ -2973,7 +2980,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         {
           "status": "poly",
@@ -3094,7 +3108,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         {
           "status": "poly",
@@ -3212,7 +3233,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         {
           "status": "poly",
@@ -3315,7 +3343,23 @@
           "separatingFunctions": []
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "$OR_n$ can be represented in IP in linear size but has $2^n-1$ models.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "$OR_n$",
+              "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
+              "description": "Separates languages that compactly represent disjunctions from those that cannot.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         {
           "status": "poly",
@@ -3370,8 +3414,20 @@
       ],
       [
         null,
-        null,
-        null,
+        {
+          "status": "poly",
+          "refs": [],
+          "hidden": true,
+          "description": "Derived via polynomial transitive closure"
+        },
+        {
+          "status": "poly",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3385,13 +3441,36 @@
           ],
           "separatingFunctions": []
         },
-        null,
-        null,
+        {
+          "status": "poly",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        {
+          "status": "poly",
+          "description": "Via the Quine-McCluskey Algorithm",
+          "refs": [
+            "Wegener_1987"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         {
           "status": "poly",
           "description": "MODS is a subset of NNF.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "A decision tree respecting the order $<$ can always be generated in polynomial time; reducing this to an $OBBD_<$ also takes polynomial time.",
           "refs": [
             "Darwiche_2002"
           ],
@@ -3404,9 +3483,14 @@
         null,
         null,
         null,
-        null,
-        null,
-        null
+        {
+          "status": "poly",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        }
       ],
       [
         null,
@@ -3495,7 +3579,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         null,
         null,
@@ -3644,7 +3735,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         {
           "status": "poly",
@@ -3740,7 +3838,23 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "$OR_n$ can be represented in PI in linear size but has $2^n-1$ models.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": [
+            {
+              "shortName": "$OR_n$",
+              "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
+              "description": "Separates languages that compactly represent disjunctions from those that cannot.",
+              "refs": [
+                "Darwiche_2002"
+              ]
+            }
+          ]
+        },
         null,
         {
           "status": "poly",
@@ -4007,7 +4121,14 @@
             }
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctions": []
+        },
         null,
         {
           "status": "poly",
@@ -4089,6 +4210,14 @@
       "shortName": "Pairwise equivalence",
       "name": "$\\Sigma_n = \\bigwedge_{i=1}^n (x_i \\leftrightarrow y_i)$",
       "description": "-",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "shortName": "$OR_n$",
+      "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
+      "description": "Separates languages that compactly represent disjunctions from those that cannot.",
       "refs": [
         "Darwiche_2002"
       ]

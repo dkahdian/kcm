@@ -9,84 +9,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -102,69 +102,69 @@
       "properties": {
         "queries": {
           "CE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -181,84 +181,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -275,84 +275,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -369,84 +369,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -463,84 +463,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -557,84 +557,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -651,84 +651,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -744,69 +744,69 @@
       "properties": {
         "queries": {
           "CE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -823,84 +823,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -917,84 +917,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1011,84 +1011,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1105,84 +1105,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1198,69 +1198,69 @@
       "properties": {
         "queries": {
           "CE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1277,84 +1277,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1373,56 +1373,56 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "CO": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "CT": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "EQ": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "IM": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "ME": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "SE": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "VA": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
@@ -1431,56 +1431,56 @@
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "AND_C": {
             "note": "",
-            "polytime": "exp",
+            "complexity": "exp",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "CD": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "FO": {
             "note": "",
-            "polytime": "exp",
+            "complexity": "exp",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "NOT_C": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "OR_BC": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Bryant_1986"
             ]
           },
           "OR_C": {
             "note": "",
-            "polytime": "exp",
+            "complexity": "exp",
             "refs": [
               "Darwiche_2002"
             ]
           },
           "SFO": {
             "note": "",
-            "polytime": "poly",
+            "complexity": "poly",
             "refs": [
               "Darwiche_2002"
             ]
@@ -1499,84 +1499,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1593,84 +1593,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1687,84 +1687,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1781,84 +1781,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1874,69 +1874,69 @@
       "properties": {
         "queries": {
           "CE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -1953,84 +1953,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -2047,84 +2047,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }
@@ -2143,84 +2143,84 @@
         "queries": {
           "CE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "CD": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "¬C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "∧BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "∧C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "∨BC": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           },
           "∨C": {
             "note": "",
-            "polytime": "unknown",
+            "complexity": "unknown-to-us",
             "refs": []
           }
         }

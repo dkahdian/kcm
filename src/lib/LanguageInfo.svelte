@@ -14,14 +14,18 @@
   import EdgeLegend from './components/EdgeLegend.svelte';
   import DynamicLegend from './components/DynamicLegend.svelte';
 
+  type ViewMode = 'graph' | 'matrix';
+
   let {
     selectedLanguage,
     graphData,
-    onEdgeSelect
+    onEdgeSelect,
+    viewMode = 'graph' as ViewMode
   }: {
     selectedLanguage: KCLanguage | null;
     graphData: GraphData | FilteredGraphData;
     onEdgeSelect: (edge: SelectedEdge) => void;
+    viewMode?: ViewMode;
   } = $props();
   
   // Combine all operations for display
@@ -134,7 +138,7 @@
   });
 
   const getOpComplexity = (op: KCOpEntry) => {
-    return getComplexity(op.polytime);
+    return getComplexity(op.complexity);
   };
 
   function scrollToReferences(e: MouseEvent) {
@@ -241,8 +245,8 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.queries ?? [] as q}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
-                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(q).color}">
-                    <MathText text={getOpComplexity(q).notation} className="inline" />
+                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(q).color}" title={getOpComplexity(q).label}>
+                    {getOpComplexity(q).emoji}
                   </span>
                   <div class="text-sm leading-5">
                     <div>
@@ -272,8 +276,8 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.transformations ?? [] as t}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
-                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(t).color}">
-                    <MathText text={getOpComplexity(t).notation} className="inline" />
+                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(t).color}" title={getOpComplexity(t).label}>
+                    {getOpComplexity(t).emoji}
                   </span>
                   <div class="text-sm leading-5">
                     <div>
@@ -372,7 +376,7 @@
       </div>
     {/if}
     
-    <DynamicLegend graphData={graphData} selectedNode={selectedLanguage} />
+    <DynamicLegend graphData={graphData} selectedNode={selectedLanguage} viewMode={viewMode} />
   </div>
 </div>
   

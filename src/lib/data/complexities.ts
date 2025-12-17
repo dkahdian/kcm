@@ -11,7 +11,8 @@ export const COMPLEXITY_CODES = [
   'unknown-poly-quasi',
   'unknown-both',
   'no-quasi',
-  'not-poly'
+  'not-poly',
+  'unknown-to-us'
 ] as const;
 
 /**
@@ -51,7 +52,7 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'no-poly-unknown-quasi',
     label: 'No Poly, Quasi Unknown',
     description: 'No polynomial transformation; quasi-polynomial unknown',
-    notation: '$\\not\\leq_p$ · $?\\leq_q$',
+    notation: '$\\not\\leq_p$ · $\\leq_q^?$',
     emoji: '⚠️',
     color: '#ef4444', // red-500
     pastel: '#fee2e2', // red-100
@@ -71,7 +72,7 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'unknown-poly-quasi',
     label: 'Poly Unknown, Quasi Exists',
     description: 'Polynomial unknown; quasi-polynomial exists',
-    notation: '$?\\leq_p$ · $\\leq_q$',
+    notation: '$\\leq_p^?$ · $\\leq_q$',
     emoji: '⚡',
     color: '#eab308', // yellow-500
     pastel: '#fef9c3', // yellow-100
@@ -81,7 +82,7 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'unknown-both',
     label: 'Unknown',
     description: 'Both polynomial and quasi-polynomial unknown',
-    notation: '$?\\leq_p$ · $?\\leq_q$',
+    notation: '$\\leq_p^?$ · $\\leq_q^?$',
     emoji: '❔',
     color: '#6b7280', // gray-500
     pastel: '#f3f4f6', // gray-100
@@ -106,6 +107,16 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     color: '#ef4444', // red-500
     pastel: '#fee2e2', // red-100
     cssClass: 'complexity-not-poly'
+  },
+  'unknown-to-us': {
+    code: 'unknown-to-us',
+    label: 'Unknown to Us',
+    description: 'Not yet researched or documented',
+    notation: '?',
+    emoji: '❓',
+    color: '#9ca3af', // gray-400
+    pastel: '#ffffff', // white
+    cssClass: 'complexity-unknown-to-us'
   }
 };
 

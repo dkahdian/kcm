@@ -181,7 +181,7 @@ function validateOperationMap(
       errors.push(`Language "${languageName}" references unknown ${kind} code "${code}"`);
     }
 
-    if (!support || typeof support.polytime !== 'string' || !VALID_COMPLEXITY_CODES.has(support.polytime)) {
+    if (!support || typeof support.complexity !== 'string' || !VALID_COMPLEXITY_CODES.has(support.complexity)) {
       errors.push(
         `Language "${languageName}" ${kind} "${code}" must have a valid complexity code`
       );

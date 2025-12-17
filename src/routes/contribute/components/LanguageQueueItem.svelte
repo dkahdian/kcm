@@ -57,7 +57,7 @@
 						{#each Object.entries(language.queries) as [code, support]}
 								<div class="bg-white p-2 rounded border">
 									<div class="font-medium">{code}</div>
-									<div class="text-gray-600">{support.polytime}</div>
+									<div class="text-gray-600">{support.complexity}</div>
 									{#if support.note}
 										<MathText text={support.note} className="text-gray-500 italic text-xs block" />
 									{/if}
@@ -78,7 +78,7 @@
 						{#each Object.entries(language.transformations) as [code, support]}
 								<div class="bg-white p-2 rounded border">
 									<div class="font-medium">{code}</div>
-									<div class="text-gray-600">{support.polytime}</div>
+									<div class="text-gray-600">{support.complexity}</div>
 									{#if support.note}
 										<MathText text={support.note} className="text-gray-500 italic text-xs block" />
 									{/if}

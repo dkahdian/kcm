@@ -4,9 +4,12 @@
   import { getComplexity } from './data/complexities.js';
   import DynamicLegend from './components/DynamicLegend.svelte';
   
-  let { selectedEdge, graphData }: { 
+  type ViewMode = 'graph' | 'matrix';
+  
+  let { selectedEdge, graphData, viewMode = 'graph' as ViewMode }: { 
     selectedEdge: SelectedEdge | null; 
-    graphData: GraphData | FilteredGraphData 
+    graphData: GraphData | FilteredGraphData;
+    viewMode?: ViewMode;
   } = $props();
   
   let referencesSection: HTMLElement | null = $state(null);
@@ -213,7 +216,7 @@
         </div>
       </div>
       
-      <DynamicLegend graphData={graphData} selectedEdge={selectedEdge} />
+      <DynamicLegend graphData={graphData} selectedEdge={selectedEdge} viewMode={viewMode} />
     </div>
   </div>
 {/if}

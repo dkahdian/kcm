@@ -30,8 +30,8 @@ export type LanguageToAdd = {
   fullName: string;
   description: string;
   descriptionRefs: string[];
-  queries: Record<string, { polytime: string; note?: string; refs: string[] }>;
-  transformations: Record<string, { polytime: string; note?: string; refs: string[] }>;
+  queries: Record<string, { complexity: string; note?: string; refs: string[] }>;
+  transformations: Record<string, { complexity: string; note?: string; refs: string[] }>;
   tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   existingReferences: string[];
 };

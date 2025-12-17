@@ -23,7 +23,7 @@ export function createOperationVisualizer(
       const operation = operations?.find((op) => op.code === code);
       if (!operation) return language;
 
-      const complexity = getComplexity(operation.polytime);
+      const complexity = getComplexity(operation.complexity);
       // Use emoji for operation display (vertically stacked, one per line)
       const suffix = `\n${complexity.emoji} ${code}`;
 
@@ -60,15 +60,15 @@ export function generateLanguageSelectionFilters(graphData: GraphData): Language
 }
 
 /**
- * Creates a hidden filter that fills in missing operations with 'unknown' complexity.
+ * Creates a hidden filter that fills in missing operations with 'unknown-to-us' complexity.
  * This ensures all languages have all standard operations defined in their properties,
- * with unspecified ones automatically marked as 'unknown'.
+ * with unspecified ones automatically marked as 'unknown-to-us'.
  */
 export function createFillUnknownOperationsFilter(): LanguageFilter {
   return {
     id: 'fill-unknown-operations',
     name: 'Fill Unknown Operations',
-    description: 'Automatically adds missing operations as "unknown" complexity',
+    description: 'Automatically adds missing operations as "unknown-to-us" complexity',
     hidden: true, // This is an internal filter - not shown in UI
     defaultParam: true,
     lambda: (data: CanonicalKCData, param: boolean) => {
@@ -82,7 +82,7 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
         const queriesMap: any = {};
         for (const op of resolved.queries) {
           queriesMap[op.code] = {
-            polytime: op.polytime,
+            complexity: op.complexity,
             ...(op.note && { note: op.note }),
             refs: op.refs
           };
@@ -91,7 +91,7 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
         const transformationsMap: any = {};
         for (const op of resolved.transformations) {
           transformationsMap[op.code] = {
-            polytime: op.polytime,
+            complexity: op.complexity,
             ...(op.note && { note: op.note }),
             refs: op.refs
           };

@@ -133,10 +133,10 @@ function validateOperationSupport(
       continue;
     }
 
-    if (!support.polytime) {
-      errors.push({ field: `${fieldPrefix}.${code}.polytime`, message: 'Complexity code is required' });
-    } else if (!isValidComplexityCode(support.polytime)) {
-      errors.push({ field: `${fieldPrefix}.${code}.polytime`, message: 'Invalid complexity code' });
+    if (!support.complexity) {
+      errors.push({ field: `${fieldPrefix}.${code}.complexity`, message: 'Complexity code is required' });
+    } else if (!isValidComplexityCode(support.complexity)) {
+      errors.push({ field: `${fieldPrefix}.${code}.complexity`, message: 'Invalid complexity code' });
     }
 
     if (!Array.isArray(support.refs) || support.refs.length === 0) {

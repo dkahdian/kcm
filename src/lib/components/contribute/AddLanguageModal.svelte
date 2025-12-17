@@ -4,8 +4,8 @@
     fullName: string;
     description: string;
     descriptionRefs: string[];
-    queries: Record<string, { polytime: string; note?: string; refs: string[] }>;
-    transformations: Record<string, { polytime: string; note?: string; refs: string[] }>;
+    queries: Record<string, { complexity: string; note?: string; refs: string[] }>;
+    transformations: Record<string, { complexity: string; note?: string; refs: string[] }>;
     tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
     existingReferences: string[];
   };
@@ -52,8 +52,8 @@
   let fullName = $state('');
   let description = $state('');
   let descriptionRefs = $state<string[]>([]);
-  let querySupport = $state<Record<string, { polytime: string; note?: string; refs: string[] }>>({});
-  let transformationSupport = $state<Record<string, { polytime: string; note?: string; refs: string[] }>>({});
+  let querySupport = $state<Record<string, { complexity: string; note?: string; refs: string[] }>>({});
+  let transformationSupport = $state<Record<string, { complexity: string; note?: string; refs: string[] }>>({});
   let selectedTags = $state<Tag[]>([]);
   let selectedExistingRefs = $state<string[]>([]);
   let errorMessage = $state<string | null>(null);
@@ -186,12 +186,12 @@
           // Copy data from initialData, creating new objects for reactivity
           const source = initialData.queries[q.code];
           merged[q.code] = { 
-            polytime: source.polytime, 
+            complexity: source.complexity, 
             note: source.note || '', 
             refs: [...source.refs] 
           };
         } else {
-          merged[q.code] = { polytime: 'unknown', note: '', refs: [] };
+          merged[q.code] = { complexity: 'unknown-to-us', note: '', refs: [] };
         }
       });
       querySupport = merged;
@@ -224,10 +224,10 @@
           }
           // Copy data, creating new objects for reactivity
           merged[t.code] = source
-            ? { polytime: source.polytime, note: source.note || '', refs: [...source.refs] }
-            : { polytime: 'unknown', note: '', refs: [] };
+            ? { complexity: source.complexity, note: source.note || '', refs: [...source.refs] }
+            : { complexity: 'unknown-to-us', note: '', refs: [] };
         } else {
-          merged[t.code] = { polytime: 'unknown', note: '', refs: [] };
+          merged[t.code] = { complexity: 'unknown-to-us', note: '', refs: [] };
         }
       });
       transformationSupport = merged;
@@ -331,10 +331,10 @@
                 <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label for="query-{query.code}-polytime" class="block text-xs font-medium text-gray-700 mb-1">{query.name}</label>
+                      <label for="query-{query.code}-complexity" class="block text-xs font-medium text-gray-700 mb-1">{query.name}</label>
                       <select
-                        id="query-{query.code}-polytime"
-                        bind:value={querySupport[query.code].polytime}
+                        id="query-{query.code}-complexity"
+                        bind:value={querySupport[query.code].complexity}
                         class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
                       >
                         {#each complexityOptions as option}
@@ -385,10 +385,10 @@
                 <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label for="transform-{transform.code}-polytime" class="block text-xs font-medium text-gray-700 mb-1">{transform.name}</label>
+                      <label for="transform-{transform.code}-complexity" class="block text-xs font-medium text-gray-700 mb-1">{transform.name}</label>
                       <select
-                        id="transform-{transform.code}-polytime"
-                        bind:value={transformationSupport[transform.code].polytime}
+                        id="transform-{transform.code}-complexity"
+                        bind:value={transformationSupport[transform.code].complexity}
                         class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
                       >
                         {#each complexityOptions as option}

@@ -3,16 +3,21 @@
   import cytoscape from 'cytoscape';
   import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, Complexity } from '../types.js';
   import { COMPLEXITIES } from '../data/complexities.js';
+  import { resolveLanguageProperties } from '../data/operations.js';
   import MathText from './MathText.svelte';
+
+  type ViewMode = 'graph' | 'matrix';
 
   let {
     graphData,
     selectedNode = null,
-    selectedEdge = null
+    selectedEdge = null,
+    viewMode = 'graph' as ViewMode
   }: {
     graphData: GraphData | FilteredGraphData;
     selectedNode?: KCLanguage | null;
     selectedEdge?: SelectedEdge | null;
+    viewMode?: ViewMode;
   } = $props();
   
   // Ensure we have a FilteredGraphData type by adding missing properties if needed
@@ -113,41 +118,41 @@
     return allEdgeTypes.filter(et => statusesInGraph.has(et.status));
   });
 
-  // Determine which operation complexity symbols are visible
+  // Determine which operation complexity emojis are visible on graph nodes
+  // Only show when operation filters are active (nodes have labelSuffix)
   const visibleComplexities = $derived.by(() => {
+    // In matrix view, never show operation complexities
+    if (viewMode === 'matrix') return [];
+    
     const codesInUse = new Set<string>();
     
-    // Collect from visible graph nodes
+    // Only collect from nodes that have visual labelSuffix (meaning an operation filter is active)
     for (const lang of filteredData.languages) {
-      // Queries
-      if (lang.properties.queries) {
-        for (const support of Object.values(lang.properties.queries)) {
-          codesInUse.add(support.polytime);
+      if (!lang.visual?.labelSuffix) continue;
+      
+      // Parse the labelSuffix to find which operations are being displayed
+      // The format is "\n{emoji} {opCode}" for each operation
+      const suffix = lang.visual.labelSuffix;
+      
+      // Resolve properties to include defaults (operations without explicit complexity get 'unknown-to-us')
+      const resolved = resolveLanguageProperties(
+        lang.properties.queries,
+        lang.properties.transformations
+      );
+      
+      // Check queries
+      for (const op of resolved.queries) {
+        if (suffix.includes(op.code)) {
+          codesInUse.add(op.complexity);
         }
       }
-      // Transformations
-      if (lang.properties.transformations) {
-        for (const support of Object.values(lang.properties.transformations)) {
-          codesInUse.add(support.polytime);
+      // Check transformations
+      for (const op of resolved.transformations) {
+        if (suffix.includes(op.code)) {
+          codesInUse.add(op.complexity);
         }
       }
     }
-    
-    // Also collect from selected node sidebar (if node is selected)
-    if (selectedNode) {
-      if (selectedNode.properties.queries) {
-        for (const support of Object.values(selectedNode.properties.queries)) {
-          codesInUse.add(support.polytime);
-        }
-      }
-      if (selectedNode.properties.transformations) {
-        for (const support of Object.values(selectedNode.properties.transformations)) {
-          codesInUse.add(support.polytime);
-        }
-      }
-    }
-    
-    // Note: Selected edge doesn't have operation complexities, so no need to check
     
     return Object.values(COMPLEXITIES).filter(c => codesInUse.has(c.code));
   });
@@ -226,7 +231,7 @@
   $effect(() => {
     // Access visibleEdgeTypes to create dependency
     const types = visibleEdgeTypes;
-    if (Object.keys(containerRefs).length > 0) {
+    if (Object.keys(containerRefs).length > 0 && viewMode === 'graph') {
       setTimeout(() => {
         renderAllGraphs();
       }, 50);
@@ -238,30 +243,50 @@
   {#if visibleEdgeTypes.length > 0}
     <div class="legend">
       <h3 class="text-lg font-semibold text-gray-700 mb-2">Succinctness</h3>
-      <p class="text-gray-600 text-sm mb-4">
-        A transforms to B in _______
-      </p>
-      <div class="legend-items">
-        {#each visibleEdgeTypes as edge (edge.status)}
-          <div class="legend-row">
-            <div class="edge-example">
-              <div class="cyto-container" bind:this={containerRefs[edge.status]}></div>
+      
+      {#if viewMode === 'graph'}
+        <!-- Graph view: show arrowhead examples -->
+        <p class="text-gray-600 text-sm mb-4">
+          A transforms to B in _______
+        </p>
+        <div class="legend-items">
+          {#each visibleEdgeTypes as edge (edge.status)}
+            <div class="legend-row">
+              <div class="edge-example">
+                <div class="cyto-container" bind:this={containerRefs[edge.status]}></div>
+              </div>
+              <p class="description">{edge.description}</p>
             </div>
-            <p class="description">{edge.description}</p>
-          </div>
-        {/each}
-      </div>
+          {/each}
+        </div>
+      {:else}
+        <!-- Matrix view: show LaTeX notation with descriptions -->
+        <p class="text-gray-600 text-sm mb-4">
+          For (Row A, Col B), from language A to B:
+        </p>
+        <div class="legend-items matrix-legend">
+          {#each visibleEdgeTypes as edge (edge.status)}
+            {@const complexity = COMPLEXITIES[edge.status]}
+            {#if complexity}
+              <div class="legend-row matrix-row">
+                <span class="matrix-notation" style="color: {complexity.color}">
+                  <MathText text={complexity.notation} className="inline" />
+                </span>
+                <span class="matrix-description">{complexity.description}</span>
+              </div>
+            {/if}
+          {/each}
+        </div>
+      {/if}
     </div>
   {/if}
   
-  {#if visibleComplexities.length > 0}
+  {#if viewMode === 'graph' && visibleComplexities.length > 0}
     <div class="legend-section">
-      <h5>Operation Complexity</h5>
+      <h5>Operations</h5>
       {#each visibleComplexities as complexity}
         <div class="legend-row">
-          <span class="complexity-notation" style="color: {complexity.color}">
-            <MathText text={complexity.notation} className="inline" />
-          </span>
+          <span class="complexity-emoji">{complexity.emoji}</span>
           <span title={complexity.description}>{complexity.label}</span>
         </div>
       {/each}
@@ -343,10 +368,31 @@
     color: #4b5563;
   }
 
-  .complexity-notation {
+  .complexity-emoji {
     display: inline-block;
-    min-width: 3rem;
+    min-width: 2rem;
     text-align: center;
+    font-size: 1rem;
+  }
+
+  /* Matrix view legend styles */
+  .matrix-legend {
+    gap: 0.5rem;
+  }
+
+  .matrix-row {
+    gap: 0.75rem;
+  }
+
+  .matrix-notation {
+    display: inline-block;
+    min-width: 6rem;
+    text-align: left;
     font-size: 0.875rem;
+  }
+
+  .matrix-description {
+    font-size: 0.875rem;
+    color: #4b5563;
   }
 </style>

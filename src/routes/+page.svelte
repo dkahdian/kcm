@@ -380,7 +380,7 @@
 
     <aside class="side-panel">
       {#if selectedEdge}
-        <EdgeInfo selectedEdge={selectedEdge} graphData={filteredGraphData} />
+        <EdgeInfo selectedEdge={selectedEdge} graphData={filteredGraphData} viewMode={viewMode} />
       {:else if selectedNode}
         <LanguageInfo 
           selectedLanguage={selectedNode} 
@@ -388,6 +388,7 @@
           onEdgeSelect={(edge) => { 
             selectedEdge = edge; 
           }}
+          viewMode={viewMode}
         />
       {:else}
         <LanguageInfo 
@@ -396,6 +397,7 @@
           onEdgeSelect={(edge) => { 
             selectedEdge = edge; 
           }}
+          viewMode={viewMode}
         />
       {/if}
     </aside>

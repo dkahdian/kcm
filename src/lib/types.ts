@@ -45,7 +45,7 @@ export interface VisualOverrides {
  */
 export interface KCOpSupport {
   /** complexity code (use getComplexity() to get full Complexity object for display) */
-  polytime: string;
+  complexity: string;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
   /** reference IDs pointing to entries in the language's references array */
@@ -62,7 +62,7 @@ export interface KCOpEntry {
   /** human-friendly label, e.g., "Consistency" */
   label: string;
   /** complexity code (use getComplexity() to get full Complexity object for display) */
-  polytime: string;
+  complexity: string;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
   /** optional visual hint for highlighting this operation */

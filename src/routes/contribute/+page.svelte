@@ -72,16 +72,16 @@
 
   function sanitizeOperationSupportRecord(
     value: unknown
-  ): Record<string, { polytime: string; note?: string; refs: string[] }> {
+  ): Record<string, { complexity: string; note?: string; refs: string[] }> {
     if (!value || typeof value !== 'object') return {};
-    const result: Record<string, { polytime: string; note?: string; refs: string[] }> = {};
+    const result: Record<string, { complexity: string; note?: string; refs: string[] }> = {};
     for (const [key, raw] of Object.entries(value as Record<string, any>)) {
       if (!raw || typeof raw !== 'object') continue;
-      const polytime = isString(raw.polytime) ? raw.polytime : 'unknown-both';
+      const complexity = isString(raw.complexity) ? raw.complexity : 'unknown-to-us';
       const note = isString(raw.note) ? raw.note : undefined;
       const refs = sanitizeStringArray(raw.refs);
-      const entry: { polytime: string; note?: string; refs: string[] } = {
-        polytime,
+      const entry: { complexity: string; note?: string; refs: string[] } = {
+        complexity,
         refs
       };
       if (note) entry.note = note;

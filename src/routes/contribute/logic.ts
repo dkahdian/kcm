@@ -22,7 +22,7 @@ export function cloneOperationSupport(
     for (const [code, support] of Object.entries(operations)) {
       const key = convertToSafeKeys ? displayCodeToSafeKey(code) : code;
       cloned[key] = {
-        polytime: support.polytime,
+        complexity: support.complexity,
         note: support.note,
         refs: Array.isArray(support.refs) ? [...support.refs] : []
       };

@@ -45,7 +45,7 @@ export function resolveOperations(
       result.push({
         code: opDef.code,
         label: opDef.label,
-        polytime: support.polytime,
+        complexity: support.complexity,
         note: support.note,
         refs: support.refs
       });
@@ -53,7 +53,7 @@ export function resolveOperations(
       result.push({
         code: opDef.code,
         label: opDef.label,
-        polytime: 'open',
+        complexity: 'unknown-to-us',
         refs: []
       });
     }

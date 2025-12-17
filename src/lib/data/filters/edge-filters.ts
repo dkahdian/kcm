@@ -106,6 +106,35 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
 };
 
 /**
+ * Positive results only - ON BY DEFAULT
+ *
+ * Hides edges that represent negative/impossible results or fully unknown status.
+ */
+export const positiveResultsOnly: EdgeFilter<boolean> = {
+  id: 'positive-results-only',
+  name: 'Positive Results Only',
+  description: 'Hide negative/unknown results (keep only edges that assert existence of a transformation)',
+  category: 'Visibility',
+  defaultParam: true,
+  controlType: 'checkbox',
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      switch (relation.status) {
+        case 'no-poly-unknown-quasi':
+        case 'no-quasi':
+        case 'not-poly':
+        case 'unknown-both':
+          return null;
+        default:
+          return relation;
+      }
+    });
+  }
+};
+
+/**
  * Omit separator functions - ON BY DEFAULT
  */
 export const omitSeparatorFunctions: EdgeFilter = {
@@ -202,6 +231,7 @@ export const hideInProgressLanguages: EdgeFilter = {
 export const edgeFilters: EdgeFilter<any>[] = [
   hideInProgressLanguages,
   manageUnknowns,
+  positiveResultsOnly,
   polyDisplay,
   omitSeparatorFunctions,
   hideMarkedEdges

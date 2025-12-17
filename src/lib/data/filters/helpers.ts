@@ -1,11 +1,11 @@
 import type { LanguageFilter, GraphData, FilterCategory, CanonicalKCData } from '../../types.js';
 import { resolveLanguageProperties } from '../operations.js';
-import { getPolytimeFlag } from '../polytime-complexities.js';
+import { getComplexity } from '../complexities.js';
 import { mapLanguagesInDataset } from '../transforms.js';
 
 /**
  * Helper function to create visualization filters for queries and transformations.
- * Adds emoji indicators and operation codes to node labels.
+ * Adds emoji and operation codes to node labels (vertically stacked).
  */
 export function createOperationVisualizer(
   code: string,
@@ -23,8 +23,9 @@ export function createOperationVisualizer(
       const operation = operations?.find((op) => op.code === code);
       if (!operation) return language;
 
-      const polytimeFlag = getPolytimeFlag(operation.polytime);
-      const suffix = `\n${polytimeFlag.emoji}${code}`;
+      const complexity = getComplexity(operation.polytime);
+      // Use emoji for operation display (vertically stacked, one per line)
+      const suffix = `\n${complexity.emoji} ${code}`;
 
       return {
         ...language,

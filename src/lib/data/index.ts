@@ -26,3 +26,15 @@ export { allPredefinedFilters } from './filters/index.js';
 export { edgeFilters } from './filters/index.js';
 export { getAllTags, getTags, getTag, CANONICAL_TAGS } from './tags.js';
 export { canonicalDataset } from './canonical.js';
+export { 
+  COMPLEXITIES,
+  COMPLEXITY_CODES,
+  getComplexity,
+  getComplexityColor,
+  getComplexityClass,
+  getComplexityNotation,
+  getComplexityDescription,
+  getComplexityLabel,
+  isValidComplexityCode,
+  getAllComplexityCodes
+} from './complexities.js';

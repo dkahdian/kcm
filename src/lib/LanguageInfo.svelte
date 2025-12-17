@@ -7,11 +7,10 @@
     KCOpSupportMap, 
     SelectedEdge,
     FilteredGraphData,
-    KCLanguagePropertiesResolved,
-    TransformationStatus
+    KCLanguagePropertiesResolved
   } from './types.js';
   import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from './data/operations.js';
-  import { POLYTIME_COMPLEXITIES, getPolytimeFlag } from './data/polytime-complexities.js';
+  import { getComplexity } from './data/complexities.js';
   import EdgeLegend from './components/EdgeLegend.svelte';
   import DynamicLegend from './components/DynamicLegend.svelte';
 
@@ -55,7 +54,7 @@
   });
 
   // Helper to generate a descriptive statement from a transformation status
-  function getStatusDescription(status: TransformationStatus, fromLang: string, toLang: string): { linkText: string; suffixText: string } {
+  function getStatusDescription(status: string, fromLang: string, toLang: string): { linkText: string; suffixText: string } {
     const from = languageLookup.get(fromLang)?.name ?? fromLang;
     const to = languageLookup.get(toLang)?.name ?? toLang;
     const linkText = `${from} converts to ${to}`;
@@ -84,7 +83,7 @@
     const { adjacencyMatrix } = graphData;
 
     const statements: RelationshipStatement[] = [];
-    const forwardStatuses = new Map<string, TransformationStatus>();
+    const forwardStatuses = new Map<string, string>();
 
     const sourceIndex = adjacencyMatrix.indexByLanguage[id];
     if (sourceIndex === undefined) return statements;
@@ -134,8 +133,8 @@
     });
   });
 
-  const statusEmoji = (op: KCOpEntry) => {
-    return getPolytimeFlag(op.polytime).emoji;
+  const getOpComplexity = (op: KCOpEntry) => {
+    return getComplexity(op.polytime);
   };
 
   function scrollToReferences(e: MouseEvent) {
@@ -242,7 +241,9 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.queries ?? [] as q}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
-                  <span class="shrink-0 text-base leading-none">{statusEmoji(q)}</span>
+                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(q).color}">
+                    <MathText text={getOpComplexity(q).notation} className="inline" />
+                  </span>
                   <div class="text-sm leading-5">
                     <div>
                       <strong>{q.code}</strong>
@@ -271,7 +272,9 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.transformations ?? [] as t}
                 <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
-                  <span class="shrink-0 text-base leading-none">{statusEmoji(t)}</span>
+                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(t).color}">
+                    <MathText text={getOpComplexity(t).notation} className="inline" />
+                  </span>
                   <div class="text-sm leading-5">
                     <div>
                       <strong>{t.code}</strong>

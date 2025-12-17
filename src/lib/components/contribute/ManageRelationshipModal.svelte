@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { TransformationStatus } from '$lib/types.js';
-
   type Language = {
     id: string;
     name: string;
@@ -22,7 +20,7 @@
   type Relationship = {
     sourceId: string;
     targetId: string;
-    status: TransformationStatus;
+    status: string;
     description?: string;
     refs: string[];
     separatingFunctionIds?: string[]; // NEW: Store only IDs
@@ -30,14 +28,14 @@
   };
 
   type BaselineRelationship = {
-    status: TransformationStatus;
+    status: string;
     refs: string[];
     separatingFunctionIds?: string[];
     separatingFunctions: SeparatingFunction[];
   };
 
   type StatusOption = {
-    value: TransformationStatus;
+    value: string;
     label: string;
     description: string;
   };
@@ -68,7 +66,7 @@
 
   let sourceId = $state('');
   let targetId = $state('');
-  let status = $state<TransformationStatus | ''>('');
+  let status = $state<string>('');
   let description = $state('');
   let selectedRefs = $state<string[]>([]);
   let selectedSeparatingFunctionIds = $state<string[]>([]);

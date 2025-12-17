@@ -1,5 +1,4 @@
 import type { ContributionQueueEntry } from '$lib/data/contribution-transforms.js';
-import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
 
 export type SeparatingFunctionEntry = {
   shortName: string;
@@ -18,7 +17,8 @@ export type SeparatingFunctionToAdd = {
 export type RelationshipEntry = {
   sourceId: string;
   targetId: string;
-  status: TransformationStatus;
+  /** Complexity code (use getComplexity() for display) */
+  status: string;
   description?: string;
   refs: string[];
   separatingFunctionIds?: string[]; // New format: array of shortNames
@@ -30,8 +30,8 @@ export type LanguageToAdd = {
   fullName: string;
   description: string;
   descriptionRefs: string[];
-  queries: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
-  transformations: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
+  queries: Record<string, { polytime: string; note?: string; refs: string[] }>;
+  transformations: Record<string, { polytime: string; note?: string; refs: string[] }>;
   tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   existingReferences: string[];
 };

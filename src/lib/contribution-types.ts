@@ -1,7 +1,5 @@
-import type { PolytimeFlagCode, TransformationStatus } from './types.js';
-
 export interface OperationSupportInput {
-  polytime: PolytimeFlagCode;
+  polytime: string;
   note?: string;
   refs: string[];
 }
@@ -38,7 +36,7 @@ export interface LanguageFormInput {
 export interface EdgeRelationshipInput {
   sourceId: string;
   targetId: string;
-  status: TransformationStatus;
+  status: string;
   refs: string[];
   separatingFunctions?: SeparatingFunctionInput[];
 }

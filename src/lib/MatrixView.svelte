@@ -5,41 +5,29 @@
     FilteredGraphData,
     KCLanguage,
     SelectedEdge,
-    DirectedSuccinctnessRelation,
-    TransformationStatus
+    DirectedSuccinctnessRelation
   } from './types.js';
+  import { 
+    getComplexity,
+    getComplexityClass,
+    getComplexityNotation,
+    getComplexityDescription,
+    getComplexityLabel,
+    COMPLEXITIES
+  } from './data/complexities.js';
+
+  // Build lookup maps from COMPLEXITIES for matrix cell display
+  const STATUS_LABELS: Record<string, string> = Object.fromEntries(
+    Object.values(COMPLEXITIES).map(c => [c.code, c.label])
+  );
+  const STATUS_CLASSES: Record<string, string> = Object.fromEntries(
+    Object.values(COMPLEXITIES).map(c => [c.code, c.cssClass])
+  );
+  const STATUS_SHORT: Record<string, string> = Object.fromEntries(
+    Object.values(COMPLEXITIES).map(c => [c.code, c.notation])
+  );
 
   type ViewableGraphData = GraphData | FilteredGraphData;
-
-  const STATUS_LABELS: Record<TransformationStatus, string> = {
-    poly: 'Polynomial',
-    'no-poly-unknown-quasi': 'No poly · quasi ?',
-    'no-poly-quasi': 'Quasi only',
-    'unknown-poly-quasi': 'Quasi ✓ · poly ?',
-    'unknown-both': 'Unknown',
-    'no-quasi': 'No quasi',
-    'not-poly': 'No poly'
-  };
-
-  const STATUS_CLASSES: Record<TransformationStatus, string> = {
-    poly: 'status-poly',
-    'no-poly-unknown-quasi': 'status-no-poly-unknown-quasi',
-    'no-poly-quasi': 'status-no-poly-quasi',
-    'unknown-poly-quasi': 'status-unknown-poly-quasi',
-    'unknown-both': 'status-unknown-both',
-    'no-quasi': 'status-no-quasi',
-    'not-poly': 'status-not-poly'
-  };
-
-  const STATUS_SHORT: Record<TransformationStatus, string> = {
-    poly: '<=p',
-    'no-poly-unknown-quasi': '!p/?q',
-    'no-poly-quasi': '!p<=q',
-    'unknown-poly-quasi': '?p<=q',
-    'unknown-both': '??',
-    'no-quasi': '!q',
-    'not-poly': '!p'
-  };
 
   let {
     graphData,
@@ -157,6 +145,13 @@
     return source === sourceId && target === targetId;
   }
 
+  function isComplementSelected(sourceId: string, targetId: string): boolean {
+    if (!selectedEdge) return false;
+    const { source, target } = selectedEdge;
+    // Complement is the reverse direction
+    return source === targetId && target === sourceId;
+  }
+
   function getCellTitle(
     rowLang: KCLanguage,
     colLang: KCLanguage,
@@ -167,11 +162,93 @@
     const refs = relation.refs?.length ? ` · refs: ${relation.refs.join(', ')}` : '';
     return `${rowLang.name} → ${colLang.name}: ${label}${refs}`;
   }
+
+  // Dynamic cell sizing
+  let matrixScrollEl: HTMLDivElement;
+  let tableEl: HTMLTableElement;
+  let cellSize = $state({ width: 0, height: 0 });
+  let measured = $state(false);
+
+  // Measure cells after render and on resize
+  function measureAndSetCellSize() {
+    if (!matrixScrollEl || !tableEl) return;
+    
+    const numCells = matrixLanguages.length + 1; // +1 for header column
+    if (numCells <= 1) return;
+
+    // Find max natural width/height of any cell by measuring actual rendered content
+    const allCells = tableEl.querySelectorAll('th, td');
+    let maxWidth = 0;
+    let maxHeight = 0;
+
+    allCells.forEach(cell => {
+      // Temporarily remove size constraints to measure natural size
+      const el = cell as HTMLElement;
+      const oldWidth = el.style.width;
+      const oldMinWidth = el.style.minWidth;
+      const oldMaxWidth = el.style.maxWidth;
+      el.style.width = 'auto';
+      el.style.minWidth = 'auto';
+      el.style.maxWidth = 'none';
+      
+      const rect = el.getBoundingClientRect();
+      maxWidth = Math.max(maxWidth, rect.width);
+      maxHeight = Math.max(maxHeight, rect.height);
+      
+      // Restore
+      el.style.width = oldWidth;
+      el.style.minWidth = oldMinWidth;
+      el.style.maxWidth = oldMaxWidth;
+    });
+
+    // Get container dimensions
+    const containerWidth = matrixScrollEl.clientWidth;
+    const containerHeight = matrixScrollEl.clientHeight;
+
+    // Case 1: everything fits - expand cells to fill
+    // Case 2: doesn't fit - use max natural size
+    const totalNaturalWidth = maxWidth * numCells;
+    const totalNaturalHeight = maxHeight * numCells;
+
+    const finalWidth = totalNaturalWidth <= containerWidth 
+      ? containerWidth / numCells 
+      : maxWidth;
+    
+    const finalHeight = totalNaturalHeight <= containerHeight 
+      ? containerHeight / numCells 
+      : maxHeight;
+
+    cellSize = { width: finalWidth, height: finalHeight };
+    measured = true;
+  }
+
+  $effect(() => {
+    // Re-measure when languages change
+    matrixLanguages;
+    measured = false;
+    // Use microtask to ensure DOM is updated
+    queueMicrotask(() => measureAndSetCellSize());
+  });
+
+  // Also measure on mount and resize
+  import { onMount } from 'svelte';
+  onMount(() => {
+    measureAndSetCellSize();
+    const resizeObserver = new ResizeObserver(() => measureAndSetCellSize());
+    if (matrixScrollEl) resizeObserver.observe(matrixScrollEl);
+    return () => resizeObserver.disconnect();
+  });
 </script>
 
 <div class="matrix-view" aria-live="polite">
-  <div class="matrix-scroll" role="region" aria-label="Adjacency matrix view">
-    <table class="matrix-table">
+  <div class="matrix-scroll" bind:this={matrixScrollEl} role="region" aria-label="Adjacency matrix view">
+    <table 
+      class="matrix-table" 
+      bind:this={tableEl}
+      style:--cell-width="{cellSize.width}px"
+      style:--cell-height="{cellSize.height}px"
+      class:measured
+    >
       <thead>
         <tr>
           <th class="corner-cell" aria-hidden="true"></th>
@@ -202,7 +279,7 @@
                     aria-label={`Select ${rowLanguage.language.name}`}
                     title={`Select ${rowLanguage.language.name}`}
                   >
-                    &MediumSpace;
+                    =
                   </button>
                 </td>
               {:else}
@@ -211,12 +288,11 @@
                   <td>
                     <button
                       type="button"
-                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''}`}
+                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(rowLanguage.id, colLanguage.id) ? 'is-complement' : ''}`}
                       onclick={() => handleCellClick(rowLanguage.id, colLanguage.id, relation)}
                       title={getCellTitle(rowLanguage.language, colLanguage.language, relation)}
                     >
-                      <span class="cell-short">{STATUS_SHORT[relation.status]}</span>
-                      <span class="cell-label">{STATUS_LABELS[relation.status]}</span>
+                      <span class="cell-short"><MathText text={STATUS_SHORT[relation.status]} className="inline" /></span>
                     </button>
                   </td>
                 {:else}
@@ -246,12 +322,28 @@
   }
 
   .matrix-table {
-    width: 100%;
+    width: auto;
     border-collapse: separate;
     border-spacing: 0;
-    min-width: 640px;
     table-layout: fixed;
     font-size: 0.75rem;
+  }
+
+  /* Before measurement, let cells size naturally */
+  .matrix-table:not(.measured) th,
+  .matrix-table:not(.measured) td {
+    width: auto;
+    min-width: auto;
+    max-width: none;
+  }
+
+  /* After measurement, use computed cell size */
+  .matrix-table.measured th,
+  .matrix-table.measured td {
+    width: var(--cell-width, auto);
+    min-width: var(--cell-width, auto);
+    max-width: var(--cell-width, none);
+    height: var(--cell-height, auto);
   }
 
   thead th {
@@ -263,19 +355,20 @@
   }
 
   .corner-cell {
-    width: 120px;
-    background: #fff;
+    background: #e5e7eb;
     z-index: 4;
+    border-left: 1px solid #e5e7eb;
   }
 
   .row-header,
   .col-header {
-    width: 120px;
     background: #fff;
     border-right: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
     padding: 0;
-    text-align: left;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .row-header {
@@ -283,6 +376,7 @@
     left: 0;
     z-index: 2;
     background: #f8fafc;
+    border-left: 1px solid #e5e7eb;
   }
 
   .row-header button,
@@ -311,8 +405,6 @@
   td {
     border-right: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
-    min-width: 80px;
-    height: 38px;
     text-align: center;
     padding: 0;
   }
@@ -378,53 +470,58 @@
   }
 
   .matrix-cell.is-selected {
-    box-shadow: inset 0 0 0 3px #1d4ed8;
+    box-shadow: inset 0 0 0 3px #1d4ed8; /* blue border for selected */
   }
 
-  .status-poly {
-    background: #ecfccb;
+  .matrix-cell.is-complement {
+    box-shadow: inset 0 0 0 3px #dc2626; /* red border for complement */
+  }
+
+  /* Complexity-based matrix cell colors - using pastel backgrounds */
+  .complexity-poly {
+    background: #dcfce7; /* green-100 pastel */
     color: #166534;
   }
 
-  .status-no-poly-unknown-quasi {
-    background: #fef9c3;
-    color: #92400e;
-  }
-
-  .status-no-poly-quasi {
-    background: #fef3c7;
-    color: #92400e;
-  }
-
-  .status-unknown-poly-quasi {
-    background: #fef9c3;
-    color: #78350f;
-  }
-
-  .status-unknown-both {
-    background: #e2e8f0;
-    color: #0f172a;
-  }
-
-  .status-no-quasi {
-    background: #fee2e2;
+  .complexity-no-poly-unknown-quasi {
+    background: #fee2e2; /* red-100 pastel */
     color: #991b1b;
   }
 
-  .status-not-poly {
-    background: #ffe4e6;
-    color: #9d174d;
+  .complexity-no-poly-quasi {
+    background: #ffedd5; /* orange-100 pastel */
+    color: #9a3412;
+  }
+
+  .complexity-unknown-poly-quasi {
+    background: #fef9c3; /* yellow-100 pastel */
+    color: #854d0e;
+  }
+
+  .complexity-unknown-both {
+    background: #f3f4f6; /* gray-100 pastel */
+    color: #374151;
+  }
+
+  .complexity-no-quasi {
+    background: #fecaca; /* red-200 pastel */
+    color: #991b1b;
+  }
+
+  .complexity-not-poly {
+    background: #fee2e2; /* red-100 pastel */
+    color: #be123c;
   }
 
   @media (max-width: 1024px) {
     .matrix-table {
-      min-width: 520px;
+      min-width: 400px;
     }
 
     .row-header,
     .col-header,
     .corner-cell {
-      width: 100px;
+      width: 80px;
     }
   }
 </style>

@@ -1,30 +1,33 @@
 // Types for the Knowledge Compilation Map
 
 /**
- * Polytime complexity flag codes
- * - 'poly': polynomial time
- * - 'quasi': quasi-polynomial time
- * - 'exp': exponential time (proven)
- * - 'not-poly-conditional': not polynomial under assumption (e.g., 'Unless P=NP')
- * - 'unknown': complexity unknown
- * - 'open': open problem
+ * Full complexity info with display properties.
+ * Used for both transformation statuses and operation complexities.
+ * 
+ * IMPORTANT: Always use the full Complexity object in the frontend,
+ * never just the code string. This ensures consistent display.
+ * 
+ * Display contexts:
+ * - notation: LaTeX notation for succinctness relations (f:languageA→languageB), e.g., "$\leq_p$"
+ * - emoji: For query/transformation operations (f:any→any), e.g., "✓" or "✗"
  */
-export type PolytimeFlagCode = 'poly' | 'quasi' | 'exp' | 'not-poly-conditional' | 'unknown' | 'open';
-
-/**
- * Full polytime complexity flag with display properties.
- */
-export interface PolytimeFlag {
-  /** Short code identifier */
-  code: PolytimeFlagCode;
-  /** Full human-readable label */
+export interface Complexity {
+  /** Internal code identifier */
+  code: string;
+  /** Human-readable label (e.g., "Polynomial") */
   label: string;
-  /** CSS color value (future: could be icon filename) */
-  color: string;
-  /** Emoji icon for text display */
+  /** Short notation, supports LaTeX (e.g., "$\\leq_p$") - used for succinctness relations */
+  notation: string;
+  /** Emoji representation - used for query/transformation operations */
   emoji: string;
-  /** Optional description for tooltips */
-  description?: string;
+  /** Full description, supports LaTeX */
+  description: string;
+  /** CSS color value (saturated, for icons/text) */
+  color: string;
+  /** Pastel version of color (for backgrounds) */
+  pastel: string;
+  /** CSS class name for styling */
+  cssClass: string;
 }
 
 export interface VisualOverrides {
@@ -41,8 +44,8 @@ export interface VisualOverrides {
  * The operation code and label come from the canonical operations definition.
  */
 export interface KCOpSupport {
-  /** polytime complexity code */
-  polytime: PolytimeFlagCode;
+  /** complexity code (use getComplexity() to get full Complexity object for display) */
+  polytime: string;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
   /** reference IDs pointing to entries in the language's references array */
@@ -58,8 +61,8 @@ export interface KCOpEntry {
   code: string;
   /** human-friendly label, e.g., "Consistency" */
   label: string;
-  /** polytime complexity code */
-  polytime: PolytimeFlagCode;
+  /** complexity code (use getComplexity() to get full Complexity object for display) */
+  polytime: string;
   /** optional explanatory note, e.g., "Unless P=NP" */
   note?: string;
   /** optional visual hint for highlighting this operation */
@@ -188,28 +191,6 @@ export interface KCRelationType {
   defaultVisible?: boolean;
 }
 
-/**
- * Relationship status between two languages (A -> B direction)
- */
-export type TransformationStatus = 
-  | 'poly'           // Polynomial transformation exists (A ≤_p B)
-  | 'no-poly-unknown-quasi'  // No poly, unknown quasi (A ⊄_p B and A ?≤_q B)
-  | 'no-poly-quasi'  // No poly, but quasi exists (A ⊄_p B and A ≤_q B)
-  | 'unknown-poly-quasi' // Unknown poly, quasi exists (A ?≤_p B and A ≤_q B)
-  | 'unknown-both'   // Both unknown (A ?≤_p B and A ?≤_q B)
-  | 'no-quasi'       // No quasi-polynomial transformation (A ⊄_q B)
-  | 'not-poly';      // Not polynomial (filter-generated, used when collapsing quasi/no-quasi)
-
-// TEMPORARY: Old flat edge format for contribution system (to be removed)
-export interface CanonicalEdge {
-  id: string;
-  nodeA: string;
-  nodeB: string;
-  aToB: TransformationStatus;
-  bToA: TransformationStatus;
-  description?: string;
-  refs: string[];
-}
 
 /**
  * Canonical edge representation - each edge stored exactly once.
@@ -249,8 +230,8 @@ export interface SeparatingFunction {
 }
 
 export interface DirectedSuccinctnessRelation {
-  /** Transformation classification from source → target */
-  status: TransformationStatus;
+  /** Transformation classification from source → target (use getComplexity() for display) */
+  status: string;
   /** Optional descriptive note for this direction */
   description?: string;
   /** Supporting references */

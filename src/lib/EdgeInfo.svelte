@@ -1,6 +1,7 @@
 <script lang="ts">
   import MathText from './components/MathText.svelte';
-  import type { SelectedEdge, TransformationStatus, GraphData, FilteredGraphData, KCReference } from './types.js';
+  import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from './types.js';
+  import { getComplexity } from './data/complexities.js';
   import DynamicLegend from './components/DynamicLegend.svelte';
   
   let { selectedEdge, graphData }: { 
@@ -60,25 +61,10 @@
     return refs;
   });
 
-  function getStatusLabel(status: TransformationStatus): string {
-    switch (status) {
-      case 'poly':
-        return 'Polynomial time';
-      case 'no-quasi':
-        return 'No quasipolynomial transformation';
-      case 'no-poly-quasi':
-        return 'Quasi-polynomial only (no polynomial)';
-      case 'no-poly-unknown-quasi':
-        return 'No polynomial; quasi-polynomial unknown';
-      case 'unknown-poly-quasi':
-        return 'Quasi-polynomial exists; polynomial unknown';
-      case 'unknown-both':
-        return 'Complexity unknown';
-      case 'not-poly':
-        return 'No polynomial transformation';
-      default:
-        return 'Unknown';
-    }
+  function getStatusLabel(status: string): string {
+    // Use getComplexity to get the full complexity object
+    const complexity = getComplexity(status);
+    return complexity.description;
   }
 
   function getRefNumber(refId: string): number {

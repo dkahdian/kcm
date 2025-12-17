@@ -1,7 +1,7 @@
 import type { PageLoad } from './$types.js';
 import { allLanguages } from '$lib/data/languages.js';
 import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
-import { POLYTIME_COMPLEXITIES } from '$lib/data/polytime-complexities.js';
+import { COMPLEXITIES } from '$lib/data/complexities.js';
 import { adjacencyMatrixData } from '$lib/data/edges.js';
 import { relationTypes } from '$lib/data/relation-types.js';
 import { allSeparatingFunctions } from '$lib/data/separating-functions.js';
@@ -38,7 +38,7 @@ export const load: PageLoad = () => {
     languages: allLanguages,
     queries: QUERIES,
     transformations: TRANSFORMATIONS,
-    polytimeOptions: POLYTIME_COMPLEXITIES,
+    complexityOptions: COMPLEXITIES,
     adjacencyMatrix: adjacencyMatrixData,
     relationTypes
   };

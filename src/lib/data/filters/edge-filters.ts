@@ -1,5 +1,5 @@
-import type { EdgeFilter } from '../../types.js';
-import { mapRelationsInDataset } from '../transforms.js';
+import type { EdgeFilter, CanonicalKCData } from '../../types.js';
+import { mapRelationsInDataset, mapLanguagesInDataset } from '../transforms.js';
 
 type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
 type PolyDisplayMode = 'include-quasipolynomial' | 'polytime-vs-not';
@@ -11,7 +11,7 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
   id: 'poly-display',
   name: 'Polynomial Display',
   description: 'Control how polynomial and quasipolynomial complexity edges are shown',
-  category: 'Edge Visibility',
+  category: 'Visibility',
   defaultParam: 'polytime-vs-not',
   controlType: 'dropdown',
   options: [
@@ -50,7 +50,7 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
   id: 'manage-unknowns',
   name: 'Manage Unknowns',
   description: 'Control how edges with unknown status are treated',
-  category: 'Edge Visibility',
+  category: 'Visibility',
   defaultParam: 'omit-all',
   controlType: 'dropdown',
   options: [
@@ -112,7 +112,7 @@ export const omitSeparatorFunctions: EdgeFilter = {
   id: 'omit-separator-functions',
   name: 'Omit Separator Functions',
   description: 'Hide all separator functions from edges',
-  category: 'Edge Visibility',
+  category: 'Visibility',
   defaultParam: true, // ON BY DEFAULT
   controlType: 'checkbox',
   lambda: (data, param) => {
@@ -138,7 +138,7 @@ export const hideMarkedEdges: EdgeFilter = {
   id: 'hide-marked-edges',
   name: 'Hide Marked Edges',
   description: 'Hide edges that have been marked as hidden',
-  category: 'Edge Visibility',
+  category: 'Visibility',
   defaultParam: true,
   controlType: 'checkbox',
   hidden: true, // Internal filter, not shown in UI
@@ -154,7 +154,53 @@ export const hideMarkedEdges: EdgeFilter = {
   }
 };
 
+/**
+ * Helper function to determine if a language has any edges
+ */
+function languageHasEdges(data: CanonicalKCData, languageId: string): boolean {
+  const { adjacencyMatrix } = data;
+  const index = adjacencyMatrix.indexByLanguage[languageId];
+  if (index === undefined) return false;
+  
+  // Check outgoing edges
+  const row = adjacencyMatrix.matrix[index];
+  if (row) {
+    for (let j = 0; j < adjacencyMatrix.languageIds.length; j++) {
+      if (row[j]) return true;
+    }
+  }
+  
+  // Check incoming edges
+  for (let i = 0; i < adjacencyMatrix.languageIds.length; i++) {
+    if (adjacencyMatrix.matrix[i]?.[index]) return true;
+  }
+  
+  return false;
+}
+
+/**
+ * Hide languages that have no edges (in progress languages) - ON BY DEFAULT
+ */
+export const hideInProgressLanguages: EdgeFilter = {
+  id: 'hide-in-progress',
+  name: 'Hide In Progress Languages',
+  description: 'Hide languages that have no edges (not yet connected to the graph)',
+  category: 'Visibility',
+  defaultParam: true, // ON BY DEFAULT
+  controlType: 'checkbox',
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapLanguagesInDataset(data, (language) => {
+      if (languageHasEdges(data, language.id)) {
+        return language;
+      }
+      return null;
+    });
+  }
+};
+
 export const edgeFilters: EdgeFilter<any>[] = [
+  hideInProgressLanguages,
   manageUnknowns,
   polyDisplay,
   omitSeparatorFunctions,

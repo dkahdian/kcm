@@ -12,7 +12,6 @@
       KCLanguage,
       KCAdjacencyMatrix,
       DirectedSuccinctnessRelation,
-      TransformationStatus,
       SelectedEdge
     } from './types.js';
   import { getEdgeEndpointStyle } from './data/relation-types.js';
@@ -111,8 +110,8 @@
     id: string;
     nodeA: string;
     nodeB: string;
-    aToB: TransformationStatus | null;
-    bToA: TransformationStatus | null;
+    aToB: string | null;
+    bToA: string | null;
     refs: string[];
     description: string;
     forward: DirectedSuccinctnessRelation | null;

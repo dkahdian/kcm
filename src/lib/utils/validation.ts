@@ -1,7 +1,6 @@
 import type { ContributionSubmission, EdgeRelationshipInput, OperationSupportInput, TagInput } from '$lib/contribution-types.js';
 import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
-import { POLYTIME_COMPLEXITIES } from '$lib/data/polytime-complexities.js';
-import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
+import { COMPLEXITIES, isValidComplexityCode } from '$lib/data/complexities.js';
 
 export interface ValidationError {
   field: string;
@@ -13,13 +12,14 @@ export interface ValidationResult {
   errors: ValidationError[];
 }
 
-const TRANSFORMATION_STATUS_VALUES: TransformationStatus[] = [
+const TRANSFORMATION_STATUS_VALUES: string[] = [
   'poly',
   'no-poly-unknown-quasi',
   'no-poly-quasi',
   'unknown-poly-quasi',
   'unknown-both',
-  'no-quasi'
+  'no-quasi',
+  'not-poly'
 ];
 
 const PLACEHOLDER_REF_REGEX = /^new-\d+$/;
@@ -134,9 +134,9 @@ function validateOperationSupport(
     }
 
     if (!support.polytime) {
-      errors.push({ field: `${fieldPrefix}.${code}.polytime`, message: 'Polytime flag is required' });
-    } else if (!POLYTIME_COMPLEXITIES[support.polytime]) {
-      errors.push({ field: `${fieldPrefix}.${code}.polytime`, message: 'Invalid polytime flag' });
+      errors.push({ field: `${fieldPrefix}.${code}.polytime`, message: 'Complexity code is required' });
+    } else if (!isValidComplexityCode(support.polytime)) {
+      errors.push({ field: `${fieldPrefix}.${code}.polytime`, message: 'Invalid complexity code' });
     }
 
     if (!Array.isArray(support.refs) || support.refs.length === 0) {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { TransformationStatus } from '$lib/types';
 	import GenericChip from './GenericChip.svelte';
 
 	type SeparatingFunctionEntry = {
@@ -12,7 +11,7 @@
 	type RelationshipData = {
 		sourceId: string;
 		targetId: string;
-		status: TransformationStatus;
+		status: string;
 		refs: string[];
 		separatingFunctions?: SeparatingFunctionEntry[];
 	};

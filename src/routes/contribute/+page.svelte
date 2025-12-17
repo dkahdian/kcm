@@ -3,7 +3,6 @@
   import { browser } from '$app/environment';
   import { v4 as uuidv4 } from 'uuid';
   import type { PageData } from './$types';
-  import type { PolytimeFlagCode, TransformationStatus } from '$lib/types.js';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
   import AddReferenceModal from '$lib/components/contribute/AddReferenceModal.svelte';
   import AddSeparatingFunctionModal from '$lib/components/contribute/AddSeparatingFunctionModal.svelte';
@@ -73,15 +72,15 @@
 
   function sanitizeOperationSupportRecord(
     value: unknown
-  ): Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }> {
+  ): Record<string, { polytime: string; note?: string; refs: string[] }> {
     if (!value || typeof value !== 'object') return {};
-    const result: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }> = {};
+    const result: Record<string, { polytime: string; note?: string; refs: string[] }> = {};
     for (const [key, raw] of Object.entries(value as Record<string, any>)) {
       if (!raw || typeof raw !== 'object') continue;
-      const polytime = isString(raw.polytime) ? (raw.polytime as PolytimeFlagCode) : 'unknown';
+      const polytime = isString(raw.polytime) ? raw.polytime : 'unknown-both';
       const note = isString(raw.note) ? raw.note : undefined;
       const refs = sanitizeStringArray(raw.refs);
-      const entry: { polytime: PolytimeFlagCode; note?: string; refs: string[] } = {
+      const entry: { polytime: string; note?: string; refs: string[] } = {
         polytime,
         refs
       };
@@ -160,7 +159,7 @@
         const relationship: RelationshipEntry = {
           sourceId: raw.sourceId,
           targetId: raw.targetId,
-          status: raw.status as TransformationStatus,
+          status: raw.status,
           refs: sanitizeStringArray(raw.refs)
         };
         if (separatingFunctions.length > 0) {
@@ -284,14 +283,14 @@
 
   let { data }: { data: PageData } = $props();
 
-  const polytimeOptions = Object.values(data.polytimeOptions);
+  const complexityOptions = Object.values(data.complexityOptions);
 
   const statusOptions: Array<{
-    value: TransformationStatus;
+    value: string;
     label: string;
     description: string;
   }> = data.relationTypes.map((type) => ({
-    value: type.id as TransformationStatus,
+    value: type.id,
     label: type.name,
     description: type.description ?? ''
   }));
@@ -1068,7 +1067,7 @@
   initialData={editLanguageToAddIndex !== null ? languagesToAdd[editLanguageToAddIndex]?.payload : undefined}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
-  polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
+  complexityOptions={complexityOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
   availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
 />
@@ -1085,7 +1084,7 @@
   initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex]?.payload : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.name === selectedLanguageToEdit)!) : undefined)}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
-  polytimeOptions={polytimeOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
+  complexityOptions={complexityOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
   availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
 />

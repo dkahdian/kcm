@@ -1,10 +1,10 @@
-import type { LanguageFilter, TransformationStatus, CanonicalKCData, KCAdjacencyMatrix } from '../../types.js';
+import type { LanguageFilter, CanonicalKCData, KCAdjacencyMatrix } from '../../types.js';
 import { cloneDataset } from '../transforms.js';
 
 /**
  * Helper function to check if a status is poly or quasi
  */
-function isPolyOrQuasi(status: TransformationStatus): 'poly' | 'quasi' | null {
+function isPolyOrQuasi(status: string): 'poly' | 'quasi' | null {
   if (status === 'poly') return 'poly';
   if (status === 'no-poly-quasi' || status === 'unknown-poly-quasi') return 'quasi';
   return null;

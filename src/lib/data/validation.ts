@@ -6,13 +6,12 @@ import type {
   KCOpSupport,
   KCSeparatingFunction,
   KCReference,
-  TransformValidationResult,
-  TransformationStatus
+  TransformValidationResult
 } from '../types.js';
 import { getAllQueryCodes, getAllTransformationCodes, TRANSFORMATIONS } from './operations.js';
-import { POLYTIME_COMPLEXITIES } from './polytime-complexities.js';
+import { COMPLEXITIES, isValidComplexityCode } from './complexities.js';
 
-const VALID_TRANSFORMATION_STATUSES: TransformationStatus[] = [
+const VALID_TRANSFORMATION_STATUSES: string[] = [
   'poly',
   'no-poly-unknown-quasi',
   'no-poly-quasi',
@@ -22,7 +21,7 @@ const VALID_TRANSFORMATION_STATUSES: TransformationStatus[] = [
   'not-poly'
 ];
 
-const VALID_POLYTIME_CODES = new Set(Object.keys(POLYTIME_COMPLEXITIES));
+const VALID_COMPLEXITY_CODES = new Set(Object.keys(COMPLEXITIES));
 const VALID_QUERY_CODES = new Set(getAllQueryCodes());
 const VALID_TRANSFORMATION_CODES = new Set(getAllTransformationCodes());
 const VALID_TRANSFORMATION_DISPLAY_CODES = new Set(
@@ -182,9 +181,9 @@ function validateOperationMap(
       errors.push(`Language "${languageName}" references unknown ${kind} code "${code}"`);
     }
 
-    if (!support || typeof support.polytime !== 'string' || !VALID_POLYTIME_CODES.has(support.polytime)) {
+    if (!support || typeof support.polytime !== 'string' || !VALID_COMPLEXITY_CODES.has(support.polytime)) {
       errors.push(
-        `Language "${languageName}" ${kind} "${code}" must have a valid polytime flag`
+        `Language "${languageName}" ${kind} "${code}" must have a valid complexity code`
       );
     }
 

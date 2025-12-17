@@ -1,4 +1,3 @@
-import type { TransformationStatus } from '$lib/types.js';
 import type { LanguageToAdd, SeparatingFunctionEntry, RelationshipEntry } from './types.js';
 import { displayCodeToSafeKey } from '$lib/data/operations.js';
 import { generateReferenceId } from '$lib/utils/reference-id.js';
@@ -38,10 +37,10 @@ export function cloneOperationSupport(
 export function buildBaselineRelations(adjacencyMatrix: {
   languageIds: string[];
   matrix: any[][];
-}): Map<string, { status: TransformationStatus; refs: string[]; separatingFunctionIds?: string[]; separatingFunctions: SeparatingFunctionEntry[] }> {
+}): Map<string, { status: string; refs: string[]; separatingFunctionIds?: string[]; separatingFunctions: SeparatingFunctionEntry[] }> {
   const baselineRelations = new Map<
     string,
-    { status: TransformationStatus; refs: string[]; separatingFunctionIds?: string[]; separatingFunctions: SeparatingFunctionEntry[] }
+    { status: string; refs: string[]; separatingFunctionIds?: string[]; separatingFunctions: SeparatingFunctionEntry[] }
   >();
 
   const { languageIds, matrix } = adjacencyMatrix;

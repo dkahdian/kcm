@@ -1,20 +1,18 @@
 <script lang="ts">
-  import type { PolytimeFlagCode } from '$lib/types.js';
-
   type Language = {
     name: string;
     fullName: string;
     description: string;
     descriptionRefs: string[];
-    queries: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
-    transformations: Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>;
+    queries: Record<string, { polytime: string; note?: string; refs: string[] }>;
+    transformations: Record<string, { polytime: string; note?: string; refs: string[] }>;
     tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
     existingReferences: string[];
   };
 
   type Query = { code: string; name: string };
   type Transformation = { code: string; name: string };
-  type PolytimeOption = { value: PolytimeFlagCode; label: string; description: string };
+  type ComplexityOption = { value: string; label: string; description: string };
   type Tag = { label: string; color: string; description?: string; refs: string[] };
 
   type OperationResult = {
@@ -30,7 +28,7 @@
     onAdd: (language: Language) => MaybePromise<void | OperationResult>;
     queries: Query[];
     transformations: Transformation[];
-    polytimeOptions: PolytimeOption[];
+    complexityOptions: ComplexityOption[];
     existingTags: Tag[];
     availableRefs?: string[];
     isEdit?: boolean;
@@ -43,7 +41,7 @@
     onAdd,
     queries,
     transformations,
-    polytimeOptions,
+    complexityOptions,
     existingTags,
     availableRefs = [],
     isEdit = false,
@@ -54,8 +52,8 @@
   let fullName = $state('');
   let description = $state('');
   let descriptionRefs = $state<string[]>([]);
-  let querySupport = $state<Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>>({});
-  let transformationSupport = $state<Record<string, { polytime: PolytimeFlagCode; note?: string; refs: string[] }>>({});
+  let querySupport = $state<Record<string, { polytime: string; note?: string; refs: string[] }>>({});
+  let transformationSupport = $state<Record<string, { polytime: string; note?: string; refs: string[] }>>({});
   let selectedTags = $state<Tag[]>([]);
   let selectedExistingRefs = $state<string[]>([]);
   let errorMessage = $state<string | null>(null);
@@ -339,7 +337,7 @@
                         bind:value={querySupport[query.code].polytime}
                         class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
                       >
-                        {#each polytimeOptions as option}
+                        {#each complexityOptions as option}
                           <option value={option.value}>{option.label}</option>
                         {/each}
                       </select>
@@ -393,7 +391,7 @@
                         bind:value={transformationSupport[transform.code].polytime}
                         class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
                       >
-                        {#each polytimeOptions as option}
+                        {#each complexityOptions as option}
                           <option value={option.value}>{option.label}</option>
                         {/each}
                       </select>

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
-  import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, PolytimeFlag, TransformationStatus } from '../types.js';
-  import { POLYTIME_COMPLEXITIES } from '../data/polytime-complexities.js';
+  import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, Complexity } from '../types.js';
+  import { COMPLEXITIES } from '../data/complexities.js';
+  import MathText from './MathText.svelte';
 
   let {
     graphData,
@@ -41,7 +42,7 @@
     arrow: string;
     filled: boolean;
     description: string;
-    status: TransformationStatus;
+    status: string;
   };
   
   const allEdgeTypes: EdgeType[] = [
@@ -91,7 +92,7 @@
 
   // Determine which edge types are actually visible
   const visibleEdgeTypes = $derived.by(() => {
-    const statusesInGraph = new Set<TransformationStatus>();
+    const statusesInGraph = new Set<string>();
     
     // Collect statuses from adjacency matrix (only for visible edges)
     const { matrix, languageIds } = filteredData.adjacencyMatrix;
@@ -148,7 +149,7 @@
     
     // Note: Selected edge doesn't have operation complexities, so no need to check
     
-    return Object.values(POLYTIME_COMPLEXITIES).filter(c => codesInUse.has(c.code));
+    return Object.values(COMPLEXITIES).filter(c => codesInUse.has(c.code));
   });
 
   let containerRefs = $state<{ [status: string]: HTMLDivElement | null }>({});
@@ -258,7 +259,9 @@
       <h5>Operation Complexity</h5>
       {#each visibleComplexities as complexity}
         <div class="legend-row">
-          <span class="complexity-emoji">{complexity.emoji}</span>
+          <span class="complexity-notation" style="color: {complexity.color}">
+            <MathText text={complexity.notation} className="inline" />
+          </span>
           <span title={complexity.description}>{complexity.label}</span>
         </div>
       {/each}
@@ -340,10 +343,10 @@
     color: #4b5563;
   }
 
-  .complexity-emoji {
+  .complexity-notation {
     display: inline-block;
-    width: 1.5rem;
+    min-width: 3rem;
     text-align: center;
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
 </style>

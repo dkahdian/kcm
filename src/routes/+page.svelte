@@ -12,7 +12,14 @@
   import { browser } from '$app/environment';
 
   import { v4 as uuidv4 } from 'uuid';
-  import { hasQueuedChanges, loadQueuedChanges, clearQueuedChanges, loadContributorInfo, loadPreviewDataset } from '$lib/contribution-storage.js';
+  import {
+    hasQueuedChanges,
+    loadQueuedChanges,
+    clearQueuedChanges,
+    loadContributorInfo,
+    loadPreviewDataset,
+    savePreviewDataset
+  } from '$lib/contribution-storage.js';
   import { recordSubmissionHistory } from '$lib/utils/submission-history.js';
   import type {
     LanguageToAdd,
@@ -25,6 +32,7 @@
     ContributionQueueState,
     ContributionSubmissionPayload
   } from '$lib/data/contribution-transforms.js';
+  import { applyContributionQueue } from '$lib/data/contribution-transforms.js';
 
   const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
@@ -119,7 +127,22 @@
         previewGraphData = dataset;
         isPreviewMode = true;
       } else {
-        console.warn('Queued changes detected but preview dataset is missing');
+        // The preview dataset is best-effort (it can fail to persist due to localStorage quota).
+        // If it's missing but the queue exists, rebuild it on demand so preview mode still works.
+        const queue = loadQueuedChanges();
+        if (queue) {
+          try {
+            const rebuilt = applyContributionQueue(initialGraphData, queue);
+            previewGraphData = rebuilt;
+            isPreviewMode = true;
+            savePreviewDataset(rebuilt);
+          } catch (error) {
+            console.error('Failed to rebuild preview dataset from queued changes:', error);
+            console.warn('Queued changes detected but preview dataset is missing');
+          }
+        } else {
+          console.warn('Queued changes detected but preview dataset is missing');
+        }
       }
     }
 

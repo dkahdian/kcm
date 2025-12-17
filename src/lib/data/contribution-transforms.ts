@@ -15,6 +15,7 @@ import type {
 import { cloneDataset } from './transforms.js';
 import { validateDatasetStructure } from './validation.js';
 import { propagateImplicitRelations } from './propagation.js';
+import { isValidComplexityCode } from './complexities.js';
 import { generateReferenceId } from '../utils/reference-id.js';
 
 export type ContributionQueueEntry =
@@ -80,6 +81,30 @@ export function applyContributionQueue(
   queue: ContributionQueueState
 ): GraphData {
   const merged = cloneDataset(base);
+
+  const normalizeOperationComplexities = () => {
+    for (const language of merged.languages) {
+      const queryMap = language.properties?.queries;
+      if (queryMap && typeof queryMap === 'object') {
+        for (const support of Object.values(queryMap)) {
+          const complexity = (support as any)?.complexity;
+          if (typeof complexity !== 'string' || !isValidComplexityCode(complexity)) {
+            (support as any).complexity = 'unknown-to-us';
+          }
+        }
+      }
+
+      const transformationMap = language.properties?.transformations;
+      if (transformationMap && typeof transformationMap === 'object') {
+        for (const support of Object.values(transformationMap)) {
+          const complexity = (support as any)?.complexity;
+          if (typeof complexity !== 'string' || !isValidComplexityCode(complexity)) {
+            (support as any).complexity = 'unknown-to-us';
+          }
+        }
+      }
+    }
+  };
 
   const ensureLanguageInMatrix = (id: string) => {
     const { adjacencyMatrix } = merged;
@@ -205,6 +230,10 @@ export function applyContributionQueue(
       }
     }
   }
+
+  // Queued contribution payloads may include older/partial operation maps.
+  // Normalize invalid/missing complexity codes so preview datasets still build.
+  normalizeOperationComplexities();
 
   const validation = validateDatasetStructure(merged);
   if (!validation.ok) {

@@ -2633,33 +2633,6 @@
         null,
         null,
         null,
-        {
-          "status": "poly",
-          "description": "BDD is a subset of DNNF",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
-        null,
-        null,
-        null,
-        null,
-        {
-          "status": "poly",
-          "refs": [],
-          "hidden": true,
-          "description": "Derived via polynomial transitive closure"
-        },
-        null,
-        {
-          "status": "no-quasi",
-          "description": "Holds transitively",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
         null,
         null,
         null,
@@ -2667,33 +2640,27 @@
         null,
         null,
         null,
-        {
-          "status": "no-quasi",
-          "description": "Holds transitively",
-          "refs": [
-            "Gergov_1994",
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": [
-            {
-              "shortName": "HWB",
-              "name": "Hidden Weighted Bit",
-              "description": "-",
-              "refs": []
-            }
-          ]
-        }
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
       ],
       [
         null,
-        {
-          "status": "poly",
-          "description": "It is straightforward to convert a clause into an equivalent sentence in BDD. In order\nto generate a BDD sentence corresponding to the conjunction of BDD sentences α and β, it is sufficient to replace the 1-sink of α with the root of β.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
+        null,
         null,
         null,
         null,
@@ -2915,14 +2882,7 @@
       ],
       [
         null,
-        {
-          "status": "poly",
-          "description": "It is straightforward to convert a term into an equivalent sentence in BDD. In order to generate a BDD sentence corresponding to the disjunction of BDD sentences α and β, it is sufficient to replace the 0-sink of α with the root of β.",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
+        null,
         {
           "status": "no-quasi",
           "description": "See the proof on page 247 of Darwiche 2002.",
@@ -3414,12 +3374,7 @@
       ],
       [
         null,
-        {
-          "status": "poly",
-          "refs": [],
-          "hidden": true,
-          "description": "Derived via polynomial transitive closure"
-        },
+        null,
         {
           "status": "poly",
           "description": "Holds transitively",

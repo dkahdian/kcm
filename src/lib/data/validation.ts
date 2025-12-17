@@ -1,5 +1,5 @@
 import type {
-  CanonicalKCData,
+  GraphData,
   DirectedSuccinctnessRelation,
   KCAdjacencyMatrix,
   KCLanguage,
@@ -295,25 +295,6 @@ function validateRelation(
       }
     }
   }
-
-  if (relation.separatingFunctions !== undefined) {
-    if (!Array.isArray(relation.separatingFunctions)) {
-      errors.push(`Edge ${sourceId} -> ${targetId}: separatingFunctions must be an array`);
-    } else {
-      for (const fn of relation.separatingFunctions) {
-        if (!fn?.shortName) {
-          errors.push(`Edge ${sourceId} -> ${targetId}: separating functions must include shortName`);
-        }
-        if (!fn?.name) {
-          errors.push(`Edge ${sourceId} -> ${targetId}: separating functions must include name`);
-        }
-        if (!fn?.description) {
-          errors.push(`Edge ${sourceId} -> ${targetId}: separating functions must include description`);
-        }
-        ensureRefsExist(fn?.refs, `Edge ${sourceId} -> ${targetId} separating function "${fn?.shortName ?? 'unknown'}" refs`, knownRefs, errors);
-      }
-    }
-  }
 }
 
 function validateRelations(
@@ -332,7 +313,7 @@ function validateRelations(
   }
 }
 
-export function validateDatasetStructure(data: CanonicalKCData): TransformValidationResult {
+export function validateDatasetStructure(data: GraphData): TransformValidationResult {
   const errors: string[] = [];
   const knownLanguages = collectLanguageIdentifiers(data.languages, errors);
   validateAdjacencyMatrix(data.adjacencyMatrix, knownLanguages, errors);

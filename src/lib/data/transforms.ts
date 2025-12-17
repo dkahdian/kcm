@@ -1,5 +1,5 @@
 import type {
-  CanonicalKCData,
+  GraphData,
   KCAdjacencyMatrix,
   KCLanguage,
   DirectedSuccinctnessRelation,
@@ -15,11 +15,11 @@ export interface TransformOptions {
   propagateImplicit?: boolean;
 }
 
-export type DataTransform = (data: CanonicalKCData) => CanonicalKCData;
+export type DataTransform = (data: GraphData) => GraphData;
 
 export interface TransformRuntimeHooks {
-  validate?: (data: CanonicalKCData) => TransformValidationResult;
-  propagate?: (data: CanonicalKCData) => CanonicalKCData;
+  validate?: (data: GraphData) => TransformValidationResult;
+  propagate?: (data: GraphData) => GraphData;
   onInvalid?: (result: TransformValidationResult) => void;
 }
 
@@ -39,7 +39,7 @@ function defaultOnInvalid(result: TransformValidationResult): void {
   }
 }
 
-export function cloneDataset(data: CanonicalKCData): CanonicalKCData {
+export function cloneDataset(data: GraphData): GraphData {
   // structuredClone fails in browsers for datasets containing functions/complex types.
   // JSON parse/stringify is sufficient for our canonical data shape and avoids runtime errors.
   return JSON.parse(JSON.stringify(data));
@@ -73,9 +73,9 @@ function rebuildAdjacencyMatrix(
 type LanguageMapper = (language: KCLanguage) => KCLanguage | null;
 
 export function mapLanguagesInDataset(
-  data: CanonicalKCData,
+  data: GraphData,
   mapper: LanguageMapper
-): CanonicalKCData {
+): GraphData {
   const cloned = cloneDataset(data);
   const updatedLanguages: KCLanguage[] = [];
   let anyRemoved = false;
@@ -107,9 +107,9 @@ type RelationMapper = (
 ) => DirectedSuccinctnessRelation | null;
 
 export function mapRelationsInDataset(
-  data: CanonicalKCData,
+  data: GraphData,
   mapper: RelationMapper
-): CanonicalKCData {
+): GraphData {
   const cloned = cloneDataset(data);
   const { languageIds, matrix } = cloned.adjacencyMatrix;
 
@@ -125,11 +125,11 @@ export function mapRelationsInDataset(
 }
 
 export function transformData(
-  input: CanonicalKCData,
+  input: GraphData,
   lambda: DataTransform,
   options: TransformOptions = {},
   hooks: TransformRuntimeHooks = {}
-): CanonicalKCData | null {
+): GraphData | null {
   const cloned = cloneDataset(input);
   const mutated = lambda(cloned);
 
@@ -151,11 +151,11 @@ export function transformData(
 }
 
 export function runTransformPipeline(
-  input: CanonicalKCData,
+  input: GraphData,
   stages: TransformStage[],
   hooks: TransformRuntimeHooks = {}
-): CanonicalKCData | null {
-  return stages.reduce<CanonicalKCData | null>((acc, stage, index) => {
+): GraphData | null {
+  return stages.reduce<GraphData | null>((acc, stage, index) => {
     if (!acc) return null;
     const result = transformData(acc, stage.lambda, stage.options, hooks);
     if (!result) {

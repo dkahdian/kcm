@@ -24,7 +24,6 @@
     LanguageToAdd,
     RelationshipEntry,
     CustomTag,
-    SeparatingFunctionEntry,
     SeparatingFunctionToAdd,
     SubmissionHistoryEntry,
     SubmissionHistoryPayload,
@@ -130,24 +129,6 @@
       .filter((item): item is LanguageToAdd => item !== null);
   }
 
-
-  function sanitizeSeparatingFunctions(value: unknown): SeparatingFunctionEntry[] {
-    if (!Array.isArray(value)) return [];
-    const results: SeparatingFunctionEntry[] = [];
-    for (const entry of value) {
-      if (!entry || typeof entry !== 'object') continue;
-      const raw = entry as Record<string, any>;
-      if (!isString(raw.shortName) || !isString(raw.name) || !isString(raw.description)) continue;
-      results.push({
-        shortName: raw.shortName,
-        name: raw.name,
-        description: raw.description,
-        refs: sanitizeStringArray(raw.refs)
-      });
-    }
-    return results;
-  }
-
   function sanitizeRelationships(value: unknown): RelationshipEntry[] {
     if (!Array.isArray(value)) return [];
     return value
@@ -155,15 +136,16 @@
         if (!entry || typeof entry !== 'object') return null;
         const raw = entry as Record<string, any>;
         if (!isString(raw.sourceId) || !isString(raw.targetId) || !isString(raw.status)) return null;
-        const separatingFunctions = sanitizeSeparatingFunctions(raw.separatingFunctions);
         const relationship: RelationshipEntry = {
           sourceId: raw.sourceId,
           targetId: raw.targetId,
           status: raw.status,
           refs: sanitizeStringArray(raw.refs)
         };
-        if (separatingFunctions.length > 0) {
-          relationship.separatingFunctions = separatingFunctions;
+        // Support separatingFunctionIds (new format)
+        const ids = sanitizeStringArray(raw.separatingFunctionIds);
+        if (ids.length > 0) {
+          relationship.separatingFunctionIds = ids;
         }
         return relationship;
       })
@@ -189,9 +171,6 @@
     refs: [...relationship.refs],
     separatingFunctionIds: relationship.separatingFunctionIds
       ? [...relationship.separatingFunctionIds]
-      : undefined,
-    separatingFunctions: relationship.separatingFunctions
-      ? relationship.separatingFunctions.map((fn) => ({ ...fn, refs: [...fn.refs] }))
       : undefined
   });
 
@@ -753,17 +732,11 @@
       }
 
       if (entry.kind === 'relationship') {
-        if (!entry.payload.refs.includes(refId) && !entry.payload.separatingFunctions?.some((fn) => fn.refs.includes(refId))) {
+        if (!entry.payload.refs.includes(refId)) {
           return entry;
         }
         const updated = cloneRelationshipEntry(entry.payload);
         updated.refs = updated.refs.filter((r) => r !== refId);
-        if (updated.separatingFunctions) {
-          updated.separatingFunctions = updated.separatingFunctions.map((fn) => ({
-            ...fn,
-            refs: fn.refs.filter((r) => r !== refId)
-          }));
-        }
         return { ...entry, payload: updated };
       }
 

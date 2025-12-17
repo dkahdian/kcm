@@ -2526,50 +2526,6 @@
       }
     }
   },
-  "polytimeComplexities": {
-    "poly": {
-      "code": "poly",
-      "label": "Polynomial",
-      "color": "#22c55e",
-      "emoji": "🟢",
-      "description": "Operation is polynomial time"
-    },
-    "quasi": {
-      "code": "quasi",
-      "label": "Quasi-polynomial",
-      "color": "#f97316",
-      "emoji": "⚡",
-      "description": "Operation is quasi-polynomial time"
-    },
-    "exp": {
-      "code": "exp",
-      "label": "Exponential",
-      "color": "#ef4444",
-      "emoji": "❌",
-      "description": "Operation is exponential time (proven)"
-    },
-    "not-poly-conditional": {
-      "code": "not-poly-conditional",
-      "label": "Not Poly (Conditional)",
-      "color": "#f97316",
-      "emoji": "⚠️",
-      "description": "Not polynomial under complexity assumption (e.g., Unless P=NP)"
-    },
-    "unknown": {
-      "code": "unknown",
-      "label": "Unknown",
-      "color": "#9ca3af",
-      "emoji": "❔",
-      "description": "Complexity is unknown"
-    },
-    "open": {
-      "code": "open",
-      "label": "Open Problem",
-      "color": "#9ca3af",
-      "emoji": "❓",
-      "description": "Open research problem"
-    }
-  },
   "adjacencyMatrix": {
     "languageIds": [
       "lang_8f666aa0",
@@ -2665,22 +2621,14 @@
             "Darwiche_2002",
             "Gogic_1995"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         {
           "status": "no-quasi",
           "description": "Unless the polynomial hierarchy collapses:\n\n\"If $\\mathrm{DNNF} \\le \\mathrm{CNF}$, then for each sentence $\\Sigma$ in $\\mathrm{CNF}$ there exists a poly-size equivalent sentence $\\Gamma$ in $\\mathrm{DNNF}$. Therefore, we can test whether a clause is entailed by $\\Sigma$ in polynomial time by testing whether the clause is entailed by $\\Gamma$. This proves the existence of poly-size knowledge-compilation functions for clausal entailment, leading to the collapse of the polynomial hierarchy $\\mathrm{PH}$.\n\nThe same is true for $\\mathrm{d\\text{-}DNNF}$ and $\\mathrm{sd\\text{-}DNNF}$ since all these languages support a polytime clausal‐entailment test.\"\n",
-          "refs": [],
-          "separatingFunctions": []
+          "refs": []
         },
         {
           "status": "no-quasi",
@@ -2688,8 +2636,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -2697,15 +2644,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         {
@@ -2713,8 +2653,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -2722,8 +2661,7 @@
           "description": "CNF is a subset of NNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -2732,8 +2670,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -2741,15 +2678,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -2764,8 +2694,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -2882,15 +2811,8 @@
             "Darwiche_2002",
             "Gogic_1995"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -2903,8 +2825,7 @@
           "description": "DNF is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -2912,8 +2833,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -2921,15 +2841,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         {
@@ -2937,8 +2850,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -2946,8 +2858,7 @@
           "description": "DNF is a subset of NNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -2956,8 +2867,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -2965,15 +2875,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -2988,8 +2891,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -3001,15 +2903,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -3022,15 +2917,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -3040,8 +2928,7 @@
           "refs": [
             "Darwiche_2002",
             "Darwiche_2000"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3049,15 +2936,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         {
@@ -3065,8 +2945,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3074,8 +2953,7 @@
           "description": "DNNF is a subset of NNF.",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3083,8 +2961,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3092,15 +2969,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -3114,8 +2984,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -3127,15 +2996,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -3148,15 +3010,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         {
@@ -3164,8 +3019,7 @@
           "description": "FBDD is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3174,15 +3028,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         {
@@ -3190,8 +3037,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3199,8 +3045,7 @@
           "description": "FBDD is a subset of NNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3210,13 +3055,8 @@
             "Darwiche_2002",
             "Gergov_1994"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "HWB",
-              "name": "Hidden Weighted Bit",
-              "description": "-",
-              "refs": []
-            }
+          "separatingFunctionIds": [
+            "HWB"
           ]
         },
         {
@@ -3225,15 +3065,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -3248,8 +3081,7 @@
           "refs": [
             "Gergov_1994",
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -3261,15 +3093,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -3282,8 +3107,7 @@
           "description": "IP is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3291,8 +3115,7 @@
           "refs": [
             "Wegener_1987",
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3301,15 +3124,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "$OR_n$",
-              "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
-              "description": "Separates languages that compactly represent disjunctions from those that cannot.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "$OR_n$"
           ]
         },
         null,
@@ -3318,8 +3134,7 @@
           "description": "IP is a subset of NNF.",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3328,8 +3143,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3337,15 +3151,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -3360,8 +3167,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -3372,8 +3178,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3385,24 +3190,21 @@
           "description": "MODS is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "poly",
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "poly",
           "description": "Via the Quine-McCluskey Algorithm",
           "refs": [
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3411,8 +3213,7 @@
           "description": "MODS is a subset of NNF.",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3420,8 +3221,7 @@
           "description": "A decision tree respecting the order $<$ can always be generated in polynomial time; reducing this to an $OBBD_<$ also takes polynomial time.",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3435,8 +3235,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -3474,8 +3273,7 @@
           "refs": [
             "Darwiche_2002",
             "Gogic_1995"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3487,8 +3285,7 @@
           "refs": [
             "Darwiche_2002",
             "Gogic_1995"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3497,8 +3294,7 @@
             "Selman_1996",
             "Darwiche_2002",
             "Cadoli_1997"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3506,8 +3302,7 @@
           "refs": [
             "Darwiche_2002",
             "Darwiche_2000"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3515,15 +3310,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         {
@@ -3531,8 +3319,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3544,13 +3331,8 @@
             "Darwiche_2002",
             "Gergov_1994"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "HWB",
-              "name": "Hidden Weighted Bit",
-              "description": "-",
-              "refs": []
-            }
+          "separatingFunctionIds": [
+            "HWB"
           ]
         },
         {
@@ -3558,8 +3340,7 @@
           "description": "This holds due to transitivity.",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3574,13 +3355,8 @@
             "Darwiche_2002",
             "Gergov_1994"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "HWB",
-              "name": "Hidden Weighted Bit",
-              "description": "-",
-              "refs": []
-            }
+          "separatingFunctionIds": [
+            "HWB"
           ]
         }
       ],
@@ -3619,15 +3395,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -3640,15 +3409,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         {
@@ -3656,14 +3418,12 @@
           "description": "OBDD$_<$ is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "poly",
           "description": "OBDD$_<$ is a subset of FBDD",
-          "refs": [],
-          "separatingFunctions": []
+          "refs": []
         },
         {
           "status": "no-quasi",
@@ -3671,15 +3431,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         {
@@ -3687,8 +3440,7 @@
           "description": "Holds transitively",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3696,8 +3448,7 @@
           "description": "OBDD$_<$ is a subset of NNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3707,15 +3458,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -3729,8 +3473,7 @@
           "description": "OBDD$_<$ is a subset of OBDD",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -3747,15 +3490,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         null,
@@ -3765,8 +3501,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "no-quasi",
@@ -3774,15 +3509,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise OR CNF",
-              "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-              "description": "This formula helps separate PI from IP, among other important separations.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
           ]
         },
         {
@@ -3791,15 +3519,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "$OR_n$",
-              "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
-              "description": "Separates languages that compactly represent disjunctions from those that cannot.",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "$OR_n$"
           ]
         },
         null,
@@ -3808,8 +3529,7 @@
           "description": "PI is a subset of NNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -3818,8 +3538,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         null,
@@ -3834,8 +3553,7 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987"
-          ],
-          "separatingFunctions": []
+          ]
         }
       ],
       [
@@ -4003,15 +3721,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -4024,15 +3735,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         {
@@ -4040,32 +3744,13 @@
           "description": "OBDD is a subset of DNNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         {
           "status": "poly",
           "description": "OBDD is a subset of FBDD",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
-        },
-        {
-          "status": "no-quasi",
-          "description": "Holds transitively",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
           ]
         },
         {
@@ -4074,7 +3759,16 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": []
+          "separatingFunctionIds": [
+            "Parity"
+          ]
+        },
+        {
+          "status": "no-quasi",
+          "description": "Holds transitively",
+          "refs": [
+            "Darwiche_2002"
+          ]
         },
         null,
         {
@@ -4082,8 +3776,7 @@
           "description": "OBDD is a subset of NNF",
           "refs": [
             "Darwiche_2002"
-          ],
-          "separatingFunctions": []
+          ]
         },
         null,
         {
@@ -4092,15 +3785,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Pairwise equivalence",
-              "name": "$\\Sigma_n = \\bigwedge_{i=1}^n (x_i \\leftrightarrow y_i)$",
-              "description": "-",
-              "refs": [
-                "Darwiche_2002"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Pairwise equivalence"
           ]
         },
         {
@@ -4109,15 +3795,8 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "separatingFunctions": [
-            {
-              "shortName": "Parity",
-              "name": "Parity function",
-              "description": "$O_n = \\bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations.",
-              "refs": [
-                "Bryant_1986"
-              ]
-            }
+          "separatingFunctionIds": [
+            "Parity"
           ]
         },
         null,
@@ -4154,17 +3833,17 @@
       "refs": []
     },
     {
-      "shortName": "Pairwise equivalence",
-      "name": "$\\Sigma_n = \\bigwedge_{i=1}^n (x_i \\leftrightarrow y_i)$",
-      "description": "-",
+      "shortName": "$OR_n$",
+      "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
+      "description": "Separates languages that compactly represent disjunctions from those that cannot.",
       "refs": [
         "Darwiche_2002"
       ]
     },
     {
-      "shortName": "$OR_n$",
-      "name": "$OR_n = \\bigvee_{i=1}^{n} x_i$",
-      "description": "Separates languages that compactly represent disjunctions from those that cannot.",
+      "shortName": "Pairwise equivalence",
+      "name": "$\\Sigma_n = \\bigwedge_{i=1}^n (x_i \\leftrightarrow y_i)$",
+      "description": "-",
       "refs": [
         "Darwiche_2002"
       ]

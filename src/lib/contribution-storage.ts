@@ -1,4 +1,4 @@
-import type { CanonicalKCData } from './types.js';
+import type { GraphData } from './types.js';
 import type { ContributionQueueEntry, ContributionQueueState } from './data/contribution-transforms.js';
 import type { ContributorInfo } from '../routes/contribute/types.js';
 
@@ -71,7 +71,7 @@ export function loadContributorInfo(): ContributorInfo | null {
   }
 }
 
-export function savePreviewDataset(dataset: CanonicalKCData | null): void {
+export function savePreviewDataset(dataset: GraphData | null): void {
   if (dataset === null) {
     removeStoredValue(PREVIEW_DATASET_STORAGE_KEY);
     return;
@@ -83,11 +83,11 @@ export function savePreviewDataset(dataset: CanonicalKCData | null): void {
   }
 }
 
-export function loadPreviewDataset(): CanonicalKCData | null {
+export function loadPreviewDataset(): GraphData | null {
   const stored = getStoredValue(PREVIEW_DATASET_STORAGE_KEY);
   if (!stored) return null;
   try {
-    return JSON.parse(stored) as CanonicalKCData;
+    return JSON.parse(stored) as GraphData;
   } catch (error) {
     console.error('Failed to load preview dataset:', error);
     return null;

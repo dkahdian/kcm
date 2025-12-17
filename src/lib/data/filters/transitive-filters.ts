@@ -1,4 +1,4 @@
-import type { LanguageFilter, CanonicalKCData, KCAdjacencyMatrix } from '../../types.js';
+import type { LanguageFilter, GraphData, KCAdjacencyMatrix } from '../../types.js';
 import { cloneDataset } from '../transforms.js';
 
 /**
@@ -32,7 +32,7 @@ export const omitTransitiveEdges: LanguageFilter<boolean> = {
   category: 'Edge Visibility',
   defaultParam: true, // ON BY DEFAULT
   controlType: 'checkbox',
-  lambda: (data: CanonicalKCData, param: boolean) => {
+  lambda: (data: GraphData, param: boolean) => {
     const working = cloneDataset(data);
     const { adjacencyMatrix } = working;
 

@@ -1,19 +1,12 @@
 <script lang="ts">
 	import GenericChip from './GenericChip.svelte';
 
-	type SeparatingFunctionEntry = {
-		shortName: string;
-		name: string;
-		description: string;
-		refs: string[];
-	};
-
 	type RelationshipData = {
 		sourceId: string;
 		targetId: string;
 		status: string;
 		refs: string[];
-		separatingFunctions?: SeparatingFunctionEntry[];
+		separatingFunctionIds?: string[];
 	};
 
 	let {

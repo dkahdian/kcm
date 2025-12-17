@@ -10,28 +10,19 @@
     description: string;
   };
 
-  type SeparatingFunction = {
-    shortName: string;
-    name: string;
-    description: string;
-    refs: string[];
-  };
-
   type Relationship = {
     sourceId: string;
     targetId: string;
     status: string;
     description?: string;
     refs: string[];
-    separatingFunctionIds?: string[]; // NEW: Store only IDs
-    separatingFunctions?: SeparatingFunction[]; // DEPRECATED: Keep for backward compat
+    separatingFunctionIds?: string[];
   };
 
   type BaselineRelationship = {
     status: string;
     refs: string[];
     separatingFunctionIds?: string[];
-    separatingFunctions: SeparatingFunction[];
   };
 
   type StatusOption = {
@@ -79,15 +70,9 @@
       status = initialData.status;
       description = initialData.description || '';
       selectedRefs = [...initialData.refs];
-      
-      // Handle both old format (separatingFunctions) and new format (separatingFunctionIds)
-      if (initialData.separatingFunctionIds) {
-        selectedSeparatingFunctionIds = [...initialData.separatingFunctionIds];
-      } else if (initialData.separatingFunctions) {
-        selectedSeparatingFunctionIds = initialData.separatingFunctions.map(sf => sf.shortName);
-      } else {
-        selectedSeparatingFunctionIds = [];
-      }
+      selectedSeparatingFunctionIds = initialData.separatingFunctionIds 
+        ? [...initialData.separatingFunctionIds] 
+        : [];
     }
   });
 
@@ -101,15 +86,9 @@
         // Relationship exists - populate with existing data
         status = baseline.status;
         selectedRefs = [...baseline.refs];
-        
-        // Handle both old and new format
-        if (baseline.separatingFunctionIds) {
-          selectedSeparatingFunctionIds = [...baseline.separatingFunctionIds];
-        } else if (baseline.separatingFunctions) {
-          selectedSeparatingFunctionIds = baseline.separatingFunctions.map(sf => sf.shortName);
-        } else {
-          selectedSeparatingFunctionIds = [];
-        }
+        selectedSeparatingFunctionIds = baseline.separatingFunctionIds 
+          ? [...baseline.separatingFunctionIds] 
+          : [];
       }
       // If no baseline exists, keep current values (defaults)
     }

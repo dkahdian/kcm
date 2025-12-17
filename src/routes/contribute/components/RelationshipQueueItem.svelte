@@ -53,23 +53,12 @@
 						<span class="font-mono text-gray-900">{relationship.status}</span>
 					</div>
 				</div>
-				{#if relationship.separatingFunctions && relationship.separatingFunctions.length > 0}
+				{#if relationship.separatingFunctionIds && relationship.separatingFunctionIds.length > 0}
 					<div>
 						<div class="font-semibold text-gray-700 mb-1">
-							Separating Functions ({relationship.separatingFunctions.length}):
+							Separating Functions ({relationship.separatingFunctionIds.length}):
 						</div>
-						<div class="space-y-2">
-							{#each relationship.separatingFunctions as fn}
-								<div class="bg-white p-2 rounded border">
-									<div class="font-medium">{fn.name}</div>
-									<div class="text-gray-600 text-xs">Short: {fn.shortName}</div>
-									<div class="text-gray-500 italic text-xs">{fn.description}</div>
-									{#if fn.refs && fn.refs.length > 0}
-										<div class="text-gray-500 text-xs mt-1">Refs: [{fn.refs.join(', ')}]</div>
-									{/if}
-								</div>
-							{/each}
-						</div>
+						<div class="text-gray-600">{relationship.separatingFunctionIds.join(', ')}</div>
 					</div>
 				{/if}
 				{#if relationship.refs && relationship.refs.length > 0}

@@ -57,10 +57,7 @@ function cloneRelationships(items: RelationshipEntry[]): RelationshipEntry[] {
   return items.map((item) => ({
     ...item,
     refs: [...item.refs],
-    separatingFunctionIds: item.separatingFunctionIds ? [...item.separatingFunctionIds] : undefined,
-    separatingFunctions: item.separatingFunctions
-      ? item.separatingFunctions.map((fn) => ({ ...fn, refs: [...fn.refs] }))
-      : undefined
+    separatingFunctionIds: item.separatingFunctionIds ? [...item.separatingFunctionIds] : undefined
   }));
 }
 

@@ -1,4 +1,4 @@
-import type { EdgeFilter, CanonicalKCData } from '../../types.js';
+import type { EdgeFilter, GraphData } from '../../types.js';
 import { mapRelationsInDataset, mapLanguagesInDataset } from '../transforms.js';
 
 type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
@@ -119,10 +119,10 @@ export const omitSeparatorFunctions: EdgeFilter = {
     if (!param) return data;
     return mapRelationsInDataset(data, (relation) => {
       if (!relation) return null;
-      if (relation.separatingFunctions && relation.separatingFunctions.length > 0) {
+      if (relation.separatingFunctionIds && relation.separatingFunctionIds.length > 0) {
         return {
           ...relation,
-          separatingFunctions: []
+          separatingFunctionIds: []
         };
       }
       return relation;
@@ -157,7 +157,7 @@ export const hideMarkedEdges: EdgeFilter = {
 /**
  * Helper function to determine if a language has any edges
  */
-function languageHasEdges(data: CanonicalKCData, languageId: string): boolean {
+function languageHasEdges(data: GraphData, languageId: string): boolean {
   const { adjacencyMatrix } = data;
   const index = adjacencyMatrix.indexByLanguage[languageId];
   if (index === undefined) return false;

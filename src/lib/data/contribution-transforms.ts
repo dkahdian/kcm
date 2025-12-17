@@ -1,5 +1,5 @@
 import type {
-  CanonicalKCData,
+  GraphData,
   KCLanguage,
   KCReference,
   DirectedSuccinctnessRelation,
@@ -76,9 +76,9 @@ function convertToKCLanguage(
 }
 
 export function applyContributionQueue(
-  base: CanonicalKCData,
+  base: GraphData,
   queue: ContributionQueueState
-): CanonicalKCData {
+): GraphData {
   const merged = cloneDataset(base);
 
   const ensureLanguageInMatrix = (id: string) => {
@@ -140,27 +140,13 @@ export function applyContributionQueue(
       }
     }
 
-    const resolvedSeparatingFunctions: { shortName: string; name: string; description: string; refs: string[] }[] = [];
+    // Collect separating function IDs
+    const separatingFunctionIds: string[] = [];
     if (rel.separatingFunctionIds && rel.separatingFunctionIds.length > 0) {
       for (const id of rel.separatingFunctionIds) {
-        const fn = separatingFunctionLookup.get(id);
-        if (fn) {
-          resolvedSeparatingFunctions.push({
-            shortName: fn.shortName,
-            name: fn.name,
-            description: fn.description,
-            refs: [...fn.refs]
-          });
+        if (separatingFunctionLookup.has(id)) {
+          separatingFunctionIds.push(id);
         }
-      }
-    } else if (rel.separatingFunctions) {
-      for (const fn of rel.separatingFunctions) {
-        resolvedSeparatingFunctions.push({
-          shortName: fn.shortName,
-          name: fn.name,
-          description: fn.description,
-          refs: [...fn.refs]
-        });
       }
     }
 
@@ -168,7 +154,7 @@ export function applyContributionQueue(
       status: rel.status,
       description: rel.description,
       refs: [...rel.refs],
-      separatingFunctions: resolvedSeparatingFunctions
+      separatingFunctionIds: separatingFunctionIds.length > 0 ? separatingFunctionIds : undefined
     };
     merged.adjacencyMatrix.matrix[sourceIdx][targetIdx] = relation;
   };

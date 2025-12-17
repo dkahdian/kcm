@@ -1,4 +1,4 @@
-import type { LanguageToAdd, SeparatingFunctionEntry, RelationshipEntry } from './types.js';
+import type { LanguageToAdd, RelationshipEntry } from './types.js';
 import { displayCodeToSafeKey } from '$lib/data/operations.js';
 import { generateReferenceId } from '$lib/utils/reference-id.js';
 import { generateLanguageId } from '$lib/utils/language-id.js';
@@ -37,10 +37,10 @@ export function cloneOperationSupport(
 export function buildBaselineRelations(adjacencyMatrix: {
   languageIds: string[];
   matrix: any[][];
-}): Map<string, { status: string; refs: string[]; separatingFunctionIds?: string[]; separatingFunctions: SeparatingFunctionEntry[] }> {
+}): Map<string, { status: string; refs: string[]; separatingFunctionIds?: string[] }> {
   const baselineRelations = new Map<
     string,
-    { status: string; refs: string[]; separatingFunctionIds?: string[]; separatingFunctions: SeparatingFunctionEntry[] }
+    { status: string; refs: string[]; separatingFunctionIds?: string[] }
   >();
 
   const { languageIds, matrix } = adjacencyMatrix;
@@ -51,26 +51,14 @@ export function buildBaselineRelations(adjacencyMatrix: {
         const sourceId = languageIds[i];
         const targetId = languageIds[j];
         
-        // Support both old format (separatingFunctions array) and new format (separatingFunctionIds)
-        let separatingFunctionIds: string[] | undefined = undefined;
-        let separatingFunctions: SeparatingFunctionEntry[] = [];
-        
-        if (relation.separatingFunctionIds && Array.isArray(relation.separatingFunctionIds)) {
-          separatingFunctionIds = [...relation.separatingFunctionIds];
-        } else if (relation.separatingFunctions && Array.isArray(relation.separatingFunctions)) {
-          separatingFunctions = relation.separatingFunctions.map((fn: any) => ({
-            shortName: fn.shortName,
-            name: fn.name,
-            description: fn.description,
-            refs: [...fn.refs]
-          }));
-        }
+        const separatingFunctionIds = relation.separatingFunctionIds && Array.isArray(relation.separatingFunctionIds)
+          ? [...relation.separatingFunctionIds]
+          : undefined;
         
         baselineRelations.set(relationKey(sourceId, targetId), {
           status: relation.status,
           refs: relation.refs ? [...relation.refs] : [],
-          separatingFunctionIds,
-          separatingFunctions
+          separatingFunctionIds
         });
       }
     }

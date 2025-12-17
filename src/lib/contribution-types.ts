@@ -1,5 +1,5 @@
 export interface OperationSupportInput {
-  polytime: string;
+  complexity: string;
   note?: string;
   refs: string[];
 }

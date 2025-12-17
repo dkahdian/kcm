@@ -1,4 +1,4 @@
-import type { LanguageFilter, GraphData, FilterCategory, CanonicalKCData } from '../../types.js';
+import type { LanguageFilter, GraphData, FilterCategory } from '../../types.js';
 import { resolveLanguageProperties } from '../operations.js';
 import { getComplexity } from '../complexities.js';
 import { mapLanguagesInDataset } from '../transforms.js';
@@ -10,8 +10,8 @@ import { mapLanguagesInDataset } from '../transforms.js';
 export function createOperationVisualizer(
   code: string,
   type: 'query' | 'transformation'
-): (data: CanonicalKCData, param: boolean) => CanonicalKCData {
-  return (data: CanonicalKCData, param: boolean) => {
+): (data: GraphData, param: boolean) => GraphData {
+  return (data: GraphData, param: boolean) => {
     if (!param) return data;
     return mapLanguagesInDataset(data, (language) => {
       const resolved = resolveLanguageProperties(
@@ -50,7 +50,7 @@ export function generateLanguageSelectionFilters(graphData: GraphData): Language
     category: 'Show Languages',
     defaultParam: true, // All languages visible by default
     controlType: 'checkbox' as const,
-    lambda: (data: CanonicalKCData, param: boolean) => {
+    lambda: (data: GraphData, param: boolean) => {
       if (param) return data;
       return mapLanguagesInDataset(data, (language) => {
         return language.name === lang.name ? null : language;
@@ -71,7 +71,7 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
     description: 'Automatically adds missing operations as "unknown-to-us" complexity',
     hidden: true, // This is an internal filter - not shown in UI
     defaultParam: true,
-    lambda: (data: CanonicalKCData, param: boolean) => {
+    lambda: (data: GraphData, param: boolean) => {
       if (!param) return data;
       return mapLanguagesInDataset(data, (language) => {
         const resolved = resolveLanguageProperties(

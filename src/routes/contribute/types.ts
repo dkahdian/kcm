@@ -1,12 +1,5 @@
 import type { ContributionQueueEntry } from '$lib/data/contribution-transforms.js';
 
-export type SeparatingFunctionEntry = {
-  shortName: string;
-  name: string;
-  description: string;
-  refs: string[];
-};
-
 export type SeparatingFunctionToAdd = {
   shortName: string;
   name: string;
@@ -21,8 +14,7 @@ export type RelationshipEntry = {
   status: string;
   description?: string;
   refs: string[];
-  separatingFunctionIds?: string[]; // New format: array of shortNames
-  separatingFunctions?: SeparatingFunctionEntry[]; // Deprecated: inline format
+  separatingFunctionIds?: string[]; // Array of shortNames referencing top-level separatingFunctions
 };
 
 export type LanguageToAdd = {

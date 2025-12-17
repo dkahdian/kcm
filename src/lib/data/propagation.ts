@@ -1,4 +1,4 @@
-import type { CanonicalKCData, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../types.js';
+import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../types.js';
 
 const DERIVED_RELATION_NOTE = 'Derived via polynomial transitive closure';
 
@@ -73,7 +73,7 @@ function addDerivedPolyEdges(matrix: KCAdjacencyMatrix, reachable: boolean[][]):
  * Implicit propagation pass that (1) rebuilds adjacency indices and
  * (2) ensures polynomial relationships are closed under transitivity.
  */
-export function propagateImplicitRelations(data: CanonicalKCData): CanonicalKCData {
+export function propagateImplicitRelations(data: GraphData): GraphData {
   const { adjacencyMatrix } = data;
   adjacencyMatrix.indexByLanguage = rebuildIndexMap(adjacencyMatrix.languageIds);
 

@@ -54,23 +54,13 @@ export interface KCOpSupport {
 
 /**
  * Full operation entry with all metadata, used for rendering.
- * Combines canonical operation info with language-specific support info.
+ * Extends KCOpSupport with canonical operation info (code/label).
  */
-export interface KCOpEntry {
+export interface KCOpEntry extends KCOpSupport {
   /** short code, e.g., CO, VA, CE, IM, EQ, SU, CD, FO */
   code: string;
   /** human-friendly label, e.g., "Consistency" */
   label: string;
-  /** complexity code (use getComplexity() to get full Complexity object for display) */
-  complexity: string;
-  /** optional explanatory note, e.g., "Unless P=NP" */
-  note?: string;
-  /** optional visual hint for highlighting this operation */
-  visualHint?: 'highlight' | 'dim' | 'normal';
-  /** optional color override for this operation's status indicator */
-  colorOverride?: string;
-  /** reference IDs pointing to entries in the language's references array */
-  refs: string[];
 }
 
 /**
@@ -215,20 +205,6 @@ export interface KCSeparatingFunction {
   refs: string[];
 }
 
-/**
- * Separating function without ID (for backward compatibility and inline usage)
- */
-export interface SeparatingFunction {
-  /** Short label rendered directly on the edge */
-  shortName: string;
-  /** Full human-readable name */
-  name: string;
-  /** Description of what is separated */
-  description: string;
-  /** Supporting references */
-  refs: string[];
-}
-
 export interface DirectedSuccinctnessRelation {
   /** Transformation classification from source → target (use getComplexity() for display) */
   status: string;
@@ -236,10 +212,8 @@ export interface DirectedSuccinctnessRelation {
   description?: string;
   /** Supporting references */
   refs: string[];
-  /** Separating function shortNames (new format - references top-level separatingFunctions array by shortName) */
+  /** Separating function shortNames (references top-level separatingFunctions array by shortName) */
   separatingFunctionIds?: string[];
-  /** Separating functions that witness this direction (deprecated - use separatingFunctionIds) */
-  separatingFunctions?: SeparatingFunction[];
   /** Whether this edge is hidden by transitive reduction (always false by default) */
   hidden?: boolean;
 }
@@ -280,15 +254,10 @@ export interface GraphData {
   relationTypes: KCRelationType[];
   /** global registry of references used across the dataset */
   references: KCReference[];
-  /** optional separating function registry */
-  separatingFunctions?: KCSeparatingFunction[];
+  /** separating function registry */
+  separatingFunctions: KCSeparatingFunction[];
   /** optional metadata copied from database.json */
   metadata?: Record<string, unknown>;
-}
-
-export interface CanonicalKCData extends GraphData {
-  /** canonical datasets must always carry separating functions */
-  separatingFunctions: KCSeparatingFunction[];
 }
 
 export interface TransformValidationResult {
@@ -320,7 +289,7 @@ export interface LanguageFilter<T extends FilterParamValue = boolean> {
   /** Optional list of selectable options for dropdown-style filters */
   options?: FilterOption[];
   /** Filter function operating on the entire dataset */
-  lambda: (data: CanonicalKCData, param: T) => CanonicalKCData;
+  lambda: (data: GraphData, param: T) => GraphData;
 }
 
 /**
@@ -341,7 +310,7 @@ export interface EdgeFilter<T extends FilterParamValue = boolean> {
   /** Optional list of selectable options for dropdown-style filters */
   options?: FilterOption[];
   /** Filter function operating on the entire dataset */
-  lambda: (data: CanonicalKCData, param: T) => CanonicalKCData;
+  lambda: (data: GraphData, param: T) => GraphData;
 }
 
 export interface FilterCategory {

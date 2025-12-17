@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import type { CanonicalKCData, KCLanguage, KCReference } from '../../src/lib/types.js';
+import type { GraphData, KCLanguage, KCReference } from '../../src/lib/types.js';
 import {
   applyContributionQueue,
   type ContributionQueueState,
@@ -135,7 +135,7 @@ function serializeReferences(
   return ordered;
 }
 
-function buildDatabasePayload(current: RawDatabase, dataset: CanonicalKCData): RawDatabase {
+function buildDatabasePayload(current: RawDatabase, dataset: GraphData): RawDatabase {
   const references = serializeReferences(dataset.references, current.references ?? []);
   const languages = serializeLanguages(dataset.languages);
 

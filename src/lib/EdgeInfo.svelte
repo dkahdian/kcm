@@ -35,6 +35,32 @@
     };
   });
 
+  // Create a map for looking up separating functions by shortName
+  const separatingFunctionMap = $derived.by(() => {
+    const map = new Map<string, (typeof graphData.separatingFunctions)[number]>();
+    for (const sf of graphData.separatingFunctions) {
+      map.set(sf.shortName, sf);
+    }
+    return map;
+  });
+
+  // Look up separating functions for a relation by IDs
+  function getSeparatingFunctionsForRelation(relation: { separatingFunctionIds?: string[] } | null) {
+    if (!relation?.separatingFunctionIds?.length) return [];
+    return relation.separatingFunctionIds
+      .map(id => separatingFunctionMap.get(id))
+      .filter((sf): sf is NonNullable<typeof sf> => sf !== undefined);
+  }
+
+  // Pre-compute separating functions for both directions
+  const forwardSeparatingFunctions = $derived(
+    originalEdge?.forward ? getSeparatingFunctionsForRelation(originalEdge.forward) : []
+  );
+
+  const backwardSeparatingFunctions = $derived(
+    originalEdge?.backward ? getSeparatingFunctionsForRelation(originalEdge.backward) : []
+  );
+
   // Collect all unique references from both directions
   const edgeReferences = $derived.by<KCReference[]>(() => {
     if (!originalEdge) return [];
@@ -42,10 +68,11 @@
     const refIds = new Set<string>();
     const refs: KCReference[] = [];
 
-    const collectRefs = (relation: typeof originalEdge.forward) => {
+    const collectRefs = (relation: { refs: string[]; separatingFunctionIds?: string[] } | null) => {
       if (!relation) return;
       relation.refs.forEach((id) => refIds.add(id));
-      relation.separatingFunctions?.forEach((fn) => {
+      // Look up separating functions by ID and collect their refs
+      getSeparatingFunctionsForRelation(relation).forEach((fn) => {
         fn.refs.forEach((id) => refIds.add(id));
       });
     };
@@ -122,11 +149,11 @@
                 <MathText text={originalEdge.forward.description} className="text-sm text-gray-600 mb-2 italic block" />
               {/if}
               
-              {#if originalEdge.forward.separatingFunctions && originalEdge.forward.separatingFunctions.length > 0}
+              {#if forwardSeparatingFunctions.length > 0}
                 <div class="mt-3">
                   <h6 class="text-sm font-semibold text-gray-900 mb-2">Separating Functions</h6>
                   <div class="space-y-2">
-                    {#each originalEdge.forward.separatingFunctions as fn}
+                    {#each forwardSeparatingFunctions as fn}
                       <div class="p-2 bg-blue-50 border border-blue-200 rounded">
                         <div class="font-medium text-sm text-gray-900">
                           <MathText text={fn.name} className="inline" />{#if fn.refs.length}{#each fn.refs as refId}<button 
@@ -162,11 +189,11 @@
                 <MathText text={originalEdge.backward.description} className="text-sm text-gray-600 mb-2 italic block" />
               {/if}
               
-              {#if originalEdge.backward.separatingFunctions && originalEdge.backward.separatingFunctions.length > 0}
+              {#if backwardSeparatingFunctions.length > 0}
                 <div class="mt-3">
                   <h6 class="text-sm font-semibold text-gray-900 mb-2">Separating Functions</h6>
                   <div class="space-y-2">
-                    {#each originalEdge.backward.separatingFunctions as fn}
+                    {#each backwardSeparatingFunctions as fn}
                       <div class="p-2 bg-blue-50 border border-blue-200 rounded">
                         <div class="font-medium text-sm text-gray-900">
                           <MathText text={fn.name} className="inline" />{#if fn.refs.length}{#each fn.refs as refId}<button 

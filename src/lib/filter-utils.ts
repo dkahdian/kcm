@@ -1,5 +1,4 @@
 import type { 
-  CanonicalKCData,
   GraphData, 
   LanguageFilter, 
   EdgeFilter,
@@ -26,18 +25,18 @@ export function applyFiltersWithParams(
   const dataset = {
     ...graphData,
     separatingFunctions: graphData.separatingFunctions ?? []
-  } as CanonicalKCData;
-  const transformStage = (current: CanonicalKCData, filter: LanguageFilter | EdgeFilter) => {
+  } as GraphData;
+  const transformStage = (current: GraphData, filter: LanguageFilter | EdgeFilter) => {
     const param = filterStates.get(filter.id) ?? filter.defaultParam;
     const result = transformData(current, (data) => filter.lambda(data, param as any)) ?? current;
     return result;
   };
 
   const applyStageList = (
-    current: CanonicalKCData,
+    current: GraphData,
     filters: Array<LanguageFilter | EdgeFilter>
-  ): CanonicalKCData => {
-    return filters.reduce<CanonicalKCData>((working, filter) => transformStage(working, filter), current);
+  ): GraphData => {
+    return filters.reduce<GraphData>((working, filter) => transformStage(working, filter), current);
   };
 
   const afterLanguageFilters = applyStageList(dataset, languageFilters);

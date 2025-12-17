@@ -1,9 +1,9 @@
-import type { CanonicalKCData, LanguageFilter, EdgeFilter } from '../types.js';
+import type { GraphData, LanguageFilter, EdgeFilter } from '../types.js';
 import { canonicalDataset } from './canonical.js';
 import { allPredefinedFilters, generateLanguageSelectionFilters, organizeFiltersByCategory, edgeFilters } from './filters/index.js';
 
 // Export main GraphData object
-export const initialGraphData: CanonicalKCData = canonicalDataset;
+export const initialGraphData: GraphData = canonicalDataset;
 
 // Export all language filters combined (predefined + dynamic language selection)
 export function getAllLanguageFilters(): LanguageFilter[] {

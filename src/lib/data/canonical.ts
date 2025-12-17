@@ -1,4 +1,4 @@
-import type { CanonicalKCData, KCSeparatingFunction } from '../types.js';
+import type { GraphData, KCSeparatingFunction } from '../types.js';
 import database from './database.json';
 import { allLanguages } from './languages.js';
 import { adjacencyMatrixData } from './edges.js';
@@ -10,7 +10,7 @@ const metadata = ('metadata' in database
   ? (database as { metadata?: Record<string, unknown> }).metadata
   : undefined);
 
-export const canonicalDataset: CanonicalKCData = {
+export const canonicalDataset: GraphData = {
   languages: allLanguages,
   adjacencyMatrix: adjacencyMatrixData,
   relationTypes,

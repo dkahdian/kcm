@@ -1,5 +1,6 @@
 <script lang="ts">
   import KCGraph from '$lib/KCGraph.svelte';
+  import MatrixView from '$lib/MatrixView.svelte';
   import LanguageInfo from '$lib/LanguageInfo.svelte';
   import EdgeInfo from '$lib/EdgeInfo.svelte';
   import FilterDropdown from '$lib/FilterDropdown.svelte';
@@ -80,17 +81,36 @@
 
   let selectedNode = $state<KCLanguage | null>(null);
   let selectedEdge = $state<SelectedEdge | null>(null);
+  type ViewMode = 'graph' | 'matrix';
+  const VIEW_MODES: Array<{ id: ViewMode; label: string }> = [
+    { id: 'graph', label: 'Graph' },
+    { id: 'matrix', label: 'Matrix' }
+  ];
+  let viewMode = $state<ViewMode>('graph');
   
   // Initialize filter state with default parameter values
   let filterStates = $state<FilterStateMap>(createDefaultFilterState(languageFilters, edgeFilters));
   let filterPersistenceReady = $state(false);
   let isPreviewMode = $state(false);
   let previewGraphData: GraphData | null = $state(null);
-  let submittingPreview = $state(false);  onMount(() => {
+  let submittingPreview = $state(false);
+
+  onMount(() => {
     if (!browser) {
       filterPersistenceReady = true;
       return;
     }
+
+    const storedViewMode = localStorage.getItem('kcm_view_mode');
+    if (storedViewMode === 'graph' || storedViewMode === 'matrix') {
+      viewMode = storedViewMode;
+    }
+
+    $effect(() => {
+      if (browser) {
+        localStorage.setItem('kcm_view_mode', viewMode);
+      }
+    });
 
     // Check for preview mode
     if (hasQueuedChanges()) {
@@ -326,6 +346,18 @@
             Contribute
           </a>
         {/if}
+        <div class="view-toggle" role="group" aria-label="Visualization mode">
+          {#each VIEW_MODES as mode}
+            <button
+              type="button"
+              class={`toggle-btn ${viewMode === mode.id ? 'is-active' : ''}`}
+              aria-pressed={viewMode === mode.id}
+              onclick={() => { viewMode = mode.id; }}
+            >
+              {mode.label}
+            </button>
+          {/each}
+        </div>
         <FilterDropdown 
           languageFilters={languageFilters}
           edgeFilters={edgeFilters}
@@ -338,8 +370,12 @@
 
   <!-- Main Content -->
   <main class="app-main">
-    <section class="graph-panel">
-      <KCGraph graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
+    <section class="visual-panel" data-view={viewMode}>
+      {#if viewMode === 'graph'}
+        <KCGraph graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
+      {:else}
+        <MatrixView graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
+      {/if}
     </section>
 
     <aside class="side-panel">
@@ -428,6 +464,38 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .view-toggle {
+    display: inline-flex;
+    border: 1px solid #cbd5f5;
+    border-radius: 999px;
+    padding: 0.125rem;
+    background: #f8fafc;
+  }
+
+  .toggle-btn {
+    border: none;
+    background: transparent;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .toggle-btn.is-active {
+    background: #1d4ed8;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
+  }
+
+  .toggle-btn:not(.is-active):hover {
+    color: #0f172a;
   }
 
   .btn {
@@ -509,7 +577,7 @@
     min-height: 0; /* allow children to shrink */
   }
 
-  .graph-panel {
+  .visual-panel {
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
@@ -517,6 +585,7 @@
     display: flex;
     flex-direction: column;
     padding: 0.5rem;
+    overflow: hidden;
   }
   
   .side-panel {
@@ -547,6 +616,7 @@
     flex-shrink: 0;
   }
 
-  /* Ensure KCGraph fills container */
+  /* Ensure visualizations fill container */
   :global(.kcm-graph-container) { flex: 1 1 auto; min-height: 0; }
+  .visual-panel > :global(.matrix-view) { flex: 1 1 auto; min-height: 0; }
 </style>

@@ -91,7 +91,10 @@ export function mapLanguagesInDataset(
 
   cloned.languages = updatedLanguages;
   if (anyRemoved) {
-    const nextLanguageIds = updatedLanguages.map((lang) => lang.id);
+    // Preserve the original languageIds order by filtering the existing order,
+    // rather than deriving order from the languages array (which may differ)
+    const remainingIdSet = new Set(updatedLanguages.map((lang) => lang.id));
+    const nextLanguageIds = cloned.adjacencyMatrix.languageIds.filter((id) => remainingIdSet.has(id));
     cloned.adjacencyMatrix = rebuildAdjacencyMatrix(cloned.adjacencyMatrix, nextLanguageIds);
   }
   return cloned;

@@ -115,7 +115,7 @@ export const positiveResultsOnly: EdgeFilter<boolean> = {
   name: 'Positive Results Only',
   description: 'Hide negative/unknown results (keep only edges that assert existence of a transformation)',
   category: 'Visibility',
-  defaultParam: true,
+  defaultParam: false,
   controlType: 'checkbox',
   lambda: (data, param) => {
     if (!param) return data;
@@ -130,6 +130,41 @@ export const positiveResultsOnly: EdgeFilter<boolean> = {
         default:
           return relation;
       }
+    });
+  }
+};
+
+/**
+ * Hide incomparable - ON BY DEFAULT
+ *
+ * Hides pairs where both directions are known to be no-quasi.
+ */
+export const hideIncomparable: EdgeFilter<boolean> = {
+  id: 'hide-incomparable',
+  name: 'Hide Incomparable',
+  description: 'Hide edges where both directions are no-quasi',
+  category: 'Visibility',
+  defaultParam: true,
+  controlType: 'checkbox',
+  lambda: (data, param) => {
+    if (!param) return data;
+
+    const indexByLanguage = data.adjacencyMatrix.indexByLanguage;
+    const matrix = data.adjacencyMatrix.matrix;
+
+    return mapRelationsInDataset(data, (relation, sourceId, targetId) => {
+      if (!relation) return null;
+      if (relation.status !== 'no-quasi') return relation;
+
+      const sourceIdx = indexByLanguage[sourceId];
+      const targetIdx = indexByLanguage[targetId];
+      if (sourceIdx === undefined || targetIdx === undefined) return relation;
+
+      const reverse = matrix[targetIdx]?.[sourceIdx];
+      if (reverse?.status === 'no-quasi') {
+        return null;
+      }
+      return relation;
     });
   }
 };
@@ -231,6 +266,7 @@ export const hideInProgressLanguages: EdgeFilter = {
 export const edgeFilters: EdgeFilter<any>[] = [
   hideInProgressLanguages,
   manageUnknowns,
+  hideIncomparable,
   positiveResultsOnly,
   polyDisplay,
   omitSeparatorFunctions,

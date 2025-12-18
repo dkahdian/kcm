@@ -58,14 +58,16 @@
   });
 
   // Helper to generate a descriptive statement from a transformation status
-  function getStatusDescription(status: string, fromLang: string, toLang: string): { linkText: string; suffixText: string } {
-    const from = languageLookup.get(fromLang)?.name ?? fromLang;
-    const to = languageLookup.get(toLang)?.name ?? toLang;
+  function getStatusDescription(status: string, fromLangId: string, toLangId: string): { linkText: string; suffixText: string } {
+    const from = languageLookup.get(fromLangId)?.name ?? fromLangId;
+    const to = languageLookup.get(toLangId)?.name ?? toLangId;
     const linkText = `${from} converts to ${to}`;
     
     switch (status) {
       case 'poly':
         return { linkText, suffixText: ' in polynomial time' };
+      case 'not-poly':
+        return { linkText: `No polynomial transformation from ${from} to ${to}`, suffixText: '' };
       case 'no-quasi':
         return { linkText: `Exponential gap between ${from} and ${to}`, suffixText: '' };
       case 'no-poly-quasi':
@@ -75,6 +77,8 @@
       case 'unknown-poly-quasi':
         return { linkText: `Polynomial transformation unknown from ${from} to ${to}`, suffixText: '; quasi-polynomial exists' };
       case 'unknown-both':
+        return { linkText: `Complexity of transformation from ${from} to ${to}`, suffixText: ' is unknown' };
+      case 'unknown':
         return { linkText: `Complexity of transformation from ${from} to ${to}`, suffixText: ' is unknown' };
       default:
         return { linkText: `${from} relates to ${to}`, suffixText: '' };
@@ -100,7 +104,7 @@
 
       const target = languageIds[targetIndex];
       forwardStatuses.set(target, relation.status);
-      const desc = getStatusDescription(relation.status, name, target);
+      const desc = getStatusDescription(relation.status, id, target);
       statements.push({
         target,
         linkText: desc.linkText,
@@ -121,7 +125,7 @@
         continue;
       }
 
-      const desc = getStatusDescription(relation.status, source, name);
+      const desc = getStatusDescription(relation.status, source, id);
       statements.push({
         target: source,
         linkText: desc.linkText,
@@ -184,8 +188,8 @@
       ? graphData.adjacencyMatrix.matrix[targetIndex]?.[sourceIndex] ?? null
       : null;
     
-    const sourceLang = graphData.languages.find(l => l.name === nodeA);
-    const targetLang = graphData.languages.find(l => l.name === nodeB);
+    const sourceLang = languageLookup.get(nodeA);
+    const targetLang = languageLookup.get(nodeB);
     
     if (sourceLang && targetLang) {
       onEdgeSelect({

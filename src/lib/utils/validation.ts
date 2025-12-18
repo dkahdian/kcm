@@ -19,7 +19,7 @@ const TRANSFORMATION_STATUS_VALUES: string[] = [
   'unknown-poly-quasi',
   'unknown-both',
   'no-quasi',
-  'not-poly'
+  // NOTE: filter-generated statuses like 'not-poly'/'unknown' are intentionally excluded
 ];
 
 const PLACEHOLDER_REF_REGEX = /^new-\d+$/;

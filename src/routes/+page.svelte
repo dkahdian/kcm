@@ -6,8 +6,8 @@
   import FilterDropdown from '$lib/FilterDropdown.svelte';
 
   import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters } from '$lib/data/index.js';
-  import { applyFiltersWithParams, createDefaultFilterState } from '$lib/filter-utils.js';
-  import type { KCLanguage, FilterStateMap, SelectedEdge, GraphData } from '$lib/types.js';
+  import { applyFiltersWithParams, createDefaultFilterState, adjustFilterStateForViewMode } from '$lib/filter-utils.js';
+  import type { KCLanguage, FilterStateMap, SelectedEdge, GraphData, ViewMode } from '$lib/types.js';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
 
@@ -89,15 +89,14 @@
 
   let selectedNode = $state<KCLanguage | null>(null);
   let selectedEdge = $state<SelectedEdge | null>(null);
-  type ViewMode = 'graph' | 'matrix';
   const VIEW_MODES: Array<{ id: ViewMode; label: string }> = [
     { id: 'graph', label: 'Graph' },
     { id: 'matrix', label: 'Matrix' }
   ];
   let viewMode = $state<ViewMode>('graph');
   
-  // Initialize filter state with default parameter values
-  let filterStates = $state<FilterStateMap>(createDefaultFilterState(languageFilters, edgeFilters));
+  // Initialize filter state with default parameter values for graph mode
+  let filterStates = $state<FilterStateMap>(createDefaultFilterState(languageFilters, edgeFilters, 'graph'));
   let filterPersistenceReady = $state(false);
   let isPreviewMode = $state(false);
   let previewGraphData: GraphData | null = $state(null);
@@ -375,7 +374,14 @@
               type="button"
               class={`toggle-btn ${viewMode === mode.id ? 'is-active' : ''}`}
               aria-pressed={viewMode === mode.id}
-              onclick={() => { viewMode = mode.id; }}
+              onclick={() => {
+                const oldMode = viewMode;
+                const newMode = mode.id;
+                if (oldMode !== newMode) {
+                  filterStates = adjustFilterStateForViewMode(filterStates, languageFilters, edgeFilters, oldMode, newMode);
+                  viewMode = newMode;
+                }
+              }}
             >
               {mode.label}
             </button>
@@ -385,6 +391,7 @@
           languageFilters={languageFilters}
           edgeFilters={edgeFilters}
           bind:filterStates 
+          {viewMode}
           class="filter-control"
         />
       </div>

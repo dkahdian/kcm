@@ -22,7 +22,7 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
     if (mode === 'include-quasipolynomial') {
       return data;
     }
-    return mapRelationsInDataset(data, (relation) => {
+    const mapped = mapRelationsInDataset(data, (relation) => {
       if (!relation) return null;
       let newStatus = relation.status;
       switch (relation.status) {
@@ -35,11 +35,26 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
           break;
         case 'unknown-poly-quasi':
         case 'unknown-both':
-          newStatus = 'unknown-both';
+          newStatus = 'unknown';
           break;
       }
       return newStatus === relation.status ? relation : { ...relation, status: newStatus };
     });
+
+    // Also adjust complexity display definitions to match the collapsed view.
+    // In this view, "poly" means "polytime" and should be rendered as \leq.
+    const poly = mapped.complexities['poly'];
+    if (poly) {
+      mapped.complexities = {
+        ...mapped.complexities,
+        poly: {
+          ...poly,
+          notation: '$\\leq$'
+        }
+      };
+    }
+
+    return mapped;
   }
 };
 
@@ -52,6 +67,7 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
   description: 'Control how edges with unknown status are treated',
   category: 'Visibility',
   defaultParam: 'omit-all',
+  defaultParamMatrix: 'expressively',
   controlType: 'dropdown',
   options: [
     { value: 'omit-all', label: 'Omit all', description: 'Hide edges with unknown or partially unknown status' },
@@ -145,6 +161,7 @@ export const hideIncomparable: EdgeFilter<boolean> = {
   description: 'Hide edges where both directions are no-quasi',
   category: 'Visibility',
   defaultParam: true,
+  defaultParamMatrix: false,
   controlType: 'checkbox',
   lambda: (data, param) => {
     if (!param) return data;

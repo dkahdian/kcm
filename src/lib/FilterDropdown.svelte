@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap } from './types.js';
+  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap, ViewMode } from './types.js';
   import { organizeFiltersByCategory } from './data/index.js';
-  import { createDefaultFilterState } from './filter-utils.js';
+  import { createDefaultFilterState, getFilterDefault } from './filter-utils.js';
 
   type AnyFilter = LanguageFilter | EdgeFilter;
 
@@ -23,16 +23,13 @@
   }
   
   function isFilterActive(filter: AnyFilter, param: any): boolean {
-    // For boolean parameters, true means active
-    if (typeof param === 'boolean') {
-      return param !== filter.defaultParam;
-    }
-    // For other types, any non-default value means active
-    return param !== filter.defaultParam;
+    // For boolean parameters, compare against current view mode's default
+    const defaultVal = getFilterDefault(filter, viewMode);
+    return param !== defaultVal;
   }
 
   function getFilterValue(filter: AnyFilter): any {
-    return filterStates.get(filter.id) ?? filter.defaultParam;
+    return filterStates.get(filter.id) ?? getFilterDefault(filter, viewMode);
   }
 
   function setFilterValue(filter: AnyFilter, value: any) {
@@ -45,11 +42,13 @@
     languageFilters = [], 
     edgeFilters = [],
     filterStates = $bindable(), 
+    viewMode = 'graph' as ViewMode,
     class: className = '' 
   }: {
     languageFilters?: LanguageFilter[];
     edgeFilters?: EdgeFilter[];
     filterStates: FilterStateMap;
+    viewMode?: ViewMode;
     class?: string;
   } = $props();
   
@@ -66,8 +65,8 @@
   let dropdownRef: HTMLDivElement;
 
   function resetAllFilters() {
-    // Reset all filters to their default parameters
-    filterStates = createDefaultFilterState(languageFilters, edgeFilters);
+    // Reset all filters to their default parameters for the current view mode
+    filterStates = createDefaultFilterState(languageFilters, edgeFilters, viewMode);
   }
 
   function toggleFilter(filter: AnyFilter) {

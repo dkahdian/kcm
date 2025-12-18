@@ -54,7 +54,8 @@ export const omitTransitiveEdges: LanguageFilter<boolean> = {
   name: 'Omit Transitive Edges',
   description: 'Hide edges that are redundant due to transitivity',
   category: 'Edge Visibility',
-  defaultParam: true, // ON BY DEFAULT
+  defaultParam: true, // ON BY DEFAULT for graph
+  defaultParamMatrix: false, // OFF for matrix - show all edges
   controlType: 'checkbox',
   lambda: (data: GraphData, param: boolean) => {
     const working = cloneDataset(data);

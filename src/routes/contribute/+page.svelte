@@ -262,17 +262,20 @@
 
   let { data }: { data: PageData } = $props();
 
-  const complexityOptions = Object.values(data.complexityOptions);
+  const complexityOptions = Object.values(data.complexityOptions)
+    .filter((option) => !option.internal);
 
   const statusOptions: Array<{
     value: string;
     label: string;
     description: string;
-  }> = data.relationTypes.map((type) => ({
-    value: type.id,
-    label: type.name,
-    description: type.description ?? ''
-  }));
+  }> = data.relationTypes
+    .filter((type) => !data.complexityOptions[type.id]?.internal)
+    .map((type) => ({
+      value: type.id,
+      label: type.name,
+      description: type.description ?? ''
+    }));
 
   // Build baseline relations from adjacency matrix
   const baselineRelations = buildBaselineRelations(data.adjacencyMatrix);

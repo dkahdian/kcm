@@ -1,6 +1,6 @@
 import type { LanguageFilter, GraphData, FilterCategory } from '../../types.js';
 import { resolveLanguageProperties } from '../operations.js';
-import { getComplexity } from '../complexities.js';
+import { getComplexityFromCatalog } from '../complexities.js';
 import { mapLanguagesInDataset } from '../transforms.js';
 
 /**
@@ -23,7 +23,7 @@ export function createOperationVisualizer(
       const operation = operations?.find((op) => op.code === code);
       if (!operation) return language;
 
-      const complexity = getComplexity(operation.complexity);
+      const complexity = getComplexityFromCatalog(data.complexities, operation.complexity);
       // Use emoji for operation display (vertically stacked, one per line)
       const suffix = `\n${complexity.emoji} ${code}`;
 

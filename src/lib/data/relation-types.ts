@@ -19,6 +19,8 @@ function getEndpointStyleForStatus(status: string | null): { arrow: any, dashed?
       return { arrow: 'triangle-cross', dashed: true };
     case 'unknown-both':
       return { arrow: 'square', dashed: true };
+    case 'unknown':
+      return { arrow: 'square', dashed: true };
     case 'no-quasi':
       return { arrow: 'square', dashed: false };
     default:

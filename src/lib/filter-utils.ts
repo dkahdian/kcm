@@ -5,9 +5,23 @@ import type {
   FilteredGraphData, 
   FilterStateMap, 
   FilterParamValue,
-  KCAdjacencyMatrix
+  KCAdjacencyMatrix,
+  ViewMode
 } from './types.js';
 import { transformData } from './data/transforms.js';
+
+type AnyFilter = LanguageFilter | EdgeFilter;
+
+/**
+ * Get the default param for a filter based on view mode.
+ * Uses defaultParamMatrix if defined and mode is 'matrix', otherwise defaultParam.
+ */
+export function getFilterDefault(filter: AnyFilter, viewMode: ViewMode = 'graph'): FilterParamValue {
+  if (viewMode === 'matrix' && filter.defaultParamMatrix !== undefined) {
+    return filter.defaultParamMatrix;
+  }
+  return filter.defaultParam;
+}
 
 /**
  * Applies filters using their parameter values from the filter state map.
@@ -70,18 +84,51 @@ function collectVisibleEdgeIds(matrix: KCAdjacencyMatrix): Set<string> {
 }
 
 /**
- * Creates initial filter state map with all filters set to their defaults
+ * Creates initial filter state map with all filters set to their defaults for a given view mode
  */
 export function createDefaultFilterState(
   languageFilters: LanguageFilter[],
-  edgeFilters: EdgeFilter[] = []
+  edgeFilters: EdgeFilter[] = [],
+  viewMode: ViewMode = 'graph'
 ): FilterStateMap {
   const stateMap: FilterStateMap = new Map();
   for (const filter of languageFilters) {
-    stateMap.set(filter.id, filter.defaultParam);
+    stateMap.set(filter.id, getFilterDefault(filter, viewMode));
   }
   for (const filter of edgeFilters) {
-    stateMap.set(filter.id, filter.defaultParam);
+    stateMap.set(filter.id, getFilterDefault(filter, viewMode));
   }
   return stateMap;
+}
+
+/**
+ * Adjusts filter states when switching view modes.
+ * For each filter: if the current value equals the old mode's default, switch to the new mode's default.
+ * Otherwise, keep the user's custom value.
+ */
+export function adjustFilterStateForViewMode(
+  currentStates: FilterStateMap,
+  languageFilters: LanguageFilter[],
+  edgeFilters: EdgeFilter[],
+  fromMode: ViewMode,
+  toMode: ViewMode
+): FilterStateMap {
+  if (fromMode === toMode) return currentStates;
+
+  const allFilters: AnyFilter[] = [...languageFilters, ...edgeFilters];
+  const newStates: FilterStateMap = new Map(currentStates);
+
+  for (const filter of allFilters) {
+    const currentValue = currentStates.get(filter.id);
+    const oldDefault = getFilterDefault(filter, fromMode);
+    const newDefault = getFilterDefault(filter, toMode);
+
+    // Only swap to new default if user was at the old default
+    if (currentValue === oldDefault) {
+      newStates.set(filter.id, newDefault);
+    }
+    // Otherwise keep the user's custom value
+  }
+
+  return newStates;
 }

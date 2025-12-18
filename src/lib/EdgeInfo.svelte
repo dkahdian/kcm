@@ -1,7 +1,7 @@
 <script lang="ts">
   import MathText from './components/MathText.svelte';
   import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from './types.js';
-  import { getComplexity } from './data/complexities.js';
+  import { getComplexityFromCatalog } from './data/complexities.js';
   import DynamicLegend from './components/DynamicLegend.svelte';
   
   type ViewMode = 'graph' | 'matrix';
@@ -92,8 +92,7 @@
   });
 
   function getStatusLabel(status: string): string {
-    // Use getComplexity to get the full complexity object
-    const complexity = getComplexity(status);
+    const complexity = getComplexityFromCatalog(graphData.complexities, status);
     return complexity.description;
   }
 

@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
   import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, Complexity } from '../types.js';
-  import { COMPLEXITIES } from '../data/complexities.js';
   import { resolveLanguageProperties } from '../data/operations.js';
   import MathText from './MathText.svelte';
 
@@ -92,6 +91,12 @@
       filled: false,
       description: 'unknown.',
       status: 'unknown-both'
+    },
+    {
+      arrow: 'square',
+      filled: false,
+      description: 'unknown.',
+      status: 'unknown'
     }
   ];
 
@@ -154,7 +159,8 @@
       }
     }
     
-    return Object.values(COMPLEXITIES).filter(c => codesInUse.has(c.code));
+    const catalog = filteredData.complexities;
+    return Object.values(catalog).filter(c => codesInUse.has(c.code));
   });
 
   let containerRefs = $state<{ [status: string]: HTMLDivElement | null }>({});
@@ -266,7 +272,7 @@
         </p>
         <div class="legend-items matrix-legend">
           {#each visibleEdgeTypes as edge (edge.status)}
-            {@const complexity = COMPLEXITIES[edge.status]}
+            {@const complexity = filteredData.complexities[edge.status]}
             {#if complexity}
               <div class="legend-row matrix-row">
                 <span class="matrix-notation" style="color: {complexity.color}">

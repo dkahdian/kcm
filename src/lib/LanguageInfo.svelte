@@ -10,7 +10,7 @@
     KCLanguagePropertiesResolved
   } from './types.js';
   import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from './data/operations.js';
-  import { getComplexity } from './data/complexities.js';
+  import { getComplexityFromCatalog } from './data/complexities.js';
   import EdgeLegend from './components/EdgeLegend.svelte';
   import DynamicLegend from './components/DynamicLegend.svelte';
 
@@ -138,7 +138,7 @@
   });
 
   const getOpComplexity = (op: KCOpEntry) => {
-    return getComplexity(op.complexity);
+    return getComplexityFromCatalog(graphData.complexities, op.complexity);
   };
 
   function scrollToReferences(e: MouseEvent) {
@@ -200,6 +200,11 @@
       });
     }
   }
+
+  const handleRelationshipClick = (targetId: string) => (event: MouseEvent) => {
+    event.preventDefault();
+    selectEdge(targetId);
+  };
 </script>
 
 <div class="content-wrapper">
@@ -310,13 +315,14 @@
               {#each languageRelationships as statement}
                 <div class="flex items-start gap-2">
                   <div class="flex-1 text-gray-700">
-                    <button 
-                      class="edge-link"
-                      onclick={() => selectEdge(statement.target)}
+                    <MathText
+                      as="a"
+                      href="#"
+                      className="edge-link inline"
+                      text={statement.linkText}
                       title="View edge details"
-                    >
-                      <MathText text={statement.linkText} className="inline" />
-                    </button>
+                      onclick={handleRelationshipClick(statement.target)}
+                    />
                     <span> </span>
                     <MathText text={statement.suffixText} className="inline" />
                     {#if statement.refs?.length}
@@ -426,25 +432,6 @@
 
     .ref-badge.inline {
       margin-left: 0.25em;
-    }
-
-    .edge-link {
-      display: inline;
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      color: inherit;
-      font: inherit;
-      text-align: left;
-      cursor: pointer;
-      text-decoration: underline;
-      text-decoration-color: rgba(37, 99, 235, 0.3);
-      transition: text-decoration-color 0.15s ease;
-    }
-    
-    .edge-link:hover {
-      text-decoration-color: rgba(37, 99, 235, 0.8);
     }
 
     .missing-ref {

@@ -14,6 +14,11 @@
 export interface Complexity {
   /** Internal code identifier */
   code: string;
+  /**
+   * True if this complexity code is generated only by filters/UI transforms
+   * and should never be stored in canonical data or user-authored contributions.
+   */
+  internal?: boolean;
   /** Human-readable label (e.g., "Polynomial") */
   label: string;
   /** Short notation, supports LaTeX (e.g., "$\\leq_p$") - used for succinctness relations */
@@ -252,6 +257,8 @@ export interface GraphData {
   adjacencyMatrix: KCAdjacencyMatrix;
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
+  /** catalog of complexity definitions used for rendering */
+  complexities: Record<string, Complexity>;
   /** global registry of references used across the dataset */
   references: KCReference[];
   /** separating function registry */
@@ -268,6 +275,7 @@ export interface TransformValidationResult {
 // Filter system types
 export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown';
 export type FilterParamValue = boolean | string | number;
+export type ViewMode = 'graph' | 'matrix';
 
 export interface FilterOption {
   value: string;
@@ -282,8 +290,10 @@ export interface LanguageFilter<T extends FilterParamValue = boolean> {
   category?: string;
   /** Whether this filter is internal/hidden from UI or can be edited by the user */
   hidden?: boolean;
-  /** Default value for the filter parameter */
+  /** Default value for the filter parameter (used for graph mode, or both if no matrix default) */
   defaultParam: T;
+  /** Optional override default for matrix view mode */
+  defaultParamMatrix?: T;
   /** UI control type for displaying this filter */
   controlType?: FilterControlType;
   /** Optional list of selectable options for dropdown-style filters */
@@ -303,8 +313,10 @@ export interface EdgeFilter<T extends FilterParamValue = boolean> {
   category?: string;
   /** Whether this filter is internal/hidden from UI or can be edited by the user */
   hidden?: boolean;
-  /** Default value for the filter parameter */
+  /** Default value for the filter parameter (used for graph mode, or both if no matrix default) */
   defaultParam: T;
+  /** Optional override default for matrix view mode */
+  defaultParamMatrix?: T;
   /** UI control type for displaying this filter */
   controlType?: FilterControlType;
   /** Optional list of selectable options for dropdown-style filters */

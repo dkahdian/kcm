@@ -17,8 +17,7 @@ const VALID_TRANSFORMATION_STATUSES: string[] = [
   'no-poly-quasi',
   'unknown-poly-quasi',
   'unknown-both',
-  'no-quasi',
-  'not-poly'
+  'no-quasi'
 ];
 
 const VALID_COMPLEXITY_CODES = new Set(Object.keys(COMPLEXITIES));

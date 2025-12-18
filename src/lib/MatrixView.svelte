@@ -7,25 +7,8 @@
     SelectedEdge,
     DirectedSuccinctnessRelation
   } from './types.js';
-  import { 
-    getComplexity,
-    getComplexityClass,
-    getComplexityNotation,
-    getComplexityDescription,
-    getComplexityLabel,
-    COMPLEXITIES
-  } from './data/complexities.js';
 
-  // Build lookup maps from COMPLEXITIES for matrix cell display
-  const STATUS_LABELS: Record<string, string> = Object.fromEntries(
-    Object.values(COMPLEXITIES).map(c => [c.code, c.label])
-  );
-  const STATUS_CLASSES: Record<string, string> = Object.fromEntries(
-    Object.values(COMPLEXITIES).map(c => [c.code, c.cssClass])
-  );
-  const STATUS_SHORT: Record<string, string> = Object.fromEntries(
-    Object.values(COMPLEXITIES).map(c => [c.code, c.notation])
-  );
+  const getComplexityCatalog = (data: GraphData | FilteredGraphData) => data.complexities;
 
   type ViewableGraphData = GraphData | FilteredGraphData;
 
@@ -38,6 +21,21 @@
     selectedNode: KCLanguage | null;
     selectedEdge: SelectedEdge | null;
   } = $props();
+
+  const STATUS_LABELS = $derived.by<Record<string, string>>(() => {
+    const catalog = getComplexityCatalog(graphData);
+    return Object.fromEntries(Object.values(catalog).map((c) => [c.code, c.label]));
+  });
+
+  const STATUS_CLASSES = $derived.by<Record<string, string>>(() => {
+    const catalog = getComplexityCatalog(graphData);
+    return Object.fromEntries(Object.values(catalog).map((c) => [c.code, c.cssClass]));
+  });
+
+  const STATUS_SHORT = $derived.by<Record<string, string>>(() => {
+    const catalog = getComplexityCatalog(graphData);
+    return Object.fromEntries(Object.values(catalog).map((c) => [c.code, c.notation]));
+  });
 
   const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
     const map = new Map<string, KCLanguage>();
@@ -508,6 +506,10 @@
     color: #991b1b;
   }
 
+    .complexity-unknown {
+      background-color: #f3f4f6; /* gray-100 */
+      color: #6b7280; /* gray-500 */
+    }
   .complexity-not-poly {
     background: #fee2e2; /* red-100 pastel */
     color: #be123c;

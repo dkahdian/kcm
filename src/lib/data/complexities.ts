@@ -10,6 +10,7 @@ export const COMPLEXITY_CODES = [
   'no-poly-quasi',
   'unknown-poly-quasi',
   'unknown-both',
+  'unknown',
   'no-quasi',
   'not-poly',
   'unknown-to-us'
@@ -88,6 +89,17 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     pastel: '#f3f4f6', // gray-100
     cssClass: 'complexity-unknown-both'
   },
+  unknown: {
+    code: 'unknown',
+    internal: true,
+    label: 'Unknown',
+    description: 'Unknown whether polynomial transformation exists',
+    notation: '$\\leq^?$',
+    emoji: '❔',
+    color: '#6b7280', // gray-500
+    pastel: '#f3f4f6', // gray-100
+    cssClass: 'complexity-unknown'
+  },
   'no-quasi': {
     code: 'no-quasi',
     label: 'No Quasi',
@@ -100,9 +112,10 @@ export const COMPLEXITIES: Record<string, Complexity> = {
   },
   'not-poly': {
     code: 'not-poly',
+    internal: true,
     label: 'Not Polynomial',
     description: 'No polynomial transformation',
-    notation: '$\\not\\leq_p$',
+    notation: '$\\not\\leq$',
     emoji: '❌',
     color: '#ef4444', // red-500
     pastel: '#fee2e2', // red-100
@@ -119,6 +132,42 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     cssClass: 'complexity-unknown-to-us'
   }
 };
+
+export function getComplexityFromCatalog(
+  catalog: Record<string, Complexity>,
+  code: string
+): Complexity {
+  const fallback = catalog['unknown-both'] ?? COMPLEXITIES['unknown-both'];
+  return catalog[code] ?? fallback;
+}
+
+export function getComplexityNotationFromCatalog(
+  catalog: Record<string, Complexity>,
+  code: string
+): string {
+  return getComplexityFromCatalog(catalog, code).notation;
+}
+
+export function getComplexityClassFromCatalog(
+  catalog: Record<string, Complexity>,
+  code: string
+): string {
+  return getComplexityFromCatalog(catalog, code).cssClass;
+}
+
+export function getComplexityLabelFromCatalog(
+  catalog: Record<string, Complexity>,
+  code: string
+): string {
+  return getComplexityFromCatalog(catalog, code).label;
+}
+
+export function getComplexityDescriptionFromCatalog(
+  catalog: Record<string, Complexity>,
+  code: string
+): string {
+  return getComplexityFromCatalog(catalog, code).description;
+}
 
 /**
  * Get complexity info by code.

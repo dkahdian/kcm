@@ -2630,7 +2630,13 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Unless polynomial hierarchy collapses",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
         null,
         null,
         {
@@ -2745,28 +2751,62 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "Unless polynomial hierarchy collapses",
+          "refs": []
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": []
+        },
+        {
+          "status": "poly",
+          "refs": []
+        },
+        {
+          "status": "no-quasi",
+          "refs": []
+        },
+        {
+          "status": "no-quasi",
+          "refs": []
+        },
+        {
+          "status": "no-quasi",
+          "refs": []
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "-",
+          "refs": []
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
+        {
+          "status": "no-quasi",
+          "refs": []
+        },
         null,
         null,
         null,
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": []
+        }
       ],
       [
         null,
@@ -2835,7 +2875,13 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Unless polynomial hierarchy collapses",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
         null,
         null,
         null,
@@ -2927,7 +2973,13 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Unless polynomial hierarchy collapses",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
         null,
         null,
         {
@@ -3020,7 +3072,10 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": []
+        },
         null,
         null,
         {
@@ -3117,7 +3172,13 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "unknown-both",
+          "description": "As of Darwiche 2002, is an open problem.",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
         null,
         null,
         {
@@ -3206,7 +3267,10 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": []
+        },
         null,
         null,
         {
@@ -3312,7 +3376,13 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Unless polynomial hierarchy collapses",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
         null,
         null,
         {
@@ -3436,7 +3506,10 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": []
+        },
         null,
         null,
         {
@@ -3523,7 +3596,13 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "unknown-both",
+          "description": "As of Darwiche 2002, is an open problem",
+          "refs": [
+            "Darwiche_2002"
+          ]
+        },
         null,
         null,
         {
@@ -3774,7 +3853,10 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": []
+        },
         null,
         null,
         {

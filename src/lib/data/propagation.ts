@@ -163,7 +163,7 @@ function phaseOneUpgrade(
         if (status === 'no-quasi') {
           const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
           const ids = path.map((idx) => languageIds[idx]);
-          const desc = describePath(ids, matrix);
+          const desc = describePath(ids, matrix, resolveName);
           contradictionError(
             `Contradiction: ${desc} Therefore ${languageIds[i]}→${languageIds[j]} must have quasi, but is marked no-quasi.`
           );
@@ -183,7 +183,7 @@ function phaseOneUpgrade(
         if (status === 'no-poly-quasi' || status === 'no-poly-unknown-quasi' || status === 'no-quasi') {
           const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
           const ids = path.map((idx) => languageIds[idx]);
-          const desc = describePath(ids, matrix);
+          const desc = describePath(ids, matrix, resolveName);
           const marked = formatMissingOrStatus(status);
           contradictionError(
             `Contradiction: ${desc} Therefore ${languageIds[i]}→${languageIds[j]} must have poly, but is marked ${marked}.`

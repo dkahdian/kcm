@@ -236,6 +236,59 @@ export const hideMarkedEdges: EdgeFilter = {
 };
 
 /**
+ * Hide implicit (derived) edges - ON BY DEFAULT for graph view
+ * 
+ * Hides edges that were inferred by propagation rather than manually authored.
+ * These edges have derived=true.
+ */
+export const hideImplicitEdges: EdgeFilter = {
+  id: 'hide-implicit-edges',
+  name: 'Hide Implicit Edges',
+  description: 'Hide edges that were inferred by propagation (not explicitly authored)',
+  category: 'Visibility',
+  defaultParam: true, // ON by default for graph
+  defaultParamMatrix: false, // OFF by default for matrix
+  controlType: 'checkbox',
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      if (relation.derived) {
+        return null;
+      }
+      return relation;
+    });
+  }
+};
+
+/**
+ * Gray implicit edges - ON BY DEFAULT for matrix view
+ * 
+ * Marks implicit (derived) edges with a visual indicator so they can be 
+ * styled differently (e.g., with gray stripes) in the matrix view.
+ * This filter adds a 'dimmed' flag to derived relations for styling purposes.
+ */
+export const grayImplicitEdges: EdgeFilter = {
+  id: 'gray-implicit-edges',
+  name: 'Gray Implicit Edges',
+  description: 'Show implicit edges with gray stripes to distinguish them from explicit edges',
+  category: 'Visibility',
+  defaultParam: false, // OFF by default for graph
+  defaultParamMatrix: true, // ON by default for matrix
+  controlType: 'checkbox',
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      if (relation.derived) {
+        return { ...relation, dimmed: true };
+      }
+      return relation;
+    });
+  }
+};
+
+/**
  * Helper function to determine if a language has any edges
  */
 function languageHasEdges(data: GraphData, languageId: string): boolean {
@@ -284,6 +337,8 @@ export const edgeFilters: EdgeFilter<any>[] = [
   hideInProgressLanguages,
   manageUnknowns,
   hideIncomparable,
+  hideImplicitEdges,
+  grayImplicitEdges,
   positiveResultsOnly,
   polyDisplay,
   omitSeparatorFunctions,

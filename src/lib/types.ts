@@ -223,6 +223,8 @@ export interface DirectedSuccinctnessRelation {
   hidden?: boolean;
   /** True if this edge was inferred by the propagator rather than manually authored. */
   derived?: boolean;
+  /** True if this edge should be visually dimmed/grayed (set by grayImplicitEdges filter). */
+  dimmed?: boolean;
 }
 
 /**

@@ -286,7 +286,7 @@
                   <td>
                     <button
                       type="button"
-                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(rowLanguage.id, colLanguage.id) ? 'is-complement' : ''}`}
+                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${relation.dimmed ? 'is-dimmed' : ''} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(rowLanguage.id, colLanguage.id) ? 'is-complement' : ''}`}
                       onclick={() => handleCellClick(rowLanguage.id, colLanguage.id, relation)}
                       title={getCellTitle(rowLanguage.language, colLanguage.language, relation)}
                     >
@@ -473,6 +473,31 @@
 
   .matrix-cell.is-complement {
     box-shadow: inset 0 0 0 3px #dc2626; /* red border for complement */
+  }
+
+  /* Dimmed/implicit edges - diagonal gray stripes overlay */
+  .matrix-cell.is-dimmed {
+    position: relative;
+  }
+
+  .matrix-cell.is-dimmed::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 3px,
+      rgba(156, 163, 175, 0.4) 3px,
+      rgba(156, 163, 175, 0.4) 5px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .matrix-cell.is-dimmed .cell-short {
+    position: relative;
+    z-index: 2;
   }
 
   /* Complexity-based matrix cell colors - using pastel backgrounds */

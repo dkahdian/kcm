@@ -73,6 +73,8 @@ Each stage can opt in/out of validation and propagation via its own wrapper.
 
 ## Validity Checks
 
+Detailed Level‑1 adjacency semantics (validator + propagator) are specified in [docs/graph-validation-and-propagation.md](docs/graph-validation-and-propagation.md).
+
 At minimum, the validity pass should enforce:
 - All language IDs referenced anywhere (edges, queues, separating functions) exist.
 - References, separating function IDs, and operation codes point to canonical registries.
@@ -82,6 +84,8 @@ At minimum, the validity pass should enforce:
 The current codebase already performs fragments of these checks ad hoc (e.g., modal validation in `routes/contribute`). The new validator should centralize these guarantees and run both in the UI pipeline and server-side submission handling.
 
 ## Implicit Propagation
+
+Level‑1 closure rules and contradiction discovery are specified in [docs/graph-validation-and-propagation.md](docs/graph-validation-and-propagation.md).
 
 Certain relationships are derivable from others. Right now we manually add transitive edges when needed. With `transformData` we can:
 - Perform graph closure for `"poly"` relations (e.g., if `A→B` and `B→C` are `poly`, ensure `A→C` is at least `poly`).

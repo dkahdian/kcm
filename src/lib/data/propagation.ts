@@ -235,12 +235,57 @@ function tryDowngrade(
     return result;
   };
 
-  const finalizeDowngrade = (nextStatus: string, witnessIds: string[], descriptionSuffix: string): void => {
+  const buildContradictionDescription = (
+    triedStatus: string,
+    witnessIds: string[]
+  ): string => {
+    // witnessIds is the path that would exist if the tested edge had `triedStatus`
+    // The contradiction is that the path endpoints have an incompatible status
+    if (witnessIds.length < 2) {
+      return `If ${srcName}→${tgtName} were ${phraseForStatus(triedStatus)}, a contradiction arises.`;
+    }
+
+    const pathStart = witnessIds[0];
+    const pathEnd = witnessIds[witnessIds.length - 1];
+    const pathStartName = idToName(pathStart);
+    const pathEndName = idToName(pathEnd);
+
+    // Get the actual status of the path endpoints (the contradiction)
+    const startIdx = languageIds.indexOf(pathStart);
+    const endIdx = languageIds.indexOf(pathEnd);
+    const actualRelation = adjacencyMatrix.matrix[startIdx]?.[endIdx];
+    const actualStatus = actualRelation?.status ?? 'unknown';
+
+    // Build description of existing edges in the path (excluding the tested edge)
+    const existingEdges: string[] = [];
+    for (let i = 0; i < witnessIds.length - 1; i++) {
+      const fromId = witnessIds[i];
+      const toId = witnessIds[i + 1];
+      // Skip the edge we're testing
+      if (fromId === languageIds[source] && toId === languageIds[target]) continue;
+      const fromIdx = languageIds.indexOf(fromId);
+      const toIdx = languageIds.indexOf(toId);
+      const edgeStatus = adjacencyMatrix.matrix[fromIdx]?.[toIdx]?.status ?? 'unknown';
+      existingEdges.push(`${idToName(fromId)}→${idToName(toId)} ${phraseForStatus(edgeStatus)}`);
+    }
+
+    const existingPart = existingEdges.length > 0 ? existingEdges.join('. ') + '. ' : '';
+    const triedPhrase = phraseForStatus(triedStatus);
+    const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
+
+    return `${existingPart}If ${srcName}→${tgtName} ${triedPhrase}, then ${pathStartName}→${pathEndName} ${impliedPhrase}. This contradicts ${pathStartName}→${pathEndName} being ${actualStatus}.`;
+  };
+
+  const finalizeDowngrade = (
+    nextStatus: string,
+    triedStatus: string,
+    witnessIds: string[]
+  ): void => {
     const refs = collectRefsUnion(
       witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0),
       adjacencyMatrix
     );
-    const desc = describePath(witnessIds, adjacencyMatrix);
+    const desc = buildContradictionDescription(triedStatus, witnessIds);
     if (DEBUG_PROPAGATION) {
       console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${nextStatus} (witness: ${witnessIds.map(idToName).join(' → ')})`);
     }
@@ -250,7 +295,7 @@ function tryDowngrade(
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
-      description: `This is an implicit relationship. ${desc} ${descriptionSuffix}`.trim()
+      description: `This is an implicit relationship. ${desc}`.trim()
     };
   };
 
@@ -260,14 +305,14 @@ function tryDowngrade(
     const polyResult = runConsistency('poly');
     if (!polyResult.ok) {
       const witnessIds = polyResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-poly-unknown-quasi', witnessIds, `Therefore ${srcName}→${tgtName} is not poly.`);
+      finalizeDowngrade('no-poly-unknown-quasi', 'poly', witnessIds);
       return true;
     }
     // Trial quasi
     const quasiResult = runConsistency('unknown-poly-quasi');
     if (!quasiResult.ok) {
       const witnessIds = quasiResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-quasi', witnessIds, `Therefore ${srcName}→${tgtName} cannot be quasi.`);
+      finalizeDowngrade('no-quasi', 'unknown-poly-quasi', witnessIds);
       return true;
     }
     // restore original status (either null or unknown-both)
@@ -280,7 +325,7 @@ function tryDowngrade(
     const polyResult = runConsistency('poly');
     if (!polyResult.ok) {
       const witnessIds = polyResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-poly-quasi', witnessIds, `Therefore ${srcName}→${tgtName} is not poly.`);
+      finalizeDowngrade('no-poly-quasi', 'poly', witnessIds);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;
@@ -292,7 +337,7 @@ function tryDowngrade(
     const quasiResult = runConsistency('no-poly-quasi');
     if (!quasiResult.ok) {
       const witnessIds = quasiResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-quasi', witnessIds, `Therefore ${srcName}→${tgtName} cannot be quasi.`);
+      finalizeDowngrade('no-quasi', 'no-poly-quasi', witnessIds);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;

@@ -221,6 +221,8 @@ export interface DirectedSuccinctnessRelation {
   separatingFunctionIds?: string[];
   /** Whether this edge is hidden by transitive reduction (always false by default) */
   hidden?: boolean;
+  /** True if this edge was inferred by the propagator rather than manually authored. */
+  derived?: boolean;
 }
 
 /**

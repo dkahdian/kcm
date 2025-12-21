@@ -25,3 +25,30 @@ export function generateLanguageId(name: string): string {
 export function isIdSafe(id: string): boolean {
   return /^lang_[a-f0-9]{8}$/.test(id);
 }
+
+/**
+ * Module-level name map for resolving language IDs to display names.
+ * Must be initialized via initNameMap() before use.
+ */
+let _nameMap: Map<string, string> = new Map();
+
+/**
+ * Initialize the name map from a list of languages.
+ * Call this once when loading data.
+ */
+export function initNameMap(languages: Array<{ id?: string; name: string }>): void {
+  _nameMap = new Map();
+  for (const lang of languages) {
+    if (lang.id) {
+      _nameMap.set(lang.id, lang.name);
+    }
+  }
+}
+
+/**
+ * Resolve a language ID to its display name.
+ * Falls back to the ID itself if not found.
+ */
+export function idToName(id: string): string {
+  return _nameMap.get(id) ?? id;
+}

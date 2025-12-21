@@ -3,9 +3,12 @@ import {
   validateAdjacencyConsistency,
   guaranteesPoly,
   guaranteesQuasi,
-  collectRefsUnion,
-  pathDescription
+  collectRefsUnion
 } from './semantic-validation.js';
+import { initNameMap, idToName } from '../utils/language-id.js';
+
+// Debug flag - set to true to see propagation decisions in console
+const DEBUG_PROPAGATION = true;
 
 const POLY_STATUS = new Set<string>(['poly']);
 const QUASI_STATUS = new Set<string>(['poly', 'unknown-poly-quasi', 'no-poly-quasi']);
@@ -92,9 +95,7 @@ function phraseForStatus(status: string): string {
   }
 }
 
-type NameResolver = (id: string) => string;
-
-function describePath(pathIds: string[], matrix: KCAdjacencyMatrix, resolveName: NameResolver): string {
+function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
   const { languageIds } = matrix;
   const parts: string[] = [];
   for (let i = 0; i < pathIds.length - 1; i += 1) {
@@ -103,7 +104,7 @@ function describePath(pathIds: string[], matrix: KCAdjacencyMatrix, resolveName:
     const fromIdx = languageIds.indexOf(fromId);
     const toIdx = languageIds.indexOf(toId);
     const status = matrix.matrix[fromIdx]?.[toIdx]?.status ?? 'unknown';
-    parts.push(`${resolveName(fromId)} transforms to ${resolveName(toId)} ${phraseForStatus(status)}.`);
+    parts.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(status)}.`);
   }
   return parts.join(' ');
 }
@@ -112,8 +113,7 @@ function applyUpgrade(
   matrix: KCAdjacencyMatrix,
   path: number[],
   newStatus: string,
-  derivedDescription: string,
-  resolveName: NameResolver
+  derivedDescription: string
 ): void {
   if (path.length === 0) return;
   const { languageIds } = matrix;
@@ -122,8 +122,8 @@ function applyUpgrade(
   const refs = collectRefsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
   const implicitIntro = 'This is an implicit relationship.';
-  const pathDescription = describePath(pathIds, matrix, resolveName);
-  const description = `${implicitIntro} ${pathDescription} ${derivedDescription}`.trim();
+  const pathDesc = describePath(pathIds, matrix);
+  const description = `${implicitIntro} ${pathDesc} ${derivedDescription}`.trim();
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
@@ -145,8 +145,7 @@ function contradictionError(message: string): never {
 function phaseOneUpgrade(
   matrix: KCAdjacencyMatrix,
   reachP: { reach: boolean[][]; parent: number[][] },
-  reachQ: { reach: boolean[][]; parent: number[][] },
-  resolveName: NameResolver
+  reachQ: { reach: boolean[][]; parent: number[][] }
 ): number {
   const { languageIds } = matrix;
   const size = languageIds.length;
@@ -157,23 +156,26 @@ function phaseOneUpgrade(
       if (i === j) continue;
       const relation = matrix.matrix[i][j];
       const status = relation?.status ?? null;
+      const srcName = idToName(languageIds[i]);
+      const tgtName = idToName(languageIds[j]);
 
       // Quasi upgrades
       if (reachQ.reach[i][j] && !guaranteesQuasi(status)) {
         if (status === 'no-quasi') {
           const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
           const ids = path.map((idx) => languageIds[idx]);
-          const desc = describePath(ids, matrix, resolveName);
+          const desc = describePath(ids, matrix);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${languageIds[i]}→${languageIds[j]} must have quasi, but is marked no-quasi.`
+            `Contradiction: ${desc} Therefore ${srcName}→${tgtName} must have quasi, but is marked no-quasi.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
-        const derivedDesc = `Therefore a quasi-polynomial transformation exists from ${resolveName(
-          languageIds[i]
-        )} to ${resolveName(languageIds[j])}.`;
+        const derivedDesc = `Therefore a quasi-polynomial transformation exists from ${srcName} to ${tgtName}.`;
         const newStatus = status === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
-        applyUpgrade(matrix, path, newStatus, derivedDesc, resolveName);
+        if (DEBUG_PROPAGATION) {
+          console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${newStatus}`);
+        }
+        applyUpgrade(matrix, path, newStatus, derivedDesc);
         changes += 1;
         continue; // allow re-evaluation in next fixed-point iteration
       }
@@ -183,17 +185,18 @@ function phaseOneUpgrade(
         if (status === 'no-poly-quasi' || status === 'no-poly-unknown-quasi' || status === 'no-quasi') {
           const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
           const ids = path.map((idx) => languageIds[idx]);
-          const desc = describePath(ids, matrix, resolveName);
+          const desc = describePath(ids, matrix);
           const marked = formatMissingOrStatus(status);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${languageIds[i]}→${languageIds[j]} must have poly, but is marked ${marked}.`
+            `Contradiction: ${desc} Therefore ${srcName}→${tgtName} must have poly, but is marked ${marked}.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
-        const derivedDesc = `Therefore a polynomial transformation exists from ${resolveName(
-          languageIds[i]
-        )} to ${resolveName(languageIds[j])}.`;
-        applyUpgrade(matrix, path, 'poly', derivedDesc, resolveName);
+        const derivedDesc = `Therefore a polynomial transformation exists from ${srcName} to ${tgtName}.`;
+        if (DEBUG_PROPAGATION) {
+          console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → poly`);
+        }
+        applyUpgrade(matrix, path, 'poly', derivedDesc);
         changes += 1;
       }
     }
@@ -213,6 +216,8 @@ function tryDowngrade(
   const relation = adjacencyMatrix.matrix[source][target];
   const status = relation?.status ?? null;
   const languageIds = adjacencyMatrix.languageIds;
+  const srcName = idToName(languageIds[source]);
+  const tgtName = idToName(languageIds[target]);
 
   const runConsistency = (nextStatus: string): boolean => {
     const original = adjacencyMatrix.matrix[source][target];
@@ -237,14 +242,17 @@ function tryDowngrade(
     }
     const refs = collectRefsUnion(witnessPath, adjacencyMatrix);
     const ids = witnessPath.map((idx) => languageIds[idx]);
-    const desc = pathDescription(ids, adjacencyMatrix);
+    const desc = describePath(ids, adjacencyMatrix);
+    if (DEBUG_PROPAGATION) {
+      console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${nextStatus}`);
+    }
     adjacencyMatrix.matrix[source][target] = {
       status: nextStatus,
       refs,
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
-      description: `Derived (contradiction): ${desc} ${descriptionSuffix}`.trim()
+      description: `This is an implicit relationship. ${desc} ${descriptionSuffix}`.trim()
     };
   };
 
@@ -259,7 +267,7 @@ function tryDowngrade(
         source,
         target
       );
-      finalizeDowngrade('no-poly-unknown-quasi', path, `Therefore ${languageIds[source]}→${languageIds[target]} is not poly.`);
+      finalizeDowngrade('no-poly-unknown-quasi', path, `Therefore ${srcName}→${tgtName} is not poly.`);
       return true;
     }
     // Trial quasi
@@ -271,7 +279,7 @@ function tryDowngrade(
         source,
         target
       );
-      finalizeDowngrade('no-quasi', path, `Therefore ${languageIds[source]}→${languageIds[target]} cannot be quasi.`);
+      finalizeDowngrade('no-quasi', path, `Therefore ${srcName}→${tgtName} cannot be quasi.`);
       return true;
     }
     // restore original status (either null or unknown-both)
@@ -289,7 +297,7 @@ function tryDowngrade(
         source,
         target
       );
-      finalizeDowngrade('no-poly-quasi', path, `Therefore ${languageIds[source]}→${languageIds[target]} is not poly.`);
+      finalizeDowngrade('no-poly-quasi', path, `Therefore ${srcName}→${tgtName} is not poly.`);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;
@@ -306,7 +314,7 @@ function tryDowngrade(
         source,
         target
       );
-      finalizeDowngrade('no-quasi', path, `Therefore ${languageIds[source]}→${languageIds[target]} cannot be quasi.`);
+      finalizeDowngrade('no-quasi', path, `Therefore ${srcName}→${tgtName} cannot be quasi.`);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;
@@ -324,11 +332,8 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
   const { adjacencyMatrix } = data;
   adjacencyMatrix.indexByLanguage = rebuildIndexMap(adjacencyMatrix.languageIds);
 
-  const nameMap = new Map<string, string>();
-  data.languages.forEach((lang) => {
-    if (lang.id) nameMap.set(lang.id, lang.name ?? lang.id);
-  });
-  const resolveName: NameResolver = (id) => nameMap.get(id) ?? id;
+  // Initialize the name map for id-to-name resolution
+  initNameMap(data.languages);
 
   // Phase 0: consistency guard
   const consistencyResult = validateAdjacencyConsistency(data);
@@ -341,7 +346,7 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
   while (changed) {
     const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
     const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
-    const upgrades = phaseOneUpgrade(adjacencyMatrix, reachP, reachQ, resolveName);
+    const upgrades = phaseOneUpgrade(adjacencyMatrix, reachP, reachQ);
     changed = upgrades > 0;
   }
 

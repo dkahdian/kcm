@@ -2633,11 +2633,35 @@
         null,
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. PI→CNF in polynomial time. If CNF→DNF in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+        },
         null,
         null,
-        null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. IP→DNF in polynomial time. If CNF→IP in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. MODS→DNF in polynomial time. If CNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -3029,11 +3053,33 @@
         null,
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. CNF→NNF in polynomial time. If NNF→DNF in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+        },
         null,
         null,
-        null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. CNF→NNF in polynomial time. IP→DNF in polynomial time. If NNF→IP in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. CNF→NNF in polynomial time. MODS→DNF in polynomial time. If NNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -3151,11 +3197,36 @@
         null,
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "Consider the $CNF$ formula $\\Sigma_n=\\bigwedge_{i=0}^{n-1}(x_{2i} \\vee x_{2i+1})$. This formula is in prime implicates form and each clause in $\\Pi_n$ is an essential prime implicate of it. Hence its negation $\\neg\\Sigma_n\\in PI$.\n\nSince the work of Quine, we know that the number of essential prime implicants of a formula is a lower bound on the number of terms that can be found in any $DNF$ representation of it. However, since $\\Sigma_n$ has $2^n$ prime implicates, $\\neg\\Sigma_n$ has $2^n$ prime implicants, so any $DNF$ representation of $\\neg\\Pi_n$ must have at least $2^n$ clauses.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Pairwise OR CNF"
+          ]
+        },
         null,
         null,
-        null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. IP→DNF in polynomial time. If PI→IP in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. MODS→DNF in polynomial time. If PI→MODS in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+        },
         null,
         {
           "status": "poly",

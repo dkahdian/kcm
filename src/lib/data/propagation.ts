@@ -92,7 +92,9 @@ function phraseForStatus(status: string): string {
   }
 }
 
-function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
+type NameResolver = (id: string) => string;
+
+function describePath(pathIds: string[], matrix: KCAdjacencyMatrix, resolveName: NameResolver): string {
   const { languageIds } = matrix;
   const parts: string[] = [];
   for (let i = 0; i < pathIds.length - 1; i += 1) {
@@ -101,7 +103,7 @@ function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
     const fromIdx = languageIds.indexOf(fromId);
     const toIdx = languageIds.indexOf(toId);
     const status = matrix.matrix[fromIdx]?.[toIdx]?.status ?? 'unknown';
-    parts.push(`${fromId} transforms to ${toId} ${phraseForStatus(status)}.`);
+    parts.push(`${resolveName(fromId)} transforms to ${resolveName(toId)} ${phraseForStatus(status)}.`);
   }
   return parts.join(' ');
 }
@@ -110,7 +112,8 @@ function applyUpgrade(
   matrix: KCAdjacencyMatrix,
   path: number[],
   newStatus: string,
-  derivedDescription: string
+  derivedDescription: string,
+  resolveName: NameResolver
 ): void {
   if (path.length === 0) return;
   const { languageIds } = matrix;
@@ -118,7 +121,9 @@ function applyUpgrade(
   const target = path[path.length - 1];
   const refs = collectRefsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
-  const description = `Derived: ${describePath(pathIds, matrix)} ${derivedDescription}`.trim();
+  const implicitIntro = 'This is an implicit relationship.';
+  const pathDescription = describePath(pathIds, matrix, resolveName);
+  const description = `${implicitIntro} ${pathDescription} ${derivedDescription}`.trim();
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
@@ -140,7 +145,8 @@ function contradictionError(message: string): never {
 function phaseOneUpgrade(
   matrix: KCAdjacencyMatrix,
   reachP: { reach: boolean[][]; parent: number[][] },
-  reachQ: { reach: boolean[][]; parent: number[][] }
+  reachQ: { reach: boolean[][]; parent: number[][] },
+  resolveName: NameResolver
 ): number {
   const { languageIds } = matrix;
   const size = languageIds.length;
@@ -163,9 +169,11 @@ function phaseOneUpgrade(
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
-        const derivedDesc = 'Therefore a quasi-polynomial transformation exists.';
+        const derivedDesc = `Therefore a quasi-polynomial transformation exists from ${resolveName(
+          languageIds[i]
+        )} to ${resolveName(languageIds[j])}.`;
         const newStatus = status === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
-        applyUpgrade(matrix, path, newStatus, derivedDesc);
+        applyUpgrade(matrix, path, newStatus, derivedDesc, resolveName);
         changes += 1;
         continue; // allow re-evaluation in next fixed-point iteration
       }
@@ -182,8 +190,10 @@ function phaseOneUpgrade(
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
-        const derivedDesc = 'Therefore a polynomial transformation exists.';
-        applyUpgrade(matrix, path, 'poly', derivedDesc);
+        const derivedDesc = `Therefore a polynomial transformation exists from ${resolveName(
+          languageIds[i]
+        )} to ${resolveName(languageIds[j])}.`;
+        applyUpgrade(matrix, path, 'poly', derivedDesc, resolveName);
         changes += 1;
       }
     }
@@ -314,6 +324,12 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
   const { adjacencyMatrix } = data;
   adjacencyMatrix.indexByLanguage = rebuildIndexMap(adjacencyMatrix.languageIds);
 
+  const nameMap = new Map<string, string>();
+  data.languages.forEach((lang) => {
+    if (lang.id) nameMap.set(lang.id, lang.name ?? lang.id);
+  });
+  const resolveName: NameResolver = (id) => nameMap.get(id) ?? id;
+
   // Phase 0: consistency guard
   const consistencyResult = validateAdjacencyConsistency(data);
   if (!consistencyResult.ok) {
@@ -325,7 +341,7 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
   while (changed) {
     const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
     const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
-    const upgrades = phaseOneUpgrade(adjacencyMatrix, reachP, reachQ);
+    const upgrades = phaseOneUpgrade(adjacencyMatrix, reachP, reachQ, resolveName);
     changed = upgrades > 0;
   }
 

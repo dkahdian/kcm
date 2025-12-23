@@ -42,12 +42,44 @@
 		<div class="space-y-3 text-xs">
 			<div>
 				<div class="font-semibold text-gray-700 mb-1">Full Name:</div>
-				<MathText text={language.fullName} className="text-gray-900 block" />
+				<div class="bg-white p-2 rounded border">
+					<MathText text={language.fullName} className="text-gray-900 block" />
+				</div>
 			</div>
 			<div>
 				<div class="font-semibold text-gray-700 mb-1">Description:</div>
-				<MathText text={language.description} className="text-gray-900 block" />
+				<div class="bg-white p-2 rounded border">
+					<MathText text={language.description} className="text-gray-900 block" />
+				</div>
 			</div>
+			{#if language.descriptionRefs && language.descriptionRefs.length > 0}
+				<div>
+					<div class="font-semibold text-gray-700 mb-1">
+						Description References ({language.descriptionRefs.length}):
+					</div>
+					<div class="flex flex-wrap gap-1">
+						{#each language.descriptionRefs as ref}
+							<span class="inline-block bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs border border-purple-300">
+								{ref}
+							</span>
+						{/each}
+					</div>
+				</div>
+			{/if}
+			{#if language.existingReferences && language.existingReferences.length > 0}
+				<div>
+					<div class="font-semibold text-gray-700 mb-1">
+						Existing References ({language.existingReferences.length}):
+					</div>
+					<div class="flex flex-wrap gap-1">
+						{#each language.existingReferences as ref}
+							<span class="inline-block bg-gray-100 text-gray-800 px-2 py-0.5 rounded text-xs border border-gray-300">
+								{ref}
+							</span>
+						{/each}
+					</div>
+				</div>
+			{/if}
 			{#if language.queries && Object.keys(language.queries).length > 0}
 				<div>
 					<div class="font-semibold text-gray-700 mb-1">

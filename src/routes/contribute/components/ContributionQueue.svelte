@@ -6,6 +6,8 @@
   import SeparatingFunctionQueueItem from './SeparatingFunctionQueueItem.svelte';
   import RelationshipQueueItem from './RelationshipQueueItem.svelte';
 
+  import { generateReferenceId } from '$lib/utils/reference-id.js';
+
   /**
    * Display all queued contribution items
    */
@@ -17,6 +19,7 @@
     newSeparatingFunctions,
     relationships,
     modifiedRelations,
+    existingReferenceIds = [],
     expandedLanguageToAddIndex,
     expandedLanguageToEditIndex,
     expandedReferenceIndex,
@@ -45,6 +48,7 @@
     newSeparatingFunctions: SeparatingFunctionToAdd[];
     relationships: RelationshipEntry[];
     modifiedRelations: Set<string>;
+    existingReferenceIds?: string[];
     expandedLanguageToAddIndex: number | null;
     expandedLanguageToEditIndex: number | null;
     expandedReferenceIndex: number | null;
@@ -74,6 +78,21 @@
     newSeparatingFunctions.length > 0 ||
     relationships.filter((rel) => modifiedRelations.has(relationKey(rel.sourceId, rel.targetId))).length > 0
   );
+
+  /**
+   * Compute the existing reference IDs at each index, including both existing and previous new references.
+   * This is used to generate unique IDs for new references in the preview.
+   */
+  function getExistingIdsAtIndex(index: number): string[] {
+    const ids = [...existingReferenceIds];
+    const idsSet = new Set(ids);
+    for (let i = 0; i < index; i++) {
+      const prevId = generateReferenceId(newReferences[i], idsSet);
+      ids.push(prevId);
+      idsSet.add(prevId);
+    }
+    return ids;
+  }
 </script>
 
 <div class="space-y-3">
@@ -86,6 +105,7 @@
       <ReferenceQueueItem
         reference={ref}
         {index}
+        existingReferenceIds={getExistingIdsAtIndex(index)}
         isExpanded={expandedReferenceIndex === index}
         onToggleExpand={onToggleExpandReference}
         onEdit={onEditReference}

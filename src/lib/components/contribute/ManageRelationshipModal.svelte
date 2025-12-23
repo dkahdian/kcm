@@ -21,8 +21,10 @@
 
   type BaselineRelationship = {
     status: string;
+    description?: string;
     refs: string[];
     separatingFunctionIds?: string[];
+    derived?: boolean;
   };
 
   type StatusOption = {
@@ -85,12 +87,18 @@
       if (baseline) {
         // Relationship exists - populate with existing data
         status = baseline.status;
+        description = baseline.description || '';
         selectedRefs = [...baseline.refs];
         selectedSeparatingFunctionIds = baseline.separatingFunctionIds 
           ? [...baseline.separatingFunctionIds] 
           : [];
+      } else {
+        // No baseline exists - clear to defaults for a new edge
+        status = '';
+        description = '';
+        selectedRefs = [];
+        selectedSeparatingFunctionIds = [];
       }
-      // If no baseline exists, keep current values (defaults)
     }
   });
 

@@ -179,7 +179,9 @@ export function applyContributionQueue(
       status: rel.status,
       description: rel.description,
       refs: [...rel.refs],
-      separatingFunctionIds: separatingFunctionIds.length > 0 ? separatingFunctionIds : undefined
+      separatingFunctionIds: separatingFunctionIds.length > 0 ? separatingFunctionIds : undefined,
+      // Explicitly mark as not derived since this is user-contributed
+      derived: false
     };
     merged.adjacencyMatrix.matrix[sourceIdx][targetIdx] = relation;
   };

@@ -991,6 +991,7 @@
             newSeparatingFunctions={separatingFunctionPayloads}
             relationships={relationshipPayloads}
             {modifiedRelations}
+            existingReferenceIds={data.existingReferences.map(r => r.id)}
             {expandedLanguageToAddIndex}
             {expandedLanguageToEditIndex}
             {expandedReferenceIndex}

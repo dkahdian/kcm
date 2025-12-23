@@ -31,17 +31,22 @@ export function cloneOperationSupport(
   return cloned;
 }
 
+export interface BaselineRelation {
+  status: string;
+  description?: string;
+  refs: string[];
+  separatingFunctionIds?: string[];
+  derived?: boolean;
+}
+
 /**
  * Build baseline relations from adjacency matrix
  */
 export function buildBaselineRelations(adjacencyMatrix: {
   languageIds: string[];
   matrix: any[][];
-}): Map<string, { status: string; refs: string[]; separatingFunctionIds?: string[] }> {
-  const baselineRelations = new Map<
-    string,
-    { status: string; refs: string[]; separatingFunctionIds?: string[] }
-  >();
+}): Map<string, BaselineRelation> {
+  const baselineRelations = new Map<string, BaselineRelation>();
 
   const { languageIds, matrix } = adjacencyMatrix;
   for (let i = 0; i < languageIds.length; i++) {
@@ -57,8 +62,10 @@ export function buildBaselineRelations(adjacencyMatrix: {
         
         baselineRelations.set(relationKey(sourceId, targetId), {
           status: relation.status,
+          description: relation.description,
           refs: relation.refs ? [...relation.refs] : [],
-          separatingFunctionIds
+          separatingFunctionIds,
+          derived: relation.derived
         });
       }
     }

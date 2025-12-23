@@ -4,7 +4,7 @@ import {
   guaranteesPoly,
   guaranteesQuasi,
   collectRefsUnion
-} from './semantic-validation.js';
+} from './validation/semantic.js';
 import { initNameMap, idToName } from '../utils/language-id.js';
 
 // Debug flag - set to true to see propagation decisions in console

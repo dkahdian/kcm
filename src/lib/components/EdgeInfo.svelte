@@ -1,8 +1,8 @@
 <script lang="ts">
-  import MathText from './components/MathText.svelte';
-  import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from './types.js';
-  import { getComplexityFromCatalog } from './data/complexities.js';
-  import DynamicLegend from './components/DynamicLegend.svelte';
+  import MathText from './MathText.svelte';
+  import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from '$lib/types.js';
+  import { getComplexityFromCatalog } from '$lib/data/complexities.js';
+  import DynamicLegend from './DynamicLegend.svelte';
   
   type ViewMode = 'graph' | 'matrix';
   

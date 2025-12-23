@@ -7,9 +7,9 @@ import type {
   KCSeparatingFunction,
   KCReference,
   TransformValidationResult
-} from '../types.js';
-import { getAllQueryCodes, getAllTransformationCodes, TRANSFORMATIONS } from './operations.js';
-import { COMPLEXITIES, isValidComplexityCode } from './complexities.js';
+} from '../../types.js';
+import { getAllQueryCodes, getAllTransformationCodes, TRANSFORMATIONS } from '../operations.js';
+import { COMPLEXITIES, isValidComplexityCode } from '../complexities.js';
 
 const VALID_TRANSFORMATION_STATUSES: string[] = [
   'poly',

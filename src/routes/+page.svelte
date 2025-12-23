@@ -1,9 +1,9 @@
 <script lang="ts">
-  import KCGraph from '$lib/KCGraph.svelte';
-  import MatrixView from '$lib/MatrixView.svelte';
-  import LanguageInfo from '$lib/LanguageInfo.svelte';
-  import EdgeInfo from '$lib/EdgeInfo.svelte';
-  import FilterDropdown from '$lib/FilterDropdown.svelte';
+  import KCGraph from '$lib/components/KCGraph.svelte';
+  import MatrixView from '$lib/components/MatrixView.svelte';
+  import LanguageInfo from '$lib/components/LanguageInfo.svelte';
+  import EdgeInfo from '$lib/components/EdgeInfo.svelte';
+  import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 
   import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters } from '$lib/data/index.js';
   import { applyFiltersWithParams, createDefaultFilterState, adjustFilterStateForViewMode } from '$lib/filter-utils.js';

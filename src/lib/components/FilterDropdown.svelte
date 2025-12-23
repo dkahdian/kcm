@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap, ViewMode } from './types.js';
-  import { organizeFiltersByCategory } from './data/index.js';
-  import { createDefaultFilterState, getFilterDefault } from './filter-utils.js';
+  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap, ViewMode } from '$lib/types.js';
+  import { organizeFiltersByCategory } from '$lib/data/index.js';
+  import { createDefaultFilterState, getFilterDefault } from '$lib/filter-utils.js';
 
   type AnyFilter = LanguageFilter | EdgeFilter;
 

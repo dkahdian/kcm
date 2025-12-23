@@ -308,3 +308,14 @@ export function markSubmissionAsSuperseded(supersededId: string, newSubmissionId
   }
   return entries;
 }
+
+/**
+ * Derive queue entries from a submission history payload.
+ * Throws if the payload doesn't have queueEntries (legacy format).
+ */
+export function deriveQueueEntriesFromHistory(payload: SubmissionHistoryPayload): ContributionQueueEntry[] {
+  if (!Array.isArray(payload.queueEntries) || payload.queueEntries.length === 0) {
+    throw new Error('Submission history entry is missing queueEntries.');
+  }
+  return cloneQueueEntries(payload.queueEntries);
+}

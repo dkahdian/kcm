@@ -13,9 +13,9 @@
       KCAdjacencyMatrix,
       DirectedSuccinctnessRelation,
       SelectedEdge
-    } from './types.js';
-  import { getEdgeEndpointStyle } from './data/relation-types.js';
-  import { renderMathText, escapeHtml } from './utils/math-text.js';
+    } from '$lib/types.js';
+  import { getEdgeEndpointStyle } from '$lib/data/relation-types.js';
+  import { renderMathText, escapeHtml } from '$lib/utils/math-text.js';
 
   const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions_v1';
 

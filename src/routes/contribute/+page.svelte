@@ -1,7 +1,6 @@
 <script lang="ts">
-
   import { browser } from '$app/environment';
-  import { v4 as uuidv4 } from 'uuid';
+  import { onMount } from 'svelte';
   import type { PageData } from './$types';
   import AddLanguageModal from '$lib/components/contribute/AddLanguageModal.svelte';
   import AddReferenceModal from '$lib/components/contribute/AddReferenceModal.svelte';
@@ -18,6 +17,21 @@
     getAvailableSeparatingFunctions,
     convertLanguageForEdit
   } from './logic.js';
+  import {
+    isString,
+    sanitizeStringArray,
+    sanitizeTags,
+    sanitizeSubmissionId,
+    cloneLanguageEntry,
+    cloneRelationshipEntry,
+    cloneSeparatingFunctionToAdd,
+    cloneQueueEntry,
+    cloneCustomTag,
+    createSubmissionId,
+    createQueueEntryId,
+    formatHistoryTimestamp,
+    formatHistorySummary
+  } from './utils.js';
   import { generateReferenceId } from '$lib/utils/reference-id.js';
   import { generateLanguageId } from '$lib/utils/language-id.js';
   import type {
@@ -26,11 +40,9 @@
     CustomTag,
     SeparatingFunctionToAdd,
     SubmissionHistoryEntry,
-    SubmissionHistoryPayload,
     ContributorInfo
   } from './types.js';
-  import { onMount } from 'svelte';
-  import { loadSubmissionHistory } from '$lib/utils/submission-history.js';
+  import { loadSubmissionHistory, deriveQueueEntriesFromHistory } from '$lib/utils/submission-history.js';
 
   type OperationResult = { success: boolean; error?: string };
 
@@ -46,170 +58,14 @@
     savePreviewDataset,
     loadQueuedChanges
   } from '$lib/contribution-storage.js';
+  import type { PersistedQueueState } from '$lib/contribution-storage.js';
 
   type QueueLanguage = { queueEntryId: string; payload: LanguageToAdd };
   type QueueRelationship = { queueEntryId: string; payload: RelationshipEntry };
   type QueueSeparatingFunction = { queueEntryId: string; payload: SeparatingFunctionToAdd };
   type QueueReference = { queueEntryId: string; bibtex: string };
 
-  type PersistedQueueState = ContributionQueueState;
-
-  const isString = (value: unknown): value is string => typeof value === 'string';
-
-  const sanitizeStringArray = (value: unknown): string[] =>
-    Array.isArray(value) ? value.filter(isString) : [];
-
-  const createSubmissionId = (): string => {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-      return crypto.randomUUID();
-    }
-    return uuidv4();
-  };
-
-  const sanitizeSubmissionId = (value: unknown): string | null =>
-    typeof value === 'string' && value.trim().length > 0 ? value : null;
-
-  function sanitizeOperationSupportRecord(
-    value: unknown
-  ): Record<string, { complexity: string; note?: string; refs: string[] }> {
-    if (!value || typeof value !== 'object') return {};
-    const result: Record<string, { complexity: string; note?: string; refs: string[] }> = {};
-    for (const [key, raw] of Object.entries(value as Record<string, any>)) {
-      if (!raw || typeof raw !== 'object') continue;
-      const complexity = isString(raw.complexity) ? raw.complexity : 'unknown-to-us';
-      const note = isString(raw.note) ? raw.note : undefined;
-      const refs = sanitizeStringArray(raw.refs);
-      const entry: { complexity: string; note?: string; refs: string[] } = {
-        complexity,
-        refs
-      };
-      if (note) entry.note = note;
-      result[key] = entry;
-    }
-    return result;
-  }
-
-  function sanitizeTags(value: unknown): CustomTag[] {
-    if (!Array.isArray(value)) return [];
-    const results: CustomTag[] = [];
-    for (const item of value) {
-      if (!item || typeof item !== 'object') continue;
-      const raw = item as Record<string, any>;
-      if (!isString(raw.label)) continue;
-      results.push({
-        label: raw.label,
-        color: isString(raw.color) ? raw.color : '#6366f1',
-        description: isString(raw.description) ? raw.description : undefined,
-        refs: sanitizeStringArray(raw.refs)
-      });
-    }
-    return results;
-  }
-
-  function sanitizeLanguages(value: unknown): LanguageToAdd[] {
-    if (!Array.isArray(value)) return [];
-    return value
-      .map((entry) => {
-        if (!entry || typeof entry !== 'object') return null;
-        const raw = entry as Record<string, any>;
-        if (!isString(raw.name) || !isString(raw.fullName) || !isString(raw.description)) {
-          return null;
-        }
-        return {
-          name: raw.name,
-          fullName: raw.fullName,
-          description: raw.description,
-          descriptionRefs: sanitizeStringArray(raw.descriptionRefs),
-          queries: sanitizeOperationSupportRecord(raw.queries),
-          transformations: sanitizeOperationSupportRecord(raw.transformations),
-          tags: sanitizeTags(raw.tags),
-          existingReferences: sanitizeStringArray(raw.existingReferences)
-        } satisfies LanguageToAdd;
-      })
-      .filter((item): item is LanguageToAdd => item !== null);
-  }
-
-  function sanitizeRelationships(value: unknown): RelationshipEntry[] {
-    if (!Array.isArray(value)) return [];
-    return value
-      .map((entry) => {
-        if (!entry || typeof entry !== 'object') return null;
-        const raw = entry as Record<string, any>;
-        if (!isString(raw.sourceId) || !isString(raw.targetId) || !isString(raw.status)) return null;
-        const relationship: RelationshipEntry = {
-          sourceId: raw.sourceId,
-          targetId: raw.targetId,
-          status: raw.status,
-          refs: sanitizeStringArray(raw.refs)
-        };
-        // Support separatingFunctionIds (new format)
-        const ids = sanitizeStringArray(raw.separatingFunctionIds);
-        if (ids.length > 0) {
-          relationship.separatingFunctionIds = ids;
-        }
-        return relationship;
-      })
-      .filter((item): item is RelationshipEntry => item !== null);
-  }
-
-  const cloneLanguageEntry = (language: LanguageToAdd): LanguageToAdd => ({
-    ...language,
-    descriptionRefs: [...language.descriptionRefs],
-    queries: Object.fromEntries(
-      Object.entries(language.queries).map(([code, support]) => [code, { ...support, refs: [...support.refs] }])
-    ),
-    transformations: Object.fromEntries(
-      Object.entries(language.transformations).map(([code, support]) => [code, { ...support, refs: [...support.refs] }])
-    ),
-    tags: language.tags.map((tag) => ({ ...tag, refs: [...tag.refs] })),
-    existingReferences: [...language.existingReferences]
-  });
-
-  const cloneRelationshipEntry = (relationship: RelationshipEntry): RelationshipEntry => ({
-    ...relationship,
-    description: relationship.description,
-    refs: [...relationship.refs],
-    separatingFunctionIds: relationship.separatingFunctionIds
-      ? [...relationship.separatingFunctionIds]
-      : undefined
-  });
-
-  const cloneSeparatingFunctionToAdd = (sf: SeparatingFunctionToAdd): SeparatingFunctionToAdd => ({
-    shortName: sf.shortName,
-    name: sf.name,
-    description: sf.description,
-    refs: [...sf.refs]
-  });
-
-  const cloneQueueEntry = (entry: ContributionQueueEntry): ContributionQueueEntry => {
-    switch (entry.kind) {
-      case 'language:new':
-      case 'language:edit':
-        return { ...entry, payload: cloneLanguageEntry(entry.payload) };
-      case 'relationship':
-        return { ...entry, payload: cloneRelationshipEntry(entry.payload) };
-      case 'separator':
-        return { ...entry, payload: cloneSeparatingFunctionToAdd(entry.payload) };
-      case 'reference':
-      default:
-        return { ...entry, payload: entry.payload };
-    }
-  };
-
-  function deriveQueueEntriesFromHistory(payload: SubmissionHistoryPayload): ContributionQueueEntry[] {
-    if (!Array.isArray(payload.queueEntries) || payload.queueEntries.length === 0) {
-      throw new Error('Submission history entry is missing queueEntries.');
-    }
-    return payload.queueEntries.map(cloneQueueEntry);
-  }
-
-  const createQueueEntryId = (): string => {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-      return crypto.randomUUID();
-    }
-    return uuidv4();
-  };
-
+  // Queue manipulation functions that reference component state
   function addQueueEntry(entry: ContributionQueueEntry) {
     queueEntries = [...queueEntries, entry];
   }
@@ -231,34 +87,6 @@
   function removeQueueEntry(entryId: string) {
     queueEntries = queueEntries.filter((entry) => entry.id !== entryId);
   }
-
-  const cloneCustomTag = (tag: CustomTag): CustomTag => ({ ...tag, refs: [...tag.refs] });
-
-  const formatHistoryTimestamp = (iso: string): string => {
-    try {
-      return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
-    } catch {
-      return iso;
-    }
-  };
-
-  const formatHistorySummary = (entry: SubmissionHistoryEntry): string => {
-    const segments: string[] = [];
-    if (entry.summary.languagesToAdd) {
-      segments.push(`${entry.summary.languagesToAdd} new ${entry.summary.languagesToAdd === 1 ? 'language' : 'languages'}`);
-    }
-    if (entry.summary.languagesToEdit) {
-      segments.push(`${entry.summary.languagesToEdit} edit${entry.summary.languagesToEdit === 1 ? '' : 's'}`);
-    }
-    if (entry.summary.relationships) {
-      segments.push(`${entry.summary.relationships} relation${entry.summary.relationships === 1 ? '' : 's'}`);
-    }
-    if (entry.summary.newReferences) {
-      segments.push(`${entry.summary.newReferences} reference${entry.summary.newReferences === 1 ? '' : 's'}`);
-    }
-
-    return segments.length > 0 ? segments.join(' · ') : 'No changes';
-  };
 
   let { data }: { data: PageData } = $props();
 

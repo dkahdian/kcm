@@ -13,10 +13,10 @@ import type {
   CustomTag
 } from '../../routes/contribute/types.js';
 import { cloneDataset } from './transforms.js';
-import { validateDatasetStructure } from './validation.js';
+import { validateDatasetStructure } from './validation/index.js';
 import { propagateImplicitRelations } from './propagation.js';
 import { isValidComplexityCode } from './complexities.js';
-import { generateReferenceId } from '../utils/reference-id.js';
+import { generateReferenceId, extractCitationKey } from '../utils/reference-id.js';
 
 export type ContributionQueueEntry =
   | { id: string; kind: 'reference'; payload: string }
@@ -42,11 +42,6 @@ export interface ContributionSubmissionPayload {
     note?: string;
   };
   queue: ContributionQueueState;
-}
-
-function extractCitationKey(bibtex: string): string | null {
-  const match = bibtex.match(/@\w+\{([^,\s]+)/);
-  return match ? match[1] : null;
 }
 
 function convertToKCLanguage(

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MathText from './components/MathText.svelte';
+  import MathText from './MathText.svelte';
   import type { 
     KCLanguage, 
     GraphData, 
@@ -8,11 +8,11 @@
     SelectedEdge,
     FilteredGraphData,
     KCLanguagePropertiesResolved
-  } from './types.js';
-  import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from './data/operations.js';
-  import { getComplexityFromCatalog } from './data/complexities.js';
-  import EdgeLegend from './components/EdgeLegend.svelte';
-  import DynamicLegend from './components/DynamicLegend.svelte';
+  } from '$lib/types.js';
+  import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '$lib/data/operations.js';
+  import { getComplexityFromCatalog } from '$lib/data/complexities.js';
+  import EdgeLegend from './EdgeLegend.svelte';
+  import DynamicLegend from './DynamicLegend.svelte';
 
   type ViewMode = 'graph' | 'matrix';
 

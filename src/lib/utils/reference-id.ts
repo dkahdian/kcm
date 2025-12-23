@@ -65,3 +65,12 @@ export function generateReferenceId(bibtex: string, existingIds: Set<string>): s
   }
   return `${baseId}_${counter}`;
 }
+
+/**
+ * Extract the citation key from a BibTeX entry.
+ * @example extractCitationKey('@article{Smith2020, ...}') => 'Smith2020'
+ */
+export function extractCitationKey(bibtex: string): string | null {
+  const match = bibtex.match(/@\w+\{([^,\s]+)/);
+  return match ? match[1] : null;
+}

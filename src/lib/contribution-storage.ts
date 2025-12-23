@@ -6,6 +6,9 @@ export const QUEUE_STORAGE_KEY = 'kcm_contribute_queue_v1';
 export const CONTRIBUTOR_STORAGE_KEY = 'kcm_contributor_info_v1';
 export const PREVIEW_DATASET_STORAGE_KEY = 'kcm_contribute_preview_dataset_v1';
 
+/** Alias for ContributionQueueState when persisted to localStorage */
+export type PersistedQueueState = ContributionQueueState;
+
 function getStoredValue(key: string): string | null {
   if (typeof localStorage === 'undefined') return null;
   return localStorage.getItem(key);

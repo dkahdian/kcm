@@ -1,13 +1,6 @@
 import type { KCReference } from '../types.js';
+import { extractCitationKey } from '../utils/reference-id.js';
 import database from './database.json';
-
-/**
- * Extract citation key from BibTeX entry
- */
-function extractCitationKey(bibtex: string): string | null {
-  const match = bibtex.match(/@\w+\{([^,\s]+)/);
-  return match ? match[1] : null;
-}
 
 /**
  * Parse BibTeX entry to extract metadata and format as IEEE citation

@@ -1,4 +1,4 @@
-import type { GraphData, KCAdjacencyMatrix, DirectedSuccinctnessRelation } from '../types.js';
+import type { GraphData, KCAdjacencyMatrix, DirectedSuccinctnessRelation } from '../../types.js';
 
 export interface SemanticValidationResult {
   ok: boolean;

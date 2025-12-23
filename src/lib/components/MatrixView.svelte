@@ -1,12 +1,12 @@
 <script lang="ts">
-  import MathText from './components/MathText.svelte';
+  import MathText from './MathText.svelte';
   import type {
     GraphData,
     FilteredGraphData,
     KCLanguage,
     SelectedEdge,
     DirectedSuccinctnessRelation
-  } from './types.js';
+  } from '$lib/types.js';
 
   const getComplexityCatalog = (data: GraphData | FilteredGraphData) => data.complexities;
 

@@ -5,7 +5,7 @@ import type {
   DirectedSuccinctnessRelation,
   TransformValidationResult
 } from '../types.js';
-import { validateDatasetStructure } from './validation.js';
+import { validateDatasetStructure } from './validation/index.js';
 import { propagateImplicitRelations } from './propagation.js';
 
 export interface TransformOptions {

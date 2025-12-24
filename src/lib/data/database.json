@@ -2630,7 +2630,16 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "The existence of polysize knowledge compilation functions for clausal entailment implies the collapse of the polynomial hierarchy. Also, note that $d$-$DNNF$ supports a polynomial-time clausal entailment test. If $CNF$ could be polynomial-time transformed to $d$-$DNNF$, then we could perform a clausal entailment test with any $CNF$ sentence by transforming it to a $d$-$DNNF$ clause.",
+          "refs": [
+            "Cadoli_1997",
+            "Selman_1996",
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         null,
         null,
         {
@@ -2642,8 +2651,25 @@
           "derived": true,
           "description": "PI→CNF in polynomial time. If CNF→DNF in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
         },
-        null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "The existence of polysize knowledge compilation functions for clausal entailment implies the collapse of the polynomial hierarchy. Also, note that $DNNF$ supports a polynomial-time clausal entailment test. If $CNF$ could be polynomial-time transformed to $DNNF$, then we could perform a clausal entailment test with any $CNF$ sentence by transforming it to a $DNNF$ clause.",
+          "refs": [
+            "Selman_1996",
+            "Cadoli_1997",
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "FBDD→d-DNNF in polynomial time. If CNF→FBDD in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -2669,7 +2695,15 @@
           "refs": []
         },
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→d-DNNF in polynomial time. If CNF→OBDD$_<$ in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+        },
         {
           "status": "no-quasi",
           "description": "It is well-known that some $CNF$ formulas (i.e. $\\neg PARITY_n=\\neg\\bigoplus_{i=1}^n x_i$) have exponentially many prime implicants.",
@@ -2682,7 +2716,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→d-DNNF in polynomial time. If CNF→OBDD in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+        }
       ],
       [
         null,
@@ -3196,7 +3238,13 @@
           "description": "DNF→NNF in polynomial time. If NNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "CNF→NNF in polynomial time. If NNF→d-DNNF in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+        },
         null,
         null,
         {
@@ -3206,7 +3254,13 @@
           "derived": true,
           "description": "CNF→NNF in polynomial time. If NNF→DNF in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "CNF→NNF in polynomial time. If NNF→DNNF in polynomial time, then CNF→DNNF in polynomial time. This contradicts CNF→DNNF being no-poly-unknown-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [

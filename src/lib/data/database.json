@@ -3204,7 +3204,7 @@
             "Darwiche_2002"
           ],
           "separatingFunctionIds": [
-            "Pairwise OR CNF"
+            "Pairwise CNF"
           ]
         },
         null,
@@ -3464,9 +3464,17 @@
   },
   "separatingFunctions": [
     {
-      "shortName": "Pairwise OR CNF",
+      "shortName": "Pairwise CNF",
       "name": "$\\Sigma_n = \\bigwedge_{i=0}^{n-1} \\left( x_{2i} \\vee x_{2i+1} \\right)$",
-      "description": "This formula helps separate PI from IP, among other important separations.",
+      "description": "This formula describes evaluating where given each pair $x_{2i}$ and $x_{2i+1}$, at least one of must be true. It is the dual to the Pairwise DNF.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "shortName": "Pairwise DNF",
+      "name": "$\\Pi_n = \\bigvee_{i=0}^{n-1} \\left( x_{2i} \\wedge x_{2i+1} \\right)$",
+      "description": "This formula describes evaluating where after pairing $x_{2i}$ and $x_{2i+1}$, at least one pair must have both be true. It is the dual to the Pairwise CNF.",
       "refs": [
         "Darwiche_2002"
       ]

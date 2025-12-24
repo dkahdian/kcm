@@ -3234,7 +3234,14 @@
           "derived": false
         },
         null,
-        null,
+        {
+          "status": "unknown-both",
+          "description": "This is listed as an open problem in the Knowledge Compilation Map (2002).",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         null,
         null,
         {
@@ -3391,7 +3398,14 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "unknown-both",
+          "description": "This is listed as an open problem in the Knowledge Compilation Map (2002).",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -3677,7 +3691,14 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "unknown-both",
+          "description": "This is listed as an open problem in A Knowledge Compilation Map (2002).",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         null,
         null,
         {
@@ -3690,7 +3711,14 @@
             "Pairwise CNF"
           ]
         },
-        null,
+        {
+          "status": "unknown-both",
+          "description": "This is listed as an open problem in the Knowledge Compilation Map (2002).",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         {
           "status": "no-quasi",
           "description": "Define the interpretation $I\\in\\{0,1\\}^{n^2}$, as arcs on a directed graph $D=\\{V,E\\}$ with $n$ vertices so that $I(x_{i,j})=1\\iff (i,j)\\in E$. Then define $\\Sigma_{n,k}:\\{0,1\\}^{n^2}\\to\\{0,1\\}$ so $\\Sigma_{n,k}(I)=1 \\iff I \\text{ contains a bidirectional clique of size }k$. This is the clique detection function. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\\Sigma_{n,k}$ has exponential size. However, it can be shown that $\\Sigma_{n,k}$ has $O(n^3)$ prime implicants, and hence not every $PI$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.",

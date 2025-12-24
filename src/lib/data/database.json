@@ -2795,13 +2795,10 @@
           "description": "IP→DNF in polynomial time. If d-DNNF→IP in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
         },
         {
-          "status": "no-poly-unknown-quasi",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "hidden": false,
-          "derived": true,
-          "description": "MODS→DNF in polynomial time. If d-DNNF→MODS in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+          "status": "no-quasi",
+          "description": "The function $ANY_n=\\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d-DNNF$ formula but has $2^n-1$ models.",
+          "refs": [],
+          "derived": false
         },
         null,
         {
@@ -2936,7 +2933,15 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS→CNF in polynomial time. If DNF→MODS in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -3027,13 +3032,13 @@
           "description": "DNF→DNNF in polynomial time. If DNNF→IP in quasipolynomial time, then DNF→IP in at most quasi-polynomial time. This contradicts DNF→IP being no-quasi."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF→DNNF in polynomial time. MODS→DNF in polynomial time. If DNNF→MODS in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+          "description": "d-DNNF→DNNF in polynomial time. MODS→FBDD in polynomial time. If DNNF→MODS in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
         },
         null,
         {
@@ -3104,7 +3109,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS→OBDD$_<$ in polynomial time. If FBDD→MODS in quasipolynomial time, then FBDD→OBDD$_<$ in at most quasi-polynomial time. This contradicts FBDD→OBDD$_<$ being no-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -3188,7 +3201,15 @@
           "derived": false
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "The function $ANY_n=\\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $IP$ formula but has $2^n-1$ models.",
+          "refs": [],
+          "separatingFunctionIds": [
+            "$OR_n$"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "poly",
@@ -3237,7 +3258,14 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "A Shannon tree for any for any $MODS$ formula can be generated in polynomial time. The set of all paths from the root of the tree to any 0-leaf can be read as a $CNF$ representation of the formula, so $MODS$ is converted to $CNF$.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "poly",
@@ -3264,8 +3292,23 @@
           "derived": true,
           "description": "MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from MODS to DNNF."
         },
-        null,
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to OBDD$_<$ in polynomial time. OBDD$_<$ transforms to FBDD in polynomial time. Therefore a polynomial transformation exists from MODS to FBDD."
+        },
+        {
+          "status": "poly",
+          "description": "The Quine-McCluskey algorithm generates an $IP$ formula in polynomial time. ",
+          "refs": [
+            "Wegener_1987"
+          ],
+          "derived": false
+        },
         null,
         null,
         {
@@ -3278,6 +3321,14 @@
           "description": "MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from MODS to NNF."
         },
         null,
+        {
+          "status": "poly",
+          "description": "A Shannon tree for any for any $MODS$ formula following any order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding $OBDD_<$ in polynomial time.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -3285,8 +3336,15 @@
         null,
         null,
         null,
-        null,
-        null
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to OBDD$_<$ in polynomial time. OBDD$_<$ transforms to OBDD in polynomial time. Therefore a polynomial transformation exists from MODS to OBDD."
+        }
       ],
       [
         null,
@@ -3547,12 +3605,14 @@
         },
         {
           "status": "no-quasi",
+          "description": "The function $ANY_n=\\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $PI$ formula but has $2^n-1$ models.",
           "refs": [
             "Darwiche_2002"
           ],
-          "hidden": false,
-          "derived": true,
-          "description": "MODS→DNF in polynomial time. If PI→MODS in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+          "separatingFunctionIds": [
+            "$OR_n$"
+          ],
+          "derived": false
         },
         null,
         {
@@ -3781,7 +3841,15 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS→OBDD$_<$ in polynomial time. If OBDD→MODS in quasipolynomial time, then OBDD→OBDD$_<$ in at most quasi-polynomial time. This contradicts OBDD→OBDD$_<$ being no-quasi."
+        },
         null,
         {
           "status": "poly",

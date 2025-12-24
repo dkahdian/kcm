@@ -2755,20 +2755,29 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→d-DNNF in polynomial time. If d-DNNF→CNF in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         null,
         null,
         null,
         {
-          "status": "no-poly-unknown-quasi",
-          "description": "Unless the polynomial hierarchy collapses.\n\nExplanation: Suppose not; then $\\forall\\Lambda\\in DNF$, $\\exists$ an equivalent $\\Lambda_*\\in d$-$DNNF$ of polynomial size. Then we may perform a clausal entailment check on some $CNF$ sentence $\\Sigma \\in CNF$ with respect to some clause $\\gamma$ by checking whether $(\\neg\\Sigma\\vee\\gamma)\\in DNF$ is valid. But we may perform a validity check on $(\\neg\\Sigma\\vee\\gamma)_* \\in d$-$DNNF$ in polynomial time. Since we can now perform a polynomial-time clausal entailment check on all $CNF$ sentences, the polynomial hierarchy collapses.",
+          "status": "no-quasi",
           "refs": [
+            "Darwiche_2002",
             "Cadoli_1997",
-            "Selman_1996",
-            "Darwiche_2002"
+            "Selman_1996"
           ],
-          "derived": false
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→d-DNNF in polynomial time. If d-DNNF→DNF in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
         },
         {
           "status": "poly",
@@ -2786,13 +2795,13 @@
           "derived": false
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "IP→DNF in polynomial time. If d-DNNF→IP in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+          "description": "IP→DNF in polynomial time. If d-DNNF→IP in quasipolynomial time, then d-DNNF→DNF in at most quasi-polynomial time. This contradicts d-DNNF→DNF being no-quasi."
         },
         {
           "status": "no-quasi",
@@ -2820,7 +2829,15 @@
           "derived": true,
           "description": "OBDD$_<$→FBDD in polynomial time. If d-DNNF→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "PI→CNF in polynomial time. If d-DNNF→PI in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -3004,13 +3021,13 @@
         null,
         null,
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF→DNNF in polynomial time. If DNNF→DNF in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+          "description": "d-DNNF→DNNF in polynomial time. If DNNF→DNF in quasipolynomial time, then d-DNNF→DNF in at most quasi-polynomial time. This contradicts d-DNNF→DNF being no-quasi."
         },
         null,
         {
@@ -3086,7 +3103,15 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→FBDD in polynomial time. If FBDD→CNF in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -3097,7 +3122,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→FBDD in polynomial time. If FBDD→DNF in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3108,7 +3141,15 @@
           "description": "FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from FBDD to DNNF."
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP→DNF in polynomial time. If FBDD→IP in quasipolynomial time, then FBDD→DNF in at most quasi-polynomial time. This contradicts FBDD→DNF being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -3138,7 +3179,15 @@
           "derived": true,
           "description": "OBDD$_<$→OBDD in polynomial time. If FBDD→OBDD$_<$ in quasipolynomial time, then FBDD→OBDD in at most quasi-polynomial time. This contradicts FBDD→OBDD being no-quasi."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "PI→CNF in polynomial time. If FBDD→PI in quasipolynomial time, then FBDD→CNF in at most quasi-polynomial time. This contradicts FBDD→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -3499,7 +3548,17 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "$PARITY_n=\\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $CNF$ representations.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Parity"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "poly",
@@ -3512,7 +3571,17 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "$PARITY_n=\\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $DNF$ representations.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Parity"
+          ],
+          "derived": false
+        },
         {
           "status": "poly",
           "refs": [
@@ -3531,8 +3600,24 @@
           "derived": true,
           "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to FBDD."
         },
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP→DNF in polynomial time. If OBDD$_<$→IP in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS→CNF in polynomial time. If OBDD$_<$→MODS in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -3545,7 +3630,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "PI→CNF in polynomial time. If OBDD$_<$→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -3810,7 +3903,15 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→OBDD in polynomial time. If OBDD→CNF in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -3823,7 +3924,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→OBDD in polynomial time. If OBDD→DNF in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3840,7 +3949,15 @@
             "Darwiche_2002"
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→OBDD in polynomial time. IP→DNF in polynomial time. If OBDD→IP in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -3872,7 +3989,15 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→OBDD in polynomial time. PI→CNF in polynomial time. If OBDD→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         null,
         null,

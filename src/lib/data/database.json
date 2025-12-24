@@ -2919,7 +2919,12 @@
           "description": "IP→DNF in polynomial time. If DNF→CNF in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
         },
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "Unless the polynomial hierarchy collapses.\n\nExplanation: Suppose not; then $\\forall\\Lambda\\in DNF$, $\\exists$ an equivalent $\\Lambda_*\\in d$-$DNNF$ of polynomial size. Then we may perform a clausal entailment check on some $CNF$ sentence $\\Sigma \\in CNF$ with respect to some clause $\\gamma$ by checking whether $(\\neg\\Sigma\\vee\\gamma)\\in DNF$ is valid. But we may perform a validity check on $(\\neg\\Sigma\\vee\\gamma)_* \\in d$-$DNNF$ in polynomial time. Since we can now perform a polynomial-time clausal entailment check on all $CNF$ sentences, the polynomial hierarchy collapses.",
+          "refs": [],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -3017,7 +3022,15 @@
           "description": "DNF→DNNF in polynomial time. If DNNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "DNF→DNNF in polynomial time. If DNNF→d-DNNF in polynomial time, then DNF→d-DNNF in polynomial time. This contradicts DNF→d-DNNF being no-poly-unknown-quasi."
+        },
         null,
         null,
         {

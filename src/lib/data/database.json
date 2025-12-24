@@ -2726,7 +2726,14 @@
             "Darwiche_2002"
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "$d$-$DNNF$s can polynomially represent the disjunction of two functions with conflicting variable orders, which forces $FBDD$s to grow exponentially to track the state of both orders within a single \"read-once\" path.",
+          "refs": [
+            "Darwiche_2000"
+          ],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -2740,6 +2747,15 @@
           "description": "d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from d-DNNF to NNF."
         },
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→FBDD in polynomial time. If d-DNNF→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
         null,
         null,
         null,
@@ -2747,8 +2763,15 @@
         null,
         null,
         null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→FBDD in polynomial time. If d-DNNF→OBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -2886,7 +2909,15 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→DNNF in polynomial time. If DNNF→FBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -2906,7 +2937,15 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→DNNF in polynomial time. OBDD$_<$→FBDD in polynomial time. If DNNF→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -2922,7 +2961,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→DNNF in polynomial time. OBDD→FBDD in polynomial time. If DNNF→OBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -2962,6 +3009,15 @@
           "description": "FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from FBDD to NNF."
         },
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→OBDD in polynomial time. If FBDD→OBDD$_<$ in quasipolynomial time, then FBDD→OBDD in at most quasi-polynomial time. This contradicts FBDD→OBDD being no-quasi."
+        },
         null,
         null,
         null,
@@ -2969,8 +3025,17 @@
         null,
         null,
         null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "The hidden weighted bit function has a lower-bounded $OBDD$ representation of $\\Omega(2^{n/4})$, while an $FBDD$ for the same function has a size of only $O(n^2)$",
+          "refs": [
+            "Gergov_1994"
+          ],
+          "separatingFunctionIds": [
+            "HWB"
+          ],
+          "derived": false
+        }
       ],
       [
         null,
@@ -3142,7 +3207,15 @@
           "description": "CNF→NNF in polynomial time. If NNF→DNF in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→NNF in polynomial time. If NNF→FBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -3164,7 +3237,15 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→NNF in polynomial time. OBDD$_<$→FBDD in polynomial time. If NNF→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [],
@@ -3178,7 +3259,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→NNF in polynomial time. OBDD→FBDD in polynomial time. If NNF→OBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -3537,7 +3626,17 @@
           "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD to NNF."
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "The function $\\bigwedge_{i=1}^n(x_i\\Leftrightarrow y_i)$ has an $OBDD_<$ representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Pairwise equivalence"
+          ],
+          "derived": false
+        },
         null,
         null,
         null,

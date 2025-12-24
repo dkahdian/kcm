@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionToAdd } from '../types.js';
+  import type { LanguageToAdd, RelationshipEntry, SeparatingFunctionToAdd, ReferenceToAdd } from '../types.js';
   import { relationKey } from '../logic.js';
   import LanguageQueueItem from './LanguageQueueItem.svelte';
   import ReferenceQueueItem from './ReferenceQueueItem.svelte';
@@ -44,7 +44,7 @@
     languages: Array<{ id: string; name: string }>;
     languagesToAdd: LanguageToAdd[];
     languagesToEdit: LanguageToAdd[];
-    newReferences: string[];
+    newReferences: ReferenceToAdd[];
     newSeparatingFunctions: SeparatingFunctionToAdd[];
     relationships: RelationshipEntry[];
     modifiedRelations: Set<string>;
@@ -87,7 +87,7 @@
     const ids = [...existingReferenceIds];
     const idsSet = new Set(ids);
     for (let i = 0; i < index; i++) {
-      const prevId = generateReferenceId(newReferences[i], idsSet);
+      const prevId = generateReferenceId(newReferences[i].bibtex, idsSet);
       ids.push(prevId);
       idsSet.add(prevId);
     }

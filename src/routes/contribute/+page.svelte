@@ -59,11 +59,12 @@
     loadQueuedChanges
   } from '$lib/contribution-storage.js';
   import type { PersistedQueueState } from '$lib/contribution-storage.js';
+  import type { ReferenceToAdd } from './types.js';
 
   type QueueLanguage = { queueEntryId: string; payload: LanguageToAdd };
   type QueueRelationship = { queueEntryId: string; payload: RelationshipEntry };
   type QueueSeparatingFunction = { queueEntryId: string; payload: SeparatingFunctionToAdd };
-  type QueueReference = { queueEntryId: string; bibtex: string };
+  type QueueReference = { queueEntryId: string; ref: ReferenceToAdd };
 
   // Queue manipulation functions that reference component state
   function addQueueEntry(entry: ContributionQueueEntry) {
@@ -155,7 +156,7 @@
 
   const languageAddPayloads = $derived(languagesToAdd.map((entry) => entry.payload));
   const languageEditPayloads = $derived(languagesToEdit.map((entry) => entry.payload));
-  const referenceValues = $derived(newReferences.map((entry) => entry.bibtex));
+  const referenceValues = $derived(newReferences.map((entry) => entry.ref));
   const separatingFunctionPayloads = $derived(newSeparatingFunctions.map((entry) => entry.payload));
   const relationshipPayloads = $derived(relationships.map((entry) => entry.payload));
 
@@ -271,7 +272,7 @@
           nextRelationships.push({ queueEntryId: entry.id, payload: cloneRelationshipEntry(entry.payload) });
           break;
         case 'reference':
-          nextReferences.push({ queueEntryId: entry.id, bibtex: entry.payload });
+          nextReferences.push({ queueEntryId: entry.id, ref: entry.payload });
           break;
         case 'separator':
           nextSeparators.push({ queueEntryId: entry.id, payload: cloneSeparatingFunctionToAdd(entry.payload) });
@@ -382,8 +383,8 @@
     return { success: true };
   }
 
-  function handleAddReference(bibtex: string) {
-    addQueueEntry({ id: createQueueEntryId(), kind: 'reference', payload: bibtex });
+  function handleAddReference(ref: ReferenceToAdd) {
+    addQueueEntry({ id: createQueueEntryId(), kind: 'reference', payload: ref });
   }
 
   function handleAddSeparatingFunction(sf: SeparatingFunctionToAdd) {
@@ -410,11 +411,11 @@
     showAddReferenceModal = true;
   }
 
-  function handleUpdateReference(bibtex: string) {
+  function handleUpdateReference(ref: ReferenceToAdd) {
     if (editReferenceIndex !== null) {
       const entry = newReferences[editReferenceIndex];
       if (entry) {
-        updateQueueEntry(entry.queueEntryId, 'reference', bibtex);
+        updateQueueEntry(entry.queueEntryId, 'reference', ref);
       }
       editReferenceIndex = null;
     }
@@ -548,11 +549,11 @@
 
     const existingIds = new Set(data.existingReferences.map((r) => r.id));
     for (let i = 0; i < index; i++) {
-      const id = generateReferenceId(newReferences[i].bibtex, existingIds);
+      const id = generateReferenceId(newReferences[i].ref.bibtex, existingIds);
       existingIds.add(id);
     }
 
-    const refId = generateReferenceId(referenceEntry.bibtex, existingIds);
+    const refId = generateReferenceId(referenceEntry.ref.bibtex, existingIds);
 
     queueEntries = queueEntries.map((entry) => {
       if (entry.kind === 'language:new' || entry.kind === 'language:edit') {
@@ -959,7 +960,7 @@
     editReferenceIndex = null;
   }}
   onAdd={editReferenceIndex !== null ? handleUpdateReference : handleAddReference}
-  initialValue={editReferenceIndex !== null ? newReferences[editReferenceIndex]?.bibtex ?? '' : ''}
+  initialValue={editReferenceIndex !== null ? newReferences[editReferenceIndex]?.ref : undefined}
   isEditMode={editReferenceIndex !== null}
 />
 

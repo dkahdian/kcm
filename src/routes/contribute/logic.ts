@@ -1,4 +1,4 @@
-import type { LanguageToAdd, RelationshipEntry } from './types.js';
+import type { LanguageToAdd, RelationshipEntry, ReferenceToAdd } from './types.js';
 import { displayCodeToSafeKey } from '$lib/data/operations.js';
 import { generateReferenceId } from '$lib/utils/reference-id.js';
 import { generateLanguageId } from '$lib/utils/language-id.js';
@@ -79,13 +79,13 @@ export function buildBaselineRelations(adjacencyMatrix: {
  */
 export function getAvailableReferenceIds(
   existingReferences: Array<{ id: string; title: string }>,
-  newReferences: string[]
+  newReferences: ReferenceToAdd[]
 ): string[] {
   const existing = existingReferences.map((r) => r.id);
   const existingSet = new Set(existing);
   
-  const newRefs = newReferences.map((bibtex) => {
-    const newId = generateReferenceId(bibtex, existingSet);
+  const newRefs = newReferences.map((ref) => {
+    const newId = generateReferenceId(ref.bibtex, existingSet);
     existingSet.add(newId); // Add to set to prevent duplicates within new references
     return newId;
   });
@@ -107,7 +107,7 @@ export type ReferenceForTooltip = {
  */
 export function getAvailableReferences(
   existingReferences: Array<{ id: string; title: string; bibtex: string }>,
-  newReferences: string[]
+  newReferences: ReferenceToAdd[]
 ): ReferenceForTooltip[] {
   const existingSet = new Set(existingReferences.map((r) => r.id));
   
@@ -117,21 +117,10 @@ export function getAvailableReferences(
     bibtex: r.bibtex
   }));
   
-  const newRefs: ReferenceForTooltip[] = newReferences.map((bibtex) => {
-    const newId = generateReferenceId(bibtex, existingSet);
+  const newRefs: ReferenceForTooltip[] = newReferences.map((ref) => {
+    const newId = generateReferenceId(ref.bibtex, existingSet);
     existingSet.add(newId);
-    // Parse title from BibTeX for new references
-    const titleMatch = bibtex.match(/title\s*=\s*\{([^}]+)\}/i);
-    const authorMatch = bibtex.match(/author\s*=\s*\{([^}]+)\}/i);
-    const yearMatch = bibtex.match(/year\s*=\s*\{?(\d{4})\}?/i);
-    
-    let title = titleMatch?.[1] || 'Untitled';
-    if (authorMatch) {
-      const firstAuthor = authorMatch[1].split(/\s+and\s+/i)[0].split(',')[0].trim();
-      title = `${firstAuthor}${yearMatch ? ` (${yearMatch[1]})` : ''}: ${title}`;
-    }
-    
-    return { id: newId, title, bibtex };
+    return { id: newId, title: ref.title, bibtex: ref.bibtex };
   });
   
   return [...existing, ...newRefs];

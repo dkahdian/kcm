@@ -12,6 +12,7 @@
 		index,
 		expanded = $bindable(false),
 		onDelete,
+		onEdit,
 		children,
 		renderMathTitle = true,
 		renderMathSubtitle = true
@@ -23,6 +24,7 @@
 		index: number;
 		expanded?: boolean;
 		onDelete: () => void;
+		onEdit?: () => void;
 		children?: import('svelte').Snippet;
 		renderMathTitle?: boolean;
 		renderMathSubtitle?: boolean;
@@ -94,6 +96,16 @@
 			>
 				{expanded ? '∨' : '^'}
 			</button>
+			{#if onEdit}
+				<button
+					type="button"
+					onclick={onEdit}
+					class="{colors.button} font-bold"
+					aria-label="Edit"
+				>
+					✎
+				</button>
+			{/if}
 			<button
 				type="button"
 				onclick={onDelete}

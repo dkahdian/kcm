@@ -1,38 +1,34 @@
-import type { KCReference } from '../types.js';
-import { extractCitationKey } from '../utils/reference-id.js';
-import database from './database.json';
-
 /**
- * Extract a BibTeX field value, handling nested braces properly.
- * Supports both {value} and "value" delimiters.
+ * Migration script to add pre-parsed title and href fields to references in database.json
+ * Run with: npx tsx scripts/migrate-references.ts
  */
+
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Extract a BibTeX field value, handling nested braces properly
 function extractBibtexField(bibtex: string, fieldName: string): string | null {
-  // Match field = {value} or field = "value" or field = value (for simple values like year)
-  const fieldPattern = new RegExp(
-    `${fieldName}\\s*=\\s*(?:\\{|"|)`,
-    'i'
-  );
-  
+  const fieldPattern = new RegExp(`${fieldName}\\s*=\\s*(?:\\{|"|)`, 'i');
   const match = fieldPattern.exec(bibtex);
   if (!match) return null;
   
   const startPos = match.index + match[0].length;
   const delimiter = match[0].slice(-1);
   
-  // For undelimited values (like year = 2002)
   if (delimiter !== '{' && delimiter !== '"') {
     const valueMatch = bibtex.slice(match.index).match(new RegExp(`${fieldName}\\s*=\\s*([^,}\\s]+)`, 'i'));
     return valueMatch ? valueMatch[1] : null;
   }
-  
-  const closeDelimiter = delimiter === '{' ? '}' : '"';
   
   let depth = delimiter === '{' ? 1 : 0;
   let pos = startPos;
   
   while (pos < bibtex.length) {
     const char = bibtex[pos];
-    
     if (delimiter === '{') {
       if (char === '{') depth++;
       else if (char === '}') {
@@ -40,7 +36,6 @@ function extractBibtexField(bibtex: string, fieldName: string): string | null {
         if (depth === 0) break;
       }
     } else {
-      // For quoted strings, just find the closing quote (ignoring escaped quotes)
       if (char === '"' && bibtex[pos - 1] !== '\\') break;
     }
     pos++;
@@ -49,15 +44,10 @@ function extractBibtexField(bibtex: string, fieldName: string): string | null {
   return bibtex.slice(startPos, pos);
 }
 
-/**
- * Clean LaTeX escape sequences and formatting from a string.
- * Converts common LaTeX accents to Unicode characters.
- */
+// Clean LaTeX escape sequences
 function cleanLatexString(str: string): string {
   return str
-    // Handle double-escaped braces (from JSON encoding)
     .replace(/\\\\/g, '\\')
-    // Common LaTeX accents - must handle both {\"{e}} and \"{e} forms
     .replace(/\{?\\"\{([aeiouAEIOU])\}\}?/g, (_, c) => {
       const map: Record<string, string> = { a: 'ä', e: 'ë', i: 'ï', o: 'ö', u: 'ü', A: 'Ä', E: 'Ë', I: 'Ï', O: 'Ö', U: 'Ü' };
       return map[c] || c;
@@ -83,19 +73,14 @@ function cleanLatexString(str: string): string {
       const map: Record<string, string> = { s: 'š', c: 'č', z: 'ž', S: 'Š', C: 'Č', Z: 'Ž' };
       return map[c] || c;
     })
-    // Remove remaining braces used for grouping
     .replace(/\{([^{}]*)\}/g, '$1')
-    // Convert -- to en-dash
     .replace(/--/g, '–')
-    // Clean up extra whitespace
     .replace(/\s+/g, ' ')
     .trim();
 }
 
-/**
- * Parse BibTeX entry to extract metadata and format as IEEE citation
- */
-export function parseBibtex(bibtex: string): { id: string; title: string; href: string } {
+// Parse BibTeX to extract title and href
+function parseBibtex(bibtex: string): { title: string; href: string } {
   const url = extractBibtexField(bibtex, 'url');
   const doi = extractBibtexField(bibtex, 'DOI');
   const titleRaw = extractBibtexField(bibtex, 'title');
@@ -105,8 +90,6 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
   const booktitle = extractBibtexField(bibtex, 'booktitle');
   const volume = extractBibtexField(bibtex, 'volume');
   const pages = extractBibtexField(bibtex, 'pages');
-  
-  const id = extractCitationKey(bibtex) || 'unknown';
   
   let href = '#';
   if (url) {
@@ -148,7 +131,6 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
     
     title = `${authorsStr}, "${titleText},"`;
     
-    // Use journal or booktitle (for conference papers)
     const venue = journal || booktitle;
     if (venue) {
       title += ` ${cleanLatexString(venue)},`;
@@ -167,42 +149,32 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
     title = cleanLatexString(titleRaw);
   }
   
-  return { id, title, href };
+  return { title, href };
 }
 
-/**
- * Database reference entry type - stores pre-parsed title and href along with bibtex.
- * This ensures consistent display and avoids re-parsing issues.
- */
-interface DatabaseReference {
-  id: string;
-  bibtex: string;
-  /** Pre-parsed/verified display title in IEEE format */
-  title: string;
-  /** Pre-parsed/verified URL for the reference */
-  href: string;
-}
+// Main migration
+const databasePath = path.join(__dirname, '../src/lib/data/database.json');
+const database = JSON.parse(fs.readFileSync(databasePath, 'utf-8'));
 
-// Build reference map from JSON data
-const referencesMap: Record<string, KCReference> = {};
+console.log('Migrating references...\n');
 
-const referencesData = database.references as DatabaseReference[];
-
-for (const ref of referencesData) {
-  referencesMap[ref.id] = {
+const migratedRefs = database.references.map((ref: { id: string; bibtex: string }) => {
+  const parsed = parseBibtex(ref.bibtex);
+  console.log(`[${ref.id}]`);
+  console.log(`  Title: ${parsed.title}`);
+  console.log(`  URL: ${parsed.href}`);
+  console.log('');
+  
+  return {
     id: ref.id,
-    title: ref.title,
-    href: ref.href,
-    bibtex: ref.bibtex
+    bibtex: ref.bibtex,
+    title: parsed.title,
+    href: parsed.href
   };
-}
+});
 
-export function getReference(id: string): KCReference | undefined {
-  return referencesMap[id];
-}
+database.references = migratedRefs;
 
-export function getReferences(...ids: string[]): KCReference[] {
-  return ids.map(id => referencesMap[id]).filter(Boolean);
-}
+fs.writeFileSync(databasePath, JSON.stringify(database, null, 2));
 
-export const allReferences = Object.values(referencesMap);
+console.log(`\nMigrated ${migratedRefs.length} references.`);

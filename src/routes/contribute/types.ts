@@ -17,6 +17,18 @@ export type RelationshipEntry = {
   separatingFunctionIds?: string[]; // Array of shortNames referencing top-level separatingFunctions
 };
 
+/**
+ * Reference entry with pre-parsed display fields.
+ * The title and href are parsed from bibtex but can be edited by the user.
+ */
+export type ReferenceToAdd = {
+  bibtex: string;
+  /** Pre-parsed/verified display title in IEEE format */
+  title: string;
+  /** Pre-parsed/verified URL for the reference */
+  href: string;
+};
+
 export type LanguageToAdd = {
   name: string;
   fullName: string;
@@ -47,7 +59,7 @@ export type SubmissionHistoryPayload = {
   languagesToAdd: LanguageToAdd[];
   languagesToEdit: LanguageToAdd[];
   relationships: RelationshipEntry[];
-  newReferences: string[];
+  newReferences: ReferenceToAdd[];
   newSeparatingFunctions: SeparatingFunctionToAdd[];
   customTags: CustomTag[];
   modifiedRelations: string[];

@@ -10,16 +10,17 @@ import type {
   LanguageToAdd,
   RelationshipEntry,
   SeparatingFunctionToAdd,
+  ReferenceToAdd,
   CustomTag
 } from '../../routes/contribute/types.js';
 import { cloneDataset } from './transforms.js';
 import { validateDatasetStructure } from './validation/index.js';
 import { propagateImplicitRelations } from './propagation.js';
 import { isValidComplexityCode } from './complexities.js';
-import { generateReferenceId, extractCitationKey } from '../utils/reference-id.js';
+import { generateReferenceId } from '../utils/reference-id.js';
 
 export type ContributionQueueEntry =
-  | { id: string; kind: 'reference'; payload: string }
+  | { id: string; kind: 'reference'; payload: ReferenceToAdd }
   | { id: string; kind: 'separator'; payload: SeparatingFunctionToAdd }
   | { id: string; kind: 'language:new'; payload: LanguageToAdd }
   | { id: string; kind: 'language:edit'; payload: LanguageToAdd }
@@ -184,15 +185,14 @@ export function applyContributionQueue(
   for (const entry of queue.entries) {
     switch (entry.kind) {
       case 'reference': {
-        const bibtex = entry.payload;
-        const generatedId = generateReferenceId(bibtex, referenceIds);
+        const refData = entry.payload;
+        const generatedId = generateReferenceId(refData.bibtex, referenceIds);
         referenceIds.add(generatedId);
-        const citationKey = extractCitationKey(bibtex);
         const reference: KCReference = {
           id: generatedId,
-          title: citationKey || generatedId,
-          href: '',
-          bibtex
+          title: refData.title,
+          href: refData.href,
+          bibtex: refData.bibtex
         };
         referenceLookup.set(generatedId, reference);
         merged.references = [...(merged.references ?? []), reference];

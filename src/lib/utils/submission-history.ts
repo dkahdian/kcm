@@ -1,6 +1,7 @@
 import type {
   CustomTag,
   LanguageToAdd,
+  ReferenceToAdd,
   RelationshipEntry,
   SeparatingFunctionToAdd,
   SubmissionHistoryEntry,
@@ -38,6 +39,15 @@ function isSeparatingFunctionLike(value: unknown): value is SeparatingFunctionTo
   );
 }
 
+function isReferenceLike(value: unknown): value is ReferenceToAdd {
+  return (
+    isObject(value) &&
+    typeof value.bibtex === 'string' &&
+    typeof value.title === 'string' &&
+    typeof value.href === 'string'
+  );
+}
+
 function cloneLanguages(items: LanguageToAdd[]): LanguageToAdd[] {
   return items.map((item) => ({
     ...item,
@@ -69,6 +79,10 @@ function cloneSeparatingFunctions(items: SeparatingFunctionToAdd[]): SeparatingF
   return items.map((item) => ({ ...item, refs: [...item.refs] }));
 }
 
+function cloneReferences(items: ReferenceToAdd[]): ReferenceToAdd[] {
+  return items.map((item) => ({ ...item }));
+}
+
 function cloneQueueEntries(entries: ContributionQueueEntry[]): ContributionQueueEntry[] {
   return entries.map((entry) => {
     switch (entry.kind) {
@@ -80,8 +94,7 @@ function cloneQueueEntries(entries: ContributionQueueEntry[]): ContributionQueue
       case 'separator':
         return { ...entry, payload: cloneSeparatingFunctions([entry.payload])[0] };
       case 'reference':
-      default:
-        return { ...entry, payload: entry.payload };
+        return { ...entry, payload: cloneReferences([entry.payload])[0] };
     }
   });
 }
@@ -113,8 +126,8 @@ function sanitizeQueueEntries(value: unknown): ContributionQueueEntry[] {
         }
         break;
       case 'reference':
-        if (typeof raw.payload === 'string') {
-          entries.push({ id, kind, payload: raw.payload });
+        if (isReferenceLike(raw.payload)) {
+          entries.push({ id, kind, payload: cloneReferences([raw.payload])[0] });
         }
         break;
       default:
@@ -162,6 +175,13 @@ function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
   const asStringArray = (value: unknown): string[] =>
     isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
 
+  const asReferenceArray = (value: unknown): ReferenceToAdd[] =>
+    isArray(value)
+      ? cloneReferences(
+          value.filter((item): item is ReferenceToAdd => isReferenceLike(item))
+        )
+      : [];
+
   const asTagArray = (value: unknown): CustomTag[] =>
     isArray(value)
       ? cloneTags(value.filter((item): item is CustomTag => !!item && typeof item === 'object') as CustomTag[])
@@ -180,7 +200,7 @@ function sanitizeHistoryEntry(raw: unknown): SubmissionHistoryEntry | null {
     languagesToAdd: asLanguageArray(payloadRaw.languagesToAdd),
     languagesToEdit: asLanguageArray(payloadRaw.languagesToEdit),
     relationships: asRelationshipArray(payloadRaw.relationships),
-    newReferences: asStringArray(payloadRaw.newReferences),
+    newReferences: asReferenceArray(payloadRaw.newReferences),
     newSeparatingFunctions: asSeparatingFunctionArray(payloadRaw.newSeparatingFunctions),
     customTags: asTagArray(payloadRaw.customTags),
     modifiedRelations: asStringArray(payloadRaw.modifiedRelations),

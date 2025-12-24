@@ -23,6 +23,7 @@
   import { recordSubmissionHistory } from '$lib/utils/submission-history.js';
   import type {
     LanguageToAdd,
+    ReferenceToAdd,
     RelationshipEntry,
     SeparatingFunctionToAdd,
     SubmissionHistoryPayload
@@ -42,7 +43,7 @@
     languagesToAdd: LanguageToAdd[];
     languagesToEdit: LanguageToAdd[];
     relationships: RelationshipEntry[];
-    newReferences: string[];
+    newReferences: ReferenceToAdd[];
     newSeparatingFunctions: SeparatingFunctionToAdd[];
   };
 

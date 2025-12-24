@@ -7,10 +7,12 @@
     KCOpSupportMap, 
     SelectedEdge,
     FilteredGraphData,
-    KCLanguagePropertiesResolved
+    KCLanguagePropertiesResolved,
+    KCReference
   } from '$lib/types.js';
   import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
+  import { extractCitationKeys } from '$lib/utils/math-text.js';
   import EdgeLegend from './EdgeLegend.svelte';
   import DynamicLegend from './DynamicLegend.svelte';
 
@@ -41,6 +43,61 @@
 
   let referencesSection: HTMLElement | null = $state(null);
   let copiedRefId: string | null = $state(null);
+
+  // Collect all references including inline citations from description and notes
+  const allReferences = $derived.by<KCReference[]>(() => {
+    if (!selectedLanguage) return [];
+
+    const refIds = new Set<string>();
+    
+    // Add explicit references from the language
+    selectedLanguage.references?.forEach(ref => refIds.add(ref.id));
+    
+    // Extract inline citations from description
+    if (selectedLanguage.description) {
+      extractCitationKeys(selectedLanguage.description).forEach(key => refIds.add(key));
+    }
+    
+    // Extract inline citations from operation notes
+    if (resolvedProperties) {
+      for (const q of resolvedProperties.queries) {
+        if (q.note) {
+          extractCitationKeys(q.note).forEach(key => refIds.add(key));
+        }
+      }
+      for (const t of resolvedProperties.transformations) {
+        if (t.note) {
+          extractCitationKeys(t.note).forEach(key => refIds.add(key));
+        }
+      }
+    }
+    
+    // Build result from global references, preserving order from selectedLanguage.references first
+    const globalRefMap = new Map(graphData.references.map(ref => [ref.id, ref]));
+    const refs: KCReference[] = [];
+    const addedIds = new Set<string>();
+    
+    // First add references in order from selectedLanguage.references
+    for (const ref of selectedLanguage.references ?? []) {
+      if (!addedIds.has(ref.id)) {
+        refs.push(ref);
+        addedIds.add(ref.id);
+      }
+    }
+    
+    // Then add any additional inline citations from global references
+    for (const id of refIds) {
+      if (!addedIds.has(id)) {
+        const ref = globalRefMap.get(id);
+        if (ref) {
+          refs.push(ref);
+          addedIds.add(id);
+        }
+      }
+    }
+    
+    return refs;
+  });
 
   interface RelationshipStatement {
     target: string;
@@ -150,10 +207,14 @@
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  // Handler for inline citation clicks (receives key string, not MouseEvent)
+  function handleCitationClick(_key: string) {
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   // Helper to get the display number (1-based) for a reference ID
   function getRefNumber(refId: string): number {
-    if (!selectedLanguage?.references) return 0;
-    const idx = selectedLanguage.references.findIndex(ref => ref.id === refId);
+    const idx = allReferences.findIndex(ref => ref.id === refId);
     return idx >= 0 ? idx + 1 : 0;
   }
 
@@ -219,7 +280,12 @@
         <MathText as="h4" className="text-sm text-gray-600 mb-4" text={selectedLanguage.fullName} />
         
         <p class="text-gray-700 mb-6">
-          <MathText text={selectedLanguage.description} className="inline" />{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
+          <MathText 
+            text={selectedLanguage.description} 
+            className="inline"
+            references={allReferences}
+            onCitationClick={handleCitationClick}
+          />{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
                 class="ref-badge"
                 onclick={scrollToReferences}
                 title="View reference"
@@ -272,7 +338,12 @@
                           >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
                     {#if q.note}
-                      <MathText text={q.note} className="text-xs text-gray-500" />
+                      <MathText 
+                        text={q.note} 
+                        className="text-xs text-gray-500"
+                        references={allReferences}
+                        onCitationClick={handleCitationClick}
+                      />
                     {/if}
                   </div>
                 </div>
@@ -303,7 +374,12 @@
                           >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
                     {#if t.note}
-                      <MathText text={t.note} className="text-xs text-gray-500" />
+                      <MathText 
+                        text={t.note} 
+                        className="text-xs text-gray-500"
+                        references={allReferences}
+                        onCitationClick={handleCitationClick}
+                      />
                     {/if}
                   </div>
                 </div>
@@ -348,11 +424,11 @@
         {/if}
         
         <div class="mt-4 pt-4 border-t border-gray-200" bind:this={referencesSection}>
-          {#if selectedLanguage.references?.length}
+          {#if allReferences.length}
             <div class="mb-2">
               <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
                             <ol class="space-y-2">
-                {#each selectedLanguage.references as ref, idx}
+                {#each allReferences as ref, idx}
                   <li class="text-xs text-gray-700">
                     <div class="flex items-start gap-1.5">
                       <span class="font-semibold text-gray-900">[{idx + 1}]</span>

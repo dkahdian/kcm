@@ -1,39 +1,7 @@
 <script lang="ts">
   import GenericQueueItem from './GenericQueueItem.svelte';
   import { generateReferenceId } from '$lib/utils/reference-id.js';
-
-  /**
-   * Extract common fields from BibTeX string for display
-   */
-  function parseBibtexFields(bibtex: string): { title?: string; author?: string; year?: string; type?: string } {
-    const result: { title?: string; author?: string; year?: string; type?: string } = {};
-    
-    // Extract entry type
-    const typeMatch = bibtex.match(/@(\w+)\s*\{/);
-    if (typeMatch) {
-      result.type = typeMatch[1].toLowerCase();
-    }
-    
-    // Extract title
-    const titleMatch = bibtex.match(/title\s*=\s*[{"]([^}"]+)[}"]/i);
-    if (titleMatch) {
-      result.title = titleMatch[1].replace(/[{}]/g, '');
-    }
-    
-    // Extract author
-    const authorMatch = bibtex.match(/author\s*=\s*[{"]([^}"]+)[}"]/i);
-    if (authorMatch) {
-      result.author = authorMatch[1].replace(/[{}]/g, '');
-    }
-    
-    // Extract year
-    const yearMatch = bibtex.match(/year\s*=\s*[{"]?(\d{4})[}"]?/i);
-    if (yearMatch) {
-      result.year = yearMatch[1];
-    }
-    
-    return result;
-  }
+  import type { ReferenceToAdd } from '../types.js';
 
   /**
    * Display a single queued reference
@@ -47,7 +15,7 @@
     onEdit,
     onDelete
   }: {
-    reference: string;
+    reference: ReferenceToAdd;
     index: number;
     existingReferenceIds?: string[];
     isExpanded?: boolean;
@@ -56,14 +24,13 @@
     onDelete: (index: number) => void;
   } = $props();
 
-  const parsed = parseBibtexFields(reference);
-  const generatedId = generateReferenceId(reference, new Set(existingReferenceIds));
+  const generatedId = generateReferenceId(reference.bibtex, new Set(existingReferenceIds));
 </script>
 
 <GenericQueueItem
   type="Reference"
   title={generatedId}
-  subtitle={parsed.title || 'BibTeX entry'}
+  subtitle={reference.title.slice(0, 60) + (reference.title.length > 60 ? '...' : '')}
   renderMathTitle={false}
   renderMathSubtitle={false}
   colorScheme="purple"
@@ -81,36 +48,24 @@
           <span class="font-mono text-purple-700">{generatedId}</span>
         </div>
       </div>
-      {#if parsed.title}
+      <div>
+        <div class="font-semibold text-gray-700 mb-1">Display Title:</div>
+        <div class="bg-white p-2 rounded border text-gray-900">{reference.title}</div>
+      </div>
+      {#if reference.href && reference.href !== '#'}
         <div>
-          <div class="font-semibold text-gray-700 mb-1">Title:</div>
-          <div class="bg-white p-2 rounded border text-gray-900">{parsed.title}</div>
-        </div>
-      {/if}
-      {#if parsed.author}
-        <div>
-          <div class="font-semibold text-gray-700 mb-1">Author(s):</div>
-          <div class="bg-white p-2 rounded border text-gray-900">{parsed.author}</div>
-        </div>
-      {/if}
-      {#if parsed.year}
-        <div>
-          <div class="font-semibold text-gray-700 mb-1">Year:</div>
-          <div class="bg-white p-2 rounded border text-gray-900">{parsed.year}</div>
-        </div>
-      {/if}
-      {#if parsed.type}
-        <div>
-          <div class="font-semibold text-gray-700 mb-1">Entry Type:</div>
+          <div class="font-semibold text-gray-700 mb-1">URL:</div>
           <div class="bg-white p-2 rounded border">
-            <span class="capitalize text-gray-600">{parsed.type}</span>
+            <a href={reference.href} target="_blank" rel="noreferrer noopener" class="text-blue-600 hover:underline break-all">
+              {reference.href}
+            </a>
           </div>
         </div>
       {/if}
-      <div>
-        <div class="font-semibold text-gray-700 mb-1">Raw BibTeX:</div>
-        <pre class="text-xs bg-white p-2 rounded border border-purple-200 overflow-x-auto whitespace-pre-wrap">{reference}</pre>
-      </div>
+      <details>
+        <summary class="font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-900">Raw BibTeX</summary>
+        <pre class="text-xs bg-white p-2 rounded border border-purple-200 overflow-x-auto whitespace-pre-wrap mt-1">{reference.bibtex}</pre>
+      </details>
     </div>
   {/snippet}
 </GenericQueueItem>

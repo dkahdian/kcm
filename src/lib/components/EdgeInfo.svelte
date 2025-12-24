@@ -2,6 +2,7 @@
   import MathText from './MathText.svelte';
   import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from '$lib/types.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
+  import { extractCitationKeys } from '$lib/utils/math-text.js';
   import DynamicLegend from './DynamicLegend.svelte';
   
   type ViewMode = 'graph' | 'matrix';
@@ -61,19 +62,29 @@
     originalEdge?.backward ? getSeparatingFunctionsForRelation(originalEdge.backward) : []
   );
 
-  // Collect all unique references from both directions
+  // Collect all unique references from both directions, including inline citations
   const edgeReferences = $derived.by<KCReference[]>(() => {
     if (!originalEdge) return [];
 
     const refIds = new Set<string>();
     const refs: KCReference[] = [];
 
-    const collectRefs = (relation: { refs: string[]; separatingFunctionIds?: string[] } | null) => {
+    const collectRefs = (relation: { refs: string[]; description?: string; separatingFunctionIds?: string[] } | null) => {
       if (!relation) return;
       relation.refs.forEach((id) => refIds.add(id));
-      // Look up separating functions by ID and collect their refs
+      
+      // Extract citation keys from description
+      if (relation.description) {
+        extractCitationKeys(relation.description).forEach((key) => refIds.add(key));
+      }
+      
+      // Look up separating functions by ID and collect their refs and inline citations
       getSeparatingFunctionsForRelation(relation).forEach((fn) => {
         fn.refs.forEach((id) => refIds.add(id));
+        // Also extract citations from separating function description
+        if (fn.description) {
+          extractCitationKeys(fn.description).forEach((key) => refIds.add(key));
+        }
       });
     };
 
@@ -103,6 +114,11 @@
 
   function scrollToReferences(e: MouseEvent) {
     e.preventDefault();
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Handler for inline citation clicks (receives key string, not MouseEvent)
+  function handleCitationClick(_key: string) {
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -145,7 +161,12 @@
                     >[{getRefNumber(refId)}]</button>{/each}{/if}
               </p>
               {#if originalEdge.forward.description}
-                <MathText text={originalEdge.forward.description} className="text-sm text-gray-600 mb-2 italic block" />
+                <MathText 
+                  text={originalEdge.forward.description} 
+                  className="text-sm text-gray-600 mb-2 italic block" 
+                  references={edgeReferences}
+                  onCitationClick={handleCitationClick}
+                />
               {/if}
               
               {#if forwardSeparatingFunctions.length > 0}
@@ -161,7 +182,12 @@
                                 title="View reference"
                               >[{getRefNumber(refId)}]</button>{/each}{/if}
                         </div>
-                        <MathText text={fn.description} className="text-xs text-gray-600 mt-1 block" />
+                        <MathText 
+                          text={fn.description} 
+                          className="text-xs text-gray-600 mt-1 block"
+                          references={edgeReferences}
+                          onCitationClick={handleCitationClick}
+                        />
                       </div>
                     {/each}
                   </div>
@@ -185,7 +211,12 @@
                     >[{getRefNumber(refId)}]</button>{/each}{/if}
               </p>
               {#if originalEdge.backward.description}
-                <MathText text={originalEdge.backward.description} className="text-sm text-gray-600 mb-2 italic block" />
+                <MathText 
+                  text={originalEdge.backward.description} 
+                  className="text-sm text-gray-600 mb-2 italic block" 
+                  references={edgeReferences}
+                  onCitationClick={handleCitationClick}
+                />
               {/if}
               
               {#if backwardSeparatingFunctions.length > 0}
@@ -201,7 +232,12 @@
                                 title="View reference"
                               >[{getRefNumber(refId)}]</button>{/each}{/if}
                         </div>
-                        <MathText text={fn.description} className="text-xs text-gray-600 mt-1 block" />
+                        <MathText 
+                          text={fn.description} 
+                          className="text-xs text-gray-600 mt-1 block"
+                          references={edgeReferences}
+                          onCitationClick={handleCitationClick}
+                        />
                       </div>
                     {/each}
                   </div>

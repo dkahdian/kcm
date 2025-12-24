@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { ReferenceForTooltip } from '../../../routes/contribute/logic.js';
+
   type Language = {
     name: string;
     fullName: string;
@@ -30,7 +32,7 @@
     transformations: Transformation[];
     complexityOptions: ComplexityOption[];
     existingTags: Tag[];
-    availableRefs?: string[];
+    availableRefs?: ReferenceForTooltip[];
     isEdit?: boolean;
     initialData?: Language;
   };
@@ -304,17 +306,18 @@
             <fieldset>
               <legend class="block text-sm font-medium text-gray-700 mb-2">Description References</legend>
               <div class="flex flex-wrap gap-2">
-                {#each availableRefs as refId}
+                {#each availableRefs as ref}
                   <button
                     type="button"
-                    onclick={() => toggleDescriptionRef(refId)}
+                    onclick={() => toggleDescriptionRef(ref.id)}
                     class={`px-3 py-1 text-sm rounded-lg border-2 transition-colors ${
-                      descriptionRefs.includes(refId)
+                      descriptionRefs.includes(ref.id)
                         ? 'bg-green-600 text-white border-green-600'
                         : 'bg-white text-gray-700 border-gray-300 hover:border-green-300'
                     }`}
+                    title={ref.title}
                   >
-                    {refId}
+                    {ref.id}
                   </button>
                 {/each}
               </div>
@@ -355,17 +358,18 @@
                 </div>
                   {#if availableRefs.length > 0}
                     <div class="mt-2 flex flex-wrap gap-1">
-                      {#each availableRefs as refId}
+                      {#each availableRefs as ref}
                         <button
                           type="button"
-                          onclick={() => toggleQueryRef(query.code, refId)}
+                          onclick={() => toggleQueryRef(query.code, ref.id)}
                           class={`px-2 py-0.5 text-xs rounded ${
-                            querySupport[query.code].refs.includes(refId)
+                            querySupport[query.code].refs.includes(ref.id)
                               ? 'bg-green-600 text-white'
                               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                           }`}
+                          title={ref.title}
                         >
-                          {refId}
+                          {ref.id}
                         </button>
                       {/each}
                     </div>
@@ -409,17 +413,18 @@
                 </div>
                   {#if availableRefs.length > 0}
                     <div class="mt-2 flex flex-wrap gap-1">
-                      {#each availableRefs as refId}
+                      {#each availableRefs as ref}
                         <button
                           type="button"
-                          onclick={() => toggleTransformRef(transform.code, refId)}
+                          onclick={() => toggleTransformRef(transform.code, ref.id)}
                           class={`px-2 py-0.5 text-xs rounded ${
-                            transformationSupport[transform.code].refs.includes(refId)
+                            transformationSupport[transform.code].refs.includes(ref.id)
                               ? 'bg-green-600 text-white'
                               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                           }`}
+                          title={ref.title}
                         >
-                          {refId}
+                          {ref.id}
                         </button>
                       {/each}
                     </div>

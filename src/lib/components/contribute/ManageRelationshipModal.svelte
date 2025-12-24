@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { ReferenceForTooltip } from '../../../routes/contribute/logic.js';
+
   type Language = {
     id: string;
     name: string;
@@ -39,7 +41,7 @@
     onSave: (relationship: Relationship) => void;
     languages: Language[];
     statusOptions: StatusOption[];
-    availableRefs?: string[];
+    availableRefs?: ReferenceForTooltip[];
     availableSeparatingFunctions?: SeparatingFunctionForDropdown[];
     baselineRelations?: Map<string, BaselineRelationship>; // key is "sourceId->targetId"
     initialData?: Relationship; // For editing existing relationships
@@ -249,17 +251,18 @@
           <fieldset>
             <legend class="block text-sm font-medium text-gray-700 mb-2">References</legend>
             <div class="flex flex-wrap gap-2">
-              {#each availableRefs as refId}
+              {#each availableRefs as ref}
                 <button
                   type="button"
-                  onclick={() => toggleRef(refId)}
+                  onclick={() => toggleRef(ref.id)}
                   class={`px-3 py-1 text-sm rounded-lg border-2 transition-colors ${
-                    selectedRefs.includes(refId)
+                    selectedRefs.includes(ref.id)
                       ? 'bg-blue-600 text-white border-blue-600'
                       : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300'
                   }`}
+                  title={ref.title}
                 >
-                  {refId}
+                  {ref.id}
                 </button>
               {/each}
             </div>

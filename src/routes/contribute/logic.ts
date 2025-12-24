@@ -94,6 +94,50 @@ export function getAvailableReferenceIds(
 }
 
 /**
+ * Reference data with tooltip information
+ */
+export type ReferenceForTooltip = {
+  id: string;
+  title: string;
+  bibtex: string;
+};
+
+/**
+ * Get available references with full tooltip data (existing + new)
+ */
+export function getAvailableReferences(
+  existingReferences: Array<{ id: string; title: string; bibtex: string }>,
+  newReferences: string[]
+): ReferenceForTooltip[] {
+  const existingSet = new Set(existingReferences.map((r) => r.id));
+  
+  const existing: ReferenceForTooltip[] = existingReferences.map((r) => ({
+    id: r.id,
+    title: r.title,
+    bibtex: r.bibtex
+  }));
+  
+  const newRefs: ReferenceForTooltip[] = newReferences.map((bibtex) => {
+    const newId = generateReferenceId(bibtex, existingSet);
+    existingSet.add(newId);
+    // Parse title from BibTeX for new references
+    const titleMatch = bibtex.match(/title\s*=\s*\{([^}]+)\}/i);
+    const authorMatch = bibtex.match(/author\s*=\s*\{([^}]+)\}/i);
+    const yearMatch = bibtex.match(/year\s*=\s*\{?(\d{4})\}?/i);
+    
+    let title = titleMatch?.[1] || 'Untitled';
+    if (authorMatch) {
+      const firstAuthor = authorMatch[1].split(/\s+and\s+/i)[0].split(',')[0].trim();
+      title = `${firstAuthor}${yearMatch ? ` (${yearMatch[1]})` : ''}: ${title}`;
+    }
+    
+    return { id: newId, title, bibtex };
+  });
+  
+  return [...existing, ...newRefs];
+}
+
+/**
  * Get available languages (existing + new + edited)
  */
 export function getAvailableLanguages(

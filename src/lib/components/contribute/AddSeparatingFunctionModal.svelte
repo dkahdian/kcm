@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { ReferenceForTooltip } from '../../../routes/contribute/logic.js';
+
   type SeparatingFunctionData = {
     shortName: string;
     name: string;
@@ -10,7 +12,7 @@
     isOpen: boolean;
     onClose: () => void;
     onAdd: (sf: SeparatingFunctionData) => void;
-    availableRefs?: string[];
+    availableRefs?: ReferenceForTooltip[];
     initialValue?: SeparatingFunctionData;
     isEditMode?: boolean;
   };
@@ -140,17 +142,18 @@
           <fieldset>
             <legend class="block text-sm font-medium text-gray-700 mb-2">References</legend>
             <div class="flex flex-wrap gap-2">
-              {#each availableRefs as refId}
+              {#each availableRefs as ref}
                 <button
                   type="button"
-                  onclick={() => toggleRef(refId)}
+                  onclick={() => toggleRef(ref.id)}
                   class={`px-3 py-1 text-sm rounded-lg border-2 transition-colors ${
-                    selectedRefs.includes(refId)
+                    selectedRefs.includes(ref.id)
                       ? 'bg-orange-600 text-white border-orange-600'
                       : 'bg-white text-gray-700 border-gray-300 hover:border-orange-300'
                   }`}
+                  title={ref.title}
                 >
-                  {refId}
+                  {ref.id}
                 </button>
               {/each}
             </div>

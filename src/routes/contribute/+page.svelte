@@ -12,7 +12,7 @@
   import { 
     relationKey, 
     buildBaselineRelations,
-    getAvailableReferenceIds,
+    getAvailableReferences,
     getAvailableLanguages,
     getAvailableSeparatingFunctions,
     convertLanguageForEdit
@@ -874,7 +874,7 @@
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   complexityOptions={complexityOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
+  availableRefs={getAvailableReferences(data.existingReferences, referenceValues)}
 />
 
 <AddLanguageModal
@@ -891,7 +891,7 @@
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   complexityOptions={complexityOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
   existingTags={[...data.existingTags, ...customTags].map(t => ({ label: t.label, color: t.color || '#6366f1', description: '', refs: [] }))}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
+  availableRefs={getAvailableReferences(data.existingReferences, referenceValues)}
 />
 
 <!-- Language Selector Modal for Editing -->
@@ -971,7 +971,7 @@
   }}
   onAdd={editSeparatingFunctionIndex !== null ? handleUpdateSeparatingFunction : handleAddSeparatingFunction}
   initialValue={editSeparatingFunctionIndex !== null ? newSeparatingFunctions[editSeparatingFunctionIndex]?.payload : undefined}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
+  availableRefs={getAvailableReferences(data.existingReferences, referenceValues)}
   isEditMode={editSeparatingFunctionIndex !== null}
 />
 
@@ -985,7 +985,7 @@
   initialData={editRelationshipIndex !== null ? relationships[editRelationshipIndex]?.payload : undefined}
   languages={getAvailableLanguages(data.languages, languageAddPayloads, languageEditPayloads)}
   {statusOptions}
-  availableRefs={getAvailableReferenceIds(data.existingReferences, referenceValues)}
+  availableRefs={getAvailableReferences(data.existingReferences, referenceValues)}
   availableSeparatingFunctions={getAvailableSeparatingFunctions(data.existingSeparatingFunctions, separatingFunctionPayloads)}
   {baselineRelations}
 />

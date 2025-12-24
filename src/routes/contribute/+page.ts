@@ -10,7 +10,7 @@ import { allReferences } from '$lib/data/references.js';
 export const load: PageLoad = () => {
   const existingLanguageIds = allLanguages.map((lang) => lang.name);
 
-  const existingReferences = allReferences.map((ref) => ({ id: ref.id, title: ref.title }));
+  const existingReferences = allReferences.map((ref) => ({ id: ref.id, title: ref.title, bibtex: ref.bibtex }));
 
   const tagLookup = new Map<string, { label: string; color?: string }>();
   for (const language of allLanguages) {

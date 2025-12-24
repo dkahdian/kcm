@@ -261,27 +261,45 @@ export const hideImplicitEdges: EdgeFilter = {
   }
 };
 
+type ImplicitEdgeTreatmentMode = 'none' | 'gray' | 'highlight-explicit';
+
 /**
- * Gray implicit edges - ON BY DEFAULT for matrix view
+ * Implicit edge treatment - controls how derived vs explicit edges are displayed
  * 
- * Marks implicit (derived) edges with a visual indicator so they can be 
- * styled differently (e.g., with gray stripes) in the matrix view.
- * This filter adds a 'dimmed' flag to derived relations for styling purposes.
+ * - none: No visual distinction (default for graph view)
+ * - gray: Gray stripes on implicit/derived edges (default for matrix view)
+ * - highlight-explicit: Golden border on explicit edges (no styling on implicit)
  */
-export const grayImplicitEdges: EdgeFilter = {
-  id: 'gray-implicit-edges',
-  name: 'Gray Implicit Edges',
-  description: 'Show implicit edges with gray stripes to distinguish them from explicit edges',
+export const implicitEdgeTreatment: EdgeFilter<ImplicitEdgeTreatmentMode> = {
+  id: 'implicit-edge-treatment',
+  name: 'Implicit Edge Treatment',
+  description: 'Control how implicit (derived) vs explicit edges are visually distinguished',
   category: 'Visibility',
-  defaultParam: false, // OFF by default for graph
-  defaultParamMatrix: true, // ON by default for matrix
-  controlType: 'checkbox',
-  lambda: (data, param) => {
-    if (!param) return data;
+  defaultParam: 'none', // None by default for graph
+  defaultParamMatrix: 'gray', // Gray by default for matrix
+  controlType: 'dropdown',
+  options: [
+    { value: 'none', label: 'None', description: 'No visual distinction between implicit and explicit edges' },
+    { value: 'gray', label: 'Gray implicit', description: 'Show implicit edges with gray stripes' },
+    { value: 'highlight-explicit', label: 'Highlight explicit', description: 'Add golden border to explicit (non-derived) edges' }
+    // TODO: Consider making 'highlight-explicit' the default
+  ],
+  lambda: (data, mode) => {
+    if (mode === 'none') return data;
+    
     return mapRelationsInDataset(data, (relation) => {
       if (!relation) return null;
-      if (relation.derived) {
-        return { ...relation, dimmed: true };
+      
+      if (mode === 'gray') {
+        // Gray stripes on derived edges
+        if (relation.derived) {
+          return { ...relation, dimmed: true };
+        }
+      } else if (mode === 'highlight-explicit') {
+        // Golden border on explicit (non-derived) edges
+        if (!relation.derived) {
+          return { ...relation, explicit: true };
+        }
       }
       return relation;
     });
@@ -338,7 +356,7 @@ export const edgeFilters: EdgeFilter<any>[] = [
   manageUnknowns,
   hideIncomparable,
   hideImplicitEdges,
-  grayImplicitEdges,
+  implicitEdgeTreatment,
   positiveResultsOnly,
   polyDisplay,
   omitSeparatorFunctions,

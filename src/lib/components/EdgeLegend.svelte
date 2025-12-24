@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
-  import { relationTypes } from '$lib/data/relation-types.js';
+  import { relationTypes } from '$lib/data/complexities.js';
 
   type EdgeType = {
     arrow: string;

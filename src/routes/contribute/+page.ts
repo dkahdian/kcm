@@ -3,7 +3,7 @@ import { allLanguages } from '$lib/data/languages.js';
 import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
 import { COMPLEXITIES } from '$lib/data/complexities.js';
 import { adjacencyMatrixData } from '$lib/data/edges.js';
-import { relationTypes } from '$lib/data/relation-types.js';
+import { relationTypes } from '$lib/data/complexities.js';
 import { allSeparatingFunctions } from '$lib/data/separating-functions.js';
 import { allReferences } from '$lib/data/references.js';
 

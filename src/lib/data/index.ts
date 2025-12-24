@@ -20,7 +20,7 @@ export function getAllEdgeFilters(): EdgeFilter[] {
 export { organizeFiltersByCategory } from './filters/index.js';
 
 // Re-export specific parts for convenience
-export { relationTypes } from './relation-types.js';
+export { relationTypes } from './complexities.js';
 export { allLanguages } from './languages.js';
 export { allPredefinedFilters } from './filters/index.js';
 export { edgeFilters } from './filters/index.js';

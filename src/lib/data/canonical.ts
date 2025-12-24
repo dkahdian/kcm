@@ -2,7 +2,7 @@ import type { GraphData, KCSeparatingFunction } from '../types.js';
 import database from './database.json';
 import { allLanguages } from './languages.js';
 import { adjacencyMatrixData } from './edges.js';
-import { relationTypes } from './relation-types.js';
+import { relationTypes } from './complexities.js';
 import { allReferences } from './references.js';
 import { COMPLEXITIES } from './complexities.js';
 

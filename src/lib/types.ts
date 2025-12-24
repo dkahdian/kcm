@@ -1,6 +1,22 @@
 // Types for the Knowledge Compilation Map
 
 /**
+ * Arrow shape types for relation endpoints
+ */
+export type ArrowShape = 
+  | 'none'           // no arrow
+  | 'triangle'       // solid triangle (standard arrow)
+  | 'triangle-tee'   // triangle with perpendicular line
+  | 'triangle-cross' // triangle with cross
+  | 'tee'            // perpendicular line only
+  | 'diamond'        // hollow diamond
+  | 'square'         // square
+  | 'circle'         // circle
+  | 'vee'            // V-shaped arrow
+  | 'chevron'        // chevron arrow
+  | 'triangle-backcurve'; // curved triangle
+
+/**
  * Full complexity info with display properties.
  * Used for both transformation statuses and operation complexities.
  * 
@@ -33,6 +49,10 @@ export interface Complexity {
   pastel: string;
   /** CSS class name for styling */
   cssClass: string;
+  /** Arrow shape for graph edge endpoints */
+  arrow: ArrowShape;
+  /** Whether the arrow/edge should be dashed */
+  dashed: boolean;
 }
 
 export interface VisualOverrides {
@@ -128,22 +148,6 @@ export interface KCLanguage {
 }
 
 /**
- * Arrow shape types for relation endpoints
- */
-export type ArrowShape = 
-  | 'none'           // no arrow
-  | 'triangle'       // solid triangle (standard arrow)
-  | 'triangle-tee'   // triangle with perpendicular line
-  | 'triangle-cross' // triangle with cross
-  | 'tee'            // perpendicular line only
-  | 'diamond'        // hollow diamond
-  | 'square'         // square
-  | 'circle'         // circle
-  | 'vee'            // V-shaped arrow
-  | 'chevron'        // chevron arrow
-  | 'triangle-backcurve'; // curved triangle
-
-/**
  * Style configuration for a single endpoint of an edge
  */
 export interface EdgeEndpointStyle {
@@ -223,8 +227,10 @@ export interface DirectedSuccinctnessRelation {
   hidden?: boolean;
   /** True if this edge was inferred by the propagator rather than manually authored. */
   derived?: boolean;
-  /** True if this edge should be visually dimmed/grayed (set by grayImplicitEdges filter). */
+  /** True if this edge should be visually dimmed/grayed (set by implicitEdgeTreatment filter). */
   dimmed?: boolean;
+  /** True if this edge should be highlighted as explicit (set by implicitEdgeTreatment filter). */
+  explicit?: boolean;
 }
 
 /**

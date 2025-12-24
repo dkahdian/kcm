@@ -1,4 +1,4 @@
-import type { Complexity } from '../types.js';
+import type { ArrowShape, Complexity, KCRelationType } from '../types.js';
 
 /**
  * Valid complexity codes used in the application.
@@ -37,6 +37,8 @@ export const COMPLEXITY_CODES = [
  * - color: Saturated hex color for icons/text
  * - pastel: Pastel version of color for backgrounds
  * - cssClass: CSS class name for styling
+ * - arrow: Arrow shape for graph edge endpoints
+ * - dashed: Whether the arrow/edge should be dashed
  */
 export const COMPLEXITIES: Record<string, Complexity> = {
   poly: {
@@ -47,7 +49,9 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '🟢',
     color: '#22c55e', // green-500
     pastel: '#dcfce7', // green-100
-    cssClass: 'complexity-poly'
+    cssClass: 'complexity-poly',
+    arrow: 'triangle',
+    dashed: false
   },
   'no-poly-unknown-quasi': {
     code: 'no-poly-unknown-quasi',
@@ -57,7 +61,9 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '⚠️',
     color: '#ef4444', // red-500
     pastel: '#fee2e2', // red-100
-    cssClass: 'complexity-no-poly-unknown-quasi'
+    cssClass: 'complexity-no-poly-unknown-quasi',
+    arrow: 'tee',
+    dashed: true
   },
   'no-poly-quasi': {
     code: 'no-poly-quasi',
@@ -67,7 +73,9 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '⚡',
     color: '#f97316', // orange-500
     pastel: '#ffedd5', // orange-100
-    cssClass: 'complexity-no-poly-quasi'
+    cssClass: 'complexity-no-poly-quasi',
+    arrow: 'tee',
+    dashed: false
   },
   'unknown-poly-quasi': {
     code: 'unknown-poly-quasi',
@@ -77,28 +85,34 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '⚡',
     color: '#eab308', // yellow-500
     pastel: '#fef9c3', // yellow-100
-    cssClass: 'complexity-unknown-poly-quasi'
+    cssClass: 'complexity-unknown-poly-quasi',
+    arrow: 'triangle-cross',
+    dashed: true
   },
   'unknown-both': {
     code: 'unknown-both',
     label: 'Unknown',
     description: 'Both polynomial and quasi-polynomial unknown',
-    notation: '$\\leq_p^?$ · $\\leq_q^?$',
+    notation: '$?$',
     emoji: '❔',
     color: '#6b7280', // gray-500
     pastel: '#f3f4f6', // gray-100
-    cssClass: 'complexity-unknown-both'
+    cssClass: 'complexity-unknown-both',
+    arrow: 'square',
+    dashed: true
   },
   unknown: {
     code: 'unknown',
     internal: true,
     label: 'Unknown',
     description: 'Unknown whether polynomial transformation exists',
-    notation: '$\\leq^?$',
+    notation: '$?$',
     emoji: '❔',
     color: '#6b7280', // gray-500
     pastel: '#f3f4f6', // gray-100
-    cssClass: 'complexity-unknown'
+    cssClass: 'complexity-unknown',
+    arrow: 'square',
+    dashed: true
   },
   'no-quasi': {
     code: 'no-quasi',
@@ -108,7 +122,9 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '❌',
     color: '#dc2626', // red-600
     pastel: '#fecaca', // red-200
-    cssClass: 'complexity-no-quasi'
+    cssClass: 'complexity-no-quasi',
+    arrow: 'square',
+    dashed: false
   },
   'not-poly': {
     code: 'not-poly',
@@ -119,7 +135,9 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '❌',
     color: '#ef4444', // red-500
     pastel: '#fee2e2', // red-100
-    cssClass: 'complexity-not-poly'
+    cssClass: 'complexity-not-poly',
+    arrow: 'square',
+    dashed: false
   },
   'unknown-to-us': {
     code: 'unknown-to-us',
@@ -129,7 +147,9 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     emoji: '❓',
     color: '#9ca3af', // gray-400
     pastel: '#ffffff', // white
-    cssClass: 'complexity-unknown-to-us'
+    cssClass: 'complexity-unknown-to-us',
+    arrow: 'circle',
+    dashed: true
   }
 };
 
@@ -242,4 +262,55 @@ export function isValidComplexityCode(code: string): boolean {
  */
 export function getAllComplexityCodes(): string[] {
   return Object.keys(COMPLEXITIES);
+}
+
+// ============================================================================
+// Relation Types (formerly in relation-types.ts)
+// ============================================================================
+
+const DEFAULT_ENDPOINT: { arrow: ArrowShape; dashed: boolean } = { arrow: 'none', dashed: false };
+
+/**
+ * Generate KCRelationType array from COMPLEXITIES.
+ * This consolidates complexity definitions into relation types for graph edges.
+ */
+function buildRelationTypes(): KCRelationType[] {
+  return Object.values(COMPLEXITIES)
+    .filter(c => !c.internal) // Skip internal-only types
+    .map(complexity => ({
+      id: complexity.code,
+      name: complexity.label,
+      label: complexity.notation,
+      description: complexity.description,
+      style: {
+        lineStyle: 'solid' as const,
+        width: 2,
+        targetStyle: {
+          arrow: complexity.arrow,
+          dashed: complexity.dashed
+        },
+        sourceStyle: {
+          arrow: 'none',
+          dashed: false
+        }
+      },
+      defaultVisible: true
+    }));
+}
+
+export const relationTypes: KCRelationType[] = buildRelationTypes();
+
+/**
+ * Get the edge endpoint style for a given status code.
+ * Used for graph visualization arrow/dashed styling.
+ */
+export function getEdgeEndpointStyle(status: string | null): { arrow: ArrowShape; dashed: boolean } {
+  if (status === null) {
+    return DEFAULT_ENDPOINT;
+  }
+  const complexity = COMPLEXITIES[status];
+  if (!complexity) {
+    return DEFAULT_ENDPOINT;
+  }
+  return { arrow: complexity.arrow, dashed: complexity.dashed };
 }

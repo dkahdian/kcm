@@ -286,7 +286,7 @@
                   <td>
                     <button
                       type="button"
-                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${relation.dimmed ? 'is-dimmed' : ''} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(rowLanguage.id, colLanguage.id) ? 'is-complement' : ''}`}
+                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${relation.dimmed ? 'is-dimmed' : ''} ${relation.explicit ? 'is-explicit' : ''} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(rowLanguage.id, colLanguage.id) ? 'is-complement' : ''}`}
                       onclick={() => handleCellClick(rowLanguage.id, colLanguage.id, relation)}
                       title={getCellTitle(rowLanguage.language, colLanguage.language, relation)}
                     >
@@ -467,6 +467,12 @@
     letter-spacing: 0.04em;
   }
 
+  /* Explicit edges - golden border to highlight non-derived edges */
+  .matrix-cell.is-explicit {
+    box-shadow: inset 0 0 0 2px #eab308; /* yellow-500 golden border */
+  }
+
+  /* Selection borders override explicit border */
   .matrix-cell.is-selected {
     box-shadow: inset 0 0 0 3px #1d4ed8; /* blue border for selected */
   }
@@ -487,9 +493,9 @@
     background: repeating-linear-gradient(
       -45deg,
       transparent,
-      transparent 3px,
-      rgba(156, 163, 175, 0.4) 3px,
-      rgba(156, 163, 175, 0.4) 5px
+      transparent 6px,
+      rgba(156, 163, 175, 0.3) 6px,
+      rgba(156, 163, 175, 0.3) 7px
     );
     pointer-events: none;
     z-index: 1;

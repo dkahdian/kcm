@@ -2670,7 +2670,12 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "It is well-known that some $CNF$ formulas (i.e. $\\neg PARITY_n=\\neg\\bigoplus_{i=1}^n x_i$) have exponentially many prime implicants.",
+          "refs": [],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -2800,7 +2805,15 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. IP→DNF in polynomial time. If DNF→CNF in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -2814,7 +2827,17 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "It is well-known that some $DNF$ formulas (i.e. $PARITY_n=\\bigoplus_{i=1}^n x_i$) have exponentially many prime implicates.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Parity"
+          ],
+          "derived": false
+        },
         null,
         null,
         {
@@ -2828,7 +2851,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. PI→CNF in polynomial time. If DNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -2840,6 +2871,15 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. DNF→DNNF in polynomial time. If DNNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -2847,8 +2887,15 @@
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. DNF→DNNF in polynomial time. If DNNF→IP in quasipolynomial time, then DNF→IP in at most quasi-polynomial time. This contradicts DNF→IP being no-quasi."
+        },
         null,
         null,
         {
@@ -2860,7 +2907,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. DNF→DNNF in polynomial time. PI→CNF in polynomial time. If DNNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -2920,7 +2975,17 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Consider the $DNF$ formula $\\Pi_n=\\bigvee_{i=0}^{n-1}(x_{2i} \\wedge x_{2i+1})$. This formula is in prime implicants form and each clause in $\\Pi_n$ is an essential prime implicant of it. Hence its negation $\\neg\\Pi_n\\in IP$.\n\nSince the early work of Quine, we know that the number of essential prime implicates of a formula is a lower bound on the number of clauses that can be found in any $CNF$ representation of it. However, since $\\Pi_n$ has $2^n$ prime implicants, $\\neg\\Pi_n$ has $2^n$ prime implicates, so any $CNF$ representation of $\\neg\\Pi_n$ must have at least $2^n$ clauses.",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Pairwise DNF"
+          ],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -2956,7 +3021,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. PI→CNF in polynomial time. If IP→PI in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -3048,7 +3121,15 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. DNF→NNF in polynomial time. If NNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
@@ -3084,7 +3165,13 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "This is an implicit relationship. CNF→NNF in polynomial time. If NNF→PI in quasipolynomial time, then CNF→PI in at most quasi-polynomial time. This contradicts CNF→PI being no-quasi."
+        },
         null,
         null,
         null,

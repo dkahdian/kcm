@@ -60,7 +60,7 @@
 
   // Initialize from initial data if editing
   $effect(() => {
-    if (isEdit && initialData) {
+    if (isOpen && isEdit && initialData) {
       name = initialData.name;
       fullName = initialData.fullName;
       description = initialData.description;

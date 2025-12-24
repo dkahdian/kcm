@@ -63,10 +63,14 @@
   let description = $state('');
   let selectedRefs = $state<string[]>([]);
   let selectedSeparatingFunctionIds = $state<string[]>([]);
+  
+  // Track if we're in edit mode to prevent auto-populate from overwriting
+  let isEditMode = $state(false);
 
   // Populate form when initialData is provided (edit mode)
   $effect(() => {
     if (isOpen && initialData) {
+      isEditMode = true;
       sourceId = initialData.sourceId;
       targetId = initialData.targetId;
       status = initialData.status;
@@ -75,11 +79,16 @@
       selectedSeparatingFunctionIds = initialData.separatingFunctionIds 
         ? [...initialData.separatingFunctionIds] 
         : [];
+    } else if (isOpen && !initialData) {
+      isEditMode = false;
     }
   });
 
-  // Auto-populate when source and target are selected
+  // Auto-populate when source and target are selected (only in non-edit mode)
   $effect(() => {
+    // Skip auto-populate when editing an existing queue item
+    if (isEditMode) return;
+    
     if (sourceId && targetId && sourceId !== targetId) {
       const key = `${sourceId}->${targetId}`;
       const baseline = baselineRelations.get(key);
@@ -109,6 +118,7 @@
     description = '';
     selectedRefs = [];
     selectedSeparatingFunctionIds = [];
+    isEditMode = false;
   }
 
   function handleSubmit() {

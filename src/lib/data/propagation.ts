@@ -95,6 +95,15 @@ function phraseForStatus(status: string): string {
   }
 }
 
+/**
+ * Format reference IDs as inline citations.
+ * Returns a string like " \\citet{ref1,ref2}" or empty string if no refs.
+ */
+function formatCitations(refs: string[]): string {
+  if (!refs || refs.length === 0) return '';
+  return ` \\citet{${refs.join(',')}}`;
+}
+
 function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
   const { languageIds } = matrix;
   const parts: string[] = [];
@@ -103,8 +112,10 @@ function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
     const toId = pathIds[i + 1];
     const fromIdx = languageIds.indexOf(fromId);
     const toIdx = languageIds.indexOf(toId);
-    const status = matrix.matrix[fromIdx]?.[toIdx]?.status ?? 'unknown';
-    parts.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(status)}.`);
+    const relation = matrix.matrix[fromIdx]?.[toIdx];
+    const status = relation?.status ?? 'unknown';
+    const refs = relation?.refs ?? [];
+    parts.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(status)}${formatCitations(refs)}.`);
   }
   return parts.join(' ');
 }
@@ -254,6 +265,7 @@ function tryDowngrade(
     const endIdx = languageIds.indexOf(pathEnd);
     const actualRelation = adjacencyMatrix.matrix[startIdx]?.[endIdx];
     const actualStatus = actualRelation?.status ?? 'unknown';
+    const actualRefs = actualRelation?.refs ?? [];
 
     // Build description of existing edges in the path (excluding the tested edge)
     const existingEdges: string[] = [];
@@ -264,15 +276,17 @@ function tryDowngrade(
       if (fromId === languageIds[source] && toId === languageIds[target]) continue;
       const fromIdx = languageIds.indexOf(fromId);
       const toIdx = languageIds.indexOf(toId);
-      const edgeStatus = adjacencyMatrix.matrix[fromIdx]?.[toIdx]?.status ?? 'unknown';
-      existingEdges.push(`${idToName(fromId)}→${idToName(toId)} ${phraseForStatus(edgeStatus)}`);
+      const edgeRelation = adjacencyMatrix.matrix[fromIdx]?.[toIdx];
+      const edgeStatus = edgeRelation?.status ?? 'unknown';
+      const edgeRefs = edgeRelation?.refs ?? [];
+      existingEdges.push(`${idToName(fromId)}→${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCitations(edgeRefs)}`);
     }
 
     const existingPart = existingEdges.length > 0 ? existingEdges.join('. ') + '. ' : '';
     const triedPhrase = phraseForStatus(triedStatus);
     const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
 
-    return `${existingPart}If ${srcName}→${tgtName} ${triedPhrase}, then ${pathStartName}→${pathEndName} ${impliedPhrase}. This contradicts ${pathStartName}→${pathEndName} being ${actualStatus}.`;
+    return `${existingPart}If ${srcName}→${tgtName} ${triedPhrase}, then ${pathStartName}→${pathEndName} ${impliedPhrase}. This contradicts ${pathStartName}→${pathEndName} being ${actualStatus}${formatCitations(actualRefs)}.`;
   };
 
   const finalizeDowngrade = (

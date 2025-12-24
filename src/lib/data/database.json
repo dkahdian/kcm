@@ -2662,13 +2662,13 @@
           "derived": false
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "FBDD→d-DNNF in polynomial time. If CNF→FBDD in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+          "description": "PI→CNF in polynomial time. If CNF→FBDD in quasipolynomial time, then PI→FBDD in at most quasi-polynomial time. This contradicts PI→FBDD being no-quasi."
         },
         {
           "status": "no-quasi",
@@ -2696,13 +2696,13 @@
         },
         null,
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$→d-DNNF in polynomial time. If CNF→OBDD$_<$ in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+          "description": "OBDD$_<$→FBDD in polynomial time. If CNF→OBDD$_<$ in quasipolynomial time, then CNF→FBDD in at most quasi-polynomial time. This contradicts CNF→FBDD being no-quasi."
         },
         {
           "status": "no-quasi",
@@ -2717,13 +2717,13 @@
         null,
         null,
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD→d-DNNF in polynomial time. If CNF→OBDD in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+          "description": "OBDD→FBDD in polynomial time. If CNF→OBDD in quasipolynomial time, then CNF→FBDD in at most quasi-polynomial time. This contradicts CNF→FBDD being no-quasi."
         }
       ],
       [
@@ -2891,7 +2891,15 @@
             "Darwiche_2002"
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP→DNF in polynomial time. If DNF→FBDD in quasipolynomial time, then IP→FBDD in at most quasi-polynomial time. This contradicts IP→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "description": "It is well-known that some $DNF$ formulas (i.e. $PARITY_n=\\bigoplus_{i=1}^n x_i$) have exponentially many prime implicates.",
@@ -2915,7 +2923,15 @@
           "description": "DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from DNF to NNF."
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→FBDD in polynomial time. If DNF→OBDD$_<$ in quasipolynomial time, then DNF→FBDD in at most quasi-polynomial time. This contradicts DNF→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -2931,7 +2947,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→FBDD in polynomial time. If DNF→OBDD in quasipolynomial time, then DNF→FBDD in at most quasi-polynomial time. This contradicts DNF→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -3113,7 +3137,15 @@
           "derived": true,
           "description": "IP transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from IP to DNNF."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Define the interpretation $I\\in\\{0,1\\}^{n^2}$, as arcs on a directed graph $D=\\{V,E\\}$ with $n$ vertices so that $I(x_{i,j})=1\\iff (i,j)\\in E$. Then define $\\neg\\Sigma_{n,k}:\\{0,1\\}^{n^2}\\to\\{0,1\\}$ so $\\neg\\Sigma_{n,k}(I)=0 \\iff I \\text{ contains a bidirectional clique of size }k$. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\\neg\\Sigma_{n,k}$ has exponential size. This is the negation of the clique detection function. However, it can be shown that $\\neg\\Sigma_{n,k}$ has $O(n^3)$ prime implicates, which implies that not every $IP$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.",
+          "refs": [
+            "Darwiche_2002",
+            "Wegener_1987"
+          ],
+          "derived": false
+        },
         null,
         null,
         null,
@@ -3127,7 +3159,15 @@
           "description": "IP transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from IP to NNF."
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→FBDD in polynomial time. If IP→OBDD$_<$ in quasipolynomial time, then IP→FBDD in at most quasi-polynomial time. This contradicts IP→FBDD being no-quasi."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -3143,7 +3183,15 @@
         null,
         null,
         null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→FBDD in polynomial time. If IP→OBDD in quasipolynomial time, then IP→FBDD in at most quasi-polynomial time. This contradicts IP→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -3438,7 +3486,15 @@
           ]
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Define the interpretation $I\\in\\{0,1\\}^{n^2}$, as arcs on a directed graph $D=\\{V,E\\}$ with $n$ vertices so that $I(x_{i,j})=1\\iff (i,j)\\in E$. Then define $\\Sigma_{n,k}:\\{0,1\\}^{n^2}\\to\\{0,1\\}$ so $\\Sigma_{n,k}(I)=1 \\iff I \\text{ contains a bidirectional clique of size }k$. This is the clique detection function. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\\Sigma_{n,k}$ has exponential size. However, it can be shown that $\\Sigma_{n,k}$ has $O(n^3)$ prime implicants, and hence not every $PI$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.",
+          "refs": [
+            "Wegener_1987",
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -3468,6 +3524,15 @@
           "description": "PI transforms to CNF in polynomial time. CNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from PI to NNF."
         },
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→FBDD in polynomial time. If PI→OBDD$_<$ in quasipolynomial time, then PI→FBDD in at most quasi-polynomial time. This contradicts PI→FBDD being no-quasi."
+        },
         null,
         null,
         null,
@@ -3475,8 +3540,15 @@
         null,
         null,
         null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→FBDD in polynomial time. If PI→OBDD in quasipolynomial time, then PI→FBDD in at most quasi-polynomial time. This contradicts PI→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -3747,6 +3819,15 @@
       "description": "-",
       "refs": [
         "Darwiche_2002"
+      ]
+    },
+    {
+      "shortName": "Clique",
+      "name": "Clique Detection Instances",
+      "description": "Define the interpretation $I\\in\\{0,1\\}^{n^2}$, as arcs on a directed graph $D=\\{V,E\\}$ with $n$ vertices so that $I(x_{i,j})=1\\iff (i,j)\\in E$. Then define $\\Sigma_{n,k}:\\{0,1\\}^{n^2}\\to\\{0,1\\}$ so $\\Sigma_{n,k}(I)=1 \\iff I \\text{ contains a bidirectional clique of size }k$.",
+      "refs": [
+        "Darwiche_2002",
+        "Wegener_1987"
       ]
     }
   ]

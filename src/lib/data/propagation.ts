@@ -121,9 +121,8 @@ function applyUpgrade(
   const target = path[path.length - 1];
   const refs = collectRefsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
-  const implicitIntro = 'This is an implicit relationship.';
   const pathDesc = describePath(pathIds, matrix);
-  const description = `${implicitIntro} ${pathDesc} ${derivedDescription}`.trim();
+  const description = `${pathDesc} ${derivedDescription}`.trim();
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
@@ -295,7 +294,7 @@ function tryDowngrade(
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
-      description: `This is an implicit relationship. ${desc}`.trim()
+      description: desc.trim()
     };
   };
 

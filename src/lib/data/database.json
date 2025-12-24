@@ -2640,7 +2640,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. PI→CNF in polynomial time. If CNF→DNF in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+          "description": "PI→CNF in polynomial time. If CNF→DNF in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
         },
         null,
         null,
@@ -2651,7 +2651,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. IP→DNF in polynomial time. If CNF→IP in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+          "description": "IP→DNF in polynomial time. If CNF→IP in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
         {
           "status": "no-quasi",
@@ -2660,7 +2660,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. MODS→DNF in polynomial time. If CNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+          "description": "MODS→DNF in polynomial time. If CNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
         null,
         {
@@ -2737,7 +2737,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from d-DNNF to NNF."
+          "description": "d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from d-DNNF to NNF."
         },
         null,
         null,
@@ -2812,7 +2812,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. IP→DNF in polynomial time. If DNF→CNF in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
+          "description": "IP→DNF in polynomial time. If DNF→CNF in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
         },
         null,
         null,
@@ -2847,7 +2847,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from DNF to NNF."
+          "description": "DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from DNF to NNF."
         },
         null,
         null,
@@ -2858,7 +2858,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. PI→CNF in polynomial time. If DNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+          "description": "PI→CNF in polynomial time. If DNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
         null,
         null,
@@ -2878,7 +2878,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. DNF→DNNF in polynomial time. If DNNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+          "description": "DNF→DNNF in polynomial time. If DNNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
         null,
         null,
@@ -2894,7 +2894,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. DNF→DNNF in polynomial time. If DNNF→IP in quasipolynomial time, then DNF→IP in at most quasi-polynomial time. This contradicts DNF→IP being no-quasi."
+          "description": "DNF→DNNF in polynomial time. If DNNF→IP in quasipolynomial time, then DNF→IP in at most quasi-polynomial time. This contradicts DNF→IP being no-quasi."
         },
         null,
         null,
@@ -2914,7 +2914,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. DNF→DNNF in polynomial time. PI→CNF in polynomial time. If DNNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+          "description": "DNF→DNNF in polynomial time. PI→CNF in polynomial time. If DNNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
         null,
         null,
@@ -2946,7 +2946,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from FBDD to DNNF."
+          "description": "FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from FBDD to DNNF."
         },
         null,
         null,
@@ -2959,7 +2959,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from FBDD to NNF."
+          "description": "FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from FBDD to NNF."
         },
         null,
         null,
@@ -3004,7 +3004,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. IP transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from IP to DNNF."
+          "description": "IP transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from IP to DNNF."
         },
         null,
         null,
@@ -3017,7 +3017,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. IP transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from IP to NNF."
+          "description": "IP transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from IP to NNF."
         },
         null,
         null,
@@ -3028,7 +3028,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. PI→CNF in polynomial time. If IP→PI in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
+          "description": "PI→CNF in polynomial time. If IP→PI in quasipolynomial time, then IP→CNF in at most quasi-polynomial time. This contradicts IP→CNF being no-quasi."
         },
         null,
         null,
@@ -3066,7 +3066,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from MODS to DNNF."
+          "description": "MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from MODS to DNNF."
         },
         null,
         null,
@@ -3079,7 +3079,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from MODS to NNF."
+          "description": "MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from MODS to NNF."
         },
         null,
         null,
@@ -3128,7 +3128,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. DNF→NNF in polynomial time. If NNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
+          "description": "DNF→NNF in polynomial time. If NNF→CNF in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
         null,
         null,
@@ -3139,7 +3139,7 @@
           "refs": [],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. CNF→NNF in polynomial time. If NNF→DNF in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+          "description": "CNF→NNF in polynomial time. If NNF→DNF in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
         null,
         null,
@@ -3150,7 +3150,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. CNF→NNF in polynomial time. IP→DNF in polynomial time. If NNF→IP in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+          "description": "CNF→NNF in polynomial time. IP→DNF in polynomial time. If NNF→IP in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
         {
           "status": "no-quasi",
@@ -3159,7 +3159,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. CNF→NNF in polynomial time. MODS→DNF in polynomial time. If NNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
+          "description": "CNF→NNF in polynomial time. MODS→DNF in polynomial time. If NNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
         null,
         null,
@@ -3170,7 +3170,7 @@
           "refs": [],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. CNF→NNF in polynomial time. If NNF→PI in quasipolynomial time, then CNF→PI in at most quasi-polynomial time. This contradicts CNF→PI being no-quasi."
+          "description": "CNF→NNF in polynomial time. If NNF→PI in quasipolynomial time, then CNF→PI in at most quasi-polynomial time. This contradicts CNF→PI being no-quasi."
         },
         null,
         null,
@@ -3218,7 +3218,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to d-DNNF."
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to d-DNNF."
         },
         null,
         null,
@@ -3230,7 +3230,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to DNNF."
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to DNNF."
         },
         {
           "status": "poly",
@@ -3239,7 +3239,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to FBDD."
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to FBDD."
         },
         null,
         null,
@@ -3251,7 +3251,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to NNF."
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to NNF."
         },
         null,
         null,
@@ -3303,7 +3303,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. IP→DNF in polynomial time. If PI→IP in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+          "description": "IP→DNF in polynomial time. If PI→IP in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
         },
         {
           "status": "no-quasi",
@@ -3312,7 +3312,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. MODS→DNF in polynomial time. If PI→MODS in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
+          "description": "MODS→DNF in polynomial time. If PI→MODS in quasipolynomial time, then PI→DNF in at most quasi-polynomial time. This contradicts PI→DNF being no-quasi."
         },
         null,
         {
@@ -3322,7 +3322,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. PI transforms to CNF in polynomial time. CNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from PI to NNF."
+          "description": "PI transforms to CNF in polynomial time. CNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from PI to NNF."
         },
         null,
         null,
@@ -3493,18 +3493,6 @@
       ],
       [
         null,
-        null,
-        null,
-        null,
-        {
-          "status": "poly",
-          "refs": [
-            "Darwiche_2002"
-          ],
-          "hidden": false,
-          "derived": true,
-          "description": "This is an implicit relationship. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD to d-DNNF."
-        },
         null,
         null,
         null,
@@ -3515,7 +3503,19 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD to DNNF."
+          "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD to d-DNNF."
+        },
+        null,
+        null,
+        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from OBDD to DNNF."
         },
         {
           "status": "poly",
@@ -3534,7 +3534,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "This is an implicit relationship. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD to NNF."
+          "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD to NNF."
         },
         null,
         null,

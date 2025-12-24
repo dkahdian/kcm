@@ -2760,7 +2760,16 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "Unless the polynomial hierarchy collapses.\n\nExplanation: Suppose not; then $\\forall\\Lambda\\in DNF$, $\\exists$ an equivalent $\\Lambda_*\\in d$-$DNNF$ of polynomial size. Then we may perform a clausal entailment check on some $CNF$ sentence $\\Sigma \\in CNF$ with respect to some clause $\\gamma$ by checking whether $(\\neg\\Sigma\\vee\\gamma)\\in DNF$ is valid. But we may perform a validity check on $(\\neg\\Sigma\\vee\\gamma)_* \\in d$-$DNNF$ in polynomial time. Since we can now perform a polynomial-time clausal entailment check on all $CNF$ sentences, the polynomial hierarchy collapses.",
+          "refs": [
+            "Cadoli_1997",
+            "Selman_1996",
+            "Darwiche_2002"
+          ],
+          "derived": false
+        },
         {
           "status": "poly",
           "description": "As defined by Darwiche 2002, d-DNNF is a subset of DNNF, so a polynomial transformation is trivial.",
@@ -2776,8 +2785,24 @@
           ],
           "derived": false
         },
-        null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP→DNF in polynomial time. If d-DNNF→IP in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+        },
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS→DNF in polynomial time. If d-DNNF→MODS in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+        },
         null,
         {
           "status": "poly",
@@ -2973,7 +2998,15 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→DNNF in polynomial time. If DNNF→DNF in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+        },
         null,
         {
           "status": "no-quasi",
@@ -2993,7 +3026,15 @@
           "derived": true,
           "description": "DNF→DNNF in polynomial time. If DNNF→IP in quasipolynomial time, then DNF→IP in at most quasi-polynomial time. This contradicts DNF→IP being no-quasi."
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→DNNF in polynomial time. MODS→DNF in polynomial time. If DNNF→MODS in polynomial time, then d-DNNF→DNF in polynomial time. This contradicts d-DNNF→DNF being no-poly-unknown-quasi."
+        },
         null,
         {
           "status": "poly",

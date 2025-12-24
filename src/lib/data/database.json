@@ -2261,6 +2261,14 @@
     {
       "id": "Wegener_1987",
       "bibtex": "@book{Wegener1987-WEGTCO-3,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987}\n}"
+    },
+    {
+      "id": "Amarilli_2018",
+      "bibtex": "@article{DBLP:journals/corr/abs-1811-02944,\n  author       = {Antoine Amarilli and\n                  Florent Capelli and\n                  Mika{\\\"{e}}l Monet and\n                  Pierre Senellart},\n  title        = {Connecting Knowledge Compilation Classes and Width Parameters},\n  journal      = {CoRR},\n  volume       = {abs/1811.02944},\n  year         = {2018},\n  url          = {http://arxiv.org/abs/1811.02944},\n  eprinttype    = {arXiv},\n  eprint       = {1811.02944},\n  timestamp    = {Thu, 22 Nov 2018 17:58:30 +0100},\n  biburl       = {https://dblp.org/rec/journals/corr/abs-1811-02944.bib},\n  bibsource    = {dblp computer science bibliography, https://dblp.org}\n}"
+    },
+    {
+      "id": "Bova_2016",
+      "bibtex": "@inproceedings{bova:hal-03301001,\n  TITLE = {{Knowledge Compilation Meets Communication Complexity}},\n  AUTHOR = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  URL = {https://univ-artois.hal.science/hal-03301001},\n  BOOKTITLE = {{25th International Joint Conference on Artificial Intelligence (IJCAI'16)}},\n  ADDRESS = {New York, NY, USA, Unknown Region},\n  EDITOR = {Subbarao Kambhampati},\n  PUBLISHER = {{IJCAI/AAAI Press}},\n  PAGES = {1008--1014},\n  YEAR = {2016},\n  HAL_ID = {hal-03301001},\n  HAL_VERSION = {v1},\n}"
     }
   ],
   "tags": {
@@ -2534,7 +2542,15 @@
           "derived": true,
           "description": "MODS→DNF in polynomial time. If CNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "nFBDD→DNNF in polynomial time. If CNF→nFBDD in polynomial time, then CNF→DNNF in polynomial time. This contradicts CNF→DNNF being no-poly-unknown-quasi."
+        },
         {
           "status": "poly",
           "description": "As defined by Darwiche 2002, $CNF$ is a subset of $NNF$. Therefore, a polynomial transformation is trivial.",
@@ -2560,7 +2576,15 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uFBDD→d-DNNF in polynomial time. If CNF→uFBDD in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+        },
         null,
         {
           "status": "no-quasi",
@@ -2655,7 +2679,16 @@
           "refs": [],
           "derived": false
         },
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF transforms to uFBDD in quasipolynomial time. uFBDD transforms to nFBDD in polynomial time. Therefore a quasi-polynomial transformation exists from d-DNNF to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -2688,7 +2721,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-poly-quasi",
+          "description": "Proposition 3.5 shows that quasi-polynomial compilation exists. Proposition 3.10 shows that this cannot be made polynomial-time.",
+          "refs": [
+            "Bova_2016"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "no-quasi",
@@ -2810,7 +2850,16 @@
           "derived": true,
           "description": "MODS→CNF in polynomial time. If DNF→MODS in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi."
         },
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "DNF transforms to DNNF in polynomial time. DNNF transforms to nFBDD in quasipolynomial time. Therefore a quasi-polynomial transformation exists from DNF to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -2843,7 +2892,15 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uFBDD→d-DNNF in polynomial time. If DNF→uFBDD in polynomial time, then DNF→d-DNNF in polynomial time. This contradicts DNF→d-DNNF being no-poly-unknown-quasi."
+        },
         null,
         {
           "status": "no-quasi",
@@ -2869,13 +2926,12 @@
         },
         null,
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
+          "description": "This is shown in Proposition 7 and Theorem 9.",
           "refs": [
-            "Darwiche_2002"
+            "Bova_2016"
           ],
-          "hidden": false,
-          "derived": true,
-          "description": "DNF→DNNF in polynomial time. If DNNF→d-DNNF in polynomial time, then DNF→d-DNNF in polynomial time. This contradicts DNF→d-DNNF being no-poly-unknown-quasi."
+          "derived": false
         },
         null,
         null,
@@ -2916,7 +2972,14 @@
           "derived": true,
           "description": "d-DNNF→DNNF in polynomial time. MODS→FBDD in polynomial time. If DNNF→MODS in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
         },
-        null,
+        {
+          "status": "no-poly-quasi",
+          "description": "Proposition 3.5 shows that a quasi-polynomial compilation exists. Proposition 3.10 shows that this transformation cannot be made polynomial-time.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
         {
           "status": "poly",
           "description": "As defined by Darwiche 2002, $DNNF$ is a subset of $NNF$, so a polynomial transformation is trivial.",
@@ -2947,7 +3010,16 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uFBDD→d-DNNF in polynomial time. If DNNF→uFBDD in quasipolynomial time, then DNNF→d-DNNF in at most quasi-polynomial time. This contradicts DNNF→d-DNNF being no-quasi."
+        },
         null,
         {
           "status": "no-quasi",
@@ -3018,7 +3090,15 @@
           "derived": true,
           "description": "MODS→OBDD$_<$ in polynomial time. If FBDD→MODS in quasipolynomial time, then FBDD→OBDD$_<$ in at most quasi-polynomial time. This contradicts FBDD→OBDD$_<$ being no-quasi."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "FBDD transforms to uFBDD in polynomial time. uFBDD transforms to nFBDD in polynomial time. Therefore a polynomial transformation exists from FBDD to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3051,7 +3131,14 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "poly",
+          "description": "As defined by \"Connecting Knowledge Compilation Classes and Width Parameters\", $FBDD$ is the subset of $uFBDD$ with no $\\vee$-nodes",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "no-quasi",
@@ -3125,7 +3212,16 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP transforms to DNNF in polynomial time. DNNF transforms to nFBDD in quasipolynomial time. Therefore a quasi-polynomial transformation exists from IP to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3225,7 +3321,16 @@
           "derived": false
         },
         null,
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to FBDD in polynomial time. FBDD transforms to uFBDD in polynomial time. uFBDD transforms to nFBDD in polynomial time. Therefore a polynomial transformation exists from MODS to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3235,7 +3340,16 @@
           "derived": true,
           "description": "MODS transforms to DNF in polynomial time. DNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from MODS to NNF."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to OBDD in polynomial time. OBDD transforms to uOBDD in polynomial time. uOBDD transforms to nOBDD in polynomial time. Therefore a polynomial transformation exists from MODS to nOBDD."
+        },
         {
           "status": "poly",
           "description": "A Shannon tree for any for any $MODS$ formula following any order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding $OBDD_<$ in polynomial time.",
@@ -3256,8 +3370,26 @@
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to FBDD in polynomial time. FBDD transforms to uFBDD in polynomial time. Therefore a polynomial transformation exists from MODS to uFBDD."
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to OBDD in polynomial time. OBDD transforms to uOBDD in polynomial time. Therefore a polynomial transformation exists from MODS to uOBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3271,28 +3403,133 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. If nFBDD→CNF in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "description": "The Sauerhoff function has an $nFBDD$ of size $O(n^2)$ over $n^2$ variables, but as a $d$-$DNNF$ has size $2^{\\Omega(n)}$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. If nFBDD→DNF in quasipolynomial time, then d-DNNF→DNF in at most quasi-polynomial time. This contradicts d-DNNF→DNF being no-quasi."
+        },
+        {
+          "status": "poly",
+          "description": "The transformation is in fact linear. We may recursively rewire every internal node $n$ labeled with variable $x$ by a circuit $(x\\wedge D_0)\\vee(\\neg x \\wedge D_1)$, where $D_0$ and $D_1$ are the rewiring of nodes to which $n$ respectively had a 0-edge and 1-edge. Note that the new $\\vee$-gate is a decision gate and the two $\\wedge$-gates are decomposable, so we attain a $DNNF$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        {
+          "status": "no-quasi",
+          "description": "Consider the Boolean functions $\\psi_n,\\phi_n:\\{0,1\\}^{n^2}\\to\\{0,1\\}$ that respectively test whether, in an $n \\times n$ Boolean matrix, either the number of 1's is odd and there is a full row of 1's, or the number of 1's is even and there is a column full of 1's. An $FBDD$ of size $O(n^2)$ may simulate either $\\psi_n$ or $\\phi_n$, and thus the $uFBDD$ $\\psi_n\\vee\\phi_n$ is of size $O(n^2)$; however, an $FBDD$ for $\\psi_n\\vee\\phi_n$ is provably of size $2^{\\Omega(n^{1/2})}$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. IP→DNF in polynomial time. If nFBDD→IP in quasipolynomial time, then d-DNNF→DNF in at most quasi-polynomial time. This contradicts d-DNNF→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. MODS→CNF in polynomial time. If nFBDD→MODS in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
+        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "nFBDD transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from nFBDD to NNF."
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. OBDD$_<$→FBDD in polynomial time. If nFBDD→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. PI→CNF in polynomial time. If nFBDD→PI in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "The Sauerhoff function has an $nFBDD$ of size $O(n^2)$ over $n^2$ variables, but as a $d$-$DNNF$, which generalize $uFBDD$, has size $2^{\\Omega(n)}$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→nFBDD in at worst quasipolynomial time. OBDD→FBDD in polynomial time. If nFBDD→OBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -3308,11 +3545,13 @@
         },
         null,
         {
-          "status": "no-poly-unknown-quasi",
-          "refs": [],
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
           "hidden": false,
           "derived": true,
-          "description": "CNF→NNF in polynomial time. If NNF→d-DNNF in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi."
+          "description": "DNNF→NNF in polynomial time. If NNF→d-DNNF in quasipolynomial time, then DNNF→d-DNNF in at most quasi-polynomial time. This contradicts DNNF→d-DNNF being no-quasi."
         },
         null,
         null,
@@ -3357,7 +3596,15 @@
           "derived": true,
           "description": "CNF→NNF in polynomial time. MODS→DNF in polynomial time. If NNF→MODS in quasipolynomial time, then CNF→DNF in at most quasi-polynomial time. This contradicts CNF→DNF being no-quasi."
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "CNF→NNF in polynomial time. nFBDD→DNNF in polynomial time. If NNF→nFBDD in polynomial time, then CNF→DNNF in polynomial time. This contradicts CNF→DNNF being no-poly-unknown-quasi."
+        },
         null,
         null,
         {
@@ -3380,7 +3627,16 @@
         null,
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "DNNF→NNF in polynomial time. uFBDD→d-DNNF in polynomial time. If NNF→uFBDD in quasipolynomial time, then DNNF→d-DNNF in at most quasi-polynomial time. This contradicts DNNF→d-DNNF being no-quasi."
+        },
         null,
         {
           "status": "no-quasi",
@@ -3395,28 +3651,94 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→nOBDD in polynomial time. If nOBDD→CNF in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→nOBDD in polynomial time. If nOBDD→DNF in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP→DNF in polynomial time. If nOBDD→IP in quasipolynomial time, then nOBDD→DNF in at most quasi-polynomial time. This contradicts nOBDD→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS→CNF in polynomial time. If nOBDD→MODS in quasipolynomial time, then nOBDD→CNF in at most quasi-polynomial time. This contradicts nOBDD→CNF being no-quasi."
+        },
+        null,
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→uOBDD in polynomial time. If nOBDD→OBDD$_<$ in quasipolynomial time, then nOBDD→uOBDD in at most quasi-polynomial time. This contradicts nOBDD→uOBDD being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "PI→CNF in polynomial time. If nOBDD→PI in quasipolynomial time, then nOBDD→CNF in at most quasi-polynomial time. This contradicts nOBDD→CNF being no-quasi."
+        },
         null,
         null,
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "Any $DNF$ can be represented as an $nOBDD$ in linear time; however the family of $DNF$s $(\\phi_n)_{n\\in\\N}$ built from expander graphs have treewidth linear in their size. Thus, any $uOBDD$ for $\\phi_n$ is of size $2^{\\Omega(|\\phi_n|)}$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→uOBDD in polynomial time. If nOBDD→OBDD in quasipolynomial time, then nOBDD→uOBDD in at most quasi-polynomial time. This contradicts nOBDD→uOBDD being no-quasi."
+        }
       ],
       [
         null,
@@ -3491,7 +3813,16 @@
           "derived": true,
           "description": "MODS→CNF in polynomial time. If OBDD$_<$→MODS in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ transforms to FBDD in polynomial time. FBDD transforms to uFBDD in polynomial time. uFBDD transforms to nFBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3501,7 +3832,16 @@
           "derived": true,
           "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to NNF."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to uOBDD in polynomial time. uOBDD transforms to nOBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to nOBDD."
+        },
         null,
         {
           "status": "no-quasi",
@@ -3516,8 +3856,26 @@
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ transforms to FBDD in polynomial time. FBDD transforms to uFBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to uFBDD."
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time. OBDD transforms to uOBDD in polynomial time. Therefore a polynomial transformation exists from OBDD$_<$ to uOBDD."
+        },
         {
           "status": "poly",
           "description": "As defined by Darwiche 2002, $OBDD_<$ is a subset of $OBDD$. Therefore, a polynomial transformation is trivial.",
@@ -3738,54 +4096,224 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. If uFBDD→CNF in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "The transformation is in fact linear. We may recursively rewire every internal node $n$ labeled with variable $x$ by a circuit $(x\\wedge D_0)\\vee(\\neg x \\wedge D_1)$, where $D_0$ and $D_1$ are the rewiring of nodes to which $n$ respectively had a 0-edge and 1-edge. Note that the new $\\vee$-gate is a decision gate and the two $\\wedge$-gates are decomposable; furthermore, all $\\vee$-gates in the rewiring are deterministic, so we attain a $d$-$DNNF$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. If uFBDD→DNF in quasipolynomial time, then d-DNNF→DNF in at most quasi-polynomial time. This contradicts d-DNNF→DNF being no-quasi."
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uFBDD transforms to nFBDD in polynomial time. nFBDD transforms to DNNF in polynomial time. Therefore a polynomial transformation exists from uFBDD to DNNF."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. If uFBDD→FBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. IP→DNF in polynomial time. If uFBDD→IP in quasipolynomial time, then d-DNNF→DNF in at most quasi-polynomial time. This contradicts d-DNNF→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. MODS→CNF in polynomial time. If uFBDD→MODS in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
+        {
+          "status": "poly",
+          "description": "As defined by \"Connecting Knowledge Compilation Classes and Width Parameters,\" $uFBDD$ is the subset of $nFBDD$ satisfying unambiguity.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uFBDD transforms to nFBDD in polynomial time. nFBDD transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from uFBDD to NNF."
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. OBDD$_<$→FBDD in polynomial time. If uFBDD→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. PI→CNF in polynomial time. If uFBDD→PI in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi."
+        },
         null,
         null,
         null,
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bova_2016",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time. OBDD→FBDD in polynomial time. If uFBDD→OBDD in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi."
+        }
       ],
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→uOBDD in polynomial time. If uOBDD→CNF in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
+        null,
+        null,
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→uOBDD in polynomial time. If uOBDD→DNF in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→uOBDD in polynomial time. IP→DNF in polynomial time. If uOBDD→IP in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→uOBDD in polynomial time. MODS→CNF in polynomial time. If uOBDD→MODS in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
+        null,
+        null,
+        {
+          "status": "poly",
+          "description": "As defined by \"Connecting Knowledge Compilation Classes and Width Parameters,\" $uOBDD$ is the subset of $nOBDD$ satisfying unambiguity.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→OBDD in polynomial time. If uOBDD→OBDD$_<$ in quasipolynomial time, then uOBDD→OBDD in at most quasi-polynomial time. This contradicts uOBDD→OBDD being no-quasi."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→uOBDD in polynomial time. PI→CNF in polynomial time. If uOBDD→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi."
+        },
         null,
         null,
         null,
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "description": "$uOBDD$ can have polynomial size for $HWB_n$, but $OBDD$s have size $2^\\Omega(n)$.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "separatingFunctionIds": [
+            "HWB"
+          ],
+          "derived": false
+        }
       ],
       [
         null,
@@ -3854,7 +4382,16 @@
           "derived": true,
           "description": "MODS→OBDD$_<$ in polynomial time. If OBDD→MODS in quasipolynomial time, then OBDD→OBDD$_<$ in at most quasi-polynomial time. This contradicts OBDD→OBDD$_<$ being no-quasi."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to uFBDD in polynomial time. uFBDD transforms to nFBDD in polynomial time. Therefore a polynomial transformation exists from OBDD to nFBDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3864,7 +4401,15 @@
           "derived": true,
           "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to d-DNNF in polynomial time. d-DNNF transforms to DNNF in polynomial time. DNNF transforms to NNF in polynomial time. Therefore a polynomial transformation exists from OBDD to NNF."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD transforms to uOBDD in polynomial time. uOBDD transforms to nOBDD in polynomial time. Therefore a polynomial transformation exists from OBDD to nOBDD."
+        },
         {
           "status": "no-quasi",
           "description": "The function $\\bigwedge_{i=1}^n(x_i\\Leftrightarrow y_i)$ has an $OBDD_<$ representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$",
@@ -3889,8 +4434,24 @@
         null,
         null,
         null,
-        null,
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD transforms to FBDD in polynomial time. FBDD transforms to uFBDD in polynomial time. Therefore a polynomial transformation exists from OBDD to uFBDD."
+        },
+        {
+          "status": "poly",
+          "description": "As defined by \"Connecting Knowledge Compilation Classes and Width Parameters,\" $OBDD$ is the subset of $uOBDD$ without any $\\vee$-node.",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "derived": false
+        },
         null
       ]
     ]
@@ -3950,6 +4511,149 @@
         "Darwiche_2002",
         "Wegener_1987"
       ]
+    },
+    {
+      "shortName": "Sauerhoff",
+      "name": "Sauerhoff function",
+      "description": "?",
+      "refs": [
+        "Amarilli_2018"
+      ]
+    }
+  ],
+  "relationTypes": [
+    {
+      "id": "poly",
+      "name": "Polynomial",
+      "label": "$\\leq_p$",
+      "description": "Polynomial transformation exists",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "triangle",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "no-poly-unknown-quasi",
+      "name": "No Poly, Quasi Unknown",
+      "label": "$\\not\\leq_p$ · $\\leq_q^?$",
+      "description": "No polynomial transformation; quasi-polynomial unknown",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "tee",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "no-poly-quasi",
+      "name": "No Poly, Quasi Exists",
+      "label": "$\\not\\leq_p$ · $\\leq_q$",
+      "description": "No polynomial transformation; quasi-polynomial exists",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "tee",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "unknown-poly-quasi",
+      "name": "Poly Unknown, Quasi Exists",
+      "label": "$\\leq_p^?$ · $\\leq_q$",
+      "description": "Polynomial unknown; quasi-polynomial exists",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "triangle-cross",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "unknown-both",
+      "name": "Unknown",
+      "label": "$?$",
+      "description": "Both polynomial and quasi-polynomial unknown",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "square",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "no-quasi",
+      "name": "No Quasi",
+      "label": "$\\not\\leq_q$",
+      "description": "No quasi-polynomial transformation (implies no polynomial)",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "square",
+          "dashed": false
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
+    },
+    {
+      "id": "unknown-to-us",
+      "name": "Unknown to Us",
+      "label": "?",
+      "description": "Not yet researched or documented",
+      "style": {
+        "lineStyle": "solid",
+        "width": 2,
+        "targetStyle": {
+          "arrow": "circle",
+          "dashed": true
+        },
+        "sourceStyle": {
+          "arrow": "none",
+          "dashed": false
+        }
+      },
+      "defaultVisible": true
     }
   ]
 }

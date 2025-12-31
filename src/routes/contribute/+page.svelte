@@ -813,7 +813,7 @@
 
           <!-- Queued Items Section -->
           <ContributionQueue
-            languages={initialGraphData.languages}
+            languages={getAvailableLanguages(data.languages, languageAddPayloads, languageEditPayloads)}
             languagesToAdd={languageAddPayloads}
             languagesToEdit={languageEditPayloads}
             newReferences={referenceValues}

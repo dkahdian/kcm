@@ -124,7 +124,8 @@ function applyUpgrade(
   matrix: KCAdjacencyMatrix,
   path: number[],
   newStatus: string,
-  derivedDescription: string
+  derivedDescription: string,
+  originalDescription?: string
 ): void {
   if (path.length === 0) return;
   const { languageIds } = matrix;
@@ -133,7 +134,9 @@ function applyUpgrade(
   const refs = collectRefsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
   const pathDesc = describePath(pathIds, matrix);
-  const description = `${pathDesc} ${derivedDescription}`.trim();
+  const newDesc = `${pathDesc} ${derivedDescription}`.trim();
+  // If originalDescription is provided, append the new description to preserve both claims
+  const description = originalDescription ? `${originalDescription}\n${newDesc}` : newDesc;
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
@@ -185,7 +188,10 @@ function phaseOneUpgrade(
         if (DEBUG_PROPAGATION) {
           console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${newStatus}`);
         }
-        applyUpgrade(matrix, path, newStatus, derivedDesc);
+        // When upgrading no-poly-unknown-quasi → no-poly-quasi, preserve original description
+        // because it justifies "no poly" while the new description justifies "quasi exists"
+        const originalDesc = status === 'no-poly-unknown-quasi' ? relation?.description : undefined;
+        applyUpgrade(matrix, path, newStatus, derivedDesc, originalDesc);
         changes += 1;
         continue; // allow re-evaluation in next fixed-point iteration
       }
@@ -292,23 +298,29 @@ function tryDowngrade(
   const finalizeDowngrade = (
     nextStatus: string,
     triedStatus: string,
-    witnessIds: string[]
+    witnessIds: string[],
+    preserveOriginalDescription?: boolean
   ): void => {
     const refs = collectRefsUnion(
       witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0),
       adjacencyMatrix
     );
-    const desc = buildContradictionDescription(triedStatus, witnessIds);
+    const newDesc = buildContradictionDescription(triedStatus, witnessIds);
     if (DEBUG_PROPAGATION) {
       console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${nextStatus} (witness: ${witnessIds.map(idToName).join(' → ')})`);
     }
+    // When preserveOriginalDescription is true, append new description to preserve both claims
+    const originalDesc = relation?.description;
+    const description = preserveOriginalDescription && originalDesc
+      ? `${originalDesc}\n${newDesc.trim()}`
+      : newDesc.trim();
     adjacencyMatrix.matrix[source][target] = {
       status: nextStatus,
       refs,
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
-      description: desc.trim()
+      description
     };
   };
 
@@ -338,7 +350,9 @@ function tryDowngrade(
     const polyResult = runConsistency('poly');
     if (!polyResult.ok) {
       const witnessIds = polyResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-poly-quasi', 'poly', witnessIds);
+      // Preserve original description because it justifies "quasi exists" while
+      // the new description justifies "no poly"
+      finalizeDowngrade('no-poly-quasi', 'poly', witnessIds, true);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;

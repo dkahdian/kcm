@@ -5,7 +5,8 @@
   import EdgeInfo from '$lib/components/EdgeInfo.svelte';
   import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 
-  import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters } from '$lib/data/index.js';
+  import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters, allPredefinedFilters } from '$lib/data/index.js';
+  import { generateLanguageSelectionFilters } from '$lib/data/filters/index.js';
   import { applyFiltersWithParams, createDefaultFilterState, adjustFilterStateForViewMode } from '$lib/filter-utils.js';
   import type { KCLanguage, FilterStateMap, SelectedEdge, GraphData, ViewMode } from '$lib/types.js';
   import { onMount } from 'svelte';
@@ -35,7 +36,7 @@
   } from '$lib/data/contribution-transforms.js';
   import { applyContributionQueue } from '$lib/data/contribution-transforms.js';
 
-  const languageFilters = getAllLanguageFilters();
+  let languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
   const FILTER_STORAGE_KEY = 'kcm_filter_state_v1';
 
@@ -283,7 +284,13 @@
 
   // Compute filtered graph data reactively
   const baseGraphData = $derived(previewGraphData || initialGraphData);
-  const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, languageFilters, edgeFilters, filterStates));
+  // Regenerate language filters when in preview mode to include new languages
+  const activeLanguageFilters = $derived(
+    previewGraphData 
+      ? [...allPredefinedFilters, ...generateLanguageSelectionFilters(previewGraphData)]
+      : languageFilters
+  );
+  const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, activeLanguageFilters, edgeFilters, filterStates));
 
   $effect(() => {
     if (filterPersistenceReady && browser) {
@@ -379,7 +386,7 @@
                 const oldMode = viewMode;
                 const newMode = mode.id;
                 if (oldMode !== newMode) {
-                  filterStates = adjustFilterStateForViewMode(filterStates, languageFilters, edgeFilters, oldMode, newMode);
+                  filterStates = adjustFilterStateForViewMode(filterStates, activeLanguageFilters, edgeFilters, oldMode, newMode);
                   viewMode = newMode;
                 }
               }}
@@ -389,7 +396,7 @@
           {/each}
         </div>
         <FilterDropdown 
-          languageFilters={languageFilters}
+          languageFilters={activeLanguageFilters}
           edgeFilters={edgeFilters}
           bind:filterStates 
           {viewMode}

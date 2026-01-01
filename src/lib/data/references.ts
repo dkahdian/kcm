@@ -171,16 +171,16 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
 }
 
 /**
- * Database reference entry type - stores pre-parsed title and href along with bibtex.
- * This ensures consistent display and avoids re-parsing issues.
+ * Database reference entry type - may have pre-parsed title and href or just bibtex.
+ * If title/href are missing, they will be parsed from bibtex at runtime.
  */
 interface DatabaseReference {
   id: string;
   bibtex: string;
-  /** Pre-parsed/verified display title in IEEE format */
-  title: string;
-  /** Pre-parsed/verified URL for the reference */
-  href: string;
+  /** Pre-parsed/verified display title in IEEE format (optional - parsed from bibtex if missing) */
+  title?: string;
+  /** Pre-parsed/verified URL for the reference (optional - parsed from bibtex if missing) */
+  href?: string;
 }
 
 // Build reference map from JSON data
@@ -189,12 +189,23 @@ const referencesMap: Record<string, KCReference> = {};
 const referencesData = database.references as DatabaseReference[];
 
 for (const ref of referencesData) {
-  referencesMap[ref.id] = {
-    id: ref.id,
-    title: ref.title,
-    href: ref.href,
-    bibtex: ref.bibtex
-  };
+  // If title or href are missing, parse them from bibtex
+  if (ref.title && ref.href) {
+    referencesMap[ref.id] = {
+      id: ref.id,
+      title: ref.title,
+      href: ref.href,
+      bibtex: ref.bibtex
+    };
+  } else {
+    const parsed = parseBibtex(ref.bibtex);
+    referencesMap[ref.id] = {
+      id: ref.id,
+      title: ref.title ?? parsed.title,
+      href: ref.href ?? parsed.href,
+      bibtex: ref.bibtex
+    };
+  }
 }
 
 export function getReference(id: string): KCReference | undefined {

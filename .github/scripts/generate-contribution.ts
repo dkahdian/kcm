@@ -15,7 +15,7 @@ const rootDir = path.resolve(__dirname, '../..');
 const contributionPath = path.join(rootDir, 'contribution.json');
 const databasePath = path.join(rootDir, 'src/lib/data/database.json');
 
-type RawReference = { id: string; bibtex: string };
+type RawReference = { id: string; bibtex: string; title?: string; href?: string };
 type RawDatabase = {
   languages: unknown[];
   references?: RawReference[];
@@ -121,14 +121,20 @@ function serializeReferences(
   for (const ref of existing) {
     const updated = lookup.get(ref.id);
     if (!updated || seen.has(ref.id)) continue;
-    ordered.push({ id: updated.id, bibtex: updated.bibtex });
+    const entry: RawReference = { id: updated.id, bibtex: updated.bibtex };
+    if (updated.title) entry.title = updated.title;
+    if (updated.href) entry.href = updated.href;
+    ordered.push(entry);
     seen.add(ref.id);
     lookup.delete(ref.id);
   }
 
   for (const ref of references) {
     if (seen.has(ref.id)) continue;
-    ordered.push({ id: ref.id, bibtex: ref.bibtex });
+    const entry: RawReference = { id: ref.id, bibtex: ref.bibtex };
+    if (ref.title) entry.title = ref.title;
+    if (ref.href) entry.href = ref.href;
+    ordered.push(entry);
     seen.add(ref.id);
   }
 

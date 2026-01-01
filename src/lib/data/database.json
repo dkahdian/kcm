@@ -2421,73 +2421,71 @@
     {
       "id": "Bryant_1986",
       "bibtex": "@article{bryant1986graph,\n  title={Graph-based algorithms for boolean function manipulation},\n  author={Bryant, Randal E},\n  journal={Computers, IEEE Transactions on},\n  volume={100},\n  number={8},\n  pages={677--691},\n  year={1986},\n  publisher={IEEE}\n}",
-      "title": "Graph-based algorithms for boolean function manipulation",
-      "href": "#"
+      "title": "R. E. Bryant, \"Graph-based algorithms for boolean function manipulation,\" Computers, IEEE Transactions on, vol. 100, pp. 677–691, 1986."
     },
     {
       "id": "Darwiche_2002",
       "bibtex": "@article{Darwiche_2002,\n   title={A Knowledge Compilation Map},\n   volume={17},\n   ISSN={1076-9757},\n   url={http://dx.doi.org/10.1613/jair.989},\n   DOI={10.1613/jair.989},\n   journal={Journal of Artificial Intelligence Research},\n   publisher={AI Access Foundation},\n   author={Darwiche, A. and Marquis, P.},\n   year={2002},\n   month=sep, pages={229–264} }",
-      "title": "A Knowledge Compilation Map",
+      "title": "A. Darwiche and P. Marquis, \"A Knowledge Compilation Map,\" Journal of Artificial Intelligence Research, vol. 17, pp. 229–264, 2002.",
       "href": "http://dx.doi.org/10.1613/jair.989"
     },
     {
       "id": "Gogic_1995",
       "bibtex": "@article{Gogic_1995,\n   title={The Comparative Study of Knowledge Compilation},\n   journal={Journal of Artificial Intelligence Research},\n   volume={2},\n   pages={147--182},\n   url={https://doi.org/10.1613/jair.110},\n   DOI={10.1613/jair.110},\n   author={Gogic, Goran and Kautz, Henry and Papadimitriou, Christos H. and Selman, Bart},\n   year={1995},\n   publisher={AI Access Foundation}\n }",
-      "title": "The Comparative Study of Knowledge Compilation",
+      "title": "G. Gogic, H. Kautz, C. H. Papadimitriou, and B. Selman, \"The Comparative Study of Knowledge Compilation,\" Journal of Artificial Intelligence Research, vol. 2, pp. 147–182, 1995.",
       "href": "https://doi.org/10.1613/jair.110"
     },
     {
       "id": "Gergov_1994",
       "bibtex": "@ARTICLE{324545,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197-1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}",
-      "title": "Efficient Boolean manipulation with OBDD's can be extended to FBDD's",
+      "title": "J. Gergov and C. Meinel, \"Efficient Boolean manipulation with OBDD's can be extended to FBDD's,\" IEEE Transactions on Computers, vol. 43, pp. 1197-1209, 1994.",
       "href": "https://doi.org/10.1109/12.324545"
     },
     {
       "id": "Darwiche_2000",
       "bibtex": "@misc{darwiche2000tractablecountingtheorymodels,\n      title={On the tractable counting of theory models and its application to belief revision and truth maintenance}, \n      author={Adnan Darwiche},\n      year={2000},\n      eprint={cs/0003044},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/cs/0003044}, \n}",
-      "title": "On the tractable counting of theory models and its application to belief revision and truth maintenance",
+      "title": "Adnan Darwiche, \"On the tractable counting of theory models and its application to belief revision and truth maintenance,\" 2000.",
       "href": "https://arxiv.org/abs/cs/0003044"
     },
     {
       "id": "Selman_1996",
       "bibtex": "@article{10.1145/226643.226644,\nauthor = {Selman, Bart and Kautz, Henry},\ntitle = {Knowledge compilation and theory approximation},\nyear = {1996},\nissue_date = {March 1996},\npublisher = {Association for Computing Machinery},\naddress = {New York, NY, USA},\nvolume = {43},\nnumber = {2},\nissn = {0004-5411},\nurl = {https://doi.org/10.1145/226643.226644},\ndoi = {10.1145/226643.226644},\nabstract = {Computational efficiency is a central concern in the design of knowledge representation systems. In order to obtain efficient systems, it has been suggested that one should limit the form of the statements in the knowledge base or use an incomplete inference mechanism. The former approach is often too restrictive for practical applications, whereas the latter leads to uncertainty about exactly what can and cannot be inferred from the knowledge base. We present a third alternative, in which knowledge given in a general representation language is translated (compiled) into a tractable form—allowing for efficient subsequent query answering.We show how propositional logical theories can be compiled into Horn theories that approximate the original information. The approximations bound the original theory from below and above in terms of logical strength. The procedures are extended to other tractable languages (for example, binary clauses) and to the first-order case. Finally, we demonstrate the generality of our approach by compiling concept descriptions in a general frame-based language into a tractable form.},\njournal = {J. ACM},\nmonth = mar,\npages = {193–224},\nnumpages = {32},\nkeywords = {Horn clauses, efficient reasoning methods, knowledge compilation, knowledge-base optimization, query evaluation, theory approximation}\n}",
-      "title": "Knowledge compilation and theory approximation",
+      "title": "B. Selman and H. Kautz, \"Knowledge compilation and theory approximation,\" J. ACM, vol. 43, pp. 193–224, 1996.",
       "href": "https://doi.org/10.1145/226643.226644"
     },
     {
       "id": "Cadoli_1997",
       "bibtex": "@article{Cadoli1997ASO,\n  title={A survey on knowledge compilation},\n  author={Marco Cadoli and Francesco M. Donini},\n  journal={AI Communications},\n  year={1997},\n  volume={10},\n  pages={137 - 150},\n  url={https://api.semanticscholar.org/CorpusID:16746005}\n}",
-      "title": "A survey on knowledge compilation",
+      "title": "Marco Cadoli and Francesco M. Donini, \"A survey on knowledge compilation,\" AI Communications, vol. 10, pp. 137 - 150, 1997.",
       "href": "https://api.semanticscholar.org/CorpusID:16746005"
     },
     {
       "id": "Wegener_1987",
       "bibtex": "@book{Wegener1987-WEGTCO-3,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987}\n}",
-      "title": "The Complexity of Boolean Functions",
-      "href": "#"
+      "title": "Ingo Wegener, \"The Complexity of Boolean Functions,\" 1987."
     },
     {
       "id": "Amarilli_2018",
       "bibtex": "@article{DBLP:journals/corr/abs-1811-02944,\n  author       = {Antoine Amarilli and\n                  Florent Capelli and\n                  Mika{\\\"{e}}l Monet and\n                  Pierre Senellart},\n  title        = {Connecting Knowledge Compilation Classes and Width Parameters},\n  journal      = {CoRR},\n  volume       = {abs/1811.02944},\n  year         = {2018},\n  url          = {http://arxiv.org/abs/1811.02944},\n  eprinttype    = {arXiv},\n  eprint       = {1811.02944},\n  timestamp    = {Thu, 22 Nov 2018 17:58:30 +0100},\n  biburl       = {https://dblp.org/rec/journals/corr/abs-1811-02944.bib},\n  bibsource    = {dblp computer science bibliography, https://dblp.org}\n}",
-      "title": "Connecting Knowledge Compilation Classes and Width Parameters",
+      "title": "Antoine Amarilli, Florent Capelli, Mikaël Monet, and Pierre Senellart, \"Connecting Knowledge Compilation Classes and Width Parameters,\" CoRR, vol. abs/1811.02944, 2018.",
       "href": "http://arxiv.org/abs/1811.02944"
     },
     {
       "id": "Bova_2016",
       "bibtex": "@inproceedings{bova:hal-03301001,\n  TITLE = {{Knowledge Compilation Meets Communication Complexity}},\n  AUTHOR = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  URL = {https://univ-artois.hal.science/hal-03301001},\n  BOOKTITLE = {{25th International Joint Conference on Artificial Intelligence (IJCAI'16)}},\n  ADDRESS = {New York, NY, USA, Unknown Region},\n  EDITOR = {Subbarao Kambhampati},\n  PUBLISHER = {{IJCAI/AAAI Press}},\n  PAGES = {1008--1014},\n  YEAR = {2016},\n  HAL_ID = {hal-03301001},\n  HAL_VERSION = {v1},\n}",
-      "title": "Knowledge Compilation Meets Communication Complexity",
+      "title": "S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, \"Knowledge Compilation Meets Communication Complexity,\" 25th International Joint Conference on Artificial Intelligence (IJCAI'16), pp. 1008–1014, 2016.",
       "href": "https://univ-artois.hal.science/hal-03301001"
     },
     {
       "id": "Beame_2013",
       "bibtex": "@misc{beame2013modelcountingqueryexpressions,\n      title={Model Counting of Query Expressions: Limitations of Propositional Methods}, \n      author={Paul Beame and Jerry Li and Sudeepa Roy and Dan Suciu},\n      year={2013},\n      eprint={1312.4125},\n      archivePrefix={arXiv},\n      primaryClass={cs.DB},\n      url={https://arxiv.org/abs/1312.4125}, \n}",
-      "title": "Model Counting of Query Expressions: Limitations of Propositional Methods",
+      "title": "Paul Beame, Jerry Li, Sudeepa Roy, and Dan Suciu, \"Model Counting of Query Expressions: Limitations of Propositional Methods,\" 2013.",
       "href": "https://arxiv.org/abs/1312.4125"
     },
     {
       "id": "Bollig_2018",
       "bibtex": "@misc{bollig2018relativesuccinctnesssententialdecision,\n      title={On the Relative Succinctness of Sentential Decision Diagrams}, \n      author={Beate Bollig and Matthias Buttkus},\n      year={2018},\n      eprint={1802.04544},\n      archivePrefix={arXiv},\n      primaryClass={cs.CC},\n      url={https://arxiv.org/abs/1802.04544}, \n}",
-      "title": "On the Relative Succinctness of Sentential Decision Diagrams",
+      "title": "Beate Bollig and Matthias Buttkus, \"On the Relative Succinctness of Sentential Decision Diagrams,\" 2018.",
       "href": "https://arxiv.org/abs/1802.04544"
     },
     {

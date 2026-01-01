@@ -161,6 +161,12 @@ export function applyContributionQueue(
       }
     }
 
+    // If the status is 'unknown-to-us' or empty, this means "remove the edge" (set to null)
+    if (!rel.status || rel.status === 'unknown-to-us') {
+      merged.adjacencyMatrix.matrix[sourceIdx][targetIdx] = null;
+      return;
+    }
+
     // Collect separating function IDs
     const separatingFunctionIds: string[] = [];
     if (rel.separatingFunctionIds && rel.separatingFunctionIds.length > 0) {

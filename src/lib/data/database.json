@@ -2421,7 +2421,8 @@
     {
       "id": "Bryant_1986",
       "bibtex": "@article{bryant1986graph,\n  title={Graph-based algorithms for boolean function manipulation},\n  author={Bryant, Randal E},\n  journal={Computers, IEEE Transactions on},\n  volume={100},\n  number={8},\n  pages={677--691},\n  year={1986},\n  publisher={IEEE}\n}",
-      "title": "R. E. Bryant, \"Graph-based algorithms for boolean function manipulation,\" Computers, IEEE Transactions on, vol. 100, pp. 677–691, 1986."
+      "title": "R. E. Bryant, \"Graph-based algorithms for boolean function manipulation,\" Computers, IEEE Transactions on, vol. 100, pp. 677–691, 1986.",
+      "href": "#"
     },
     {
       "id": "Darwiche_2002",
@@ -2462,7 +2463,8 @@
     {
       "id": "Wegener_1987",
       "bibtex": "@book{Wegener1987-WEGTCO-3,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987}\n}",
-      "title": "Ingo Wegener, \"The Complexity of Boolean Functions,\" 1987."
+      "title": "Ingo Wegener, \"The Complexity of Boolean Functions,\" 1987.",
+      "href": "#"
     },
     {
       "id": "Amarilli_2018",
@@ -4536,7 +4538,7 @@
         null,
         {
           "status": "poly",
-          "description": "Shown via Proposition 3.8 of \\citet{Amarilli_2018}",
+          "description": "From the variable order $v$, construct a right-linear $v$-tree $T$ as follows: let $r_1$ be the root; for $2 \\le i \\le n-1$, let $r_i$ be the left child of $r_{i-1}$; for $1 \\le i \\le n-1$, attach leaf $v_i$ as the right child of $r_i$, and attach leaf $v_n$ as the right child of $r_{n-1}$.\nNext, apply the standard compilation of an $n$-FBDD into a DNNF by rewriting each decision node labeled by variable $x$ as $(x \\wedge D_0) \\vee (\\neg x \\wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the respective successors. Because the $v$-tree aligns with the variable order of the $n$-OBDD, every $\\wedge$-gate respects the variable partition induced by $T$, yielding a structured DNNF. The construction is linear in the size of $D$.",
           "refs": [
             "Amarilli_2018"
           ],
@@ -5300,7 +5302,7 @@
         },
         {
           "status": "poly",
-          "description": "Shown via Proposition 3.8 of \\citet{Amarilli_2018}",
+          "description": "From the variable order $v$, construct a right-linear $v$-tree $T$ as follows: let $r_1$ be the root; for $2 \\le i \\le n-1$, let $r_i$ be the left child of $r_{i-1}$; for $1 \\le i \\le n-1$, attach leaf $v_i$ as the right child of $r_i$, and attach leaf $v_n$ as the right child of $r_{n-1}$.\nNext, apply the standard compilation of an $n$-FBDD into a DNNF by rewriting each decision node labeled by variable $x$ as $(x \\wedge D_0) \\vee (\\neg x \\wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the respective successors. Because the $v$-tree aligns with the variable order of the $n$-OBDD, every $\\wedge$-gate respects the variable partition induced by $T$, yielding a structured DNNF. The construction is linear in the size of $D$. Since $D$ is unambiguous, for every rewritten node the two subcircuits $(x \\wedge D_0)$ and $(\\neg x \\wedge D_1)$ are mutually exclusive, ensuring that all $\\vee$-gates introduced in the translation are deterministic. The resulting circuit is therefore a deterministic structured DNNF (d-SDNNF), and the compilation remains linear-time.",
           "refs": [
             "Amarilli_2018"
           ],
@@ -5595,7 +5597,7 @@
         },
         {
           "status": "poly",
-          "description": "Shown via Proposition 3.8 of \\citet{Amarilli_2018}",
+          "description": "From the variable order $v$, construct a right-linear $v$-tree $T$ as follows: let $r_1$ be the root; for $2 \\le i \\le n-1$, let $r_i$ be the left child of $r_{i-1}$; for $1 \\le i \\le n-1$, attach leaf $v_i$ as the right child of $r_i$, and attach leaf $v_n$ as the right child of $r_{n-1}$.\nNext, apply the standard compilation of an $n$-FBDD into a DNNF by rewriting each decision node labeled by variable $x$ as $(x \\wedge D_0) \\vee (\\neg x \\wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the respective successors. Because the $v$-tree aligns with the variable order of the $n$-OBDD, every $\\wedge$-gate respects the variable partition induced by $T$, yielding a structured DNNF. The construction is linear in the size of $D$. Since $D$ is unambiguous, for every rewritten node the two subcircuits $(x \\wedge D_0)$ and $(\\neg x \\wedge D_1)$ are mutually exclusive, ensuring that all $\\vee$-gates introduced in the translation are deterministic. The resulting circuit is therefore a deterministic structured DNNF (d-SDNNF), and the compilation remains linear-time.  In the case of an OBDD, all disjunctions in the resulting circuit arise from the rewriting of decision nodes, so every $\\vee$-gate is a decision gate. Combined with the structured decomposability ensured by the $v$-tree, this yields a dec-SDNNF. The translation is linear in the size of $D$.",
           "refs": [
             "Amarilli_2018"
           ],

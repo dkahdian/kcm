@@ -2507,6 +2507,18 @@
       "bibtex": "@misc{beame2015newlimitsknowledgecompilation,\n      title={New Limits for Knowledge Compilation and Applications to Exact Model Counting}, \n      author={Paul Beame and Vincent Liew},\n      year={2015},\n      eprint={1506.02639},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/1506.02639}, \n}",
       "title": "Paul Beame and Vincent Liew, \"New Limits for Knowledge Compilation and Applications to Exact Model Counting,\" 2015.",
       "href": "https://arxiv.org/abs/1506.02639"
+    },
+    {
+      "id": "Pipatsrisawat_2010",
+      "bibtex": "@phdthesis{pipatsrisawat2010reasoning,\n  author       = {Thammanit Pipatsrisawat},\n  title        = {Reasoning with Propositional Knowledge: Frameworks for Boolean Satisfiability and Knowledge Compilation},\n  school       = {University of California, Los Angeles},\n  year         = {2010},\n  address      = {Los Angeles, CA, USA},\n  note         = {PhD thesis},\n  url          = {https://escholarship.org/content/qt2vz8n06q/qt2vz8n06q.pdf}\n}",
+      "title": "Thammanit Pipatsrisawat, \"Reasoning with Propositional Knowledge: Frameworks for Boolean Satisfiability and Knowledge Compilation,\" 2010.",
+      "href": "https://escholarship.org/content/qt2vz8n06q/qt2vz8n06q.pdf"
+    },
+    {
+      "id": "Capelli_2016",
+      "bibtex": "@phdthesis{capelli2016structural,\n  author       = {Florent Capelli},\n  title        = {Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation},\n  school       = {Universit{\\'e} Paris-Diderot (Paris 7), Sorbonne Paris Cit{\\'e}},\n  year         = {2016},\n  address      = {Paris, France},\n  note         = {PhD thesis},\n  url          = {https://florent.capelli.me/publi/these_capelli.pdf}\n}",
+      "title": "Florent Capelli, \"Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation,\" 2016.",
+      "href": "https://florent.capelli.me/publi/these_capelli.pdf"
     }
   ],
   "tags": {
@@ -3021,13 +3033,14 @@
           "description": "d-DNNF transforms to DNNF in polynomial time \\citet{Darwiche_2002}. DNNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from d-DNNF to NNF."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
+            "Darwiche_2002",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "nOBDD→nFBDD in polynomial time \\citet{Amarilli_2018}. If d-DNNF→nOBDD in polynomial time, then d-DNNF→nFBDD in polynomial time. This contradicts d-DNNF→nFBDD being no-poly-quasi \\citet{Amarilli_2018,Bova_2016}."
+          "description": "FBDD→d-DNNF in polynomial time \\citet{Darwiche_2002}. nOBDD→SDNNF in polynomial time \\citet{Amarilli_2018}. If d-DNNF→nOBDD in quasipolynomial time, then FBDD→SDNNF in at most quasi-polynomial time. This contradicts FBDD→SDNNF being no-quasi \\citet{Capelli_2016,Pipatsrisawat_2010}."
         },
         {
           "status": "no-quasi",
@@ -3049,7 +3062,17 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDNNF→nOBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If d-DNNF→SDNNF in quasipolynomial time, then d-DNNF→nOBDD in at most quasi-polynomial time. This contradicts d-DNNF→nOBDD being no-quasi \\citet{Darwiche_2002,Amarilli_2018}."
+        },
         null,
         {
           "status": "no-poly-quasi",
@@ -3748,7 +3771,15 @@
             "Darwiche_2002"
           ]
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-SDNNF→SDNNF in polynomial time \\citet{Amarilli_2018}. If FBDD→d-SDNNF in quasipolynomial time, then FBDD→SDNNF in at most quasi-polynomial time. This contradicts FBDD→SDNNF being no-quasi \\citet{Capelli_2016,Pipatsrisawat_2010}."
+        },
         null,
         {
           "status": "no-quasi",
@@ -3806,7 +3837,15 @@
           "derived": true,
           "description": "FBDD transforms to uFBDD in polynomial time \\citet{Amarilli_2018}. uFBDD transforms to nFBDD in polynomial time \\citet{Amarilli_2018}. nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. DNNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from FBDD to NNF."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "nOBDD→SDNNF in polynomial time \\citet{Amarilli_2018}. If FBDD→nOBDD in quasipolynomial time, then FBDD→SDNNF in at most quasi-polynomial time. This contradicts FBDD→SDNNF being no-quasi \\citet{Capelli_2016,Pipatsrisawat_2010}."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -3827,7 +3866,15 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "description": "Appendix D.2 of \\citet{Pipatsrisawat_2010} and Section 6.3 of \\citet{Capelli_2016} independently proved this result using different techniques.",
+          "refs": [
+            "Capelli_2016",
+            "Pipatsrisawat_2010"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "poly",
@@ -3837,7 +3884,15 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uOBDD→d-SDNNF in polynomial time \\citet{Amarilli_2018}. If FBDD→uOBDD in quasipolynomial time, then FBDD→d-SDNNF in at most quasi-polynomial time. This contradicts FBDD→d-SDNNF being no-quasi \\citet{Amarilli_2018}."
+        },
         {
           "status": "no-quasi",
           "description": "The hidden weighted bit function has a lower-bounded $OBDD$ representation of $\\Omega(2^{n/4})$, while an $FBDD$ for the same function has a size of only $O(n^2)$",
@@ -5381,7 +5436,16 @@
           "derived": true,
           "description": "uFBDD transforms to nFBDD in polynomial time \\citet{Amarilli_2018}. nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. DNNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from uFBDD to NNF."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Beame_2013"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. If uFBDD→nOBDD in quasipolynomial time, then d-DNNF→nOBDD in at most quasi-polynomial time. This contradicts d-DNNF→nOBDD being no-quasi \\citet{Darwiche_2002,Amarilli_2018}."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -5405,7 +5469,18 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF→uFBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. SDNNF→nOBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If uFBDD→SDNNF in quasipolynomial time, then d-DNNF→nOBDD in at most quasi-polynomial time. This contradicts d-DNNF→nOBDD being no-quasi \\citet{Darwiche_2002,Amarilli_2018}."
+        },
         null,
         null,
         {
@@ -5807,7 +5882,15 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "FBDD→dec-DNNF in polynomial time \\citet{Amarilli_2018}. If dec-DNNF→d-SDNNF in quasipolynomial time, then FBDD→d-SDNNF in at most quasi-polynomial time. This contradicts FBDD→d-SDNNF being no-quasi \\citet{Amarilli_2018}."
+        },
         null,
         {
           "status": "no-quasi",
@@ -5910,13 +5993,13 @@
           "description": "dec-DNNF transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. d-DNNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from dec-DNNF to NNF."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "nOBDD→nFBDD in polynomial time \\citet{Amarilli_2018}. If dec-DNNF→nOBDD in polynomial time, then dec-DNNF→nFBDD in polynomial time. This contradicts dec-DNNF→nFBDD being no-poly-quasi \\citet{Amarilli_2018,Bova_2016}."
+          "description": "FBDD→dec-DNNF in polynomial time \\citet{Amarilli_2018}. nOBDD→SDNNF in polynomial time \\citet{Amarilli_2018}. If dec-DNNF→nOBDD in quasipolynomial time, then FBDD→SDNNF in at most quasi-polynomial time. This contradicts FBDD→SDNNF being no-quasi \\citet{Capelli_2016,Pipatsrisawat_2010}."
         },
         {
           "status": "no-quasi",
@@ -5939,7 +6022,17 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "FBDD→dec-DNNF in polynomial time \\citet{Amarilli_2018}. SDNNF→nOBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If dec-DNNF→SDNNF in quasipolynomial time, then FBDD→nOBDD in at most quasi-polynomial time. This contradicts FBDD→nOBDD being no-quasi \\citet{Amarilli_2018}."
+        },
         null,
         {
           "status": "no-poly-quasi",
@@ -5968,13 +6061,13 @@
           "description": "First, we show no polynomial transformation exists.\nuFBDD→nFBDD in polynomial time \\citet{Amarilli_2018}. If dec-DNNF→uFBDD in polynomial time, then dec-DNNF→nFBDD in polynomial time. This contradicts dec-DNNF→nFBDD being no-poly-quasi \\citet{Amarilli_2018,Bova_2016}.\n\nNow, we show a quasipolynomial transformation exists.\ndec-DNNF transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. d-DNNF transforms to uFBDD in quasipolynomial time \\citet{Bova_2016}. Therefore a quasi-polynomial transformation exists from dec-DNNF to uFBDD."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "uOBDD→nFBDD in polynomial time \\citet{Amarilli_2018}. If dec-DNNF→uOBDD in polynomial time, then dec-DNNF→nFBDD in polynomial time. This contradicts dec-DNNF→nFBDD being no-poly-quasi \\citet{Amarilli_2018,Bova_2016}."
+          "description": "FBDD→dec-DNNF in polynomial time \\citet{Amarilli_2018}. uOBDD→SDNNF in polynomial time \\citet{Amarilli_2018}. If dec-DNNF→uOBDD in quasipolynomial time, then FBDD→SDNNF in at most quasi-polynomial time. This contradicts FBDD→SDNNF being no-quasi \\citet{Capelli_2016,Pipatsrisawat_2010}."
         },
         {
           "status": "no-quasi",

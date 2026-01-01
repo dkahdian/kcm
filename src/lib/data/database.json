@@ -2999,9 +2999,9 @@
         null,
         {
           "status": "no-poly-quasi",
-          "description": "Proposition 3.5 shows that quasi-polynomial compilation exists. Proposition 3.10 shows that this cannot be made polynomial-time.",
+          "description": "Proposition 3.5 of \\citet{Amarilli_2018} shows that quasi-polynomial compilation exists. Proposition 3.10 of \\citet{Amarilli_2018} shows that this cannot be made polynomial-time.",
           "refs": [
-            "Bova_2016"
+            "Amarilli_2018"
           ],
           "derived": false
         },
@@ -3484,7 +3484,7 @@
         },
         {
           "status": "no-poly-quasi",
-          "description": "Proposition 3.5 shows that a quasi-polynomial compilation exists. Proposition 3.10 shows that this transformation cannot be made polynomial-time.",
+          "description": "Proposition 3.5 of \\citet{Amarilli_2018} shows that a quasi-polynomial compilation exists. Proposition 3.10 of \\citet{Amarilli_2018} shows that this transformation cannot be made polynomial-time.",
           "refs": [
             "Amarilli_2018"
           ],
@@ -5278,7 +5278,7 @@
         null,
         {
           "status": "no-quasi",
-          "description": "$uOBDD$ can have polynomial size for $HWB_n$, but $OBDD$s have size $2^\\Omega(n)$. Claimed by Figure 1 of \\citet{Amarilli_2018}.",
+          "description": "$uOBDD$ can have polynomial size for $HWB_n$, but $OBDD$s have size $2^\\Omega(n)$",
           "refs": [
             "Amarilli_2018"
           ],

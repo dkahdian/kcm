@@ -4090,25 +4090,8 @@
           "derived": true,
           "description": "nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. DNNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from nFBDD to NNF."
         },
-        {
-          "status": "no-quasi",
-          "description": "Claimed by Figure 1 of \\citet{Amarilli_2018}.",
-          "refs": [
-            "Amarilli_2018"
-          ],
-          "derived": false
-        },
-        {
-          "status": "no-quasi",
-          "refs": [
-            "Bova_2016",
-            "Amarilli_2018",
-            "Darwiche_2002"
-          ],
-          "hidden": false,
-          "derived": true,
-          "description": "d-DNNF→nFBDD in at worst quasipolynomial time \\citet{Bova_2016,Amarilli_2018}. OBDD$_<$→FBDD in polynomial time \\citet{Darwiche_2002}. If nFBDD→OBDD$_<$ in quasipolynomial time, then d-DNNF→FBDD in at most quasi-polynomial time. This contradicts d-DNNF→FBDD being no-quasi \\citet{Darwiche_2000}."
-        },
+        null,
+        null,
         {
           "status": "no-quasi",
           "refs": [
@@ -5123,12 +5106,7 @@
         null,
         null,
         null,
-        {
-          "status": "no-quasi",
-          "description": "Claimed by Figure 1 of \\citet{Amarilli_2018}.",
-          "refs": [],
-          "derived": false
-        },
+        null,
         {
           "status": "no-quasi",
           "refs": [

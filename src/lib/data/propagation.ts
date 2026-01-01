@@ -1,4 +1,4 @@
-import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../types.js';
+import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix, DescriptionComponent } from '../types.js';
 import {
   validateAdjacencyConsistency,
   guaranteesPoly,
@@ -120,12 +120,77 @@ function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
   return parts.join(' ');
 }
 
-function applyUpgrade(
+/**
+ * Build the combined description for a no-poly-quasi edge from its proof components.
+ */
+function buildNoPolyQuasiDescription(noPolyDescription: DescriptionComponent, quasiDescription: DescriptionComponent): string {
+  const parts: string[] = [];
+  parts.push('First, we show no polynomial transformation exists.');
+  parts.push(noPolyDescription.description);
+  parts.push('');
+  parts.push('Now, we show a quasipolynomial transformation exists.');
+  parts.push(quasiDescription.description);
+  return parts.join('\n');
+}
+
+/**
+ * Extract or create a noPolyDescription from an existing relation.
+ * Used when the relation has a "no poly" claim (no-poly-unknown-quasi or no-poly-quasi).
+ */
+function extractNoPolyDescription(relation: DirectedSuccinctnessRelation | null): DescriptionComponent | null {
+  if (!relation) return null;
+  
+  // If structured proof already exists, use it
+  if (relation.noPolyDescription) {
+    return relation.noPolyDescription;
+  }
+  
+  // For no-poly-unknown-quasi or no-poly-quasi without structured proof,
+  // the description justifies the "no poly" claim
+  if (relation.status === 'no-poly-unknown-quasi' || relation.status === 'no-poly-quasi') {
+    return {
+      description: relation.description ?? '',
+      refs: relation.refs ?? [],
+      derived: relation.derived ?? false
+    };
+  }
+  
+  return null;
+}
+
+/**
+ * Extract or create a quasiDescription from an existing relation.
+ * Used when the relation has a "quasi exists" claim (unknown-poly-quasi or no-poly-quasi).
+ */
+function extractQuasiDescription(relation: DirectedSuccinctnessRelation | null): DescriptionComponent | null {
+  if (!relation) return null;
+  
+  // If structured proof already exists, use it
+  if (relation.quasiDescription) {
+    return relation.quasiDescription;
+  }
+  
+  // For unknown-poly-quasi or no-poly-quasi without structured proof,
+  // the description justifies the "quasi exists" claim
+  if (relation.status === 'unknown-poly-quasi' || relation.status === 'no-poly-quasi') {
+    return {
+      description: relation.description ?? '',
+      refs: relation.refs ?? [],
+      derived: relation.derived ?? false
+    };
+  }
+  
+  return null;
+}
+
+/**
+ * Apply a standard upgrade (not no-poly-quasi).
+ */
+function applySimpleUpgrade(
   matrix: KCAdjacencyMatrix,
   path: number[],
   newStatus: string,
-  derivedDescription: string,
-  originalDescription?: string
+  derivedDescription: string
 ): void {
   if (path.length === 0) return;
   const { languageIds } = matrix;
@@ -134,9 +199,7 @@ function applyUpgrade(
   const refs = collectRefsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
   const pathDesc = describePath(pathIds, matrix);
-  const newDesc = `${pathDesc} ${derivedDescription}`.trim();
-  // If originalDescription is provided, append the new description to preserve both claims
-  const description = originalDescription ? `${originalDescription}\n${newDesc}` : newDesc;
+  const description = `${pathDesc} ${derivedDescription}`.trim();
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
@@ -144,6 +207,57 @@ function applyUpgrade(
     hidden: false,
     derived: true,
     description
+  } satisfies DirectedSuccinctnessRelation;
+}
+
+/**
+ * Apply upgrade from no-poly-unknown-quasi to no-poly-quasi.
+ * Preserves the original noPolyDescription and adds a derived quasiDescription.
+ */
+function applyNoPolyQuasiUpgrade(
+  matrix: KCAdjacencyMatrix,
+  sourceIdx: number,
+  targetIdx: number,
+  path: number[],
+  originalRelation: DirectedSuccinctnessRelation
+): void {
+  const { languageIds } = matrix;
+  const srcName = idToName(languageIds[sourceIdx]);
+  const tgtName = idToName(languageIds[targetIdx]);
+  
+  // Extract original noPolyDescription
+  const noPolyDescription = extractNoPolyDescription(originalRelation) ?? {
+    description: originalRelation.description ?? '',
+    refs: originalRelation.refs ?? [],
+    derived: originalRelation.derived ?? false
+  };
+  
+  // Create derived quasiDescription
+  const pathIds = path.map((idx) => languageIds[idx]);
+  const pathDesc = describePath(pathIds, matrix);
+  const quasiDesc = `${pathDesc} Therefore a quasi-polynomial transformation exists from ${srcName} to ${tgtName}.`;
+  const quasiRefs = collectRefsUnion(path, matrix);
+  const quasiDescription: DescriptionComponent = {
+    description: quasiDesc,
+    refs: quasiRefs,
+    derived: true
+  };
+  
+  // Combine refs from both proofs
+  const allRefs = [...new Set([...noPolyDescription.refs, ...quasiDescription.refs])];
+  
+  // derived = true only if BOTH proofs are derived
+  const fullyDerived = noPolyDescription.derived && quasiDescription.derived;
+  
+  matrix.matrix[sourceIdx][targetIdx] = {
+    status: 'no-poly-quasi',
+    refs: allRefs,
+    separatingFunctionIds: originalRelation.separatingFunctionIds,
+    hidden: false,
+    derived: fullyDerived,
+    noPolyDescription,
+    quasiDescription,
+    description: buildNoPolyQuasiDescription(noPolyDescription, quasiDescription)
   } satisfies DirectedSuccinctnessRelation;
 }
 
@@ -183,15 +297,19 @@ function phaseOneUpgrade(
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
-        const derivedDesc = `Therefore a quasi-polynomial transformation exists from ${srcName} to ${tgtName}.`;
         const newStatus = status === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
         if (DEBUG_PROPAGATION) {
           console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${newStatus}`);
         }
-        // When upgrading no-poly-unknown-quasi → no-poly-quasi, preserve original description
-        // because it justifies "no poly" while the new description justifies "quasi exists"
-        const originalDesc = status === 'no-poly-unknown-quasi' ? relation?.description : undefined;
-        applyUpgrade(matrix, path, newStatus, derivedDesc, originalDesc);
+        
+        if (status === 'no-poly-unknown-quasi' && relation) {
+          // Special case: use structured proof components
+          applyNoPolyQuasiUpgrade(matrix, i, j, path, relation);
+        } else {
+          // Standard upgrade to unknown-poly-quasi
+          const derivedDesc = `Therefore a quasi-polynomial transformation exists from ${srcName} to ${tgtName}.`;
+          applySimpleUpgrade(matrix, path, newStatus, derivedDesc);
+        }
         changes += 1;
         continue; // allow re-evaluation in next fixed-point iteration
       }
@@ -212,7 +330,7 @@ function phaseOneUpgrade(
         if (DEBUG_PROPAGATION) {
           console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → poly`);
         }
-        applyUpgrade(matrix, path, 'poly', derivedDesc);
+        applySimpleUpgrade(matrix, path, 'poly', derivedDesc);
         changes += 1;
       }
     }
@@ -295,11 +413,10 @@ function tryDowngrade(
     return `${existingPart}If ${srcName}→${tgtName} ${triedPhrase}, then ${pathStartName}→${pathEndName} ${impliedPhrase}. This contradicts ${pathStartName}→${pathEndName} being ${actualStatus}${formatCitations(actualRefs)}.`;
   };
 
-  const finalizeDowngrade = (
+  const finalizeSimpleDowngrade = (
     nextStatus: string,
     triedStatus: string,
-    witnessIds: string[],
-    preserveOriginalDescription?: boolean
+    witnessIds: string[]
   ): void => {
     const refs = collectRefsUnion(
       witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0),
@@ -309,18 +426,61 @@ function tryDowngrade(
     if (DEBUG_PROPAGATION) {
       console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${nextStatus} (witness: ${witnessIds.map(idToName).join(' → ')})`);
     }
-    // When preserveOriginalDescription is true, append new description to preserve both claims
-    const originalDesc = relation?.description;
-    const description = preserveOriginalDescription && originalDesc
-      ? `${originalDesc}\n${newDesc.trim()}`
-      : newDesc.trim();
     adjacencyMatrix.matrix[source][target] = {
       status: nextStatus,
       refs,
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
-      description
+      description: newDesc.trim()
+    };
+  };
+
+  /**
+   * Finalize downgrade from unknown-poly-quasi to no-poly-quasi.
+   * Preserves the original quasiDescription and creates a derived noPolyDescription.
+   */
+  const finalizeNoPolyQuasiDowngrade = (
+    witnessIds: string[]
+  ): void => {
+    // Extract original quasiDescription from the unknown-poly-quasi relation
+    const quasiDescription = extractQuasiDescription(relation) ?? {
+      description: relation?.description ?? '',
+      refs: relation?.refs ?? [],
+      derived: relation?.derived ?? false
+    };
+    
+    // Create derived noPolyDescription from contradiction
+    const noPolyDesc = buildContradictionDescription('poly', witnessIds);
+    const noPolyRefs = collectRefsUnion(
+      witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0),
+      adjacencyMatrix
+    );
+    const noPolyDescription: DescriptionComponent = {
+      description: noPolyDesc,
+      refs: noPolyRefs,
+      derived: true
+    };
+    
+    // Combine refs from both proofs
+    const allRefs = [...new Set([...noPolyDescription.refs, ...quasiDescription.refs])];
+    
+    // derived = true only if BOTH proofs are derived
+    const fullyDerived = noPolyDescription.derived && quasiDescription.derived;
+    
+    if (DEBUG_PROPAGATION) {
+      console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → no-poly-quasi (witness: ${witnessIds.map(idToName).join(' → ')})`);
+    }
+    
+    adjacencyMatrix.matrix[source][target] = {
+      status: 'no-poly-quasi',
+      refs: allRefs,
+      hidden: false,
+      derived: fullyDerived,
+      separatingFunctionIds: relation?.separatingFunctionIds,
+      noPolyDescription,
+      quasiDescription,
+      description: buildNoPolyQuasiDescription(noPolyDescription, quasiDescription)
     };
   };
 
@@ -330,14 +490,14 @@ function tryDowngrade(
     const polyResult = runConsistency('poly');
     if (!polyResult.ok) {
       const witnessIds = polyResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-poly-unknown-quasi', 'poly', witnessIds);
+      finalizeSimpleDowngrade('no-poly-unknown-quasi', 'poly', witnessIds);
       return true;
     }
     // Trial quasi
     const quasiResult = runConsistency('unknown-poly-quasi');
     if (!quasiResult.ok) {
       const witnessIds = quasiResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-quasi', 'unknown-poly-quasi', witnessIds);
+      finalizeSimpleDowngrade('no-quasi', 'unknown-poly-quasi', witnessIds);
       return true;
     }
     // restore original status (either null or unknown-both)
@@ -350,9 +510,8 @@ function tryDowngrade(
     const polyResult = runConsistency('poly');
     if (!polyResult.ok) {
       const witnessIds = polyResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      // Preserve original description because it justifies "quasi exists" while
-      // the new description justifies "no poly"
-      finalizeDowngrade('no-poly-quasi', 'poly', witnessIds, true);
+      // Use structured proof for no-poly-quasi
+      finalizeNoPolyQuasiDowngrade(witnessIds);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;
@@ -364,7 +523,7 @@ function tryDowngrade(
     const quasiResult = runConsistency('no-poly-quasi');
     if (!quasiResult.ok) {
       const witnessIds = quasiResult.witnessPath ?? [languageIds[source], languageIds[target]];
-      finalizeDowngrade('no-quasi', 'no-poly-quasi', witnessIds);
+      finalizeSimpleDowngrade('no-quasi', 'no-poly-quasi', witnessIds);
       return true;
     }
     adjacencyMatrix.matrix[source][target] = relation;

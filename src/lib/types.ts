@@ -214,6 +214,19 @@ export interface KCSeparatingFunction {
   refs: string[];
 }
 
+/**
+ * Description component for a single claim in a no-poly-quasi edge.
+ * Used to track whether each half (no-poly / quasi-exists) was manually authored or derived.
+ */
+export interface DescriptionComponent {
+  /** Description/justification for this claim */
+  description: string;
+  /** Supporting references */
+  refs: string[];
+  /** True if this part was inferred by the propagator */
+  derived: boolean;
+}
+
 export interface DirectedSuccinctnessRelation {
   /** Transformation classification from source → target (use getComplexity() for display) */
   status: string;
@@ -227,6 +240,13 @@ export interface DirectedSuccinctnessRelation {
   hidden?: boolean;
   /** True if this edge was inferred by the propagator rather than manually authored. */
   derived?: boolean;
+  /**
+   * For no-poly-quasi edges: structured proof tracking for each claim.
+   * Allows partial derivation where one claim is manual and the other derived.
+   * When present, `derived` should be true only if BOTH proofs are derived.
+   */
+  noPolyDescription?: DescriptionComponent;
+  quasiDescription?: DescriptionComponent;
   /** True if this edge should be visually dimmed/grayed (set by implicitEdgeTreatment filter). */
   dimmed?: boolean;
   /** True if this edge should be highlighted as explicit (set by implicitEdgeTreatment filter). */

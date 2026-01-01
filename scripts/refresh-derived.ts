@@ -3,9 +3,10 @@
  * 
  * This script:
  * 1. Reads database.json
- * 2. Removes all edges marked as "derived: true"
- * 3. Runs the propagator to re-generate derived edges
- * 4. Writes the updated database.json
+ * 2. Removes all fully-derived edges (where derived=true and both description components, if present, are derived)
+ * 3. For partially-derived no-poly-quasi edges, reverts the derived description component
+ * 4. Runs the propagator to re-generate derived edges
+ * 5. Writes the updated database.json
  * 
  * Usage: npx tsx scripts/refresh-derived.ts
  */
@@ -21,18 +22,18 @@ const __dirname = path.dirname(__filename);
 // Path to database.json relative to scripts directory
 const DATABASE_PATH = path.join(__dirname, '..', 'src', 'lib', 'data', 'database.json');
 
-// Import the propagation logic
-// Note: We need to dynamically import since it uses browser APIs
+// Import the propagation logic and types
 import { propagateImplicitRelations } from '../src/lib/data/propagation.js';
-import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../src/lib/types.js';
+import { relationTypes, COMPLEXITIES } from '../src/lib/data/complexities.js';
+import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix, KCSeparatingFunction } from '../src/lib/types.js';
 
 interface DatabaseSchema {
   languages: any[];
   references: any[];
-  separatingFunctions: any[];
-  complexities: any[];
+  separatingFunctions: KCSeparatingFunction[];
   tags: any[];
   adjacencyMatrix: KCAdjacencyMatrix;
+  metadata?: Record<string, unknown>;
 }
 
 function loadDatabase(): DatabaseSchema {
@@ -45,22 +46,59 @@ function saveDatabase(data: DatabaseSchema): void {
   fs.writeFileSync(DATABASE_PATH, content, 'utf-8');
 }
 
-function removeDerivedEdges(matrix: KCAdjacencyMatrix): { removed: number } {
+function removeDerivedEdges(matrix: KCAdjacencyMatrix): { removed: number; reverted: number } {
   let removed = 0;
+  let reverted = 0;
   const size = matrix.languageIds.length;
   
   for (let i = 0; i < size; i++) {
     if (!matrix.matrix[i]) continue;
     for (let j = 0; j < size; j++) {
       const edge = matrix.matrix[i][j] as DirectedSuccinctnessRelation | null;
-      if (edge && edge.derived === true) {
+      if (!edge) continue;
+      
+      // Handle no-poly-quasi edges with structured descriptions
+      if (edge.status === 'no-poly-quasi' && (edge.noPolyDescription || edge.quasiDescription)) {
+        const noPolyDerived = edge.noPolyDescription?.derived ?? true;
+        const quasiDerived = edge.quasiDescription?.derived ?? true;
+        
+        if (noPolyDerived && quasiDerived) {
+          // Both parts are derived - remove entirely
+          matrix.matrix[i][j] = null;
+          removed++;
+        } else if (noPolyDerived && !quasiDerived) {
+          // Only noPolyDescription is derived - revert to unknown-poly-quasi
+          matrix.matrix[i][j] = {
+            status: 'unknown-poly-quasi',
+            description: edge.quasiDescription!.description,
+            refs: edge.quasiDescription!.refs,
+            separatingFunctionIds: edge.separatingFunctionIds,
+            hidden: false,
+            derived: false
+          };
+          reverted++;
+        } else if (!noPolyDerived && quasiDerived) {
+          // Only quasiDescription is derived - revert to no-poly-unknown-quasi
+          matrix.matrix[i][j] = {
+            status: 'no-poly-unknown-quasi',
+            description: edge.noPolyDescription!.description,
+            refs: edge.noPolyDescription!.refs,
+            separatingFunctionIds: edge.separatingFunctionIds,
+            hidden: false,
+            derived: false
+          };
+          reverted++;
+        }
+        // If neither is derived, keep as-is
+      } else if (edge.derived === true) {
+        // Standard derived edge - remove entirely
         matrix.matrix[i][j] = null;
         removed++;
       }
     }
   }
   
-  return { removed };
+  return { removed, reverted };
 }
 
 function countDerivedEdges(matrix: KCAdjacencyMatrix): number {
@@ -91,19 +129,22 @@ function main(): void {
   const existingDerived = countDerivedEdges(database.adjacencyMatrix);
   console.log(`Found ${existingDerived} existing derived edges.\n`);
   
-  // Remove derived edges
-  console.log('Removing derived edges...');
-  const { removed } = removeDerivedEdges(database.adjacencyMatrix);
-  console.log(`Removed ${removed} derived edges.\n`);
+  // Remove derived edges (or revert partially-derived ones)
+  console.log('Removing/reverting derived edges...');
+  const { removed, reverted } = removeDerivedEdges(database.adjacencyMatrix);
+  console.log(`Removed ${removed} fully-derived edges.`);
+  console.log(`Reverted ${reverted} partially-derived edges.\n`);
   
   // Build graph data structure for propagation
+  // Note: complexities and relationTypes come from complexities.ts, not database.json
   const graphData: GraphData = {
     languages: database.languages,
     references: database.references,
-    separatingFunctions: database.separatingFunctions,
-    complexities: database.complexities,
-    tags: database.tags,
-    adjacencyMatrix: database.adjacencyMatrix
+    separatingFunctions: database.separatingFunctions ?? [],
+    complexities: COMPLEXITIES,
+    relationTypes: relationTypes,
+    adjacencyMatrix: database.adjacencyMatrix,
+    metadata: database.metadata
   };
   
   // Run propagation
@@ -124,7 +165,7 @@ function main(): void {
   saveDatabase(database);
   
   console.log('\n=== Done ===');
-  console.log(`Summary: Removed ${removed} → Generated ${newDerived} derived edges`);
+  console.log(`Summary: Removed ${removed}, Reverted ${reverted} → Generated ${newDerived} derived edges`);
 }
 
 main();

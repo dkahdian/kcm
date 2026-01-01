@@ -1,8 +1,52 @@
-import type { EdgeFilter, GraphData } from '../../types.js';
+import type { DirectedSuccinctnessRelation, EdgeFilter, GraphData } from '../../types.js';
 import { mapRelationsInDataset, mapLanguagesInDataset } from '../transforms.js';
 
 type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
 type PolyDisplayMode = 'include-quasipolynomial' | 'polytime-vs-not';
+
+/**
+ * A classifier function that determines if an edge matches a certain criterion.
+ * Returns true if the edge matches (should be considered for hiding), false otherwise.
+ * A null relation is treated as matching (i.e., absence of an edge counts as matching the criterion).
+ */
+type EdgeClassifier = (relation: DirectedSuccinctnessRelation | null) => boolean;
+
+/**
+ * Creates an edge filter that hides edge pairs where BOTH directions match the classifier.
+ * For an edge A<->B, we hide the edge IFF:
+ * - A->B matches the classifier (or is null)
+ * - B->A matches the classifier (or is null)
+ * 
+ * This ensures we only hide edges where both directions satisfy the condition.
+ */
+function createPairwiseOmitFilter(
+  classifier: EdgeClassifier,
+  data: GraphData
+): (relation: DirectedSuccinctnessRelation | null, sourceId: string, targetId: string) => DirectedSuccinctnessRelation | null {
+  const { indexByLanguage, matrix } = data.adjacencyMatrix;
+  
+  return (relation, sourceId, targetId) => {
+    if (!relation) return null;
+    
+    // Check if this direction matches the classifier
+    const forwardMatches = classifier(relation);
+    
+    // Get the reverse direction
+    const sourceIdx = indexByLanguage[sourceId];
+    const targetIdx = indexByLanguage[targetId];
+    if (sourceIdx === undefined || targetIdx === undefined) return relation;
+    
+    const reverse = matrix[targetIdx]?.[sourceIdx] ?? null;
+    const reverseMatches = classifier(reverse);
+    
+    // Only hide if BOTH directions match (or are null)
+    if (forwardMatches && reverseMatches) {
+      return null;
+    }
+    
+    return relation;
+  };
+}
 
 /**
  * Control how polynomial and quasipolynomial edges are displayed
@@ -151,38 +195,27 @@ export const positiveResultsOnly: EdgeFilter<boolean> = {
 };
 
 /**
- * Hide incomparable - ON BY DEFAULT
+ * Omit incomparable - ON BY DEFAULT
  *
- * Hides pairs where both directions are known to be no-quasi.
+ * Hides pairs where both directions are no-quasi (or null).
+ * Uses the pairwise classifier: an edge pair A<->B is hidden IFF
+ * both A->B and B->A are no-quasi or null.
  */
-export const hideIncomparable: EdgeFilter<boolean> = {
-  id: 'hide-incomparable',
-  name: 'Hide Incomparable',
-  description: 'Hide edges where both directions are no-quasi',
-  category: 'Visibility',
+export const omitIncomparable: EdgeFilter<boolean> = {
+  id: 'omit-incomparable',
+  name: 'Omit Incomparable',
+  description: 'Omit edges where both directions are no-quasi',
+  category: 'Edge Visibility',
   defaultParam: true,
   defaultParamMatrix: false,
   controlType: 'checkbox',
   lambda: (data, param) => {
     if (!param) return data;
-
-    const indexByLanguage = data.adjacencyMatrix.indexByLanguage;
-    const matrix = data.adjacencyMatrix.matrix;
-
-    return mapRelationsInDataset(data, (relation, sourceId, targetId) => {
-      if (!relation) return null;
-      if (relation.status !== 'no-quasi') return relation;
-
-      const sourceIdx = indexByLanguage[sourceId];
-      const targetIdx = indexByLanguage[targetId];
-      if (sourceIdx === undefined || targetIdx === undefined) return relation;
-
-      const reverse = matrix[targetIdx]?.[sourceIdx];
-      if (reverse?.status === 'no-quasi') {
-        return null;
-      }
-      return relation;
-    });
+    
+    // Classifier: matches if the relation is no-quasi (or null)
+    const isIncomparable: EdgeClassifier = (rel) => !rel || rel.status === 'no-quasi';
+    
+    return mapRelationsInDataset(data, createPairwiseOmitFilter(isIncomparable, data));
   }
 };
 
@@ -212,14 +245,14 @@ export const omitSeparatorFunctions: EdgeFilter = {
 };
 
 /**
- * Hide edges marked as hidden (used by transitive reduction)
+ * Omit edges marked as hidden (used by transitive reduction)
  * This is an internal filter that should always be applied
  */
-export const hideMarkedEdges: EdgeFilter = {
-  id: 'hide-marked-edges',
-  name: 'Hide Marked Edges',
-  description: 'Hide edges that have been marked as hidden',
-  category: 'Visibility',
+export const omitMarkedEdges: EdgeFilter = {
+  id: 'omit-marked-edges',
+  name: 'Omit Marked Edges',
+  description: 'Omit edges that have been marked as hidden',
+  category: 'Edge Visibility',
   defaultParam: true,
   controlType: 'checkbox',
   hidden: true, // Internal filter, not shown in UI
@@ -236,28 +269,27 @@ export const hideMarkedEdges: EdgeFilter = {
 };
 
 /**
- * Hide implicit (derived) edges - ON BY DEFAULT for graph view
+ * Omit implicit (derived) edges - ON BY DEFAULT for graph view
  * 
- * Hides edges that were inferred by propagation rather than manually authored.
- * These edges have derived=true.
+ * Hides edge pairs where both directions were inferred by propagation (derived=true)
+ * or are null. Uses the pairwise classifier: an edge pair A<->B is hidden IFF
+ * both A->B and B->A are derived or null.
  */
-export const hideImplicitEdges: EdgeFilter = {
-  id: 'hide-implicit-edges',
-  name: 'Hide Implicit Edges',
-  description: 'Hide edges that were inferred by propagation (not explicitly authored)',
-  category: 'Visibility',
+export const omitImplicitEdges: EdgeFilter = {
+  id: 'omit-implicit-edges',
+  name: 'Omit Implicit Edges',
+  description: 'Omit edges where both directions were inferred by propagation',
+  category: 'Edge Visibility',
   defaultParam: true, // ON by default for graph
   defaultParamMatrix: false, // OFF by default for matrix
   controlType: 'checkbox',
   lambda: (data, param) => {
     if (!param) return data;
-    return mapRelationsInDataset(data, (relation) => {
-      if (!relation) return null;
-      if (relation.derived) {
-        return null;
-      }
-      return relation;
-    });
+    
+    // Classifier: matches if the relation is derived (or null)
+    const isImplicit: EdgeClassifier = (rel) => !rel || rel.derived === true;
+    
+    return mapRelationsInDataset(data, createPairwiseOmitFilter(isImplicit, data));
   }
 };
 
@@ -354,11 +386,11 @@ export const hideInProgressLanguages: EdgeFilter = {
 export const edgeFilters: EdgeFilter<any>[] = [
   hideInProgressLanguages,
   manageUnknowns,
-  hideIncomparable,
-  hideImplicitEdges,
+  omitIncomparable,
+  omitImplicitEdges,
   implicitEdgeTreatment,
   positiveResultsOnly,
   polyDisplay,
   omitSeparatorFunctions,
-  hideMarkedEdges
+  omitMarkedEdges
 ];

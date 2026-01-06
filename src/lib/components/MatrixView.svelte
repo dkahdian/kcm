@@ -348,13 +348,13 @@
     position: sticky;
     top: 0;
     background: #f8fafc;
-    z-index: 3;
+    z-index: 5;
     border-bottom: 1px solid #e5e7eb;
   }
 
   .corner-cell {
     background: #e5e7eb;
-    z-index: 4;
+    z-index: 6;
     border-left: 1px solid #e5e7eb;
   }
 
@@ -372,7 +372,7 @@
   .row-header {
     position: sticky;
     left: 0;
-    z-index: 2;
+    z-index: 4;
     background: #f8fafc;
     border-left: 1px solid #e5e7eb;
   }

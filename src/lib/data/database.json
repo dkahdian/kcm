@@ -6547,7 +6547,7 @@
             "derived": true
           },
           "quasiDescription": {
-            "description": "Theorem 2 of \\citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \\citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \\citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF since there are no $\\vee$-gates that are not decision gates in a $dec$-$SDNNF$.",
+            "description": "Theorem 2 of \\citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \\citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \\citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF$ since there are no $\\vee$-gates that are not decision gates in a $dec$-$SDNNF$.",
             "refs": [
               "Amarilli_2018",
               "Bollig_2018",
@@ -6555,7 +6555,7 @@
             ],
             "derived": false
           },
-          "description": "First, we show no polynomial transformation exists.\nOBDD→FBDD in polynomial time \\citet{Darwiche_2002}. If dec-SDNNF→OBDD in polynomial time, then dec-SDNNF→FBDD in polynomial time. This contradicts dec-SDNNF→FBDD being no-poly-quasi \\citet{Amarilli_2018,Beame_2013}.\n\nNow, we show a quasipolynomial transformation exists.\nTheorem 2 of \\citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \\citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \\citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF since there are no $\\vee$-gates that are not decision gates in a $dec$-$SDNNF$."
+          "description": "First, we show no polynomial transformation exists.\nOBDD→FBDD in polynomial time \\citet{Darwiche_2002}. If dec-SDNNF→OBDD in polynomial time, then dec-SDNNF→FBDD in polynomial time. This contradicts dec-SDNNF→FBDD being no-poly-quasi \\citet{Amarilli_2018,Beame_2013}.\n\nNow, we show a quasipolynomial transformation exists.\nTheorem 2 of \\citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \\citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \\citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF$ since there are no $\\vee$-gates that are not decision gates in a $dec$-$SDNNF$."
         },
         {
           "status": "poly",

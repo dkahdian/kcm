@@ -2531,6 +2531,12 @@
       "bibtex": "@article{Van den Broeck_Darwiche_2015, title={On the Role of Canonicity in Knowledge Compilation}, volume={29}, url={https://ojs.aaai.org/index.php/AAAI/article/view/9423}, DOI={10.1609/aaai.v29i1.9423}, abstractNote={ &lt;p&gt; Knowledge compilation is a powerful reasoning paradigm with many applications across AI and computer science more broadly. We consider the problem of bottom-up compilation of knowledge bases, which is usually predicated on the existence of a polytime function for combining compilations using Boolean operators (usually called an Apply function). While such a polytime Apply function is known to exist for certain languages (e.g., OBDDs) and not exist for others (e.g., DNNFs), its existence for certain languages remains unknown. Among the latter is the recently introduced language of Sentential Decision Diagrams (SDDs): while a polytime Apply function exists for SDDs, it was unknown whether such a function exists for the important subset of compressed SDDs which are canonical. We resolve this open question in this paper and consider some of its theoretical and practical implications. Some of the findings we report question the common wisdom on the relationship between bottom-up compilation, language canonicity and the complexity of the Apply function. &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Van den Broeck, Guy and Darwiche, Adnan}, year={2015}, month={Feb.} }",
       "title": "G. Van den Broeck and A. Darwiche, \"On the Role of Canonicity in Knowledge Compilation,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 29, 2015.",
       "href": "https://ojs.aaai.org/index.php/AAAI/article/view/9423"
+    },
+    {
+      "id": "Bova_2016_a",
+      "bibtex": "@article{Bova_2016, title={SDDs Are Exponentially More Succinct than OBDDs}, volume={30}, url={https://ojs.aaai.org/index.php/AAAI/article/view/10107}, DOI={10.1609/aaai.v30i1.10107}, abstractNote={ &lt;p&gt; Introduced by Darwiche (2011), sentential decision diagrams (SDDs) are essentially as tractable as ordered binary decision diagrams (OBDDs), but tend to be more succinct in practice. This makes SDDs a prominent representation language, with many applications in artificial intelligence and knowledge compilation. We prove that SDDs are more succinct than OBDDs also in theory, by constructing a family of boolean functions where each member has polynomial SDD size but exponential OBDD size. This exponential separation improves a quasipolynomial separation recently established by Razgon (2014), and settles an open problem in knowledge compilation (Darwiche, 2011). &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Bova, Simone}, year={2016}, month={Feb.} }",
+      "title": "S. Bova, \"SDDs Are Exponentially More Succinct than OBDDs,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 30, 2016.",
+      "href": "https://ojs.aaai.org/index.php/AAAI/article/view/10107"
     }
   ],
   "tags": {
@@ -5201,9 +5207,31 @@
         null,
         null,
         null,
+        {
+          "status": "no-quasi",
+          "description": "$OBDD$ representations of $HWB_n$ are $2^{\\Omega(n)}$\\citet{Bryant_1986}, but an $SDD$ can represent $HWB_n$ in size $O(n^3)$\\citet{Bova_2016_a}.",
+          "refs": [
+            "Bryant_1986",
+            "Bova_2016_a"
+          ],
+          "separatingFunctionIds": [
+            "HWB"
+          ],
+          "derived": false
+        },
         null,
-        null,
-        null
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "dec-SDNNF→OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If SDD→dec-SDNNF in quasipolynomial time, then SDD→OBDD in at most quasi-polynomial time. This contradicts SDD→OBDD being no-quasi \\citet{Bryant_1986,Bova_2016_a}."
+        }
       ],
       [
         null,

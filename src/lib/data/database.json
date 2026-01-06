@@ -2519,6 +2519,18 @@
       "bibtex": "@phdthesis{capelli2016structural,\n  author       = {Florent Capelli},\n  title        = {Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation},\n  school       = {Universit{\\'e} Paris-Diderot (Paris 7), Sorbonne Paris Cit{\\'e}},\n  year         = {2016},\n  address      = {Paris, France},\n  note         = {PhD thesis},\n  url          = {https://florent.capelli.me/publi/these_capelli.pdf}\n}",
       "title": "Florent Capelli, \"Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation,\" 2016.",
       "href": "https://florent.capelli.me/publi/these_capelli.pdf"
+    },
+    {
+      "id": "Darwiche_2011",
+      "bibtex": "@inproceedings{10.5555/2283516.2283536,\nauthor = {Darwiche, Adnan},\ntitle = {SDD: a new canonical representation of propositional knowledge bases},\nyear = {2011},\nisbn = {9781577355144},\npublisher = {AAAI Press},\nabstract = {We identify a new representation of propositional knowledge bases, the Sentential Decision Diagram (SDD), which is interesting for a number of reasons. First, it is canonical in the presence of additional properties that resemble reduction rules of OBDDs. Second, SDDs can be combined using any Boolean operator in polytime. Third, CNFs with n variables and treewidth w have canonical SDDs of size O(n2w), which is tighter than the bound on OBDDs based on pathwidth. Finally, every OBDD is an SDD. Hence, working with the latter does not preclude the former.},\nbooktitle = {Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two},\npages = {819–826},\nnumpages = {8},\nlocation = {Barcelona, Catalonia, Spain},\nseries = {IJCAI'11}\n}",
+      "title": "A. Darwiche, \"SDD: a new canonical representation of propositional knowledge bases,\" Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two, pp. 819–826, 2011.",
+      "href": "#"
+    },
+    {
+      "id": "Van den Broeck_2015",
+      "bibtex": "@article{Van den Broeck_Darwiche_2015, title={On the Role of Canonicity in Knowledge Compilation}, volume={29}, url={https://ojs.aaai.org/index.php/AAAI/article/view/9423}, DOI={10.1609/aaai.v29i1.9423}, abstractNote={ &lt;p&gt; Knowledge compilation is a powerful reasoning paradigm with many applications across AI and computer science more broadly. We consider the problem of bottom-up compilation of knowledge bases, which is usually predicated on the existence of a polytime function for combining compilations using Boolean operators (usually called an Apply function). While such a polytime Apply function is known to exist for certain languages (e.g., OBDDs) and not exist for others (e.g., DNNFs), its existence for certain languages remains unknown. Among the latter is the recently introduced language of Sentential Decision Diagrams (SDDs): while a polytime Apply function exists for SDDs, it was unknown whether such a function exists for the important subset of compressed SDDs which are canonical. We resolve this open question in this paper and consider some of its theoretical and practical implications. Some of the findings we report question the common wisdom on the relationship between bottom-up compilation, language canonicity and the complexity of the Apply function. &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Van den Broeck, Guy and Darwiche, Adnan}, year={2015}, month={Feb.} }",
+      "title": "G. Van den Broeck and A. Darwiche, \"On the Role of Canonicity in Knowledge Compilation,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 29, 2015.",
+      "href": "https://ojs.aaai.org/index.php/AAAI/article/view/9423"
     }
   ],
   "tags": {
@@ -2844,7 +2856,15 @@
           "refs": [],
           "derived": false
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Van den Broeck_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD→d-DNNF in polynomial time \\citet{Van den Broeck_2015}. If CNF→SDD in polynomial time, then CNF→d-DNNF in polynomial time. This contradicts CNF→d-DNNF being no-poly-unknown-quasi \\citet{Cadoli_1997,Selman_1996,Darwiche_2002}."
+        },
         null,
         {
           "status": "no-poly-unknown-quasi",
@@ -3507,7 +3527,15 @@
           "derived": true,
           "description": "PI→CNF in polynomial time \\citet{Darwiche_2002}. If DNF→PI in quasipolynomial time, then DNF→CNF in at most quasi-polynomial time. This contradicts DNF→CNF being no-quasi \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Van den Broeck_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD→d-DNNF in polynomial time \\citet{Van den Broeck_2015}. If DNF→SDD in polynomial time, then DNF→d-DNNF in polynomial time. This contradicts DNF→d-DNNF being no-poly-unknown-quasi."
+        },
         null,
         null,
         null,
@@ -3688,7 +3716,16 @@
           "derived": true,
           "description": "d-DNNF→DNNF in polynomial time \\citet{Darwiche_2002}. PI→CNF in polynomial time \\citet{Darwiche_2002}. If DNNF→PI in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Van den Broeck_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD→d-DNNF in polynomial time \\citet{Van den Broeck_2015}. If DNNF→SDD in quasipolynomial time, then DNNF→d-DNNF in at most quasi-polynomial time. This contradicts DNNF→d-DNNF being no-quasi \\citet{Bova_2016}."
+        },
         null,
         {
           "status": "no-quasi",
@@ -4170,7 +4207,16 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS transforms to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD transforms to SDD in polynomial time \\citet{Darwiche_2011}. Therefore a polynomial transformation exists from MODS to SDD."
+        },
         null,
         {
           "status": "poly",
@@ -4356,7 +4402,17 @@
           "derived": true,
           "description": "d-DNNF→nFBDD in at worst quasipolynomial time \\citet{Bova_2016,Amarilli_2018}. PI→CNF in polynomial time \\citet{Darwiche_2002}. If nFBDD→PI in quasipolynomial time, then d-DNNF→CNF in at most quasi-polynomial time. This contradicts d-DNNF→CNF being no-quasi \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Bodlaender_1993",
+            "Van den Broeck_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "DNNF→nFBDD in quasipolynomial time \\citet{Darwiche_2002,Bodlaender_1993}. SDD→d-DNNF in polynomial time \\citet{Van den Broeck_2015}. If nFBDD→SDD in quasipolynomial time, then DNNF→d-DNNF in at most quasi-polynomial time. This contradicts DNNF→d-DNNF being no-quasi \\citet{Bova_2016}."
+        },
         null,
         {
           "status": "no-quasi",
@@ -4532,7 +4588,16 @@
           "derived": true,
           "description": "CNF→NNF in polynomial time. If NNF→PI in quasipolynomial time, then CNF→PI in at most quasi-polynomial time. This contradicts CNF→PI being no-quasi."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Van den Broeck_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "DNNF→NNF in polynomial time \\citet{Darwiche_2002}. SDD→d-DNNF in polynomial time \\citet{Van den Broeck_2015}. If NNF→SDD in quasipolynomial time, then DNNF→d-DNNF in at most quasi-polynomial time. This contradicts DNNF→d-DNNF being no-quasi \\citet{Bova_2016}."
+        },
         null,
         {
           "status": "no-quasi",
@@ -4866,7 +4931,16 @@
           "derived": true,
           "description": "PI→CNF in polynomial time \\citet{Darwiche_2002}. If OBDD$_<$→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ transforms to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD transforms to SDD in polynomial time \\citet{Darwiche_2011}. Therefore a polynomial transformation exists from OBDD$_<$ to SDD."
+        },
         null,
         {
           "status": "poly",
@@ -5055,26 +5129,124 @@
       [
         null,
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If SDD→CNF in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi \\citet{Darwiche_2002}."
+        },
+        null,
+        {
+          "status": "poly",
+          "description": "$SDD$ is a strict subset of $d-DNNF$",
+          "refs": [
+            "Van den Broeck_2015"
+          ],
+          "derived": false
+        },
+        null,
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If SDD→DNF in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi \\citet{Darwiche_2002}."
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Van den Broeck_2015",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015}. d-DNNF transforms to DNNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from SDD to DNNF."
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. IP→DNF in polynomial time \\citet{Darwiche_2002}. If SDD→IP in quasipolynomial time, then OBDD$_<$→DNF in at most quasi-polynomial time. This contradicts OBDD$_<$→DNF being no-quasi \\citet{Darwiche_2002}."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. MODS→CNF in polynomial time \\citet{Darwiche_2002}. If SDD→MODS in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi \\citet{Darwiche_2002}."
+        },
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
+            "Bova_2016"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015}. d-DNNF transforms to nFBDD in quasipolynomial time \\citet{Amarilli_2018,Bova_2016}. Therefore a quasi-polynomial transformation exists from SDD to nFBDD."
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Van den Broeck_2015",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015}. d-DNNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from SDD to NNF."
+        },
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD→SDD in polynomial time \\citet{Darwiche_2011}. If SDD→OBDD$_<$ in quasipolynomial time, then OBDD→OBDD$_<$ in at most quasi-polynomial time. This contradicts OBDD→OBDD$_<$ being no-quasi \\citet{Darwiche_2002}."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$→SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. PI→CNF in polynomial time \\citet{Darwiche_2002}. If SDD→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi \\citet{Darwiche_2002}."
+        },
         null,
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
+            "Beame_2013"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015}. d-DNNF transforms to uFBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. Therefore a quasi-polynomial transformation exists from SDD to uFBDD."
+        },
         null,
         null,
         null,
@@ -5812,7 +5984,14 @@
           "derived": true,
           "description": "OBDD$_<$→OBDD in polynomial time \\citet{Darwiche_2002}. PI→CNF in polynomial time \\citet{Darwiche_2002}. If OBDD→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "poly",
+          "description": "Every $OBDD$ is a right-linear $SDD$; $SDD$ generalizes $OBDD$.",
+          "refs": [
+            "Darwiche_2011"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "poly",
@@ -6270,7 +6449,19 @@
           "derived": true,
           "description": "OBDD$_<$→dec-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. PI→CNF in polynomial time \\citet{Darwiche_2002}. If dec-SDNNF→PI in quasipolynomial time, then OBDD$_<$→CNF in at most quasi-polynomial time. This contradicts OBDD$_<$→CNF being no-quasi \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "dec-SDNNF transforms to OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. OBDD transforms to SDD in polynomial time \\citet{Darwiche_2011}. Therefore a quasi-polynomial transformation exists from dec-SDNNF to SDD."
+        },
         null,
         {
           "status": "poly",

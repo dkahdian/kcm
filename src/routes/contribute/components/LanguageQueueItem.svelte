@@ -90,8 +90,8 @@
 								<div class="bg-white p-2 rounded border">
 									<div class="font-medium">{code}</div>
 									<div class="text-gray-600">{support.complexity}</div>
-									{#if support.note}
-										<MathText text={support.note} className="text-gray-500 italic text-xs block" />
+									{#if support.caveat}
+										<MathText text={`Unless ${support.caveat}`} className="text-gray-500 italic text-xs block" />
 									{/if}
 								{#if support.refs.length > 0}
 									<div class="text-gray-500 text-xs">Refs: [{support.refs.join(', ')}]</div>
@@ -111,8 +111,8 @@
 								<div class="bg-white p-2 rounded border">
 									<div class="font-medium">{code}</div>
 									<div class="text-gray-600">{support.complexity}</div>
-									{#if support.note}
-										<MathText text={support.note} className="text-gray-500 italic text-xs block" />
+									{#if support.caveat}
+										<MathText text={`Unless ${support.caveat}`} className="text-gray-500 italic text-xs block" />
 									{/if}
 								{#if support.refs.length > 0}
 									<div class="text-gray-500 text-xs">Refs: [{support.refs.join(', ')}]</div>

@@ -74,6 +74,14 @@
 						</div>
 					</div>
 				{/if}
+				{#if relationship.caveat}
+					<div>
+						<div class="font-semibold text-gray-700 mb-1">Caveat:</div>
+						<div class="bg-white p-2 rounded border">
+							<span class="text-gray-700">Unless {relationship.caveat}</span>
+						</div>
+					</div>
+				{/if}
 				{#if relationship.separatingFunctionIds && relationship.separatingFunctionIds.length > 0}
 					<div>
 						<div class="font-semibold text-gray-700 mb-1">

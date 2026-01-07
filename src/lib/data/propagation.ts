@@ -121,6 +121,34 @@ function formatCitations(refs: string[]): string {
   return ` \\citet{${refs.join(',')}}`;
 }
 
+/**
+ * Format a caveat as an "unless" clause.
+ * Returns " unless {caveat}" or empty string if no caveat.
+ */
+function formatCaveat(caveat: string | undefined): string {
+  if (!caveat) return '';
+  return ` unless ${caveat}`;
+}
+
+/**
+ * Collect and merge caveats from all edges along a path.
+ * Returns undefined if no caveats, a single caveat if only one,
+ * or caveats joined with " OR " if multiple unique caveats.
+ */
+function collectCaveatsUnion(path: number[], matrix: KCAdjacencyMatrix): string | undefined {
+  const caveats = new Set<string>();
+  for (let i = 0; i < path.length - 1; i += 1) {
+    const from = path[i];
+    const to = path[i + 1];
+    const relation = matrix.matrix[from]?.[to];
+    if (relation?.caveat) {
+      caveats.add(relation.caveat);
+    }
+  }
+  if (caveats.size === 0) return undefined;
+  return Array.from(caveats).join(' OR ');
+}
+
 function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
   const { languageIds } = matrix;
   const parts: string[] = [];
@@ -132,7 +160,8 @@ function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): string {
     const relation = matrix.matrix[fromIdx]?.[toIdx];
     const status = relation?.status ?? 'unknown';
     const refs = relation?.refs ?? [];
-    parts.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(status)}${formatCitations(refs)}.`);
+    const caveat = relation?.caveat;
+    parts.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(status)}${formatCaveat(caveat)}${formatCitations(refs)}.`);
   }
   return parts.join(' ');
 }
@@ -214,12 +243,14 @@ function applySimpleUpgrade(
   const source = path[0];
   const target = path[path.length - 1];
   const refs = collectRefsUnion(path, matrix);
+  const caveat = collectCaveatsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
   const pathDesc = describePath(pathIds, matrix);
   const description = `${pathDesc} ${derivedDescription}`.trim();
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
+    caveat,
     separatingFunctionIds: undefined,
     hidden: false,
     derived: true,
@@ -263,12 +294,25 @@ function applyNoPolyQuasiUpgrade(
   // Combine refs from both proofs
   const allRefs = [...new Set([...noPolyDescription.refs, ...quasiDescription.refs])];
   
+  // Merge caveats: original caveat + path caveats
+  const pathCaveat = collectCaveatsUnion(path, matrix);
+  const originalCaveat = originalRelation.caveat;
+  const allCaveats = new Set<string>();
+  if (originalCaveat) allCaveats.add(originalCaveat);
+  if (pathCaveat) {
+    for (const c of pathCaveat.split(' OR ')) {
+      allCaveats.add(c.trim());
+    }
+  }
+  const mergedCaveat = allCaveats.size > 0 ? Array.from(allCaveats).join(' OR ') : undefined;
+  
   // derived = true only if BOTH proofs are derived
   const fullyDerived = noPolyDescription.derived && quasiDescription.derived;
   
   matrix.matrix[sourceIdx][targetIdx] = {
     status: 'no-poly-quasi',
     refs: allRefs,
+    caveat: mergedCaveat,
     separatingFunctionIds: originalRelation.separatingFunctionIds,
     hidden: false,
     derived: fullyDerived,
@@ -383,12 +427,13 @@ function tryDowngrade(
 
   const buildContradictionDescription = (
     triedStatus: string,
-    witnessIds: string[]
+    witnessIds: string[],
+    mergedCaveat?: string
   ): string => {
     // witnessIds is the path that would exist if the tested edge had `triedStatus`
     // The contradiction is that the path endpoints have an incompatible status
     if (witnessIds.length < 2) {
-      return `If ${srcName}→${tgtName} were ${phraseForStatus(triedStatus)}, a contradiction arises.`;
+      return `If ${srcName} transforms to ${tgtName} ${phraseForStatus(triedStatus)}, a contradiction arises.`;
     }
 
     const pathStart = witnessIds[0];
@@ -415,7 +460,8 @@ function tryDowngrade(
       const edgeRelation = adjacencyMatrix.matrix[fromIdx]?.[toIdx];
       const edgeStatus = edgeRelation?.status ?? 'unknown';
       const edgeRefs = edgeRelation?.refs ?? [];
-      existingEdges.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCitations(edgeRefs)}`);
+      const edgeCaveat = edgeRelation?.caveat;
+      existingEdges.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
     }
 
     const existingPart = existingEdges.length > 0 ? existingEdges.join('. ') + '. ' : '';
@@ -423,7 +469,36 @@ function tryDowngrade(
     const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
     const contradictionPhrase = formatStatusContradiction(pathStartName, pathEndName, actualStatus);
 
-    return `${existingPart}If ${srcName} transforms to ${tgtName} ${triedPhrase}, then ${pathStartName} transforms to ${pathEndName} ${impliedPhrase}. ${contradictionPhrase}${formatCitations(actualRefs)}.`;
+    return `${existingPart}If ${srcName} transforms to ${tgtName} ${triedPhrase}, then ${pathStartName} transforms to ${pathEndName} ${impliedPhrase}. ${contradictionPhrase}${formatCaveat(mergedCaveat)}${formatCitations(actualRefs)}.`;
+  };
+
+  /**
+   * Calculate the merged caveat from the witness path and contradicting edge.
+   * This should be called before buildContradictionDescription.
+   */
+  const calculateMergedCaveat = (witnessIds: string[]): string | undefined => {
+    const pathIndices = witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0);
+    const pathCaveat = collectCaveatsUnion(pathIndices, adjacencyMatrix);
+    
+    // Get the contradicting edge (from path start to path end)
+    const pathStart = witnessIds[0];
+    const pathEnd = witnessIds[witnessIds.length - 1];
+    const startIdx = languageIds.indexOf(pathStart);
+    const endIdx = languageIds.indexOf(pathEnd);
+    const contradictingEdge = adjacencyMatrix.matrix[startIdx]?.[endIdx];
+    const contradictingCaveat = contradictingEdge?.caveat;
+    
+    // Merge all caveats
+    const allCaveats = new Set<string>();
+    if (pathCaveat) {
+      for (const c of pathCaveat.split(' OR ')) {
+        allCaveats.add(c.trim());
+      }
+    }
+    if (contradictingCaveat) {
+      allCaveats.add(contradictingCaveat);
+    }
+    return allCaveats.size > 0 ? Array.from(allCaveats).join(' OR ') : undefined;
   };
 
   const finalizeSimpleDowngrade = (
@@ -431,17 +506,21 @@ function tryDowngrade(
     triedStatus: string,
     witnessIds: string[]
   ): void => {
-    const refs = collectRefsUnion(
-      witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0),
-      adjacencyMatrix
-    );
-    const newDesc = buildContradictionDescription(triedStatus, witnessIds);
+    const pathIndices = witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0);
+    const refs = collectRefsUnion(pathIndices, adjacencyMatrix);
+    
+    // Calculate merged caveat from path + contradicting edge
+    const caveat = calculateMergedCaveat(witnessIds);
+    
+    // Pass merged caveat to description builder so it appears in description text
+    const newDesc = buildContradictionDescription(triedStatus, witnessIds, caveat);
     if (DEBUG_PROPAGATION) {
       console.log(`[Propagation] DOWNGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> ${nextStatus} (witness: ${witnessIds.map(idToName).join(' -> ')})`);
     }
     adjacencyMatrix.matrix[source][target] = {
       status: nextStatus,
       refs,
+      caveat,
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
@@ -463,12 +542,23 @@ function tryDowngrade(
       derived: relation?.derived ?? false
     };
     
-    // Create derived noPolyDescription from contradiction
-    const noPolyDesc = buildContradictionDescription('poly', witnessIds);
-    const noPolyRefs = collectRefsUnion(
-      witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0),
-      adjacencyMatrix
-    );
+    // Calculate merged caveat first (for both the field and description text)
+    // Merge caveats: original caveat + path caveats + contradicting edge caveat
+    const pathIndices = witnessIds.map((id) => languageIds.indexOf(id)).filter((i) => i >= 0);
+    const baseMergedCaveat = calculateMergedCaveat(witnessIds);
+    const originalCaveat = relation?.caveat;
+    const allCaveats = new Set<string>();
+    if (originalCaveat) allCaveats.add(originalCaveat);
+    if (baseMergedCaveat) {
+      for (const c of baseMergedCaveat.split(' OR ')) {
+        allCaveats.add(c.trim());
+      }
+    }
+    const mergedCaveat = allCaveats.size > 0 ? Array.from(allCaveats).join(' OR ') : undefined;
+    
+    // Create derived noPolyDescription from contradiction (with merged caveat)
+    const noPolyDesc = buildContradictionDescription('poly', witnessIds, mergedCaveat);
+    const noPolyRefs = collectRefsUnion(pathIndices, adjacencyMatrix);
     const noPolyDescription: DescriptionComponent = {
       description: noPolyDesc,
       refs: noPolyRefs,
@@ -488,6 +578,7 @@ function tryDowngrade(
     adjacencyMatrix.matrix[source][target] = {
       status: 'no-poly-quasi',
       refs: allRefs,
+      caveat: mergedCaveat,
       hidden: false,
       derived: fullyDerived,
       separatingFunctionIds: relation?.separatingFunctionIds,

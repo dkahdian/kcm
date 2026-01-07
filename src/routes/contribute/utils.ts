@@ -85,6 +85,7 @@ export function sanitizeRelationships(value: unknown): RelationshipEntry[] {
       targetId: isString(r.targetId) ? r.targetId : '',
       status: isString(r.status) ? r.status : '',
       description: isString(r.description) ? r.description : undefined,
+      caveat: isString(r.caveat) ? r.caveat : undefined,
       refs: sanitizeStringArray(r.refs),
       separatingFunctionIds: r.separatingFunctionIds !== undefined
         ? sanitizeStringArray(r.separatingFunctionIds)
@@ -139,6 +140,7 @@ export function cloneRelationshipEntry(entry: RelationshipEntry): RelationshipEn
     targetId: entry.targetId,
     status: entry.status,
     description: entry.description,
+    caveat: entry.caveat,
     refs: [...entry.refs],
     separatingFunctionIds: entry.separatingFunctionIds ? [...entry.separatingFunctionIds] : undefined
   };

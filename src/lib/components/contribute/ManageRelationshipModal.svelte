@@ -17,6 +17,7 @@
     targetId: string;
     status: string;
     description?: string;
+    caveat?: string;
     refs: string[];
     separatingFunctionIds?: string[];
   };
@@ -24,6 +25,7 @@
   type BaselineRelationship = {
     status: string;
     description?: string;
+    caveat?: string;
     refs: string[];
     separatingFunctionIds?: string[];
     derived?: boolean;
@@ -63,6 +65,7 @@
   let targetId = $state('');
   let status = $state<string>('');
   let description = $state('');
+  let caveat = $state('');
   let selectedRefs = $state<string[]>([]);
   let selectedSeparatingFunctionIds = $state<string[]>([]);
   
@@ -77,6 +80,7 @@
       targetId = initialData.targetId;
       status = initialData.status;
       description = initialData.description || '';
+      caveat = initialData.caveat || '';
       selectedRefs = [...initialData.refs];
       selectedSeparatingFunctionIds = initialData.separatingFunctionIds 
         ? [...initialData.separatingFunctionIds] 
@@ -99,6 +103,7 @@
         // Relationship exists - populate with existing data
         status = baseline.status;
         description = baseline.description || '';
+        caveat = baseline.caveat || '';
         selectedRefs = [...baseline.refs];
         selectedSeparatingFunctionIds = baseline.separatingFunctionIds 
           ? [...baseline.separatingFunctionIds] 
@@ -107,6 +112,7 @@
         // No baseline exists - clear to defaults for a new edge
         status = '';
         description = '';
+        caveat = '';
         selectedRefs = [];
         selectedSeparatingFunctionIds = [];
       }
@@ -118,6 +124,7 @@
     targetId = '';
     status = '';
     description = '';
+    caveat = '';
     selectedRefs = [];
     selectedSeparatingFunctionIds = [];
     isEditMode = false;
@@ -131,6 +138,7 @@
       targetId,
       status,
       description: description || undefined,
+      caveat: caveat || undefined,
       refs: selectedRefs,
       separatingFunctionIds: selectedSeparatingFunctionIds.length > 0 ? selectedSeparatingFunctionIds : undefined
     });
@@ -244,6 +252,23 @@
             class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
             placeholder="Describe this transformation relationship (optional)..."
           ></textarea>
+        </div>
+
+        <!-- Caveat -->
+        <div>
+          <label for="rel-caveat" class="block text-sm font-medium text-gray-700 mb-1">
+            Caveat (Unless...)
+          </label>
+          <input
+            type="text"
+            id="rel-caveat"
+            bind:value={caveat}
+            class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="e.g., the polynomial hierarchy collapses"
+          />
+          <p class="text-xs text-gray-500 mt-1">
+            Conditional clause for the relationship, displayed as "Unless {'{caveat}'}".
+          </p>
         </div>
 
         <!-- References -->

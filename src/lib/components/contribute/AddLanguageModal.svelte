@@ -6,8 +6,8 @@
     fullName: string;
     description: string;
     descriptionRefs: string[];
-    queries: Record<string, { complexity: string; note?: string; refs: string[] }>;
-    transformations: Record<string, { complexity: string; note?: string; refs: string[] }>;
+    queries: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
+    transformations: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
     tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
     existingReferences: string[];
   };
@@ -54,8 +54,8 @@
   let fullName = $state('');
   let description = $state('');
   let descriptionRefs = $state<string[]>([]);
-  let querySupport = $state<Record<string, { complexity: string; note?: string; refs: string[] }>>({});
-  let transformationSupport = $state<Record<string, { complexity: string; note?: string; refs: string[] }>>({});
+  let querySupport = $state<Record<string, { complexity: string; caveat?: string; refs: string[] }>>({});
+  let transformationSupport = $state<Record<string, { complexity: string; caveat?: string; refs: string[] }>>({});
   let selectedTags = $state<Tag[]>([]);
   let selectedExistingRefs = $state<string[]>([]);
   let errorMessage = $state<string | null>(null);
@@ -189,11 +189,11 @@
           const source = initialData.queries[q.code];
           merged[q.code] = { 
             complexity: source.complexity, 
-            note: source.note || '', 
+            caveat: source.caveat || '', 
             refs: [...source.refs] 
           };
         } else {
-          merged[q.code] = { complexity: 'unknown-to-us', note: '', refs: [] };
+          merged[q.code] = { complexity: 'unknown-to-us', caveat: '', refs: [] };
         }
       });
       querySupport = merged;
@@ -226,10 +226,10 @@
           }
           // Copy data, creating new objects for reactivity
           merged[t.code] = source
-            ? { complexity: source.complexity, note: source.note || '', refs: [...source.refs] }
-            : { complexity: 'unknown-to-us', note: '', refs: [] };
+            ? { complexity: source.complexity, caveat: source.caveat || '', refs: [...source.refs] }
+            : { complexity: 'unknown-to-us', caveat: '', refs: [] };
         } else {
-          merged[t.code] = { complexity: 'unknown-to-us', note: '', refs: [] };
+          merged[t.code] = { complexity: 'unknown-to-us', caveat: '', refs: [] };
         }
       });
       transformationSupport = merged;
@@ -346,12 +346,12 @@
                       </select>
                     </div>
                     <div>
-                      <label for="query-{query.code}-note" class="block text-xs font-medium text-gray-700 mb-1">Note</label>
+                      <label for="query-{query.code}-caveat" class="block text-xs font-medium text-gray-700 mb-1">Caveat (unless...)</label>
                       <input
-                        id="query-{query.code}-note"
+                        id="query-{query.code}-caveat"
                         type="text"
-                        bind:value={querySupport[query.code].note}
-                        placeholder="Optional note..."
+                        bind:value={querySupport[query.code].caveat}
+                        placeholder="e.g., P=NP"
                         class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
                       />
                   </div>
@@ -401,12 +401,12 @@
                       </select>
                     </div>
                     <div>
-                      <label for="transform-{transform.code}-note" class="block text-xs font-medium text-gray-700 mb-1">Note</label>
+                      <label for="transform-{transform.code}-caveat" class="block text-xs font-medium text-gray-700 mb-1">Caveat (unless...)</label>
                       <input
-                        id="transform-{transform.code}-note"
+                        id="transform-{transform.code}-caveat"
                         type="text"
-                        bind:value={transformationSupport[transform.code].note}
-                        placeholder="Optional note..."
+                        bind:value={transformationSupport[transform.code].caveat}
+                        placeholder="e.g., P=NP"
                         class="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-green-500"
                       />
                   </div>

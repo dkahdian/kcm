@@ -13,6 +13,7 @@ export type RelationshipEntry = {
   /** Complexity code (use getComplexity() for display) */
   status: string;
   description?: string;
+  caveat?: string;
   refs: string[];
   separatingFunctionIds?: string[]; // Array of shortNames referencing top-level separatingFunctions
 };
@@ -34,8 +35,8 @@ export type LanguageToAdd = {
   fullName: string;
   description: string;
   descriptionRefs: string[];
-  queries: Record<string, { complexity: string; note?: string; refs: string[] }>;
-  transformations: Record<string, { complexity: string; note?: string; refs: string[] }>;
+  queries: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
+  transformations: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
   tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   existingReferences: string[];
 };

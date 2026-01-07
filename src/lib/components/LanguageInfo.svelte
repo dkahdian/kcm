@@ -58,16 +58,16 @@
       extractCitationKeys(selectedLanguage.description).forEach(key => refIds.add(key));
     }
     
-    // Extract inline citations from operation notes
+    // Extract inline citations from operation caveats
     if (resolvedProperties) {
       for (const q of resolvedProperties.queries) {
-        if (q.note) {
-          extractCitationKeys(q.note).forEach(key => refIds.add(key));
+        if (q.caveat) {
+          extractCitationKeys(q.caveat).forEach(key => refIds.add(key));
         }
       }
       for (const t of resolvedProperties.transformations) {
-        if (t.note) {
-          extractCitationKeys(t.note).forEach(key => refIds.add(key));
+        if (t.caveat) {
+          extractCitationKeys(t.caveat).forEach(key => refIds.add(key));
         }
       }
     }
@@ -337,9 +337,9 @@
                             title="View reference"
                           >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
-                    {#if q.note}
+                    {#if q.caveat}
                       <MathText 
-                        text={q.note} 
+                        text={`Unless ${q.caveat}`} 
                         className="text-xs text-gray-500"
                         references={allReferences}
                         onCitationClick={handleCitationClick}
@@ -373,9 +373,9 @@
                             title="View reference"
                           >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
-                    {#if t.note}
+                    {#if t.caveat}
                       <MathText 
-                        text={t.note} 
+                        text={`Unless ${t.caveat}`} 
                         className="text-xs text-gray-500"
                         references={allReferences}
                         onCitationClick={handleCitationClick}

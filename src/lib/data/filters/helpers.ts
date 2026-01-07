@@ -83,7 +83,7 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
         for (const op of resolved.queries) {
           queriesMap[op.code] = {
             complexity: op.complexity,
-            ...(op.note && { note: op.note }),
+            ...(op.caveat && { caveat: op.caveat }),
             refs: op.refs
           };
         }
@@ -92,7 +92,7 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
         for (const op of resolved.transformations) {
           transformationsMap[op.code] = {
             complexity: op.complexity,
-            ...(op.note && { note: op.note }),
+            ...(op.caveat && { caveat: op.caveat }),
             refs: op.refs
           };
         }

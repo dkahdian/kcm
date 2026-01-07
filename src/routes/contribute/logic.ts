@@ -34,6 +34,7 @@ export function cloneOperationSupport(
 export interface BaselineRelation {
   status: string;
   description?: string;
+  caveat?: string;
   refs: string[];
   separatingFunctionIds?: string[];
   derived?: boolean;
@@ -63,6 +64,7 @@ export function buildBaselineRelations(adjacencyMatrix: {
         baselineRelations.set(relationKey(sourceId, targetId), {
           status: relation.status,
           description: relation.description,
+          caveat: relation.caveat,
           refs: relation.refs ? [...relation.refs] : [],
           separatingFunctionIds,
           derived: relation.derived

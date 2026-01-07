@@ -71,8 +71,8 @@ export interface VisualOverrides {
 export interface KCOpSupport {
   /** complexity code (use getComplexity() to get full Complexity object for display) */
   complexity: string;
-  /** optional explanatory note, e.g., "Unless P=NP" */
-  note?: string;
+  /** optional caveat (unless clause), e.g., "P=NP" meaning "unless P=NP" */
+  caveat?: string;
   /** reference IDs pointing to entries in the language's references array */
   refs: string[];
 }
@@ -232,6 +232,8 @@ export interface DirectedSuccinctnessRelation {
   status: string;
   /** Optional descriptive note for this direction */
   description?: string;
+  /** Optional caveat (unless clause), e.g., "P=NP" meaning "unless P=NP" */
+  caveat?: string;
   /** Supporting references */
   refs: string[];
   /** Separating function shortNames (references top-level separatingFunctions array by shortName) */

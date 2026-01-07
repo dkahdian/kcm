@@ -96,6 +96,23 @@ function phraseForStatus(status: string): string {
 }
 
 /**
+ * Convert a status code to a human-readable contradiction phrase.
+ * E.g., "no-poly-quasi" becomes "This contradicts the fact that X cannot transform to Y in polynomial time"
+ */
+function formatStatusContradiction(srcName: string, tgtName: string, status: string): string {
+  switch (status) {
+    case 'no-poly-quasi':
+      return `This contradicts the fact that ${srcName} cannot transform to ${tgtName} in polynomial time`;
+    case 'no-poly-unknown-quasi':
+      return `This contradicts the fact that ${srcName} cannot transform to ${tgtName} in polynomial time`;
+    case 'no-quasi':
+      return `This contradicts the fact that ${srcName} cannot transform to ${tgtName} in quasipolynomial time`;
+    default:
+      return `This contradicts the existing relationship from ${srcName} to ${tgtName}`;
+  }
+}
+
+/**
  * Format reference IDs as inline citations.
  * Returns a string like " \\citet{ref1,ref2}" or empty string if no refs.
  */
@@ -261,10 +278,6 @@ function applyNoPolyQuasiUpgrade(
   } satisfies DirectedSuccinctnessRelation;
 }
 
-function formatMissingOrStatus(status: string | null): string {
-  return status ?? 'missing';
-}
-
 function contradictionError(message: string): never {
   throw new Error(message);
 }
@@ -293,13 +306,13 @@ function phaseOneUpgrade(
           const ids = path.map((idx) => languageIds[idx]);
           const desc = describePath(ids, matrix);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${srcName}→${tgtName} must have quasi, but is marked no-quasi.`
+            `Contradiction: ${desc} Therefore ${srcName} transforms to ${tgtName} in quasipolynomial time, but ${srcName} is marked as not transforming to ${tgtName} in quasipolynomial time.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
         const newStatus = status === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
         if (DEBUG_PROPAGATION) {
-          console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${newStatus}`);
+          console.log(`[Propagation] UPGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> ${newStatus}`);
         }
         
         if (status === 'no-poly-unknown-quasi' && relation) {
@@ -320,15 +333,14 @@ function phaseOneUpgrade(
           const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
           const ids = path.map((idx) => languageIds[idx]);
           const desc = describePath(ids, matrix);
-          const marked = formatMissingOrStatus(status);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${srcName}→${tgtName} must have poly, but is marked ${marked}.`
+            `Contradiction: ${desc} Therefore ${srcName} transforms to ${tgtName} in polynomial time, but ${srcName} is marked as not transforming to ${tgtName} in polynomial time.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
         const derivedDesc = `Therefore a polynomial transformation exists from ${srcName} to ${tgtName}.`;
         if (DEBUG_PROPAGATION) {
-          console.log(`[Propagation] UPGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → poly`);
+          console.log(`[Propagation] UPGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> poly`);
         }
         applySimpleUpgrade(matrix, path, 'poly', derivedDesc);
         changes += 1;
@@ -403,14 +415,15 @@ function tryDowngrade(
       const edgeRelation = adjacencyMatrix.matrix[fromIdx]?.[toIdx];
       const edgeStatus = edgeRelation?.status ?? 'unknown';
       const edgeRefs = edgeRelation?.refs ?? [];
-      existingEdges.push(`${idToName(fromId)}→${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCitations(edgeRefs)}`);
+      existingEdges.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCitations(edgeRefs)}`);
     }
 
     const existingPart = existingEdges.length > 0 ? existingEdges.join('. ') + '. ' : '';
     const triedPhrase = phraseForStatus(triedStatus);
     const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
+    const contradictionPhrase = formatStatusContradiction(pathStartName, pathEndName, actualStatus);
 
-    return `${existingPart}If ${srcName}→${tgtName} ${triedPhrase}, then ${pathStartName}→${pathEndName} ${impliedPhrase}. This contradicts ${pathStartName}→${pathEndName} being ${actualStatus}${formatCitations(actualRefs)}.`;
+    return `${existingPart}If ${srcName} transforms to ${tgtName} ${triedPhrase}, then ${pathStartName} transforms to ${pathEndName} ${impliedPhrase}. ${contradictionPhrase}${formatCitations(actualRefs)}.`;
   };
 
   const finalizeSimpleDowngrade = (
@@ -424,7 +437,7 @@ function tryDowngrade(
     );
     const newDesc = buildContradictionDescription(triedStatus, witnessIds);
     if (DEBUG_PROPAGATION) {
-      console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → ${nextStatus} (witness: ${witnessIds.map(idToName).join(' → ')})`);
+      console.log(`[Propagation] DOWNGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> ${nextStatus} (witness: ${witnessIds.map(idToName).join(' -> ')})`);
     }
     adjacencyMatrix.matrix[source][target] = {
       status: nextStatus,
@@ -469,7 +482,7 @@ function tryDowngrade(
     const fullyDerived = noPolyDescription.derived && quasiDescription.derived;
     
     if (DEBUG_PROPAGATION) {
-      console.log(`[Propagation] DOWNGRADE ${srcName}→${tgtName}: ${status ?? 'null'} → no-poly-quasi (witness: ${witnessIds.map(idToName).join(' → ')})`);
+      console.log(`[Propagation] DOWNGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> no-poly-quasi (witness: ${witnessIds.map(idToName).join(' -> ')})`);
     }
     
     adjacencyMatrix.matrix[source][target] = {

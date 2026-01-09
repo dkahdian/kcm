@@ -4224,7 +4224,7 @@
         },
         {
           "status": "poly",
-          "description": "The Quine-McCluskey algorithm generates an $IP$ formula in polynomial time. ",
+          "description": "The Quine-McCluskey algorithm generates an $IP$ formula in polynomial time.",
           "refs": [
             "Wegener_1987"
           ],

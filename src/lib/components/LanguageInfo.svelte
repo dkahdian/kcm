@@ -297,7 +297,7 @@
             {#each selectedLanguage.tags as tag}
               <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium" style={`background:${tag.color ?? '#e5e7eb'}20; color:${tag.color ?? '#374151'}; border:1px solid ${tag.color ?? '#e5e7eb'}`}
                 title={tag.description || ''}>
-                {tag.label}
+                <MathText text={tag.label} className="inline" />
                 {#if tag.refs?.length}
                   {#each tag.refs as refId}
                     <button 

@@ -128,8 +128,8 @@
 					<div class="space-y-2">
 						{#each language.tags as tag}
 							<div class="bg-white p-2 rounded border">
-								<div class="font-medium">{tag.label}</div>
-								<div class="text-gray-600">{tag.description || 'No description'}</div>
+								<MathText text={tag.label} className="font-medium" />
+								<MathText text={tag.description || 'No description'} className="text-gray-600" />
 							</div>
 						{/each}
 					</div>

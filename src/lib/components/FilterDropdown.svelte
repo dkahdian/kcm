@@ -2,6 +2,7 @@
   import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap, ViewMode } from '$lib/types.js';
   import { organizeFiltersByCategory } from '$lib/data/index.js';
   import { createDefaultFilterState, getFilterDefault } from '$lib/filter-utils.js';
+  import MathText from './MathText.svelte';
 
   type AnyFilter = LanguageFilter | EdgeFilter;
 
@@ -153,7 +154,7 @@
                   class:selected={isFilterActive(filter, value)}
                   title={filter.description}
                 >
-                  <span class="item-name">{filter.name}</span>
+                  <MathText text={filter.name} className="item-name" />
                   <select
                     class="filter-select"
                     value={value as string}
@@ -178,7 +179,7 @@
                     onchange={() => toggleFilter(filter)}
                     class="filter-checkbox"
                   />
-                  <span class="item-name">{filter.name}</span>
+                  <MathText text={filter.name} className="item-name" />
                 </label>
               {/if}
             {/each}

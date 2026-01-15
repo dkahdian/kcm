@@ -2693,6 +2693,12 @@
       "bibtex": "@article{Bova_2016_a, title={SDDs Are Exponentially More Succinct than OBDDs}, volume={30}, url={https://ojs.aaai.org/index.php/AAAI/article/view/10107}, DOI={10.1609/aaai.v30i1.10107}, abstractNote={ &lt;p&gt; Introduced by Darwiche (2011), sentential decision diagrams (SDDs) are essentially as tractable as ordered binary decision diagrams (OBDDs), but tend to be more succinct in practice. This makes SDDs a prominent representation language, with many applications in artificial intelligence and knowledge compilation. We prove that SDDs are more succinct than OBDDs also in theory, by constructing a family of boolean functions where each member has polynomial SDD size but exponential OBDD size. This exponential separation improves a quasipolynomial separation recently established by Razgon (2014), and settles an open problem in knowledge compilation (Darwiche, 2011). &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Bova, Simone}, year={2016}, month={Feb.} }",
       "title": "S. Bova, \"SDDs Are Exponentially More Succinct than OBDDs,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 30, 2016.",
       "href": "https://ojs.aaai.org/index.php/AAAI/article/view/10107"
+    },
+    {
+      "id": "Sauerhoff_2003",
+      "bibtex": "@article{SAUERHOFF200345,\ntitle = {Approximation of boolean functions by combinatorial rectangles},\njournal = {Theoretical Computer Science},\nvolume = {301},\nnumber = {1},\npages = {45-78},\nyear = {2003},\nissn = {0304-3975},\ndoi = {https://doi.org/10.1016/S0304-3975(02)00568-6},\nurl = {https://www.sciencedirect.com/science/article/pii/S0304397502005686},\nauthor = {Martin Sauerhoff},\nkeywords = {Branching programs, Communication complexity, Lower bounds, Approximation, Nondeterminism, Randomness},\nabstract = {This paper deals with the number of monochromatic combinatorial rectangles required to approximate a boolean function on a constant fraction of all inputs, where each rectangle may use its own partition of the input variables. The main result of the paper is that the number of rectangles required for the approximation of boolean functions in this model is very sensitive to the allowed error. There is an explicitly defined sequence of boolean functions fn on n variables such that fn has rectangle approximations with a constant number of rectangles and one-sided error 13+o(1) or two-sided error 14+o(1), but, on the other hand, fn requires exponentially many rectangles if the error bounds are decreased by an arbitrarily small constant. As applications of this result, the following separation results for read-once branching programs are obtained. The functions from the main result require only linear size for nondeterministic read-once branching programs and randomized read-once branching programs with two-sided error 13+o(1), while randomized read-once branching programs with constant two-sided error smaller than 13 and unambiguous nondeterministic read-once branching programs require exponential size.}\n}",
+      "title": "Martin Sauerhoff, \"Approximation of boolean functions by combinatorial rectangles,\" Theoretical Computer Science, vol. 301, pp. 45-78, 2003.",
+      "href": "https://www.sciencedirect.com/science/article/pii/S0304397502005686"
     }
   ],
   "tags": {
@@ -7094,37 +7100,7 @@
         null,
         null
       ]
-    ],
-    "indexByLanguage": {
-      "lang_8f666aa0": 0,
-      "lang_bb65ddb5": 1,
-      "lang_89649e36": 2,
-      "lang_83e3b023": 3,
-      "lang_6c130090": 4,
-      "lang_ea9b5299": 5,
-      "lang_91f812d0": 6,
-      "lang_4c204bf3": 7,
-      "lang_3bebcab7": 8,
-      "lang_684b1ca7": 9,
-      "lang_6ae90adc": 10,
-      "lang_e02902d0": 11,
-      "lang_1df07cc3": 12,
-      "lang_5bf00851": 13,
-      "lang_d24efe0e": 14,
-      "lang_d69995dd": 15,
-      "lang_27fffab2": 16,
-      "lang_1afefbe2": 17,
-      "lang_9c84a267": 18,
-      "lang_b13b0d78": 19,
-      "lang_3c803ba1": 20,
-      "lang_4e62a038": 21,
-      "lang_c2df8c2b": 22,
-      "lang_b9d72a7c": 23,
-      "lang_981b62f0": 24,
-      "lang_0f27d539": 25,
-      "lang_4ae03bc8": 26,
-      "lang_82fa749e": 27
-    }
+    ]
   },
   "separatingFunctions": [
     {
@@ -7187,7 +7163,8 @@
       "name": "Sauerhoff function",
       "description": "Let $g_n: \\{0,1\\}^{2n} \\to \\{0,1\\}$ be the function evaluating to 1 if and only if the sum of its inputs is divisible by 3. The Sauerhoff function $S_n: \\{0,1\\}^{n^2} \\to \\{0,1\\}$ is defined on the $n \\times n$ matrix $X = (x_{i,j})$ as $S_n(X) = R_n(X) \\vee C_n(X)$, where $R_n, C_n : \\{0,1\\}^{n^2} \\to \\{0,1\\}$ are defined by $R_n(X) = \\bigplus_{i=1}^n g_n(x_{i1},x_{i2},...,x_{in}$ and $C_n(X) = R_n(X^T)$.",
       "refs": [
-        "Amarilli_2018", "Bova_2016" 
+        "Amarilli_2018",
+        "Bova_2016"
       ]
     }
   ],

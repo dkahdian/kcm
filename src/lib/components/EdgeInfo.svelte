@@ -154,7 +154,7 @@
                 <MathText text={selectedEdge.targetName} className="inline" />
               </h5>
               <p class="text-sm text-gray-700 mb-2">
-                {getStatusLabel(originalEdge.forward.status)}{#if originalEdge.forward.refs.length}{#each originalEdge.forward.refs as refId}<button 
+                {getStatusLabel(originalEdge.forward.status)}{#if originalEdge.forward.caveat}{' '}unless {originalEdge.forward.caveat}{/if}{#if originalEdge.forward.refs.length}{' '}{#each originalEdge.forward.refs as refId}<button 
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"
@@ -204,7 +204,7 @@
                 <MathText text={selectedEdge.sourceName} className="inline" />
               </h5>
               <p class="text-sm text-gray-700 mb-2">
-                {getStatusLabel(originalEdge.backward.status)}{#if originalEdge.backward.refs.length}{#each originalEdge.backward.refs as refId}<button 
+                {getStatusLabel(originalEdge.backward.status)}{#if originalEdge.backward.caveat}{' '}unless {originalEdge.backward.caveat}{/if}{#if originalEdge.backward.refs.length}{' '}{#each originalEdge.backward.refs as refId}<button 
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"

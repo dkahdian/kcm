@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-01-15T01:14:53.505Z
+% Generated: 2026-01-15T22:52:36.490Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -68,20 +68,6 @@
 \section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map," Journal of Artificial...}
 % Reference ID: Darwiche_2002
 % =============================
-\begin{claim}
-$CNF$ is not polynomial-time transformable to $d$-$DNNF$ unless the polynomial hierarchy collapses \citet{Cadoli_1997,Selman_1996,Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The existence of polysize knowledge compilation functions for clausal entailment implies the collapse of the polynomial hierarchy. Also, note that $d$-$DNNF$ supports a polynomial-time clausal entailment test. If $CNF$ could be polynomial-time transformed to $d$-$DNNF$, then we could perform a clausal entailment test with any $CNF$ sentence by transforming it to a $d$-$DNNF$ clause.
-\end{claimdescription}
-
-\begin{claim}
-$CNF$ is not polynomial-time transformable to $DNNF$ unless the polynomial hierarchy collapses \citet{Selman_1996,Cadoli_1997,Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The existence of polysize knowledge compilation functions for clausal entailment implies the collapse of the polynomial hierarchy. Also, note that $DNNF$ supports a polynomial-time clausal entailment test. If $CNF$ could be polynomial-time transformed to $DNNF$, then we could perform a clausal entailment test with any $CNF$ sentence by transforming it to a $DNNF$ clause.
-\end{claimdescription}
-
 \begin{claim}
 $CNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
 \end{claim}
@@ -274,26 +260,12 @@ As defined by Darwiche 2002, $PI$ is a subset of $CNF$. Therefore, a polynomial 
 \end{claimdescription}
 
 \begin{claim}
-$PI$ has unknown transformation to $d$-$DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-This is listed as an open problem in A Knowledge Compilation Map (2002).
-\end{claimdescription}
-
-\begin{claim}
 $PI$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 Consider the $CNF$ formula $\Sigma_n=\bigwedge_{i=0}^{n-1}(x_{2i} \vee x_{2i+1})$. This formula is in prime implicates form and each clause in $\Sigma_n$ is an essential prime implicate of it. Hence its negation $\neg\Sigma_n\in PI$.
 
 Since the work of Quine, we know that the number of essential prime implicants of a formula is a lower bound on the number of terms that can be found in any $DNF$ representation of it. However, since $\Sigma_n$ has $2^n$ prime implicates, $\neg\Sigma_n$ has $2^n$ prime implicants, so any $DNF$ representation of $\neg\Sigma_n$ must have at least $2^n$ clauses.
-\end{claimdescription}
-
-\begin{claim}
-$PI$ has unknown transformation to $DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-This is listed as an open problem in the Knowledge Compilation Map (2002).
 \end{claimdescription}
 
 \begin{claim}
@@ -535,6 +507,25 @@ Shown by Corollary 3.5 of \citet{Beame_2013}.
 
 
 % =============================
+\section{S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, "Knowledge Compilation Meets C...}
+% Reference ID: Bova_2016
+% =============================
+\begin{claim}
+$DNNF$ is not quasi-polynomial-time transformable to $d$-$DNNF$ \citet{Bova_2016}
+\end{claim}
+\begin{claimdescription}
+Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has $DNNF$ size $O(n^2)$. Theorem 9 shows that $S_n$ has $d$-$DNNF$ size $2^{\Omega(n)}$.
+\end{claimdescription}
+
+\begin{claim}
+$PI$ is not quasi-polynomial-time transformable to $DNNF$ \citet{Bova_2016}
+\end{claim}
+\begin{claimdescription}
+Proposition 11 of \citet{Bova_2016} shows that the $JS_n$ has $PI$ size $O(n^2)$. Proposition 12 of \citet{Bova_2016} shows that $JS_n$ has $DNNF$ size $2^{\Omega(n^2)}$.
+\end{claimdescription}
+
+
+% =============================
 \section{Ingo Wegener, "The Complexity of Boolean Functions," 1987.}
 % Reference ID: Wegener_1987
 % =============================
@@ -543,18 +534,6 @@ $MODS$ is polynomial-time transformable to $IP$ \citet{Wegener_1987}
 \end{claim}
 \begin{claimdescription}
 The Quine-McCluskey algorithm generates an $IP$ formula in polynomial time.
-\end{claimdescription}
-
-
-% =============================
-\section{S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, "Knowledge Compilation Meets C...}
-% Reference ID: Bova_2016
-% =============================
-\begin{claim}
-$DNNF$ is not quasi-polynomial-time transformable to $d$-$DNNF$ \citet{Bova_2016}
-\end{claim}
-\begin{claimdescription}
-This is shown in Proposition 7 and Theorem 9.
 \end{claimdescription}
 
 

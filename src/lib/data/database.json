@@ -2699,6 +2699,12 @@
       "bibtex": "@article{Sauerhoff_2003,\ntitle = {Approximation of boolean functions by combinatorial rectangles},\njournal = {Theoretical Computer Science},\nvolume = {301},\nnumber = {1},\npages = {45-78},\nyear = {2003},\nissn = {0304-3975},\ndoi = {https://doi.org/10.1016/S0304-3975(02)00568-6},\nurl = {https://www.sciencedirect.com/science/article/pii/S0304397502005686},\nauthor = {Martin Sauerhoff},\nkeywords = {Branching programs, Communication complexity, Lower bounds, Approximation, Nondeterminism, Randomness},\nabstract = {This paper deals with the number of monochromatic combinatorial rectangles required to approximate a boolean function on a constant fraction of all inputs, where each rectangle may use its own partition of the input variables. The main result of the paper is that the number of rectangles required for the approximation of boolean functions in this model is very sensitive to the allowed error. There is an explicitly defined sequence of boolean functions fn on n variables such that fn has rectangle approximations with a constant number of rectangles and one-sided error 13+o(1) or two-sided error 14+o(1), but, on the other hand, fn requires exponentially many rectangles if the error bounds are decreased by an arbitrarily small constant. As applications of this result, the following separation results for read-once branching programs are obtained. The functions from the main result require only linear size for nondeterministic read-once branching programs and randomized read-once branching programs with two-sided error 13+o(1), while randomized read-once branching programs with constant two-sided error smaller than 13 and unambiguous nondeterministic read-once branching programs require exponential size.}\n}",
       "title": "Martin Sauerhoff, \"Approximation of boolean functions by combinatorial rectangles,\" Theoretical Computer Science, vol. 301, pp. 45-78, 2003.",
       "href": "https://www.sciencedirect.com/science/article/pii/S0304397502005686"
+    },
+    {
+      "id": "Jukna_2002",
+      "bibtex": "@article{Jukna_2002, title={Triangle-Freeness is Hard to Detect}, volume={11}, DOI={10.1017/S0963548302005333}, number={6}, journal={Combinatorics, Probability and Computing}, author={Jukna, S. and Schnitger, G.}, year={2002}, pages={549–569}}",
+      "title": "S. Jukna and G. Schnitger, \"Triangle-Freeness is Hard to Detect,\" Combinatorics, Probability and Computing, vol. 11, pp. 549–569, 2002.",
+      "href": "https://doi.org/10.1017/S0963548302005333"
     }
   ],
   "tags": {
@@ -2927,25 +2933,26 @@
         null,
         null,
         {
-          "status": "no-poly-unknown-quasi",
-          "caveat": "the polynomial hierarchy collapses",
-          "description": "The existence of polysize knowledge compilation functions for clausal entailment implies the collapse of the polynomial hierarchy. Also, note that $d$-$DNNF$ supports a polynomial-time clausal entailment test. If $CNF$ could be polynomial-time transformed to $d$-$DNNF$, then we could perform a clausal entailment test with any $CNF$ sentence by transforming it to a $d$-$DNNF$ clause.",
+          "status": "no-quasi",
           "refs": [
+            "Darwiche_2002",
             "Cadoli_1997",
-            "Selman_1996",
-            "Darwiche_2002"
+            "Selman_1996"
           ],
-          "derived": false
+          "caveat": "the polynomial hierarchy collapses",
+          "hidden": false,
+          "derived": true,
+          "description": "PI transforms to CNF in polynomial time \\citet{Darwiche_2002}. d-DNNF transforms to DNNF in polynomial time \\citet{Darwiche_2002}. If CNF transforms to d-DNNF in quasipolynomial time, then PI transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Bova_2016}."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to d-SDNNF in polynomial time, then CNF transforms to d-DNNF in polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Cadoli_1997,Selman_1996,Darwiche_2002}."
+          "description": "d-SDNNF transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to d-SDNNF in quasipolynomial time, then CNF transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Cadoli_1997,Selman_1996}."
         },
         null,
         {
@@ -2959,15 +2966,16 @@
           "description": "PI transforms to CNF in polynomial time \\citet{Darwiche_2002}. If CNF transforms to DNF in quasipolynomial time, then PI transforms to DNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
         },
         {
-          "status": "no-poly-unknown-quasi",
-          "caveat": "the polynomial hierarchy collapses",
-          "description": "The existence of polysize knowledge compilation functions for clausal entailment implies the collapse of the polynomial hierarchy. Also, note that $DNNF$ supports a polynomial-time clausal entailment test. If $CNF$ could be polynomial-time transformed to $DNNF$, then we could perform a clausal entailment test with any $CNF$ sentence by transforming it to a $DNNF$ clause.",
+          "status": "no-quasi",
           "refs": [
+            "Darwiche_2002",
             "Selman_1996",
-            "Cadoli_1997",
-            "Darwiche_2002"
+            "Cadoli_1997"
           ],
-          "derived": false
+          "caveat": "the polynomial hierarchy collapses",
+          "hidden": false,
+          "derived": true,
+          "description": "PI transforms to CNF in polynomial time \\citet{Darwiche_2002}. If CNF transforms to DNNF in quasipolynomial time, then PI transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Bova_2016}."
         },
         {
           "status": "no-quasi",
@@ -3000,14 +3008,14 @@
           "description": "MODS transforms to DNF in polynomial time \\citet{Darwiche_2002}. If CNF transforms to MODS in quasipolynomial time, then CNF transforms to DNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to nFBDD in polynomial time, then CNF transforms to DNNF in polynomial time. This contradicts the fact that CNF cannot transform to DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Selman_1996,Cadoli_1997,Darwiche_2002}."
+          "description": "nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to nFBDD in quasipolynomial time, then CNF transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Selman_1996,Cadoli_1997}."
         },
         {
           "status": "poly",
@@ -3017,14 +3025,14 @@
           ]
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "nOBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to nOBDD in polynomial time, then CNF transforms to DNNF in polynomial time. This contradicts the fact that CNF cannot transform to DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Selman_1996,Cadoli_1997,Darwiche_2002}."
+          "description": "nOBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to nOBDD in quasipolynomial time, then CNF transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Selman_1996,Cadoli_1997}."
         },
         {
           "status": "no-quasi",
@@ -3046,7 +3054,7 @@
           "derived": false
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Van den Broeck_2015",
             "Amarilli_2018"
@@ -3054,39 +3062,39 @@
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If CNF transforms to SDD in polynomial time, then CNF transforms to d-DNNF in polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Cadoli_1997,Selman_1996,Darwiche_2002}."
+          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If CNF transforms to SDD in quasipolynomial time, then CNF transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Cadoli_1997,Selman_1996}."
         },
         null,
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "SDNNF transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to SDNNF in polynomial time, then CNF transforms to DNNF in polynomial time. This contradicts the fact that CNF cannot transform to DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Selman_1996,Cadoli_1997,Darwiche_2002}."
+          "description": "SDNNF transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to SDNNF in quasipolynomial time, then CNF transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Selman_1996,Cadoli_1997}."
         },
         null,
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "uFBDD transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to uFBDD in polynomial time, then CNF transforms to d-DNNF in polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Cadoli_1997,Selman_1996,Darwiche_2002}."
+          "description": "uFBDD transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to uFBDD in quasipolynomial time, then CNF transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Cadoli_1997,Selman_1996}."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Amarilli_2018"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "uOBDD transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to uOBDD in polynomial time, then CNF transforms to d-DNNF in polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Cadoli_1997,Selman_1996,Darwiche_2002}."
+          "description": "uOBDD transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF transforms to uOBDD in quasipolynomial time, then CNF transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to d-DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Cadoli_1997,Selman_1996}."
         },
         {
           "status": "no-quasi",
@@ -3852,7 +3860,7 @@
         null,
         {
           "status": "no-quasi",
-          "description": "This is shown in Proposition 7 and Theorem 9.",
+          "description": "Proposition 7 of \\citet{Bova_2016} shows that the Sauerhoff function $S_n$ has $DNNF$ size $O(n^2)$. Theorem 9 shows that $S_n$ has $d$-$DNNF$ size $2^{\\Omega(n)}$.",
           "refs": [
             "Bova_2016"
           ],
@@ -4800,14 +4808,14 @@
           "description": "CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. If NNF transforms to DNF in quasipolynomial time, then CNF transforms to DNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. If NNF transforms to DNNF in polynomial time, then CNF transforms to DNNF in polynomial time. This contradicts the fact that CNF cannot transform to DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Selman_1996,Cadoli_1997,Darwiche_2002}."
+          "description": "CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. If NNF transforms to DNNF in quasipolynomial time, then CNF transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Selman_1996,Cadoli_1997}."
         },
         {
           "status": "no-quasi",
@@ -4840,7 +4848,7 @@
           "description": "CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. MODS transforms to DNF in polynomial time \\citet{Darwiche_2002}. If NNF transforms to MODS in quasipolynomial time, then CNF transforms to DNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
             "Amarilli_2018"
@@ -4848,7 +4856,7 @@
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If NNF transforms to nFBDD in polynomial time, then CNF transforms to DNNF in polynomial time. This contradicts the fact that CNF cannot transform to DNNF in polynomial time unless the polynomial hierarchy collapses \\citet{Selman_1996,Cadoli_1997,Darwiche_2002}."
+          "description": "CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If NNF transforms to nFBDD in quasipolynomial time, then CNF transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to DNNF in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002,Selman_1996,Cadoli_1997}."
         },
         null,
         {
@@ -5350,14 +5358,23 @@
         },
         null,
         {
-          "status": "unknown-both",
-          "description": "This is listed as an open problem in A Knowledge Compilation Map (2002).",
+          "status": "no-quasi",
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "hidden": false,
+          "derived": true,
+          "description": "d-DNNF transforms to DNNF in polynomial time \\citet{Darwiche_2002}. If PI transforms to d-DNNF in quasipolynomial time, then PI transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNNF in quasipolynomial time \\citet{Bova_2016}."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "d-SDNNF transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If PI transforms to d-SDNNF in quasipolynomial time, then PI transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to d-DNNF in quasipolynomial time \\citet{Darwiche_2002}."
+        },
         null,
         {
           "status": "no-quasi",
@@ -5370,10 +5387,10 @@
           ]
         },
         {
-          "status": "unknown-both",
-          "description": "This is listed as an open problem in the Knowledge Compilation Map (2002).",
+          "status": "no-quasi",
+          "description": "Proposition 11 of \\citet{Bova_2016} shows that the $JS_n$ has $PI$ size $O(n^2)$. Proposition 12 of \\citet{Bova_2016} shows that $JS_n$ has $DNNF$ size $2^{\\Omega(n^2)}$.",
           "refs": [
-            "Darwiche_2002"
+            "Bova_2016"
           ],
           "derived": false
         },
@@ -5406,7 +5423,15 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "nFBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If PI transforms to nFBDD in quasipolynomial time, then PI transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNNF in quasipolynomial time \\citet{Bova_2016}."
+        },
         {
           "status": "poly",
           "refs": [
@@ -5416,7 +5441,15 @@
           "derived": true,
           "description": "PI transforms to CNF in polynomial time \\citet{Darwiche_2002}. CNF transforms to NNF in polynomial time \\citet{Darwiche_2002}. Therefore a polynomial transformation exists from PI to NNF."
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "nOBDD transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If PI transforms to nOBDD in quasipolynomial time, then PI transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNNF in quasipolynomial time \\citet{Bova_2016}."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -5427,12 +5460,45 @@
           "description": "OBDD$_<$ transforms to FBDD in polynomial time \\citet{Darwiche_2002}. If PI transforms to OBDD$_<$ in quasipolynomial time, then PI transforms to FBDD in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to FBDD in quasipolynomial time \\citet{Wegener_1987,Darwiche_2002}."
         },
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDD transforms to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If PI transforms to SDD in quasipolynomial time, then PI transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to d-DNNF in quasipolynomial time \\citet{Darwiche_2002}."
+        },
         null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "SDNNF transforms to DNNF in polynomial time \\citet{Amarilli_2018}. If PI transforms to SDNNF in quasipolynomial time, then PI transforms to DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to DNNF in quasipolynomial time \\citet{Bova_2016}."
+        },
         null,
-        null,
-        null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uFBDD transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If PI transforms to uFBDD in quasipolynomial time, then PI transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to d-DNNF in quasipolynomial time \\citet{Darwiche_2002}."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "uOBDD transforms to d-DNNF in polynomial time \\citet{Amarilli_2018}. If PI transforms to uOBDD in quasipolynomial time, then PI transforms to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to d-DNNF in quasipolynomial time \\citet{Darwiche_2002}."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -7163,7 +7229,16 @@
       "name": "Sauerhoff function",
       "description": "Let $g_n: \\{0,1\\}^{2n} \\to \\{0,1\\}$ be the function evaluating to 1 if and only if the sum of its inputs is divisible by 3. The Sauerhoff function $S_n: \\{0,1\\}^{n^2} \\to \\{0,1\\}$ is defined on the $n \\times n$ matrix $X = (x_{i,j})$ as $S_n(X) = R_n(X) \\vee C_n(X)$, where $R_n, C_n : \\{0,1\\}^{n^2} \\to \\{0,1\\}$ are defined by $R_n(X) = \\bigplus_{i=1}^n g_n(x_{i1},x_{i2},...,x_{in}$ and $C_n(X) = R_n(X^T)$.",
       "refs": [
-        "Sauerhoff_2003", "Bova_2016"
+        "Sauerhoff_2003",
+        "Bova_2016"
+      ]
+    },
+    {
+      "shortName": "JS",
+      "name": "Jukna-Schnitger function",
+      "description": "Let $K_n$ be the set of all 2-element subsets of $\\{1,...,n\\}$. Let the graph $G \\subset K_n$ be incoded by the $\\{0,1\\}$ assignment of $K_n$ mapping a variable to 1 if and only if it is in the edge set of the $G$. A triangle is defined as the edges $\\{i, j\\}, \\{j, k\\}, \\{k, i\\}$, where $i, j, k$ are distinct. Let $T_n$ be the set of all triangles on $n$ vertices. Let $JS_n^A: \\{0,1\\}^{K_n}\\to\\{0,1\\}$ be the function accepting exactly those graphs over $\\{1,...,n\\}$ that avoid all triangles in $A$. \\citet{Jukna_2002} show that for every $n$ there exists an $A_n \\subset $T_n$ of size $O(n^2)$ so that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\\Omega(n^2)}$. Call this function $JS_n$ the Jukna-Schnitger function.",
+      "refs": [
+        "Jukna_2002"
       ]
     }
   ],

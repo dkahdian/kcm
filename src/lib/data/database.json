@@ -2415,6 +2415,162 @@
         }
       },
       "tags": []
+    },
+    {
+      "id": "lang_4ae03bc8",
+      "name": "dec-SDNNF$_<$",
+      "fullName": "-",
+      "description": "-",
+      "descriptionRefs": [],
+      "properties": {
+        "queries": {
+          "CE": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "CO": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "CT": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "EQ": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "IM": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "ME": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "SE": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "VA": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "CD": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "FO": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "SFO": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "¬C": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∧BC": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∧C": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∨BC": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∨C": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
+    },
+    {
+      "id": "lang_82fa749e",
+      "name": "cSDD$_T$",
+      "fullName": "-",
+      "description": "-",
+      "descriptionRefs": [],
+      "properties": {
+        "queries": {
+          "CE": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "CO": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "CT": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "EQ": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "IM": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "ME": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "SE": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "VA": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          }
+        },
+        "transformations": {
+          "CD": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "FO": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "SFO": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "¬C": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∧BC": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∧C": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∨BC": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∨C": {
+            "complexity": "unknown-to-us",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
     }
   ],
   "references": [
@@ -2694,7 +2850,9 @@
       "lang_c2df8c2b",
       "lang_b9d72a7c",
       "lang_981b62f0",
-      "lang_0f27d539"
+      "lang_0f27d539",
+      "lang_4ae03bc8",
+      "lang_82fa749e"
     ],
     "matrix": [
       [
@@ -2723,9 +2881,13 @@
         null,
         null,
         null,
+        null,
+        null,
         null
       ],
       [
+        null,
+        null,
         null,
         null,
         null,
@@ -2948,9 +3110,13 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to FBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. If CNF transforms to dec-SDNNF in quasipolynomial time, then CNF transforms to FBDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to FBDD in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
+        null,
+        null,
         null,
         null,
         null,
@@ -3191,7 +3357,9 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If d-DNNF transforms to dec-SDNNF in quasipolynomial time, then d-DNNF transforms to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot transform to d-SDNNF in quasipolynomial time \\citet{Darwiche_2002,Amarilli_2018}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -3442,9 +3610,13 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If d-SDNNF transforms to dec-SDNNF in quasipolynomial time, then d-SDNNF transforms to OBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot transform to OBDD in quasipolynomial time \\citet{Van den Broeck_2015,Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
+        null,
+        null,
         null,
         null,
         null,
@@ -3647,7 +3819,9 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to FBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. If DNF transforms to dec-SDNNF in quasipolynomial time, then DNF transforms to FBDD in at most quasi-polynomial time. This contradicts the fact that DNF cannot transform to FBDD in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -3852,7 +4026,9 @@
           "hidden": false,
           "derived": true,
           "description": "d-DNNF transforms to DNNF in polynomial time \\citet{Darwiche_2002}. dec-SDNNF transforms to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If DNNF transforms to dec-SDNNF in quasipolynomial time, then d-DNNF transforms to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot transform to d-SDNNF in quasipolynomial time \\citet{Darwiche_2002,Amarilli_2018}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -4031,7 +4207,9 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If FBDD transforms to dec-SDNNF in quasipolynomial time, then FBDD transforms to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot transform to d-SDNNF in quasipolynomial time \\citet{Amarilli_2018}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -4165,7 +4343,9 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to FBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. If IP transforms to dec-SDNNF in quasipolynomial time, then IP transforms to FBDD in at most quasi-polynomial time. This contradicts the fact that IP cannot transform to FBDD in quasipolynomial time \\citet{Darwiche_2002,Wegener_1987}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -4346,7 +4526,9 @@
           "hidden": false,
           "derived": true,
           "description": "MODS transforms to OBDD$_<$ in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ transforms to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD transforms to dec-SDNNF in polynomial time \\citet{Amarilli_2018}. Therefore a polynomial transformation exists from MODS to dec-SDNNF."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -4552,7 +4734,9 @@
           "hidden": false,
           "derived": true,
           "description": "d-DNNF transforms to nFBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. dec-SDNNF transforms to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If nFBDD transforms to dec-SDNNF in quasipolynomial time, then d-DNNF transforms to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot transform to d-SDNNF in quasipolynomial time \\citet{Darwiche_2002,Amarilli_2018}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -4756,7 +4940,9 @@
           "hidden": false,
           "derived": true,
           "description": "CNF transforms to NNF in polynomial time. dec-SDNNF transforms to FBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. If NNF transforms to dec-SDNNF in quasipolynomial time, then CNF transforms to FBDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot transform to FBDD in quasipolynomial time unless the polynomial hierarchy collapses \\citet{Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -4927,7 +5113,9 @@
           "hidden": false,
           "derived": true,
           "description": "d-SDNNF transforms to nOBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF transforms to OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If nOBDD transforms to dec-SDNNF in quasipolynomial time, then d-SDNNF transforms to OBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot transform to OBDD in quasipolynomial time \\citet{Van den Broeck_2015,Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -5121,7 +5309,9 @@
           "hidden": false,
           "derived": true,
           "description": "OBDD$_<$ transforms to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD transforms to dec-SDNNF in polynomial time \\citet{Amarilli_2018}. Therefore a polynomial transformation exists from OBDD$_<$ to dec-SDNNF."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -5246,7 +5436,9 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to FBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. If PI transforms to dec-SDNNF in quasipolynomial time, then PI transforms to FBDD in at most quasi-polynomial time. This contradicts the fact that PI cannot transform to FBDD in quasipolynomial time \\citet{Wegener_1987,Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -5437,9 +5629,13 @@
           "hidden": false,
           "derived": true,
           "description": "dec-SDNNF transforms to OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If SDD transforms to dec-SDNNF in quasipolynomial time, then SDD transforms to OBDD in at most quasi-polynomial time. This contradicts the fact that SDD cannot transform to OBDD in quasipolynomial time \\citet{Bryant_1986,Bova_2016_a}."
-        }
+        },
+        null,
+        null
       ],
       [
+        null,
+        null,
         null,
         null,
         null,
@@ -5677,9 +5873,13 @@
           "hidden": false,
           "derived": true,
           "description": "d-SDNNF transforms to SDNNF in polynomial time \\citet{Amarilli_2018}. dec-SDNNF transforms to OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If SDNNF transforms to dec-SDNNF in quasipolynomial time, then d-SDNNF transforms to OBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot transform to OBDD in quasipolynomial time \\citet{Van den Broeck_2015,Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
+        null,
+        null,
         null,
         null,
         null,
@@ -5907,7 +6107,9 @@
           "hidden": false,
           "derived": true,
           "description": "d-DNNF transforms to uFBDD in quasipolynomial time \\citet{Amarilli_2018,Beame_2013}. dec-SDNNF transforms to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If uFBDD transforms to dec-SDNNF in quasipolynomial time, then d-DNNF transforms to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot transform to d-SDNNF in quasipolynomial time \\citet{Darwiche_2002,Amarilli_2018}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -6086,7 +6288,9 @@
           "hidden": false,
           "derived": true,
           "description": "d-SDNNF transforms to uOBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF transforms to OBDD in quasipolynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If uOBDD transforms to dec-SDNNF in quasipolynomial time, then d-SDNNF transforms to OBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot transform to OBDD in quasipolynomial time \\citet{Van den Broeck_2015,Darwiche_2002}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -6265,7 +6469,9 @@
             "Amarilli_2018"
           ],
           "derived": false
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -6503,7 +6709,9 @@
           "hidden": false,
           "derived": true,
           "description": "FBDD transforms to dec-DNNF in polynomial time \\citet{Amarilli_2018}. dec-SDNNF transforms to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If dec-DNNF transforms to dec-SDNNF in quasipolynomial time, then FBDD transforms to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot transform to d-SDNNF in quasipolynomial time \\citet{Amarilli_2018}."
-        }
+        },
+        null,
+        null
       ],
       [
         null,
@@ -6803,37 +7011,71 @@
           ],
           "derived": false
         },
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null
       ]
-    ],
-    "indexByLanguage": {
-      "lang_8f666aa0": 0,
-      "lang_bb65ddb5": 1,
-      "lang_89649e36": 2,
-      "lang_83e3b023": 3,
-      "lang_6c130090": 4,
-      "lang_ea9b5299": 5,
-      "lang_91f812d0": 6,
-      "lang_4c204bf3": 7,
-      "lang_3bebcab7": 8,
-      "lang_684b1ca7": 9,
-      "lang_6ae90adc": 10,
-      "lang_e02902d0": 11,
-      "lang_1df07cc3": 12,
-      "lang_5bf00851": 13,
-      "lang_d24efe0e": 14,
-      "lang_d69995dd": 15,
-      "lang_27fffab2": 16,
-      "lang_1afefbe2": 17,
-      "lang_9c84a267": 18,
-      "lang_b13b0d78": 19,
-      "lang_3c803ba1": 20,
-      "lang_4e62a038": 21,
-      "lang_c2df8c2b": 22,
-      "lang_b9d72a7c": 23,
-      "lang_981b62f0": 24,
-      "lang_0f27d539": 25
-    }
+    ]
   },
   "separatingFunctions": [
     {

@@ -38,9 +38,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Paths
+// Default Paths
 const DATABASE_PATH = path.join(__dirname, '..', 'src', 'lib', 'data', 'database.json');
-const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'proofs.tex');
+const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'claims.tex');
+const DEFAULT_BIBTEX_OUTPUT = path.join(__dirname, '..', 'docs', 'refs.bib');
 
 // Import types
 import type { 
@@ -924,6 +925,156 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
 }
 
 // =============================================================================
+// BibTeX Generation and Parsing
+// =============================================================================
+
+/**
+ * Normalize a BibTeX entry to use the given citation key.
+ * Replaces @type{oldkey, with @type{newkey,
+ */
+function normalizeBibtexKey(bibtex: string, newKey: string): string {
+  // Match @type{key, and replace with @type{newKey,
+  return bibtex.replace(/(@\w+\{)([^,\s]+)(,)/, `$1${newKey}$3`);
+}
+
+/**
+ * Generate BibTeX file content from database references.
+ * Normalizes citation keys to match database reference IDs.
+ */
+function generateBibtex(database: DatabaseSchema): string {
+  const entries: string[] = [];
+  
+  for (const ref of database.references) {
+    if (ref.bibtex && ref.bibtex.trim()) {
+      // Normalize the citation key to match our reference ID
+      let entry = normalizeBibtexKey(ref.bibtex.trim(), ref.id);
+      entries.push(entry);
+    }
+  }
+  
+  return entries.join('\n');
+}
+
+/**
+ * Parse a BibTeX file and extract entries.
+ * Returns a map of citation key → full BibTeX entry.
+ */
+function parseBibtex(content: string): Map<string, string> {
+  const entries = new Map<string, string>();
+  
+  // Match BibTeX entries: @type{key, ... }
+  // This regex handles nested braces properly
+  const entryRegex = /@(\w+)\s*\{\s*([^,\s]+)\s*,/g;
+  let match;
+  
+  while ((match = entryRegex.exec(content)) !== null) {
+    const startIdx = match.index;
+    const key = match[2];
+    
+    // Find the matching closing brace
+    let braceCount = 0;
+    let endIdx = startIdx;
+    let inEntry = false;
+    
+    for (let i = startIdx; i < content.length; i++) {
+      if (content[i] === '{') {
+        braceCount++;
+        inEntry = true;
+      } else if (content[i] === '}') {
+        braceCount--;
+        if (inEntry && braceCount === 0) {
+          endIdx = i + 1;
+          break;
+        }
+      }
+    }
+    
+    if (endIdx > startIdx) {
+      const entry = content.slice(startIdx, endIdx).trim();
+      entries.set(key, entry);
+    }
+  }
+  
+  return entries;
+}
+
+/**
+ * Update database references from parsed BibTeX entries.
+ * - Updates existing references if bibtex content changed
+ * - Adds new references if they don't exist
+ * - Does NOT remove references that are not in the BibTeX file
+ */
+function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map<string, string>): void {
+  const existingRefs = new Map<string, KCReference>();
+  for (const ref of database.references) {
+    existingRefs.set(ref.id, ref);
+    // Also map by bibtex citation key if different from id
+    const keyMatch = ref.bibtex?.match(/@\w+\{([^,\s]+)/);
+    if (keyMatch && keyMatch[1] !== ref.id) {
+      existingRefs.set(keyMatch[1], ref);
+    }
+  }
+  
+  let added = 0;
+  let updated = 0;
+  
+  for (const [key, bibtex] of bibtexEntries) {
+    const existingRef = existingRefs.get(key);
+    
+    if (existingRef) {
+      // Update existing reference - normalize the bibtex key to match our ID
+      const normalizedBibtex = normalizeBibtexKey(bibtex, existingRef.id);
+      if (existingRef.bibtex !== normalizedBibtex) {
+        existingRef.bibtex = normalizedBibtex;
+        updated++;
+      }
+    } else {
+      // Add new reference with normalized key
+      const normalizedBibtex = normalizeBibtexKey(bibtex, key);
+      const title = extractTitleFromBibtex(bibtex) || key;
+      const href = extractUrlFromBibtex(bibtex) || '#';
+      
+      database.references.push({
+        id: key,
+        title,
+        href,
+        bibtex: normalizedBibtex
+      });
+      added++;
+    }
+  }
+  
+  console.log(`References: ${added} added, ${updated} updated`);
+}
+
+/**
+ * Extract title from BibTeX entry
+ */
+function extractTitleFromBibtex(bibtex: string): string | null {
+  // Match title = {...} or title = "..."
+  const match = bibtex.match(/title\s*=\s*\{([^}]+)\}/i) || 
+                bibtex.match(/title\s*=\s*"([^"]+)"/i);
+  return match ? match[1].replace(/\s+/g, ' ').trim() : null;
+}
+
+/**
+ * Extract URL from BibTeX entry
+ */
+function extractUrlFromBibtex(bibtex: string): string | null {
+  const match = bibtex.match(/url\s*=\s*\{([^}]+)\}/i) ||
+                bibtex.match(/doi\s*=\s*\{([^}]+)\}/i);
+  if (match) {
+    const value = match[1].trim();
+    // If it's a DOI, convert to URL
+    if (bibtex.toLowerCase().includes('doi') && !value.startsWith('http')) {
+      return `https://doi.org/${value}`;
+    }
+    return value;
+  }
+  return null;
+}
+
+// =============================================================================
 // CLI
 // =============================================================================
 
@@ -932,19 +1083,28 @@ function printUsage(): void {
 Knowledge Compilation Map - LaTeX Bijection Script
 
 Usage:
-  npx tsx scripts/latex-bijection.ts --to-latex [-o output.tex]
-  npx tsx scripts/latex-bijection.ts --to-json input.tex
+  npx tsx scripts/latex-bijection.ts --to-latex [-o output.tex] [-b refs.bib]
+  npx tsx scripts/latex-bijection.ts --to-json [input.tex] [-b refs.bib]
+  npx tsx scripts/latex-bijection.ts --normalize-refs
 
 Options:
-  --to-latex    Convert database.json to LaTeX format
-  --to-json     Convert LaTeX file back to database.json
-  -o, --output  Specify output file path (default: docs/proofs.tex)
-  -h, --help    Show this help message
+  --to-latex      Convert database.json to LaTeX + BibTeX format
+  --to-json       Convert LaTeX + BibTeX files back to database.json
+  --normalize-refs Normalize all BibTeX keys in database to match reference IDs
+  -o, --output    Specify LaTeX output file path (default: docs/claims.tex)
+  -b, --bib       Specify BibTeX file path (default: docs/refs.bib)
+  -h, --help      Show this help message
+
+Default paths:
+  LaTeX:   docs/claims.tex
+  BibTeX:  docs/refs.bib
+  Database: src/lib/data/database.json
 
 Examples:
   npx tsx scripts/latex-bijection.ts --to-latex
-  npx tsx scripts/latex-bijection.ts --to-latex -o my-proofs.tex
-  npx tsx scripts/latex-bijection.ts --to-json docs/proofs.tex
+  npx tsx scripts/latex-bijection.ts --to-json
+  npx tsx scripts/latex-bijection.ts --to-latex -o custom.tex -b custom.bib
+  npx tsx scripts/latex-bijection.ts --normalize-refs
 `);
 }
 
@@ -958,27 +1118,69 @@ async function main(): Promise<void> {
   
   const toLatex = args.includes('--to-latex');
   const toJson = args.includes('--to-json');
+  const normalizeRefs = args.includes('--normalize-refs');
   
-  if (toLatex && toJson) {
-    console.error('Error: Cannot specify both --to-latex and --to-json');
+  const modeCount = [toLatex, toJson, normalizeRefs].filter(Boolean).length;
+  
+  if (modeCount > 1) {
+    console.error('Error: Cannot specify multiple modes (--to-latex, --to-json, --normalize-refs)');
     process.exit(1);
   }
   
-  if (!toLatex && !toJson) {
-    console.error('Error: Must specify --to-latex or --to-json');
+  if (modeCount === 0) {
+    console.error('Error: Must specify --to-latex, --to-json, or --normalize-refs');
     printUsage();
     process.exit(1);
   }
   
+  if (normalizeRefs) {
+    // Normalize all BibTeX keys in database
+    console.log('=== Normalizing BibTeX Keys ===\n');
+    console.log(`Reading database from: ${DATABASE_PATH}`);
+    
+    const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
+    
+    console.log(`Found ${database.references.length} references\n`);
+    
+    let updated = 0;
+    for (const ref of database.references) {
+      if (ref.bibtex) {
+        const normalized = normalizeBibtexKey(ref.bibtex, ref.id);
+        if (normalized !== ref.bibtex) {
+          console.log(`Normalized: ${ref.id}`);
+          ref.bibtex = normalized;
+          updated++;
+        }
+      }
+    }
+    
+    console.log(`\nUpdated ${updated} references`);
+    
+    if (updated > 0) {
+      console.log(`\nWriting database to: ${DATABASE_PATH}`);
+      fs.writeFileSync(DATABASE_PATH, JSON.stringify(database, null, 2), 'utf-8');
+    }
+    
+    console.log('\n=== Done ===');
+    return;
+  }
+  
   if (toLatex) {
-    // JSON → LaTeX
+    // JSON → LaTeX + BibTeX
     let outputPath = DEFAULT_LATEX_OUTPUT;
+    let bibtexPath = DEFAULT_BIBTEX_OUTPUT;
+    
     const outputIdx = args.findIndex(a => a === '-o' || a === '--output');
     if (outputIdx !== -1 && args[outputIdx + 1]) {
       outputPath = args[outputIdx + 1];
     }
     
-    console.log('=== JSON → LaTeX Conversion ===\n');
+    const bibIdx = args.findIndex(a => a === '-b' || a === '--bib');
+    if (bibIdx !== -1 && args[bibIdx + 1]) {
+      bibtexPath = args[bibIdx + 1];
+    }
+    
+    console.log('=== JSON → LaTeX + BibTeX Conversion ===\n');
     console.log(`Reading database from: ${DATABASE_PATH}`);
     
     const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
@@ -986,29 +1188,46 @@ async function main(): Promise<void> {
     console.log(`Found ${database.languages.length} languages`);
     console.log(`Found ${database.references.length} references`);
     
+    // Generate and write LaTeX
     const latex = generateLatex(database);
-    
     fs.writeFileSync(outputPath, latex, 'utf-8');
     console.log(`\nWrote LaTeX to: ${outputPath}`);
+    
+    // Generate and write BibTeX
+    const bibtex = generateBibtex(database);
+    fs.writeFileSync(bibtexPath, bibtex, 'utf-8');
+    console.log(`Wrote BibTeX to: ${bibtexPath}`);
+    
     console.log('\n=== Done ===');
   }
   
   if (toJson) {
-    // LaTeX → JSON
-    const inputPath = args.find(a => !a.startsWith('-') && a !== 'input.tex') || args[args.indexOf('--to-json') + 1];
+    // LaTeX + BibTeX → JSON
+    let inputPath = DEFAULT_LATEX_OUTPUT;
+    let bibtexPath = DEFAULT_BIBTEX_OUTPUT;
     
-    if (!inputPath || inputPath.startsWith('-')) {
-      console.error('Error: Must specify input LaTeX file');
-      printUsage();
-      process.exit(1);
+    // Check for explicit input file (positional argument after --to-json)
+    const toJsonIdx = args.indexOf('--to-json');
+    if (toJsonIdx !== -1 && args[toJsonIdx + 1] && !args[toJsonIdx + 1].startsWith('-')) {
+      inputPath = args[toJsonIdx + 1];
+    }
+    
+    const outputIdx = args.findIndex(a => a === '-o' || a === '--output');
+    if (outputIdx !== -1 && args[outputIdx + 1]) {
+      inputPath = args[outputIdx + 1];
+    }
+    
+    const bibIdx = args.findIndex(a => a === '-b' || a === '--bib');
+    if (bibIdx !== -1 && args[bibIdx + 1]) {
+      bibtexPath = args[bibIdx + 1];
     }
     
     if (!fs.existsSync(inputPath)) {
-      console.error(`Error: File not found: ${inputPath}`);
+      console.error(`Error: LaTeX file not found: ${inputPath}`);
       process.exit(1);
     }
     
-    console.log('=== LaTeX → JSON Conversion ===\n');
+    console.log('=== LaTeX + BibTeX → JSON Conversion ===\n');
     console.log(`Reading LaTeX from: ${inputPath}`);
     
     const latexContent = fs.readFileSync(inputPath, 'utf-8');
@@ -1018,6 +1237,19 @@ async function main(): Promise<void> {
     
     console.log(`\nReading database from: ${DATABASE_PATH}`);
     const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
+    
+    // Update from BibTeX if file exists
+    if (fs.existsSync(bibtexPath)) {
+      console.log(`\nReading BibTeX from: ${bibtexPath}`);
+      const bibtexContent = fs.readFileSync(bibtexPath, 'utf-8');
+      const bibtexEntries = parseBibtex(bibtexContent);
+      console.log(`Parsed ${bibtexEntries.size} BibTeX entries`);
+      
+      console.log(`\nUpdating references...`);
+      updateReferencesFromBibtex(database, bibtexEntries);
+    } else {
+      console.log(`\nNote: BibTeX file not found: ${bibtexPath} (skipping reference updates)`);
+    }
     
     console.log(`\nUpdating adjacency matrix...`);
     updateDatabase(database, claims);

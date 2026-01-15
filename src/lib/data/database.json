@@ -2576,7 +2576,7 @@
   "references": [
     {
       "id": "Bryant_1986",
-      "bibtex": "@article{bryant1986graph,\n  title={Graph-based algorithms for boolean function manipulation},\n  author={Bryant, Randal E},\n  journal={Computers, IEEE Transactions on},\n  volume={100},\n  number={8},\n  pages={677--691},\n  year={1986},\n  publisher={IEEE}\n}",
+      "bibtex": "@article{Bryant_1986,\n  title={Graph-based algorithms for boolean function manipulation},\n  author={Bryant, Randal E},\n  journal={Computers, IEEE Transactions on},\n  volume={100},\n  number={8},\n  pages={677--691},\n  year={1986},\n  publisher={IEEE}\n}",
       "title": "R. E. Bryant, \"Graph-based algorithms for boolean function manipulation,\" Computers, IEEE Transactions on, vol. 100, pp. 677–691, 1986.",
       "href": "#"
     },
@@ -2594,91 +2594,91 @@
     },
     {
       "id": "Gergov_1994",
-      "bibtex": "@ARTICLE{324545,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197-1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}",
+      "bibtex": "@ARTICLE{Gergov_1994,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197-1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}",
       "title": "J. Gergov and C. Meinel, \"Efficient Boolean manipulation with OBDD's can be extended to FBDD's,\" IEEE Transactions on Computers, vol. 43, pp. 1197-1209, 1994.",
       "href": "https://doi.org/10.1109/12.324545"
     },
     {
       "id": "Darwiche_2000",
-      "bibtex": "@misc{darwiche2000tractablecountingtheorymodels,\n      title={On the tractable counting of theory models and its application to belief revision and truth maintenance}, \n      author={Adnan Darwiche},\n      year={2000},\n      eprint={cs/0003044},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/cs/0003044}, \n}",
+      "bibtex": "@misc{Darwiche_2000,\n      title={On the tractable counting of theory models and its application to belief revision and truth maintenance}, \n      author={Adnan Darwiche},\n      year={2000},\n      eprint={cs/0003044},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/cs/0003044}, \n}",
       "title": "Adnan Darwiche, \"On the tractable counting of theory models and its application to belief revision and truth maintenance,\" 2000.",
       "href": "https://arxiv.org/abs/cs/0003044"
     },
     {
       "id": "Selman_1996",
-      "bibtex": "@article{10.1145/226643.226644,\nauthor = {Selman, Bart and Kautz, Henry},\ntitle = {Knowledge compilation and theory approximation},\nyear = {1996},\nissue_date = {March 1996},\npublisher = {Association for Computing Machinery},\naddress = {New York, NY, USA},\nvolume = {43},\nnumber = {2},\nissn = {0004-5411},\nurl = {https://doi.org/10.1145/226643.226644},\ndoi = {10.1145/226643.226644},\nabstract = {Computational efficiency is a central concern in the design of knowledge representation systems. In order to obtain efficient systems, it has been suggested that one should limit the form of the statements in the knowledge base or use an incomplete inference mechanism. The former approach is often too restrictive for practical applications, whereas the latter leads to uncertainty about exactly what can and cannot be inferred from the knowledge base. We present a third alternative, in which knowledge given in a general representation language is translated (compiled) into a tractable form—allowing for efficient subsequent query answering.We show how propositional logical theories can be compiled into Horn theories that approximate the original information. The approximations bound the original theory from below and above in terms of logical strength. The procedures are extended to other tractable languages (for example, binary clauses) and to the first-order case. Finally, we demonstrate the generality of our approach by compiling concept descriptions in a general frame-based language into a tractable form.},\njournal = {J. ACM},\nmonth = mar,\npages = {193–224},\nnumpages = {32},\nkeywords = {Horn clauses, efficient reasoning methods, knowledge compilation, knowledge-base optimization, query evaluation, theory approximation}\n}",
+      "bibtex": "@article{Selman_1996,\nauthor = {Selman, Bart and Kautz, Henry},\ntitle = {Knowledge compilation and theory approximation},\nyear = {1996},\nissue_date = {March 1996},\npublisher = {Association for Computing Machinery},\naddress = {New York, NY, USA},\nvolume = {43},\nnumber = {2},\nissn = {0004-5411},\nurl = {https://doi.org/10.1145/226643.226644},\ndoi = {10.1145/226643.226644},\nabstract = {Computational efficiency is a central concern in the design of knowledge representation systems. In order to obtain efficient systems, it has been suggested that one should limit the form of the statements in the knowledge base or use an incomplete inference mechanism. The former approach is often too restrictive for practical applications, whereas the latter leads to uncertainty about exactly what can and cannot be inferred from the knowledge base. We present a third alternative, in which knowledge given in a general representation language is translated (compiled) into a tractable form—allowing for efficient subsequent query answering.We show how propositional logical theories can be compiled into Horn theories that approximate the original information. The approximations bound the original theory from below and above in terms of logical strength. The procedures are extended to other tractable languages (for example, binary clauses) and to the first-order case. Finally, we demonstrate the generality of our approach by compiling concept descriptions in a general frame-based language into a tractable form.},\njournal = {J. ACM},\nmonth = mar,\npages = {193–224},\nnumpages = {32},\nkeywords = {Horn clauses, efficient reasoning methods, knowledge compilation, knowledge-base optimization, query evaluation, theory approximation}\n}",
       "title": "B. Selman and H. Kautz, \"Knowledge compilation and theory approximation,\" J. ACM, vol. 43, pp. 193–224, 1996.",
       "href": "https://doi.org/10.1145/226643.226644"
     },
     {
       "id": "Cadoli_1997",
-      "bibtex": "@article{Cadoli1997ASO,\n  title={A survey on knowledge compilation},\n  author={Marco Cadoli and Francesco M. Donini},\n  journal={AI Communications},\n  year={1997},\n  volume={10},\n  pages={137 - 150},\n  url={https://api.semanticscholar.org/CorpusID:16746005}\n}",
+      "bibtex": "@article{Cadoli_1997,\n  title={A survey on knowledge compilation},\n  author={Marco Cadoli and Francesco M. Donini},\n  journal={AI Communications},\n  year={1997},\n  volume={10},\n  pages={137 - 150},\n  url={https://api.semanticscholar.org/CorpusID:16746005}\n}",
       "title": "Marco Cadoli and Francesco M. Donini, \"A survey on knowledge compilation,\" AI Communications, vol. 10, pp. 137 - 150, 1997.",
       "href": "https://api.semanticscholar.org/CorpusID:16746005"
     },
     {
       "id": "Wegener_1987",
-      "bibtex": "@book{Wegener1987-WEGTCO-3,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987}\n}",
+      "bibtex": "@book{Wegener_1987,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987}\n}",
       "title": "Ingo Wegener, \"The Complexity of Boolean Functions,\" 1987.",
       "href": "#"
     },
     {
       "id": "Amarilli_2018",
-      "bibtex": "@article{DBLP:journals/corr/abs-1811-02944,\n  author       = {Antoine Amarilli and\n                  Florent Capelli and\n                  Mika{\\\"{e}}l Monet and\n                  Pierre Senellart},\n  title        = {Connecting Knowledge Compilation Classes and Width Parameters},\n  journal      = {CoRR},\n  volume       = {abs/1811.02944},\n  year         = {2018},\n  url          = {http://arxiv.org/abs/1811.02944},\n  eprinttype    = {arXiv},\n  eprint       = {1811.02944},\n  timestamp    = {Thu, 22 Nov 2018 17:58:30 +0100},\n  biburl       = {https://dblp.org/rec/journals/corr/abs-1811-02944.bib},\n  bibsource    = {dblp computer science bibliography, https://dblp.org}\n}",
+      "bibtex": "@article{Amarilli_2018,\n  author       = {Antoine Amarilli and\n                  Florent Capelli and\n                  Mika{\\\"{e}}l Monet and\n                  Pierre Senellart},\n  title        = {Connecting Knowledge Compilation Classes and Width Parameters},\n  journal      = {CoRR},\n  volume       = {abs/1811.02944},\n  year         = {2018},\n  url          = {http://arxiv.org/abs/1811.02944},\n  eprinttype    = {arXiv},\n  eprint       = {1811.02944},\n  timestamp    = {Thu, 22 Nov 2018 17:58:30 +0100},\n  biburl       = {https://dblp.org/rec/journals/corr/abs-1811-02944.bib},\n  bibsource    = {dblp computer science bibliography, https://dblp.org}\n}",
       "title": "Antoine Amarilli, Florent Capelli, Mikaël Monet, and Pierre Senellart, \"Connecting Knowledge Compilation Classes and Width Parameters,\" CoRR, vol. abs/1811.02944, 2018.",
       "href": "http://arxiv.org/abs/1811.02944"
     },
     {
       "id": "Bova_2016",
-      "bibtex": "@inproceedings{bova:hal-03301001,\n  TITLE = {{Knowledge Compilation Meets Communication Complexity}},\n  AUTHOR = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  URL = {https://univ-artois.hal.science/hal-03301001},\n  BOOKTITLE = {{25th International Joint Conference on Artificial Intelligence (IJCAI'16)}},\n  ADDRESS = {New York, NY, USA, Unknown Region},\n  EDITOR = {Subbarao Kambhampati},\n  PUBLISHER = {{IJCAI/AAAI Press}},\n  PAGES = {1008--1014},\n  YEAR = {2016},\n  HAL_ID = {hal-03301001},\n  HAL_VERSION = {v1},\n}",
+      "bibtex": "@inproceedings{Bova_2016,\n  TITLE = {{Knowledge Compilation Meets Communication Complexity}},\n  AUTHOR = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  URL = {https://univ-artois.hal.science/hal-03301001},\n  BOOKTITLE = {{25th International Joint Conference on Artificial Intelligence (IJCAI'16)}},\n  ADDRESS = {New York, NY, USA, Unknown Region},\n  EDITOR = {Subbarao Kambhampati},\n  PUBLISHER = {{IJCAI/AAAI Press}},\n  PAGES = {1008--1014},\n  YEAR = {2016},\n  HAL_ID = {hal-03301001},\n  HAL_VERSION = {v1},\n}",
       "title": "S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, \"Knowledge Compilation Meets Communication Complexity,\" 25th International Joint Conference on Artificial Intelligence (IJCAI'16), pp. 1008–1014, 2016.",
       "href": "https://univ-artois.hal.science/hal-03301001"
     },
     {
       "id": "Beame_2013",
-      "bibtex": "@misc{beame2013modelcountingqueryexpressions,\n      title={Model Counting of Query Expressions: Limitations of Propositional Methods}, \n      author={Paul Beame and Jerry Li and Sudeepa Roy and Dan Suciu},\n      year={2013},\n      eprint={1312.4125},\n      archivePrefix={arXiv},\n      primaryClass={cs.DB},\n      url={https://arxiv.org/abs/1312.4125}, \n}",
+      "bibtex": "@misc{Beame_2013,\n      title={Model Counting of Query Expressions: Limitations of Propositional Methods}, \n      author={Paul Beame and Jerry Li and Sudeepa Roy and Dan Suciu},\n      year={2013},\n      eprint={1312.4125},\n      archivePrefix={arXiv},\n      primaryClass={cs.DB},\n      url={https://arxiv.org/abs/1312.4125}, \n}",
       "title": "Paul Beame, Jerry Li, Sudeepa Roy, and Dan Suciu, \"Model Counting of Query Expressions: Limitations of Propositional Methods,\" 2013.",
       "href": "https://arxiv.org/abs/1312.4125"
     },
     {
       "id": "Bollig_2018",
-      "bibtex": "@misc{bollig2018relativesuccinctnesssententialdecision,\n      title={On the Relative Succinctness of Sentential Decision Diagrams}, \n      author={Beate Bollig and Matthias Buttkus},\n      year={2018},\n      eprint={1802.04544},\n      archivePrefix={arXiv},\n      primaryClass={cs.CC},\n      url={https://arxiv.org/abs/1802.04544}, \n}",
+      "bibtex": "@misc{Bollig_2018,\n      title={On the Relative Succinctness of Sentential Decision Diagrams}, \n      author={Beate Bollig and Matthias Buttkus},\n      year={2018},\n      eprint={1802.04544},\n      archivePrefix={arXiv},\n      primaryClass={cs.CC},\n      url={https://arxiv.org/abs/1802.04544}, \n}",
       "title": "Beate Bollig and Matthias Buttkus, \"On the Relative Succinctness of Sentential Decision Diagrams,\" 2018.",
       "href": "https://arxiv.org/abs/1802.04544"
     },
     {
       "id": "Bodlaender_1993",
-      "bibtex": "@inproceedings{b588170f4b8b4a0c8fee5c49a6eaa621,\ntitle = \"A Linear Time Algorithm for Finding Tree-decompositions of Small Treewidth\",\nabstract = \"In this paper, we give, for constant k, a linear time algorithm, that given a graph G = (V, E), determines whether the treewidth of G is at most k, and if so, finds a treedecomposition of G with treewidth at most k. A consequence is that every minor-closed class of graphs that does not contain all planar graphs has a linear time recognition algorithm. \",\nkeywords = \"graph algorithms, graph minors, partial k-trees, pathwidth, treewidth\",\nauthor = \"Bodlaender, \\{Hans L.\\}\",\nyear = \"1993\",\ndoi = \"10.1145/167088.167161\",\nlanguage = \"English\",\nseries = \"STOC '93\",\npublisher = \"Association for Computing Machinery\",\npages = \"226--234\",\nbooktitle = \"Proceedings of the Twenty-fifth Annual ACM Symposium on Theory of Computing\",\n}",
+      "bibtex": "@inproceedings{Bodlaender_1993,\ntitle = \"A Linear Time Algorithm for Finding Tree-decompositions of Small Treewidth\",\nabstract = \"In this paper, we give, for constant k, a linear time algorithm, that given a graph G = (V, E), determines whether the treewidth of G is at most k, and if so, finds a treedecomposition of G with treewidth at most k. A consequence is that every minor-closed class of graphs that does not contain all planar graphs has a linear time recognition algorithm. \",\nkeywords = \"graph algorithms, graph minors, partial k-trees, pathwidth, treewidth\",\nauthor = \"Bodlaender, \\{Hans L.\\}\",\nyear = \"1993\",\ndoi = \"10.1145/167088.167161\",\nlanguage = \"English\",\nseries = \"STOC '93\",\npublisher = \"Association for Computing Machinery\",\npages = \"226--234\",\nbooktitle = \"Proceedings of the Twenty-fifth Annual ACM Symposium on Theory of Computing\",\n}",
       "title": "\\. L. Bodlaender, \"A Linear Time Algorithm for Finding Tree-decompositions of Small Treewidth,\" Proceedings of the Twenty-fifth Annual ACM Symposium on Theory of Computing, pp. 226–234, 1993.",
       "href": "https://doi.org/10.1145/167088.167161"
     },
     {
       "id": "Wegener_2000",
-      "bibtex": "@book{wegener2000branching,\n  title={Branching Programs and Binary Decision Diagrams: Theory and Applications},\n  author={Wegener, I.},\n  isbn={9780898719789},\n  lccn={00035749},\n  series={Discrete Mathematics and Applications},\n  url={https://books.google.com/books?id=xqqJj42ZoXcC},\n  year={2000},\n  publisher={Society for Industrial and Applied Mathematics}\n}",
+      "bibtex": "@book{Wegener_2000,\n  title={Branching Programs and Binary Decision Diagrams: Theory and Applications},\n  author={Wegener, I.},\n  isbn={9780898719789},\n  lccn={00035749},\n  series={Discrete Mathematics and Applications},\n  url={https://books.google.com/books?id=xqqJj42ZoXcC},\n  year={2000},\n  publisher={Society for Industrial and Applied Mathematics}\n}",
       "title": "I. Wegener, \"Branching Programs and Binary Decision Diagrams: Theory and Applications,\" 2000.",
       "href": "https://books.google.com/books?id=xqqJj42ZoXcC"
     },
     {
       "id": "Beame_2015",
-      "bibtex": "@misc{beame2015newlimitsknowledgecompilation,\n      title={New Limits for Knowledge Compilation and Applications to Exact Model Counting}, \n      author={Paul Beame and Vincent Liew},\n      year={2015},\n      eprint={1506.02639},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/1506.02639}, \n}",
+      "bibtex": "@misc{Beame_2015,\n      title={New Limits for Knowledge Compilation and Applications to Exact Model Counting}, \n      author={Paul Beame and Vincent Liew},\n      year={2015},\n      eprint={1506.02639},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/1506.02639}, \n}",
       "title": "Paul Beame and Vincent Liew, \"New Limits for Knowledge Compilation and Applications to Exact Model Counting,\" 2015.",
       "href": "https://arxiv.org/abs/1506.02639"
     },
     {
       "id": "Pipatsrisawat_2010",
-      "bibtex": "@phdthesis{pipatsrisawat2010reasoning,\n  author       = {Thammanit Pipatsrisawat},\n  title        = {Reasoning with Propositional Knowledge: Frameworks for Boolean Satisfiability and Knowledge Compilation},\n  school       = {University of California, Los Angeles},\n  year         = {2010},\n  address      = {Los Angeles, CA, USA},\n  note         = {PhD thesis},\n  url          = {https://escholarship.org/content/qt2vz8n06q/qt2vz8n06q.pdf}\n}",
+      "bibtex": "@phdthesis{Pipatsrisawat_2010,\n  author       = {Thammanit Pipatsrisawat},\n  title        = {Reasoning with Propositional Knowledge: Frameworks for Boolean Satisfiability and Knowledge Compilation},\n  school       = {University of California, Los Angeles},\n  year         = {2010},\n  address      = {Los Angeles, CA, USA},\n  note         = {PhD thesis},\n  url          = {https://escholarship.org/content/qt2vz8n06q/qt2vz8n06q.pdf}\n}",
       "title": "Thammanit Pipatsrisawat, \"Reasoning with Propositional Knowledge: Frameworks for Boolean Satisfiability and Knowledge Compilation,\" 2010.",
       "href": "https://escholarship.org/content/qt2vz8n06q/qt2vz8n06q.pdf"
     },
     {
       "id": "Capelli_2016",
-      "bibtex": "@phdthesis{capelli2016structural,\n  author       = {Florent Capelli},\n  title        = {Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation},\n  school       = {Universit{\\'e} Paris-Diderot (Paris 7), Sorbonne Paris Cit{\\'e}},\n  year         = {2016},\n  address      = {Paris, France},\n  note         = {PhD thesis},\n  url          = {https://florent.capelli.me/publi/these_capelli.pdf}\n}",
+      "bibtex": "@phdthesis{Capelli_2016,\n  author       = {Florent Capelli},\n  title        = {Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation},\n  school       = {Universit{\\'e} Paris-Diderot (Paris 7), Sorbonne Paris Cit{\\'e}},\n  year         = {2016},\n  address      = {Paris, France},\n  note         = {PhD thesis},\n  url          = {https://florent.capelli.me/publi/these_capelli.pdf}\n}",
       "title": "Florent Capelli, \"Structural Restrictions of CNF-formulas: Applications to Model Counting and Knowledge Compilation,\" 2016.",
       "href": "https://florent.capelli.me/publi/these_capelli.pdf"
     },
     {
       "id": "Darwiche_2011",
-      "bibtex": "@inproceedings{10.5555/2283516.2283536,\nauthor = {Darwiche, Adnan},\ntitle = {SDD: a new canonical representation of propositional knowledge bases},\nyear = {2011},\nisbn = {9781577355144},\npublisher = {AAAI Press},\nabstract = {We identify a new representation of propositional knowledge bases, the Sentential Decision Diagram (SDD), which is interesting for a number of reasons. First, it is canonical in the presence of additional properties that resemble reduction rules of OBDDs. Second, SDDs can be combined using any Boolean operator in polytime. Third, CNFs with n variables and treewidth w have canonical SDDs of size O(n2w), which is tighter than the bound on OBDDs based on pathwidth. Finally, every OBDD is an SDD. Hence, working with the latter does not preclude the former.},\nbooktitle = {Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two},\npages = {819–826},\nnumpages = {8},\nlocation = {Barcelona, Catalonia, Spain},\nseries = {IJCAI'11}\n}",
+      "bibtex": "@inproceedings{Darwiche_2011,\nauthor = {Darwiche, Adnan},\ntitle = {SDD: a new canonical representation of propositional knowledge bases},\nyear = {2011},\nisbn = {9781577355144},\npublisher = {AAAI Press},\nabstract = {We identify a new representation of propositional knowledge bases, the Sentential Decision Diagram (SDD), which is interesting for a number of reasons. First, it is canonical in the presence of additional properties that resemble reduction rules of OBDDs. Second, SDDs can be combined using any Boolean operator in polytime. Third, CNFs with n variables and treewidth w have canonical SDDs of size O(n2w), which is tighter than the bound on OBDDs based on pathwidth. Finally, every OBDD is an SDD. Hence, working with the latter does not preclude the former.},\nbooktitle = {Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two},\npages = {819–826},\nnumpages = {8},\nlocation = {Barcelona, Catalonia, Spain},\nseries = {IJCAI'11}\n}",
       "title": "A. Darwiche, \"SDD: a new canonical representation of propositional knowledge bases,\" Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two, pp. 819–826, 2011.",
       "href": "#"
     },
@@ -2690,7 +2690,7 @@
     },
     {
       "id": "Bova_2016_a",
-      "bibtex": "@article{Bova_2016, title={SDDs Are Exponentially More Succinct than OBDDs}, volume={30}, url={https://ojs.aaai.org/index.php/AAAI/article/view/10107}, DOI={10.1609/aaai.v30i1.10107}, abstractNote={ &lt;p&gt; Introduced by Darwiche (2011), sentential decision diagrams (SDDs) are essentially as tractable as ordered binary decision diagrams (OBDDs), but tend to be more succinct in practice. This makes SDDs a prominent representation language, with many applications in artificial intelligence and knowledge compilation. We prove that SDDs are more succinct than OBDDs also in theory, by constructing a family of boolean functions where each member has polynomial SDD size but exponential OBDD size. This exponential separation improves a quasipolynomial separation recently established by Razgon (2014), and settles an open problem in knowledge compilation (Darwiche, 2011). &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Bova, Simone}, year={2016}, month={Feb.} }",
+      "bibtex": "@article{Bova_2016_a, title={SDDs Are Exponentially More Succinct than OBDDs}, volume={30}, url={https://ojs.aaai.org/index.php/AAAI/article/view/10107}, DOI={10.1609/aaai.v30i1.10107}, abstractNote={ &lt;p&gt; Introduced by Darwiche (2011), sentential decision diagrams (SDDs) are essentially as tractable as ordered binary decision diagrams (OBDDs), but tend to be more succinct in practice. This makes SDDs a prominent representation language, with many applications in artificial intelligence and knowledge compilation. We prove that SDDs are more succinct than OBDDs also in theory, by constructing a family of boolean functions where each member has polynomial SDD size but exponential OBDD size. This exponential separation improves a quasipolynomial separation recently established by Razgon (2014), and settles an open problem in knowledge compilation (Darwiche, 2011). &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Bova, Simone}, year={2016}, month={Feb.} }",
       "title": "S. Bova, \"SDDs Are Exponentially More Succinct than OBDDs,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 30, 2016.",
       "href": "https://ojs.aaai.org/index.php/AAAI/article/view/10107"
     }

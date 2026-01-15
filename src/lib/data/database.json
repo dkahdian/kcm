@@ -7185,9 +7185,9 @@
     {
       "shortName": "Sauerhoff",
       "name": "Sauerhoff function",
-      "description": "?",
+      "description": "Let $g_n: \\{0,1\\}^{2n} \\to \\{0,1\\}$ be the function evaluating to 1 if and only if the sum of its inputs is divisible by 3. The Sauerhoff function $S_n: \\{0,1\\}^{n^2} \\to \\{0,1\\}$ is defined on the $n \\times n$ matrix $X = (x_{i,j})$ as $S_n(X) = R_n(X) \\vee C_n(X)$, where $R_n, C_n : \\{0,1\\}^{n^2} \\to \\{0,1\\}$ are defined by $R_n(X) = \\bigplus_{i=1}^n g_n(x_{i1},x_{i2},...,x_{in}$ and $C_n(X) = R_n(X^T)$.",
       "refs": [
-        "Amarilli_2018"
+        "Amarilli_2018", "Bova_2016" 
       ]
     }
   ],

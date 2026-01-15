@@ -8,12 +8,12 @@
  *    - Converts adjacency matrix to edge list
  *    - Generates LaTeX with claims organized by reference (sorted by frequency)
  *    - Claims are auto-generated with STRICT canonical format
- *    - Proof sketches are editable
+ *    - Descriptions are editable
  * 
  * 2. LaTeX → JSON (--to-json):
  *    - Parses LaTeX file with STRICT canonical format requirements
- *    - Extracts edges from claims and proof sketches
- *    - Proof sketch content is copied directly into description field
+ *    - Extracts edges from claims and descriptions
+ *    - Description content is copied directly into description field
  *    - Updates adjacency matrix in database.json
  *    - Runs refresh-derived.ts to propagate changes
  * 
@@ -445,9 +445,9 @@ function buildClaimTextWithEffectiveStatus(edge: Edge): string {
  *   \begin{claim}
  *   $LANG1$ TRANSFORMATION_TYPE $LANG2$ (unless CAVEAT)? \citet{REFS}?
  *   \end{claim}
- *   \begin{proofsketch}
+ *   \begin{claimdescription}
  *   DESCRIPTION (EDITABLE)
- *   \end{proofsketch}
+ *   \end{claimdescription}
  * 
  * For partially derived edges (derived: false but one sub-description has derived: true),
  * only includes the non-derived proof content with adjusted status.
@@ -476,19 +476,19 @@ function generateClaim(edge: Edge): string {
       }
     } else {
       // Both have same derivation status - use full description
-      proofSketch = edge.description || '(Proof sketch needed)';
+      proofSketch = edge.description || '(Description needed)';
     }
   } else {
     // No sub-descriptions or only one - use full description
-    proofSketch = edge.description || '(Proof sketch needed)';
+    proofSketch = edge.description || '(Description needed)';
   }
   
   return `\\begin{claim}
 ${claimText}
 \\end{claim}
-\\begin{proofsketch}
+\\begin{claimdescription}
 ${proofSketch}
-\\end{proofsketch}
+\\end{claimdescription}
 `;
 }
 
@@ -563,13 +563,13 @@ function generateLatex(database: DatabaseSchema): string {
   
   // Build full document
   const preamble = `% =============================
-% Knowledge Compilation Map - Proof Sketches
+% Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\\begin{claim}...\\end{claim}) are auto-generated. Do NOT edit.
-% - Proof sketches (\\begin{proofsketch}...\\end{proofsketch}) are EDITABLE.
+% - Descriptions (\\begin{claimdescription}...\\end{claimdescription}) are EDITABLE.
 % - Lines starting with "% [DERIVED" indicate auto-propagated edges.
 % - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json <this-file>
 % =============================
@@ -608,10 +608,10 @@ function generateLatex(database: DatabaseSchema): string {
 \\theoremstyle{remark}
 \\newtheorem{remark}[theorem]{Remark}
 
-% -------- Proof sketch environment --------
-\\newenvironment{proofsketch}{%
-  \\par\\noindent\\textit{Proof sketch.} \\ignorespaces
-}{\\hfill$\\square$\\par}
+% -------- Description environment (just indented text, no prefix) --------
+\\newenvironment{claimdescription}{%
+  \\par\\noindent\\ignorespaces
+}{\\par}
 
 % -------- Handy macros --------
 \\newcommand{\\R}{\\mathbb{R}}
@@ -619,7 +619,7 @@ function generateLatex(database: DatabaseSchema): string {
 \\newcommand{\\eps}{\\varepsilon}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: Proof Sketches}
+\\title{Knowledge Compilation Map: Claims}
 \\date{\\today}
 
 \\begin{document}
@@ -788,23 +788,23 @@ function parseLatex(latexContent: string): ParsedClaim[] {
       }
       i++; // Skip \end{claim}
       
-      // Find and collect proof sketch
+      // Find and collect description content
       let proofContent = '';
-      while (i < lines.length && !lines[i].includes('\\begin{proofsketch}')) {
-        // Skip empty lines and comments between claim and proofsketch
+      while (i < lines.length && !lines[i].includes('\\begin{claimdescription}')) {
+        // Skip empty lines and comments between claim and description
         if (lines[i].trim() && !lines[i].trim().startsWith('%')) {
-          console.warn(`Unexpected content between claim and proofsketch: ${lines[i]}`);
+          console.warn(`Unexpected content between claim and description: ${lines[i]}`);
         }
         i++;
       }
       
-      if (i < lines.length && lines[i].includes('\\begin{proofsketch}')) {
-        i++; // Skip \begin{proofsketch}
-        while (i < lines.length && !lines[i].includes('\\end{proofsketch}')) {
+      if (i < lines.length && lines[i].includes('\\begin{claimdescription}')) {
+        i++; // Skip \begin{claimdescription}
+        while (i < lines.length && !lines[i].includes('\\end{claimdescription}')) {
           proofContent += lines[i] + '\n';
           i++;
         }
-        i++; // Skip \end{proofsketch}
+        i++; // Skip \end{claimdescription}
       }
       
       // Parse the claim with strict validation
@@ -845,8 +845,8 @@ function buildNameToIdMap(languages: KCLanguage[]): Map<string, string> {
 /**
  * Update database from parsed claims.
  * Only non-derived claims are updated.
- * The proofSketch is copied directly to the description field.
- * References are taken from the claim line (not extracted from proof sketch).
+ * The description is copied directly to the description field.
+ * References, status, and caveat are taken from the claim line.
  */
 function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
   const nameToId = buildNameToIdMap(database.languages);
@@ -897,8 +897,25 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
       continue;
     }
     
-    // Only update the description field - preserve everything else
+    // Update description field
     existing.description = claim.proofSketch;
+    
+    // Update references from claim line (this was missing before!)
+    if (claim.refs.length > 0) {
+      existing.refs = claim.refs;
+    }
+    
+    // Update caveat from claim line
+    if (claim.caveat) {
+      existing.caveat = claim.caveat;
+    } else if (existing.caveat) {
+      // If caveat was removed from LaTeX, remove it from DB too
+      delete existing.caveat;
+    }
+    
+    // Note: We don't update the status because it's auto-generated in LaTeX
+    // and changing it would break the bijection. Status changes should be
+    // made directly in the database.
     
     updated++;
   }

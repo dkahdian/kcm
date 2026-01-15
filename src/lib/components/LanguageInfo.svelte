@@ -21,14 +21,19 @@
   let {
     selectedLanguage,
     graphData,
+    filteredGraphData,
     onEdgeSelect,
     viewMode = 'graph' as ViewMode
   }: {
     selectedLanguage: KCLanguage | null;
     graphData: GraphData | FilteredGraphData;
+    filteredGraphData?: GraphData | FilteredGraphData;
     onEdgeSelect: (edge: SelectedEdge) => void;
     viewMode?: ViewMode;
   } = $props();
+
+  // Use filteredGraphData for the legend if provided, otherwise fall back to graphData
+  const legendGraphData = $derived(filteredGraphData ?? graphData);
   
   // Combine all operations for display
   const KC_OPERATIONS = { ...QUERIES, ...TRANSFORMATIONS };  // Resolve the properties to get full operation entries
@@ -462,7 +467,7 @@
       </div>
     {/if}
     
-    <DynamicLegend graphData={graphData} selectedNode={selectedLanguage} viewMode={viewMode} />
+    <DynamicLegend graphData={legendGraphData} selectedNode={selectedLanguage} viewMode={viewMode} />
   </div>
 </div>
   

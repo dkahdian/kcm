@@ -7193,7 +7193,7 @@
     {
       "shortName": "JS",
       "name": "Jukna-Schnitger function",
-      "description": "Let $K_n$ be the set of all 2-element subsets of $\\{1,...,n\\}$. Let the graph $G \\subset K_n$ be incoded by the $\\{0,1\\}$ assignment of $K_n$ mapping a variable to 1 if and only if it is in the edge set of the $G$. A triangle is defined as the edges $\\{i, j\\}, \\{j, k\\}, \\{k, i\\}$, where $i, j, k$ are distinct. Let $T_n$ be the set of all triangles on $n$ vertices. Let $JS_n^A: \\{0,1\\}^{K_n}\\to\\{0,1\\}$ be the function accepting exactly those graphs over $\\{1,...,n\\}$ that avoid all triangles in $A$. \\citet{Jukna_2002} show that for every $n$ there exists an $A_n \\subset $T_n$ of size $O(n^2)$ so that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\\Omega(n^2)}$. Call this function $JS_n$ the Jukna-Schnitger function.",
+      "description": "Let $K_n$ be the set of all 2-element subsets of $\\{1,...,n\\}$. Let the graph $G \\subset K_n$ be encoded by the $\\{0,1\\}$ assignment of $K_n$ mapping a variable to 1 if and only if it is in the edge set of $G$. A triangle is defined as the edges $\\{i, j\\}, \\{j, k\\}, \\{k, i\\}$, where $i, j, k$ are distinct. Let $T_n$ be the set of all triangles on $n$ vertices. Let $JS_n^A: \\{0,1\\}^{K_n}\\to\\{0,1\\}$ be the function accepting exactly those graphs over $\\{1,...,n\\}$ that avoid all triangles in $A$. \\citet{Jukna_2002} show that for every $n$ there exists an $A_n \\subset T_n$ of size $O(n^2)$ so that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\\Omega(n^2)}$. Call this function $JS_n$ the Jukna-Schnitger function.",
       "refs": [
         "Jukna_2002"
       ]

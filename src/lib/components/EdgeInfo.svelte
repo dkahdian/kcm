@@ -7,11 +7,15 @@
   
   type ViewMode = 'graph' | 'matrix';
   
-  let { selectedEdge, graphData, viewMode = 'graph' as ViewMode }: { 
+  let { selectedEdge, graphData, filteredGraphData, viewMode = 'graph' as ViewMode }: { 
     selectedEdge: SelectedEdge | null; 
     graphData: GraphData | FilteredGraphData;
+    filteredGraphData?: GraphData | FilteredGraphData;
     viewMode?: ViewMode;
   } = $props();
+
+  // Use filteredGraphData for the legend if provided, otherwise fall back to graphData
+  const legendGraphData = $derived(filteredGraphData ?? graphData);
   
   let referencesSection: HTMLElement | null = $state(null);
   let copiedRefId: string | null = $state(null);
@@ -278,7 +282,7 @@
         </div>
       </div>
       
-      <DynamicLegend graphData={graphData} selectedEdge={selectedEdge} viewMode={viewMode} />
+      <DynamicLegend graphData={legendGraphData} selectedEdge={selectedEdge} viewMode={viewMode} />
     </div>
   </div>
 {/if}

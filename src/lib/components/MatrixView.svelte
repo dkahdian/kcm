@@ -290,7 +290,7 @@
                       onclick={() => handleCellClick(rowLanguage.id, colLanguage.id, relation)}
                       title={getCellTitle(rowLanguage.language, colLanguage.language, relation)}
                     >
-                      <span class="cell-short"><MathText text={STATUS_SHORT[relation.status]} className="inline" /></span>
+                      <span class="cell-short"><MathText text={STATUS_SHORT[relation.status]} className="inline" />{#if relation.caveat}*{/if}</span>
                     </button>
                   </td>
                 {:else}

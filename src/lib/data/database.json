@@ -2711,6 +2711,12 @@
       "bibtex": "@misc{Vinall-Smeeth_2024,\n      title={Structured d-DNNF Is Not Closed Under Negation}, \n      author={Harry Vinall-Smeeth},\n      year={2024},\n      eprint={2402.04832},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/2402.04832}, \n}",
       "title": "Harry Vinall-Smeeth, \"Structured d-DNNF Is Not Closed Under Negation,\" 2024.",
       "href": "https://arxiv.org/abs/2402.04832"
+    },
+    {
+      "id": "Kaleyski_2016",
+      "bibtex": "@mastersthesis{Kaleyski_2016,\n  author       = {Kaleyski, Nikolay Stoyanov},\n  title        = {Boolean methods in knowledge compilation},\n  school       = {Charles University, Faculty of Mathematics and Physics},\n  year         = {2016},\n  address      = {Prague, Czech Republic},\n  type         = {Master’s thesis},\n  keywords     = {Boolean functions, knowledge compilation, PI, MODS, prime implicants},\n  note         = {Master’s thesis, Department of Theoretical Computer Science and Mathematical Logic},\n  url          = {https://dspace.cuni.cz/bitstream/handle/20.500.11956/83080/DPTX_2014_2_11320_0_450653_0_169085.pdf?sequence=1}\n}",
+      "title": "N. S. Kaleyski, \"Boolean methods in knowledge compilation,\" 2016.",
+      "href": "https://dspace.cuni.cz/bitstream/handle/20.500.11956/83080/DPTX_2014_2_11320_0_450653_0_169085.pdf?sequence=1"
     }
   ],
   "tags": {
@@ -4465,10 +4471,10 @@
           "derived": false
         },
         {
-          "status": "unknown-both",
-          "description": "This is listed as an open problem in the Knowledge Compilation Map (2002).",
+          "status": "no-poly-unknown-quasi",
+          "description": "Corollary 2 of \\citet{Kaleyski_2016} shows that for some boolean formula $\\psi_i$, a $MODS$ representation of $\\psi_i$ is $\\Theta(2^{2i})$. Proposition 6 of \\citet{Kaleyski_2016} shows that the $PI$ representation of the same $\\psi_i$ is $\\Omega(2^{\\frac{(i-1)^2-1}{4}})$, which is not polynomial in $2^{2i}$. Thus, no polynomial transformation exists.\n\nChapter 4 of \\citet{Kaleyski_2016} demonstrates that a similar analysis is insufficient to produce an exponential separation of $PI$ and $MODS$, so whether such a separation exists is still an open problem.",
           "refs": [
-            "Darwiche_2002"
+            "Kaleyski_2016"
           ],
           "derived": false
         },

@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-01-15T22:52:36.490Z
+% Generated: 2026-01-17T01:09:51.315Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -546,6 +546,18 @@ $d$-$DNNF$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Darwiche_
 \end{claim}
 \begin{claimdescription}
 $d$-$DNNF$s can polynomially represent the disjunction of two functions with conflicting variable orders, which forces $FBDD$s to grow exponentially to track the state of both orders within a single "read-once" path.
+\end{claimdescription}
+
+
+% =============================
+\section{Harry Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation," 2024.}
+% Reference ID: Vinall-Smeeth_2024
+% =============================
+\begin{claim}
+$d$-$SDNNF$ is not polynomial-time transformable to $SDD$ \citet{Vinall-Smeeth_2024}
+\end{claim}
+\begin{claimdescription}
+Theorem 1 of \citet{Vinall-Smeeth_2024} proved that there exists a family of functions $f_n$ with $d$-$SDNNF$ of size $n$ but any $SDD$ representing $f_n$ has size $n^{\Omega(log(n))}$
 \end{claimdescription}
 
 

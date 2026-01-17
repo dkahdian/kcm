@@ -268,7 +268,7 @@
       {:else}
         <!-- Matrix view: show LaTeX notation with descriptions -->
         <p class="text-gray-600 text-sm mb-4">
-          For (Row A, Col B), from language A to B:
+          For (Row A, Col B), A ___ B implies ________ from language B to A:
         </p>
         <div class="legend-items matrix-legend">
           {#each visibleEdgeTypes as edge (edge.status)}

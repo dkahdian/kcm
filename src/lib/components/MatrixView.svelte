@@ -73,12 +73,14 @@
   const visibleEdgeIds = $derived.by<Set<string> | null>(() => ('visibleEdgeIds' in graphData ? graphData.visibleEdgeIds : null));
 
   function getRelation(
-    source: MatrixLanguageEntry,
-    target: MatrixLanguageEntry
+    rowLanguage: MatrixLanguageEntry,
+    colLanguage: MatrixLanguageEntry
   ): DirectedSuccinctnessRelation | null {
-    if (source.id === target.id) return null;
+    // In transposed view: rows = targets, columns = sources
+    // So cell (row, col) shows relation from col → row
+    if (rowLanguage.id === colLanguage.id) return null;
     const { adjacencyMatrix } = graphData;
-    const relation = adjacencyMatrix.matrix[source.matrixIndex]?.[target.matrixIndex] ?? null;
+    const relation = adjacencyMatrix.matrix[colLanguage.matrixIndex]?.[rowLanguage.matrixIndex] ?? null;
     return relation;
   }
 
@@ -155,10 +157,11 @@
     colLang: KCLanguage,
     relation: DirectedSuccinctnessRelation | null
   ): string {
-    if (!relation) return `${rowLang.name} → ${colLang.name}: no relation`;
+    // In transposed view: cell (row, col) shows relation from col → row
+    if (!relation) return `${colLang.name} → ${rowLang.name}: no relation`;
     const label = STATUS_LABELS[relation.status];
     const refs = relation.refs?.length ? ` · refs: ${relation.refs.join(', ')}` : '';
-    return `${rowLang.name} → ${colLang.name}: ${label}${refs}`;
+    return `${colLang.name} → ${rowLang.name}: ${label}${refs}`;
   }
 
   // Dynamic cell sizing
@@ -286,8 +289,8 @@
                   <td>
                     <button
                       type="button"
-                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${relation.dimmed ? 'is-dimmed' : ''} ${relation.explicit ? 'is-explicit' : ''} ${isEdgeSelected(rowLanguage.id, colLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(rowLanguage.id, colLanguage.id) ? 'is-complement' : ''}`}
-                      onclick={() => handleCellClick(rowLanguage.id, colLanguage.id, relation)}
+                      class={`matrix-cell matrix-cell--button ${STATUS_CLASSES[relation.status]} ${relation.dimmed ? 'is-dimmed' : ''} ${relation.explicit ? 'is-explicit' : ''} ${isEdgeSelected(colLanguage.id, rowLanguage.id) ? 'is-selected' : ''} ${isComplementSelected(colLanguage.id, rowLanguage.id) ? 'is-complement' : ''}`}
+                      onclick={() => handleCellClick(colLanguage.id, rowLanguage.id, relation)}
                       title={getCellTitle(rowLanguage.language, colLanguage.language, relation)}
                     >
                       <span class="cell-short"><MathText text={STATUS_SHORT[relation.status]} className="inline" />{#if relation.caveat}*{/if}</span>

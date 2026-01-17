@@ -2705,6 +2705,12 @@
       "bibtex": "@article{Jukna_2002, title={Triangle-Freeness is Hard to Detect}, volume={11}, DOI={10.1017/S0963548302005333}, number={6}, journal={Combinatorics, Probability and Computing}, author={Jukna, S. and Schnitger, G.}, year={2002}, pages={549–569}}",
       "title": "S. Jukna and G. Schnitger, \"Triangle-Freeness is Hard to Detect,\" Combinatorics, Probability and Computing, vol. 11, pp. 549–569, 2002.",
       "href": "https://doi.org/10.1017/S0963548302005333"
+    },
+    {
+      "id": "Vinall-Smeeth_2024",
+      "bibtex": "@misc{Vinall-Smeeth_2024,\n      title={Structured d-DNNF Is Not Closed Under Negation}, \n      author={Harry Vinall-Smeeth},\n      year={2024},\n      eprint={2402.04832},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/2402.04832}, \n}",
+      "title": "Harry Vinall-Smeeth, \"Structured d-DNNF Is Not Closed Under Negation,\" 2024.",
+      "href": "https://arxiv.org/abs/2402.04832"
     }
   ],
   "tags": {
@@ -3514,7 +3520,14 @@
           "derived": true,
           "description": "PI transforms to CNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF transforms to PI in quasipolynomial time, then d-SDNNF transforms to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot transform to CNF in quasipolynomial time \\citet{Darwiche_2002,Amarilli_2018}."
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "description": "Theorem 1 of \\citet{Vinall-Smeeth_2024} proved that there exists a family of functions $f_n$ with $d$-$SDNNF$ of size $n$ but any $SDD$ representing $f_n$ has size $n^{\\Omega(log(n))}$",
+          "refs": [
+            "Vinall-Smeeth_2024"
+          ],
+          "derived": false
+        },
         null,
         {
           "status": "poly",
@@ -7123,37 +7136,7 @@
         null,
         null
       ]
-    ],
-    "indexByLanguage": {
-      "lang_8f666aa0": 0,
-      "lang_bb65ddb5": 1,
-      "lang_89649e36": 2,
-      "lang_83e3b023": 3,
-      "lang_6c130090": 4,
-      "lang_ea9b5299": 5,
-      "lang_91f812d0": 6,
-      "lang_4c204bf3": 7,
-      "lang_3bebcab7": 8,
-      "lang_684b1ca7": 9,
-      "lang_6ae90adc": 10,
-      "lang_e02902d0": 11,
-      "lang_1df07cc3": 12,
-      "lang_5bf00851": 13,
-      "lang_d24efe0e": 14,
-      "lang_d69995dd": 15,
-      "lang_27fffab2": 16,
-      "lang_1afefbe2": 17,
-      "lang_9c84a267": 18,
-      "lang_b13b0d78": 19,
-      "lang_3c803ba1": 20,
-      "lang_4e62a038": 21,
-      "lang_c2df8c2b": 22,
-      "lang_b9d72a7c": 23,
-      "lang_981b62f0": 24,
-      "lang_0f27d539": 25,
-      "lang_4ae03bc8": 26,
-      "lang_82fa749e": 27
-    }
+    ]
   },
   "separatingFunctions": [
     {

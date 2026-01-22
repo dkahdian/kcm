@@ -745,8 +745,6 @@ function parseCanonicalClaim(
     caveat,
     proofSketch: proofSketch.trim(),  // Copy directly - this is the editable part
     derived,
-    edgeFromId,
-    edgeToId,
     refs  // References extracted from the claim line
   };
 }

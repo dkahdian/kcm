@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-01-22T22:58:53.766Z
+% Generated: 2026-01-22T23:11:56.513Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -531,6 +531,25 @@ The Quine-McCluskey algorithm generates an $IP$ formula in polynomial time.
 
 
 % =============================
+\section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
+% Reference ID: Van den Broeck_2015
+% =============================
+\begin{claim}
+$cSDD$ is polynomial-time transformable to $SDD$ \citet{Van den Broeck_2015}
+\end{claim}
+\begin{claimdescription}
+As defined by \citet{Van den Broeck_2015}, $cSDD$ is the compressed subset of $SDD$, so transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$SDD$ is polynomial-time transformable to $d$-$SDNNF$ \citet{Van den Broeck_2015}
+\end{claim}
+\begin{claimdescription}
+$SDD$ is a strict subset of $d$-$SDNNF$.
+\end{claimdescription}
+
+
+% =============================
 \section{Adnan Darwiche, "On the tractable counting of theory models and its application ...}
 % Reference ID: Darwiche_2000
 % =============================
@@ -589,18 +608,6 @@ $MODS$ is not polynomial-time transformable to $PI$ \citet{Kaleyski_2016}
 Corollary 2 of \citet{Kaleyski_2016} shows that for some boolean formula $\psi_i$, a $MODS$ representation of $\psi_i$ is $\Theta(2^{2i})$. Proposition 6 of \citet{Kaleyski_2016} shows that the $PI$ representation of the same $\psi_i$ is $\Omega(2^{\frac{(i-1)^2-1}{4}})$, which is not polynomial in $2^{2i}$. Thus, no polynomial transformation exists.
 
 Chapter 4 of \citet{Kaleyski_2016} demonstrates that a similar analysis is insufficient to produce an exponential separation of $PI$ and $MODS$, so whether such a separation exists is still an open problem.
-\end{claimdescription}
-
-
-% =============================
-\section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
-% Reference ID: Van den Broeck_2015
-% =============================
-\begin{claim}
-$SDD$ is polynomial-time transformable to $d$-$SDNNF$ \citet{Van den Broeck_2015}
-\end{claim}
-\begin{claimdescription}
-$SDD$ is a strict subset of $d$-$SDNNF$.
 \end{claimdescription}
 
 

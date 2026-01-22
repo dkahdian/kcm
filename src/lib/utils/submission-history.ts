@@ -51,7 +51,7 @@ function isReferenceLike(value: unknown): value is ReferenceToAdd {
 function cloneLanguages(items: LanguageToAdd[]): LanguageToAdd[] {
   return items.map((item) => ({
     ...item,
-    descriptionRefs: [...item.descriptionRefs],
+    definitionRefs: [...item.definitionRefs],
     queries: Object.fromEntries(
       Object.entries(item.queries).map(([code, support]) => [code, { ...support, refs: [...support.refs] }])
     ),

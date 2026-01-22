@@ -213,7 +213,7 @@ function validateLanguage(
     }
   }
 
-  ensureRefsExist(language.descriptionRefs, `Language "${language.name}" descriptionRefs`, globalRefs, errors);
+  ensureRefsExist(language.definitionRefs, `Language "${language.name}" definitionRefs`, globalRefs, errors);
 
   validateOperationMap(language.name, 'query', language.properties?.queries, globalRefs, errors);
   validateOperationMap(language.name, 'transformation', language.properties?.transformations, globalRefs, errors);

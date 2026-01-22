@@ -1,8 +1,6 @@
 {
   "languages": [
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "ANF",
       "properties": {
@@ -92,13 +90,13 @@
         }
       },
       "tags": [],
-      "id": "lang_8f666aa0"
+      "id": "lang_8f666aa0",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "BDD",
       "fullName": "Binary Decision Diagram",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -170,13 +168,13 @@
         }
       },
       "tags": [],
-      "id": "lang_bb65ddb5"
+      "id": "lang_bb65ddb5",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "CNF",
       "fullName": "Conjunctive Normal Form",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -264,11 +262,11 @@
         }
       },
       "tags": [],
-      "id": "lang_89649e36"
+      "id": "lang_89649e36",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "cSDD",
       "properties": {
@@ -358,13 +356,13 @@
         }
       },
       "tags": [],
-      "id": "lang_83e3b023"
+      "id": "lang_83e3b023",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "d-DNNF",
       "fullName": "Deterministic Decomposable Negation Normal Form",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -452,11 +450,11 @@
         }
       },
       "tags": [],
-      "id": "lang_6c130090"
+      "id": "lang_6c130090",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "d-SDNNF",
       "properties": {
@@ -546,11 +544,11 @@
         }
       },
       "tags": [],
-      "id": "lang_ea9b5299"
+      "id": "lang_ea9b5299",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "d-SDNNF$_T$",
       "properties": {
@@ -640,13 +638,13 @@
         }
       },
       "tags": [],
-      "id": "lang_91f812d0"
+      "id": "lang_91f812d0",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "DNF",
       "fullName": "Disjunctive Normal Form",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -734,13 +732,13 @@
         }
       },
       "tags": [],
-      "id": "lang_4c204bf3"
+      "id": "lang_4c204bf3",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "DNNF",
       "fullName": "Decomposable Negation Normal Form",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -812,13 +810,13 @@
         }
       },
       "tags": [],
-      "id": "lang_3bebcab7"
+      "id": "lang_3bebcab7",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "FBDD",
       "fullName": "Free Binary Decision Diagram",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -906,13 +904,13 @@
         }
       },
       "tags": [],
-      "id": "lang_684b1ca7"
+      "id": "lang_684b1ca7",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "IP",
       "fullName": "Prime Implicants",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -1000,13 +998,13 @@
         }
       },
       "tags": [],
-      "id": "lang_6ae90adc"
+      "id": "lang_6ae90adc",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "MODS",
       "fullName": "Models",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -1094,11 +1092,11 @@
         }
       },
       "tags": [],
-      "id": "lang_e02902d0"
+      "id": "lang_e02902d0",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "nFBDD",
       "properties": {
@@ -1188,13 +1186,13 @@
         }
       },
       "tags": [],
-      "id": "lang_1df07cc3"
+      "id": "lang_1df07cc3",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "NNF",
       "fullName": "Negation Normal Form",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -1266,11 +1264,11 @@
         }
       },
       "tags": [],
-      "id": "lang_5bf00851"
+      "id": "lang_5bf00851",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "nOBDD",
       "properties": {
@@ -1360,13 +1358,11 @@
         }
       },
       "tags": [],
-      "id": "lang_d24efe0e"
+      "id": "lang_d24efe0e",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "Ordered Binary Decision Diagram with respect to a fixed variable order",
-      "descriptionRefs": [
-        "Bryant_1986"
-      ],
       "fullName": "Ordered Binary Decision Diagram (wrt a fixed variable order)",
       "name": "OBDD$_<$",
       "properties": {
@@ -1488,13 +1484,15 @@
         }
       },
       "tags": [],
-      "id": "lang_d69995dd"
+      "id": "lang_d69995dd",
+      "definition": "Ordered Binary Decision Diagram with respect to a fixed variable order",
+      "definitionRefs": [
+        "Bryant_1986"
+      ]
     },
     {
       "name": "PI",
       "fullName": "Prime Implicates",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -1582,11 +1580,11 @@
         }
       },
       "tags": [],
-      "id": "lang_27fffab2"
+      "id": "lang_27fffab2",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "SDD",
       "properties": {
@@ -1676,11 +1674,11 @@
         }
       },
       "tags": [],
-      "id": "lang_1afefbe2"
+      "id": "lang_1afefbe2",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "SDD$_T$",
       "properties": {
@@ -1770,11 +1768,11 @@
         }
       },
       "tags": [],
-      "id": "lang_9c84a267"
+      "id": "lang_9c84a267",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "SDNNF",
       "properties": {
@@ -1864,11 +1862,11 @@
         }
       },
       "tags": [],
-      "id": "lang_b13b0d78"
+      "id": "lang_b13b0d78",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "SDNNF$_T$",
       "properties": {
@@ -1942,11 +1940,11 @@
         }
       },
       "tags": [],
-      "id": "lang_3c803ba1"
+      "id": "lang_3c803ba1",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "uFBDD",
       "properties": {
@@ -2036,11 +2034,11 @@
         }
       },
       "tags": [],
-      "id": "lang_4e62a038"
+      "id": "lang_4e62a038",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
-      "description": "-",
-      "descriptionRefs": [],
       "fullName": "-",
       "name": "uOBDD",
       "properties": {
@@ -2130,15 +2128,13 @@
         }
       },
       "tags": [],
-      "id": "lang_c2df8c2b"
+      "id": "lang_c2df8c2b",
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "name": "OBDD",
       "fullName": "Ordered Binary Decision Diagram",
-      "description": "-",
-      "descriptionRefs": [
-        "Darwiche_2002"
-      ],
       "properties": {
         "queries": {
           "CE": {
@@ -2226,14 +2222,16 @@
         }
       },
       "tags": [],
-      "id": "lang_b9d72a7c"
+      "id": "lang_b9d72a7c",
+      "definition": "-",
+      "definitionRefs": [
+        "Darwiche_2002"
+      ]
     },
     {
       "id": "lang_981b62f0",
       "name": "dec-DNNF",
       "fullName": "-",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -2320,14 +2318,14 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "id": "lang_0f27d539",
       "name": "dec-SDNNF",
       "fullName": "-",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -2414,14 +2412,14 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "id": "lang_4ae03bc8",
       "name": "dec-SDNNF$_<$",
       "fullName": "-",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -2492,14 +2490,14 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "definition": "-",
+      "definitionRefs": []
     },
     {
       "id": "lang_82fa749e",
       "name": "cSDD$_T$",
       "fullName": "-",
-      "description": "-",
-      "descriptionRefs": [],
       "properties": {
         "queries": {
           "CE": {
@@ -2570,7 +2568,9 @@
           }
         }
       },
-      "tags": []
+      "tags": [],
+      "definition": "-",
+      "definitionRefs": []
     }
   ],
   "references": [

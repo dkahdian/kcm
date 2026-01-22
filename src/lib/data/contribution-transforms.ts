@@ -50,7 +50,7 @@ function convertToKCLanguage(
   referenceLookup: Map<string, KCReference>
 ): KCLanguage {
   const references: KCReference[] = [];
-  for (const refId of language.descriptionRefs) {
+  for (const refId of language.definitionRefs) {
     const ref = referenceLookup.get(refId);
     if (ref) {
       references.push(ref);
@@ -61,8 +61,8 @@ function convertToKCLanguage(
     id: generateLanguageId(language.name),
     name: language.name,
     fullName: language.fullName,
-    description: language.description,
-    descriptionRefs: [...language.descriptionRefs],
+    definition: language.definition,
+    definitionRefs: [...language.definitionRefs],
     properties: {
       queries: language.queries,
       transformations: language.transformations

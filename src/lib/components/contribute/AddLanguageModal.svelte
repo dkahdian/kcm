@@ -4,8 +4,8 @@
   type Language = {
     name: string;
     fullName: string;
-    description: string;
-    descriptionRefs: string[];
+    definition: string;
+    definitionRefs: string[];
     queries: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
     transformations: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
     tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
@@ -52,8 +52,8 @@
 
   let name = $state('');
   let fullName = $state('');
-  let description = $state('');
-  let descriptionRefs = $state<string[]>([]);
+  let definition = $state('');
+  let definitionRefs = $state<string[]>([]);
   let querySupport = $state<Record<string, { complexity: string; caveat?: string; refs: string[] }>>({});
   let transformationSupport = $state<Record<string, { complexity: string; caveat?: string; refs: string[] }>>({});
   let selectedTags = $state<Tag[]>([]);
@@ -65,8 +65,8 @@
     if (isOpen && isEdit && initialData) {
       name = initialData.name;
       fullName = initialData.fullName;
-      description = initialData.description;
-      descriptionRefs = [...initialData.descriptionRefs];
+      definition = initialData.definition;
+      definitionRefs = [...initialData.definitionRefs];
       querySupport = { ...initialData.queries };
       transformationSupport = { ...initialData.transformations };
       selectedTags = [...initialData.tags];
@@ -78,8 +78,8 @@
   function resetForm() {
     name = '';
     fullName = '';
-    description = '';
-    descriptionRefs = [];
+    definition = '';
+    definitionRefs = [];
     querySupport = {};
     transformationSupport = {};
     selectedTags = [];
@@ -90,7 +90,7 @@
   }
 
   async function handleSubmit() {
-    if (!name.trim() || !fullName.trim() || !description.trim()) {
+    if (!name.trim() || !fullName.trim() || !definition.trim()) {
       errorMessage = 'Please fill out all required fields.';
       return;
     }
@@ -99,8 +99,8 @@
       const result = await onAdd({
         name: name.trim(),
         fullName: fullName.trim(),
-        description: description.trim(),
-        descriptionRefs,
+        definition: definition.trim(),
+        definitionRefs,
         queries: querySupport,
         transformations: transformationSupport,
         tags: selectedTags,
@@ -130,11 +130,11 @@
     onClose();
   }
 
-  function toggleDescriptionRef(refId: string) {
-    if (descriptionRefs.includes(refId)) {
-      descriptionRefs = descriptionRefs.filter(r => r !== refId);
+  function toggleDefinitionRef(refId: string) {
+    if (definitionRefs.includes(refId)) {
+      definitionRefs = definitionRefs.filter(r => r !== refId);
     } else {
-      descriptionRefs = [...descriptionRefs, refId];
+      definitionRefs = [...definitionRefs, refId];
     }
   }
 
@@ -290,13 +290,13 @@
           </div>
 
           <div>
-            <label for="lang-description" class="block text-sm font-medium text-gray-700 mb-1">
-              Description <span class="text-red-500">*</span>
+            <label for="lang-definition" class="block text-sm font-medium text-gray-700 mb-1">
+              Definition <span class="text-red-500">*</span>
             </label>
             <textarea
-              id="lang-description"
-              bind:value={description}
-              placeholder="Brief description of this language..."
+              id="lang-definition"
+              bind:value={definition}
+              placeholder="Formal definition of this language..."
               rows="3"
               class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
             ></textarea>
@@ -304,14 +304,14 @@
 
           {#if availableRefs.length > 0}
             <fieldset>
-              <legend class="block text-sm font-medium text-gray-700 mb-2">Description References</legend>
+              <legend class="block text-sm font-medium text-gray-700 mb-2">Definition References</legend>
               <div class="flex flex-wrap gap-2">
                 {#each availableRefs as ref}
                   <button
                     type="button"
-                    onclick={() => toggleDescriptionRef(ref.id)}
+                    onclick={() => toggleDefinitionRef(ref.id)}
                     class={`px-3 py-1 text-sm rounded-lg border-2 transition-colors ${
-                      descriptionRefs.includes(ref.id)
+                      definitionRefs.includes(ref.id)
                         ? 'bg-green-600 text-white border-green-600'
                         : 'bg-white text-gray-700 border-gray-300 hover:border-green-300'
                     }`}
@@ -470,7 +470,7 @@
           <button
             type="button"
             onclick={handleSubmit}
-            disabled={!name.trim() || !fullName.trim() || !description.trim()}
+            disabled={!name.trim() || !fullName.trim() || !definition.trim()}
             class="px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
           >
             {isEdit ? 'Update' : 'Add'} Language

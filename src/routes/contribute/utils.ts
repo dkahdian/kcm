@@ -67,8 +67,8 @@ export function sanitizeLanguages(value: unknown): LanguageToAdd[] {
     .map((l) => ({
       name: isString(l.name) ? l.name : '',
       fullName: isString(l.fullName) ? l.fullName : '',
-      description: isString(l.description) ? l.description : '',
-      descriptionRefs: sanitizeStringArray(l.descriptionRefs),
+      definition: isString(l.definition) ? l.definition : '',
+      definitionRefs: sanitizeStringArray(l.definitionRefs),
       queries: sanitizeOperationSupportRecord(l.queries),
       transformations: sanitizeOperationSupportRecord(l.transformations),
       tags: sanitizeTags(l.tags),
@@ -120,8 +120,8 @@ export function cloneLanguageEntry(entry: LanguageToAdd): LanguageToAdd {
   return {
     name: entry.name,
     fullName: entry.fullName,
-    description: entry.description,
-    descriptionRefs: [...entry.descriptionRefs],
+    definition: entry.definition,
+    definitionRefs: [...entry.definitionRefs],
     queries: cloneOperationSupport(entry.queries),
     transformations: cloneOperationSupport(entry.transformations),
     tags: entry.tags.map((t) => ({

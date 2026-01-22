@@ -33,8 +33,8 @@ export type ReferenceToAdd = {
 export type LanguageToAdd = {
   name: string;
   fullName: string;
-  description: string;
-  descriptionRefs: string[];
+  definition: string;
+  definitionRefs: string[];
   queries: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
   transformations: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
   tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;

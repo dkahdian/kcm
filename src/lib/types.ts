@@ -133,9 +133,10 @@ export interface KCLanguage {
   /** Display name (may contain LaTeX like OBDD$_<$) */
   name: string;
   fullName: string;
-  description: string;
-  /** reference IDs for the main description */
-  descriptionRefs: string[];
+  /** Formal definition of the language (supports LaTeX) */
+  definition: string;
+  /** reference IDs for the definition */
+  definitionRefs: string[];
   properties: KCLanguageProperties;
   /** names of languages that are strict subsets of this one */
   subsets?: string[];

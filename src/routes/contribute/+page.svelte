@@ -557,9 +557,9 @@
 
     queueEntries = queueEntries.map((entry) => {
       if (entry.kind === 'language:new' || entry.kind === 'language:edit') {
-        if (!entry.payload.descriptionRefs.includes(refId)) return entry;
+        if (!entry.payload.definitionRefs.includes(refId)) return entry;
         const updated = cloneLanguageEntry(entry.payload);
-        updated.descriptionRefs = updated.descriptionRefs.filter((r) => r !== refId);
+        updated.definitionRefs = updated.definitionRefs.filter((r) => r !== refId);
         return { ...entry, payload: updated };
       }
 

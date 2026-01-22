@@ -59,9 +59,9 @@
     // Add explicit references from the language
     selectedLanguage.references?.forEach(ref => refIds.add(ref.id));
     
-    // Extract inline citations from description
-    if (selectedLanguage.description) {
-      extractCitationKeys(selectedLanguage.description).forEach(key => refIds.add(key));
+    // Extract inline citations from definition
+    if (selectedLanguage.definition) {
+      extractCitationKeys(selectedLanguage.definition).forEach(key => refIds.add(key));
     }
     
     // Extract inline citations from operation caveats
@@ -284,10 +284,10 @@
         
         <p class="text-gray-700 mb-6">
           <MathText 
-            text={selectedLanguage.description} 
+            text={selectedLanguage.definition} 
             className="inline"
             onCitationClick={handleCitationClick}
-          />{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
+          />{#if selectedLanguage.definitionRefs?.length}{#each selectedLanguage.definitionRefs as refId}<button 
                 class="ref-badge"
                 onclick={scrollToReferences}
                 title="View reference"

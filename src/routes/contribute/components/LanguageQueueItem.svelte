@@ -30,7 +30,7 @@
 <GenericQueueItem
 	type={isEdit ? 'Edit Language' : 'New Language'}
 	title={language.name}
-	subtitle={language.description}
+	subtitle={language.definition}
 	{colorScheme}
 	{index}
 	{isExpanded}
@@ -47,18 +47,18 @@
 				</div>
 			</div>
 			<div>
-				<div class="font-semibold text-gray-700 mb-1">Description:</div>
+				<div class="font-semibold text-gray-700 mb-1">Definition:</div>
 				<div class="bg-white p-2 rounded border">
-					<MathText text={language.description} className="text-gray-900 block" />
+					<MathText text={language.definition} className="text-gray-900 block" />
 				</div>
 			</div>
-			{#if language.descriptionRefs && language.descriptionRefs.length > 0}
+			{#if language.definitionRefs && language.definitionRefs.length > 0}
 				<div>
 					<div class="font-semibold text-gray-700 mb-1">
-						Description References ({language.descriptionRefs.length}):
+						Definition References ({language.definitionRefs.length}):
 					</div>
 					<div class="flex flex-wrap gap-1">
-						{#each language.descriptionRefs as ref}
+						{#each language.definitionRefs as ref}
 							<span class="inline-block bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs border border-purple-300">
 								{ref}
 							</span>

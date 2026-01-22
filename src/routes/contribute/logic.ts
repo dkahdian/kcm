@@ -149,8 +149,8 @@ export function convertLanguageForEdit(lang: any): LanguageToAdd {
   return {
     name: lang.name,
     fullName: lang.fullName || '',
-    description: lang.description || '',
-    descriptionRefs: lang.descriptionRefs || [],
+    definition: lang.definition || '',
+    definitionRefs: lang.definitionRefs || [],
     queries: lang.properties?.queries || {},
     transformations: lang.properties?.transformations || {},
     tags: (lang.tags || []).map((t: any) => ({ ...t, color: t.color || '#6366f1' })),

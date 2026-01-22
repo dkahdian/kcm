@@ -41,6 +41,7 @@ const __dirname = path.dirname(__filename);
 // Default Paths
 const DATABASE_PATH = path.join(__dirname, '..', 'src', 'lib', 'data', 'database.json');
 const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'claims.tex');
+const DEFAULT_LANGUAGES_OUTPUT = path.join(__dirname, '..', 'docs', 'languages.tex');
 const DEFAULT_BIBTEX_OUTPUT = path.join(__dirname, '..', 'docs', 'refs.bib');
 
 // Import types
@@ -1075,6 +1076,237 @@ function extractUrlFromBibtex(bibtex: string): string | null {
 }
 
 // =============================================================================
+// Languages LaTeX Generation and Parsing
+// =============================================================================
+
+/**
+ * Generate a single language definition block.
+ * 
+ * Format:
+ *   \begin{definition}[$NAME$]\label{def:ID}
+ *   \textbf{FULL_NAME} \\
+ *   DEFINITION_CONTENT \citet{REFS}?
+ *   \end{definition}
+ */
+function generateLanguageDefinition(lang: KCLanguage): string {
+  const nameLatex = languageToLatex(lang.name);
+  const definition = lang.definition && lang.definition !== '-' 
+    ? lang.definition 
+    : '(Definition needed)';
+  
+  let content = `\\textbf{${escapeLatex(lang.fullName)}} \\\\
+${definition}`;
+  
+  // Add references at the end
+  if (lang.definitionRefs && lang.definitionRefs.length > 0) {
+    content += ` \\citet{${lang.definitionRefs.join(',')}}`;
+  }
+  
+  return `\\begin{definition}[${nameLatex}]\\label{def:${lang.id}}
+${content}
+\\end{definition}
+`;
+}
+
+/**
+ * Generate the full languages LaTeX document
+ */
+function generateLanguagesLatex(database: DatabaseSchema): string {
+  const { languages } = database;
+  
+  // Sort languages alphabetically by name
+  const sortedLanguages = [...languages].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+  
+  // Build all definitions
+  const definitions = sortedLanguages
+    .map(lang => generateLanguageDefinition(lang))
+    .join('\n');
+  
+  // Build full document
+  const preamble = `% =============================
+% Knowledge Compilation Map - Language Definitions
+% Auto-generated from database.json
+% Generated: ${new Date().toISOString()}
+% 
+% EDITING INSTRUCTIONS:
+% - Language names in brackets are auto-generated. Do NOT edit.
+% - Full names (\\textbf{...}) are auto-generated. Do NOT edit.
+% - Definition content (after the full name line) is EDITABLE.
+% - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
+% =============================
+\\documentclass[11pt]{article}
+
+% -------- Packages --------
+\\usepackage[margin=1in]{geometry}
+\\usepackage{amsmath, amssymb, amsthm}
+\\usepackage{mathtools}
+\\usepackage{enumitem}
+\\usepackage{hyperref}
+\\usepackage{cleveref}
+\\usepackage{xcolor}
+\\usepackage{natbib}
+
+% -------- Hyperref setup --------
+\\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% -------- Theorem styles --------
+\\theoremstyle{definition}
+\\newtheorem{definition}{Definition}
+
+% -------- Handy macros --------
+\\newcommand{\\R}{\\mathbb{R}}
+\\newcommand{\\N}{\\mathbb{N}}
+\\newcommand{\\eps}{\\varepsilon}
+
+% -------- Title info --------
+\\title{Knowledge Compilation Map: Language Definitions}
+\\date{\\today}
+
+\\begin{document}
+\\maketitle
+
+`;
+
+  const postamble = `
+% =============================
+% Bibliography
+% =============================
+\\bibliographystyle{plainnat}
+\\bibliography{refs}
+
+\\end{document}
+`;
+
+  return preamble + definitions + postamble;
+}
+
+/**
+ * Parsed language definition from LaTeX
+ */
+interface ParsedLanguageDefinition {
+  id: string;
+  name: string;
+  fullName: string;
+  definition: string;
+  definitionRefs: string[];
+}
+
+/**
+ * Parse language definitions from LaTeX file.
+ * 
+ * Expected format:
+ *   \begin{definition}[$NAME$]\label{def:ID}
+ *   \textbf{FULL_NAME} \\
+ *   DEFINITION_CONTENT \citet{REFS}?
+ *   \end{definition}
+ */
+function parseLanguagesLatex(latexContent: string): ParsedLanguageDefinition[] {
+  const definitions: ParsedLanguageDefinition[] = [];
+  const lines = latexContent.split('\n');
+  let i = 0;
+  
+  while (i < lines.length) {
+    const line = lines[i];
+    
+    // Look for definition start: \begin{definition}[$NAME$]\label{def:ID}
+    const defMatch = line.match(/\\begin\{definition\}\[([^\]]+)\]\\label\{def:([^}]+)\}/);
+    if (defMatch) {
+      const nameLatex = defMatch[1];
+      const id = defMatch[2];
+      const name = parseLanguageName(nameLatex);
+      
+      // Collect definition content until \end{definition}
+      let content = '';
+      i++;
+      while (i < lines.length && !lines[i].includes('\\end{definition}')) {
+        content += lines[i] + '\n';
+        i++;
+      }
+      i++; // Skip \end{definition}
+      
+      // Parse the content
+      content = content.trim();
+      
+      // Extract full name from \textbf{...}
+      let fullName = '';
+      const fullNameMatch = content.match(/^\\textbf\{([^}]+)\}/);
+      if (fullNameMatch) {
+        fullName = fullNameMatch[1];
+        // Remove the fullName line (including the \\)
+        content = content.slice(fullNameMatch[0].length).replace(/^\s*\\\\\s*/, '').trim();
+      }
+      
+      // Extract references from the end
+      let definitionRefs: string[] = [];
+      const citeMatch = content.match(/\\citet?\{([^}]+)\}\s*$/);
+      if (citeMatch) {
+        definitionRefs = citeMatch[1].split(',').map(s => s.trim());
+        content = content.slice(0, citeMatch.index).trim();
+      }
+      
+      definitions.push({
+        id,
+        name,
+        fullName,
+        definition: content,
+        definitionRefs
+      });
+      
+      continue;
+    }
+    
+    i++;
+  }
+  
+  return definitions;
+}
+
+/**
+ * Update database languages from parsed definitions.
+ */
+function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLanguageDefinition[]): void {
+  // Build ID to language map
+  const idToLang = new Map<string, KCLanguage>();
+  for (const lang of database.languages) {
+    idToLang.set(lang.id, lang);
+  }
+  
+  let updated = 0;
+  let skipped = 0;
+  
+  for (const def of parsedDefs) {
+    const lang = idToLang.get(def.id);
+    
+    if (!lang) {
+      console.warn(`Unknown language ID in LaTeX: ${def.id} (${def.name})`);
+      skipped++;
+      continue;
+    }
+    
+    // Update definition (the editable part)
+    if (def.definition && def.definition !== '(Definition needed)') {
+      lang.definition = def.definition;
+    }
+    
+    // Update definition refs
+    if (def.definitionRefs.length > 0) {
+      lang.definitionRefs = def.definitionRefs;
+    }
+    
+    updated++;
+  }
+  
+  console.log(`Updated ${updated} language definitions, skipped ${skipped}`);
+}
+
+// =============================================================================
 // CLI
 // =============================================================================
 
@@ -1083,27 +1315,31 @@ function printUsage(): void {
 Knowledge Compilation Map - LaTeX Bijection Script
 
 Usage:
-  npx tsx scripts/latex-bijection.ts --to-latex [-o output.tex] [-b refs.bib]
-  npx tsx scripts/latex-bijection.ts --to-json [input.tex] [-b refs.bib]
+  npx tsx scripts/latex-bijection.ts --to-latex
+  npx tsx scripts/latex-bijection.ts --to-json
   npx tsx scripts/latex-bijection.ts --normalize-refs
 
 Options:
-  --to-latex      Convert database.json to LaTeX + BibTeX format
-  --to-json       Convert LaTeX + BibTeX files back to database.json
+  --to-latex      Convert database.json to LaTeX files (claims.tex, languages.tex, refs.bib)
+  --to-json       Convert LaTeX files back to database.json
   --normalize-refs Normalize all BibTeX keys in database to match reference IDs
-  -o, --output    Specify LaTeX output file path (default: docs/claims.tex)
-  -b, --bib       Specify BibTeX file path (default: docs/refs.bib)
   -h, --help      Show this help message
 
-Default paths:
-  LaTeX:   docs/claims.tex
-  BibTeX:  docs/refs.bib
-  Database: src/lib/data/database.json
+Output files (--to-latex):
+  docs/claims.tex    - Succinctness claims and proofs
+  docs/languages.tex - Language definitions
+  docs/refs.bib      - BibTeX references
+
+Input files (--to-json):
+  docs/claims.tex    - Updates adjacency matrix descriptions
+  docs/languages.tex - Updates language definitions
+  docs/refs.bib      - Updates references
+
+Database: src/lib/data/database.json
 
 Examples:
   npx tsx scripts/latex-bijection.ts --to-latex
   npx tsx scripts/latex-bijection.ts --to-json
-  npx tsx scripts/latex-bijection.ts --to-latex -o custom.tex -b custom.bib
   npx tsx scripts/latex-bijection.ts --normalize-refs
 `);
 }
@@ -1167,20 +1403,11 @@ async function main(): Promise<void> {
   
   if (toLatex) {
     // JSON → LaTeX + BibTeX
-    let outputPath = DEFAULT_LATEX_OUTPUT;
-    let bibtexPath = DEFAULT_BIBTEX_OUTPUT;
+    const claimsPath = DEFAULT_LATEX_OUTPUT;
+    const languagesPath = DEFAULT_LANGUAGES_OUTPUT;
+    const bibtexPath = DEFAULT_BIBTEX_OUTPUT;
     
-    const outputIdx = args.findIndex(a => a === '-o' || a === '--output');
-    if (outputIdx !== -1 && args[outputIdx + 1]) {
-      outputPath = args[outputIdx + 1];
-    }
-    
-    const bibIdx = args.findIndex(a => a === '-b' || a === '--bib');
-    if (bibIdx !== -1 && args[bibIdx + 1]) {
-      bibtexPath = args[bibIdx + 1];
-    }
-    
-    console.log('=== JSON → LaTeX + BibTeX Conversion ===\n');
+    console.log('=== JSON → LaTeX Conversion ===\n');
     console.log(`Reading database from: ${DATABASE_PATH}`);
     
     const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
@@ -1188,10 +1415,15 @@ async function main(): Promise<void> {
     console.log(`Found ${database.languages.length} languages`);
     console.log(`Found ${database.references.length} references`);
     
-    // Generate and write LaTeX
-    const latex = generateLatex(database);
-    fs.writeFileSync(outputPath, latex, 'utf-8');
-    console.log(`\nWrote LaTeX to: ${outputPath}`);
+    // Generate and write claims LaTeX
+    const claimsLatex = generateLatex(database);
+    fs.writeFileSync(claimsPath, claimsLatex, 'utf-8');
+    console.log(`\nWrote claims to: ${claimsPath}`);
+    
+    // Generate and write languages LaTeX
+    const languagesLatex = generateLanguagesLatex(database);
+    fs.writeFileSync(languagesPath, languagesLatex, 'utf-8');
+    console.log(`Wrote language definitions to: ${languagesPath}`);
     
     // Generate and write BibTeX
     const bibtex = generateBibtex(database);
@@ -1202,40 +1434,14 @@ async function main(): Promise<void> {
   }
   
   if (toJson) {
-    // LaTeX + BibTeX → JSON
-    let inputPath = DEFAULT_LATEX_OUTPUT;
-    let bibtexPath = DEFAULT_BIBTEX_OUTPUT;
+    // LaTeX → JSON
+    const claimsPath = DEFAULT_LATEX_OUTPUT;
+    const languagesPath = DEFAULT_LANGUAGES_OUTPUT;
+    const bibtexPath = DEFAULT_BIBTEX_OUTPUT;
     
-    // Check for explicit input file (positional argument after --to-json)
-    const toJsonIdx = args.indexOf('--to-json');
-    if (toJsonIdx !== -1 && args[toJsonIdx + 1] && !args[toJsonIdx + 1].startsWith('-')) {
-      inputPath = args[toJsonIdx + 1];
-    }
+    console.log('=== LaTeX → JSON Conversion ===\n');
     
-    const outputIdx = args.findIndex(a => a === '-o' || a === '--output');
-    if (outputIdx !== -1 && args[outputIdx + 1]) {
-      inputPath = args[outputIdx + 1];
-    }
-    
-    const bibIdx = args.findIndex(a => a === '-b' || a === '--bib');
-    if (bibIdx !== -1 && args[bibIdx + 1]) {
-      bibtexPath = args[bibIdx + 1];
-    }
-    
-    if (!fs.existsSync(inputPath)) {
-      console.error(`Error: LaTeX file not found: ${inputPath}`);
-      process.exit(1);
-    }
-    
-    console.log('=== LaTeX + BibTeX → JSON Conversion ===\n');
-    console.log(`Reading LaTeX from: ${inputPath}`);
-    
-    const latexContent = fs.readFileSync(inputPath, 'utf-8');
-    const claims = parseLatex(latexContent);
-    
-    console.log(`Parsed ${claims.length} claims`);
-    
-    console.log(`\nReading database from: ${DATABASE_PATH}`);
+    console.log(`Reading database from: ${DATABASE_PATH}`);
     const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
     
     // Update from BibTeX if file exists
@@ -1245,14 +1451,37 @@ async function main(): Promise<void> {
       const bibtexEntries = parseBibtex(bibtexContent);
       console.log(`Parsed ${bibtexEntries.size} BibTeX entries`);
       
-      console.log(`\nUpdating references...`);
+      console.log(`Updating references...`);
       updateReferencesFromBibtex(database, bibtexEntries);
     } else {
       console.log(`\nNote: BibTeX file not found: ${bibtexPath} (skipping reference updates)`);
     }
     
-    console.log(`\nUpdating adjacency matrix...`);
-    updateDatabase(database, claims);
+    // Update from claims.tex if file exists
+    if (fs.existsSync(claimsPath)) {
+      console.log(`\nReading claims from: ${claimsPath}`);
+      const claimsContent = fs.readFileSync(claimsPath, 'utf-8');
+      const claims = parseLatex(claimsContent);
+      console.log(`Parsed ${claims.length} claims`);
+      
+      console.log(`Updating adjacency matrix...`);
+      updateDatabase(database, claims);
+    } else {
+      console.log(`\nNote: Claims file not found: ${claimsPath} (skipping claim updates)`);
+    }
+    
+    // Update from languages.tex if file exists
+    if (fs.existsSync(languagesPath)) {
+      console.log(`\nReading language definitions from: ${languagesPath}`);
+      const languagesContent = fs.readFileSync(languagesPath, 'utf-8');
+      const languageDefs = parseLanguagesLatex(languagesContent);
+      console.log(`Parsed ${languageDefs.length} language definitions`);
+      
+      console.log(`Updating language definitions...`);
+      updateLanguagesFromLatex(database, languageDefs);
+    } else {
+      console.log(`\nNote: Languages file not found: ${languagesPath} (skipping language definition updates)`);
+    }
     
     // Write updated database
     console.log(`\nWriting database to: ${DATABASE_PATH}`);

@@ -5,8 +5,8 @@
 		id: string;
 		name: string;
 		fullName: string;
-		description: string;
-		descriptionRefs: string[];
+		definition: string;
+		definitionRefs: string[];
 		queries: Record<string, { polytime: string; note?: string; refs: string[] }>;
 		transformations: Record<string, { polytime: string; note?: string; refs: string[] }>;
 		tags: Array<{ id: string; label: string; color: string; description?: string; refs: string[] }>;

@@ -484,7 +484,7 @@
             labelHtml: labelContent.html,
             labelText: labelContent.text,
             fullName: lang.fullName,
-            description: lang.description,
+            definition: lang.definition,
             properties: lang.properties,
             bgColor: lang.visual?.backgroundColor,
             borderColor: lang.visual?.borderColor,

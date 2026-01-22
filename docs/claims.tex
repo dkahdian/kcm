@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-01-17T01:09:51.315Z
+% Generated: 2026-01-22T22:58:53.766Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -63,225 +63,6 @@
 
 \tableofcontents
 \newpage
-
-% =============================
-\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map," Journal of Artificial...}
-% Reference ID: Darwiche_2002
-% =============================
-\begin{claim}
-$CNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $CNF$ is a subset of $NNF$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$CNF$ is not quasi-polynomial-time transformable to $PI$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is well-known that some $CNF$ formulas (i.e. $\neg PARITY_n=\neg\bigoplus_{i=1}^n x_i$) have exponentially many prime implicants.
-\end{claimdescription}
-
-\begin{claim}
-$d$-$DNNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, d-DNNF is a subset of DNNF, so a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$d$-$DNNF$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d-DNNF$ formula but has $2^n-1$ models.
-\end{claimdescription}
-
-\begin{claim}
-$dec$-$SDNNF$ has unknown polynomial-time (but has quasi-polynomial-time) transformation to $OBDD$ \citet{Amarilli_2018,Bollig_2018,Beame_2015}
-\end{claim}
-\begin{claimdescription}
-Theorem 2 of \citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF$ since there are no $\vee$-gates that are not decision gates in a $dec$-$SDNNF$.
-\end{claimdescription}
-
-\begin{claim}
-$DNF$ is not polynomial-time transformable to $d$-$DNNF$ unless the polynomial hierarchy collapses \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Suppose not; then $\forall\Lambda\in DNF$, $\exists$ an equivalent $\Lambda_*\in d$-$DNNF$ of polynomial size. Then we may perform a clausal entailment check on some $CNF$ sentence $\Sigma \in CNF$ with respect to some clause $\gamma$ by checking whether $(\neg\Sigma\vee\gamma)\in DNF$ is valid. But we may perform a validity check on $(\neg\Sigma\vee\gamma)_* \in d$-$DNNF$ in polynomial time. Since we can now perform a polynomial-time clausal entailment check on all $CNF$ sentences, the polynomial hierarchy collapses.
-\end{claimdescription}
-
-\begin{claim}
-$DNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $DNF$ is a subset of $DNNF$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$DNF$ is not quasi-polynomial-time transformable to $IP$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is well-known that some $DNF$ formulas (i.e. $PARITY_n=\bigoplus_{i=1}^n x_i$) have exponentially many prime implicates.
-\end{claimdescription}
-
-\begin{claim}
-$DNNF$ has unknown polynomial-time (but has quasi-polynomial-time) transformation to $nFBDD$ \citet{Bodlaender_1993}
-\end{claim}
-\begin{claimdescription}
-Section 5 of \citet{Bodlaender_1993} extends the compilation of $dec$-$DNNF$s into $FBDD$s (shown in \citet{Beame_2013}) to show that $DNNF$ can be quasipolynomial-time compiled into $nFBDD$.
-\end{claimdescription}
-
-\begin{claim}
-$DNNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $DNNF$ is a subset of $NNF$, so a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$FBDD$ is polynomial-time transformable to $d$-$DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, FBDD is a subset of d-DNNF, so a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$IP$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Consider the $DNF$ formula $\Pi_n=\bigvee_{i=0}^{n-1}(x_{2i} \wedge x_{2i+1})$. This formula is in prime implicants form and each clause in $\Pi_n$ is an essential prime implicant of it. Hence its negation $\neg\Pi_n\in IP$.
-
-Since the early work of Quine, we know that the number of essential prime implicates of a formula is a lower bound on the number of clauses that can be found in any $CNF$ representation of it. However, since $\Pi_n$ has $2^n$ prime implicants, $\neg\Pi_n$ has $2^n$ prime implicates, so any $CNF$ representation of $\neg\Pi_n$ must have at least $2^n$ clauses.
-\end{claimdescription}
-
-\begin{claim}
-$IP$ has unknown transformation to $d$-$DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-This is listed as an open problem in the Knowledge Compilation Map (2002).
-\end{claimdescription}
-
-\begin{claim}
-$IP$ is polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $IP$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$IP$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Darwiche_2002,Wegener_1987}
-\end{claim}
-\begin{claimdescription}
-Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\neg\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\neg\Sigma_{n,k}(I)=0 \iff I \text{ contains a bidirectional clique of size }k$. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\neg\Sigma_{n,k}$ has exponential size. This is the negation of the clique detection function. However, it can be shown that $\neg\Sigma_{n,k}$ has $O(n^3)$ prime implicates, which implies that not every $IP$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
-$IP$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $IP$ formula but has $2^n-1$ models.
-\end{claimdescription}
-
-\begin{claim}
-$MODS$ is polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-A Shannon tree for any for any $MODS$ formula can be generated in polynomial time. The set of all paths from the root of the tree to any 0-leaf can be read as a $CNF$ representation of the formula, so $MODS$ is converted to $CNF$.
-\end{claimdescription}
-
-\begin{claim}
-$MODS$ is polynomial-time transformable to $d$-$DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $MODS$ is a subset of $d-DNNF$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$MODS$ is polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $MODS$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$MODS$ is polynomial-time transformable to $OBDD_<$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-A Shannon tree for any for any $MODS$ formula following any order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding $OBDD_<$ in polynomial time.
-\end{claimdescription}
-
-\begin{claim}
-$MODS$ has unknown transformation to $PI$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-This is listed as an open problem in the Knowledge Compilation Map (2002).
-\end{claimdescription}
-
-\begin{claim}
-$OBDD$ is polynomial-time transformable to $FBDD$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $OBDD$ is a superset of $FBDD$. Therefore a polynomial time transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$OBDD$ is not quasi-polynomial-time transformable to $OBDD_<$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The function $\bigwedge_{i=1}^n(x_i\Leftrightarrow y_i)$ has an $OBDD_<$ representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$
-\end{claimdescription}
-
-\begin{claim}
-$OBDD_<$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-$PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $CNF$ representations.
-\end{claimdescription}
-
-\begin{claim}
-$OBDD_<$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-$PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $DNF$ representations.
-\end{claimdescription}
-
-\begin{claim}
-$OBDD_<$ is polynomial-time transformable to $OBDD$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $OBDD_<$ is a subset of $OBDD$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$PI$ is polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-As defined by Darwiche 2002, $PI$ is a subset of $CNF$. Therefore, a polynomial transformation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-$PI$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Consider the $CNF$ formula $\Sigma_n=\bigwedge_{i=0}^{n-1}(x_{2i} \vee x_{2i+1})$. This formula is in prime implicates form and each clause in $\Sigma_n$ is an essential prime implicate of it. Hence its negation $\neg\Sigma_n\in PI$.
-
-Since the work of Quine, we know that the number of essential prime implicants of a formula is a lower bound on the number of terms that can be found in any $DNF$ representation of it. However, since $\Sigma_n$ has $2^n$ prime implicates, $\neg\Sigma_n$ has $2^n$ prime implicants, so any $DNF$ representation of $\neg\Sigma_n$ must have at least $2^n$ clauses.
-\end{claimdescription}
-
-\begin{claim}
-$PI$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Wegener_1987,Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\Sigma_{n,k}(I)=1 \iff I \text{ contains a bidirectional clique of size }k$. This is the clique detection function. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\Sigma_{n,k}$ has exponential size. However, it can be shown that $\Sigma_{n,k}$ has $O(n^3)$ prime implicants, and hence not every $PI$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
-$PI$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $PI$ formula but has $2^n-1$ models.
-\end{claimdescription}
-
 
 % =============================
 \section{Antoine Amarilli, Florent Capelli, Mikaël Monet, and Pierre Senellart, "Connecti...}
@@ -348,6 +129,13 @@ $dec$-$SDNNF$ is not polynomial-time transformable to $nFBDD$ \citet{Amarilli_20
 \end{claim}
 \begin{claimdescription}
 Shown by Proposition 3.10 of \citet{Amarilli_2018}
+\end{claimdescription}
+
+\begin{claim}
+$dec$-$SDNNF$ has unknown polynomial-time (but has quasi-polynomial-time) transformation to $OBDD$ \citet{Amarilli_2018,Bollig_2018,Beame_2015}
+\end{claim}
+\begin{claimdescription}
+Theorem 2 of \citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF$ since there are no $\vee$-gates that are not decision gates in a $dec$-$SDNNF$.
 \end{claimdescription}
 
 \begin{claim}
@@ -495,6 +283,211 @@ As defined by \citet{Amarilli_2018}, $uOBDD$ is the subset of $uFBDD$ satisfying
 
 
 % =============================
+\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map," Journal of Artificial...}
+% Reference ID: Darwiche_2002
+% =============================
+\begin{claim}
+$CNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $CNF$ is a subset of $NNF$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$CNF$ is not quasi-polynomial-time transformable to $PI$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+It is well-known that some $CNF$ formulas (i.e. $\neg PARITY_n=\neg\bigoplus_{i=1}^n x_i$) have exponentially many prime implicants.
+\end{claimdescription}
+
+\begin{claim}
+$d$-$DNNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, d-DNNF is a subset of DNNF, so a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$d$-$DNNF$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d-DNNF$ formula but has $2^n-1$ models.
+\end{claimdescription}
+
+\begin{claim}
+$DNF$ is not polynomial-time transformable to $d$-$DNNF$ unless the polynomial hierarchy collapses \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Suppose not; then $\forall\Lambda\in DNF$, $\exists$ an equivalent $\Lambda_*\in d$-$DNNF$ of polynomial size. Then we may perform a clausal entailment check on some $CNF$ sentence $\Sigma \in CNF$ with respect to some clause $\gamma$ by checking whether $(\neg\Sigma\vee\gamma)\in DNF$ is valid. But we may perform a validity check on $(\neg\Sigma\vee\gamma)_* \in d$-$DNNF$ in polynomial time. Since we can now perform a polynomial-time clausal entailment check on all $CNF$ sentences, the polynomial hierarchy collapses.
+\end{claimdescription}
+
+\begin{claim}
+$DNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $DNF$ is a subset of $DNNF$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$DNF$ is not quasi-polynomial-time transformable to $IP$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+It is well-known that some $DNF$ formulas (i.e. $PARITY_n=\bigoplus_{i=1}^n x_i$) have exponentially many prime implicates.
+\end{claimdescription}
+
+\begin{claim}
+$DNNF$ has unknown polynomial-time (but has quasi-polynomial-time) transformation to $nFBDD$ \citet{Bodlaender_1993}
+\end{claim}
+\begin{claimdescription}
+Section 5 of \citet{Bodlaender_1993} extends the compilation of $dec$-$DNNF$s into $FBDD$s (shown in \citet{Beame_2013}) to show that $DNNF$ can be quasipolynomial-time compiled into $nFBDD$.
+\end{claimdescription}
+
+\begin{claim}
+$DNNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $DNNF$ is a subset of $NNF$, so a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$FBDD$ is polynomial-time transformable to $d$-$DNNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, FBDD is a subset of d-DNNF, so a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$IP$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Consider the $DNF$ formula $\Pi_n=\bigvee_{i=0}^{n-1}(x_{2i} \wedge x_{2i+1})$. This formula is in prime implicants form and each clause in $\Pi_n$ is an essential prime implicant of it. Hence its negation $\neg\Pi_n\in IP$.
+
+Since the early work of Quine, we know that the number of essential prime implicates of a formula is a lower bound on the number of clauses that can be found in any $CNF$ representation of it. However, since $\Pi_n$ has $2^n$ prime implicants, $\neg\Pi_n$ has $2^n$ prime implicates, so any $CNF$ representation of $\neg\Pi_n$ must have at least $2^n$ clauses.
+\end{claimdescription}
+
+\begin{claim}
+$IP$ has unknown transformation to $d$-$DNNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+This is listed as an open problem in the Knowledge Compilation Map (2002).
+\end{claimdescription}
+
+\begin{claim}
+$IP$ is polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $IP$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$IP$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Darwiche_2002,Wegener_1987}
+\end{claim}
+\begin{claimdescription}
+Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\neg\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\neg\Sigma_{n,k}(I)=0 \iff I \text{ contains a bidirectional clique of size }k$. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\neg\Sigma_{n,k}$ has exponential size. This is the negation of the clique detection function. However, it can be shown that $\neg\Sigma_{n,k}$ has $O(n^3)$ prime implicates, which implies that not every $IP$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+$IP$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $IP$ formula but has $2^n-1$ models.
+\end{claimdescription}
+
+\begin{claim}
+$MODS$ is polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+A Shannon tree for any for any $MODS$ formula can be generated in polynomial time. The set of all paths from the root of the tree to any 0-leaf can be read as a $CNF$ representation of the formula, so $MODS$ is converted to $CNF$.
+\end{claimdescription}
+
+\begin{claim}
+$MODS$ is polynomial-time transformable to $d$-$DNNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $MODS$ is a subset of $d-DNNF$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$MODS$ is polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $MODS$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$MODS$ is polynomial-time transformable to $OBDD_<$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+A Shannon tree for any for any $MODS$ formula following any order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding $OBDD_<$ in polynomial time.
+\end{claimdescription}
+
+\begin{claim}
+$OBDD$ is polynomial-time transformable to $FBDD$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $OBDD$ is a superset of $FBDD$. Therefore a polynomial time transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$OBDD$ is not quasi-polynomial-time transformable to $OBDD_<$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+The function $\bigwedge_{i=1}^n(x_i\Leftrightarrow y_i)$ has an $OBDD_<$ representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$
+\end{claimdescription}
+
+\begin{claim}
+$OBDD_<$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+$PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $CNF$ representations.
+\end{claimdescription}
+
+\begin{claim}
+$OBDD_<$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+$PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $DNF$ representations.
+\end{claimdescription}
+
+\begin{claim}
+$OBDD_<$ is polynomial-time transformable to $OBDD$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $OBDD_<$ is a subset of $OBDD$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$PI$ is polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+As defined by Darwiche 2002, $PI$ is a subset of $CNF$. Therefore, a polynomial transformation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+$PI$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Consider the $CNF$ formula $\Sigma_n=\bigwedge_{i=0}^{n-1}(x_{2i} \vee x_{2i+1})$. This formula is in prime implicates form and each clause in $\Sigma_n$ is an essential prime implicate of it. Hence its negation $\neg\Sigma_n\in PI$.
+
+Since the work of Quine, we know that the number of essential prime implicants of a formula is a lower bound on the number of terms that can be found in any $DNF$ representation of it. However, since $\Sigma_n$ has $2^n$ prime implicates, $\neg\Sigma_n$ has $2^n$ prime implicants, so any $DNF$ representation of $\neg\Sigma_n$ must have at least $2^n$ clauses.
+\end{claimdescription}
+
+\begin{claim}
+$PI$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Wegener_1987,Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\Sigma_{n,k}(I)=1 \iff I \text{ contains a bidirectional clique of size }k$. This is the clique detection function. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\Sigma_{n,k}$ has exponential size. However, it can be shown that $\Sigma_{n,k}$ has $O(n^3)$ prime implicants, and hence not every $PI$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+$PI$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $PI$ formula but has $2^n-1$ models.
+\end{claimdescription}
+
+
+% =============================
 \section{Paul Beame, Jerry Li, Sudeepa Roy, and Dan Suciu, "Model Counting of Query Expre...}
 % Reference ID: Beame_2013
 % =============================
@@ -582,6 +575,20 @@ $FBDD$ is not quasi-polynomial-time transformable to $OBDD$ \citet{Gergov_1994}
 \end{claim}
 \begin{claimdescription}
 The hidden weighted bit function has a lower-bounded $OBDD$ representation of $\Omega(2^{n/4})$, while an $FBDD$ for the same function has a size of only $O(n^2)$
+\end{claimdescription}
+
+
+% =============================
+\section{N. S. Kaleyski, "Boolean methods in knowledge compilation," 2016.}
+% Reference ID: Kaleyski_2016
+% =============================
+\begin{claim}
+$MODS$ is not polynomial-time transformable to $PI$ \citet{Kaleyski_2016}
+\end{claim}
+\begin{claimdescription}
+Corollary 2 of \citet{Kaleyski_2016} shows that for some boolean formula $\psi_i$, a $MODS$ representation of $\psi_i$ is $\Theta(2^{2i})$. Proposition 6 of \citet{Kaleyski_2016} shows that the $PI$ representation of the same $\psi_i$ is $\Omega(2^{\frac{(i-1)^2-1}{4}})$, which is not polynomial in $2^{2i}$. Thus, no polynomial transformation exists.
+
+Chapter 4 of \citet{Kaleyski_2016} demonstrates that a similar analysis is insufficient to produce an exponential separation of $PI$ and $MODS$, so whether such a separation exists is still an open problem.
 \end{claimdescription}
 
 

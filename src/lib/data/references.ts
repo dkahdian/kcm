@@ -217,3 +217,19 @@ export function getReferences(...ids: string[]): KCReference[] {
 }
 
 export const allReferences = Object.values(referencesMap);
+
+// Build a map from reference ID to its global index (1-based for display)
+const globalRefIndexMap = new Map<string, number>();
+allReferences.forEach((ref, idx) => {
+  globalRefIndexMap.set(ref.id, idx + 1);
+  // Also map lowercase version for case-insensitive lookup
+  globalRefIndexMap.set(ref.id.toLowerCase(), idx + 1);
+});
+
+/**
+ * Get the global reference number (1-based) for a reference ID.
+ * Returns null if the reference is not found.
+ */
+export function getGlobalRefNumber(id: string): number | null {
+  return globalRefIndexMap.get(id) ?? globalRefIndexMap.get(id.toLowerCase()) ?? null;
+}

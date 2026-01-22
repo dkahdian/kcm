@@ -13,6 +13,7 @@
   import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { extractCitationKeys } from '$lib/utils/math-text.js';
+  import { getGlobalRefNumber } from '$lib/data/references.js';
   import EdgeLegend from './EdgeLegend.svelte';
   import DynamicLegend from './DynamicLegend.svelte';
 
@@ -100,6 +101,9 @@
         }
       }
     }
+    
+    // Sort by global reference number
+    refs.sort((a, b) => (getGlobalRefNumber(a.id) ?? Infinity) - (getGlobalRefNumber(b.id) ?? Infinity));
     
     return refs;
   });
@@ -217,12 +221,6 @@
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // Helper to get the display number (1-based) for a reference ID
-  function getRefNumber(refId: string): number {
-    const idx = allReferences.findIndex(ref => ref.id === refId);
-    return idx >= 0 ? idx + 1 : 0;
-  }
-
   // Copy BibTeX to clipboard
   async function copyBibtex(bibtex: string, refId: string) {
     try {
@@ -288,13 +286,12 @@
           <MathText 
             text={selectedLanguage.description} 
             className="inline"
-            references={allReferences}
             onCitationClick={handleCitationClick}
           />{#if selectedLanguage.descriptionRefs?.length}{#each selectedLanguage.descriptionRefs as refId}<button 
                 class="ref-badge"
                 onclick={scrollToReferences}
                 title="View reference"
-              >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+              >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
         </p>
 
         {#if selectedLanguage.tags?.length}
@@ -309,7 +306,7 @@
                       class="ref-badge inline"
                       onclick={scrollToReferences}
                       title="View reference"
-                    >[{getRefNumber(refId)}]</button>
+                    >[{getGlobalRefNumber(refId) ?? '?'}]</button>
                   {/each}
                 {:else}
                   <span class="missing-ref inline" title="Missing reference">[missing ref]</span>
@@ -340,13 +337,12 @@
                             class="ref-badge"
                             onclick={scrollToReferences}
                             title="View reference"
-                          >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                          >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
                     {#if q.caveat}
                       <MathText 
                         text={`Unless ${q.caveat}`} 
                         className="text-xs text-gray-500"
-                        references={allReferences}
                         onCitationClick={handleCitationClick}
                       />
                     {/if}
@@ -376,13 +372,12 @@
                             class="ref-badge"
                             onclick={scrollToReferences}
                             title="View reference"
-                          >[{getRefNumber(refId)}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                          >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                     </div>
                     {#if t.caveat}
                       <MathText 
                         text={`Unless ${t.caveat}`} 
                         className="text-xs text-gray-500"
-                        references={allReferences}
                         onCitationClick={handleCitationClick}
                       />
                     {/if}
@@ -416,7 +411,7 @@
                           class="ref-badge"
                           onclick={scrollToReferences}
                           title="View reference"
-                        >[{getRefNumber(refId)}]</button>
+                        >[{getGlobalRefNumber(refId) ?? '?'}]</button>
                       {/each}
                     {:else}
                       <span class="missing-ref" title="Missing reference">[missing ref]</span>
@@ -433,10 +428,10 @@
             <div class="mb-2">
               <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
                             <ol class="space-y-2">
-                {#each allReferences as ref, idx}
+                {#each allReferences as ref}
                   <li class="text-xs text-gray-700">
                     <div class="flex items-start gap-1.5">
-                      <span class="font-semibold text-gray-900">[{idx + 1}]</span>
+                      <span class="font-semibold text-gray-900">[{getGlobalRefNumber(ref.id) ?? '?'}]</span>
                       <div class="flex-1 min-w-0">
                         <a class="underline text-blue-600 hover:text-blue-800 break-words" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
                         <button

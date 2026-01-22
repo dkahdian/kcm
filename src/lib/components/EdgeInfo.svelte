@@ -3,6 +3,7 @@
   import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from '$lib/types.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { extractCitationKeys } from '$lib/utils/math-text.js';
+  import { getGlobalRefNumber } from '$lib/data/references.js';
   import DynamicLegend from './DynamicLegend.svelte';
   
   type ViewMode = 'graph' | 'matrix';
@@ -103,17 +104,15 @@
       }
     }
 
+    // Sort by global reference number
+    refs.sort((a, b) => (getGlobalRefNumber(a.id) ?? Infinity) - (getGlobalRefNumber(b.id) ?? Infinity));
+
     return refs;
   });
 
   function getStatusLabel(status: string): string {
     const complexity = getComplexityFromCatalog(graphData.complexities, status);
     return complexity.description;
-  }
-
-  function getRefNumber(refId: string): number {
-    const idx = edgeReferences.findIndex(ref => ref.id === refId);
-    return idx >= 0 ? idx + 1 : 0;
   }
 
   function scrollToReferences(e: MouseEvent) {
@@ -162,13 +161,12 @@
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"
-                    >[{getRefNumber(refId)}]</button>{/each}{/if}
+                    >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
               </p>
               {#if originalEdge.forward.description}
                 <MathText 
                   text={originalEdge.forward.description} 
                   className="text-sm text-gray-600 mb-2 italic block" 
-                  references={edgeReferences}
                   onCitationClick={handleCitationClick}
                 />
               {/if}
@@ -184,12 +182,11 @@
                                 class="ref-badge"
                                 onclick={scrollToReferences}
                                 title="View reference"
-                              >[{getRefNumber(refId)}]</button>{/each}{/if}
+                              >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
                         </div>
                         <MathText 
                           text={fn.description} 
                           className="text-xs text-gray-600 mt-1 block"
-                          references={edgeReferences}
                           onCitationClick={handleCitationClick}
                         />
                       </div>
@@ -212,13 +209,12 @@
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"
-                    >[{getRefNumber(refId)}]</button>{/each}{/if}
+                    >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
               </p>
               {#if originalEdge.backward.description}
                 <MathText 
                   text={originalEdge.backward.description} 
                   className="text-sm text-gray-600 mb-2 italic block" 
-                  references={edgeReferences}
                   onCitationClick={handleCitationClick}
                 />
               {/if}
@@ -234,12 +230,11 @@
                                 class="ref-badge"
                                 onclick={scrollToReferences}
                                 title="View reference"
-                              >[{getRefNumber(refId)}]</button>{/each}{/if}
+                              >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
                         </div>
                         <MathText 
                           text={fn.description} 
                           className="text-xs text-gray-600 mt-1 block"
-                          references={edgeReferences}
                           onCitationClick={handleCitationClick}
                         />
                       </div>
@@ -256,10 +251,10 @@
             <div class="mb-2">
               <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
               <ol class="space-y-2">
-                {#each edgeReferences as ref, idx}
+                {#each edgeReferences as ref}
                   <li class="text-xs text-gray-700">
                     <div class="flex items-start gap-1.5">
-                      <span class="font-semibold text-gray-900">[{idx + 1}]</span>
+                      <span class="font-semibold text-gray-900">[{getGlobalRefNumber(ref.id) ?? '?'}]</span>
                       <div class="flex-1 min-w-0">
                         <a class="underline text-blue-600 hover:text-blue-800 break-words" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
                         <button

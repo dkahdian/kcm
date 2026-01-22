@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { renderMathText, renderTextWithCitations, containsCitations, extractCitationKeys } from '$lib/utils/math-text';
-  import type { KCReference } from '$lib/types.js';
+  import { renderMathText, renderTextWithCitations, containsCitations } from '$lib/utils/math-text';
+  import { getGlobalRefNumber } from '$lib/data/references.js';
 
   let {
     text = '',
@@ -9,11 +9,6 @@
     href,
     target,
     rel,
-    /** 
-     * Optional references for resolving inline citations like \citet{darwiche2002}.
-     * If provided, citations will be rendered as clickable [N] links.
-     */
-    references = undefined as KCReference[] | undefined,
     /**
      * Callback when a citation is clicked. Receives the citation key.
      */
@@ -26,45 +21,22 @@
     href?: string;
     target?: string;
     rel?: string;
-    references?: KCReference[];
     onCitationClick?: (key: string) => void;
     [key: string]: unknown;
   } = $props();
 
   const result = $derived(renderMathText(text));
   
-  // Build a map from citation key to reference number
-  const citationKeyToNumber = $derived.by(() => {
-    if (!references?.length) return new Map<string, number>();
-    
-    const map = new Map<string, number>();
-    references.forEach((ref, idx) => {
-      // Map both the reference ID and any citation key extracted from bibtex
-      map.set(ref.id, idx + 1);
-      map.set(ref.id.toLowerCase(), idx + 1);
-      
-      // Also try to extract the bibtex citation key (e.g., "darwiche2002" from "@article{darwiche2002,...")
-      if (ref.bibtex) {
-        const keyMatch = ref.bibtex.match(/@\w+\{([^,\s]+)/);
-        if (keyMatch) {
-          map.set(keyMatch[1], idx + 1);
-          map.set(keyMatch[1].toLowerCase(), idx + 1);
-        }
-      }
-    });
-    return map;
-  });
-  
-  // Process HTML to replace citations with clickable links
+  // Process HTML to replace citations with clickable links using global reference numbers
   const processedHtml = $derived.by(() => {
     if (!result.html) return null;
-    if (!references?.length || !containsCitations(text ?? '')) {
+    if (!containsCitations(text ?? '')) {
       return result.html;
     }
     
     return renderTextWithCitations(
       result.html,
-      (key) => citationKeyToNumber.get(key) ?? citationKeyToNumber.get(key.toLowerCase()) ?? null
+      getGlobalRefNumber
     );
   });
 
@@ -94,7 +66,7 @@
     href={href}
     target={target}
     rel={resolvedRel}
-    onclick={references?.length ? handleClick : undefined}
+    onclick={handleClick}
     {...rest}
   >
     {@html processedHtml}

@@ -181,8 +181,12 @@
       "properties": {
         "queries": {
           "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma ce-co: CE → CO. if CNF cannot support CO in polynomial time, it cannot support CE in polynomial time either."
           },
           "CO": {
             "complexity": "no-poly-unknown-quasi",
@@ -191,8 +195,12 @@
             ]
           },
           "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma ct-co: CT → CO. if CNF cannot support CO in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -266,14 +274,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "cSDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore cSDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since cSDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -360,14 +374,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "d-DNNF transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore d-DNNF supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since d-DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -454,14 +474,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "d-SDNNF transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore d-SDNNF supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since d-SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -645,16 +671,28 @@
       "properties": {
         "queries": {
           "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "DNF transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore DNF supports CE in polynomial time."
           },
           "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since DNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma ct-va: CT → VA. if DNF cannot support VA in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -665,8 +703,12 @@
             "description": "By contrapositive of lemma eq-va: EQ → VA. if DNF cannot support VA in polynomial time, it cannot support EQ in polynomial time either."
           },
           "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma im-va: IM → VA. if DNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
           },
           "ME": {
             "complexity": "unknown-to-us",
@@ -730,16 +772,28 @@
       "properties": {
         "queries": {
           "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": false,
+            "description": "DNNF supports clause entailment (CE) in polynomial time (Darwiche, 2001a)."
           },
           "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma ct-va: CT → VA. if DNNF cannot support VA in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -750,8 +804,12 @@
             "description": "By contrapositive of lemma eq-va: EQ → VA. if DNNF cannot support VA in polynomial time, it cannot support EQ in polynomial time either."
           },
           "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma im-va: IM → VA. if DNNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
           },
           "ME": {
             "complexity": "unknown-to-us",
@@ -820,14 +878,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "FBDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore FBDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since FBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -914,14 +978,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "IP transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore IP supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since IP supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -1018,18 +1088,18 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Bryant_1986"
+              "Darwiche_2002"
             ],
-            "derived": true,
-            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports CO in polynomial time. Therefore MODS supports CO in polynomial time."
+            "derived": false,
+            "description": "A sentence $\\Sigma$ is consistent iff it has at least one model. The number of models of $\\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\\Sigma$. Accordingly, CO can be achieved in polynomial time by checking if this count is nonzero (Table 18, Darwiche 2002)."
           },
           "CT": {
             "complexity": "poly",
             "refs": [
-              "Bryant_1986"
+              "Darwiche_2002"
             ],
-            "derived": true,
-            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports CT in polynomial time. Therefore MODS supports CT in polynomial time."
+            "derived": false,
+            "description": "The number of models of $\\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\\Sigma$. Accordingly, CT (model counting) can be achieved in polynomial time by counting these edges (Table 18, Darwiche 2002)."
           },
           "EQ": {
             "complexity": "poly",
@@ -1066,10 +1136,10 @@
           "VA": {
             "complexity": "poly",
             "refs": [
-              "Bryant_1986"
+              "Darwiche_2002"
             ],
-            "derived": true,
-            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports VA in polynomial time. Therefore MODS supports VA in polynomial time."
+            "derived": false,
+            "description": "A sentence $\\Sigma$ is valid iff it has $2^n$ models, where $n = |\\text{Vars}(\\Sigma)|$. The number of models of $\\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\\Sigma$. Accordingly, VA can be achieved in polynomial time by checking if this count equals $2^n$ (Table 18, Darwiche 2002)."
           }
         },
         "transformations": {
@@ -1126,14 +1196,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "nFBDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore nFBDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since nFBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -1220,8 +1296,12 @@
       "properties": {
         "queries": {
           "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma ce-co: CE → CO. if NNF cannot support CO in polynomial time, it cannot support CE in polynomial time either."
           },
           "CO": {
             "complexity": "no-poly-unknown-quasi",
@@ -1232,8 +1312,12 @@
             "description": "CNF does not support CO in polynomial time, and CNF transforms to NNF in polynomial time. If NNF supported CO in polynomial time, then CNF could too by transforming first. Therefore NNF does not support CO in polynomial time."
           },
           "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma ct-co: CT → CO. if NNF cannot support CO in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -1244,8 +1328,12 @@
             "description": "By contrapositive of lemma eq-co: EQ → CO. if NNF cannot support CO in polynomial time, it cannot support EQ in polynomial time either."
           },
           "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By contrapositive of lemma im-va: IM → VA. if NNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
           },
           "ME": {
             "complexity": "unknown-to-us",
@@ -1314,14 +1402,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "nOBDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore nOBDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since nOBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -1630,14 +1724,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "SDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore SDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since SDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -1818,14 +1918,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "SDNNF transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore SDNNF supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -1990,14 +2096,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "uFBDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore uFBDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since uFBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -2084,14 +2196,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "uOBDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore uOBDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since uOBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -2178,14 +2296,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "OBDD transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore OBDD supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since OBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "caveat": "",
@@ -2275,14 +2399,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "dec-DNNF transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore dec-DNNF supports CE in polynomial time."
           },
           "CO": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since dec-DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "complexity": "unknown-to-us",
@@ -2369,14 +2499,20 @@
       "properties": {
         "queries": {
           "CE": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "dec-SDNNF transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore dec-SDNNF supports CE in polynomial time."
           },
           "CO": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "By lemma ce-co: since dec-SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "complexity": "unknown-to-us",
@@ -7712,6 +7848,50 @@
       ],
       "consequent": "EQ",
       "description": "SE implies EQ: Sentences $\\Sigma_1$ and $\\Sigma_2$ are equivalent iff $\\Sigma_1 \\models \\Sigma_2$ and $\\Sigma_2 \\models \\Sigma_1$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "ct-co",
+      "antecedent": [
+        "CT"
+      ],
+      "consequent": "CO",
+      "description": "CT implies CO: Model counting (CT) requires enumerating all satisfying assignments. If a formula is inconsistent, it has zero models. Thus CT can determine CO by checking if the model count is zero.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "ct-va",
+      "antecedent": [
+        "CT"
+      ],
+      "consequent": "VA",
+      "description": "CT implies VA: A formula is valid iff all $2^n$ assignments satisfy it. If we can count models in polytime (CT), we can check validity by testing if the count equals $2^n$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "im-va",
+      "antecedent": [
+        "IM"
+      ],
+      "consequent": "VA",
+      "description": "IM implies VA: A formula $\\Sigma$ is valid iff the complete term (all positive or all negative literals, i.e., any single model) implies $\\Sigma$. Since IM tests whether a consistent term implies the sentence, testing with a trivially consistent term gives validity.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "ce-co",
+      "antecedent": [
+        "CE"
+      ],
+      "consequent": "CO",
+      "description": "CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly.",
       "refs": [
         "Darwiche_2002"
       ]

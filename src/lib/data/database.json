@@ -1008,44 +1008,68 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports CE in polynomial time. Therefore MODS supports CE in polynomial time."
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Bryant_1986"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports CO in polynomial time. Therefore MODS supports CO in polynomial time."
           },
           "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Bryant_1986"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports CT in polynomial time. Therefore MODS supports CT in polynomial time."
           },
           "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports EQ in polynomial time. Therefore MODS supports EQ in polynomial time."
           },
           "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports IM in polynomial time. Therefore MODS supports IM in polynomial time."
           },
           "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Bryant_1986"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports ME in polynomial time. Therefore MODS supports ME in polynomial time."
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports SE in polynomial time. Therefore MODS supports SE in polynomial time."
           },
           "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Bryant_1986"
+            ],
+            "derived": true,
+            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports VA in polynomial time. Therefore MODS supports VA in polynomial time."
           }
         },
         "transformations": {
@@ -2603,6 +2627,12 @@
       "bibtex": "@misc{Darwiche_2000,\n      title={On the tractable counting of theory models and its application to belief revision and truth maintenance}, \n      author={Adnan Darwiche},\n      year={2000},\n      eprint={cs/0003044},\n      archivePrefix={arXiv},\n      primaryClass={cs.AI},\n      url={https://arxiv.org/abs/cs/0003044}, \n}",
       "title": "Adnan Darwiche, \"On the tractable counting of theory models and its application to belief revision and truth maintenance,\" 2000.",
       "href": "https://arxiv.org/abs/cs/0003044"
+    },
+    {
+      "id": "Darwiche_2001a",
+      "bibtex": "@inproceedings{Darwiche_2001a,\n  author={Darwiche, Adnan},\n  title={Decomposable Negation Normal Form},\n  booktitle={Journal of the ACM},\n  volume={48},\n  number={4},\n  pages={608--647},\n  year={2001},\n  publisher={ACM}\n}",
+      "title": "Adnan Darwiche, \"Decomposable Negation Normal Form,\" Journal of the ACM, vol. 48, no. 4, pp. 608–647, 2001.",
+      "href": "https://doi.org/10.1145/502090.502091"
     },
     {
       "id": "Selman_1996",
@@ -7597,6 +7627,78 @@
         }
       },
       "defaultVisible": true
+    }
+  ],
+  "operationLemmas": [
+    {
+      "id": "co-cd-me",
+      "antecedent": [
+        "CO",
+        "CD"
+      ],
+      "consequent": "ME",
+      "description": "CO and CD imply ME: First test consistency (polytime via CO). If inconsistent, return the empty set. Otherwise, build a decision tree of models by iterating over variables $x_1, \\ldots, x_n$ and using CD to test consistency of $\\Sigma | \\alpha \\land x_i$ and $\\Sigma | \\alpha \\land \\neg x_i$ for each leaf term $\\alpha$. Since one branch must succeed for consistent terms, the tree has $O(mn)$ tests where $m$ is the model count and $n$ is the variable count.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "co-cd-ce",
+      "antecedent": [
+        "CO",
+        "CD"
+      ],
+      "consequent": "CE",
+      "description": "CO and CD imply CE: To test whether sentence $\\Sigma$ entails non-valid clause $\\alpha$, i.e. $\\Sigma \\models \\alpha$, it suffices to test whether $\\Sigma | \\neg\\alpha$ is inconsistent.",
+      "refs": [
+        "Darwiche_2002",
+        "Darwiche_2001a"
+      ]
+    },
+    {
+      "id": "va-cd-im",
+      "antecedent": [
+        "VA",
+        "CD"
+      ],
+      "consequent": "IM",
+      "description": "VA and CD imply IM: To test whether consistent term $\\alpha$ entails sentence $\\Sigma$, i.e. $\\alpha \\models \\Sigma$, test whether $\\neg\\alpha \\lor \\Sigma$ is valid. This is equivalent to $\\neg\\alpha \\lor (\\Sigma | \\alpha)$. Since $\\neg\\alpha$ and $\\Sigma | \\alpha$ share no variables, the disjunction is valid iff $\\neg\\alpha$ is valid or $\\Sigma | \\alpha$ is valid. Since $\\alpha$ is consistent, $\\neg\\alpha$ cannot be valid. Thus we test validity of $\\Sigma | \\alpha$, constructible in polytime via CD and testable in polytime via VA.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "eq-co",
+      "antecedent": [
+        "EQ"
+      ],
+      "consequent": "CO",
+      "description": "EQ implies CO: $\\mathsf{true}$ and $\\mathsf{false}$ belong to every NNF subset. $\\Sigma$ is inconsistent iff it is equivalent to $\\mathsf{false}$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "eq-va",
+      "antecedent": [
+        "EQ"
+      ],
+      "consequent": "VA",
+      "description": "EQ implies VA: $\\mathsf{true}$ and $\\mathsf{false}$ belong to every NNF subset. $\\Sigma$ is valid iff it is equivalent to $\\mathsf{true}$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "se-eq",
+      "antecedent": [
+        "SE"
+      ],
+      "consequent": "EQ",
+      "description": "SE implies EQ: Sentences $\\Sigma_1$ and $\\Sigma_2$ are equivalent iff $\\Sigma_1 \\models \\Sigma_2$ and $\\Sigma_2 \\models \\Sigma_1$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
     }
   ]
 }

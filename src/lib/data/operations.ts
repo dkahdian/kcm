@@ -47,7 +47,9 @@ export function resolveOperations(
         label: opDef.label,
         complexity: support.complexity,
         caveat: support.caveat,
-        refs: support.refs
+        refs: support.refs,
+        description: support.description,
+        derived: support.derived
       });
     } else {
       result.push({

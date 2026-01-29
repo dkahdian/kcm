@@ -1,4 +1,5 @@
 import type { ContributionQueueEntry } from '$lib/data/contribution-transforms.js';
+import type { KCOpSupport } from '$lib/types.js';
 
 export type SeparatingFunctionToAdd = {
   shortName: string;
@@ -35,8 +36,8 @@ export type LanguageToAdd = {
   fullName: string;
   definition: string;
   definitionRefs: string[];
-  queries: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
-  transformations: Record<string, { complexity: string; caveat?: string; refs: string[] }>;
+  queries: Record<string, KCOpSupport>;
+  transformations: Record<string, KCOpSupport>;
   tags: Array<{ label: string; color: string; description?: string; refs: string[] }>;
   existingReferences: string[];
 };

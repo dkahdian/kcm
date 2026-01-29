@@ -240,6 +240,63 @@ Termination and runtime:
 - Each iteration scans all `O(E)` edges.
 - Total: `O(E² · V²)` worst case, but with `V ≈ 20` this is still sub-second.
 
+## Algorithmic Notes: Potential Optimizations
+
+### Upgrade Optimization (Future Work)
+
+The current Phase 1 upgrade algorithm recomputes full reachability (`DFS-from-each-source`) on every iteration. A simpler and potentially faster approach uses direct transitive closure:
+
+```
+// Simplified upgrade without explicit reachability computation
+do until no changes:
+    for each language A:
+        for each language B:
+            for each language C:
+                if A→B exists and B→C exists:
+                    if A→C does not exist or is weaker:
+                        upgrade A→C = compose(A→B, B→C)
+```
+
+**Analysis**: This is essentially Floyd-Warshall for transitive closure.
+- Time per iteration: $O(V^3)$ 
+- Current DFS approach: $O(V \cdot (V + E))$ per iteration, but requires tracking parent pointers
+
+For small graphs ($V \approx 20$), both approaches are sub-millisecond. The Floyd-Warshall style may be simpler to implement and reason about, though it loses explicit witness paths (would need separate path reconstruction).
+
+### Downgrade Optimization (Future Work)
+
+The current Phase 2 downgrade algorithm uses trial-and-error with the full consistency validator:
+```
+for each edge (A, C):
+    temporarily assume stronger status
+    run validateAdjacencyConsistency  // O(V·(V+E))
+    if contradiction: downgrade
+```
+
+**Current runtime**: The validator runs DFS from each source, so `validateAdjacencyConsistency` is $O(V \cdot (V + E))$. Since we call it for every edge, the total is $O(E \cdot V \cdot (V + E))$ per iteration, or $O(E^2 \cdot V) for dense graphs like this one$.
+
+A more efficient direct approach avoids the validator entirely:
+
+```
+// Optimized downgrade without validator calls
+while changes remain:
+    for each edge (A, C) marked no-poly (resp. no-quasi):
+        for each language B:
+            // Case 1: (A, B) is poly and (B, C) is unknown
+            if (A, B) is poly and (B, C).poly is unknown:
+                downgrade (B, C) to no-poly
+                // Because A→B→C would be poly, but A→C is no-poly
+            
+            // Case 2: (A, B) is unknown and (B, C) is poly
+            if (A, B).poly is unknown and (B, C) is poly:
+                downgrade (A, B) to no-poly
+                // Because A→B→C would be poly, but A→C is no-poly
+```
+
+**Optimized runtime**: $O(E \cdot V)$ per iteration, since for each "no-poly" edge we scan all intermediate languages.
+
+**Trade-off**: The optimized version loses the explicit witness paths that come from the validator's DFS. For the KC Map's scale ($V \approx 20$), the current implementation is fast enough, so this optimization is left for future work when scaling to larger graphs.
+
 ## Implementation placement
 
 - Level‑0 (structural) validation: `validateDatasetStructure` in `src/lib/data/validation.ts` (already exists).
@@ -269,10 +326,231 @@ interface PropagationResult {
 }
 ```
 
-## Future (Level 2)
+## Level 2: Query Propagation
 
-A Level‑2 validator/propagator would additionally enforce:
-- If `A→B` is poly and `B` answers a query in poly, then `A` also answers it in poly.
-- Similar closure rules for transformation operations.
+This section specifies the **Level‑2 propagator** for query operations. Query propagation runs **after** Level‑1 succinctness propagation is complete, using the computed reachability matrices.
 
-This should be layered separately to keep Level‑1 fast and conceptually clean.
+### Theoretical Foundation
+
+**Definition**: A *query* on a language $L$ is a function $q: L \to \{0,1\}$ that answers a decision problem about formulas in that language.
+
+**Lemma 1 (Succinctness Composition)**: If there exists a polynomial (resp. quasipolynomial) transformation $m: L_1 \to L_2$ and a query $q: L_2 \to \{0,1\}$ is computable in polynomial (resp. quasipolynomial) time, then the composed function $q \circ m: L_1 \to \{0,1\}$ is also computable in polynomial (resp. quasipolynomial) time.
+
+**Corollary**: If $L_1$ transforms to $L_2$ and $L_2$ supports query $q$, then $L_1$ also supports query $q$ with complexity at most $\max(\text{transform complexity}, \text{query complexity})$.
+
+**Lemma 2 (Operation Implication)**: Certain operations imply others within the same language. These lemmas can involve both queries AND transformations in their antecedent/consequent:
+
+Examples:
+- Model Enumeration (ME) implies Model Counting (CT): enumerate all models and count
+- Model Counting (CT) implies Consistency (CO): check if count $> 0$
+- Validity (VA) + Negation (¬C) implies Consistency (CO): $\neg\phi$ valid iff $\phi$ unsatisfiable
+- Model Enumeration (ME) implies Implicant (IM): enumerate until you find one
+
+These lemmas are parameterized: $\{o_1, o_2, \ldots, o_n\} \Rightarrow o_m$ where each $o_i$ can be a query or transformation. If a language supports all operations in the antecedent set at a given complexity, it supports the consequent at that complexity.
+
+### Operation Implication Lemmas
+
+Lemmas are stored in `database.json` under `operationLemmas` (not hardcoded). Each lemma specifies:
+- `id`: unique identifier
+- `antecedent`: list of operation codes (queries like "CT" or transformations like "NOT_C")
+- `consequent`: the implied operation code
+- `description`: human-readable justification
+- `refs`: supporting references
+
+Example lemmas:
+
+| ID | Antecedent | Consequent | Justification |
+| --- | --- | --- | --- |
+| `me-ct` | ME | CT | Count models by enumeration |
+| `ct-co` | CT | CO | Satisfiable iff model count $> 0$ |
+| `va-not-co` | VA, ¬C | CO | Check validity of $\neg\phi$; valid iff $\phi$ unsatisfiable |
+| `me-im` | ME | IM | Return any enumerated model as implicant |
+| `se-ce` | SE | CE | Clausal entailment is a special case of sentential entailment |
+
+### Complexity Lattice for Queries
+
+The same complexity codes are used for queries and succinctness relations:
+- `poly` - query is polynomial
+- `unknown-poly-quasi` - polynomial unknown, quasi-polynomial exists
+- `no-poly-quasi` - polynomial impossible, quasi-polynomial exists
+- `no-poly-unknown-quasi` - polynomial impossible, quasi unknown
+- `no-quasi` - quasi-polynomial impossible (implies polynomial also impossible)
+- `unknown-both` - both polynomial and quasi-polynomial unknown
+- `unknown-to-us` - not yet researched (treat as `null` for propagation)
+
+### Partial Derivation
+
+Like succinctness relations with `noPolyDescription`/`quasiDescription`, operation support needs partial derivation tracking. When an operation has `no-poly-quasi` complexity, we track separately:
+- Whether the "no poly" claim was manually authored or derived
+- Whether the "quasi exists" claim was manually authored or derived
+
+The `derived` field on `KCOpSupport` is `true` only if BOTH claims are derived.
+
+### Phase 3: Query Propagation via Succinctness (Upgrades)
+
+**Precondition**: Level‑1 succinctness propagation is complete; `reachP` and `reachQ` matrices are stable.
+
+Since the reachability matrices already encode all transitive closures, no graph traversal is needed. The algorithm simply iterates over all pairs.
+
+**Algorithm**:
+```
+propagateQueriesViaSuccinctness(reachP, reachQ, languages):
+    changed = false
+    for each query q in QUERIES:
+        for each language L2 in languages:
+            qComplexity = L2.queries[q].complexity
+            if qComplexity guarantees poly:
+                for each language L1 in languages:
+                    if reachP[L1][L2]:  // poly path exists
+                        if L1.queries[q].complexity does not guarantee poly:
+                            upgrade L1.queries[q] to poly
+                            set L1.queries[q].derived = true
+                            set L1.queries[q].description = witness path + " Therefore {L1} supports {q} in polynomial time."
+                            changed = true
+            if qComplexity guarantees quasi:
+                for each language L1 in languages:
+                    if reachQ[L1][L2]:  // quasi path exists
+                        if L1.queries[q].complexity does not guarantee quasi:
+                            // Upgrade to quasi; preserve poly status
+                            upgrade L1.queries[q] to at-least-quasi
+                            set L1.queries[q].derived = true (if wasn't already manual)
+                            changed = true
+    return changed
+```
+
+**Complexity**: $O(Q \cdot V^2)$ where $Q$ = number of queries, $V$ = number of languages.
+
+### Phase 4: Query Propagation via Lemmas (Upgrades)
+
+**Algorithm**:
+```
+propagateQueriesViaLemmas(languages, lemmas):
+    changed = false
+    for each language L in languages:
+        for each lemma (antecedent, consequent) in lemmas:
+            // antecedent may include both queries and transformations
+            if all operations in antecedent are supported by L:
+                worst_complexity = max complexity among antecedent operations
+                if L.operations[consequent].complexity > worst_complexity:
+                    upgrade L.operations[consequent] to worst_complexity
+                    set derived = true
+                    set description = "By {lemma}: since {L} supports {antecedent}, it supports {consequent}."
+                    changed = true
+    return changed
+```
+
+### Phase 3+4 Combined: Fixed-Point Query Upgrade Loop
+
+The upgrade phases run in a fixed-point loop, processing polynomial before quasipolynomial:
+
+```
+propagateQueryUpgrades(data, reachP, reachQ, lemmas):
+    // First: all poly upgrades until stable
+    polyChanged = true
+    while polyChanged:
+        polyChanged = false
+        if propagateQueriesViaSuccinctness(reachP, null, data.languages, poly_only=true):
+            polyChanged = true
+        if propagateQueriesViaLemmas(data.languages, lemmas, poly_only=true):
+            polyChanged = true
+    
+    // Second: all quasi upgrades until stable
+    quasiChanged = true
+    while quasiChanged:
+        quasiChanged = false
+        if propagateQueriesViaSuccinctness(null, reachQ, data.languages, quasi_only=true):
+            quasiChanged = true
+        if propagateQueriesViaLemmas(data.languages, lemmas, quasi_only=true):
+            quasiChanged = true
+    
+    return data
+```
+
+### Phase 5: Query Downgrades (Contradiction Discovery)
+
+**Key Insight**: Unlike succinctness downgrades which require exhaustive trial-and-error with the validator, query downgrades can be computed efficiently without graph traversal.
+
+**Contrapositive of Lemma 1**: If $L_1$ does NOT support query $q$, and there's a polynomial transformation $L_2 \to L_1$, then $L_2$ does NOT support $q$ in polynomial time either.
+
+In the language of chains: consider `L_1 → L_2 → ... → L_i → (unknown) → q` where `L_1` does not support `q`. Since succinctness is transitive and already propagated, we have `L_1 → L_i` directly. Thus we only need to check length-1 chains.
+
+**Simplified Downgrade Algorithm** (no graph traversal needed):
+```
+propagateQueryDowngrades(reachP, reachQ, languages):
+    changed = false
+    for each query q in QUERIES:
+        for each language Li with unknown q support:
+            for each language L1 in languages:
+                if reachP[L1][Li] and L1.queries[q] asserts "no poly":
+                    downgrade Li.queries[q] to "no poly"
+                    set derived = true
+                    set description = "L1 does not support q in poly, and L1 transforms to Li in poly. Therefore Li does not support q in poly."
+                    changed = true
+                    break  // found a witness, move to next Li
+            
+            for each language L1 in languages:
+                if reachQ[L1][Li] and L1.queries[q] asserts "no quasi":
+                    downgrade Li.queries[q] to "no quasi"
+                    set derived = true
+                    changed = true
+                    break
+    return changed
+```
+
+**Complexity**: $O(Q \cdot V^2)$ — same as upgrades, no expensive validator calls.
+
+### Query Consistency Validator
+
+The query validator checks for contradictions where the data claims:
+- Language $L_1$ supports $q$ in poly, AND
+- $L_1 \xrightarrow{poly} L_2$, BUT
+- $L_2$ is marked as NOT supporting $q$ in poly
+
+This mirrors the succinctness consistency validator but treats the query as the final node in the chain: `L_1 \to L_2 \to ... \to L_n \to q`.
+
+**Algorithm**:
+```
+validateQueryConsistency(reachP, reachQ, languages):
+    for each query q in QUERIES:
+        for each language L1 in languages:
+            for each language L2 in languages:
+                if reachP[L1][L2]:
+                    if L1.queries[q] guarantees poly and L2.queries[q] asserts "no poly":
+                        return { ok: false, error: "Contradiction: L1 supports q in poly, transforms to L2 in poly, but L2 doesn't support q in poly" }
+                if reachQ[L1][L2]:
+                    if L1.queries[q] guarantees quasi and L2.queries[q] asserts "no quasi":
+                        return { ok: false, error: "..." }
+    return { ok: true }
+```
+
+### Implementation Placement
+
+- Query propagation: add `propagateQueryOperations` in `src/lib/data/propagation.ts`
+- Operation lemmas: store in `database.json` under `operationLemmas`
+- Type updates: extend `KCOpSupport` with `description?: string` and `derived?: boolean`
+- Query validator: add `validateQueryConsistency` alongside `validateAdjacencyConsistency`
+
+### Execution Order
+
+1. Run Level-1 succinctness propagation (Phases 0, 1, 2)
+2. Run Level-2 query validation (check consistency before propagation)
+3. Run Level-2 query propagation (Phases 3, 4, 5)
+4. Return combined results
+
+### Note on Transformation Operations
+
+Transformation operations (CD, FO, ∧C, etc.) are NOT propagated via succinctness. Unlike queries where $L_1 \to L_2$ helps compute $q$ on $L_1$, a transformation $T: L \to L$ on one language does not help construct $T': L' \to L'$ on another language. This would require $L$ and $L'$ to be bidirectionally equivalent, which is rare.
+
+However, transformation operations CAN participate in lemma-based propagation as antecedents (e.g., VA + ¬C → CO).
+
+### Note on Level-1 Downgrade Efficiency
+
+The current Level-1 succinctness downgrade algorithm uses exhaustive trial-and-error:
+```
+for each edge:
+    temporarily assume stronger status
+    run full validator
+    if contradiction: downgrade
+```
+
+This is $O(E \cdot V \cdot (V + E))$ per iteration. A more efficient approach would use the same "direct witness" pattern as query downgrades, avoiding repeated validator calls. This optimization is left for future work; the current approach is correct and fast enough for small graphs ($V \approx 20$).

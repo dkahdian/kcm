@@ -17,6 +17,28 @@ export type ArrowShape =
   | 'triangle-backcurve'; // curved triangle
 
 /**
+ * An operation implication lemma: if a language supports all operations in the antecedent,
+ * it also supports the consequent operation.
+ * 
+ * Operations can be queries (CO, VA, CT, etc.) or transformations (CD, FO, NOT_C, etc.).
+ * 
+ * Example: VA + NOT_C implies CO because you can check satisfiability by
+ * negating the formula and checking if the negation is valid.
+ */
+export interface OperationLemma {
+  /** Unique identifier for this lemma */
+  id: string;
+  /** Operation codes that must be supported (antecedent set) - can be queries or transformations */
+  antecedent: string[];
+  /** Operation code that is implied (consequent) - can be a query or transformation */
+  consequent: string;
+  /** Human-readable justification for the implication */
+  description: string;
+  /** Reference IDs supporting this lemma */
+  refs: string[];
+}
+
+/**
  * Full complexity info with display properties.
  * Used for both transformation statuses and operation complexities.
  * 
@@ -75,6 +97,10 @@ export interface KCOpSupport {
   caveat?: string;
   /** reference IDs pointing to entries in the language's references array */
   refs: string[];
+  /** optional justification/description for this complexity claim */
+  description?: string;
+  /** True if this operation support was inferred by the propagator rather than manually authored */
+  derived?: boolean;
 }
 
 /**

@@ -338,11 +338,21 @@
                             onclick={scrollToReferences}
                             title="View reference"
                           >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                      {#if q.derived}
+                        <span class="derived-badge" title="Inferred by propagation">derived</span>
+                      {/if}
                     </div>
                     {#if q.caveat}
                       <MathText 
                         text={`Unless ${q.caveat}`} 
                         className="text-xs text-gray-500"
+                        onCitationClick={handleCitationClick}
+                      />
+                    {/if}
+                    {#if q.description}
+                      <MathText 
+                        text={q.description} 
+                        className="text-xs text-gray-500 mt-1"
                         onCitationClick={handleCitationClick}
                       />
                     {/if}
@@ -373,11 +383,21 @@
                             onclick={scrollToReferences}
                             title="View reference"
                           >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                      {#if t.derived}
+                        <span class="derived-badge" title="Inferred by propagation">derived</span>
+                      {/if}
                     </div>
                     {#if t.caveat}
                       <MathText 
                         text={`Unless ${t.caveat}`} 
                         className="text-xs text-gray-500"
+                        onCitationClick={handleCitationClick}
+                      />
+                    {/if}
+                    {#if t.description}
+                      <MathText 
+                        text={t.description} 
+                        className="text-xs text-gray-500 mt-1"
                         onCitationClick={handleCitationClick}
                       />
                     {/if}
@@ -531,5 +551,20 @@
 
     .missing-ref.inline {
       margin-left: 0.25em;
+    }
+
+    .derived-badge {
+      display: inline;
+      font-size: 0.65em;
+      vertical-align: super;
+      line-height: 0;
+      color: #7c3aed;
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      border-radius: 0.25rem;
+      padding: 0.1em 0.3em;
+      margin: 0 0.2em;
+      font-weight: 600;
+      white-space: nowrap;
     }
   </style>

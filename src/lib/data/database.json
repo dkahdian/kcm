@@ -173,98 +173,84 @@
       "definitionRefs": []
     },
     {
+      "id": "lang_89649e36",
       "name": "CNF",
       "fullName": "Conjunctive Normal Form",
+      "definition": "-",
+      "definitionRefs": [],
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ]
           },
           "CT": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           }
         },
         "transformations": {
           "AND_BC": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           }
         }
       },
-      "tags": [],
-      "id": "lang_89649e36",
-      "definition": "-",
-      "definitionRefs": []
+      "tags": []
     },
     {
       "fullName": "-",
@@ -643,98 +629,84 @@
       "definitionRefs": []
     },
     {
+      "id": "lang_4c204bf3",
       "name": "DNF",
       "fullName": "Disjunctive Normal Form",
+      "definition": "-",
+      "definitionRefs": [],
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "CO": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "CT": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "EQ": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "IM": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "ME": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "SE": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ]
           }
         },
         "transformations": {
           "AND_BC": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "AND_C": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "CD": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "FO": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "NOT_C": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_BC": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "OR_C": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           },
           "SFO": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": []
           }
         }
       },
-      "tags": [],
-      "id": "lang_4c204bf3",
-      "definition": "-",
-      "definitionRefs": []
+      "tags": []
     },
     {
       "name": "DNNF",
@@ -770,8 +742,12 @@
             "refs": []
           },
           "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "DNF does not support VA in polynomial time, and DNF transforms to DNNF in polynomial time. If DNNF supported VA in polynomial time, then DNF could too by transforming first. Therefore DNNF does not support VA in polynomial time."
           }
         },
         "transformations": {
@@ -1224,8 +1200,12 @@
             "refs": []
           },
           "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "CNF does not support CO in polynomial time, and CNF transforms to NNF in polynomial time. If NNF supported CO in polynomial time, then CNF could too by transforming first. Therefore NNF does not support CO in polynomial time."
           },
           "CT": {
             "complexity": "unknown-to-us",
@@ -1248,8 +1228,12 @@
             "refs": []
           },
           "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "DNF does not support VA in polynomial time, and DNF transforms to NNF in polynomial time. If NNF supported VA in polynomial time, then DNF could too by transforming first. Therefore NNF does not support VA in polynomial time."
           }
         },
         "transformations": {
@@ -7388,37 +7372,7 @@
         null,
         null
       ]
-    ],
-    "indexByLanguage": {
-      "lang_8f666aa0": 0,
-      "lang_bb65ddb5": 1,
-      "lang_89649e36": 2,
-      "lang_83e3b023": 3,
-      "lang_6c130090": 4,
-      "lang_ea9b5299": 5,
-      "lang_91f812d0": 6,
-      "lang_4c204bf3": 7,
-      "lang_3bebcab7": 8,
-      "lang_684b1ca7": 9,
-      "lang_6ae90adc": 10,
-      "lang_e02902d0": 11,
-      "lang_1df07cc3": 12,
-      "lang_5bf00851": 13,
-      "lang_d24efe0e": 14,
-      "lang_d69995dd": 15,
-      "lang_27fffab2": 16,
-      "lang_1afefbe2": 17,
-      "lang_9c84a267": 18,
-      "lang_b13b0d78": 19,
-      "lang_3c803ba1": 20,
-      "lang_4e62a038": 21,
-      "lang_c2df8c2b": 22,
-      "lang_b9d72a7c": 23,
-      "lang_981b62f0": 24,
-      "lang_0f27d539": 25,
-      "lang_4ae03bc8": 26,
-      "lang_82fa749e": 27
-    }
+    ]
   },
   "separatingFunctions": [
     {

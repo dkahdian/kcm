@@ -1,12 +1,13 @@
 /**
- * Script to refresh derived edges in database.json
+ * Script to refresh derived edges and queries in database.json
  * 
  * This script:
  * 1. Reads database.json
  * 2. Removes all fully-derived edges (where derived=true and both description components, if present, are derived)
  * 3. For partially-derived no-poly-quasi edges, reverts the derived description component
- * 4. Runs the propagator to re-generate derived edges
- * 5. Writes the updated database.json
+ * 4. Removes all derived queries and transformations from languages
+ * 5. Runs the propagator to re-generate derived edges and queries
+ * 6. Writes the updated database.json
  * 
  * Usage: npx tsx scripts/refresh-derived.ts
  */
@@ -101,6 +102,51 @@ function removeDerivedEdges(matrix: KCAdjacencyMatrix): { removed: number; rever
   return { removed, reverted };
 }
 
+/**
+ * Remove derived queries and transformations from all languages.
+ * For each query/transformation with derived=true, reset to unknown-to-us.
+ */
+function removeDerivedOperations(languages: any[]): { queriesRemoved: number; transformationsRemoved: number } {
+  let queriesRemoved = 0;
+  let transformationsRemoved = 0;
+
+  for (const language of languages) {
+    if (!language.properties) continue;
+
+    // Process queries
+    if (language.properties.queries) {
+      for (const [opCode, opData] of Object.entries(language.properties.queries)) {
+        const op = opData as any;
+        if (op && op.derived === true) {
+          // Reset to unknown-to-us
+          language.properties.queries[opCode] = {
+            complexity: 'unknown-to-us',
+            refs: []
+          };
+          queriesRemoved++;
+        }
+      }
+    }
+
+    // Process transformations
+    if (language.properties.transformations) {
+      for (const [opCode, opData] of Object.entries(language.properties.transformations)) {
+        const op = opData as any;
+        if (op && op.derived === true) {
+          // Reset to unknown-to-us
+          language.properties.transformations[opCode] = {
+            complexity: 'unknown-to-us',
+            refs: []
+          };
+          transformationsRemoved++;
+        }
+      }
+    }
+  }
+
+  return { queriesRemoved, transformationsRemoved };
+}
+
 function countDerivedEdges(matrix: KCAdjacencyMatrix): number {
   let count = 0;
   const size = matrix.languageIds.length;
@@ -134,6 +180,12 @@ function main(): void {
   const { removed, reverted } = removeDerivedEdges(database.adjacencyMatrix);
   console.log(`Removed ${removed} fully-derived edges.`);
   console.log(`Reverted ${reverted} partially-derived edges.\n`);
+
+  // Remove derived queries and transformations
+  console.log('Removing derived queries and transformations...');
+  const { queriesRemoved, transformationsRemoved } = removeDerivedOperations(database.languages);
+  console.log(`Removed ${queriesRemoved} derived queries.`);
+  console.log(`Removed ${transformationsRemoved} derived transformations.\n`);
   
   // Build graph data structure for propagation
   // Note: complexities and relationTypes come from complexities.ts, not database.json
@@ -165,7 +217,9 @@ function main(): void {
   saveDatabase(database);
   
   console.log('\n=== Done ===');
-  console.log(`Summary: Removed ${removed}, Reverted ${reverted} → Generated ${newDerived} derived edges`);
+  console.log(`Summary: Removed ${removed} edges, Reverted ${reverted} edges`);
+  console.log(`         Removed ${queriesRemoved} queries, ${transformationsRemoved} transformations`);
+  console.log(`         Generated ${newDerived} derived edges`);
 }
 
 main();

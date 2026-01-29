@@ -410,9 +410,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to d-DNNF in polynomial time. If d-DNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore d-DNNF does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -510,9 +513,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to d-SDNNF in polynomial time. If d-SDNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore d-SDNNF does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -818,10 +824,10 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Meinel_Theobald_1998"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma se-eq: SE → EQ. if DNNF cannot support EQ in polynomial time, it cannot support SE in polynomial time either."
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to DNNF in polynomial time. If DNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore DNNF does not support SE in polynomial time."
           },
           "VA": {
             "complexity": "no-poly-unknown-quasi",
@@ -918,9 +924,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to FBDD in polynomial time. If FBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore FBDD does not support SE in polynomial time."
           },
           "VA": {
             "complexity": "poly",
@@ -1087,10 +1096,10 @@
           "CE": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports CE in polynomial time. Therefore MODS supports CE in polynomial time."
+            "description": "MODS transforms to DNNF in polynomial time, and DNNF supports CE in polynomial time. Therefore MODS supports CE in polynomial time."
           },
           "CO": {
             "complexity": "poly",
@@ -1111,7 +1120,9 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Bryant_1986",
+              "Bryant_1992",
+              "Meinel_Theobald_1998"
             ],
             "derived": true,
             "description": "MODS transforms to OBDD$_<$ in polynomial time, and OBDD$_<$ supports EQ in polynomial time. Therefore MODS supports EQ in polynomial time."
@@ -1239,9 +1250,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to nFBDD in polynomial time. If nFBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore nFBDD does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -1349,10 +1363,10 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Meinel_Theobald_1998"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma se-eq: SE → EQ. if NNF cannot support EQ in polynomial time, it cannot support SE in polynomial time either."
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to NNF in polynomial time. If NNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore NNF does not support SE in polynomial time."
           },
           "VA": {
             "complexity": "no-poly-unknown-quasi",
@@ -1445,9 +1459,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to nOBDD in polynomial time. If nOBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore nOBDD does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -1536,9 +1553,10 @@
             "complexity": "poly",
             "refs": [
               "Bryant_1986",
-              "Bryant_1992"
+              "Bryant_1992",
+              "Meinel_Theobald_1998"
             ],
-            "description": "OBDDs with a fixed variable ordering are canonical: two functions are equivalent iff their reduced OBDDs are identical. This makes EQ trivial (structural isomorphism check) \\citet{Bryant_1986, Bryant_1992, Gergov_1994}."
+            "description": "OBDDs with a fixed variable ordering are canonical: two functions are equivalent iff their reduced OBDDs are identical. This makes EQ trivial (structural isomorphism check) \\citet{Bryant_1986, Bryant_1992, Meinel_Theobald_1998} (Theorem 8.11)."
           },
           "IM": {
             "caveat": "",
@@ -1772,9 +1790,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to SDD in polynomial time. If SDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore SDD does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -1966,9 +1987,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to SDNNF in polynomial time. If SDNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore SDNNF does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -2144,9 +2168,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to uFBDD in polynomial time. If uFBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore uFBDD does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -2244,9 +2271,12 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to uOBDD in polynomial time. If uOBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore uOBDD does not support SE in polynomial time."
           },
           "VA": {
             "caveat": "",
@@ -2318,18 +2348,20 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Bryant_1986",
               "Darwiche_2002"
             ],
-            "derived": true,
-            "description": "By lemma ce-co: since OBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
+            "derived": false,
+            "description": "Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \\citet{Darwiche_2002}."
           },
           "CT": {
             "complexity": "poly",
             "refs": [
-              "Gergov_1994"
+              "Bryant_1986",
+              "Darwiche_2002"
             ],
-            "derived": true,
-            "description": "OBDD transforms to FBDD in polynomial time, and FBDD supports CT in polynomial time. Therefore OBDD supports CT in polynomial time."
+            "derived": false,
+            "description": "Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \\citet{Darwiche_2002}."
           },
           "EQ": {
             "caveat": "",
@@ -2347,17 +2379,21 @@
             "refs": []
           },
           "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": false,
+            "description": "Checking sentential entailment for OBDD formulas is coNP-complete. Since OBDD satisfies $\\neg$C and since $\\alpha \\land \\beta$ is consistent iff $\\alpha \\not\\models \\neg\\beta$, checking SE for OBDD is coNP-complete (Lemma 8.14, Meinel \\& Theobald 1998). This is because checking consistency of two OBDD$_<$ formulas with different variable orderings is NP-complete."
           },
           "VA": {
             "complexity": "poly",
             "refs": [
-              "Gergov_1994"
+              "Bryant_1986",
+              "Darwiche_2002"
             ],
-            "derived": true,
-            "description": "OBDD transforms to FBDD in polynomial time, and FBDD supports VA in polynomial time. Therefore OBDD supports VA in polynomial time."
+            "derived": false,
+            "description": "Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \\citet{Darwiche_2002}."
           }
         },
         "transformations": {
@@ -2456,9 +2492,12 @@
             "refs": []
           },
           "SE": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to dec-DNNF in polynomial time. If dec-DNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore dec-DNNF does not support SE in polynomial time."
           },
           "VA": {
             "complexity": "unknown-poly-quasi",
@@ -2562,9 +2601,12 @@
             "refs": []
           },
           "SE": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Meinel_Theobald_1998"
+            ],
+            "derived": true,
+            "description": "OBDD does not support SE in polynomial time, and OBDD transforms to dec-SDNNF in polynomial time. If dec-SDNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore dec-SDNNF does not support SE in polynomial time."
           },
           "VA": {
             "complexity": "unknown-poly-quasi",
@@ -2935,6 +2977,12 @@
       "bibtex": "@mastersthesis{Kaleyski_2016,\n  author       = {Kaleyski, Nikolay Stoyanov},\n  title        = {Boolean methods in knowledge compilation},\n  school       = {Charles University, Faculty of Mathematics and Physics},\n  year         = {2016},\n  address      = {Prague, Czech Republic},\n  type         = {Master’s thesis},\n  keywords     = {Boolean functions, knowledge compilation, PI, MODS, prime implicants},\n  note         = {Master’s thesis, Department of Theoretical Computer Science and Mathematical Logic},\n  url          = {https://dspace.cuni.cz/bitstream/handle/20.500.11956/83080/DPTX_2014_2_11320_0_450653_0_169085.pdf?sequence=1}\n}",
       "title": "N. S. Kaleyski, \"Boolean methods in knowledge compilation,\" 2016.",
       "href": "https://dspace.cuni.cz/bitstream/handle/20.500.11956/83080/DPTX_2014_2_11320_0_450653_0_169085.pdf?sequence=1"
+    },
+    {
+      "id": "Meinel_Theobald_1998",
+      "bibtex": "@book{Meinel_Theobald_1998,\n  author = {Meinel, Christoph and Theobald, Thorsten},\n  title = {Algorithms and Data Structures in VLSI Design: OBDD - Foundations and Applications},\n  year = {1998},\n  isbn = {3540644865},\n  publisher = {Springer-Verlag},\n  address = {Berlin, Heidelberg}\n}",
+      "title": "C. Meinel and T. Theobald, \"Algorithms and Data Structures in VLSI Design: OBDD - Foundations and Applications,\" Springer-Verlag, 1998.",
+      "href": "https://doi.org/10.1007/978-3-642-58940-9"
     }
   ],
   "tags": {

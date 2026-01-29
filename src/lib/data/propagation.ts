@@ -1024,6 +1024,165 @@ function propagateQueryDowngrades(
 }
 
 /**
+ * Phase 5b: Propagate query downgrades via lemma contrapositives.
+ * 
+ * For a lemma A1 ∧ A2 ∧ ... ∧ An -> C (all antecedents together imply consequent):
+ * Contrapositive: ¬C -> ¬A1 ∨ ¬A2 ∨ ... ∨ ¬An
+ * 
+ * We can only infer a specific antecedent is false when:
+ * - C is false (no-poly or no-quasi)
+ * - All OTHER antecedents are TRUE (supported in poly or quasi)
+ * - Then the remaining antecedent must be false
+ * 
+ * Example: [CO, CD] -> ME (consistency + conditioning implies model enumeration)
+ * - If ME is no-poly AND CD is poly → CO must be no-poly
+ * - If ME is no-poly AND CO is poly → CD must be no-poly
+ * 
+ * Example: [EQ] -> CO (equivalence implies consistency)
+ * - If CO is no-poly → EQ must be no-poly (single antecedent, trivially all others true)
+ */
+function propagateDowngradesViaLemmaContrapositives(
+  data: GraphData,
+  lemmas: OperationLemma[]
+): boolean {
+  let changed = false;
+
+  for (const language of data.languages) {
+    const langName = idToName(language.id);
+
+    for (const lemma of lemmas) {
+      // Get the consequent's complexity
+      const consequentSupport = getOperationSupport(language, lemma.consequent);
+      const consequentComplexity = consequentSupport?.complexity ?? 'unknown-to-us';
+
+      // Check no-poly contrapositive
+      if (queryAssertsNoPoly(consequentComplexity)) {
+        // For each antecedent Aj, check if all OTHER antecedents are supported in poly
+        for (let j = 0; j < lemma.antecedent.length; j++) {
+          const targetOp = lemma.antecedent[j];
+          const targetSupport = getOperationSupport(language, targetOp);
+          const targetComplexity = targetSupport?.complexity ?? 'unknown-to-us';
+
+          // Skip if target already asserts no-poly
+          if (queryAssertsNoPoly(targetComplexity)) continue;
+
+          // Check if ALL OTHER antecedents support poly
+          let allOthersPolySupported = true;
+          const otherAntecedents: string[] = [];
+          for (let k = 0; k < lemma.antecedent.length; k++) {
+            if (k === j) continue;
+            const otherOp = lemma.antecedent[k];
+            otherAntecedents.push(otherOp);
+            const otherSupport = getOperationSupport(language, otherOp);
+            const otherComplexity = otherSupport?.complexity ?? 'unknown-to-us';
+            if (!queryGuaranteesPoly(otherComplexity)) {
+              allOthersPolySupported = false;
+              break;
+            }
+          }
+
+          if (!allOthersPolySupported) continue;
+
+          // All other antecedents support poly, consequent is no-poly → target must be no-poly
+          const othersDesc = otherAntecedents.length > 0 
+            ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in polynomial time,`
+            : '';
+          const description = `By contrapositive of lemma ${lemma.id}: ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent}.${othersDesc} if ${langName} cannot support ${lemma.consequent} in polynomial time, it cannot support ${targetOp} in polynomial time either.`;
+
+          if (DEBUG_PROPAGATION) {
+            console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
+          }
+
+          // Determine if this is a query or transformation
+          const isQuery = targetOp in (QUERIES ?? {});
+          if (isQuery) {
+            setQuerySupport(language, targetOp, {
+              complexity: 'no-poly-unknown-quasi',
+              refs: consequentSupport?.refs ?? lemma.refs,
+              derived: true,
+              description
+            });
+          } else {
+            if (!language.properties) language.properties = {};
+            if (!language.properties.transformations) language.properties.transformations = {};
+            language.properties.transformations[targetOp] = {
+              complexity: 'no-poly-unknown-quasi',
+              refs: consequentSupport?.refs ?? lemma.refs,
+              derived: true,
+              description
+            };
+          }
+          changed = true;
+        }
+      }
+
+      // Check no-quasi contrapositive
+      if (queryAssertsNoQuasi(consequentComplexity)) {
+        // For each antecedent Aj, check if all OTHER antecedents are supported in quasi
+        for (let j = 0; j < lemma.antecedent.length; j++) {
+          const targetOp = lemma.antecedent[j];
+          const targetSupport = getOperationSupport(language, targetOp);
+          const targetComplexity = targetSupport?.complexity ?? 'unknown-to-us';
+
+          // Skip if target already asserts no-quasi
+          if (queryAssertsNoQuasi(targetComplexity)) continue;
+
+          // Check if ALL OTHER antecedents support quasi
+          let allOthersQuasiSupported = true;
+          const otherAntecedents: string[] = [];
+          for (let k = 0; k < lemma.antecedent.length; k++) {
+            if (k === j) continue;
+            const otherOp = lemma.antecedent[k];
+            otherAntecedents.push(otherOp);
+            const otherSupport = getOperationSupport(language, otherOp);
+            const otherComplexity = otherSupport?.complexity ?? 'unknown-to-us';
+            if (!queryGuaranteesQuasi(otherComplexity)) {
+              allOthersQuasiSupported = false;
+              break;
+            }
+          }
+
+          if (!allOthersQuasiSupported) continue;
+
+          // All other antecedents support quasi, consequent is no-quasi → target must be no-quasi
+          const othersDesc = otherAntecedents.length > 0 
+            ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in quasi-polynomial time,`
+            : '';
+          const description = `By contrapositive of lemma ${lemma.id}: ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent}.${othersDesc} if ${langName} cannot support ${lemma.consequent} in quasi-polynomial time, it cannot support ${targetOp} in quasi-polynomial time either.`;
+
+          if (DEBUG_PROPAGATION) {
+            console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
+          }
+
+          // Determine if this is a query or transformation
+          const isQuery = targetOp in (QUERIES ?? {});
+          if (isQuery) {
+            setQuerySupport(language, targetOp, {
+              complexity: 'no-quasi',
+              refs: consequentSupport?.refs ?? lemma.refs,
+              derived: true,
+              description
+            });
+          } else {
+            if (!language.properties) language.properties = {};
+            if (!language.properties.transformations) language.properties.transformations = {};
+            language.properties.transformations[targetOp] = {
+              complexity: 'no-quasi',
+              refs: consequentSupport?.refs ?? lemma.refs,
+              derived: true,
+              description
+            };
+          }
+          changed = true;
+        }
+      }
+    }
+  }
+
+  return changed;
+}
+
+/**
  * Validate query consistency.
  * Checks for contradictions:
  * 1. If L1 -> L2 and L2 supports q, but L1 claims no support (upgrade direction)
@@ -1130,12 +1289,18 @@ function propagateQueryOperations(data: GraphData): void {
     }
   }
 
-  // Phase 5: Downgrades
+  // Phase 5: Downgrades (via succinctness and lemma contrapositives)
   let downgradeChanged = true;
   while (downgradeChanged) {
     const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
     const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
-    downgradeChanged = propagateQueryDowngrades(data, reachP, reachQ);
+    downgradeChanged = false;
+    if (propagateQueryDowngrades(data, reachP, reachQ)) {
+      downgradeChanged = true;
+    }
+    if (propagateDowngradesViaLemmaContrapositives(data, OPERATION_LEMMAS)) {
+      downgradeChanged = true;
+    }
   }
 
   // Post-propagation validation: ensure no contradictions remain

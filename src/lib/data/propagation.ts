@@ -694,7 +694,7 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
 /** Statuses that assert "no polynomial" */
 const NO_POLY_QUERY_STATUSES = new Set<string>(['no-poly-unknown-quasi', 'no-poly-quasi', 'no-quasi']);
 /** Statuses that assert "no quasi-polynomial" */
-const NO_QUASI_QUERY_STATUSES = new Set<string>(['no-quasi']);
+const NO_QUASI_QUERY_STATUSES = new Set<string>(['no-quasi', 'no-poly-quasi']);
 /** Statuses that are unknown and can be upgraded/downgraded */
 const UNKNOWN_QUERY_STATUSES = new Set<string>(['unknown-both', 'unknown-to-us']);
 
@@ -805,25 +805,27 @@ function propagateQueriesViaSuccinctness(
 
           if (reachQ.reach[l1MatrixIdx][l2MatrixIdx]) {
             const l1Complexity = getQueryComplexity(l1, queryCode);
-            if (!queryGuaranteesQuasi(l1Complexity)) {
-              // Upgrade L1's query to quasi
-              const l1Name = idToName(l1Id);
-              const l2Name = idToName(l2Id);
-              const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
-              const description = `${l1Name} transforms to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${queryCode}. Therefore ${l1Name} supports ${queryCode} in at most quasi-polynomial time.`;
-              
-              if (DEBUG_PROPAGATION) {
-                console.log(`[Query Propagation] UPGRADE ${l1Name}.${queryCode}: ${l1Complexity} -> ${newComplexity}`);
-              }
-              
-              setQuerySupport(l1, queryCode, {
-                complexity: newComplexity,
-                refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
-                derived: true,
-                description
-              });
-              changed = true;
+            // Don't upgrade if L1 already guarantees quasi OR if L1 asserts no-quasi
+            // (no-quasi means it's proven impossible, so we can't upgrade it)
+            if (queryGuaranteesQuasi(l1Complexity) || queryAssertsNoQuasi(l1Complexity)) continue;
+
+            // Upgrade L1's query to quasi
+            const l1Name = idToName(l1Id);
+            const l2Name = idToName(l2Id);
+            const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
+            const description = `${l1Name} transforms to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${queryCode}. Therefore ${l1Name} supports ${queryCode} in at most quasi-polynomial time.`;
+            
+            if (DEBUG_PROPAGATION) {
+              console.log(`[Query Propagation] UPGRADE ${l1Name}.${queryCode}: ${l1Complexity} -> ${newComplexity}`);
             }
+            
+            setQuerySupport(l1, queryCode, {
+              complexity: newComplexity,
+              refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
+              derived: true,
+              description
+            });
+            changed = true;
           }
         }
       }
@@ -927,7 +929,15 @@ function propagateQueriesViaLemmas(
 
 /**
  * Phase 5: Propagate query downgrades.
- * If L1 does NOT support query q and L1 -> L2, then L2 does NOT support q either.
+ * 
+ * Simple algorithm:
+ * - For language L1 with L1.X = no-poly:
+ *   - For language L2 downstream of L1 (L1 -> L2 in poly):
+ *     - Set L2.X to no-poly-unknown-quasi (unless L2 already asserts no-poly)
+ * 
+ * - For language L1 with L1.X = no-quasi:
+ *   - For language L2 downstream of L1 (L1 -> L2 in quasi):
+ *     - Set L2.X to no-quasi (unless L2 already asserts no-quasi)
  */
 function propagateQueryDowngrades(
   data: GraphData,
@@ -936,85 +946,75 @@ function propagateQueryDowngrades(
 ): boolean {
   let changed = false;
   const { adjacencyMatrix, languages } = data;
-  const { languageIds } = adjacencyMatrix;
   const queryCodes = getAllQueryCodes();
 
   for (const queryCode of queryCodes) {
-    for (let liIdx = 0; liIdx < languages.length; liIdx++) {
-      const li = languages[liIdx];
-      const liId = li.id;
-      const liMatrixIdx = adjacencyMatrix.indexByLanguage[liId];
-      if (liMatrixIdx === undefined) continue;
+    for (const l1 of languages) {
+      const l1MatrixIdx = adjacencyMatrix.indexByLanguage[l1.id];
+      if (l1MatrixIdx === undefined) continue;
 
-      const liComplexity = getQueryComplexity(li, queryCode);
+      const l1Complexity = getQueryComplexity(l1, queryCode);
+      const l1Name = idToName(l1.id);
 
-      // Only process if Li's query is unknown
-      if (!queryIsUnknown(liComplexity)) continue;
+      // No-poly propagation: L1 has no-poly, propagate via poly edges
+      if (queryAssertsNoPoly(l1Complexity)) {
+        for (const l2 of languages) {
+          if (l2.id === l1.id) continue;
+          const l2MatrixIdx = adjacencyMatrix.indexByLanguage[l2.id];
+          if (l2MatrixIdx === undefined) continue;
 
-      // Check for no-poly downgrade
-      for (let l1Idx = 0; l1Idx < languages.length; l1Idx++) {
-        const l1 = languages[l1Idx];
-        const l1Id = l1.id;
-        const l1MatrixIdx = adjacencyMatrix.indexByLanguage[l1Id];
-        if (l1MatrixIdx === undefined) continue;
-        if (l1MatrixIdx === liMatrixIdx) continue;
+          // Check if L1 -> L2 in poly
+          if (!reachP.reach[l1MatrixIdx][l2MatrixIdx]) continue;
 
-        // If L1 -> Li in poly and L1 has no-poly for q, then Li has no-poly for q
-        if (reachP.reach[l1MatrixIdx][liMatrixIdx]) {
-          const l1Complexity = getQueryComplexity(l1, queryCode);
-          if (queryAssertsNoPoly(l1Complexity)) {
-            const l1Name = idToName(l1Id);
-            const liName = idToName(liId);
-            const description = `${l1Name} does not support ${queryCode} in polynomial time, and ${l1Name} transforms to ${liName} in polynomial time. Therefore ${liName} does not support ${queryCode} in polynomial time.`;
+          const l2Complexity = getQueryComplexity(l2, queryCode);
+          // Skip if L2 already asserts no-poly
+          if (queryAssertsNoPoly(l2Complexity)) continue;
 
-            if (DEBUG_PROPAGATION) {
-              console.log(`[Query Propagation] DOWNGRADE ${liName}.${queryCode}: ${liComplexity} -> no-poly-unknown-quasi`);
-            }
+          const l2Name = idToName(l2.id);
+          const description = `${l1Name} does not support ${queryCode} in polynomial time, and ${l1Name} transforms to ${l2Name} in polynomial time. If ${l2Name} supported ${queryCode} in polynomial time, then ${l1Name} could too by transforming first. Therefore ${l2Name} does not support ${queryCode} in polynomial time.`;
 
-            setQuerySupport(li, queryCode, {
-              complexity: 'no-poly-unknown-quasi',
-              refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
-              derived: true,
-              description
-            });
-            changed = true;
-            break; // Found a witness, move to next Li
+          if (DEBUG_PROPAGATION) {
+            console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-poly-unknown-quasi`);
           }
+
+          setQuerySupport(l2, queryCode, {
+            complexity: 'no-poly-unknown-quasi',
+            refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
+            derived: true,
+            description
+          });
+          changed = true;
         }
       }
 
-      // Check for no-quasi downgrade
-      const updatedComplexity = getQueryComplexity(li, queryCode);
-      if (queryIsUnknown(updatedComplexity) || updatedComplexity === 'no-poly-unknown-quasi') {
-        for (let l1Idx = 0; l1Idx < languages.length; l1Idx++) {
-          const l1 = languages[l1Idx];
-          const l1Id = l1.id;
-          const l1MatrixIdx = adjacencyMatrix.indexByLanguage[l1Id];
-          if (l1MatrixIdx === undefined) continue;
-          if (l1MatrixIdx === liMatrixIdx) continue;
+      // No-quasi propagation: L1 has no-quasi, propagate via quasi edges
+      if (queryAssertsNoQuasi(l1Complexity)) {
+        for (const l2 of languages) {
+          if (l2.id === l1.id) continue;
+          const l2MatrixIdx = adjacencyMatrix.indexByLanguage[l2.id];
+          if (l2MatrixIdx === undefined) continue;
 
-          // If L1 -> Li in quasi and L1 has no-quasi for q, then Li has no-quasi for q
-          if (reachQ.reach[l1MatrixIdx][liMatrixIdx]) {
-            const l1Complexity = getQueryComplexity(l1, queryCode);
-            if (queryAssertsNoQuasi(l1Complexity)) {
-              const l1Name = idToName(l1Id);
-              const liName = idToName(liId);
-              const description = `${l1Name} does not support ${queryCode} in quasi-polynomial time, and ${l1Name} transforms to ${liName} in quasi-polynomial time. Therefore ${liName} does not support ${queryCode} in quasi-polynomial time.`;
+          // Check if L1 -> L2 in quasi
+          if (!reachQ.reach[l1MatrixIdx][l2MatrixIdx]) continue;
 
-              if (DEBUG_PROPAGATION) {
-                console.log(`[Query Propagation] DOWNGRADE ${liName}.${queryCode}: ${updatedComplexity} -> no-quasi`);
-              }
+          const l2Complexity = getQueryComplexity(l2, queryCode);
+          // Skip if L2 already asserts no-quasi
+          if (queryAssertsNoQuasi(l2Complexity)) continue;
 
-              setQuerySupport(li, queryCode, {
-                complexity: 'no-quasi',
-                refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
-                derived: true,
-                description
-              });
-              changed = true;
-              break; // Found a witness, move to next Li
-            }
+          const l2Name = idToName(l2.id);
+          const description = `${l1Name} does not support ${queryCode} in quasi-polynomial time, and ${l1Name} transforms to ${l2Name} in quasi-polynomial time. If ${l2Name} supported ${queryCode}, then ${l1Name} could too by transforming first. Therefore ${l2Name} does not support ${queryCode} in quasi-polynomial time.`;
+
+          if (DEBUG_PROPAGATION) {
+            console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-quasi`);
           }
+
+          setQuerySupport(l2, queryCode, {
+            complexity: 'no-quasi',
+            refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
+            derived: true,
+            description
+          });
+          changed = true;
         }
       }
     }
@@ -1025,7 +1025,10 @@ function propagateQueryDowngrades(
 
 /**
  * Validate query consistency.
- * Checks for contradictions where L1 supports q, L1 -> L2, but L2 doesn't support q.
+ * Checks for contradictions:
+ * 1. If L1 -> L2 and L2 supports q, but L1 claims no support (upgrade direction)
+ * 2. If L1 doesn't support q and L1 -> L2, but L2 claims to support q (downgrade direction)
+ * (If you can transform L1 to L2 and L2 supports a query, L1 must also support it.)
  */
 export function validateQueryConsistency(data: GraphData): { ok: boolean; error?: string } {
   const { adjacencyMatrix, languages } = data;
@@ -1053,22 +1056,36 @@ export function validateQueryConsistency(data: GraphData): { ok: boolean; error?
         const l1Name = idToName(l1Id);
         const l2Name = idToName(l2Id);
 
-        // Check poly contradiction
+        // Check poly contradiction (upgrade direction): L1 -> L2, L2 supports q in poly, but L1 claims no-poly
         if (reachP.reach[l1MatrixIdx][l2MatrixIdx]) {
-          if (queryGuaranteesPoly(l1Complexity) && queryAssertsNoPoly(l2Complexity)) {
+          if (queryGuaranteesPoly(l2Complexity) && queryAssertsNoPoly(l1Complexity)) {
             return {
               ok: false,
-              error: `Contradiction: ${l1Name} supports ${queryCode} in polynomial time, ${l1Name} transforms to ${l2Name} in polynomial time, but ${l2Name} is marked as not supporting ${queryCode} in polynomial time.`
+              error: `Contradiction: ${l1Name} transforms to ${l2Name} in polynomial time, and ${l2Name} supports ${queryCode} in polynomial time, but ${l1Name} is marked as not supporting ${queryCode} in polynomial time.`
+            };
+          }
+          // Check poly contradiction (downgrade direction): L1 -> L2, L1 claims no-poly, but L2 supports q in poly
+          if (queryAssertsNoPoly(l1Complexity) && queryGuaranteesPoly(l2Complexity)) {
+            return {
+              ok: false,
+              error: `Contradiction: ${l1Name} does not support ${queryCode} in polynomial time and transforms to ${l2Name} in polynomial time, but ${l2Name} is marked as supporting ${queryCode} in polynomial time.`
             };
           }
         }
 
-        // Check quasi contradiction
+        // Check quasi contradiction (upgrade direction): L1 -> L2, L2 supports q in quasi, but L1 claims no-quasi
         if (reachQ.reach[l1MatrixIdx][l2MatrixIdx]) {
-          if (queryGuaranteesQuasi(l1Complexity) && queryAssertsNoQuasi(l2Complexity)) {
+          if (queryGuaranteesQuasi(l2Complexity) && queryAssertsNoQuasi(l1Complexity)) {
             return {
               ok: false,
-              error: `Contradiction: ${l1Name} supports ${queryCode} in quasi-polynomial time, ${l1Name} transforms to ${l2Name} in quasi-polynomial time, but ${l2Name} is marked as not supporting ${queryCode} in quasi-polynomial time.`
+              error: `Contradiction: ${l1Name} transforms to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${queryCode} in quasi-polynomial time, but ${l1Name} is marked as not supporting ${queryCode} in quasi-polynomial time.`
+            };
+          }
+          // Check quasi contradiction (downgrade direction): L1 -> L2, L1 claims no-quasi, but L2 supports q
+          if (queryAssertsNoQuasi(l1Complexity) && queryGuaranteesQuasi(l2Complexity)) {
+            return {
+              ok: false,
+              error: `Contradiction: ${l1Name} does not support ${queryCode} in quasi-polynomial time and transforms to ${l2Name} in quasi-polynomial time, but ${l2Name} is marked as supporting ${queryCode} in quasi-polynomial time.`
             };
           }
         }
@@ -1085,12 +1102,6 @@ export function validateQueryConsistency(data: GraphData): { ok: boolean; error?
  */
 function propagateQueryOperations(data: GraphData): void {
   const { adjacencyMatrix } = data;
-
-  // Validate query consistency first
-  const consistency = validateQueryConsistency(data);
-  if (!consistency.ok) {
-    throw new Error(consistency.error ?? 'Query consistency validation failed');
-  }
 
   // Phase 3+4: Fixed-point upgrades (poly first, then quasi)
   let polyChanged = true;
@@ -1125,5 +1136,11 @@ function propagateQueryOperations(data: GraphData): void {
     const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
     const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
     downgradeChanged = propagateQueryDowngrades(data, reachP, reachQ);
+  }
+
+  // Post-propagation validation: ensure no contradictions remain
+  const consistency = validateQueryConsistency(data);
+  if (!consistency.ok) {
+    throw new Error(consistency.error ?? 'Query consistency validation failed after propagation');
   }
 }

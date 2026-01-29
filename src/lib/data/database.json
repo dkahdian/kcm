@@ -888,20 +888,24 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Gergov_1994"
             ],
-            "derived": true,
-            "description": "By lemma ce-co: since FBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
+            "derived": false,
+            "description": "It is well-known that FBDD satisfies CO \\citet{Gergov_1994, Darwiche_2002}. Consistency is polynomial: check if the BDD root is not the terminal 0 node."
           },
           "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": false,
+            "description": "It is well-known that FBDD satisfies CT \\citet{Gergov_1994, Darwiche_2002}. Model counting on FBDDs can be done in polynomial time by a single bottom-up pass counting satisfying assignments at each node."
           },
           "EQ": {
             "caveat": "",
             "complexity": "unknown-to-us",
-            "refs": []
+            "refs": [],
+            "description": "Unlike OBDDs, FBDDs are not canonical, so equivalence checking is not straightforward. The complexity of EQ for FBDDs requires further investigation."
           },
           "IM": {
             "caveat": "",
@@ -919,9 +923,12 @@
             "refs": []
           },
           "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": false,
+            "description": "It is well-known that FBDD satisfies VA \\citet{Gergov_1994, Darwiche_2002}. Validity is polynomial: check if the BDD root equals the terminal 1 node."
           }
         },
         "transformations": {
@@ -1513,21 +1520,25 @@
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
-            ]
+            ],
+            "description": "Consistency is trivial for OBDDs: check if the diagram root is not the terminal 0 node \\citet{Bryant_1986}."
           },
           "CT": {
             "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
-            ]
+            ],
+            "description": "Model counting on OBDDs can be done in polynomial time by a single bottom-up pass \\citet{Bryant_1986, Bryant_1992}."
           },
           "EQ": {
             "caveat": "",
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
-            ]
+              "Bryant_1986",
+              "Bryant_1992"
+            ],
+            "description": "OBDDs with a fixed variable ordering are canonical: two functions are equivalent iff their reduced OBDDs are identical. This makes EQ trivial (structural isomorphism check) \\citet{Bryant_1986, Bryant_1992, Gergov_1994}."
           },
           "IM": {
             "caveat": "",
@@ -1555,7 +1566,8 @@
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
-            ]
+            ],
+            "description": "Validity is trivial for OBDDs: check if the diagram root equals the terminal 1 node \\citet{Bryant_1986}."
           }
         },
         "transformations": {
@@ -2312,9 +2324,12 @@
             "description": "By lemma ce-co: since OBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": true,
+            "description": "OBDD transforms to FBDD in polynomial time, and FBDD supports CT in polynomial time. Therefore OBDD supports CT in polynomial time."
           },
           "EQ": {
             "caveat": "",
@@ -2337,9 +2352,12 @@
             "refs": []
           },
           "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "complexity": "poly",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": true,
+            "description": "OBDD transforms to FBDD in polynomial time, and FBDD supports VA in polynomial time. Therefore OBDD supports VA in polynomial time."
           }
         },
         "transformations": {
@@ -2415,9 +2433,12 @@
             "description": "By lemma ce-co: since dec-DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "unknown-poly-quasi",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": true,
+            "description": "dec-DNNF transforms to FBDD in quasi-polynomial time, and FBDD supports CT. Therefore dec-DNNF supports CT in at most quasi-polynomial time."
           },
           "EQ": {
             "complexity": "unknown-to-us",
@@ -2440,9 +2461,12 @@
             "refs": []
           },
           "VA": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "unknown-poly-quasi",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": true,
+            "description": "dec-DNNF transforms to FBDD in quasi-polynomial time, and FBDD supports VA. Therefore dec-DNNF supports VA in at most quasi-polynomial time."
           }
         },
         "transformations": {
@@ -2515,9 +2539,12 @@
             "description": "By lemma ce-co: since dec-SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "unknown-poly-quasi",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": true,
+            "description": "dec-SDNNF transforms to FBDD in quasi-polynomial time, and FBDD supports CT. Therefore dec-SDNNF supports CT in at most quasi-polynomial time."
           },
           "EQ": {
             "complexity": "unknown-to-us",
@@ -2540,9 +2567,12 @@
             "refs": []
           },
           "VA": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
+            "complexity": "unknown-poly-quasi",
+            "refs": [
+              "Gergov_1994"
+            ],
+            "derived": true,
+            "description": "dec-SDNNF transforms to FBDD in quasi-polynomial time, and FBDD supports VA. Therefore dec-SDNNF supports VA in at most quasi-polynomial time."
           }
         },
         "transformations": {
@@ -2755,6 +2785,12 @@
       "bibtex": "@article{Bryant_1986,\n  title={Graph-based algorithms for boolean function manipulation},\n  author={Bryant, Randal E},\n  journal={Computers, IEEE Transactions on},\n  volume={100},\n  number={8},\n  pages={677--691},\n  year={1986},\n  publisher={IEEE}\n}",
       "title": "R. E. Bryant, \"Graph-based algorithms for boolean function manipulation,\" Computers, IEEE Transactions on, vol. 100, pp. 677–691, 1986.",
       "href": "#"
+    },
+    {
+      "id": "Bryant_1992",
+      "bibtex": "@article{Bryant_1992,\n  author={Bryant, Randal E.},\n  title={Symbolic Boolean manipulation with ordered binary-decision diagrams},\n  journal={ACM Computing Surveys},\n  volume={24},\n  number={3},\n  pages={293--318},\n  year={1992},\n  publisher={ACM},\n  doi={10.1145/136035.136043}\n}",
+      "title": "R. E. Bryant, \"Symbolic Boolean manipulation with ordered binary-decision diagrams,\" ACM Computing Surveys, vol. 24, no. 3, pp. 293–318, 1992.",
+      "href": "https://doi.org/10.1145/136035.136043"
     },
     {
       "id": "Darwiche_2002",

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap, ViewMode } from '$lib/types.js';
+  import type { LanguageFilter, EdgeFilter, FilterCategory, FilterStateMap, FilterParamValue, ViewMode } from '$lib/types.js';
   import { organizeFiltersByCategory } from '$lib/data/index.js';
-  import { createDefaultFilterState, getFilterDefault } from '$lib/filter-utils.js';
+  import { getFilterDefault } from '$lib/filter-utils.js';
   import MathText from './MathText.svelte';
 
   type AnyFilter = LanguageFilter | EdgeFilter;
@@ -23,33 +23,35 @@
     }).length;
   }
   
-  function isFilterActive(filter: AnyFilter, param: any): boolean {
+  function isFilterActive(filter: AnyFilter, param: FilterParamValue): boolean {
     // For boolean parameters, compare against current view mode's default
     const defaultVal = getFilterDefault(filter, viewMode);
     return param !== defaultVal;
   }
 
-  function getFilterValue(filter: AnyFilter): any {
+  function getFilterValue(filter: AnyFilter): FilterParamValue {
     return filterStates.get(filter.id) ?? getFilterDefault(filter, viewMode);
   }
 
-  function setFilterValue(filter: AnyFilter, value: any) {
-    const newStates = new Map(filterStates);
-    newStates.set(filter.id, value);
-    filterStates = newStates;
+  function setFilterValue(filter: AnyFilter, value: FilterParamValue) {
+    onFilterChange(filter, value);
   }
 
   let { 
     languageFilters = [], 
     edgeFilters = [],
-    filterStates = $bindable(), 
+    filterStates, 
     viewMode = 'graph' as ViewMode,
+    onFilterChange,
+    onReset,
     class: className = '' 
   }: {
     languageFilters?: LanguageFilter[];
     edgeFilters?: EdgeFilter[];
     filterStates: FilterStateMap;
     viewMode?: ViewMode;
+    onFilterChange: (filter: AnyFilter, value: FilterParamValue) => void;
+    onReset: () => void;
     class?: string;
   } = $props();
   
@@ -66,8 +68,7 @@
   let dropdownRef: HTMLDivElement;
 
   function resetAllFilters() {
-    // Reset all filters to their default parameters for the current view mode
-    filterStates = createDefaultFilterState(languageFilters, edgeFilters, viewMode);
+    onReset();
   }
 
   function toggleFilter(filter: AnyFilter) {

@@ -1,14 +1,16 @@
 <script lang="ts">
   import KCGraph from '$lib/components/KCGraph.svelte';
   import MatrixView from '$lib/components/MatrixView.svelte';
+  import OperationsMatrixView from '$lib/components/OperationsMatrixView.svelte';
   import LanguageInfo from '$lib/components/LanguageInfo.svelte';
   import EdgeInfo from '$lib/components/EdgeInfo.svelte';
+  import OperationInfo from '$lib/components/OperationInfo.svelte';
   import FilterDropdown from '$lib/components/FilterDropdown.svelte';
 
   import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters, allPredefinedFilters } from '$lib/data/index.js';
   import { generateLanguageSelectionFilters } from '$lib/data/filters/index.js';
-  import { applyFiltersWithParams, createDefaultFilterState, adjustFilterStateForViewMode } from '$lib/filter-utils.js';
-  import type { KCLanguage, FilterStateMap, SelectedEdge, GraphData, ViewMode } from '$lib/types.js';
+  import { applyFiltersWithParams, computeEffectiveFilterState, extractDeltasFromState, updateDelta, type FilterDeltas } from '$lib/filter-utils.js';
+  import type { KCLanguage, LanguageFilter, EdgeFilter, FilterParamValue, FilterStateMap, SelectedEdge, SelectedOperation, SelectedOperationCell, GraphData, ViewMode } from '$lib/types.js';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
 
@@ -38,7 +40,7 @@
 
   let languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
-  const FILTER_STORAGE_KEY = 'kcm_filter_state_v1';
+  const FILTER_STORAGE_KEY = 'kcm_filter_deltas_v2';
 
   type DerivedQueueCollections = {
     languagesToAdd: LanguageToAdd[];
@@ -91,14 +93,20 @@
 
   let selectedNode = $state<KCLanguage | null>(null);
   let selectedEdge = $state<SelectedEdge | null>(null);
+  let selectedOperation = $state<SelectedOperation | null>(null);
+  let selectedOperationCell = $state<SelectedOperationCell | null>(null);
   const VIEW_MODES: Array<{ id: ViewMode; label: string }> = [
     { id: 'graph', label: 'Graph' },
-    { id: 'matrix', label: 'Matrix' }
+    { id: 'succinctness', label: 'Succinctness' },
+    { id: 'queries', label: 'Queries' },
+    { id: 'transforms', label: 'Transforms' }
   ];
   let viewMode = $state<ViewMode>('graph');
   
-  // Initialize filter state with default parameter values for graph mode
-  let filterStates = $state<FilterStateMap>(createDefaultFilterState(languageFilters, edgeFilters, 'graph'));
+  // Filter deltas: only user changes from defaults (view-mode-agnostic)
+  let filterDeltas = $state<FilterDeltas>(new Map());
+  // Effective filter state: defaults for current view + deltas applied on top
+  let filterStates = $state<FilterStateMap>(computeEffectiveFilterState(languageFilters, edgeFilters, 'graph', new Map()));
   let filterPersistenceReady = $state(false);
   let isPreviewMode = $state(false);
   let previewGraphData: GraphData | null = $state(null);
@@ -111,7 +119,7 @@
     }
 
     const storedViewMode = localStorage.getItem('kcm_view_mode');
-    if (storedViewMode === 'graph' || storedViewMode === 'matrix') {
+    if (storedViewMode === 'graph' || storedViewMode === 'succinctness' || storedViewMode === 'queries' || storedViewMode === 'transforms') {
       viewMode = storedViewMode;
     }
 
@@ -152,7 +160,22 @@
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          filterStates = new Map(parsed);
+          filterDeltas = new Map(parsed);
+          // Recompute effective state for current view mode with restored deltas
+          filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+        }
+      } else {
+        // Try migrating from old storage format (v1)
+        const oldStored = localStorage.getItem('kcm_filter_state_v1');
+        if (oldStored) {
+          const parsed = JSON.parse(oldStored);
+          if (Array.isArray(parsed)) {
+            const oldStates: FilterStateMap = new Map(parsed);
+            filterDeltas = extractDeltasFromState(oldStates, activeLanguageFilters, edgeFilters);
+            filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+            // Clean up old key
+            localStorage.removeItem('kcm_filter_state_v1');
+          }
         }
       }
     } catch (error) {
@@ -292,17 +315,29 @@
   );
   const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, activeLanguageFilters, edgeFilters, filterStates));
 
+  // Handler for individual filter changes from FilterDropdown
+  function handleFilterChange(filter: LanguageFilter | EdgeFilter, value: FilterParamValue) {
+    filterDeltas = updateDelta(filterDeltas, filter.id, value, filter);
+    filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+  }
+
+  // Handler for resetting all filters from FilterDropdown
+  function handleFilterReset() {
+    filterDeltas = new Map();
+    filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+  }
+
   $effect(() => {
     if (filterPersistenceReady && browser) {
       try {
-        const entries = Array.from(filterStates.entries());
+        const entries = Array.from(filterDeltas.entries());
         if (entries.length === 0) {
           localStorage.removeItem(FILTER_STORAGE_KEY);
         } else {
           localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(entries));
         }
       } catch (error) {
-        console.warn('Failed to persist filter state', error);
+        console.warn('Failed to persist filter deltas', error);
       }
     }
   });
@@ -383,11 +418,11 @@
               class={`toggle-btn ${viewMode === mode.id ? 'is-active' : ''}`}
               aria-pressed={viewMode === mode.id}
               onclick={() => {
-                const oldMode = viewMode;
                 const newMode = mode.id;
-                if (oldMode !== newMode) {
-                  filterStates = adjustFilterStateForViewMode(filterStates, activeLanguageFilters, edgeFilters, oldMode, newMode);
+                if (viewMode !== newMode) {
                   viewMode = newMode;
+                  // Recompute effective state: defaults for new view + existing deltas
+                  filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, newMode, filterDeltas);
                 }
               }}
             >
@@ -398,8 +433,10 @@
         <FilterDropdown 
           languageFilters={activeLanguageFilters}
           edgeFilters={edgeFilters}
-          bind:filterStates 
+          {filterStates}
           {viewMode}
+          onFilterChange={handleFilterChange}
+          onReset={handleFilterReset}
           class="filter-control"
         />
       </div>
@@ -411,13 +448,88 @@
     <section class="visual-panel" data-view={viewMode}>
       {#if viewMode === 'graph'}
         <KCGraph graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
-      {:else}
+      {:else if viewMode === 'succinctness'}
         <MatrixView graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
+      {:else if viewMode === 'queries'}
+        <OperationsMatrixView 
+          graphData={filteredGraphData} 
+          operationType="queries"
+          bind:selectedNode 
+          bind:selectedOperation
+          bind:selectedOperationCell
+        />
+      {:else if viewMode === 'transforms'}
+        <OperationsMatrixView 
+          graphData={filteredGraphData} 
+          operationType="transformations"
+          bind:selectedNode 
+          bind:selectedOperation
+          bind:selectedOperationCell
+        />
       {/if}
     </section>
 
     <aside class="side-panel">
-      {#if selectedEdge}
+      {#if viewMode === 'queries' || viewMode === 'transforms'}
+        <!-- Operations matrix sidebar -->
+        {#if selectedOperationCell}
+          <OperationInfo 
+            {selectedOperation}
+            {selectedOperationCell}
+            graphData={baseGraphData}
+            filteredGraphData={filteredGraphData}
+            {viewMode}
+            onLanguageSelect={(lang) => {
+              selectedOperation = null;
+              selectedOperationCell = null;
+              selectedNode = lang;
+            }}
+            onOperationSelect={(op) => {
+              selectedOperationCell = null;
+              selectedOperation = op;
+            }}
+          />
+        {:else if selectedOperation}
+          <OperationInfo 
+            {selectedOperation}
+            {selectedOperationCell}
+            graphData={baseGraphData}
+            filteredGraphData={filteredGraphData}
+            {viewMode}
+            onLanguageSelect={(lang) => {
+              selectedOperation = null;
+              selectedOperationCell = null;
+              selectedNode = lang;
+            }}
+            onOperationSelect={(op) => {
+              selectedOperationCell = null;
+              selectedOperation = op;
+            }}
+          />
+        {:else if selectedNode}
+          <LanguageInfo 
+            selectedLanguage={selectedNode} 
+            graphData={baseGraphData}
+            filteredGraphData={filteredGraphData}
+            onEdgeSelect={(edge) => { 
+              selectedEdge = edge; 
+            }}
+            onOperationCellSelect={(cell) => {
+              selectedNode = null;
+              selectedOperationCell = cell;
+            }}
+            viewMode={viewMode}
+          />
+        {:else}
+          <OperationInfo 
+            selectedOperation={null}
+            selectedOperationCell={null}
+            graphData={baseGraphData}
+            filteredGraphData={filteredGraphData}
+            {viewMode}
+          />
+        {/if}
+      {:else if selectedEdge}
         <EdgeInfo selectedEdge={selectedEdge} graphData={baseGraphData} filteredGraphData={filteredGraphData} viewMode={viewMode} />
       {:else if selectedNode}
         <LanguageInfo 

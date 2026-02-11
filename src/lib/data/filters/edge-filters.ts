@@ -319,22 +319,48 @@ export const implicitEdgeTreatment: EdgeFilter<ImplicitEdgeTreatmentMode> = {
   lambda: (data, mode) => {
     if (mode === 'none') return data;
     
-    return mapRelationsInDataset(data, (relation) => {
+    // Apply to succinctness edges
+    let result = mapRelationsInDataset(data, (relation) => {
       if (!relation) return null;
       
       if (mode === 'gray') {
-        // Gray stripes on derived edges
         if (relation.derived) {
           return { ...relation, dimmed: true };
         }
       } else if (mode === 'highlight-explicit') {
-        // Golden border on explicit (non-derived) edges
         if (!relation.derived) {
           return { ...relation, explicit: true };
         }
       }
       return relation;
     });
+
+    // Apply to operations data (queries + transformations)
+    result = mapLanguagesInDataset(result, (language) => {
+      const mapOps = (ops: Record<string, import('$lib/types.js').KCOpSupport>) => {
+        const mapped: Record<string, import('$lib/types.js').KCOpSupport> = {};
+        for (const [code, support] of Object.entries(ops)) {
+          if (mode === 'gray' && support.derived) {
+            mapped[code] = { ...support, dimmed: true };
+          } else if (mode === 'highlight-explicit' && !support.derived) {
+            mapped[code] = { ...support, explicit: true };
+          } else {
+            mapped[code] = support;
+          }
+        }
+        return mapped;
+      };
+      return {
+        ...language,
+        properties: {
+          ...language.properties,
+          queries: mapOps(language.properties.queries ?? {}),
+          transformations: mapOps(language.properties.transformations ?? {})
+        }
+      };
+    });
+
+    return result;
   }
 };
 

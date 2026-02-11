@@ -1,0 +1,521 @@
+<script lang="ts">
+  import MathText from './MathText.svelte';
+  import type {
+    GraphData,
+    FilteredGraphData,
+    KCLanguage,
+    KCOpEntry,
+    SelectedOperation,
+    SelectedOperationCell,
+    Complexity
+  } from '$lib/types.js';
+  import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
+  import { getComplexityFromCatalog } from '$lib/data/complexities.js';
+
+  type ViewableGraphData = GraphData | FilteredGraphData;
+  type OperationType = 'queries' | 'transformations';
+
+  let {
+    graphData,
+    operationType,
+    selectedNode = $bindable(),
+    selectedOperation = $bindable(),
+    selectedOperationCell = $bindable()
+  }: {
+    graphData: ViewableGraphData;
+    operationType: OperationType;
+    selectedNode: KCLanguage | null;
+    selectedOperation: SelectedOperation | null;
+    selectedOperationCell: SelectedOperationCell | null;
+  } = $props();
+
+  const getComplexityCatalog = (data: GraphData | FilteredGraphData) => data.complexities;
+
+  const complexityCatalog = $derived(getComplexityCatalog(graphData));
+
+  // Get the operations based on type
+  const operations = $derived(operationType === 'queries' ? QUERIES : TRANSFORMATIONS);
+
+  // Get operation codes in display order
+  const operationCodes = $derived(Object.keys(operations));
+
+  // Get visible languages
+  const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
+    const map = new Map<string, KCLanguage>();
+    for (const language of graphData.languages) {
+      map.set(language.id, language);
+    }
+    return map;
+  });
+
+  const visibleLanguageIds = $derived.by<string[]>(() => {
+    const ids = graphData.adjacencyMatrix.languageIds.filter((id) => languageLookup.has(id));
+    if ('visibleLanguageIds' in graphData && graphData.visibleLanguageIds.size > 0) {
+      return ids.filter((id) => graphData.visibleLanguageIds.has(id));
+    }
+    return ids;
+  });
+
+  const visibleLanguages = $derived.by<KCLanguage[]>(() => {
+    return visibleLanguageIds
+      .map((id) => languageLookup.get(id))
+      .filter((lang): lang is KCLanguage => lang !== undefined);
+  });
+
+  // Get operation support for a language
+  function getOperationSupport(language: KCLanguage, opCode: string): KCOpEntry | null {
+    const supportMap = operationType === 'queries' 
+      ? language.properties.queries 
+      : language.properties.transformations;
+    
+    const operationDefs = operationType === 'queries' ? QUERIES : TRANSFORMATIONS;
+    const opDef = operationDefs[opCode];
+    if (!opDef) return null;
+    
+    // Look up by opCode (safe key) or by the operation code itself
+    const support = supportMap?.[opCode] ?? supportMap?.[opDef.code];
+    if (!support) return null;
+    
+    return {
+      code: opDef.code,
+      label: opDef.label,
+      complexity: support.complexity,
+      caveat: support.caveat,
+      refs: support.refs ?? [],
+      description: support.description,
+      derived: support.derived,
+      dimmed: support.dimmed,
+      explicit: support.explicit
+    };
+  }
+
+  function getComplexity(code: string): Complexity {
+    return getComplexityFromCatalog(complexityCatalog, code);
+  }
+
+  function handleLanguageClick(language: KCLanguage) {
+    selectedOperation = null;
+    selectedOperationCell = null;
+    selectedNode = language;
+  }
+
+  function handleOperationClick(opCode: string) {
+    const opDef = operations[opCode];
+    if (!opDef) return;
+    
+    selectedNode = null;
+    selectedOperationCell = null;
+    selectedOperation = {
+      code: opDef.code,
+      label: opDef.label,
+      description: opDef.description,
+      type: operationType === 'queries' ? 'query' : 'transformation'
+    };
+  }
+
+  function handleCellClick(language: KCLanguage, opCode: string) {
+    const support = getOperationSupport(language, opCode);
+    if (!support) return;
+
+    const opDef = operations[opCode];
+    if (!opDef) return;
+
+    selectedNode = null;
+    selectedOperation = null;
+    selectedOperationCell = {
+      language,
+      operationCode: opDef.code,
+      operationLabel: opDef.label,
+      operationType: operationType === 'queries' ? 'query' : 'transformation',
+      support
+    };
+  }
+
+  function isLanguageSelected(language: KCLanguage): boolean {
+    return selectedNode?.id === language.id;
+  }
+
+  function isOperationSelected(opCode: string): boolean {
+    if (!selectedOperation) return false;
+    const opDef = operations[opCode];
+    return selectedOperation.code === opDef?.code;
+  }
+
+  function isCellSelected(language: KCLanguage, opCode: string): boolean {
+    if (!selectedOperationCell) return false;
+    const opDef = operations[opCode];
+    return selectedOperationCell.language.id === language.id && 
+           selectedOperationCell.operationCode === opDef?.code;
+  }
+
+  function getCellTitle(language: KCLanguage, opCode: string, support: KCOpEntry | null): string {
+    const opDef = operations[opCode];
+    if (!support) return `${language.name} - ${opDef?.label ?? opCode}: no data`;
+    const complexity = getComplexity(support.complexity);
+    return `${language.name} - ${opDef?.label ?? opCode}: ${complexity.label}`;
+  }
+
+  // Dynamic cell sizing
+  let matrixScrollEl: HTMLDivElement;
+  let tableEl: HTMLTableElement;
+  let cellSize = $state({ width: 0, height: 0 });
+  let measured = $state(false);
+
+  function measureAndSetCellSize() {
+    if (!matrixScrollEl || !tableEl) return;
+    
+    const numLangRows = visibleLanguages.length;
+    const numOpCols = operationCodes.length + 1; // +1 for header column
+    if (numLangRows <= 0 || numOpCols <= 1) return;
+
+    const allCells = tableEl.querySelectorAll('th, td');
+    let maxWidth = 0;
+    let maxHeight = 0;
+
+    allCells.forEach(cell => {
+      const el = cell as HTMLElement;
+      const oldWidth = el.style.width;
+      const oldMinWidth = el.style.minWidth;
+      const oldMaxWidth = el.style.maxWidth;
+      el.style.width = 'auto';
+      el.style.minWidth = 'auto';
+      el.style.maxWidth = 'none';
+      
+      const rect = el.getBoundingClientRect();
+      maxWidth = Math.max(maxWidth, rect.width);
+      maxHeight = Math.max(maxHeight, rect.height);
+      
+      el.style.width = oldWidth;
+      el.style.minWidth = oldMinWidth;
+      el.style.maxWidth = oldMaxWidth;
+    });
+
+    const containerWidth = matrixScrollEl.clientWidth;
+    const containerHeight = matrixScrollEl.clientHeight;
+
+    const totalNaturalWidth = maxWidth * numOpCols;
+    const totalNaturalHeight = maxHeight * (numLangRows + 1);
+
+    const finalWidth = totalNaturalWidth <= containerWidth 
+      ? containerWidth / numOpCols 
+      : maxWidth;
+    
+    const finalHeight = totalNaturalHeight <= containerHeight 
+      ? containerHeight / (numLangRows + 1) 
+      : maxHeight;
+
+    cellSize = { width: finalWidth, height: finalHeight };
+    measured = true;
+  }
+
+  $effect(() => {
+    visibleLanguages;
+    operationCodes;
+    measured = false;
+    queueMicrotask(() => measureAndSetCellSize());
+  });
+
+  import { onMount } from 'svelte';
+  onMount(() => {
+    measureAndSetCellSize();
+    const resizeObserver = new ResizeObserver(() => measureAndSetCellSize());
+    if (matrixScrollEl) resizeObserver.observe(matrixScrollEl);
+    return () => resizeObserver.disconnect();
+  });
+</script>
+
+<div class="matrix-view" aria-live="polite">
+  <div class="matrix-scroll" bind:this={matrixScrollEl} role="region" aria-label="{operationType === 'queries' ? 'Queries' : 'Transformations'} matrix view">
+    <table 
+      class="matrix-table" 
+      bind:this={tableEl}
+      style:--cell-width="{cellSize.width}px"
+      style:--cell-height="{cellSize.height}px"
+      class:measured
+    >
+      <thead>
+        <tr>
+          <th class="corner-cell" aria-hidden="true"></th>
+          {#each operationCodes as opCode}
+            {@const opDef = operations[opCode]}
+            <th class={`col-header ${isOperationSelected(opCode) ? 'is-active' : ''}`}>
+              <button 
+                type="button" 
+                onclick={() => handleOperationClick(opCode)} 
+                title={opDef?.description ?? opDef?.label ?? opCode}
+              >
+                <span class="op-code">{opDef?.code ?? opCode}</span>
+              </button>
+            </th>
+          {/each}
+        </tr>
+      </thead>
+      <tbody>
+        {#each visibleLanguages as language}
+          <tr>
+            <th class={`row-header ${isLanguageSelected(language) ? 'is-active' : ''}`}>
+              <button type="button" onclick={() => handleLanguageClick(language)} title={`Select ${language.name}`}>
+                <MathText text={language.name} className="inline" />
+              </button>
+            </th>
+            {#each operationCodes as opCode}
+              {@const support = getOperationSupport(language, opCode)}
+              {@const complexity = support ? getComplexity(support.complexity) : null}
+              <td>
+                {#if support}
+                <button
+                  type="button"
+                  class={`matrix-cell matrix-cell--button ${complexity?.cssClass ?? 'complexity-unknown-to-us'} ${isCellSelected(language, opCode) ? 'is-selected' : ''} ${support?.dimmed ? 'is-dimmed' : ''} ${support?.explicit ? 'is-explicit' : ''}`}
+                  onclick={() => handleCellClick(language, opCode)}
+                  title={getCellTitle(language, opCode, support)}
+                >
+                  <span class="cell-emoji">{complexity?.emoji ?? '❓'}</span>
+                </button>
+                {:else}
+                <span class="matrix-cell matrix-cell--empty" title={`${language.name}: ${opCode} — no data`}>&nbsp;</span>
+                {/if}
+              </td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .matrix-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .matrix-scroll {
+    flex: 1;
+    overflow: auto;
+    width: 100%;
+  }
+
+  .matrix-table {
+    width: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 0.75rem;
+  }
+
+  .matrix-table:not(.measured) th,
+  .matrix-table:not(.measured) td {
+    width: auto;
+    min-width: auto;
+    max-width: none;
+  }
+
+  .matrix-table.measured th,
+  .matrix-table.measured td {
+    width: var(--cell-width, auto);
+    min-width: var(--cell-width, auto);
+    max-width: var(--cell-width, none);
+    height: var(--cell-height, auto);
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    z-index: 5;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .corner-cell {
+    background: #e5e7eb;
+    z-index: 6;
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .row-header,
+  .col-header {
+    background: #fff;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .row-header {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    background: #f8fafc;
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .row-header button,
+  .col-header button {
+    width: 100%;
+    height: 100%;
+    padding: 0.25rem 0.35rem;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.8rem;
+  }
+
+  .col-header button {
+    text-align: center;
+  }
+
+  .op-code {
+    font-family: monospace;
+    font-size: 0.75rem;
+  }
+
+  .row-header.is-active,
+  .col-header.is-active {
+    background: #e0f2fe;
+  }
+
+  tbody th {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  td {
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+    padding: 0;
+  }
+
+  .matrix-cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    border: none;
+    background: #fff;
+    cursor: default;
+    font-size: 0.75rem;
+    color: #0f172a;
+  }
+
+  .matrix-cell--button {
+    cursor: pointer;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+    padding: 0.2rem 0.25rem;
+  }
+
+  .matrix-cell--button:is(:hover, :focus-visible) {
+    box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.2);
+  }
+
+  .matrix-cell--empty {
+    background: #f9fafb;
+  }
+
+  .cell-emoji {
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  /* Explicit (non-derived) edges - golden border to highlight manually authored data */
+  .matrix-cell.is-explicit {
+    box-shadow: inset 0 0 0 2px #eab308; /* yellow-500 golden border */
+  }
+
+  /* Selection borders override explicit border */
+  .matrix-cell.is-selected {
+    box-shadow: inset 0 0 0 3px #1d4ed8;
+  }
+
+  /* Dimmed/derived edges - diagonal gray stripes overlay */
+  .matrix-cell.is-dimmed {
+    position: relative;
+  }
+
+  .matrix-cell.is-dimmed::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 6px,
+      rgba(156, 163, 175, 0.3) 6px,
+      rgba(156, 163, 175, 0.3) 7px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .matrix-cell.is-dimmed .cell-emoji {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Complexity-based colors (reusing from MatrixView) */
+  .complexity-poly {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .complexity-no-poly-unknown-quasi {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .complexity-no-poly-quasi {
+    background: #ffedd5;
+    color: #9a3412;
+  }
+
+  .complexity-unknown-poly-quasi {
+    background: #fef9c3;
+    color: #854d0e;
+  }
+
+  .complexity-unknown-both {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .complexity-unknown {
+    background-color: #f3f4f6;
+    color: #6b7280;
+  }
+
+  .complexity-no-quasi {
+    background: #fecaca;
+    color: #991b1b;
+  }
+
+  .complexity-not-poly {
+    background: #fee2e2;
+    color: #be123c;
+  }
+
+  .complexity-unknown-to-us {
+    background: #ffffff;
+    color: #9ca3af;
+  }
+
+  @media (max-width: 1024px) {
+    .matrix-table {
+      min-width: 400px;
+    }
+
+    .row-header,
+    .col-header,
+    .corner-cell {
+      width: 80px;
+    }
+  }
+</style>

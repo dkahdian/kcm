@@ -893,7 +893,7 @@ function propagateQueriesViaLemmas(
       if (shouldUpgrade) {
         const langName = idToName(language.id);
         const antecedentNames = lemma.antecedent.join(', ');
-        const description = `By lemma ${lemma.id}: since ${langName} supports {${antecedentNames}}, it supports ${lemma.consequent}. ${lemma.description}`;
+        const description = `Since ${langName} supports ${antecedentNames}, it also supports ${lemma.consequent}. ${lemma.description}`;
 
         if (DEBUG_PROPAGATION) {
           console.log(`[Query Propagation] LEMMA ${langName}.${lemma.consequent}: ${consequentComplexity} -> ${targetComplexity} (via ${lemma.id})`);
@@ -1087,7 +1087,7 @@ function propagateDowngradesViaLemmaContrapositives(
           const othersDesc = otherAntecedents.length > 0 
             ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in polynomial time,`
             : '';
-          const description = `By contrapositive of lemma ${lemma.id}: ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent}.${othersDesc} if ${langName} cannot support ${lemma.consequent} in polynomial time, it cannot support ${targetOp} in polynomial time either.`;
+          const description = `Since ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent},${othersDesc} if ${langName} cannot support ${lemma.consequent} in polynomial time, it cannot support ${targetOp} in polynomial time either.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
@@ -1148,7 +1148,7 @@ function propagateDowngradesViaLemmaContrapositives(
           const othersDesc = otherAntecedents.length > 0 
             ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in quasi-polynomial time,`
             : '';
-          const description = `By contrapositive of lemma ${lemma.id}: ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent}.${othersDesc} if ${langName} cannot support ${lemma.consequent} in quasi-polynomial time, it cannot support ${targetOp} in quasi-polynomial time either.`;
+          const description = `Since ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent},${othersDesc} if ${langName} cannot support ${lemma.consequent} in quasi-polynomial time, it cannot support ${targetOp} in quasi-polynomial time either.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);

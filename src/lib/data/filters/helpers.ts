@@ -1,5 +1,5 @@
 import type { LanguageFilter, GraphData, FilterCategory } from '../../types.js';
-import { resolveLanguageProperties } from '../operations.js';
+import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '../operations.js';
 import { getComplexityFromCatalog } from '../complexities.js';
 import { mapLanguagesInDataset } from '../transforms.js';
 
@@ -60,48 +60,49 @@ export function generateLanguageSelectionFilters(graphData: GraphData): Language
 }
 
 /**
- * Creates a hidden filter that fills in missing operations with 'unknown-to-us' complexity.
- * This ensures all languages have all standard operations defined in their properties,
- * with unspecified ones automatically marked as 'unknown-to-us'.
+ * Creates a hidden filter that normalizes operation data by resolving safe keys to operation codes.
+ * Only includes operations that have explicit data in the source; missing operations stay absent
+ * (rendered as blank cells in the matrix).
  */
 export function createFillUnknownOperationsFilter(): LanguageFilter {
   return {
     id: 'fill-unknown-operations',
     name: 'Fill Unknown Operations',
-    description: 'Automatically adds missing operations as "unknown-to-us" complexity',
+    description: 'Normalizes operation keys without adding unknown entries',
     hidden: true, // This is an internal filter - not shown in UI
     defaultParam: true,
     lambda: (data: GraphData, param: boolean) => {
       if (!param) return data;
       return mapLanguagesInDataset(data, (language) => {
-        const resolved = resolveLanguageProperties(
-          language.properties.queries,
-          language.properties.transformations
-        );
+        const normalizeOps = (
+          supportMap: Record<string, any> | undefined,
+          operationDefs: Record<string, any>
+        ): Record<string, any> => {
+          const result: Record<string, any> = {};
+          if (!supportMap) return result;
 
-        const queriesMap: any = {};
-        for (const op of resolved.queries) {
-          queriesMap[op.code] = {
-            complexity: op.complexity,
-            ...(op.caveat && { caveat: op.caveat }),
-            refs: op.refs
-          };
-        }
-
-        const transformationsMap: any = {};
-        for (const op of resolved.transformations) {
-          transformationsMap[op.code] = {
-            complexity: op.complexity,
-            ...(op.caveat && { caveat: op.caveat }),
-            refs: op.refs
-          };
-        }
+          for (const [safeKey, opDef] of Object.entries(operationDefs)) {
+            const support = supportMap[safeKey] || supportMap[opDef.code];
+            if (support) {
+              result[opDef.code] = {
+                complexity: support.complexity,
+                ...(support.caveat && { caveat: support.caveat }),
+                refs: support.refs ?? [],
+                ...(support.description && { description: support.description }),
+                ...(support.derived != null && { derived: support.derived }),
+                ...(support.dimmed != null && { dimmed: support.dimmed }),
+                ...(support.explicit != null && { explicit: support.explicit })
+              };
+            }
+          }
+          return result;
+        };
 
         return {
           ...language,
           properties: {
-            queries: queriesMap,
-            transformations: transformationsMap
+            queries: normalizeOps(language.properties.queries, QUERIES),
+            transformations: normalizeOps(language.properties.transformations, TRANSFORMATIONS)
           }
         };
       });

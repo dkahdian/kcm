@@ -101,6 +101,10 @@ export interface KCOpSupport {
   description?: string;
   /** True if this operation support was inferred by the propagator rather than manually authored */
   derived?: boolean;
+  /** True if this cell should be visually dimmed/grayed (set by implicitEdgeTreatment filter). */
+  dimmed?: boolean;
+  /** True if this cell should be highlighted as explicit (set by implicitEdgeTreatment filter). */
+  explicit?: boolean;
 }
 
 /**
@@ -334,7 +338,37 @@ export interface TransformValidationResult {
 // Filter system types
 export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown';
 export type FilterParamValue = boolean | string | number;
-export type ViewMode = 'graph' | 'matrix';
+export type ViewMode = 'graph' | 'succinctness' | 'queries' | 'transforms';
+
+/**
+ * Selected operation for sidebar display
+ */
+export interface SelectedOperation {
+  /** Operation code (e.g., CO, VA, CD, FO) */
+  code: string;
+  /** Human-readable label */
+  label: string;
+  /** Description of the operation */
+  description?: string;
+  /** Type of operation */
+  type: 'query' | 'transformation';
+}
+
+/**
+ * Selected language-operation cell for sidebar display
+ */
+export interface SelectedOperationCell {
+  /** The language */
+  language: KCLanguage;
+  /** The operation code */
+  operationCode: string;
+  /** The operation label */
+  operationLabel: string;
+  /** Type of operation */
+  operationType: 'query' | 'transformation';
+  /** The language's support info for this operation */
+  support: KCOpEntry;
+}
 
 export interface FilterOption {
   value: string;

@@ -8,7 +8,8 @@
     SelectedEdge,
     FilteredGraphData,
     KCLanguagePropertiesResolved,
-    KCReference
+    KCReference,
+    SelectedOperationCell
   } from '$lib/types.js';
   import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
@@ -16,22 +17,25 @@
   import { getGlobalRefNumber } from '$lib/data/references.js';
   import EdgeLegend from './EdgeLegend.svelte';
   import DynamicLegend from './DynamicLegend.svelte';
-
-  type ViewMode = 'graph' | 'matrix';
+  import type { ViewMode } from '$lib/types.js';
 
   let {
     selectedLanguage,
     graphData,
     filteredGraphData,
     onEdgeSelect,
+    onOperationCellSelect,
     viewMode = 'graph' as ViewMode
   }: {
     selectedLanguage: KCLanguage | null;
     graphData: GraphData | FilteredGraphData;
     filteredGraphData?: GraphData | FilteredGraphData;
     onEdgeSelect: (edge: SelectedEdge) => void;
+    onOperationCellSelect?: (cell: SelectedOperationCell) => void;
     viewMode?: ViewMode;
   } = $props();
+
+  const isOperationsView = $derived(viewMode === 'queries' || viewMode === 'transforms');
 
   // Use filteredGraphData for the legend if provided, otherwise fall back to graphData
   const legendGraphData = $derived(filteredGraphData ?? graphData);
@@ -211,14 +215,14 @@
     return getComplexityFromCatalog(graphData.complexities, op.complexity);
   };
 
-  function scrollToReferences(e: MouseEvent) {
+  function scrollToReferences(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
-    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // Handler for inline citation clicks (receives key string, not MouseEvent)
   function handleCitationClick(_key: string) {
-    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // Copy BibTeX to clipboard
@@ -273,6 +277,17 @@
     event.preventDefault();
     selectEdge(targetId);
   };
+
+  function selectOperationCell(op: KCOpEntry, type: 'query' | 'transformation') {
+    if (!selectedLanguage || !onOperationCellSelect) return;
+    onOperationCellSelect({
+      language: selectedLanguage,
+      operationCode: op.code,
+      operationLabel: op.label,
+      operationType: type,
+      support: op
+    });
+  }
 </script>
 
 <div class="content-wrapper">
@@ -282,6 +297,7 @@
         <MathText as="h3" className="text-xl font-bold text-gray-900 mb-2" text={selectedLanguage.name} />
         <MathText as="h4" className="text-sm text-gray-600 mb-4" text={selectedLanguage.fullName} />
         
+        {#if !isOperationsView}
         <p class="text-gray-700 mb-6">
           <MathText 
             text={selectedLanguage.definition} 
@@ -315,17 +331,24 @@
             {/each}
           </div>
         {/if}
+        {/if}
         
         <div class="space-y-4">
           <div>
             <h5 class="font-semibold text-gray-900 mb-2">Queries</h5>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.queries ?? [] as q}
-                <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
+                <button
+                  type="button"
+                  class="op-row grid grid-cols-[auto,1fr] items-start gap-x-2"
+                  class:op-row--clickable={isOperationsView}
+                  onclick={() => selectOperationCell(q, 'query')}
+                  disabled={!isOperationsView}
+                >
                   <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(q).color}" title={getOpComplexity(q).label}>
                     {getOpComplexity(q).emoji}
                   </span>
-                  <div class="text-sm leading-5">
+                  <div class="text-sm leading-5 text-left">
                     <div>
                       <strong>{q.code}</strong>
                       {#if q.label}
@@ -333,31 +356,28 @@
                         <MathText text={q.label} className="inline" />
                         <span>)</span>
                       {/if}
-                      {#if q.refs?.length}{#each q.refs as refId}<button 
-                            class="ref-badge"
-                            onclick={scrollToReferences}
-                            title="View reference"
-                          >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
-                      {#if q.derived}
-                        <span class="derived-badge" title="Inferred by propagation">derived</span>
+                      {#if !isOperationsView}
+                        {#if q.refs?.length}{#each q.refs as refId}<span 
+                              class="ref-badge"
+                              role="link"
+                              tabindex="0"
+                              onclick={scrollToReferences}
+                              onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
+                              title="View reference"
+                            >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                       {/if}
                     </div>
-                    {#if q.caveat}
-                      <MathText 
-                        text={`Unless ${q.caveat}`} 
-                        className="text-xs text-gray-500"
-                        onCitationClick={handleCitationClick}
-                      />
-                    {/if}
-                    {#if q.description}
-                      <MathText 
-                        text={q.description} 
-                        className="text-xs text-gray-500 mt-1"
-                        onCitationClick={handleCitationClick}
-                      />
+                    {#if !isOperationsView}
+                      {#if q.caveat}
+                        <MathText 
+                          text={`Unless ${q.caveat}`} 
+                          className="text-xs text-gray-500"
+                          onCitationClick={handleCitationClick}
+                        />
+                      {/if}
                     {/if}
                   </div>
-                </div>
+                </button>
               {/each}
             </div>
           </div>
@@ -366,11 +386,17 @@
             <h5 class="font-semibold text-gray-900 mb-2">Transformations</h5>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each resolvedProperties?.transformations ?? [] as t}
-                <div class="grid grid-cols-[auto,1fr] items-start gap-x-2">
+                <button
+                  type="button"
+                  class="op-row grid grid-cols-[auto,1fr] items-start gap-x-2"
+                  class:op-row--clickable={isOperationsView}
+                  onclick={() => selectOperationCell(t, 'transformation')}
+                  disabled={!isOperationsView}
+                >
                   <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(t).color}" title={getOpComplexity(t).label}>
                     {getOpComplexity(t).emoji}
                   </span>
-                  <div class="text-sm leading-5">
+                  <div class="text-sm leading-5 text-left">
                     <div>
                       <strong>{t.code}</strong>
                       {#if t.label}
@@ -378,36 +404,33 @@
                         <MathText text={t.label} className="inline" />
                         <span>)</span>
                       {/if}
-                      {#if t.refs?.length}{#each t.refs as refId}<button 
-                            class="ref-badge"
-                            onclick={scrollToReferences}
-                            title="View reference"
-                          >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
-                      {#if t.derived}
-                        <span class="derived-badge" title="Inferred by propagation">derived</span>
+                      {#if !isOperationsView}
+                        {#if t.refs?.length}{#each t.refs as refId}<span 
+                              class="ref-badge"
+                              role="link"
+                              tabindex="0"
+                              onclick={scrollToReferences}
+                              onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
+                              title="View reference"
+                            >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
                       {/if}
                     </div>
-                    {#if t.caveat}
-                      <MathText 
-                        text={`Unless ${t.caveat}`} 
-                        className="text-xs text-gray-500"
-                        onCitationClick={handleCitationClick}
-                      />
-                    {/if}
-                    {#if t.description}
-                      <MathText 
-                        text={t.description} 
-                        className="text-xs text-gray-500 mt-1"
-                        onCitationClick={handleCitationClick}
-                      />
+                    {#if !isOperationsView}
+                      {#if t.caveat}
+                        <MathText 
+                          text={`Unless ${t.caveat}`} 
+                          className="text-xs text-gray-500"
+                          onCitationClick={handleCitationClick}
+                        />
+                      {/if}
                     {/if}
                   </div>
-                </div>
+                </button>
               {/each}
             </div>
           </div>
         </div>
-        {#if languageRelationships.length}
+        {#if !isOperationsView && languageRelationships.length}
           <!-- TODO: Fix multi-line link text causing newline injection before suffix -->
           <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
             <h5 class="font-semibold text-gray-900 mb-2">Relationships</h5>
@@ -553,18 +576,26 @@
       margin-left: 0.25em;
     }
 
-    .derived-badge {
-      display: inline;
-      font-size: 0.65em;
-      vertical-align: super;
-      line-height: 0;
-      color: #7c3aed;
-      background: #f5f3ff;
-      border: 1px solid #ddd6fe;
+    .op-row {
+      background: none;
+      border: none;
+      padding: 0.25rem;
+      margin: -0.25rem;
       border-radius: 0.25rem;
-      padding: 0.1em 0.3em;
-      margin: 0 0.2em;
-      font-weight: 600;
-      white-space: nowrap;
+      width: 100%;
+      cursor: default;
+    }
+
+    .op-row:disabled {
+      opacity: 1;
+    }
+
+    .op-row--clickable {
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .op-row--clickable:hover {
+      background: #f0f9ff;
     }
   </style>

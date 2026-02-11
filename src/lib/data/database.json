@@ -4,90 +4,8 @@
       "fullName": "-",
       "name": "ANF",
       "properties": {
-        "queries": {
-          "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_8f666aa0",
@@ -98,74 +16,8 @@
       "name": "BDD",
       "fullName": "Binary Decision Diagram",
       "properties": {
-        "queries": {
-          "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "AND_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_bb65ddb5",
@@ -186,7 +38,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma ce-co: CE → CO. if CNF cannot support CO in polynomial time, it cannot support CE in polynomial time either."
+            "description": "Since CE → CO, if CNF cannot support CO in polynomial time, it cannot support CE in polynomial time either."
           },
           "CO": {
             "complexity": "no-poly-unknown-quasi",
@@ -200,7 +52,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma ct-co: CT → CO. if CNF cannot support CO in polynomial time, it cannot support CT in polynomial time either."
+            "description": "Since CT → CO, if CNF cannot support CO in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -208,15 +60,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma eq-co: EQ → CO. if CNF cannot support CO in polynomial time, it cannot support EQ in polynomial time either."
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since EQ → CO, if CNF cannot support CO in polynomial time, it cannot support EQ in polynomial time either."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -224,47 +68,10 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma se-eq: SE → EQ. if CNF cannot support EQ in polynomial time, it cannot support SE in polynomial time either."
-          },
-          "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since SE → EQ, if CNF cannot support EQ in polynomial time, it cannot support SE in polynomial time either."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": []
     },
@@ -287,81 +94,10 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since cSDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since cSDD supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_83e3b023",
@@ -387,27 +123,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since d-DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since d-DNNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -416,55 +132,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to d-DNNF in polynomial time. If d-DNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore d-DNNF does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_6c130090",
@@ -490,27 +160,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since d-SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since d-SDNNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -519,55 +169,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to d-SDNNF in polynomial time. If d-SDNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore d-SDNNF does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_ea9b5299",
@@ -578,90 +182,8 @@
       "fullName": "-",
       "name": "d-SDNNF$_T$",
       "properties": {
-        "queries": {
-          "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_91f812d0",
@@ -690,7 +212,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since DNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
+            "description": "Since DNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "complexity": "no-poly-unknown-quasi",
@@ -698,7 +220,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma ct-va: CT → VA. if DNF cannot support VA in polynomial time, it cannot support CT in polynomial time either."
+            "description": "Since CT → VA, if DNF cannot support VA in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -706,7 +228,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma eq-va: EQ → VA. if DNF cannot support VA in polynomial time, it cannot support EQ in polynomial time either."
+            "description": "Since EQ → VA, if DNF cannot support VA in polynomial time, it cannot support EQ in polynomial time either."
           },
           "IM": {
             "complexity": "no-poly-unknown-quasi",
@@ -714,11 +236,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma im-va: IM → VA. if DNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since IM → VA, if DNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -726,7 +244,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma se-eq: SE → EQ. if DNF cannot support EQ in polynomial time, it cannot support SE in polynomial time either."
+            "description": "Since SE → EQ, if DNF cannot support EQ in polynomial time, it cannot support SE in polynomial time either."
           },
           "VA": {
             "complexity": "no-poly-unknown-quasi",
@@ -735,40 +253,7 @@
             ]
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": []
     },
@@ -791,7 +276,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
+            "description": "Since DNNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "complexity": "no-poly-unknown-quasi",
@@ -799,7 +284,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma ct-va: CT → VA. if DNNF cannot support VA in polynomial time, it cannot support CT in polynomial time either."
+            "description": "Since CT → VA, if DNNF cannot support VA in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -807,7 +292,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma eq-va: EQ → VA. if DNNF cannot support VA in polynomial time, it cannot support EQ in polynomial time either."
+            "description": "Since EQ → VA, if DNNF cannot support VA in polynomial time, it cannot support EQ in polynomial time either."
           },
           "IM": {
             "complexity": "no-poly-unknown-quasi",
@@ -815,11 +300,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma im-va: IM → VA. if DNNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since IM → VA, if DNNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -838,40 +319,7 @@
             "description": "DNF does not support VA in polynomial time, and DNF transforms to DNNF in polynomial time. If DNNF supported VA in polynomial time, then DNF could too by transforming first. Therefore DNNF does not support VA in polynomial time."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_3bebcab7",
@@ -913,16 +361,6 @@
             "refs": [],
             "description": "Unlike OBDDs, FBDDs are not canonical, so equivalence checking is not straightforward. The complexity of EQ for FBDDs requires further investigation."
           },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
@@ -940,48 +378,7 @@
             "description": "It is well-known that FBDD satisfies VA \\citet{Gergov_1994, Darwiche_2002}. Validity is polynomial: check if the BDD root equals the terminal 1 node."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_684b1ca7",
@@ -1007,81 +404,10 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since IP supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since IP supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_6ae90adc",
@@ -1160,48 +486,7 @@
             "description": "A sentence $\\Sigma$ is valid iff it has $2^n$ models, where $n = |\\text{Vars}(\\Sigma)|$. The number of models of $\\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\\Sigma$. Accordingly, VA can be achieved in polynomial time by checking if this count equals $2^n$ (Table 18, Darwiche 2002)."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_e02902d0",
@@ -1227,27 +512,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since nFBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since nFBDD supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -1256,55 +521,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to nFBDD in polynomial time. If nFBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore nFBDD does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_1df07cc3",
@@ -1322,7 +541,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma ce-co: CE → CO. if NNF cannot support CO in polynomial time, it cannot support CE in polynomial time either."
+            "description": "Since CE → CO, if NNF cannot support CO in polynomial time, it cannot support CE in polynomial time either."
           },
           "CO": {
             "complexity": "no-poly-unknown-quasi",
@@ -1338,7 +557,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma ct-co: CT → CO. if NNF cannot support CO in polynomial time, it cannot support CT in polynomial time either."
+            "description": "Since CT → CO, if NNF cannot support CO in polynomial time, it cannot support CT in polynomial time either."
           },
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
@@ -1346,7 +565,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma eq-co: EQ → CO. if NNF cannot support CO in polynomial time, it cannot support EQ in polynomial time either."
+            "description": "Since EQ → CO, if NNF cannot support CO in polynomial time, it cannot support EQ in polynomial time either."
           },
           "IM": {
             "complexity": "no-poly-unknown-quasi",
@@ -1354,11 +573,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By contrapositive of lemma im-va: IM → VA. if NNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since IM → VA, if NNF cannot support VA in polynomial time, it cannot support IM in polynomial time either."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -1377,40 +592,7 @@
             "description": "DNF does not support VA in polynomial time, and DNF transforms to NNF in polynomial time. If NNF supported VA in polynomial time, then DNF could too by transforming first. Therefore NNF does not support VA in polynomial time."
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_5bf00851",
@@ -1436,27 +618,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since nOBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since nOBDD supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -1465,55 +627,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to nOBDD in polynomial time. If nOBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore nOBDD does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_d24efe0e",
@@ -1658,90 +774,8 @@
       "name": "PI",
       "fullName": "Prime Implicates",
       "properties": {
-        "queries": {
-          "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_27fffab2",
@@ -1767,27 +801,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since SDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since SDD supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -1796,55 +810,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to SDD in polynomial time. If SDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore SDD does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_1afefbe2",
@@ -1855,90 +823,8 @@
       "fullName": "-",
       "name": "SDD$_T$",
       "properties": {
-        "queries": {
-          "CE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_9c84a267",
@@ -1964,27 +850,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since SDNNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -1993,55 +859,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to SDNNF in polynomial time. If SDNNF supported SE in polynomial time, then OBDD could too by transforming first. Therefore SDNNF does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_b13b0d78",
@@ -2052,74 +872,8 @@
       "fullName": "-",
       "name": "SDNNF$_T$",
       "properties": {
-        "queries": {
-          "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "AND_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_3c803ba1",
@@ -2145,27 +899,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since uFBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since uFBDD supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -2174,55 +908,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to uFBDD in polynomial time. If uFBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore uFBDD does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_4e62a038",
@@ -2248,27 +936,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since uOBDD supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
-          },
-          "CT": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
+            "description": "Since uOBDD supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -2277,55 +945,9 @@
             ],
             "derived": true,
             "description": "OBDD does not support SE in polynomial time, and OBDD transforms to uOBDD in polynomial time. If uOBDD supported SE in polynomial time, then OBDD could too by transforming first. Therefore uOBDD does not support SE in polynomial time."
-          },
-          "VA": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
-        "transformations": {
-          "AND_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "AND_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "NOT_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "OR_C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_c2df8c2b",
@@ -2363,21 +985,6 @@
             "derived": false,
             "description": "Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \\citet{Darwiche_2002}."
           },
-          "EQ": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
@@ -2396,48 +1003,7 @@
             "description": "Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \\citet{Darwiche_2002}."
           }
         },
-        "transformations": {
-          "CD": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "¬C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∧BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∧C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∨BC": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∨C": {
-            "caveat": "",
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "id": "lang_b9d72a7c",
@@ -2466,7 +1032,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since dec-DNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
+            "description": "Since dec-DNNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "complexity": "unknown-poly-quasi",
@@ -2475,21 +1041,6 @@
             ],
             "derived": true,
             "description": "dec-DNNF transforms to FBDD in quasi-polynomial time, and FBDD supports CT. Therefore dec-DNNF supports CT in at most quasi-polynomial time."
-          },
-          "EQ": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -2508,48 +1059,7 @@
             "description": "dec-DNNF transforms to FBDD in quasi-polynomial time, and FBDD supports VA. Therefore dec-DNNF supports VA in at most quasi-polynomial time."
           }
         },
-        "transformations": {
-          "CD": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "¬C": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∧BC": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∧C": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∨BC": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∨C": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "definition": "-",
@@ -2575,7 +1085,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "By lemma ce-co: since dec-SDNNF supports {CE}, it supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
+            "description": "Since dec-SDNNF supports CE, it also supports CO. CE implies CO: A formula $\\Sigma$ is inconsistent iff $\\Sigma \\models \\bot$, which is equivalent to $\\Sigma$ entailing the empty clause. Clause entailment (CE) can test this directly."
           },
           "CT": {
             "complexity": "unknown-poly-quasi",
@@ -2584,21 +1094,6 @@
             ],
             "derived": true,
             "description": "dec-SDNNF transforms to FBDD in quasi-polynomial time, and FBDD supports CT. Therefore dec-SDNNF supports CT in at most quasi-polynomial time."
-          },
-          "EQ": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
           },
           "SE": {
             "complexity": "no-poly-unknown-quasi",
@@ -2617,48 +1112,7 @@
             "description": "dec-SDNNF transforms to FBDD in quasi-polynomial time, and FBDD supports VA. Therefore dec-SDNNF supports VA in at most quasi-polynomial time."
           }
         },
-        "transformations": {
-          "CD": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "¬C": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∧BC": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∧C": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∨BC": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          },
-          "∨C": {
-            "complexity": "unknown-to-us",
-            "caveat": "",
-            "refs": []
-          }
-        }
+        "transformations": {}
       },
       "tags": [],
       "definition": "-",
@@ -2669,74 +1123,8 @@
       "name": "dec-SDNNF$_<$",
       "fullName": "-",
       "properties": {
-        "queries": {
-          "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "¬C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∧BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∧C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∨BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∨C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "definition": "-",
@@ -2747,74 +1135,8 @@
       "name": "cSDD$_T$",
       "fullName": "-",
       "properties": {
-        "queries": {
-          "CE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "CT": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "EQ": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "IM": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "ME": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "VA": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        },
-        "transformations": {
-          "CD": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "FO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "¬C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∧BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∧C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∨BC": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
-          "∨C": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          }
-        }
+        "queries": {},
+        "transformations": {}
       },
       "tags": [],
       "definition": "-",
@@ -4268,7 +2590,7 @@
             "Bova_2016"
           ],
           "separatingFunctionIds": [
-            "JS"
+            "Sauerhoff"
           ],
           "derived": false
         },
@@ -7754,7 +6076,7 @@
       "id": "no-poly-unknown-quasi",
       "name": "No Poly, Quasi Unknown",
       "label": "$\\not\\leq_p$ · $\\leq_q^?$",
-      "description": "No polynomial transformation; quasi-polynomial unknown",
+      "description": "No polynomial algorithm; quasi-polynomial unknown",
       "style": {
         "lineStyle": "solid",
         "width": 2,
@@ -7773,7 +6095,7 @@
       "id": "no-poly-quasi",
       "name": "No Poly, Quasi Exists",
       "label": "$\\not\\leq_p$ · $\\leq_q$",
-      "description": "No polynomial transformation; quasi-polynomial exists",
+      "description": "No polynomial algorithm; quasi-polynomial unknown",
       "style": {
         "lineStyle": "solid",
         "width": 2,
@@ -7830,7 +6152,7 @@
       "id": "no-quasi",
       "name": "No Quasi",
       "label": "$\\not\\leq_q$",
-      "description": "No quasi-polynomial transformation (implies no polynomial)",
+      "description": "No quasi-polynomial algorithm (implies no polynomial)",
       "style": {
         "lineStyle": "solid",
         "width": 2,

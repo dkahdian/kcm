@@ -1,11 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
-  import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, Complexity } from '../types.js';
+  import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, Complexity, ViewMode } from '../types.js';
   import { resolveLanguageProperties } from '../data/operations.js';
   import MathText from './MathText.svelte';
-
-  type ViewMode = 'graph' | 'matrix';
 
   let {
     graphData,
@@ -126,9 +124,35 @@
   // Determine which operation complexity emojis are visible on graph nodes
   // Only show when operation filters are active (nodes have labelSuffix)
   const visibleComplexities = $derived.by(() => {
-    // In matrix view, never show operation complexities
-    if (viewMode === 'matrix') return [];
+    // In succinctness view, never show operation complexities on the legend
+    if (viewMode === 'succinctness') return [];
     
+    // In queries/transforms view, show all complexity codes that appear in the matrix
+    if (viewMode === 'queries' || viewMode === 'transforms') {
+      const codesInUse = new Set<string>();
+      const isQueries = viewMode === 'queries';
+      
+      for (const lang of filteredData.languages) {
+        const supportMap = isQueries 
+          ? lang.properties.queries 
+          : lang.properties.transformations;
+        if (!supportMap) continue;
+        
+        for (const support of Object.values(supportMap)) {
+          if (support.complexity) {
+            codesInUse.add(support.complexity);
+          }
+        }
+      }
+      
+      // Also add 'unknown-to-us' if any operations don't have explicit support
+      codesInUse.add('unknown-to-us');
+      
+      const catalog = filteredData.complexities;
+      return Object.values(catalog).filter(c => codesInUse.has(c.code));
+    }
+    
+    // Graph view: only show when operation filters are active
     const codesInUse = new Set<string>();
     
     // Only collect from nodes that have visual labelSuffix (meaning an operation filter is active)
@@ -246,7 +270,7 @@
 </script>
 
 <div class="legends-container">
-  {#if visibleEdgeTypes.length > 0}
+  {#if visibleEdgeTypes.length > 0 && (viewMode === 'graph' || viewMode === 'succinctness')}
     <div class="legend">
       <h3 class="text-lg font-semibold text-gray-700 mb-2">Succinctness</h3>
       
@@ -287,7 +311,7 @@
     </div>
   {/if}
   
-  {#if viewMode === 'graph' && visibleComplexities.length > 0}
+  {#if visibleComplexities.length > 0}
     <div class="legend-section">
       <h5>Operations</h5>
       {#each visibleComplexities as complexity}

@@ -1,12 +1,10 @@
 <script lang="ts">
   import MathText from './MathText.svelte';
-  import type { SelectedEdge, GraphData, FilteredGraphData, KCReference } from '$lib/types.js';
+  import type { SelectedEdge, GraphData, FilteredGraphData, KCReference, ViewMode } from '$lib/types.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { extractCitationKeys } from '$lib/utils/math-text.js';
   import { getGlobalRefNumber } from '$lib/data/references.js';
   import DynamicLegend from './DynamicLegend.svelte';
-  
-  type ViewMode = 'graph' | 'matrix';
   
   let { selectedEdge, graphData, filteredGraphData, viewMode = 'graph' as ViewMode }: { 
     selectedEdge: SelectedEdge | null; 
@@ -117,12 +115,12 @@
 
   function scrollToReferences(e: MouseEvent) {
     e.preventDefault();
-    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   // Handler for inline citation clicks (receives key string, not MouseEvent)
   function handleCitationClick(_key: string) {
-    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   async function copyBibtex(bibtex: string, refId: string) {
@@ -169,6 +167,13 @@
                   className="text-sm text-gray-600 mb-2 italic block" 
                   onCitationClick={handleCitationClick}
                 />
+              {/if}
+
+              {#if originalEdge.forward.derived}
+                <div class="derived-notice mt-2 mb-2">
+                  <span class="derived-badge">Derived</span>
+                  <span class="text-xs text-gray-500">This was inferred from other data</span>
+                </div>
               {/if}
               
               {#if forwardSeparatingFunctions.length > 0}
@@ -217,6 +222,13 @@
                   className="text-sm text-gray-600 mb-2 italic block" 
                   onCitationClick={handleCitationClick}
                 />
+              {/if}
+
+              {#if originalEdge.backward.derived}
+                <div class="derived-notice mt-2 mb-2">
+                  <span class="derived-badge">Derived</span>
+                  <span class="text-xs text-gray-500">This was inferred from other data</span>
+                </div>
               {/if}
               
               {#if backwardSeparatingFunctions.length > 0}
@@ -331,5 +343,25 @@
   .ref-badge:hover {
     color: #1d4ed8;
     text-decoration: underline;
+  }
+
+  .derived-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+  }
+
+  .derived-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    background: #e5e7eb;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
   }
 </style>

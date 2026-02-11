@@ -49,7 +49,9 @@ export function resolveOperations(
         caveat: support.caveat,
         refs: support.refs,
         description: support.description,
-        derived: support.derived
+        derived: support.derived,
+        dimmed: support.dimmed,
+        explicit: support.explicit
       });
     } else {
       result.push({

@@ -11,8 +11,8 @@
   } from '$lib/types.js';
   import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
+  import { measureCellSize } from '$lib/utils/matrix-cell-size.js';
 
-  type ViewableGraphData = GraphData | FilteredGraphData;
   type OperationType = 'queries' | 'transformations';
 
   let {
@@ -22,16 +22,14 @@
     selectedOperation = $bindable(),
     selectedOperationCell = $bindable()
   }: {
-    graphData: ViewableGraphData;
+    graphData: GraphData | FilteredGraphData;
     operationType: OperationType;
     selectedNode: KCLanguage | null;
     selectedOperation: SelectedOperation | null;
     selectedOperationCell: SelectedOperationCell | null;
   } = $props();
 
-  const getComplexityCatalog = (data: GraphData | FilteredGraphData) => data.complexities;
-
-  const complexityCatalog = $derived(getComplexityCatalog(graphData));
+  const complexityCatalog = $derived(graphData.complexities);
 
   // Get the operations based on type
   const operations = $derived(operationType === 'queries' ? QUERIES : TRANSFORMATIONS);
@@ -161,64 +159,27 @@
   let cellSize = $state({ width: 0, height: 0 });
   let measured = $state(false);
 
-  function measureAndSetCellSize() {
-    if (!matrixScrollEl || !tableEl) return;
-    
-    const numLangRows = visibleLanguages.length;
-    const numOpCols = operationCodes.length + 1; // +1 for header column
-    if (numLangRows <= 0 || numOpCols <= 1) return;
-
-    const allCells = tableEl.querySelectorAll('th, td');
-    let maxWidth = 0;
-    let maxHeight = 0;
-
-    allCells.forEach(cell => {
-      const el = cell as HTMLElement;
-      const oldWidth = el.style.width;
-      const oldMinWidth = el.style.minWidth;
-      const oldMaxWidth = el.style.maxWidth;
-      el.style.width = 'auto';
-      el.style.minWidth = 'auto';
-      el.style.maxWidth = 'none';
-      
-      const rect = el.getBoundingClientRect();
-      maxWidth = Math.max(maxWidth, rect.width);
-      maxHeight = Math.max(maxHeight, rect.height);
-      
-      el.style.width = oldWidth;
-      el.style.minWidth = oldMinWidth;
-      el.style.maxWidth = oldMaxWidth;
-    });
-
-    const containerWidth = matrixScrollEl.clientWidth;
-    const containerHeight = matrixScrollEl.clientHeight;
-
-    const totalNaturalWidth = maxWidth * numOpCols;
-    const totalNaturalHeight = maxHeight * (numLangRows + 1);
-
-    const finalWidth = totalNaturalWidth <= containerWidth 
-      ? containerWidth / numOpCols 
-      : maxWidth;
-    
-    const finalHeight = totalNaturalHeight <= containerHeight 
-      ? containerHeight / (numLangRows + 1) 
-      : maxHeight;
-
-    cellSize = { width: finalWidth, height: finalHeight };
-    measured = true;
+  function updateCellSize() {
+    const numCols = operationCodes.length + 1; // +1 for header
+    const numRows = visibleLanguages.length + 1; // +1 for header
+    const result = measureCellSize(matrixScrollEl, tableEl, numCols, numRows);
+    if (result) {
+      cellSize = result;
+      measured = true;
+    }
   }
 
   $effect(() => {
     visibleLanguages;
     operationCodes;
     measured = false;
-    queueMicrotask(() => measureAndSetCellSize());
+    queueMicrotask(() => updateCellSize());
   });
 
   import { onMount } from 'svelte';
   onMount(() => {
-    measureAndSetCellSize();
-    const resizeObserver = new ResizeObserver(() => measureAndSetCellSize());
+    updateCellSize();
+    const resizeObserver = new ResizeObserver(() => updateCellSize());
     if (matrixScrollEl) resizeObserver.observe(matrixScrollEl);
     return () => resizeObserver.disconnect();
   });
@@ -401,10 +362,8 @@
     justify-content: center;
     gap: 0.1rem;
     border: none;
-    background: #fff;
     cursor: default;
     font-size: 0.75rem;
-    color: #0f172a;
   }
 
   .matrix-cell--button {
@@ -459,47 +418,6 @@
   .matrix-cell.is-dimmed .cell-emoji {
     position: relative;
     z-index: 2;
-  }
-
-  /* Complexity-based colors (reusing from MatrixView) */
-  .complexity-poly {
-    background: #dcfce7;
-    color: #166534;
-  }
-
-  .complexity-no-poly-unknown-quasi {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-
-  .complexity-no-poly-quasi {
-    background: #ffedd5;
-    color: #9a3412;
-  }
-
-  .complexity-unknown-poly-quasi {
-    background: #fef9c3;
-    color: #854d0e;
-  }
-
-  .complexity-unknown-both {
-    background: #f3f4f6;
-    color: #374151;
-  }
-
-  .complexity-unknown {
-    background-color: #f3f4f6;
-    color: #6b7280;
-  }
-
-  .complexity-no-quasi {
-    background: #fecaca;
-    color: #991b1b;
-  }
-
-  .complexity-not-poly {
-    background: #fee2e2;
-    color: #be123c;
   }
 
   .complexity-unknown-to-us {

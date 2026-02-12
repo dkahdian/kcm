@@ -1,22 +1,6 @@
 import type { ArrowShape, Complexity, KCRelationType } from '../types.js';
 
 /**
- * Valid complexity codes used in the application.
- * Use isValidComplexityCode() to validate strings at runtime.
- */
-export const COMPLEXITY_CODES = [
-  'poly',
-  'no-poly-unknown-quasi',
-  'no-poly-quasi',
-  'unknown-poly-quasi',
-  'unknown-both',
-  'unknown',
-  'no-quasi',
-  'not-poly',
-  'unknown-to-us'
-] as const;
-
-/**
  * Canonical complexity definitions for transformations and operations.
  * These define how complexity classifications are displayed throughout the app.
  * 
@@ -161,34 +145,6 @@ export function getComplexityFromCatalog(
   return catalog[code] ?? fallback;
 }
 
-export function getComplexityNotationFromCatalog(
-  catalog: Record<string, Complexity>,
-  code: string
-): string {
-  return getComplexityFromCatalog(catalog, code).notation;
-}
-
-export function getComplexityClassFromCatalog(
-  catalog: Record<string, Complexity>,
-  code: string
-): string {
-  return getComplexityFromCatalog(catalog, code).cssClass;
-}
-
-export function getComplexityLabelFromCatalog(
-  catalog: Record<string, Complexity>,
-  code: string
-): string {
-  return getComplexityFromCatalog(catalog, code).label;
-}
-
-export function getComplexityDescriptionFromCatalog(
-  catalog: Record<string, Complexity>,
-  code: string
-): string {
-  return getComplexityFromCatalog(catalog, code).description;
-}
-
 /**
  * Get complexity info by code.
  * Falls back to 'unknown-both' if code is not recognized.
@@ -200,68 +156,10 @@ export function getComplexity(code: string): Complexity {
 }
 
 /**
- * Get the color for a complexity code.
- */
-export function getComplexityColor(code: string): string {
-  return getComplexity(code).color;
-}
-
-/**
- * Get the CSS class for a complexity code.
- */
-export function getComplexityClass(code: string): string {
-  return getComplexity(code).cssClass;
-}
-
-/**
- * Get the notation (short LaTeX) for a complexity code.
- */
-export function getComplexityNotation(code: string): string {
-  return getComplexity(code).notation;
-}
-
-/**
- * Get the description for a complexity code.
- */
-export function getComplexityDescription(code: string): string {
-  return getComplexity(code).description;
-}
-
-/**
- * Get the label for a complexity code.
- */
-export function getComplexityLabel(code: string): string {
-  return getComplexity(code).label;
-}
-
-/**
- * Get the emoji for a complexity code.
- * Use this for query/transformation operations (f:any→any).
- */
-export function getComplexityEmoji(code: string): string {
-  return getComplexity(code).emoji;
-}
-
-/**
- * Get the pastel color for a complexity code.
- * Use this for backgrounds.
- */
-export function getComplexityPastel(code: string): string {
-  return getComplexity(code).pastel;
-}
-
-/**
  * Check if a code is a valid complexity code.
  */
 export function isValidComplexityCode(code: string): boolean {
   return code in COMPLEXITIES;
-}
-
-/**
- * Get all complexity codes.
- */
-export function getAllComplexityCodes(): string[] {
-  return Object.keys(COMPLEXITIES);
 }
 
 // ============================================================================

@@ -15,7 +15,7 @@ import type {
 } from '../../routes/contribute/types.js';
 import { cloneDataset } from './transforms.js';
 import { validateDatasetStructure } from './validation/index.js';
-import { propagateImplicitRelations } from './propagation.js';
+import { propagateImplicitRelations } from './propagation/index.js';
 import { isValidComplexityCode } from './complexities.js';
 import { generateReferenceId } from '../utils/reference-id.js';
 

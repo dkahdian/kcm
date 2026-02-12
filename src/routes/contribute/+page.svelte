@@ -58,7 +58,6 @@
     savePreviewDataset,
     loadQueuedChanges
   } from '$lib/contribution-storage.js';
-  import type { PersistedQueueState } from '$lib/contribution-storage.js';
   import type { ReferenceToAdd } from './types.js';
 
   type QueueLanguage = { queueEntryId: string; payload: LanguageToAdd };
@@ -117,12 +116,32 @@
   // Ordered queue of all contribution entries
   let queueEntries = $state<ContributionQueueEntry[]>([]);
 
-  // Languages (derived from queue entries)
-  let languagesToAdd = $state<QueueLanguage[]>([]);
-  let languagesToEdit = $state<QueueLanguage[]>([]);
-
-  // Relationships (always visible, works with existing + new languages)
-  let relationships = $state<QueueRelationship[]>([]);
+  // Per-kind views derived from queue (replaces manual $effect splitting)
+  const languagesToAdd = $derived(
+    queueEntries
+      .filter((e): e is Extract<ContributionQueueEntry, { kind: 'language:new' }> => e.kind === 'language:new')
+      .map((e): QueueLanguage => ({ queueEntryId: e.id, payload: e.payload }))
+  );
+  const languagesToEdit = $derived(
+    queueEntries
+      .filter((e): e is Extract<ContributionQueueEntry, { kind: 'language:edit' }> => e.kind === 'language:edit')
+      .map((e): QueueLanguage => ({ queueEntryId: e.id, payload: e.payload }))
+  );
+  const relationships = $derived(
+    queueEntries
+      .filter((e): e is Extract<ContributionQueueEntry, { kind: 'relationship' }> => e.kind === 'relationship')
+      .map((e): QueueRelationship => ({ queueEntryId: e.id, payload: e.payload }))
+  );
+  const newReferences = $derived(
+    queueEntries
+      .filter((e): e is Extract<ContributionQueueEntry, { kind: 'reference' }> => e.kind === 'reference')
+      .map((e): QueueReference => ({ queueEntryId: e.id, ref: e.payload }))
+  );
+  const newSeparatingFunctions = $derived(
+    queueEntries
+      .filter((e): e is Extract<ContributionQueueEntry, { kind: 'separator' }> => e.kind === 'separator')
+      .map((e): QueueSeparatingFunction => ({ queueEntryId: e.id, payload: e.payload }))
+  );
 
   // Track expanded state for chip UI
   let expandedLanguageToAddIndex = $state<number | null>(null);
@@ -131,27 +150,35 @@
   let expandedReferenceIndex = $state<number | null>(null);
   let expandedSeparatingFunctionIndex = $state<number | null>(null);
 
-  // Modal visibility state
-  let showAddLanguageModal = $state(false);
-  let showEditLanguageModal = $state(false);
-  let showLanguageSelectorModal = $state(false);
+  // Modal state — discriminated union replaces 11 separate state variables.
+  // Only one modal is open at a time.
+  type ModalState =
+    | { kind: 'none' }
+    | { kind: 'add-language' }
+    | { kind: 'edit-queued-add', index: number }
+    | { kind: 'select-language-to-edit' }
+    | { kind: 'edit-existing-language', name: string }
+    | { kind: 'edit-queued-edit', index: number }
+    | { kind: 'add-reference' }
+    | { kind: 'edit-reference', index: number }
+    | { kind: 'add-sep-fn' }
+    | { kind: 'edit-sep-fn', index: number }
+    | { kind: 'add-relationship' }
+    | { kind: 'edit-relationship', index: number };
+
+  let modal = $state<ModalState>({ kind: 'none' });
+
+  function closeModal() {
+    modal = { kind: 'none' };
+  }
+
+  // Local state for the language selector modal only
   let selectedLanguageToEdit = $state<string>('');
-  let showAddReferenceModal = $state(false);
-  let showAddSeparatingFunctionModal = $state(false);
-  let showManageRelationshipModal = $state(false);
-  let editReferenceIndex = $state<number | null>(null);
-  let editSeparatingFunctionIndex = $state<number | null>(null);
-  let editLanguageToAddIndex = $state<number | null>(null);
-  let editLanguageToEditIndex = $state<number | null>(null);
-  let editRelationshipIndex = $state<number | null>(null);
 
   // Track which relationships have been modified from baseline
   let modifiedRelations = $state(new Set<string>());
   let queuePersistenceReady = $state(false);
 
-  // Additional state (declared before hasQueuedItems to avoid TDZ errors)
-  let newReferences = $state<QueueReference[]>([]);
-  let newSeparatingFunctions = $state<QueueSeparatingFunction[]>([]);
   let customTags = $state<CustomTag[]>([]);
 
   const languageAddPayloads = $derived(languagesToAdd.map((entry) => entry.payload));
@@ -159,6 +186,24 @@
   const referenceValues = $derived(newReferences.map((entry) => entry.ref));
   const separatingFunctionPayloads = $derived(newSeparatingFunctions.map((entry) => entry.payload));
   const relationshipPayloads = $derived(relationships.map((entry) => entry.payload));
+
+  // Derived modal-related computations for template use
+  const isAddLangOpen = $derived(modal.kind === 'add-language' || modal.kind === 'edit-queued-add');
+  const isEditLangOpen = $derived(modal.kind === 'edit-existing-language' || modal.kind === 'edit-queued-edit');
+  const editAddIndex = $derived(modal.kind === 'edit-queued-add' ? modal.index : null);
+  const editEditIndex = $derived(modal.kind === 'edit-queued-edit' ? modal.index : null);
+  const editRefIndex = $derived(modal.kind === 'edit-reference' ? modal.index : null);
+  const editSepIndex = $derived(modal.kind === 'edit-sep-fn' ? modal.index : null);
+  const editRelIndex = $derived(modal.kind === 'edit-relationship' ? modal.index : null);
+  const editLangInitialData = $derived.by(() => {
+    const m = modal;
+    if (m.kind === 'edit-queued-edit') return languagesToEdit[m.index]?.payload;
+    if (m.kind === 'edit-existing-language') {
+      const lang = data.languages.find(l => l.name === m.name);
+      return lang ? convertLanguageForEdit(lang) : undefined;
+    }
+    return undefined;
+  });
 
   // Submission metadata & history
   let activeSubmissionId = $state('');
@@ -254,42 +299,6 @@
   }
 
   $effect(() => {
-    const nextLanguagesToAdd: QueueLanguage[] = [];
-    const nextLanguagesToEdit: QueueLanguage[] = [];
-    const nextRelationships: QueueRelationship[] = [];
-    const nextReferences: QueueReference[] = [];
-    const nextSeparators: QueueSeparatingFunction[] = [];
-
-    for (const entry of queueEntries) {
-      switch (entry.kind) {
-        case 'language:new':
-          nextLanguagesToAdd.push({ queueEntryId: entry.id, payload: cloneLanguageEntry(entry.payload) });
-          break;
-        case 'language:edit':
-          nextLanguagesToEdit.push({ queueEntryId: entry.id, payload: cloneLanguageEntry(entry.payload) });
-          break;
-        case 'relationship':
-          nextRelationships.push({ queueEntryId: entry.id, payload: cloneRelationshipEntry(entry.payload) });
-          break;
-        case 'reference':
-          nextReferences.push({ queueEntryId: entry.id, ref: entry.payload });
-          break;
-        case 'separator':
-          nextSeparators.push({ queueEntryId: entry.id, payload: cloneSeparatingFunctionToAdd(entry.payload) });
-          break;
-        default:
-          break;
-      }
-    }
-
-    languagesToAdd = nextLanguagesToAdd;
-    languagesToEdit = nextLanguagesToEdit;
-    relationships = nextRelationships;
-    newReferences = nextReferences;
-    newSeparatingFunctions = nextSeparators;
-  });
-
-  $effect(() => {
     if (!queuePersistenceReady || !browser) return;
 
     if (!activeSubmissionId) {
@@ -311,7 +320,7 @@
       return;
     }
 
-    const snapshot: PersistedQueueState = {
+    const snapshot: ContributionQueueState = {
       entries: queueEntries.map(cloneQueueEntry),
       customTags: customTags.map(cloneCustomTag),
       modifiedRelations: Array.from(modifiedRelations),
@@ -367,137 +376,67 @@
     }
   });
 
-  // Modal handlers
-  function handleAddLanguage(language: LanguageToAdd): OperationResult {
-    addQueueEntry({ id: createQueueEntryId(), kind: 'language:new', payload: cloneLanguageEntry(language) });
-    return { success: true };
-  }
+  // Modal handlers — consolidated by entity type using modal state union
 
-  function handleEditLanguage(language: LanguageToAdd): OperationResult {
-    const existing = languagesToEdit.find((entry) => entry.payload.name === language.name);
-    if (existing) {
-      updateQueueEntry(existing.queueEntryId, 'language:edit', cloneLanguageEntry(language));
+  function handleLanguageAddSubmit(language: LanguageToAdd): OperationResult {
+    if (modal.kind === 'edit-queued-add') {
+      const entry = languagesToAdd[modal.index];
+      if (entry) updateQueueEntry(entry.queueEntryId, 'language:new', cloneLanguageEntry(language));
     } else {
-      addQueueEntry({ id: createQueueEntryId(), kind: 'language:edit', payload: cloneLanguageEntry(language) });
+      addQueueEntry({ id: createQueueEntryId(), kind: 'language:new', payload: cloneLanguageEntry(language) });
     }
     return { success: true };
   }
 
-  function handleAddReference(ref: ReferenceToAdd) {
-    addQueueEntry({ id: createQueueEntryId(), kind: 'reference', payload: ref });
-  }
-
-  function handleAddSeparatingFunction(sf: SeparatingFunctionToAdd) {
-    addQueueEntry({ id: createQueueEntryId(), kind: 'separator', payload: cloneSeparatingFunctionToAdd(sf) });
-  }
-
-  function handleEditSeparatingFunction(index: number) {
-    editSeparatingFunctionIndex = index;
-    showAddSeparatingFunctionModal = true;
-  }
-
-  function handleUpdateSeparatingFunction(sf: SeparatingFunctionToAdd) {
-    if (editSeparatingFunctionIndex !== null) {
-      const entry = newSeparatingFunctions[editSeparatingFunctionIndex];
-      if (entry) {
-        updateQueueEntry(entry.queueEntryId, 'separator', cloneSeparatingFunctionToAdd(sf));
+  function handleLanguageEditSubmit(language: LanguageToAdd): OperationResult {
+    if (modal.kind === 'edit-queued-edit') {
+      const entry = languagesToEdit[modal.index];
+      if (entry) updateQueueEntry(entry.queueEntryId, 'language:edit', cloneLanguageEntry(language));
+    } else {
+      const existing = languagesToEdit.find((e) => e.payload.name === language.name);
+      if (existing) {
+        updateQueueEntry(existing.queueEntryId, 'language:edit', cloneLanguageEntry(language));
+      } else {
+        addQueueEntry({ id: createQueueEntryId(), kind: 'language:edit', payload: cloneLanguageEntry(language) });
       }
-      editSeparatingFunctionIndex = null;
-    }
-  }
-
-  function handleEditReference(index: number) {
-    editReferenceIndex = index;
-    showAddReferenceModal = true;
-  }
-
-  function handleUpdateReference(ref: ReferenceToAdd) {
-    if (editReferenceIndex !== null) {
-      const entry = newReferences[editReferenceIndex];
-      if (entry) {
-        updateQueueEntry(entry.queueEntryId, 'reference', ref);
-      }
-      editReferenceIndex = null;
-    }
-  }
-
-  function handleEditLanguageToAdd(index: number) {
-    // Open modal with current content
-    editLanguageToAddIndex = index;
-    showAddLanguageModal = true;
-  }
-
-  function handleUpdateLanguageToAdd(language: LanguageToAdd): OperationResult {
-    if (editLanguageToAddIndex !== null) {
-      const entry = languagesToAdd[editLanguageToAddIndex];
-      if (entry) {
-        updateQueueEntry(entry.queueEntryId, 'language:new', cloneLanguageEntry(language));
-      }
-      // Clear edit state
-      editLanguageToAddIndex = null;
     }
     return { success: true };
   }
 
-  function handleEditLanguageToEdit(index: number) {
-    // Open modal with current content
-    editLanguageToEditIndex = index;
-    showEditLanguageModal = true;
-  }
-
-  function handleUpdateLanguageToEdit(language: LanguageToAdd): OperationResult {
-    if (editLanguageToEditIndex !== null) {
-      const entry = languagesToEdit[editLanguageToEditIndex];
-      if (entry) {
-        updateQueueEntry(entry.queueEntryId, 'language:edit', cloneLanguageEntry(language));
-      }
-      // Clear edit state
-      editLanguageToEditIndex = null;
+  function handleReferenceSubmit(ref: ReferenceToAdd) {
+    if (modal.kind === 'edit-reference') {
+      const entry = newReferences[modal.index];
+      if (entry) updateQueueEntry(entry.queueEntryId, 'reference', ref);
+    } else {
+      addQueueEntry({ id: createQueueEntryId(), kind: 'reference', payload: ref });
     }
-    return { success: true };
   }
 
-  function handleEditRelationship(index: number) {
-    // Open modal with current content
-    editRelationshipIndex = index;
-    showManageRelationshipModal = true;
+  function handleSepFnSubmit(sf: SeparatingFunctionToAdd) {
+    if (modal.kind === 'edit-sep-fn') {
+      const entry = newSeparatingFunctions[modal.index];
+      if (entry) updateQueueEntry(entry.queueEntryId, 'separator', cloneSeparatingFunctionToAdd(sf));
+    } else {
+      addQueueEntry({ id: createQueueEntryId(), kind: 'separator', payload: cloneSeparatingFunctionToAdd(sf) });
+    }
   }
 
-  function handleUpdateRelationship(relationship: RelationshipEntry) {
-    if (editRelationshipIndex !== null) {
-      const entry = relationships[editRelationshipIndex];
+  function handleRelationshipSubmit(relationship: RelationshipEntry) {
+    if (modal.kind === 'edit-relationship') {
+      const entry = relationships[modal.index];
       if (entry) {
         updateQueueEntry(entry.queueEntryId, 'relationship', cloneRelationshipEntry(relationship));
-        recordModification(relationship);
       }
-
-      // Clear edit state
-      editRelationshipIndex = null;
-    }
-  }
-
-  function handleSaveRelationship(relationship: RelationshipEntry) {
-    // If we're in edit mode, use the update handler
-    if (editRelationshipIndex !== null) {
-      handleUpdateRelationship(relationship);
-      return;
-    }
-
-    // Check if this relationship already exists (adding)
-    const key = relationKey(relationship.sourceId, relationship.targetId);
-    const existing = relationships.find((entry) => relationKey(entry.payload.sourceId, entry.payload.targetId) === key);
-
-    if (existing) {
-      updateQueueEntry(existing.queueEntryId, 'relationship', cloneRelationshipEntry(relationship));
     } else {
-      addQueueEntry({ id: createQueueEntryId(), kind: 'relationship', payload: cloneRelationshipEntry(relationship) });
+      const key = relationKey(relationship.sourceId, relationship.targetId);
+      const existing = relationships.find((e) => relationKey(e.payload.sourceId, e.payload.targetId) === key);
+      if (existing) {
+        updateQueueEntry(existing.queueEntryId, 'relationship', cloneRelationshipEntry(relationship));
+      } else {
+        addQueueEntry({ id: createQueueEntryId(), kind: 'relationship', payload: cloneRelationshipEntry(relationship) });
+      }
     }
-
     recordModification(relationship);
-  }
-
-  function handleAddTag(tag: { label: string; color: string; description?: string; refs: string[] }) {
-    customTags = [...customTags, tag];
   }
 
   function handleDeleteLanguageToAdd(index: number) {
@@ -636,10 +575,7 @@
       isHistoryOpen = false;
 
       // Reset transient UI state
-      editReferenceIndex = null;
-      editLanguageToAddIndex = null;
-      editLanguageToEditIndex = null;
-      editRelationshipIndex = null;
+      modal = { kind: 'none' };
       expandedLanguageToAddIndex = null;
       expandedLanguageToEditIndex = null;
       expandedRelationshipIndex = null;
@@ -831,26 +767,26 @@
             onToggleExpandReference={(index) => expandedReferenceIndex = expandedReferenceIndex === index ? null : index}
             onToggleExpandSeparatingFunction={(index) => expandedSeparatingFunctionIndex = expandedSeparatingFunctionIndex === index ? null : index}
             onToggleExpandRelationship={(index) => expandedRelationshipIndex = expandedRelationshipIndex === index ? null : index}
-            onEditLanguageToAdd={handleEditLanguageToAdd}
-            onEditLanguageToEdit={handleEditLanguageToEdit}
+            onEditLanguageToAdd={(index) => { modal = { kind: 'edit-queued-add', index }; }}
+            onEditLanguageToEdit={(index) => { modal = { kind: 'edit-queued-edit', index }; }}
             onDeleteLanguageToAdd={handleDeleteLanguageToAdd}
             onDeleteLanguageToEdit={handleDeleteLanguageToEdit}
-            onEditReference={handleEditReference}
+            onEditReference={(index) => { modal = { kind: 'edit-reference', index }; }}
             onDeleteReference={deleteReference}
-            onEditSeparatingFunction={handleEditSeparatingFunction}
+            onEditSeparatingFunction={(index) => { modal = { kind: 'edit-sep-fn', index }; }}
             onDeleteSeparatingFunction={deleteSeparatingFunction}
-            onEditRelationship={handleEditRelationship}
+            onEditRelationship={(index) => { modal = { kind: 'edit-relationship', index }; }}
             onDeleteRelationship={(index) => handleDeleteRelationship(index)}
           />
           <!-- END Queued Items Section -->
 
           <!-- Action Buttons -->
           <ActionButtons
-            onAddLanguage={() => showAddLanguageModal = true}
-            onEditLanguage={() => showLanguageSelectorModal = true}
-            onManageRelationships={() => showManageRelationshipModal = true}
-            onAddReference={() => showAddReferenceModal = true}
-            onAddSeparatingFunction={() => showAddSeparatingFunctionModal = true}
+            onAddLanguage={() => { modal = { kind: 'add-language' }; }}
+            onEditLanguage={() => { modal = { kind: 'select-language-to-edit' }; }}
+            onManageRelationships={() => { modal = { kind: 'add-relationship' }; }}
+            onAddReference={() => { modal = { kind: 'add-reference' }; }}
+            onAddSeparatingFunction={() => { modal = { kind: 'add-sep-fn' }; }}
           />
 
           <!-- Preview Button -->
@@ -863,14 +799,11 @@
 
 <!-- Modals -->
 <AddLanguageModal
-  bind:isOpen={showAddLanguageModal}
-  onClose={() => {
-    showAddLanguageModal = false;
-    editLanguageToAddIndex = null;
-  }}
-  onAdd={editLanguageToAddIndex !== null ? handleUpdateLanguageToAdd : handleAddLanguage}
-  isEdit={editLanguageToAddIndex !== null}
-  initialData={editLanguageToAddIndex !== null ? languagesToAdd[editLanguageToAddIndex]?.payload : undefined}
+  isOpen={isAddLangOpen}
+  onClose={closeModal}
+  onAdd={handleLanguageAddSubmit}
+  isEdit={editAddIndex !== null}
+  initialData={editAddIndex !== null ? languagesToAdd[editAddIndex]?.payload : undefined}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   complexityOptions={complexityOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
@@ -879,15 +812,11 @@
 />
 
 <AddLanguageModal
-  bind:isOpen={showEditLanguageModal}
-  onClose={() => {
-    showEditLanguageModal = false;
-    selectedLanguageToEdit = '';
-    editLanguageToEditIndex = null;
-  }}
-  onAdd={editLanguageToEditIndex !== null ? handleUpdateLanguageToEdit : handleEditLanguage}
+  isOpen={isEditLangOpen}
+  onClose={closeModal}
+  onAdd={handleLanguageEditSubmit}
   isEdit={true}
-  initialData={editLanguageToEditIndex !== null ? languagesToEdit[editLanguageToEditIndex]?.payload : (selectedLanguageToEdit ? convertLanguageForEdit(data.languages.find(l => l.name === selectedLanguageToEdit)!) : undefined)}
+  initialData={editLangInitialData}
   queries={Object.values(data.queries).map(q => ({ code: q.code, name: q.label }))}
   transformations={Object.values(data.transformations).map(t => ({ code: t.code, name: t.label }))}
   complexityOptions={complexityOptions.map(p => ({ value: p.code, label: p.label, description: p.description || '' }))}
@@ -896,10 +825,10 @@
 />
 
 <!-- Language Selector Modal for Editing -->
-{#if showLanguageSelectorModal}
+{#if modal.kind === 'select-language-to-edit'}
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick={() => showLanguageSelectorModal = false}>
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick={closeModal}>
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full" onclick={(e) => e.stopPropagation()}>
@@ -928,7 +857,7 @@
             type="button"
             onclick={() => {
               selectedLanguageToEdit = '';
-              showLanguageSelectorModal = false;
+              closeModal();
             }}
             class="px-4 py-2 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
           >
@@ -939,8 +868,8 @@
             disabled={!selectedLanguageToEdit}
             onclick={() => {
               if (selectedLanguageToEdit) {
-                showLanguageSelectorModal = false;
-                showEditLanguageModal = true;
+                modal = { kind: 'edit-existing-language', name: selectedLanguageToEdit };
+                selectedLanguageToEdit = '';
               }
             }}
             class="px-4 py-2 bg-yellow-600 text-white font-medium rounded-lg hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
@@ -954,36 +883,27 @@
 {/if}
 
 <AddReferenceModal
-  bind:isOpen={showAddReferenceModal}
-  onClose={() => {
-    showAddReferenceModal = false;
-    editReferenceIndex = null;
-  }}
-  onAdd={editReferenceIndex !== null ? handleUpdateReference : handleAddReference}
-  initialValue={editReferenceIndex !== null ? newReferences[editReferenceIndex]?.ref : undefined}
-  isEditMode={editReferenceIndex !== null}
+  isOpen={modal.kind === 'add-reference' || modal.kind === 'edit-reference'}
+  onClose={closeModal}
+  onAdd={handleReferenceSubmit}
+  initialValue={editRefIndex !== null ? newReferences[editRefIndex]?.ref : undefined}
+  isEditMode={editRefIndex !== null}
 />
 
 <AddSeparatingFunctionModal
-  bind:isOpen={showAddSeparatingFunctionModal}
-  onClose={() => {
-    showAddSeparatingFunctionModal = false;
-    editSeparatingFunctionIndex = null;
-  }}
-  onAdd={editSeparatingFunctionIndex !== null ? handleUpdateSeparatingFunction : handleAddSeparatingFunction}
-  initialValue={editSeparatingFunctionIndex !== null ? newSeparatingFunctions[editSeparatingFunctionIndex]?.payload : undefined}
+  isOpen={modal.kind === 'add-sep-fn' || modal.kind === 'edit-sep-fn'}
+  onClose={closeModal}
+  onAdd={handleSepFnSubmit}
+  initialValue={editSepIndex !== null ? newSeparatingFunctions[editSepIndex]?.payload : undefined}
   availableRefs={getAvailableReferences(data.existingReferences, referenceValues)}
-  isEditMode={editSeparatingFunctionIndex !== null}
+  isEditMode={editSepIndex !== null}
 />
 
 <ManageRelationshipModal
-  bind:isOpen={showManageRelationshipModal}
-  onClose={() => {
-    showManageRelationshipModal = false;
-    editRelationshipIndex = null;
-  }}
-  onSave={handleSaveRelationship}
-  initialData={editRelationshipIndex !== null ? relationships[editRelationshipIndex]?.payload : undefined}
+  isOpen={modal.kind === 'add-relationship' || modal.kind === 'edit-relationship'}
+  onClose={closeModal}
+  onSave={handleRelationshipSubmit}
+  initialData={editRelIndex !== null ? relationships[editRelIndex]?.payload : undefined}
   languages={getAvailableLanguages(data.languages, languageAddPayloads, languageEditPayloads)}
   {statusOptions}
   availableRefs={getAvailableReferences(data.existingReferences, referenceValues)}

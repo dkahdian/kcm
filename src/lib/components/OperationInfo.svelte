@@ -1,6 +1,7 @@
 <script lang="ts">
   import MathText from './MathText.svelte';
   import DynamicLegend from './DynamicLegend.svelte';
+  import ReferenceList from './ReferenceList.svelte';
   import type { 
     GraphData, 
     FilteredGraphData, 
@@ -44,22 +45,9 @@
   }
 
   let referencesSection: HTMLElement | null = $state(null);
-  let copiedRefId: string | null = $state(null);
 
   function handleCitationClick(_key: string) {
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  async function copyBibtex(bibtex: string, refId: string) {
-    try {
-      await navigator.clipboard.writeText(bibtex);
-      copiedRefId = refId;
-      setTimeout(() => {
-        copiedRefId = null;
-      }, 2000);
-    } catch (err) {
-      console.error('Failed to copy BibTeX:', err);
-    }
   }
 
   function handleLanguageClick(language: KCLanguage) {
@@ -169,33 +157,7 @@
           </div>
         {/if}
 
-        <div class="mt-4 pt-4 border-t border-gray-200" bind:this={referencesSection}>
-          {#if cellReferences.length}
-            <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
-            <ol class="space-y-2">
-              {#each cellReferences as ref}
-                <li class="text-xs text-gray-700">
-                  <div class="flex items-start gap-1.5">
-                    <span class="font-semibold text-gray-900">[{getGlobalRefNumber(ref.id) ?? '?'}]</span>
-                    <div class="flex-1 min-w-0">
-                      <a class="underline text-blue-600 hover:text-blue-800 break-words" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
-                      <button
-                        class="font-medium cursor-pointer ml-2 transition-colors"
-                        class:text-green-600={copiedRefId !== ref.id}
-                        class:hover:text-green-800={copiedRefId !== ref.id}
-                        class:text-green-700={copiedRefId === ref.id}
-                        onclick={() => copyBibtex(ref.bibtex, ref.id)}
-                        title="Copy BibTeX citation"
-                      >
-                        {copiedRefId === ref.id ? '[✓ copied]' : '[copy bibtex]'}
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              {/each}
-            </ol>
-          {/if}
-        </div>
+        <ReferenceList references={cellReferences} bind:anchorElement={referencesSection} />
       </div>
     {:else if selectedOperation}
       <!-- Show operation info only -->
@@ -234,20 +196,6 @@
 </div>
 
 <style>
-  .content-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 0;
-  }
-  
-  .scrollable-content {
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0;
-    padding-bottom: 1rem;
-  }
-  
   .operation-details, 
   .operation-cell-details,
   .welcome-message {
@@ -323,26 +271,6 @@
     color: #6366f1;
     background: #eef2ff;
     padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-  }
-
-  .derived-notice {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.375rem;
-  }
-
-  .derived-badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #6b7280;
-    background: #e5e7eb;
-    padding: 0.2rem 0.4rem;
     border-radius: 0.25rem;
   }
 

@@ -11,12 +11,12 @@
     KCReference,
     SelectedOperationCell
   } from '$lib/types.js';
-  import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '$lib/data/operations.js';
+  import { resolveLanguageProperties } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { extractCitationKeys } from '$lib/utils/math-text.js';
   import { getGlobalRefNumber } from '$lib/data/references.js';
-  import EdgeLegend from './EdgeLegend.svelte';
   import DynamicLegend from './DynamicLegend.svelte';
+  import ReferenceList from './ReferenceList.svelte';
   import type { ViewMode } from '$lib/types.js';
 
   let {
@@ -41,7 +41,7 @@
   const legendGraphData = $derived(filteredGraphData ?? graphData);
   
   // Combine all operations for display
-  const KC_OPERATIONS = { ...QUERIES, ...TRANSFORMATIONS };  // Resolve the properties to get full operation entries
+  // Resolve the properties to get full operation entries
   // Note: If the fill-unknown-operations filter is active, properties will already be resolved,
   // but we resolve again here for safety in case selectedLanguage comes from unfiltered data
   let resolvedProperties: KCLanguagePropertiesResolved | null = $derived(
@@ -52,7 +52,6 @@
   );
 
   let referencesSection: HTMLElement | null = $state(null);
-  let copiedRefId: string | null = $state(null);
 
   // Collect all references including inline citations from description and notes
   const allReferences = $derived.by<KCReference[]>(() => {
@@ -225,20 +224,6 @@
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  // Copy BibTeX to clipboard
-  async function copyBibtex(bibtex: string, refId: string) {
-    try {
-      await navigator.clipboard.writeText(bibtex);
-      copiedRefId = refId;
-      // Reset after 2 seconds
-      setTimeout(() => {
-        copiedRefId = null;
-      }, 2000);
-    } catch (err) {
-      console.error('Failed to copy BibTeX:', err);
-    }
-  }
-
   function selectEdge(targetId: string) {
     if (!selectedLanguage || !onEdgeSelect) return;
     
@@ -334,30 +319,31 @@
         {/if}
         
         <div class="space-y-4">
+          {#snippet operationSection(heading: string, ops: KCOpEntry[], opType: 'query' | 'transformation')}
           <div>
-            <h5 class="font-semibold text-gray-900 mb-2">Queries</h5>
+            <h5 class="font-semibold text-gray-900 mb-2">{heading}</h5>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              {#each resolvedProperties?.queries ?? [] as q}
+              {#each ops as op}
                 <button
                   type="button"
                   class="op-row grid grid-cols-[auto,1fr] items-start gap-x-2"
                   class:op-row--clickable={isOperationsView}
-                  onclick={() => selectOperationCell(q, 'query')}
+                  onclick={() => selectOperationCell(op, opType)}
                   disabled={!isOperationsView}
                 >
-                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(q).color}" title={getOpComplexity(q).label}>
-                    {getOpComplexity(q).emoji}
+                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(op).color}" title={getOpComplexity(op).label}>
+                    {getOpComplexity(op).emoji}
                   </span>
                   <div class="text-sm leading-5 text-left">
                     <div>
-                      <strong>{q.code}</strong>
-                      {#if q.label}
+                      <strong>{op.code}</strong>
+                      {#if op.label}
                         <span> (</span>
-                        <MathText text={q.label} className="inline" />
+                        <MathText text={op.label} className="inline" />
                         <span>)</span>
                       {/if}
                       {#if !isOperationsView}
-                        {#if q.refs?.length}{#each q.refs as refId}<span 
+                        {#if op.refs?.length}{#each op.refs as refId}<span 
                               class="ref-badge"
                               role="link"
                               tabindex="0"
@@ -368,9 +354,9 @@
                       {/if}
                     </div>
                     {#if !isOperationsView}
-                      {#if q.caveat}
+                      {#if op.caveat}
                         <MathText 
-                          text={`Unless ${q.caveat}`} 
+                          text={`Unless ${op.caveat}`} 
                           className="text-xs text-gray-500"
                           onCitationClick={handleCitationClick}
                         />
@@ -381,54 +367,10 @@
               {/each}
             </div>
           </div>
+          {/snippet}
 
-          <div>
-            <h5 class="font-semibold text-gray-900 mb-2">Transformations</h5>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              {#each resolvedProperties?.transformations ?? [] as t}
-                <button
-                  type="button"
-                  class="op-row grid grid-cols-[auto,1fr] items-start gap-x-2"
-                  class:op-row--clickable={isOperationsView}
-                  onclick={() => selectOperationCell(t, 'transformation')}
-                  disabled={!isOperationsView}
-                >
-                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(t).color}" title={getOpComplexity(t).label}>
-                    {getOpComplexity(t).emoji}
-                  </span>
-                  <div class="text-sm leading-5 text-left">
-                    <div>
-                      <strong>{t.code}</strong>
-                      {#if t.label}
-                        <span> (</span>
-                        <MathText text={t.label} className="inline" />
-                        <span>)</span>
-                      {/if}
-                      {#if !isOperationsView}
-                        {#if t.refs?.length}{#each t.refs as refId}<span 
-                              class="ref-badge"
-                              role="link"
-                              tabindex="0"
-                              onclick={scrollToReferences}
-                              onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
-                              title="View reference"
-                            >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
-                      {/if}
-                    </div>
-                    {#if !isOperationsView}
-                      {#if t.caveat}
-                        <MathText 
-                          text={`Unless ${t.caveat}`} 
-                          className="text-xs text-gray-500"
-                          onCitationClick={handleCitationClick}
-                        />
-                      {/if}
-                    {/if}
-                  </div>
-                </button>
-              {/each}
-            </div>
-          </div>
+          {@render operationSection('Queries', resolvedProperties?.queries ?? [], 'query')}
+          {@render operationSection('Transformations', resolvedProperties?.transformations ?? [], 'transformation')}
         </div>
         {#if !isOperationsView && languageRelationships.length}
           <!-- TODO: Fix multi-line link text causing newline injection before suffix -->
@@ -466,35 +408,7 @@
           </div>
         {/if}
         
-        <div class="mt-4 pt-4 border-t border-gray-200" bind:this={referencesSection}>
-          {#if allReferences.length}
-            <div class="mb-2">
-              <h6 class="text-sm font-semibold text-gray-900 mb-2">References</h6>
-                            <ol class="space-y-2">
-                {#each allReferences as ref}
-                  <li class="text-xs text-gray-700">
-                    <div class="flex items-start gap-1.5">
-                      <span class="font-semibold text-gray-900">[{getGlobalRefNumber(ref.id) ?? '?'}]</span>
-                      <div class="flex-1 min-w-0">
-                        <a class="underline text-blue-600 hover:text-blue-800 break-words" href={ref.href} target="_blank" rel="noreferrer noopener">{ref.title}</a>
-                        <button
-                          class="font-medium cursor-pointer ml-2 transition-colors"
-                          class:text-green-600={copiedRefId !== ref.id}
-                          class:hover:text-green-800={copiedRefId !== ref.id}
-                          class:text-green-700={copiedRefId === ref.id}
-                          onclick={() => copyBibtex(ref.bibtex, ref.id)}
-                          title="Copy BibTeX citation"
-                        >
-                          {copiedRefId === ref.id ? '[✓ copied]' : '[copy bibtex]'}
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                {/each}
-              </ol>
-            </div>
-          {/if}
-        </div>
+        <ReferenceList references={allReferences} bind:anchorElement={referencesSection} />
       </div>
     {:else}
       <div class="welcome-message">
@@ -510,47 +424,12 @@
 </div>
   
   <style>
-    .content-wrapper {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-height: 0;
-    }
-    
-    .scrollable-content {
-      flex: 1;
-      overflow-y: auto;
-      min-height: 0;
-      padding-bottom: 1rem;
-    }
-    
     .language-details, .welcome-message {
       background: white;
       border: 1px solid #e5e7eb;
       border-radius: 0.5rem;
       padding: 1rem;
       margin-bottom: 1rem;
-    }
-
-    .ref-badge {
-      display: inline;
-      font-size: 0.7em;
-      vertical-align: super;
-      line-height: 0;
-      color: #2563eb;
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0 0.1em;
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: none;
-      transition: color 0.15s ease;
-    }
-    
-    .ref-badge:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
     }
 
     .ref-badge.inline {

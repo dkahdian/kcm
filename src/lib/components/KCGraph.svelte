@@ -10,12 +10,11 @@
       GraphData,
       FilteredGraphData,
       KCLanguage,
-      KCAdjacencyMatrix,
-      DirectedSuccinctnessRelation,
       SelectedEdge
     } from '$lib/types.js';
   import { getEdgeEndpointStyle } from '$lib/data/complexities.js';
   import { renderMathText, escapeHtml } from '$lib/utils/math-text.js';
+  import { normalizeEdgePairs, buildSameLayerGroups, type EdgePair } from '$lib/utils/graph-layout.js';
 
   const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions_v1';
 
@@ -134,122 +133,19 @@
   let showResetButton = $state(false);
   let defaultPositions = new Map<string, NodePosition>();
 
-  interface EdgePair {
-    id: string;
-    nodeA: string;
-    nodeB: string;
-    aToB: string | null;
-    bToA: string | null;
-    refs: string[];
-    description: string;
-    forward: DirectedSuccinctnessRelation | null;
-    backward: DirectedSuccinctnessRelation | null;
-  }
+  const BASE_NODE_STYLE = {
+    'border-color': '#d1d5db',
+    'border-width': 2,
+    'background-color': '#ffffff'
+  } as const;
 
-  function normalizeEdgePairs(adjacencyMatrix: KCAdjacencyMatrix): EdgePair[] {
-    const pairMap = new Map<string, EdgePair>();
-    const { languageIds, matrix } = adjacencyMatrix;
-
-    for (let i = 0; i < languageIds.length; i += 1) {
-      for (let j = 0; j < languageIds.length; j += 1) {
-        const relation = matrix[i]?.[j];
-        if (!relation) continue;
-
-        const source = languageIds[i];
-        const target = languageIds[j];
-        const [nodeA, nodeB] = source < target ? [source, target] : [target, source];
-        const key = `${nodeA}__${nodeB}`;
-
-        let pair = pairMap.get(key);
-        if (!pair) {
-          pair = {
-            id: `${nodeA}-${nodeB}`,
-            nodeA,
-            nodeB,
-            aToB: null, // Will be set if relation exists
-            bToA: null, // Will be set if relation exists
-            refs: [],
-            description: '',
-            forward: null,
-            backward: null
-          };
-          pairMap.set(key, pair);
-        }
-
-        if (source === nodeA) {
-          pair.aToB = relation.status;
-          pair.forward = relation;
-        } else {
-          pair.bToA = relation.status;
-          pair.backward = relation;
-        }
-
-        const combinedRefs = new Set(pair.refs);
-        for (const ref of relation.refs) {
-          combinedRefs.add(ref);
-        }
-        pair.refs = Array.from(combinedRefs);
+  /** Reset all node styles to the base state, optionally excluding one node. */
+  function resetNodeStyles(excludeId?: string) {
+    cy.nodes().forEach(n => {
+      if (!excludeId || n.id() !== excludeId) {
+        n.style(BASE_NODE_STYLE);
       }
-    }
-
-    for (const pair of pairMap.values()) {
-      const descriptions: string[] = [];
-      if (pair.forward?.description) {
-        descriptions.push(pair.forward.description);
-      }
-      const backwardDesc = pair.backward?.description;
-      if (backwardDesc && backwardDesc !== pair.forward?.description) {
-        descriptions.push(backwardDesc);
-      }
-      pair.description = descriptions.join(' ').trim();
-    }
-
-    return Array.from(pairMap.values());
-  }
-
-  /**
-   * Build same-layer groups using union-find.
-   * Returns a map from each node to its group representative.
-   */
-  function buildSameLayerGroups(edges: EdgePair[], languages: KCLanguage[]): Map<string, string> {
-    const languageIds = new Set(languages.map(l => l.id));
-    const parent = new Map<string, string>();
-    
-    const findRoot = (node: string): string => {
-      if (parent.get(node) === node) return node;
-      const root = findRoot(parent.get(node)!);
-      parent.set(node, root);
-      return root;
-    };
-    
-    const union = (a: string, b: string) => {
-      const rootA = findRoot(a);
-      const rootB = findRoot(b);
-      if (rootA !== rootB) {
-        parent.set(rootB, rootA);
-      }
-    };
-    
-    // Initialize
-    for (const lang of languages) {
-      parent.set(lang.id, lang.id);
-    }
-    
-    // Union nodes with bidirectional poly edges
-    for (const edge of edges) {
-      if (!languageIds.has(edge.nodeA) || !languageIds.has(edge.nodeB)) continue;
-      if (edge.aToB === 'poly' && edge.bToA === 'poly') {
-        union(edge.nodeA, edge.nodeB);
-      }
-    }
-    
-    // Return map: nodeId -> groupRepresentative
-    const nodeToGroup = new Map<string, string>();
-    for (const lang of languages) {
-      nodeToGroup.set(lang.id, findRoot(lang.id));
-    }
-    
-    return nodeToGroup;
+    });
   }
 
   function checkIfPositionsModified(): boolean {
@@ -677,16 +573,7 @@
         // Deselect edge if selecting a node
         selectedEdge = null;
         
-        // Reset all other nodes to base state before selecting new node
-        cy.nodes().forEach(n => {
-          if (n.id() !== id) {
-            n.style({
-              'border-color': '#d1d5db',
-              'border-width': 2,
-              'background-color': '#ffffff'
-            });
-          }
-        });
+        resetNodeStyles(id);
         selectedNode = language;
       }
     });
@@ -700,13 +587,7 @@
       if (sourceNode && targetNode) {
         // Deselect node if selecting an edge
         selectedNode = null;
-        cy.nodes().forEach(n => {
-          n.style({
-            'border-color': '#d1d5db',
-            'border-width': 2,
-            'background-color': '#ffffff'
-          });
-        });
+        resetNodeStyles();
         
         // Build edge selection data
         const nodeA = edgeData.source < edgeData.target ? edgeData.source : edgeData.target;
@@ -739,14 +620,7 @@
       if (evt.target === cy) {
         selectedNode = null;
         selectedEdge = null;
-        // Reset all node styles to base state when deselecting
-        cy.nodes().forEach(node => {
-          node.style({
-            'border-color': '#d1d5db',
-            'border-width': 2,
-            'background-color': '#ffffff'
-          });
-        });
+        resetNodeStyles();
         cy.elements().unselect();
       }
     });
@@ -765,11 +639,7 @@
       const node = evt.target;
       // Reset to base style unless selected
       if (!node.selected()) {
-        node.style({
-          'border-color': '#d1d5db',
-          'border-width': 2,
-          'background-color': '#ffffff'
-        });
+        node.style(BASE_NODE_STYLE);
       }
     });
 

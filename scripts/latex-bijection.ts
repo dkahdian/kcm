@@ -33,13 +33,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { DATABASE_PATH, loadDatabase, saveDatabase, type DatabaseSchema } from './shared/database.js';
 
-// Get script directory
+// Get script directory (still needed for LaTeX/BibTeX paths)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Default Paths
-const DATABASE_PATH = path.join(__dirname, '..', 'src', 'lib', 'data', 'database.json');
+// Default Paths (LaTeX-specific, not shared)
 const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'claims.tex');
 const DEFAULT_LANGUAGES_OUTPUT = path.join(__dirname, '..', 'docs', 'languages.tex');
 const DEFAULT_BIBTEX_OUTPUT = path.join(__dirname, '..', 'docs', 'refs.bib');
@@ -52,20 +52,6 @@ import type {
   KCReference,
   KCSeparatingFunction
 } from '../src/lib/types.js';
-
-// =============================================================================
-// Database Types (matching database.json structure)
-// =============================================================================
-
-interface DatabaseSchema {
-  languages: KCLanguage[];
-  references: KCReference[];
-  separatingFunctions: KCSeparatingFunction[];
-  tags: Record<string, unknown>;
-  adjacencyMatrix: KCAdjacencyMatrix;
-  metadata?: Record<string, unknown>;
-  operations?: Record<string, unknown>;
-}
 
 // =============================================================================
 // Edge Representation
@@ -104,13 +90,6 @@ const CANONICAL_STATUSES: Record<string, string> = {
   'no-quasi':               'is not quasi-polynomial-time transformable to',
   'unknown-both':           'has unknown transformation to',
 };
-
-/**
- * Reverse map: canonical text → status code
- */
-const TEXT_TO_STATUS: Record<string, string> = Object.fromEntries(
-  Object.entries(CANONICAL_STATUSES).map(([k, v]) => [v, k])
-);
 
 // =============================================================================
 // LaTeX Helpers
@@ -193,33 +172,6 @@ function escapeLatex(text: string): string {
     .replace(/&/g, '\\&')
     .replace(/#/g, '\\#');
   // Note: we don't escape _ because it might be part of reference IDs
-}
-
-/**
- * Build canonical claim text from edge data.
- * Format: "$LANG1$ TRANSFORMATION_TYPE $LANG2$ (unless CAVEAT)? \\citet{REFS}?"
- */
-function buildClaimText(edge: Edge): string {
-  const fromLatex = languageToLatex(edge.fromName);
-  const toLatex = languageToLatex(edge.toName);
-  const transformType = CANONICAL_STATUSES[edge.status];
-  
-  if (!transformType) {
-    throw new Error(`Unknown status: ${edge.status}`);
-  }
-  
-  let claim = `${fromLatex} ${transformType} ${toLatex}`;
-  
-  if (edge.caveat) {
-    claim += ` unless ${edge.caveat}`;
-  }
-  
-  // Add references at the end
-  if (edge.refs && edge.refs.length > 0) {
-    claim += ` \\citet{${edge.refs.join(',')}}`;
-  }
-  
-  return claim;
 }
 
 // =============================================================================
@@ -673,9 +625,7 @@ function parseCanonicalClaim(
   claimLine: string,  // The \begin{claim} line
   claimBody: string,  // The content between begin/end
   proofSketch: string,
-  derived: boolean,
-  edgeFromId?: string,
-  edgeToId?: string
+  derived: boolean
 ): ParsedClaim | null {
   // Parse claim body: $LANG1$ TRANSFORMATION_TYPE $LANG2$ (unless CAVEAT)? (\citet{REFS})?
   let body = claimBody.trim();
@@ -763,12 +713,12 @@ function parseLatex(latexContent: string): ParsedClaim[] {
   const claims: ParsedClaim[] = [];
   const lines = latexContent.split('\n');
   let i = 0;
+  let isDerived = false;
   
   while (i < lines.length) {
     const line = lines[i];
     
     // Check for derived marker
-    let isDerived = false;
     if (line.includes('% [DERIVED')) {
       isDerived = true;
       i++;
@@ -819,6 +769,7 @@ function parseLatex(latexContent: string): ParsedClaim[] {
         claims.push(parsed);
       }
       
+      isDerived = false;
       continue;
     }
     
@@ -1372,7 +1323,7 @@ async function main(): Promise<void> {
     console.log('=== Normalizing BibTeX Keys ===\n');
     console.log(`Reading database from: ${DATABASE_PATH}`);
     
-    const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
+    const database = loadDatabase();
     
     console.log(`Found ${database.references.length} references\n`);
     
@@ -1392,7 +1343,7 @@ async function main(): Promise<void> {
     
     if (updated > 0) {
       console.log(`\nWriting database to: ${DATABASE_PATH}`);
-      fs.writeFileSync(DATABASE_PATH, JSON.stringify(database, null, 2), 'utf-8');
+      saveDatabase(database);
     }
     
     console.log('\n=== Done ===');
@@ -1408,7 +1359,7 @@ async function main(): Promise<void> {
     console.log('=== JSON → LaTeX Conversion ===\n');
     console.log(`Reading database from: ${DATABASE_PATH}`);
     
-    const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
+    const database = loadDatabase();
     
     console.log(`Found ${database.languages.length} languages`);
     console.log(`Found ${database.references.length} references`);
@@ -1440,7 +1391,7 @@ async function main(): Promise<void> {
     console.log('=== LaTeX → JSON Conversion ===\n');
     
     console.log(`Reading database from: ${DATABASE_PATH}`);
-    const database = JSON.parse(fs.readFileSync(DATABASE_PATH, 'utf-8')) as DatabaseSchema;
+    const database = loadDatabase();
     
     // Update from BibTeX if file exists
     if (fs.existsSync(bibtexPath)) {
@@ -1483,7 +1434,7 @@ async function main(): Promise<void> {
     
     // Write updated database
     console.log(`\nWriting database to: ${DATABASE_PATH}`);
-    fs.writeFileSync(DATABASE_PATH, JSON.stringify(database, null, 2), 'utf-8');
+    saveDatabase(database);
     
     console.log('\n=== Running refresh-derived.ts to propagate changes ===\n');
     

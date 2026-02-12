@@ -11,14 +11,14 @@ import type {
 import { getAllQueryCodes, getAllTransformationCodes, TRANSFORMATIONS } from '../operations.js';
 import { COMPLEXITIES, isValidComplexityCode } from '../complexities.js';
 
-const VALID_TRANSFORMATION_STATUSES: string[] = [
+const VALID_TRANSFORMATION_STATUSES = new Set([
   'poly',
   'no-poly-unknown-quasi',
   'no-poly-quasi',
   'unknown-poly-quasi',
   'unknown-both',
   'no-quasi'
-];
+]);
 
 const VALID_COMPLEXITY_CODES = new Set(Object.keys(COMPLEXITIES));
 const VALID_QUERY_CODES = new Set(getAllQueryCodes());
@@ -273,7 +273,7 @@ function validateRelation(
   separatingFunctionIds: Set<string>,
   errors: string[]
 ): void {
-  if (!VALID_TRANSFORMATION_STATUSES.includes(relation.status)) {
+  if (!VALID_TRANSFORMATION_STATUSES.has(relation.status)) {
     errors.push(`Edge ${sourceId} -> ${targetId} has unknown status "${relation.status}"`);
   }
 

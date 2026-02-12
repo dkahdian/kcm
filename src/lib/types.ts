@@ -376,7 +376,7 @@ export interface FilterOption {
   description?: string;
 }
 
-export interface LanguageFilter<T extends FilterParamValue = boolean> {
+export interface DataFilter<T extends FilterParamValue = boolean> {
   id: string;
   name: string;
   description: string;
@@ -395,32 +395,14 @@ export interface LanguageFilter<T extends FilterParamValue = boolean> {
   lambda: (data: GraphData, param: T) => GraphData;
 }
 
-/**
- * Edge filter - operates on edges after node filtering
- * Returns the edge to show it, or null to hide it
- */
-export interface EdgeFilter<T extends FilterParamValue = boolean> {
-  id: string;
-  name: string;
-  description: string;
-  category?: string;
-  /** Whether this filter is internal/hidden from UI or can be edited by the user */
-  hidden?: boolean;
-  /** Default value for the filter parameter (used for graph mode, or both if no matrix default) */
-  defaultParam: T;
-  /** Optional override default for matrix view mode */
-  defaultParamMatrix?: T;
-  /** UI control type for displaying this filter */
-  controlType?: FilterControlType;
-  /** Optional list of selectable options for dropdown-style filters */
-  options?: FilterOption[];
-  /** Filter function operating on the entire dataset */
-  lambda: (data: GraphData, param: T) => GraphData;
-}
+/** A filter that operates primarily on language/node data */
+export type LanguageFilter<T extends FilterParamValue = boolean> = DataFilter<T>;
+/** A filter that operates primarily on edge/relation data */
+export type EdgeFilter<T extends FilterParamValue = boolean> = DataFilter<T>;
 
 export interface FilterCategory {
   name: string;
-  filters: LanguageFilter[];
+  filters: DataFilter[];
 }
 
 /**

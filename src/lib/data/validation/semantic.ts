@@ -168,35 +168,6 @@ export function validateAdjacencyConsistency(data: GraphData): SemanticValidatio
   return { ok: true };
 }
 
-export function validateAdjacencyClosure(data: GraphData): SemanticValidationResult {
-  const { adjacencyMatrix } = data;
-  const size = adjacencyMatrix.languageIds.length;
-  const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
-  const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
-
-  for (let i = 0; i < size; i += 1) {
-    for (let j = 0; j < size; j += 1) {
-      if (i === j) continue;
-      const status = getEdgeStatus(adjacencyMatrix, i, j);
-      if (reachP.reach[i][j]) {
-        if (status !== 'poly') {
-          const path = reconstructPathIndices(i, j, reachP.parent[i]);
-          const message = buildClosureMessage(i, j, 'poly', path, adjacencyMatrix);
-          return { ok: false, error: message, witnessPath: pathToIds(path, adjacencyMatrix.languageIds) };
-        }
-      } else if (reachQ.reach[i][j]) {
-        if (!status || !QUASI_STATUS.has(status)) {
-          const path = reconstructPathIndices(i, j, reachQ.parent[i]);
-          const message = buildClosureMessage(i, j, 'quasi', path, adjacencyMatrix);
-          return { ok: false, error: message, witnessPath: pathToIds(path, adjacencyMatrix.languageIds) };
-        }
-      }
-    }
-  }
-
-  return { ok: true };
-}
-
 export function guaranteesPoly(status: string | null | undefined): boolean {
   return status !== undefined && status !== null && POLY_STATUS.has(status);
 }
@@ -219,21 +190,4 @@ export function collectRefsUnion(path: number[], matrix: KCAdjacencyMatrix): str
   return Array.from(refs);
 }
 
-export function pathDescription(pathIds: string[], matrix: KCAdjacencyMatrix): string {
-  const { languageIds } = matrix;
-  const parts: string[] = [];
-  for (let i = 0; i < pathIds.length - 1; i += 1) {
-    const fromId = pathIds[i];
-    const toId = pathIds[i + 1];
-    const fromIdx = languageIds.indexOf(fromId);
-    const toIdx = languageIds.indexOf(toId);
-    const status = getEdgeStatus(matrix, fromIdx, toIdx) ?? 'unknown';
-    parts.push(`${fromId} transforms to ${toId} ${phraseForStatus(status)}.`);
-  }
-  return parts.join(' ');
-}
 
-export function reconstructPathIds(source: number, target: number, parent: number[][], ids: string[]): string[] {
-  const path = reconstructPathIndices(source, target, parent[source]);
-  return pathToIds(path, ids);
-}

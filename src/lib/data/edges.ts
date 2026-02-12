@@ -13,19 +13,8 @@ const indexByLanguage: Record<string, number> = Object.fromEntries(
   languageIds.map((name, idx) => [name, idx])
 );
 
-export function indexForLanguage(name: string): number | undefined {
-  return indexByLanguage[name];
-}
-
-export function languageForIndex(index: number): string | undefined {
-  return languageIds[index];
-}
-
 export const adjacencyMatrixData: KCAdjacencyMatrix = {
   languageIds,
   indexByLanguage,
   matrix
 };
-
-// Temporary export for contribution system (to be replaced)
-export const edges: any[] = [];

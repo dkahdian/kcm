@@ -107,8 +107,8 @@ Propagation should operate only on the cloned dataset so the original canonical 
 - Each queue item `cᵢ` becomes a transformation `cᵢ: D → D`.
 - After replaying the queue we cache the **entire serialized dataset** in `localStorage`—that snapshot becomes the preview source of truth instead of re-running `mergeQueueIntoBaseline`.
 - Editing `cₖ` involves recomputing the prefix `c₁ … cₖ₋₁`, applying the edited `cₖ`, then replaying `cₖ₊₁ … cₙ` with identical options (`checkValidity = true`, `propagateImplicit = true`).
-- The existing `src/lib/preview-merge.ts` module can be removed once the queue uses this reducer-style replay.
-- Queue entries are **strictly one-to-one with the UI buttons** exposed in `ActionButtons.svelte`. Pressing **New Language, Edit Language, Relationship, Reference, or Separator** appends exactly one entry to the ordered queue. Each entry records `{ id, kind, payload }` so that replay, previews, undo/redo, and GitHub submission scripts can treat every action as an atomic transform.
+- The contribution queue now uses a reducer-style replay via `applyContributionQueue`, eliminating the need for a separate preview-merge module.
+- Queue entries are **strictly one-to-one with the UI buttons** exposed in the contribute page. Pressing **New Language, Edit Language, Relationship, Reference, or Separator** appends exactly one entry to the ordered queue. Each entry records `{ id, kind, payload }` so that replay, previews, undo/redo, and GitHub submission scripts can treat every action as an atomic transform.
 - Queue order is the source of truth. Derived groupings ("Languages to Add", "References", etc.) are computed views layered on top of the ordered queue for UI convenience only.
 - Queue serialization persists both the ordered entry list and the contributor metadata. Rehydration rebuilds derived views exclusively from this ordered list to avoid drift between UI and submission data.
 
@@ -129,7 +129,7 @@ Propagation should operate only on the cloned dataset so the original canonical 
 1. **Central module**: Add `src/lib/data/transforms.ts` exporting the foundational types, `transformData`, built-in validators, and propagation hooks.
 2. **Canonical type**: Define `CanonicalKCData` next to `GraphData` (with canonical `separatingFunctions`) and load it via a single `canonicalDataset` export so we stop re-reading `database.json` piecemeal.
 3. **Deep clone**: Use `structuredClone` when available; fall back to `JSON.parse(JSON.stringify(...))` for now (dataset is small) but wrap it so we can upgrade without touching consumers.
-4. **Validation pass**: Replace the scattered helpers in `src/lib/utils/validation.ts` and the contribute modals with a central validator that `transformData` can run whenever contributions are replayed.
+4. **Validation pass**: Replace the scattered helpers in `src/lib/data/validation/` and the contribute modals with a central validator that `transformData` can run whenever contributions are replayed.
 5. **Filter migration**: Rewrite each language/edge filter as a dataset transform (no adapter layer) to keep composition consistent.
 6. **Preview storage**: Persist the final dataset snapshot in `localStorage` after each contribution queue replay so the viewer simply hydrates using that serialized `CanonicalKCData`.
 7. **Testing**: Add unit tests for chaining and validity failures (use `npm run check` and future Vitest suites).

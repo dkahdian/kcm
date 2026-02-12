@@ -6,7 +6,7 @@ import type {
   TransformValidationResult
 } from '../types.js';
 import { validateDatasetStructure } from './validation/index.js';
-import { propagateImplicitRelations } from './propagation.js';
+import { propagateImplicitRelations } from './propagation/index.js';
 
 export interface TransformOptions {
   /** run the validity checker after the transform */

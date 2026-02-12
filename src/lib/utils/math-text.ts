@@ -113,7 +113,7 @@ export function renderMathText(input?: string | null): MathRenderResult {
   return { hasLatex: true, html, plainText: text, citationKeys };
 }
 
-export function containsLatex(input?: string | null): boolean {
+function containsLatex(input?: string | null): boolean {
   if (!input) return false;
   return LATEX_TRIGGER.test(input);
 }
@@ -125,8 +125,7 @@ export function containsLatex(input?: string | null): boolean {
  */
 export function renderTextWithCitations(
   html: string,
-  keyToNumber: (key: string) => number | null,
-  onCitationClick?: (key: string) => void
+  keyToNumber: (key: string) => number | null
 ): string {
   // Replace citation commands with numbered links
   // Handle \cite{key}, \citet{key}, \citep{key}

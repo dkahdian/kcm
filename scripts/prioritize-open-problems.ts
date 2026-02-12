@@ -10,26 +10,11 @@
  * Usage: npx tsx scripts/prioritize-open-problems.ts [topN]
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
+import { loadDatabase, type DatabaseSchema } from './shared/database.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const DATABASE_PATH = path.join(__dirname, '..', 'src', 'lib', 'data', 'database.json');
-
-import { propagateImplicitRelations } from '../src/lib/data/propagation.js';
+import { propagateImplicitRelations } from '../src/lib/data/propagation/index.js';
 import { relationTypes, COMPLEXITIES } from '../src/lib/data/complexities.js';
 import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix, KCSeparatingFunction, KCLanguage } from '../src/lib/types.js';
-
-interface DatabaseSchema {
-  languages: KCLanguage[];
-  references: any[];
-  separatingFunctions: KCSeparatingFunction[];
-  tags: any[];
-  adjacencyMatrix: KCAdjacencyMatrix;
-  metadata?: Record<string, unknown>;
-}
 
 type TargetStatus = 'poly' | 'no-poly-quasi' | 'no-quasi';
 
@@ -43,11 +28,6 @@ interface ChangeCandidate {
   propagatedChanges: number;
   propagatedEdges: string[];  // List of "i->j" edge keys that changed
   contradictionFound: boolean;
-}
-
-function loadDatabase(): DatabaseSchema {
-  const content = fs.readFileSync(DATABASE_PATH, 'utf-8');
-  return JSON.parse(content) as DatabaseSchema;
 }
 
 function deepClone<T>(obj: T): T {

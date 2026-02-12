@@ -14,17 +14,3 @@ import database from './database.json';
  * - Darwiche & Marquis (2002): "A Knowledge Compilation Map"
  */
 export const OPERATION_LEMMAS: OperationLemma[] = database.operationLemmas as OperationLemma[];
-
-/**
- * Get all lemmas where the given operation appears in the antecedent.
- */
-export function getLemmasWithAntecedent(opCode: string): OperationLemma[] {
-  return OPERATION_LEMMAS.filter(lemma => lemma.antecedent.includes(opCode));
-}
-
-/**
- * Get all lemmas that imply the given operation.
- */
-export function getLemmasImplying(opCode: string): OperationLemma[] {
-  return OPERATION_LEMMAS.filter(lemma => lemma.consequent === opCode);
-}

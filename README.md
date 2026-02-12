@@ -23,4 +23,5 @@ The project will support the following features:
 
 ## Docs
 
-- Contribution pipeline specification: see `docs/contribution-pipeline.md` for the unified GraphData model, queue processing, validation rules, preview semantics, and PR generation.
+- Data transformation model: see `docs/data-transformation-model.md` for the unified GraphData model, queue processing, validation rules, and filter pipeline.
+- Graph validation & propagation: see `docs/graph-validation-and-propagation.md` for the Level-1 semantic validator and propagator specification.

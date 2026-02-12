@@ -9,8 +9,8 @@ function enrichLanguage(langJson: any): KCLanguage {
   const refIds = new Set<string>();
   
   // Collect all reference IDs
-  if (langJson.descriptionRefs) {
-    langJson.descriptionRefs.forEach((id: string) => refIds.add(id));
+  if (langJson.definitionRefs) {
+    langJson.definitionRefs.forEach((id: string) => refIds.add(id));
   }
   
   if (langJson.properties?.queries) {

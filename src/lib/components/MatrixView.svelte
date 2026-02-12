@@ -7,34 +7,28 @@
     SelectedEdge,
     DirectedSuccinctnessRelation
   } from '$lib/types.js';
-
-  const getComplexityCatalog = (data: GraphData | FilteredGraphData) => data.complexities;
-
-  type ViewableGraphData = GraphData | FilteredGraphData;
+  import { measureCellSize } from '$lib/utils/matrix-cell-size.js';
 
   let {
     graphData,
     selectedNode = $bindable(),
     selectedEdge = $bindable()
   }: {
-    graphData: ViewableGraphData;
+    graphData: GraphData | FilteredGraphData;
     selectedNode: KCLanguage | null;
     selectedEdge: SelectedEdge | null;
   } = $props();
 
   const STATUS_LABELS = $derived.by<Record<string, string>>(() => {
-    const catalog = getComplexityCatalog(graphData);
-    return Object.fromEntries(Object.values(catalog).map((c) => [c.code, c.label]));
+    return Object.fromEntries(Object.values(graphData.complexities).map((c) => [c.code, c.label]));
   });
 
   const STATUS_CLASSES = $derived.by<Record<string, string>>(() => {
-    const catalog = getComplexityCatalog(graphData);
-    return Object.fromEntries(Object.values(catalog).map((c) => [c.code, c.cssClass]));
+    return Object.fromEntries(Object.values(graphData.complexities).map((c) => [c.code, c.cssClass]));
   });
 
   const STATUS_SHORT = $derived.by<Record<string, string>>(() => {
-    const catalog = getComplexityCatalog(graphData);
-    return Object.fromEntries(Object.values(catalog).map((c) => [c.code, c.notation]));
+    return Object.fromEntries(Object.values(graphData.complexities).map((c) => [c.code, c.notation]));
   });
 
   const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
@@ -170,57 +164,13 @@
   let cellSize = $state({ width: 0, height: 0 });
   let measured = $state(false);
 
-  // Measure cells after render and on resize
-  function measureAndSetCellSize() {
-    if (!matrixScrollEl || !tableEl) return;
-    
-    const numCells = matrixLanguages.length + 1; // +1 for header column
-    if (numCells <= 1) return;
-
-    // Find max natural width/height of any cell by measuring actual rendered content
-    const allCells = tableEl.querySelectorAll('th, td');
-    let maxWidth = 0;
-    let maxHeight = 0;
-
-    allCells.forEach(cell => {
-      // Temporarily remove size constraints to measure natural size
-      const el = cell as HTMLElement;
-      const oldWidth = el.style.width;
-      const oldMinWidth = el.style.minWidth;
-      const oldMaxWidth = el.style.maxWidth;
-      el.style.width = 'auto';
-      el.style.minWidth = 'auto';
-      el.style.maxWidth = 'none';
-      
-      const rect = el.getBoundingClientRect();
-      maxWidth = Math.max(maxWidth, rect.width);
-      maxHeight = Math.max(maxHeight, rect.height);
-      
-      // Restore
-      el.style.width = oldWidth;
-      el.style.minWidth = oldMinWidth;
-      el.style.maxWidth = oldMaxWidth;
-    });
-
-    // Get container dimensions
-    const containerWidth = matrixScrollEl.clientWidth;
-    const containerHeight = matrixScrollEl.clientHeight;
-
-    // Case 1: everything fits - expand cells to fill
-    // Case 2: doesn't fit - use max natural size
-    const totalNaturalWidth = maxWidth * numCells;
-    const totalNaturalHeight = maxHeight * numCells;
-
-    const finalWidth = totalNaturalWidth <= containerWidth 
-      ? containerWidth / numCells 
-      : maxWidth;
-    
-    const finalHeight = totalNaturalHeight <= containerHeight 
-      ? containerHeight / numCells 
-      : maxHeight;
-
-    cellSize = { width: finalWidth, height: finalHeight };
-    measured = true;
+  function updateCellSize() {
+    const numCells = matrixLanguages.length + 1; // +1 for header
+    const result = measureCellSize(matrixScrollEl, tableEl, numCells, numCells);
+    if (result) {
+      cellSize = result;
+      measured = true;
+    }
   }
 
   $effect(() => {
@@ -228,14 +178,14 @@
     matrixLanguages;
     measured = false;
     // Use microtask to ensure DOM is updated
-    queueMicrotask(() => measureAndSetCellSize());
+    queueMicrotask(() => updateCellSize());
   });
 
   // Also measure on mount and resize
   import { onMount } from 'svelte';
   onMount(() => {
-    measureAndSetCellSize();
-    const resizeObserver = new ResizeObserver(() => measureAndSetCellSize());
+    updateCellSize();
+    const resizeObserver = new ResizeObserver(() => updateCellSize());
     if (matrixScrollEl) resizeObserver.observe(matrixScrollEl);
     return () => resizeObserver.disconnect();
   });
@@ -419,10 +369,8 @@
     justify-content: center;
     gap: 0.1rem;
     border: none;
-    background: #fff;
     cursor: default;
     font-size: 0.6rem;
-    color: #0f172a;
   }
 
   .matrix-cell--button {
@@ -507,46 +455,6 @@
   .matrix-cell.is-dimmed .cell-short {
     position: relative;
     z-index: 2;
-  }
-
-  /* Complexity-based matrix cell colors - using pastel backgrounds */
-  .complexity-poly {
-    background: #dcfce7; /* green-100 pastel */
-    color: #166534;
-  }
-
-  .complexity-no-poly-unknown-quasi {
-    background: #fee2e2; /* red-100 pastel */
-    color: #991b1b;
-  }
-
-  .complexity-no-poly-quasi {
-    background: #ffedd5; /* orange-100 pastel */
-    color: #9a3412;
-  }
-
-  .complexity-unknown-poly-quasi {
-    background: #fef9c3; /* yellow-100 pastel */
-    color: #854d0e;
-  }
-
-  .complexity-unknown-both {
-    background: #f3f4f6; /* gray-100 pastel */
-    color: #374151;
-  }
-
-  .complexity-no-quasi {
-    background: #fecaca; /* red-200 pastel */
-    color: #991b1b;
-  }
-
-    .complexity-unknown {
-      background-color: #f3f4f6; /* gray-100 */
-      color: #6b7280; /* gray-500 */
-    }
-  .complexity-not-poly {
-    background: #fee2e2; /* red-100 pastel */
-    color: #be123c;
   }
 
   @media (max-width: 1024px) {

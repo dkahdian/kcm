@@ -77,25 +77,6 @@ export function buildBaselineRelations(adjacencyMatrix: {
 }
 
 /**
- * Get available reference IDs (existing + new with meaningful names)
- */
-export function getAvailableReferenceIds(
-  existingReferences: Array<{ id: string; title: string }>,
-  newReferences: ReferenceToAdd[]
-): string[] {
-  const existing = existingReferences.map((r) => r.id);
-  const existingSet = new Set(existing);
-  
-  const newRefs = newReferences.map((ref) => {
-    const newId = generateReferenceId(ref.bibtex, existingSet);
-    existingSet.add(newId); // Add to set to prevent duplicates within new references
-    return newId;
-  });
-  
-  return [...existing, ...newRefs];
-}
-
-/**
  * Reference data with tooltip information
  */
 export type ReferenceForTooltip = {
@@ -158,25 +139,7 @@ export function convertLanguageForEdit(lang: any): LanguageToAdd {
   };
 }
 
-/**
- * Validate submission has content
- */
-export function validateSubmission(
-  languagesToAdd: LanguageToAdd[],
-  languagesToEdit: LanguageToAdd[],
-  changedRelationships: RelationshipEntry[],
-  newReferences: string[]
-): string | null {
-  if (
-    languagesToAdd.length === 0 &&
-    languagesToEdit.length === 0 &&
-    changedRelationships.length === 0 &&
-    newReferences.length === 0
-  ) {
-    return 'Please add at least one item (language, reference, or relationship) before submitting.';
-  }
-  return null;
-}
+
 
 /**
  * Build submission payload

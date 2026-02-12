@@ -18,7 +18,7 @@
   };
 
   let { 
-    isOpen = $bindable(false), 
+    isOpen = false, 
     onClose, 
     onAdd, 
     availableRefs = [],
@@ -61,7 +61,7 @@
     if (!isEditMode) {
       resetForm();
     }
-    isOpen = false;
+    onClose();
   }
 
   function handleCancel() {

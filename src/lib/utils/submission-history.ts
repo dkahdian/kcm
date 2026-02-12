@@ -273,7 +273,7 @@ export function saveSubmissionHistory(entries: SubmissionHistoryEntry[]): void {
   }
 }
 
-export function createSubmissionHistoryEntry(payload: SubmissionHistoryPayload): SubmissionHistoryEntry {
+function createSubmissionHistoryEntry(payload: SubmissionHistoryPayload): SubmissionHistoryEntry {
   const createdAt = new Date().toISOString();
   return {
     id: payload.submissionId,
@@ -317,16 +317,6 @@ export function recordSubmissionHistory(payload: SubmissionHistoryPayload): Subm
   const capped = next.slice(0, MAX_ENTRIES);
   saveSubmissionHistory(capped);
   return capped;
-}
-
-export function markSubmissionAsSuperseded(supersededId: string, newSubmissionId: string): SubmissionHistoryEntry[] {
-  const entries = loadSubmissionHistory();
-  const target = entries.find((item) => item.id === supersededId);
-  if (target) {
-    target.supersededBySubmissionId = newSubmissionId;
-    saveSubmissionHistory(entries);
-  }
-  return entries;
 }
 
 /**

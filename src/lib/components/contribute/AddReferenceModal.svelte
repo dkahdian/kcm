@@ -10,7 +10,7 @@
     isEditMode?: boolean;
   };
 
-  let { isOpen = $bindable(false), onClose, onAdd, initialValue, isEditMode = false }: Props = $props();
+  let { isOpen = false, onClose, onAdd, initialValue, isEditMode = false }: Props = $props();
 
   let bibtexInput = $state(initialValue?.bibtex ?? '');
   let titleInput = $state(initialValue?.title ?? '');
@@ -59,7 +59,7 @@
       href: hrefInput.trim() || '#'
     });
     resetForm();
-    isOpen = false;
+    onClose();
   }
 
   function resetForm() {

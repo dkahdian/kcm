@@ -14,7 +14,6 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
 
-  import { v4 as uuidv4 } from 'uuid';
   import {
     hasQueuedChanges,
     loadQueuedChanges,
@@ -85,10 +84,7 @@
   }
 
   const createSubmissionId = (): string => {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-      return crypto.randomUUID();
-    }
-    return uuidv4();
+    return crypto.randomUUID();
   };
 
   let selectedNode = $state<KCLanguage | null>(null);

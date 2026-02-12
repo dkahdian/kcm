@@ -12,40 +12,12 @@
  * Usage: npx tsx scripts/refresh-derived.ts
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-
-// Get the directory of this script
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Path to database.json relative to scripts directory
-const DATABASE_PATH = path.join(__dirname, '..', 'src', 'lib', 'data', 'database.json');
+import { loadDatabase, saveDatabase, type DatabaseSchema } from './shared/database.js';
 
 // Import the propagation logic and types
-import { propagateImplicitRelations } from '../src/lib/data/propagation.js';
+import { propagateImplicitRelations } from '../src/lib/data/propagation/index.js';
 import { relationTypes, COMPLEXITIES } from '../src/lib/data/complexities.js';
-import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix, KCSeparatingFunction } from '../src/lib/types.js';
-
-interface DatabaseSchema {
-  languages: any[];
-  references: any[];
-  separatingFunctions: KCSeparatingFunction[];
-  tags: any[];
-  adjacencyMatrix: KCAdjacencyMatrix;
-  metadata?: Record<string, unknown>;
-}
-
-function loadDatabase(): DatabaseSchema {
-  const content = fs.readFileSync(DATABASE_PATH, 'utf-8');
-  return JSON.parse(content) as DatabaseSchema;
-}
-
-function saveDatabase(data: DatabaseSchema): void {
-  const content = JSON.stringify(data, null, 2);
-  fs.writeFileSync(DATABASE_PATH, content, 'utf-8');
-}
+import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix } from '../src/lib/types.js';
 
 function removeDerivedEdges(matrix: KCAdjacencyMatrix): { removed: number; reverted: number } {
   let removed = 0;

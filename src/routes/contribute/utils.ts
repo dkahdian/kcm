@@ -60,51 +60,6 @@ export function sanitizeTags(value: unknown): CustomTag[] {
     }));
 }
 
-export function sanitizeLanguages(value: unknown): LanguageToAdd[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((l): l is Record<string, unknown> => typeof l === 'object' && l !== null)
-    .map((l) => ({
-      name: isString(l.name) ? l.name : '',
-      fullName: isString(l.fullName) ? l.fullName : '',
-      definition: isString(l.definition) ? l.definition : '',
-      definitionRefs: sanitizeStringArray(l.definitionRefs),
-      queries: sanitizeOperationSupportRecord(l.queries),
-      transformations: sanitizeOperationSupportRecord(l.transformations),
-      tags: sanitizeTags(l.tags),
-      existingReferences: sanitizeStringArray(l.existingReferences)
-    }));
-}
-
-export function sanitizeRelationships(value: unknown): RelationshipEntry[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((r): r is Record<string, unknown> => typeof r === 'object' && r !== null)
-    .map((r) => ({
-      sourceId: isString(r.sourceId) ? r.sourceId : '',
-      targetId: isString(r.targetId) ? r.targetId : '',
-      status: isString(r.status) ? r.status : '',
-      description: isString(r.description) ? r.description : undefined,
-      caveat: isString(r.caveat) ? r.caveat : undefined,
-      refs: sanitizeStringArray(r.refs),
-      separatingFunctionIds: r.separatingFunctionIds !== undefined
-        ? sanitizeStringArray(r.separatingFunctionIds)
-        : undefined
-    }));
-}
-
-export function sanitizeSeparatingFunctions(value: unknown): SeparatingFunctionToAdd[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((sf): sf is Record<string, unknown> => typeof sf === 'object' && sf !== null)
-    .map((sf) => ({
-      shortName: isString(sf.shortName) ? sf.shortName : '',
-      name: isString(sf.name) ? sf.name : '',
-      description: isString(sf.description) ? sf.description : '',
-      refs: sanitizeStringArray(sf.refs)
-    }));
-}
-
 export function sanitizeSubmissionId(value: unknown): string | null {
   if (!isString(value) || value.length === 0) return null;
   // Basic validation: should look like a submission ID

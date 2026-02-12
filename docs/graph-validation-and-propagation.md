@@ -301,7 +301,7 @@ while changes remain:
 
 - Level‑0 (structural) validation: `validateDatasetStructure` in `src/lib/data/validation.ts` (already exists).
 - Level‑1 semantic validation: add `validateAdjacencyConsistency` and `validateAdjacencyClosure` in `src/lib/data/semantic-validation.ts` (new file).
-- Propagator: extend or replace `propagateImplicitRelations` in `src/lib/data/propagation.ts` with the two-phase algorithm.
+- Propagator: extend or replace `propagateImplicitRelations` in `src/lib/data/propagation/` with the two-phase algorithm.
 - Type update: add `derived?: boolean` to `DirectedSuccinctnessRelation` in `src/lib/types.ts`.
 
 ## Return types
@@ -525,7 +525,7 @@ validateQueryConsistency(reachP, reachQ, languages):
 
 ### Implementation Placement
 
-- Query propagation: add `propagateQueryOperations` in `src/lib/data/propagation.ts`
+- Query propagation: add `propagateQueryOperations` in `src/lib/data/propagation/`
 - Operation lemmas: store in `database.json` under `operationLemmas`
 - Type updates: extend `KCOpSupport` with `description?: string` and `derived?: boolean`
 - Query validator: add `validateQueryConsistency` alongside `validateAdjacencyConsistency`

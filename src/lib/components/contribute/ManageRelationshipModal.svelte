@@ -50,7 +50,7 @@
   };
 
   let { 
-    isOpen = $bindable(false), 
+    isOpen = false, 
     onClose, 
     onSave, 
     languages, 
@@ -144,7 +144,7 @@
     });
     
     resetForm();
-    isOpen = false;
+    onClose();
   }
 
   function handleCancel() {

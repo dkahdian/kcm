@@ -38,7 +38,7 @@
   };
 
   let {
-    isOpen = $bindable(false),
+    isOpen = false,
     onClose,
     onAdd,
     queries,

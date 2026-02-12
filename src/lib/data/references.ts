@@ -208,10 +208,6 @@ for (const ref of referencesData) {
   }
 }
 
-export function getReference(id: string): KCReference | undefined {
-  return referencesMap[id];
-}
-
 export function getReferences(...ids: string[]): KCReference[] {
   return ids.map(id => referencesMap[id]).filter(Boolean);
 }

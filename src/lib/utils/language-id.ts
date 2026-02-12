@@ -20,13 +20,6 @@ export function generateLanguageId(name: string): string {
 }
 
 /**
- * Check if an ID is safe for use in Cytoscape selectors
- */
-export function isIdSafe(id: string): boolean {
-  return /^lang_[a-f0-9]{8}$/.test(id);
-}
-
-/**
  * Module-level name map for resolving language IDs to display names.
  * Must be initialized via initNameMap() before use.
  */

@@ -1,4 +1,4 @@
-import type { GraphData, LanguageFilter, EdgeFilter } from '../types.js';
+import type { GraphData, DataFilter } from '../types.js';
 import { canonicalDataset } from './canonical.js';
 import { allPredefinedFilters, generateLanguageSelectionFilters, organizeFiltersByCategory, edgeFilters } from './filters/index.js';
 
@@ -6,13 +6,13 @@ import { allPredefinedFilters, generateLanguageSelectionFilters, organizeFilters
 export const initialGraphData: GraphData = canonicalDataset;
 
 // Export all language filters combined (predefined + dynamic language selection)
-export function getAllLanguageFilters(): LanguageFilter[] {
+export function getAllLanguageFilters(): DataFilter[] {
   const languageSelectionFilters = generateLanguageSelectionFilters(initialGraphData);
   return [...allPredefinedFilters, ...languageSelectionFilters];
 }
 
 // Export all edge filters
-export function getAllEdgeFilters(): EdgeFilter[] {
+export function getAllEdgeFilters(): DataFilter[] {
   return edgeFilters;
 }
 
@@ -28,13 +28,6 @@ export { getAllTags, getTags, getTag, CANONICAL_TAGS } from './tags.js';
 export { canonicalDataset } from './canonical.js';
 export { 
   COMPLEXITIES,
-  COMPLEXITY_CODES,
   getComplexity,
-  getComplexityColor,
-  getComplexityClass,
-  getComplexityNotation,
-  getComplexityDescription,
-  getComplexityLabel,
-  isValidComplexityCode,
-  getAllComplexityCodes
+  isValidComplexityCode
 } from './complexities.js';

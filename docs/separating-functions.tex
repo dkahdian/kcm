@@ -1,0 +1,99 @@
+% =============================
+% Knowledge Compilation Map - Separating Functions
+% Auto-generated from database.json
+% Generated: 2026-02-12T23:14:25.251Z
+%
+% EDITING INSTRUCTIONS:
+% - Short names in brackets are auto-generated identifiers. Do NOT edit.
+% - Names (\textbf{...}) are EDITABLE (may contain LaTeX math).
+% - Description content (after the name line) is EDITABLE.
+% - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
+% =============================
+\documentclass[11pt]{article}
+
+% -------- Packages --------
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage{natbib}
+
+% -------- Hyperref setup --------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% -------- Theorem styles --------
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+% -------- Handy macros --------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+
+% -------- Title info --------
+\title{Knowledge Compilation Map: Separating Functions}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{definition}[$OR_n$]\label{sf:-or-n-}
+\textbf{$OR_n = \bigvee_{i=1}^{n} x_i$} \\
+Separates languages that compactly represent disjunctions from those that cannot. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[Clique]\label{sf:clique}
+\textbf{Clique Detection Instances} \\
+Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\Sigma_{n,k}(I)=1 \iff I \text{ contains a bidirectional clique of size }k$. \citet{Darwiche_2002,Wegener_1987}
+\end{definition}
+
+\begin{definition}[HWB]\label{sf:hwb}
+\textbf{Hidden Weighted Bit} \\
+(Description needed)
+\end{definition}
+
+\begin{definition}[JS]\label{sf:js}
+\textbf{Jukna-Schnitger function} \\
+Let $K_n$ be the set of all 2-element subsets of $\{1,...,n\}$. Let the graph $G \subset K_n$ be encoded by the $\{0,1\}$ assignment of $K_n$ mapping a variable to 1 if and only if it is in the edge set of $G$. A triangle is defined as the edges $\{i, j\}, \{j, k\}, \{k, i\}$, where $i, j, k$ are distinct. Let $T_n$ be the set of all triangles on $n$ vertices. Let $JS_n^A: \{0,1\}^{K_n}\to\{0,1\}$ be the function accepting exactly those graphs over $\{1,...,n\}$ that avoid all triangles in $A$. \citet{Jukna_2002} show that for every $n$ there exists an $A_n \subset T_n$ of size $O(n^2)$ so that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\Omega(n^2)}$. Call this function $JS_n$ the Jukna-Schnitger function. \citet{Jukna_2002}
+\end{definition}
+
+\begin{definition}[Pairwise CNF]\label{sf:pairwise-cnf}
+\textbf{$\Sigma_n = \bigwedge_{i=0}^{n-1} \left( x_{2i} \vee x_{2i+1} \right)$} \\
+This formula describes evaluating where given each pair $x_{2i}$ and $x_{2i+1}$, at least one of must be true. It is the dual to the Pairwise DNF. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[Pairwise DNF]\label{sf:pairwise-dnf}
+\textbf{$\Pi_n = \bigvee_{i=0}^{n-1} \left( x_{2i} \wedge x_{2i+1} \right)$} \\
+This formula describes evaluating where after pairing $x_{2i}$ and $x_{2i+1}$, at least one pair must have both be true. It is the dual to the Pairwise CNF. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[Pairwise equivalence]\label{sf:pairwise-equivalence}
+\textbf{$\Sigma_n = \bigwedge_{i=1}^n (x_i \leftrightarrow y_i)$} \\
+(Description needed) \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[Parity]\label{sf:parity}
+\textbf{Parity function} \\
+$O_n = \bigoplus_{i=0}^{n-1} x_i$ has linear size $OBBD_<$ representations but exponential size CNF and DNF representations. \citet{Bryant_1986}
+\end{definition}
+
+\begin{definition}[Sauerhoff]\label{sf:sauerhoff}
+\textbf{Sauerhoff function} \\
+Let $g_n: \{0,1\}^{2n} \to \{0,1\}$ be the function evaluating to 1 if and only if the sum of its inputs is divisible by 3. The Sauerhoff function $S_n: \{0,1\}^{n^2} \to \{0,1\}$ is defined on the $n \times n$ matrix $X = (x_{i,j})$ as $S_n(X) = R_n(X) \vee C_n(X)$, where $R_n, C_n : \{0,1\}^{n^2} \to \{0,1\}$ are defined by $R_n(X) = \bigplus_{i=1}^n g_n(x_{i1},x_{i2},...,x_{in}$ and $C_n(X) = R_n(X^T)$. \citet{Sauerhoff_2003,Bova_2016}
+\end{definition}
+
+% =============================
+% Bibliography
+% =============================
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

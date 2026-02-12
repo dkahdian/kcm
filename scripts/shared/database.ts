@@ -16,7 +16,7 @@ export interface DatabaseSchema {
   separatingFunctions: KCSeparatingFunction[];
   tags?: Record<string, unknown>;
   metadata?: Record<string, unknown>;
-  operations?: Record<string, unknown>;
+  operations: Record<string, unknown>;
   operationLemmas?: unknown[];
 }
 

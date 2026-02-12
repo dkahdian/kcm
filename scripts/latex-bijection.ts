@@ -5,25 +5,27 @@
  * 
  * 1. JSON → LaTeX (--to-latex):
  *    - Reads database.json
- *    - Converts adjacency matrix to edge list
- *    - Generates LaTeX with claims organized by reference (sorted by frequency)
- *    - Claims are auto-generated with STRICT canonical format
- *    - Descriptions are editable
+ *    - Generates claims.tex (succinctness edges, grouped by reference)
+ *    - Generates languages.tex (language definitions)
+ *    - Generates queries.tex (query operation support claims, non-derived only)
+ *    - Generates transformations.tex (transformation operation support claims, non-derived only)
+ *    - Generates separating-functions.tex (separating function definitions)
+ *    - Generates refs.bib (BibTeX references)
  * 
  * 2. LaTeX → JSON (--to-json):
- *    - Parses LaTeX file with STRICT canonical format requirements
- *    - Extracts edges from claims and descriptions
- *    - Description content is copied directly into description field
- *    - Updates adjacency matrix in database.json
+ *    - Parses all LaTeX files with STRICT canonical format requirements
+ *    - Updates database.json with editable content (descriptions, refs, caveats)
  *    - Runs refresh-derived.ts to propagate changes
  * 
- * CANONICAL CLAIM FORMAT (strictly enforced):
+ * CANONICAL CLAIM FORMAT for edges (strictly enforced):
  *   \begin{claim}[status=STATUS]
  *   $LANG1$ transforms to $LANG2$ (unless CAVEAT)?
  *   \end{claim}
  * 
- * Where STATUS is one of: poly, no-poly-unknown-quasi, no-poly-quasi, 
- *                         unknown-poly-quasi, no-quasi, unknown-both
+ * CANONICAL CLAIM FORMAT for operations (strictly enforced):
+ *   \begin{claim}[lang=LANG_ID, op=OP_CODE]
+ *   $LANG$ supports OP_LABEL COMPLEXITY_TEXT (unless CAVEAT)?
+ *   \end{claim}
  * 
  * Usage:
  *   npx tsx scripts/latex-bijection.ts --to-latex [-o output.tex]
@@ -43,6 +45,9 @@ const __dirname = path.dirname(__filename);
 const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'claims.tex');
 const DEFAULT_LANGUAGES_OUTPUT = path.join(__dirname, '..', 'docs', 'languages.tex');
 const DEFAULT_BIBTEX_OUTPUT = path.join(__dirname, '..', 'docs', 'refs.bib');
+const DEFAULT_QUERIES_OUTPUT = path.join(__dirname, '..', 'docs', 'queries.tex');
+const DEFAULT_TRANSFORMS_OUTPUT = path.join(__dirname, '..', 'docs', 'transformations.tex');
+const DEFAULT_SEPFUNCS_OUTPUT = path.join(__dirname, '..', 'docs', 'separating-functions.tex');
 
 // Import types
 import type { 
@@ -50,7 +55,9 @@ import type {
   KCAdjacencyMatrix, 
   KCLanguage, 
   KCReference,
-  KCSeparatingFunction
+  KCSeparatingFunction,
+  KCOpSupport,
+  KCOpSupportMap
 } from '../src/lib/types.js';
 
 // =============================================================================
@@ -89,6 +96,20 @@ const CANONICAL_STATUSES: Record<string, string> = {
   'unknown-poly-quasi':     'has unknown polynomial-time (but has quasi-polynomial-time) transformation to',
   'no-quasi':               'is not quasi-polynomial-time transformable to',
   'unknown-both':           'has unknown transformation to',
+};
+
+/**
+ * All valid operation complexity codes.
+ * Maps complexity code → canonical claim text fragment for operation support.
+ */
+const CANONICAL_OP_COMPLEXITIES: Record<string, string> = {
+  'poly':                   'in polynomial time',
+  'no-poly-unknown-quasi':  'not in polynomial time (quasi-polynomial unknown)',
+  'no-poly-quasi':          'not in polynomial time (but in quasi-polynomial time)',
+  'unknown-poly-quasi':     'in unknown polynomial time (but in quasi-polynomial time)',
+  'no-quasi':               'not in quasi-polynomial time',
+  'unknown-both':           'in unknown complexity',
+  'unknown-to-us':          'in unknown-to-us complexity',
 };
 
 // =============================================================================
@@ -172,6 +193,36 @@ function escapeLatex(text: string): string {
     .replace(/&/g, '\\&')
     .replace(/#/g, '\\#');
   // Note: we don't escape _ because it might be part of reference IDs
+}
+
+/**
+ * Extract content from a LaTeX command with brace-delimited argument,
+ * properly handling nested braces.
+ * 
+ * Given content starting after the opening '{', returns the matched content
+ * up to the balanced closing '}', and the remainder of the string.
+ * 
+ * Example: "hello {world}} rest" with depth 1 → content="hello {world}", rest=" rest"
+ */
+function extractBraceContent(text: string, prefix: string): { content: string; rest: string } | null {
+  const idx = text.indexOf(prefix);
+  if (idx === -1) return null;
+
+  const start = idx + prefix.length;
+  // prefix should end with '{', so we start inside
+  let depth = 1;
+  let i = start;
+  while (i < text.length && depth > 0) {
+    if (text[i] === '{') depth++;
+    else if (text[i] === '}') depth--;
+    i++;
+  }
+  if (depth !== 0) return null;
+
+  // i is now one past the closing brace
+  const content = text.slice(start, i - 1);
+  const rest = text.slice(i);
+  return { content, rest };
 }
 
 // =============================================================================
@@ -1183,13 +1234,13 @@ function parseLanguagesLatex(latexContent: string): ParsedLanguageDefinition[] {
       // Parse the content
       content = content.trim();
       
-      // Extract full name from \textbf{...}
+      // Extract full name from \textbf{...} (handles nested braces)
       let fullName = '';
-      const fullNameMatch = content.match(/^\\textbf\{([^}]+)\}/);
-      if (fullNameMatch) {
-        fullName = fullNameMatch[1];
+      const extracted = extractBraceContent(content, '\\textbf{');
+      if (extracted) {
+        fullName = extracted.content;
         // Remove the fullName line (including the \\)
-        content = content.slice(fullNameMatch[0].length).replace(/^\s*\\\\\s*/, '').trim();
+        content = extracted.rest.replace(/^\s*\\\\\s*/, '').trim();
       }
       
       // Extract references from the end
@@ -1256,6 +1307,755 @@ function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLa
 }
 
 // =============================================================================
+// Separating Functions LaTeX Generation and Parsing
+// =============================================================================
+
+/**
+ * Generate a single separating function definition block.
+ * 
+ * Format:
+ *   \begin{definition}[SHORTNAME]\label{sf:SAFE_LABEL}
+ *   \textbf{NAME} \\
+ *   DESCRIPTION \citet{REFS}?
+ *   \end{definition}
+ */
+function generateSepFuncDefinition(sf: KCSeparatingFunction): string {
+  const safeLabel = sf.shortName.replace(/[^a-zA-Z0-9-]/g, '-').toLowerCase();
+  const description = sf.description && sf.description !== '-'
+    ? sf.description
+    : '(Description needed)';
+
+  let content = `\\textbf{${sf.name}} \\\\
+${description}`;
+
+  if (sf.refs && sf.refs.length > 0) {
+    content += ` \\citet{${sf.refs.join(',')}}`;
+  }
+
+  return `\\begin{definition}[${escapeLatex(sf.shortName)}]\\label{sf:${safeLabel}}
+${content}
+\\end{definition}
+`;
+}
+
+/**
+ * Generate the full separating functions LaTeX document.
+ */
+function generateSepFuncsLatex(database: DatabaseSchema): string {
+  const { separatingFunctions } = database;
+
+  const sorted = [...separatingFunctions].sort((a, b) =>
+    a.shortName.localeCompare(b.shortName)
+  );
+
+  const definitions = sorted
+    .map(sf => generateSepFuncDefinition(sf))
+    .join('\n');
+
+  const preamble = `% =============================
+% Knowledge Compilation Map - Separating Functions
+% Auto-generated from database.json
+% Generated: ${new Date().toISOString()}
+%
+% EDITING INSTRUCTIONS:
+% - Short names in brackets are auto-generated identifiers. Do NOT edit.
+% - Names (\\textbf{...}) are EDITABLE (may contain LaTeX math).
+% - Description content (after the name line) is EDITABLE.
+% - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
+% =============================
+\\documentclass[11pt]{article}
+
+% -------- Packages --------
+\\usepackage[margin=1in]{geometry}
+\\usepackage{amsmath, amssymb, amsthm}
+\\usepackage{mathtools}
+\\usepackage{enumitem}
+\\usepackage{hyperref}
+\\usepackage{cleveref}
+\\usepackage{xcolor}
+\\usepackage{natbib}
+
+% -------- Hyperref setup --------
+\\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% -------- Theorem styles --------
+\\theoremstyle{definition}
+\\newtheorem{definition}{Definition}
+
+% -------- Handy macros --------
+\\newcommand{\\R}{\\mathbb{R}}
+\\newcommand{\\N}{\\mathbb{N}}
+\\newcommand{\\eps}{\\varepsilon}
+
+% -------- Title info --------
+\\title{Knowledge Compilation Map: Separating Functions}
+\\date{\\today}
+
+\\begin{document}
+\\maketitle
+
+`;
+
+  const postamble = `
+% =============================
+% Bibliography
+% =============================
+\\bibliographystyle{plainnat}
+\\bibliography{refs}
+
+\\end{document}
+`;
+
+  return preamble + definitions + postamble;
+}
+
+/**
+ * Parsed separating function from LaTeX
+ */
+interface ParsedSepFunc {
+  shortName: string;
+  name: string;
+  description: string;
+  refs: string[];
+}
+
+/**
+ * Parse separating function definitions from LaTeX file.
+ *
+ * Expected format:
+ *   \begin{definition}[SHORTNAME]\label{sf:SAFE_LABEL}
+ *   \textbf{NAME} \\
+ *   DESCRIPTION \citet{REFS}?
+ *   \end{definition}
+ */
+function parseSepFuncsLatex(latexContent: string): ParsedSepFunc[] {
+  const results: ParsedSepFunc[] = [];
+  const lines = latexContent.split('\n');
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Look for definition start: \begin{definition}[SHORTNAME]\label{sf:...}
+    const defMatch = line.match(/\\begin\{definition\}\[([^\]]+)\]\\label\{sf:([^}]+)\}/);
+    if (defMatch) {
+      const shortName = defMatch[1];
+
+      // Collect definition content until \end{definition}
+      let content = '';
+      i++;
+      while (i < lines.length && !lines[i].includes('\\end{definition}')) {
+        content += lines[i] + '\n';
+        i++;
+      }
+      i++; // Skip \end{definition}
+
+      content = content.trim();
+
+      // Extract name from \textbf{...} (handles nested braces)
+      let name = '';
+      const nameExtracted = extractBraceContent(content, '\\textbf{');
+      if (nameExtracted) {
+        name = nameExtracted.content;
+        content = nameExtracted.rest.replace(/^\s*\\\\\s*/, '').trim();
+      }
+
+      // Extract references from the end
+      let refs: string[] = [];
+      const citeMatch = content.match(/\\citet?\{([^}]+)\}\s*$/);
+      if (citeMatch) {
+        refs = citeMatch[1].split(',').map(s => s.trim());
+        content = content.slice(0, citeMatch.index).trim();
+      }
+
+      results.push({
+        shortName,
+        name,
+        description: content,
+        refs
+      });
+
+      continue;
+    }
+
+    i++;
+  }
+
+  return results;
+}
+
+/**
+ * Update database separating functions from parsed LaTeX definitions.
+ */
+function updateSepFuncsFromLatex(database: DatabaseSchema, parsed: ParsedSepFunc[]): void {
+  const byShortName = new Map<string, KCSeparatingFunction>();
+  for (const sf of database.separatingFunctions) {
+    byShortName.set(sf.shortName, sf);
+  }
+
+  let updated = 0;
+  let skipped = 0;
+
+  for (const p of parsed) {
+    const sf = byShortName.get(p.shortName);
+
+    if (!sf) {
+      console.warn(`Unknown separating function in LaTeX: ${p.shortName}`);
+      skipped++;
+      continue;
+    }
+
+    // Update name (math content, editable)
+    if (p.name && p.name.length > 0) {
+      sf.name = p.name;
+    }
+
+    // Update description (editable)
+    if (p.description && p.description !== '(Description needed)') {
+      sf.description = p.description;
+    }
+
+    // Update refs
+    if (p.refs.length > 0) {
+      sf.refs = p.refs;
+    }
+
+    updated++;
+  }
+
+  console.log(`Updated ${updated} separating functions, skipped ${skipped}`);
+}
+
+// =============================================================================
+// Queries & Transformations LaTeX Generation and Parsing
+// =============================================================================
+
+/**
+ * Operation definition lookup loaded from database.
+ */
+interface OpDef {
+  code: string;
+  label: string;
+  description?: string;
+}
+
+/**
+ * A single operation support claim to be rendered as LaTeX.
+ */
+interface OpClaim {
+  langId: string;
+  langName: string;
+  /** Safe key used in the database (e.g., AND_C, NOT_C) */
+  opSafeKey: string;
+  /** Display code (e.g., ∧C, ¬C) - only for display in claim text */
+  opCode: string;
+  opLabel: string;
+  complexity: string;
+  caveat: string;
+  description: string;
+  refs: string[];
+  derived: boolean;
+}
+
+/**
+ * Extract non-derived operation claims from the database.
+ * @param opType 'queries' or 'transformations'
+ */
+function extractOpClaims(
+  database: DatabaseSchema,
+  opType: 'queries' | 'transformations'
+): OpClaim[] {
+  const opDefs = (database.operations as Record<string, Record<string, OpDef>>)[opType];
+  const claims: OpClaim[] = [];
+
+  for (const lang of database.languages) {
+    const supportMap: KCOpSupportMap | undefined = lang.properties?.[opType];
+    if (!supportMap) continue;
+
+    for (const [safeKey, opDef] of Object.entries(opDefs)) {
+      const support = supportMap[safeKey] || supportMap[opDef.code];
+      if (!support) continue;
+
+      // Skip derived entries
+      if (support.derived) continue;
+
+      // Skip unknown-to-us (no claim to make)
+      if (support.complexity === 'unknown-to-us') continue;
+
+      claims.push({
+        langId: lang.id,
+        langName: lang.name,
+        opSafeKey: safeKey,
+        opCode: opDef.code,
+        opLabel: opDef.label,
+        complexity: support.complexity,
+        caveat: support.caveat || '',
+        description: support.description || '',
+        refs: support.refs || [],
+        derived: false
+      });
+    }
+  }
+
+  return claims;
+}
+
+/**
+ * Generate a single operation support claim block.
+ *
+ * Format:
+ *   % lang=LANG_ID, op=OP_SAFE_KEY
+ *   \begin{claim}
+ *   $LANG$ supports $OP_LABEL$ COMPLEXITY_TEXT (unless CAVEAT)? \citet{REFS}?
+ *   \end{claim}
+ *   \begin{claimdescription}
+ *   DESCRIPTION (EDITABLE)
+ *   \end{claimdescription}
+ */
+function generateOpClaim(claim: OpClaim): string {
+  const langLatex = languageToLatex(claim.langName);
+  const complexityText = CANONICAL_OP_COMPLEXITIES[claim.complexity];
+
+  if (!complexityText) {
+    console.warn(`Unknown operation complexity: ${claim.complexity}`);
+    return '';
+  }
+
+  let claimText = `${langLatex} supports ${claim.opLabel} ${complexityText}`;
+
+  if (claim.caveat) {
+    claimText += ` unless ${claim.caveat}`;
+  }
+
+  if (claim.refs.length > 0) {
+    claimText += ` \\citet{${claim.refs.join(',')}}`;
+  }
+
+  const description = claim.description || '(Description needed)';
+
+  return `% lang=${claim.langId}, op=${claim.opSafeKey}
+\\begin{claim}
+${claimText}
+\\end{claim}
+\\begin{claimdescription}
+${description}
+\\end{claimdescription}
+`;
+}
+
+/**
+ * Group operation claims by reference, same pattern as edge claims.
+ */
+function groupOpClaimsByReference(claims: OpClaim[]): Map<string, OpClaim[]> {
+  const refCounts = new Map<string, number>();
+
+  for (const claim of claims) {
+    for (const ref of claim.refs) {
+      refCounts.set(ref, (refCounts.get(ref) || 0) + 1);
+    }
+  }
+
+  const sortedRefs = [...refCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([ref]) => ref);
+
+  const grouped = new Map<string, OpClaim[]>();
+  const usedClaims = new Set<OpClaim>();
+
+  grouped.set('__NO_REFERENCE__', []);
+  for (const ref of sortedRefs) {
+    grouped.set(ref, []);
+  }
+
+  for (const claim of claims) {
+    if (claim.refs.length === 0) {
+      grouped.get('__NO_REFERENCE__')!.push(claim);
+      usedClaims.add(claim);
+      continue;
+    }
+
+    // Find the most frequent reference for this claim
+    for (const ref of sortedRefs) {
+      if (claim.refs.includes(ref) && !usedClaims.has(claim)) {
+        grouped.get(ref)!.push(claim);
+        usedClaims.add(claim);
+        break;
+      }
+    }
+  }
+
+  // Remove empty groups
+  for (const [key, value] of grouped) {
+    if (value.length === 0) grouped.delete(key);
+  }
+
+  return grouped;
+}
+
+/**
+ * Build a section of operation claims grouped by reference.
+ */
+function buildOpSection(refId: string, refClaims: OpClaim[], refMap: Map<string, KCReference>): string {
+  let sectionTitle: string;
+
+  if (refId === '__NO_REFERENCE__') {
+    sectionTitle = 'No Reference';
+  } else {
+    const ref = refMap.get(refId);
+    sectionTitle = ref ? ref.title.slice(0, 80) + (ref.title.length > 80 ? '...' : '') : refId;
+  }
+
+  // Sort by language name, then operation code
+  refClaims.sort((a, b) => {
+    const langCmp = a.langName.localeCompare(b.langName);
+    if (langCmp !== 0) return langCmp;
+    return a.opCode.localeCompare(b.opCode);
+  });
+
+  const claimTexts = refClaims
+    .map(c => generateOpClaim(c))
+    .filter(c => c.length > 0)
+    .join('\n');
+
+  if (claimTexts.length === 0) return '';
+
+  return `% =============================
+\\section{${escapeLatex(sectionTitle)}}
+% Reference ID: ${refId}
+% =============================
+${claimTexts}`;
+}
+
+/**
+ * Generate the full operations LaTeX document.
+ * @param opType 'queries' or 'transformations'
+ * @param title Document title
+ */
+function generateOpsLatex(database: DatabaseSchema, opType: 'queries' | 'transformations', title: string): string {
+  const claims = extractOpClaims(database, opType);
+  const grouped = groupOpClaimsByReference(claims);
+
+  const refMap = new Map<string, KCReference>();
+  for (const ref of database.references) {
+    refMap.set(ref.id, ref);
+  }
+
+  const sections: string[] = [];
+  let noRefSection: string | null = null;
+
+  for (const [refId, refClaims] of grouped) {
+    const section = buildOpSection(refId, refClaims, refMap);
+    if (!section) continue;
+
+    if (refId === '__NO_REFERENCE__') {
+      noRefSection = section;
+    } else {
+      sections.push(section);
+    }
+  }
+
+  if (noRefSection) {
+    sections.push(noRefSection);
+  }
+
+  const opTypeLabel = opType === 'queries' ? 'Query' : 'Transformation';
+
+  const preamble = `% =============================
+% Knowledge Compilation Map - ${opTypeLabel} Support Claims
+% Auto-generated from database.json
+% Generated: ${new Date().toISOString()}
+%
+% EDITING INSTRUCTIONS:
+% - Claims (\\begin{claim}...\\end{claim}) are auto-generated. Do NOT edit.
+% - Descriptions (\\begin{claimdescription}...\\end{claimdescription}) are EDITABLE.
+% - Derived entries are omitted; they will be regenerated by propagation.
+% - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
+% =============================
+\\documentclass[11pt]{article}
+
+% -------- Packages --------
+\\usepackage[margin=1in]{geometry}
+\\usepackage{amsmath, amssymb, amsthm}
+\\usepackage{mathtools}
+\\usepackage{enumitem}
+\\usepackage{hyperref}
+\\usepackage{cleveref}
+\\usepackage{xcolor}
+\\usepackage{natbib}
+
+% -------- Hyperref setup --------
+\\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% -------- Theorem styles --------
+\\theoremstyle{plain}
+\\newtheorem{claim}{Claim}[section]
+
+\\theoremstyle{definition}
+\\newtheorem{definition}[claim]{Definition}
+
+% -------- Description environment --------
+\\newenvironment{claimdescription}{%
+  \\par\\noindent\\ignorespaces
+}{\\par}
+
+% -------- Handy macros --------
+\\newcommand{\\R}{\\mathbb{R}}
+\\newcommand{\\N}{\\mathbb{N}}
+\\newcommand{\\eps}{\\varepsilon}
+
+% -------- Title info --------
+\\title{Knowledge Compilation Map: ${opTypeLabel} Support}
+\\date{\\today}
+
+\\begin{document}
+\\maketitle
+
+\\tableofcontents
+\\newpage
+
+`;
+
+  const postamble = `
+% =============================
+% Bibliography
+% =============================
+\\bibliographystyle{plainnat}
+\\bibliography{refs}
+
+\\end{document}
+`;
+
+  return preamble + sections.join('\n\n') + postamble;
+}
+
+// =============================================================================
+// Queries & Transformations LaTeX Parsing
+// =============================================================================
+
+/**
+ * Parsed operation support claim from LaTeX.
+ */
+interface ParsedOpClaim {
+  langId: string;
+  opCode: string;
+  complexity: string;
+  caveat: string;
+  description: string;
+  refs: string[];
+}
+
+/**
+ * Parse operation support claims from LaTeX file.
+ *
+ * Expected format:
+ *   % lang=LANG_ID, op=OP_SAFE_KEY
+ *   \begin{claim}
+ *   $LANG$ supports OP_LABEL COMPLEXITY_TEXT (unless CAVEAT)? (\citet{REFS})?
+ *   \end{claim}
+ *   \begin{claimdescription}
+ *   DESCRIPTION
+ *   \end{claimdescription}
+ */
+function parseOpsLatex(latexContent: string): ParsedOpClaim[] {
+  const results: ParsedOpClaim[] = [];
+  const lines = latexContent.split('\n');
+  let i = 0;
+
+  // Track the most recent metadata comment
+  let pendingLangId: string | null = null;
+  let pendingOpCode: string | null = null;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Look for metadata comment: % lang=..., op=...
+    const metaMatch = line.match(/^%\s*lang=([^,]+),\s*op=(.+)$/);
+    if (metaMatch) {
+      pendingLangId = metaMatch[1].trim();
+      pendingOpCode = metaMatch[2].trim();
+      i++;
+      continue;
+    }
+
+    // Look for claim start: \begin{claim} (without optional args for op claims)
+    if (line.includes('\\begin{claim}') && pendingLangId && pendingOpCode) {
+      const langId = pendingLangId;
+      const opCode = pendingOpCode;
+      pendingLangId = null;
+      pendingOpCode = null;
+
+      // Collect claim content until \end{claim}
+      let claimContent = '';
+      i++;
+      while (i < lines.length && !lines[i].includes('\\end{claim}')) {
+        claimContent += lines[i] + '\n';
+        i++;
+      }
+      i++; // Skip \end{claim}
+
+      // Find and collect description content
+      let descContent = '';
+      while (i < lines.length && !lines[i].includes('\\begin{claimdescription}')) {
+        if (lines[i].trim() && !lines[i].trim().startsWith('%')) {
+          break; // Unexpected content
+        }
+        i++;
+      }
+
+      if (i < lines.length && lines[i].includes('\\begin{claimdescription}')) {
+        i++; // Skip \begin{claimdescription}
+        while (i < lines.length && !lines[i].includes('\\end{claimdescription}')) {
+          descContent += lines[i] + '\n';
+          i++;
+        }
+        i++; // Skip \end{claimdescription}
+      }
+
+      // Parse the claim body to extract complexity, caveat, refs
+      let body = claimContent.trim();
+
+      // Extract citation
+      let refs: string[] = [];
+      const citeMatch = body.match(/\\citet?\{([^}]+)\}\s*$/);
+      if (citeMatch) {
+        refs = citeMatch[1].split(',').map(s => s.trim());
+        body = body.slice(0, citeMatch.index).trim();
+      }
+
+      // Extract caveat
+      let caveat = '';
+      const unlessMatch = body.match(/\s+unless\s+(.+)$/i);
+      if (unlessMatch) {
+        caveat = unlessMatch[1].trim();
+        body = body.slice(0, unlessMatch.index).trim();
+      }
+
+      // Determine complexity from canonical text
+      let complexity: string | null = null;
+      for (const [code, text] of Object.entries(CANONICAL_OP_COMPLEXITIES)) {
+        if (body.includes(text)) {
+          complexity = code;
+          break;
+        }
+      }
+
+      if (!complexity) {
+        console.warn(`Could not determine complexity from op claim body: ${body}`);
+        i++;
+        continue;
+      }
+
+      results.push({
+        langId,
+        opCode,
+        complexity,
+        caveat,
+        description: descContent.trim(),
+        refs
+      });
+
+      continue;
+    }
+
+    i++;
+  }
+
+  return results;
+}
+
+/**
+ * Update database operation support from parsed LaTeX claims.
+ * @param opType 'queries' or 'transformations'
+ */
+function updateOpsFromLatex(
+  database: DatabaseSchema,
+  parsedClaims: ParsedOpClaim[],
+  opType: 'queries' | 'transformations'
+): void {
+  const opDefs = (database.operations as Record<string, Record<string, OpDef>>)[opType];
+
+  // Build set of valid safe keys for validation
+  const validSafeKeys = new Set(Object.keys(opDefs));
+
+  // Build language ID lookup
+  const idToLang = new Map<string, KCLanguage>();
+  for (const lang of database.languages) {
+    idToLang.set(lang.id, lang);
+  }
+
+  let updated = 0;
+  let skipped = 0;
+
+  for (const claim of parsedClaims) {
+    const lang = idToLang.get(claim.langId);
+    if (!lang) {
+      console.warn(`Unknown language ID in ops LaTeX: ${claim.langId}`);
+      skipped++;
+      continue;
+    }
+
+    // The opCode from LaTeX is already the safe key (e.g., AND_C, NOT_C)
+    const safeKey = claim.opCode;
+    if (!validSafeKeys.has(safeKey)) {
+      console.warn(`Unknown operation safe key in ops LaTeX: ${safeKey}`);
+      skipped++;
+      continue;
+    }
+
+    // Ensure properties map exists
+    if (!lang.properties) {
+      lang.properties = {};
+    }
+    if (!lang.properties[opType]) {
+      lang.properties[opType] = {};
+    }
+
+    const supportMap = lang.properties[opType]!;
+    const existing = supportMap[safeKey];
+
+    if (existing) {
+      // Update existing entry
+      if (claim.description && claim.description !== '(Description needed)') {
+        existing.description = claim.description;
+      }
+      if (claim.refs.length > 0) {
+        existing.refs = claim.refs;
+      }
+      if (claim.caveat) {
+        existing.caveat = claim.caveat;
+      } else if (existing.caveat) {
+        delete existing.caveat;
+      }
+    } else {
+      // Create new entry
+      const newSupport: KCOpSupport = {
+        complexity: claim.complexity,
+        refs: claim.refs,
+      };
+      if (claim.caveat) newSupport.caveat = claim.caveat;
+      if (claim.description && claim.description !== '(Description needed)') {
+        newSupport.description = claim.description;
+      }
+      supportMap[safeKey] = newSupport;
+    }
+
+    updated++;
+  }
+
+  console.log(`Updated ${updated} ${opType} entries, skipped ${skipped}`);
+}
+
+// =============================================================================
 // CLI
 // =============================================================================
 
@@ -1269,20 +2069,26 @@ Usage:
   npx tsx scripts/latex-bijection.ts --normalize-refs
 
 Options:
-  --to-latex      Convert database.json to LaTeX files (claims.tex, languages.tex, refs.bib)
+  --to-latex      Convert database.json to LaTeX files
   --to-json       Convert LaTeX files back to database.json
   --normalize-refs Normalize all BibTeX keys in database to match reference IDs
   -h, --help      Show this help message
 
 Output files (--to-latex):
-  docs/claims.tex    - Succinctness claims and proofs
-  docs/languages.tex - Language definitions
-  docs/refs.bib      - BibTeX references
+  docs/claims.tex               - Succinctness claims and proofs
+  docs/languages.tex            - Language definitions
+  docs/queries.tex              - Query operation support claims
+  docs/transformations.tex      - Transformation operation support claims
+  docs/separating-functions.tex - Separating function definitions
+  docs/refs.bib                 - BibTeX references
 
 Input files (--to-json):
-  docs/claims.tex    - Updates adjacency matrix descriptions
-  docs/languages.tex - Updates language definitions
-  docs/refs.bib      - Updates references
+  docs/claims.tex               - Updates adjacency matrix descriptions
+  docs/languages.tex            - Updates language definitions
+  docs/queries.tex              - Updates query operation support
+  docs/transformations.tex      - Updates transformation operation support
+  docs/separating-functions.tex - Updates separating functions
+  docs/refs.bib                 - Updates references
 
 Database: src/lib/data/database.json
 
@@ -1355,6 +2161,9 @@ async function main(): Promise<void> {
     const claimsPath = DEFAULT_LATEX_OUTPUT;
     const languagesPath = DEFAULT_LANGUAGES_OUTPUT;
     const bibtexPath = DEFAULT_BIBTEX_OUTPUT;
+    const queriesPath = DEFAULT_QUERIES_OUTPUT;
+    const transformsPath = DEFAULT_TRANSFORMS_OUTPUT;
+    const sepFuncsPath = DEFAULT_SEPFUNCS_OUTPUT;
     
     console.log('=== JSON → LaTeX Conversion ===\n');
     console.log(`Reading database from: ${DATABASE_PATH}`);
@@ -1363,6 +2172,7 @@ async function main(): Promise<void> {
     
     console.log(`Found ${database.languages.length} languages`);
     console.log(`Found ${database.references.length} references`);
+    console.log(`Found ${database.separatingFunctions.length} separating functions`);
     
     // Generate and write claims LaTeX
     const claimsLatex = generateLatex(database);
@@ -1374,6 +2184,21 @@ async function main(): Promise<void> {
     fs.writeFileSync(languagesPath, languagesLatex, 'utf-8');
     console.log(`Wrote language definitions to: ${languagesPath}`);
     
+    // Generate and write queries LaTeX
+    const queriesLatex = generateOpsLatex(database, 'queries', 'Query');
+    fs.writeFileSync(queriesPath, queriesLatex, 'utf-8');
+    console.log(`Wrote query support claims to: ${queriesPath}`);
+
+    // Generate and write transformations LaTeX
+    const transformsLatex = generateOpsLatex(database, 'transformations', 'Transformation');
+    fs.writeFileSync(transformsPath, transformsLatex, 'utf-8');
+    console.log(`Wrote transformation support claims to: ${transformsPath}`);
+
+    // Generate and write separating functions LaTeX
+    const sepFuncsLatex = generateSepFuncsLatex(database);
+    fs.writeFileSync(sepFuncsPath, sepFuncsLatex, 'utf-8');
+    console.log(`Wrote separating functions to: ${sepFuncsPath}`);
+
     // Generate and write BibTeX
     const bibtex = generateBibtex(database);
     fs.writeFileSync(bibtexPath, bibtex, 'utf-8');
@@ -1387,6 +2212,9 @@ async function main(): Promise<void> {
     const claimsPath = DEFAULT_LATEX_OUTPUT;
     const languagesPath = DEFAULT_LANGUAGES_OUTPUT;
     const bibtexPath = DEFAULT_BIBTEX_OUTPUT;
+    const queriesPath = DEFAULT_QUERIES_OUTPUT;
+    const transformsPath = DEFAULT_TRANSFORMS_OUTPUT;
+    const sepFuncsPath = DEFAULT_SEPFUNCS_OUTPUT;
     
     console.log('=== LaTeX → JSON Conversion ===\n');
     
@@ -1430,6 +2258,45 @@ async function main(): Promise<void> {
       updateLanguagesFromLatex(database, languageDefs);
     } else {
       console.log(`\nNote: Languages file not found: ${languagesPath} (skipping language definition updates)`);
+    }
+
+    // Update from queries.tex if file exists
+    if (fs.existsSync(queriesPath)) {
+      console.log(`\nReading query claims from: ${queriesPath}`);
+      const queriesContent = fs.readFileSync(queriesPath, 'utf-8');
+      const queryClaims = parseOpsLatex(queriesContent);
+      console.log(`Parsed ${queryClaims.length} query claims`);
+
+      console.log(`Updating query operation support...`);
+      updateOpsFromLatex(database, queryClaims, 'queries');
+    } else {
+      console.log(`\nNote: Queries file not found: ${queriesPath} (skipping query updates)`);
+    }
+
+    // Update from transformations.tex if file exists
+    if (fs.existsSync(transformsPath)) {
+      console.log(`\nReading transformation claims from: ${transformsPath}`);
+      const transformsContent = fs.readFileSync(transformsPath, 'utf-8');
+      const transformClaims = parseOpsLatex(transformsContent);
+      console.log(`Parsed ${transformClaims.length} transformation claims`);
+
+      console.log(`Updating transformation operation support...`);
+      updateOpsFromLatex(database, transformClaims, 'transformations');
+    } else {
+      console.log(`\nNote: Transformations file not found: ${transformsPath} (skipping transformation updates)`);
+    }
+
+    // Update from separating-functions.tex if file exists
+    if (fs.existsSync(sepFuncsPath)) {
+      console.log(`\nReading separating functions from: ${sepFuncsPath}`);
+      const sepFuncsContent = fs.readFileSync(sepFuncsPath, 'utf-8');
+      const parsedSepFuncs = parseSepFuncsLatex(sepFuncsContent);
+      console.log(`Parsed ${parsedSepFuncs.length} separating functions`);
+
+      console.log(`Updating separating functions...`);
+      updateSepFuncsFromLatex(database, parsedSepFuncs);
+    } else {
+      console.log(`\nNote: Separating functions file not found: ${sepFuncsPath} (skipping sep func updates)`);
     }
     
     // Write updated database

@@ -1,0 +1,182 @@
+\documentclass[10pt]{article}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{cleveref}
+\usepackage{natbib} 
+\usepackage{url}
+\usepackage{fourier}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\definecolor{lightskyblue}{rgb}{0.53, 0.81, 0.98}\newcommand{\oliver}[1]{{\small{\color{lightskyblue}[Oliver: #1]}}}
+\usepackage[margin=1in,bottom=1in,top=1in]{geometry}
+\usepackage{palatino}
+\usetikzlibrary{calc}
+
+
+% -------- Theorem styles --------
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}{Claim}[section]
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+
+\newcommand{\var}{\text{var}}
+
+\title{Executive Summary for Updated Knowledge Compilation Map}
+\author{David Kahdian}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We describe the algorithmic machinery behind the Updated Knowledge Compilation Map, an interactive tool for exploring succinctness relations and query tractability across KC languages. Starting from a hand-curated knowledge base of known results, we validate consistency via DFS-based reachability, then propagate derived facts through fixed-point upgrade and contradiction-driven downgrade algorithms. Query and transformation support is propagated analogously using succinctness relations and operation implication lemmas. Finally, we outline how the knowledge base can itself be encoded as a small CNF and compiled for further analysis.
+\end{abstract}
+
+\section{Setup}
+
+\subsection{Data}
+Data was primarily sourced from \citet{Darwiche_2002}, \citet{Amarilli_2018}, \citet{Bova_2016}, and related works. The knowledge base stores: (1)~a set of KC languages~$V$, (2)~a directed adjacency matrix of succinctness relations on $V \times V$, and (3)~per-language query/transformation support tables.
+
+Each directed edge $L_i \to L_j$ carries one of six statuses capturing the existence or non-existence of polynomial (P) and quasi-polynomial (Q) compilations:
+\begin{center}
+\small
+\begin{tabular}{lcc}
+\textbf{Status} & \textbf{P exists?} & \textbf{Q exists?} \\ \hline
+\texttt{poly} & \checkmark & \checkmark \\
+\texttt{unknown-poly-quasi} & ? & \checkmark \\
+\texttt{no-poly-quasi} & $\times$ & \checkmark \\
+\texttt{unknown-both} & ? & ? \\
+\texttt{no-poly-unknown-quasi} & $\times$ & ? \\
+\texttt{no-quasi} & $\times$ & $\times$ \\
+\end{tabular}
+\end{center}
+
+Query/transformation entries carry the same status vocabulary: each operation on each language records whether it can be performed in polynomial time, quasi-polynomial time, or not at all.
+
+\subsection{Transitivity Lemmas}
+
+The propagation logic relies on two families of lemmas.
+
+\paragraph{Succinctness transitivity.}
+If $L_1 \leq_p L_2$ and $L_2 \leq_p L_3$, then $L_1 \leq_p L_3$ (similarly for $\leq_q$). By contrapositive: if $L_1 \not\leq_p L_3$, then $L_1 \not\leq_p L_2$ or $L_2 \not\leq_p L_3$.
+
+\paragraph{Query-by-compiling.}
+If $L_1 \leq_p L_2$ and $L_2$ supports query~$q$ in polytime, then $L_1$ supports $q$ in polytime (compile first, then query). Contrapositive: if $L_1$ cannot perform~$q$ in polytime and $L_1 \leq_p L_2$, then $L_2$ cannot perform~$q$ in polytime either.
+
+\paragraph{Operation implication lemmas.}
+A fixed set of ``hardcoded'' lemmas of the form $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$ hold within any single language. For example, $\text{CO} \wedge \lnot\text{C} \Rightarrow \text{VA}$. Their contrapositives are also exploited.
+
+\section{Validation}
+
+Represent the knowledge base as a directed graph $G = (V, E)$ with $|V| = v \approx 20$ languages and $|E| = e \approx 400$ edges. Each edge carries a positive label (compilation exists) or a negative label (compilation does not exist).
+
+\textbf{Succinctness validation.} A contradiction occurs when a positive path (chain of ``exists'' edges) connects $L_i$ to $L_j$ but the direct edge $L_i \to L_j$ is negative. We run a DFS from every vertex on the subgraph of positive edges, yielding $O(v(v + e))$ time. Witness paths for contradictions are extracted from the DFS parent pointers.
+
+\textbf{Query/transformation validation.} Two checks: (1)~for each language and each operation lemma $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$, verify that it is not the case that all antecedents are supported while the consequent is marked unsupported ($O(vL)$ for $L \approx 10$ lemmas); (2)~for each pair $(L_1, L_2)$ with $L_1 \leq_p L_2$, verify that no query $q$ is supported on $L_2$ but marked impossible on $L_1$ ($O(v^2 Q)$ for $Q \approx 10$ queries).
+
+\section{Succinctness Propagation}
+
+The propagation algorithm fills in derived relations that follow logically from the hand-entered data. It operates in two phases, both run to a fixed point.
+
+\subsection{Phase 1: Upgrades (Fixed-Point)}
+
+An \emph{upgrade} strengthens an edge status---for example, marking an unknown edge as \texttt{poly}. The core idea is transitive closure: we repeatedly compute the reachability matrix on the subgraph of polytime edges (via DFS from every vertex), then for each pair $(i,j)$ that is reachable but whose direct edge does not yet reflect this, we upgrade $i \to j$ to \texttt{poly} and record the witness path from the DFS parent pointers. If an upgrade would contradict a known negative edge, a contradiction is raised.
+
+This repeats until no further upgrades are possible (fixed point). Each iteration costs $O(v(v+e))$ for the DFS. Since each edge can only be upgraded a bounded number of times and there are $O(v^2)$ edges, the loop runs at most $O(v^2)$ iterations for a total of $O(v^3(v+e))$, though in practice it converges in 2--3 passes. The quasi-polynomial case is handled identically with a broader set of qualifying edge statuses.
+
+\subsection{Phase 2: Downgrades (Fixed-Point)}
+
+A \emph{downgrade} narrows an edge status based on contradiction. The algorithm tentatively assumes a stronger status for an edge and checks (using the validator) whether that would create a path contradicting a known negative edge. If so, the stronger status is ruled out.
+
+Concretely, for each edge $i \to j$ with status \texttt{null} or \texttt{unknown-both}:
+\begin{enumerate}
+\item Tentatively set $i \to j$ to \texttt{poly} and run the consistency checker. If a contradiction is found, downgrade to \texttt{no-poly-unknown-quasi} (``poly is impossible'').
+\item If poly was not eliminated, tentatively set $i \to j$ to \texttt{unknown-poly-quasi} and run consistency. If contradiction, downgrade to \texttt{no-quasi}.
+\end{enumerate}
+
+Similarly, \texttt{unknown-poly-quasi} edges are tested for a poly upgrade (yielding \texttt{no-poly-quasi} on failure), and \texttt{no-poly-unknown-quasi} edges are tested for a quasi upgrade (yielding \texttt{no-quasi} on failure).
+
+This phase also runs to a fixed point because a downgrade on one edge may enable further downgrades elsewhere. Each trial consistency check costs $O(v(v+e))$, and there are $O(v^2)$ edges to test per iteration, giving $O(v^2 \cdot v(v+e))$ per round.
+
+Witness paths from the DFS are stored as human-readable proof descriptions on each derived edge, enabling the UI to display \emph{why} a relation was inferred.
+
+\section{Query/Transformation Propagation}
+
+After succinctness propagation, we propagate query and transformation support across languages in three sub-phases.
+
+\subsection{Phase 3: Upgrades via Succinctness}
+
+Using the query-by-compiling principle: if $L_1 \leq_p L_2$ (from the now-complete reachability matrix) and $L_2$ supports query $q$ in polytime, then $L_1$ also supports $q$ in polytime. The quasi analogue holds as well. Process poly upgrades first (to a fixed point), then quasi upgrades. Cost: $O(v^2 Q)$ per iteration.
+
+\subsection{Phase 4: Upgrades via Lemmas}
+
+For each language $L$ and each operation lemma $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$: if $L$ supports all antecedents in polytime, mark the consequent as polytime-supported (similarly for quasi, with complexity bounded by the worst antecedent). This is interleaved with Phase~3 in the same fixed-point loop. Cost: $O(vL)$ per iteration.
+
+\subsection{Phase 5: Downgrades}
+
+\paragraph{Via succinctness (contrapositive of query-by-compiling).}
+If $L_1$ cannot perform $q$ in polytime and $L_1 \leq_p L_2$, then $L_2$ cannot perform $q$ in polytime. (If it could, $L_1$ would compile to $L_2$ and query there---contradiction.) The quasi analogue applies with $\leq_q$. Cost: $O(v^2 Q)$.
+
+\paragraph{Via lemma contrapositives.}
+Given $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$, if the consequent $O_{n+1}$ is impossible (say, no-poly) and all antecedents except $O_j$ are supported, then $O_j$ must be impossible too. Each lemma is checked against every language. Cost: $O(vLn)$.
+
+Phases 3--5 are each repeated to a fixed point, since one inference may enable another. All derived entries are tagged \texttt{derived = true} with human-readable proof descriptions and references.
+
+\section{Meta-Knowledge Compilation}
+
+The knowledge base itself can be cast as a propositional satisfiability problem. This section outlines a (currently unimplemented) approach.
+
+\subsection{Encoding}
+
+For each pair $(i,j)$ with $i \neq j$, introduce two Boolean variables: $P_{ij}$ (a polytime compilation $L_i \to L_j$ exists) and $Q_{ij}$ (a quasi-polytime compilation exists). The invariant $P_{ij} \Rightarrow Q_{ij}$ is encoded as $(\lnot P_{ij} \lor Q_{ij})$. For each language~$L$ and operation~$o$, introduce $p_{L,o}$ and $q_{L,o}$ for polytime and quasi-polytime support, with the same implication.
+
+Known facts become unit clauses: for instance, a \texttt{poly} edge $i \to j$ asserts $P_{ij} = \top$; a \texttt{no-quasi} edge asserts $Q_{ij} = \bot$.
+
+The transitivity lemmas yield 3-literal clauses over all triples:
+\[
+  \forall\, i,j,k:\quad (\lnot P_{ij} \lor \lnot P_{jk} \lor P_{ik})
+\]
+Query-by-compiling contributes:
+\[
+  \forall\, i,j,o:\quad (\lnot P_{ij} \lor \lnot p_{j,o} \lor p_{i,o})
+\]
+Operation implication lemmas contribute one clause per language per lemma. The resulting formula~$\Sigma$ is a CNF with $O(v^3 + v^2 Q + vL)$ clauses.
+
+\subsection{Applications}
+
+Since~$v \approx 20$ and $Q, L \approx 10$, $\Sigma$~is small enough to compile into a tractable target language (e.g.\ d-DNNF). Once compiled, standard KC queries become available:
+
+\begin{itemize}
+  \item \textbf{Clausal entailment.} Determine whether $\Sigma \models \ell$ for any literal~$\ell$, recovering the same propagation results as Sections~3--4.
+  \item \textbf{Model counting.} $\text{MC}(\Sigma)$ counts the number of ``consistent worlds''---assignments to all unknown variables that are compatible with current knowledge.
+  \item \textbf{Surprise metric.} Given a new result $v_i = \textit{val}$, the ratio $\text{MC}(\Sigma) \,/\, \text{MC}(\Sigma \mid v_i = \textit{val})$ quantifies how much the result narrows the space of consistent worlds, providing a measure of how ``surprising'' or informative the finding is.
+  \item \textbf{Conditioning.} Fix a variable and propagate, producing the residual theory under a hypothetical assumption.
+\end{itemize}
+
+\subsection{Comparison to Algorithmic Propagation}
+
+While compiling~$\Sigma$ and querying it via clausal entailment would reproduce the propagation results of Sections~3--4, the dedicated algorithms above are preferable in practice for two reasons: (1)~they produce \emph{informative witness paths}---human-readable chains of citations and intermediate edges explaining \emph{why} each derived fact holds---whereas a compiled representation only answers ``entailed or not''; and (2)~they are simpler to implement and debug in a web application context. The meta-compilation approach is most compelling for queries that the current algorithms do not support, such as model counting and surprise quantification.
+
+% =============================
+% Bibliography
+% =============================
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

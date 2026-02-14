@@ -488,7 +488,13 @@ function generateClaim(edge: Edge): string {
     proofSketch = edge.description || '(Description needed)';
   }
   
-  return `\\begin{claim}
+  // Build separator comment if applicable
+  const sepComment = edge.separatingFunctionIds && edge.separatingFunctionIds.length > 0
+    ? `% separators=${edge.separatingFunctionIds.join(',')}
+`
+    : '';
+
+  return `${sepComment}\\begin{claim}
 ${claimText}
 \\end{claim}
 \\begin{claimdescription}
@@ -660,6 +666,7 @@ interface ParsedClaim {
   proofSketch: string;  // Copied directly to description field
   refs: string[];       // References from the claim line
   derived: boolean;
+  separatingFunctionIds?: string[];  // Separating functions referenced by this edge
 }
 
 /**
@@ -766,12 +773,22 @@ function parseLatex(latexContent: string): ParsedClaim[] {
   let i = 0;
   let isDerived = false;
   
+  let pendingSeparators: string[] | undefined = undefined;
+
   while (i < lines.length) {
     const line = lines[i];
     
     // Check for derived marker
     if (line.includes('% [DERIVED')) {
       isDerived = true;
+      i++;
+      continue;
+    }
+
+    // Check for separator metadata comment
+    const sepMatch = line.match(/^%\s*separators=(.+)$/);
+    if (sepMatch) {
+      pendingSeparators = sepMatch[1].split(',').map(s => s.trim()).filter(s => s.length > 0);
       i++;
       continue;
     }
@@ -817,10 +834,14 @@ function parseLatex(latexContent: string): ParsedClaim[] {
       );
       
       if (parsed) {
+        if (pendingSeparators && pendingSeparators.length > 0) {
+          parsed.separatingFunctionIds = pendingSeparators;
+        }
         claims.push(parsed);
       }
       
       isDerived = false;
+      pendingSeparators = undefined;
       continue;
     }
     
@@ -913,6 +934,14 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
     } else if (existing.caveat) {
       // If caveat was removed from LaTeX, remove it from DB too
       delete existing.caveat;
+    }
+
+    // Update separating function IDs
+    if (claim.separatingFunctionIds && claim.separatingFunctionIds.length > 0) {
+      existing.separatingFunctionIds = claim.separatingFunctionIds;
+    } else if (existing.separatingFunctionIds) {
+      // If separators were removed from LaTeX, remove from DB too
+      delete existing.separatingFunctionIds;
     }
     
     // Note: We don't update the status because it's auto-generated in LaTeX

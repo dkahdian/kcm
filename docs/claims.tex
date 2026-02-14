@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-02-12T23:14:25.240Z
+% Generated: 2026-02-14T00:49:22.887Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -142,16 +142,17 @@ Theorem 2 of \citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$
 $FBDD$ is polynomial-time transformable to $dec$-$DNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-Recursively rewire every internal node $n$ labeled with variable $x$ by a circuit $(x\wedge D_0)\vee (\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the (not necessarily disjoint) rewirings of the nodes to which $n$ respectively had a 0-edge and a 1-edge. We note that the new $\vee$-gate is a decision gate and the two $\wedge$ gates are decomposable. Furthermore, $\vee$ gates are only introduced in the rewriting, so we obtain a $dec$-$DNNF$ in linear time.
+Rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the 0- and 1-successors. The introduced $\vee$-gates are decision gates and the $\wedge$-gates are decomposable, so all $\vee$-gates arise from decision node rewrites, yielding a $dec$-$DNNF$ in linear time \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
 $FBDD$ is polynomial-time transformable to $uFBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-As defined by "Connecting Knowledge Compilation Classes and Width Parameters", $FBDD$ is the subset of $uFBDD$ with no $\vee$-nodes
+As defined by \citet{Amarilli_2018}, $FBDD$ is the subset of $uFBDD$ with no $\vee$-nodes.
 \end{claimdescription}
 
+% separators=Sauerhoff
 \begin{claim}
 $nFBDD$ is not quasi-polynomial-time transformable to $d$-$DNNF$ \citet{Amarilli_2018}
 \end{claim}
@@ -163,16 +164,17 @@ The Sauerhoff function has an $nFBDD$ of size $O(n^2)$ over $n^2$ variables, but
 $nFBDD$ is polynomial-time transformable to $DNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-The transformation is in fact linear. We may recursively rewire every internal node $n$ labeled with variable $x$ by a circuit $(x\wedge D_0)\vee(\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the rewiring of nodes to which $n$ respectively had a 0-edge and 1-edge. Note that the new $\vee$-gate is a decision gate and the two $\wedge$-gates are decomposable, so we attain a $DNNF$.
+Rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The $\wedge$-gates are decomposable, yielding a $DNNF$ in linear time \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
 $nFBDD$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-Consider the Boolean functions $\psi_n,\phi_n:\{0,1\}^{n^2}\to\{0,1\}$ that respectively test whether, in an $n \times n$ Boolean matrix, either the number of 1's is odd and there is a full row of 1's, or the number of 1's is even and there is a column full of 1's. An $FBDD$ of size $O(n^2)$ may simulate either $\psi_n$ or $\phi_n$, and thus the $uFBDD$ $\psi_n\vee\phi_n$ is of size $O(n^2)$; however, an $FBDD$ for $\psi_n\vee\phi_n$ is provably of size $2^{\Omega(n^{1/2})}$.
+The parity-row/parity-column functions $\psi_n \vee \phi_n$ have $nFBDD$ size $O(n^2)$ but $FBDD$ size $2^{\Omega(n^{1/2})}$ \citep{Amarilli_2018}.
 \end{claimdescription}
 
+% separators=Sauerhoff
 \begin{claim}
 $nFBDD$ is not quasi-polynomial-time transformable to $uFBDD$ \citet{Amarilli_2018}
 \end{claim}
@@ -191,8 +193,7 @@ As defined by \citet{Amarilli_2018}, $nOBDD$ is the subset of $nFBDD$ satisfying
 $nOBDD$ is polynomial-time transformable to $SDNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-From the variable order $v$, construct a right-linear $v$-tree $T$ as follows: let $r_1$ be the root; for $2 \le i \le n-1$, let $r_i$ be the left child of $r_{i-1}$; for $1 \le i \le n-1$, attach leaf $v_i$ as the right child of $r_i$, and attach leaf $v_n$ as the right child of $r_{n-1}$.
-Next, apply the standard compilation of an $n$-FBDD into a DNNF by rewriting each decision node labeled by variable $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the respective successors. Because the $v$-tree aligns with the variable order of the $n$-OBDD, every $\wedge$-gate respects the variable partition induced by $T$, yielding a structured DNNF. The construction is linear in the size of $D$.
+Construct a right-linear v-tree from the variable order, then rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The v-tree alignment ensures every $\wedge$-gate respects the variable partition, yielding an $SDNNF$ in linear time \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
@@ -206,15 +207,14 @@ Any $DNF$ can be represented as an $nOBDD$ in linear time; however the family of
 $OBDD$ is polynomial-time transformable to $dec$-$SDNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-From the variable order $v$, construct a right-linear $v$-tree $T$ as follows: let $r_1$ be the root; for $2 \le i \le n-1$, let $r_i$ be the left child of $r_{i-1}$; for $1 \le i \le n-1$, attach leaf $v_i$ as the right child of $r_i$, and attach leaf $v_n$ as the right child of $r_{n-1}$.
-Next, apply the standard compilation of an $n$-FBDD into a DNNF by rewriting each decision node labeled by variable $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the respective successors. Because the $v$-tree aligns with the variable order of the $n$-OBDD, every $\wedge$-gate respects the variable partition induced by $T$, yielding a structured DNNF. The construction is linear in the size of $D$. Since $D$ is unambiguous, for every rewritten node the two subcircuits $(x \wedge D_0)$ and $(\neg x \wedge D_1)$ are mutually exclusive, ensuring that all $\vee$-gates introduced in the translation are deterministic. The resulting circuit is therefore a deterministic structured DNNF (d-SDNNF), and the compilation remains linear-time.  In the case of an OBDD, all disjunctions in the resulting circuit arise from the rewriting of decision nodes, so every $\vee$-gate is a decision gate. Combined with the structured decomposability ensured by the $v$-tree, this yields a dec-SDNNF. The translation is linear in the size of $D$.
+Construct a right-linear v-tree from the variable order, then rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The v-tree alignment ensures structuredness, and since all $\vee$-gates arise from decision node rewrites, every $\vee$-gate is a decision gate, yielding a $dec$-$SDNNF$ in linear time \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
 $OBDD$ is polynomial-time transformable to $uOBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-As defined by "Connecting Knowledge Compilation Classes and Width Parameters," $OBDD$ is the subset of $uOBDD$ without any $\vee$-node.
+As defined by \citet{Amarilli_2018}, $OBDD$ is the subset of $uOBDD$ without any $\vee$-node.
 \end{claimdescription}
 
 \begin{claim}
@@ -235,43 +235,43 @@ Theorem 2 of \citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$
 $uFBDD$ is polynomial-time transformable to $d$-$DNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-The transformation is in fact linear. We may recursively rewire every internal node $n$ labeled with variable $x$ by a circuit $(x\wedge D_0)\vee(\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the rewiring of nodes to which $n$ respectively had a 0-edge and 1-edge. Note that the new $\vee$-gate is a decision gate and the two $\wedge$-gates are decomposable; furthermore, all $\vee$-gates in the rewiring are deterministic, so we attain a $d$-$DNNF$.
+Rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The $\wedge$-gates are decomposable, and unambiguity of the $uFBDD$ ensures all introduced $\vee$-gates are deterministic, yielding a $d$-$DNNF$ in linear time \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
 $uFBDD$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Bova_2016,Amarilli_2018,Wegener_2000}
 \end{claim}
 \begin{claimdescription}
-Consider the Boolean functions $\phi_n, \psi_n: \{0,1\}^{n^2}\to\{0,1\}$, which respectively test whether, in an $n\times n$ Boolean matrix, that the number of 1's is odd and there is a row full of 1's, and that the number of 1's is even and there is a column full of 1's. \citet{Bova_2016} and \citet{Wegener_2000} show that an $FBDD$ expression for $\phi_n \vee \psi_n$ has necessarily size $2^{\Omega(n^{1/2})}$; but since an $FBDD$ of size $O(n^2)$ may test $\phi_n$ or $\psi_n$ separately (shown by Proposition 3.1 of \citet{Amarilli_2018}), a $uFBDD$ for $\phi_n\vee \psi_n$ may be obtained by simply adding an $\vee$-gate joining these two $FBDD$ expressions, since $\phi_n \wedge \psi_n$ is unsatisfiable.
+The parity-row/parity-column functions $\phi_n \vee \psi_n$ have $uFBDD$ size $O(n^2)$ (Proposition 3.1, \citet{Amarilli_2018}) but $FBDD$ size $2^{\Omega(n^{1/2})}$ \citep{Bova_2016,Wegener_2000}.
 \end{claimdescription}
 
 \begin{claim}
 $uFBDD$ is polynomial-time transformable to $nFBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-As defined by "Connecting Knowledge Compilation Classes and Width Parameters," $uFBDD$ is the subset of $nFBDD$ satisfying unambiguity.
+As defined by \citet{Amarilli_2018}, $uFBDD$ is the subset of $nFBDD$ satisfying unambiguity.
 \end{claimdescription}
 
 \begin{claim}
 $uOBDD$ is polynomial-time transformable to $d$-$SDNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-From the variable order $v$, construct a right-linear $v$-tree $T$ as follows: let $r_1$ be the root; for $2 \le i \le n-1$, let $r_i$ be the left child of $r_{i-1}$; for $1 \le i \le n-1$, attach leaf $v_i$ as the right child of $r_i$, and attach leaf $v_n$ as the right child of $r_{n-1}$.
-Next, apply the standard compilation of an $n$-FBDD into a DNNF by rewriting each decision node labeled by variable $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the respective successors. Because the $v$-tree aligns with the variable order of the $n$-OBDD, every $\wedge$-gate respects the variable partition induced by $T$, yielding a structured DNNF. The construction is linear in the size of $D$. Since $D$ is unambiguous, for every rewritten node the two subcircuits $(x \wedge D_0)$ and $(\neg x \wedge D_1)$ are mutually exclusive, ensuring that all $\vee$-gates introduced in the translation are deterministic. The resulting circuit is therefore a deterministic structured DNNF (d-SDNNF), and the compilation remains linear-time.
+Construct a right-linear v-tree from the variable order, then rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The v-tree alignment ensures structuredness, and unambiguity of the $uOBDD$ makes all introduced $\vee$-gates deterministic, yielding a $d$-$SDNNF$ in linear time \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
 $uOBDD$ is polynomial-time transformable to $nOBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-As defined by "Connecting Knowledge Compilation Classes and Width Parameters," $uOBDD$ is the subset of $nOBDD$ satisfying unambiguity.
+As defined by \citet{Amarilli_2018}, $uOBDD$ is the subset of $nOBDD$ satisfying unambiguity.
 \end{claimdescription}
 
+% separators=HWB
 \begin{claim}
 $uOBDD$ is not quasi-polynomial-time transformable to $OBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-$uOBDD$ can have polynomial size for $HWB_n$, but $OBDD$s have size $2^\Omega(n)$
+The hidden weighted bit function $HWB_n$ has polynomial $uOBDD$ size, but $OBDD$ size $2^{\Omega(n)}$ \citep{Amarilli_2018}.
 \end{claimdescription}
 
 \begin{claim}
@@ -290,49 +290,52 @@ As defined by \citet{Amarilli_2018}, $uOBDD$ is the subset of $uFBDD$ satisfying
 $CNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $CNF$ is a subset of $NNF$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $CNF$ is a subset of $NNF$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $CNF$ is not quasi-polynomial-time transformable to $PI$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-It is well-known that some $CNF$ formulas (i.e. $\neg PARITY_n=\neg\bigoplus_{i=1}^n x_i$) have exponentially many prime implicants.
+It is well-known that some $CNF$ formulas (i.e. the negation of the parity function $\neg PARITY_n=\neg\bigoplus_{i=1}^n x_i$) have exponentially many prime implicants.
 \end{claimdescription}
 
 \begin{claim}
 $d$-$DNNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, d-DNNF is a subset of DNNF, so a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $d$-$DNNF$ is a subset of $DNNF$, so a polynomial transformation is trivial.
 \end{claimdescription}
 
+% separators=$OR_n$
 \begin{claim}
 $d$-$DNNF$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d-DNNF$ formula but has $2^n-1$ models.
+The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d$-$DNNF$ formula but has $2^n-1$ models.
 \end{claimdescription}
 
 \begin{claim}
 $DNF$ is not polynomial-time transformable to $d$-$DNNF$ unless the polynomial hierarchy collapses \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Suppose not; then $\forall\Lambda\in DNF$, $\exists$ an equivalent $\Lambda_*\in d$-$DNNF$ of polynomial size. Then we may perform a clausal entailment check on some $CNF$ sentence $\Sigma \in CNF$ with respect to some clause $\gamma$ by checking whether $(\neg\Sigma\vee\gamma)\in DNF$ is valid. But we may perform a validity check on $(\neg\Sigma\vee\gamma)_* \in d$-$DNNF$ in polynomial time. Since we can now perform a polynomial-time clausal entailment check on all $CNF$ sentences, the polynomial hierarchy collapses.
+A polytime $DNF$-to-$d$-$DNNF$ transformation would enable polytime clausal entailment on $CNF$, collapsing the polynomial hierarchy \citep{Darwiche_2002}.
 \end{claimdescription}
 
 \begin{claim}
 $DNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $DNF$ is a subset of $DNNF$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $DNF$ is a subset of $DNNF$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $DNF$ is not quasi-polynomial-time transformable to $IP$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-It is well-known that some $DNF$ formulas (i.e. $PARITY_n=\bigoplus_{i=1}^n x_i$) have exponentially many prime implicates.
+It is well-known that some $DNF$ formulas (i.e. the parity function $PARITY_n=\bigoplus_{i=1}^n x_i$) have exponentially many prime implicates.
 \end{claimdescription}
 
 \begin{claim}
@@ -346,23 +349,22 @@ Section 5 of \citet{Bodlaender_1993} extends the compilation of $dec$-$DNNF$s in
 $DNNF$ is polynomial-time transformable to $NNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $DNNF$ is a subset of $NNF$, so a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $DNNF$ is a subset of $NNF$, so a polynomial transformation is trivial.
 \end{claimdescription}
 
 \begin{claim}
 $FBDD$ is polynomial-time transformable to $d$-$DNNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, FBDD is a subset of d-DNNF, so a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $FBDD$ is a subset of $d$-$DNNF$, so a polynomial transformation is trivial.
 \end{claimdescription}
 
+% separators=Pairwise DNF
 \begin{claim}
 $IP$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Consider the $DNF$ formula $\Pi_n=\bigvee_{i=0}^{n-1}(x_{2i} \wedge x_{2i+1})$. This formula is in prime implicants form and each clause in $\Pi_n$ is an essential prime implicant of it. Hence its negation $\neg\Pi_n\in IP$.
-
-Since the early work of Quine, we know that the number of essential prime implicates of a formula is a lower bound on the number of clauses that can be found in any $CNF$ representation of it. However, since $\Pi_n$ has $2^n$ prime implicants, $\neg\Pi_n$ has $2^n$ prime implicates, so any $CNF$ representation of $\neg\Pi_n$ must have at least $2^n$ clauses.
+The pairwise DNF $\Pi_n = \bigvee_{i=0}^{n-1}(x_{2i} \wedge x_{2i+1})$ has $2^n$ prime implicants; its negation $\neg\Pi_n \in IP$ therefore has $2^n$ essential prime implicates, forcing any $CNF$ representation to have at least $2^n$ clauses \citep{Darwiche_2002}.
 \end{claimdescription}
 
 \begin{claim}
@@ -376,58 +378,61 @@ This is listed as an open problem in the Knowledge Compilation Map (2002).
 $IP$ is polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $IP$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $IP$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
+% separators=Clique
 \begin{claim}
 $IP$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Darwiche_2002,Wegener_1987}
 \end{claim}
 \begin{claimdescription}
-Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\neg\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\neg\Sigma_{n,k}(I)=0 \iff I \text{ contains a bidirectional clique of size }k$. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\neg\Sigma_{n,k}$ has exponential size. This is the negation of the clique detection function. However, it can be shown that $\neg\Sigma_{n,k}$ has $O(n^3)$ prime implicates, which implies that not every $IP$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.
+The negation of the clique detection function $\neg\Sigma_{n,k}$ has $O(n^3)$ prime implicates (hence polynomial $IP$ size), but any $FBDD$ for $\neg\Sigma_{n,k}$ has exponential size for suitable $k$ \citep{Darwiche_2002,Wegener_1987}.
 \end{claimdescription}
 
+% separators=$OR_n$
 \begin{claim}
 $IP$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $IP$ formula but has $2^n-1$ models.
+The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $IP$ formula but has $2^n-1$ models.
 \end{claimdescription}
 
 \begin{claim}
 $MODS$ is polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-A Shannon tree for any for any $MODS$ formula can be generated in polynomial time. The set of all paths from the root of the tree to any 0-leaf can be read as a $CNF$ representation of the formula, so $MODS$ is converted to $CNF$.
+A Shannon tree for any $MODS$ formula can be generated in polynomial time. Paths from the root to 0-leaves yield a $CNF$ representation \citep{Darwiche_2002}.
 \end{claimdescription}
 
 \begin{claim}
 $MODS$ is polynomial-time transformable to $d$-$DNNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $MODS$ is a subset of $d-DNNF$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $MODS$ is a subset of $d$-$DNNF$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
 \begin{claim}
 $MODS$ is polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $MODS$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $MODS$ is a subset of $DNF$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
 \begin{claim}
 $MODS$ is polynomial-time transformable to $OBDD_<$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-A Shannon tree for any for any $MODS$ formula following any order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding $OBDD_<$ in polynomial time.
+A Shannon tree for any $MODS$ formula following order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding $OBDD_<$ in polynomial time \citep{Darwiche_2002}.
 \end{claimdescription}
 
 \begin{claim}
 $OBDD$ is polynomial-time transformable to $FBDD$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $OBDD$ is a superset of $FBDD$. Therefore a polynomial time transformation is trivial.
+As defined by \citet{Darwiche_2002}, $OBDD$ is a superset of $FBDD$. Therefore a polynomial time transformation is trivial.
 \end{claimdescription}
 
+% separators=Pairwise equivalence
 \begin{claim}
 $OBDD$ is not quasi-polynomial-time transformable to $OBDD_<$ \citet{Darwiche_2002}
 \end{claim}
@@ -435,55 +440,58 @@ $OBDD$ is not quasi-polynomial-time transformable to $OBDD_<$ \citet{Darwiche_20
 The function $\bigwedge_{i=1}^n(x_i\Leftrightarrow y_i)$ has an $OBDD_<$ representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $OBDD_<$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-$PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $CNF$ representations.
+The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $CNF$ representations.
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $OBDD_<$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-$PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $DNF$ representations.
+The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $DNF$ representations.
 \end{claimdescription}
 
 \begin{claim}
 $OBDD_<$ is polynomial-time transformable to $OBDD$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $OBDD_<$ is a subset of $OBDD$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $OBDD_<$ is a subset of $OBDD$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
 \begin{claim}
 $PI$ is polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by Darwiche 2002, $PI$ is a subset of $CNF$. Therefore, a polynomial transformation is trivial.
+As defined by \citet{Darwiche_2002}, $PI$ is a subset of $CNF$. Therefore, a polynomial transformation is trivial.
 \end{claimdescription}
 
+% separators=Pairwise CNF
 \begin{claim}
 $PI$ is not quasi-polynomial-time transformable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Consider the $CNF$ formula $\Sigma_n=\bigwedge_{i=0}^{n-1}(x_{2i} \vee x_{2i+1})$. This formula is in prime implicates form and each clause in $\Sigma_n$ is an essential prime implicate of it. Hence its negation $\neg\Sigma_n\in PI$.
-
-Since the work of Quine, we know that the number of essential prime implicants of a formula is a lower bound on the number of terms that can be found in any $DNF$ representation of it. However, since $\Sigma_n$ has $2^n$ prime implicates, $\neg\Sigma_n$ has $2^n$ prime implicants, so any $DNF$ representation of $\neg\Sigma_n$ must have at least $2^n$ clauses.
+The pairwise CNF $\Sigma_n = \bigwedge_{i=0}^{n-1}(x_{2i} \vee x_{2i+1})$ has $2^n$ prime implicates; its negation $\neg\Sigma_n \in PI$ therefore has $2^n$ essential prime implicants, forcing any $DNF$ representation to have at least $2^n$ terms \citep{Darwiche_2002}.
 \end{claimdescription}
 
+% separators=Clique
 \begin{claim}
 $PI$ is not quasi-polynomial-time transformable to $FBDD$ \citet{Wegener_1987,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\Sigma_{n,k}(I)=1 \iff I \text{ contains a bidirectional clique of size }k$. This is the clique detection function. It can be shown that for certain values of $k$ (dependent on $n$), every $FBDD$ representation of $\Sigma_{n,k}$ has exponential size. However, it can be shown that $\Sigma_{n,k}$ has $O(n^3)$ prime implicants, and hence not every $PI$ formula cannot be converted to $FBDD$ in quasi-polynomial-time.
+The clique detection function $\Sigma_{n,k}$ has $O(n^3)$ prime implicants (hence polynomial $PI$ size), but any $FBDD$ for $\Sigma_{n,k}$ has exponential size for suitable $k$ \citep{Wegener_1987,Darwiche_2002}.
 \end{claimdescription}
 
+% separators=$OR_n$
 \begin{claim}
 $PI$ is not quasi-polynomial-time transformable to $MODS$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The function $ANY_n=\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $PI$ formula but has $2^n-1$ models.
+The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $PI$ formula but has $2^n-1$ models.
 \end{claimdescription}
 
 
@@ -503,6 +511,7 @@ Shown by Corollary 3.5 of \citet{Beame_2013}.
 \section{S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, "Knowledge Compilation Meets C...}
 % Reference ID: Bova_2016
 % =============================
+% separators=Sauerhoff
 \begin{claim}
 $DNNF$ is not quasi-polynomial-time transformable to $d$-$DNNF$ \citet{Bova_2016}
 \end{claim}
@@ -510,6 +519,7 @@ $DNNF$ is not quasi-polynomial-time transformable to $d$-$DNNF$ \citet{Bova_2016
 Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has $DNNF$ size $O(n^2)$. Theorem 9 shows that $S_n$ has $d$-$DNNF$ size $2^{\Omega(n)}$.
 \end{claimdescription}
 
+% separators=JS
 \begin{claim}
 $PI$ is not quasi-polynomial-time transformable to $DNNF$ \citet{Bova_2016}
 \end{claim}
@@ -589,11 +599,12 @@ Appendix D.2 of \citet{Pipatsrisawat_2010} and Section 6.3 of \citet{Capelli_201
 \section{J. Gergov and C. Meinel, "Efficient Boolean manipulation with OBDD's can be exte...}
 % Reference ID: Gergov_1994
 % =============================
+% separators=HWB
 \begin{claim}
 $FBDD$ is not quasi-polynomial-time transformable to $OBDD$ \citet{Gergov_1994}
 \end{claim}
 \begin{claimdescription}
-The hidden weighted bit function has a lower-bounded $OBDD$ representation of $\Omega(2^{n/4})$, while an $FBDD$ for the same function has a size of only $O(n^2)$
+The hidden weighted bit function $HWB_n$ has $OBDD$ size $2^{\Omega(n/4)}$ \citep{Bryant_1986} but $FBDD$ size $O(n^2)$ \citep{Gergov_1994}.
 \end{claimdescription}
 
 
@@ -605,9 +616,7 @@ The hidden weighted bit function has a lower-bounded $OBDD$ representation of $\
 $MODS$ is not polynomial-time transformable to $PI$ \citet{Kaleyski_2016}
 \end{claim}
 \begin{claimdescription}
-Corollary 2 of \citet{Kaleyski_2016} shows that for some boolean formula $\psi_i$, a $MODS$ representation of $\psi_i$ is $\Theta(2^{2i})$. Proposition 6 of \citet{Kaleyski_2016} shows that the $PI$ representation of the same $\psi_i$ is $\Omega(2^{\frac{(i-1)^2-1}{4}})$, which is not polynomial in $2^{2i}$. Thus, no polynomial transformation exists.
-
-Chapter 4 of \citet{Kaleyski_2016} demonstrates that a similar analysis is insufficient to produce an exponential separation of $PI$ and $MODS$, so whether such a separation exists is still an open problem.
+\citet{Kaleyski_2016} constructs a family of Boolean functions $\psi_i$ with $MODS$ size $\Theta(2^{2i})$ but $PI$ size $\Omega(2^{(i-1)^2/4})$, ruling out a polynomial transformation. Whether an exponential separation exists remains open.
 \end{claimdescription}
 
 
@@ -615,6 +624,7 @@ Chapter 4 of \citet{Kaleyski_2016} demonstrates that a similar analysis is insuf
 \section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation," Comput...}
 % Reference ID: Bryant_1986
 % =============================
+% separators=HWB
 \begin{claim}
 $SDD$ is not quasi-polynomial-time transformable to $OBDD$ \citet{Bryant_1986,Bova_2016_a}
 \end{claim}

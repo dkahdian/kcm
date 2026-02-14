@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Separating Functions
 % Auto-generated from database.json
-% Generated: 2026-02-12T23:14:25.251Z
+% Generated: 2026-02-14T00:49:22.897Z
 %
 % EDITING INSTRUCTIONS:
 % - Short names in brackets are auto-generated identifiers. Do NOT edit.
@@ -52,32 +52,32 @@ Separates languages that compactly represent disjunctions from those that cannot
 
 \begin{definition}[Clique]\label{sf:clique}
 \textbf{Clique Detection Instances} \\
-Define the interpretation $I\in\{0,1\}^{n^2}$, as arcs on a directed graph $D=\{V,E\}$ with $n$ vertices so that $I(x_{i,j})=1\iff (i,j)\in E$. Then define $\Sigma_{n,k}:\{0,1\}^{n^2}\to\{0,1\}$ so $\Sigma_{n,k}(I)=1 \iff I \text{ contains a bidirectional clique of size }k$. \citet{Darwiche_2002,Wegener_1987}
+Tests whether a directed graph on $n$ vertices (encoded as $I \in \{0,1\}^{n^2}$) contains a bidirectional clique of size $k$: $\Sigma_{n,k}(I) = 1 \iff I$ contains such a clique. Has $O(n^3)$ prime implicants but exponential $FBDD$ size for suitable $k$. \citet{Darwiche_2002,Wegener_1987}
 \end{definition}
 
 \begin{definition}[HWB]\label{sf:hwb}
 \textbf{Hidden Weighted Bit} \\
-(Description needed)
+Let $w = \sum_{i=1}^n x_i$ be the Hamming weight of the input. Then $HWB_n(x_1, \ldots, x_n) = x_w$ (the $w$-th input bit). Has $OBDD$ size $2^{\Omega(n)}$ but polynomial $SDD$ and $FBDD$ size. \citet{Bryant_1986}
 \end{definition}
 
 \begin{definition}[JS]\label{sf:js}
 \textbf{Jukna-Schnitger function} \\
-Let $K_n$ be the set of all 2-element subsets of $\{1,...,n\}$. Let the graph $G \subset K_n$ be encoded by the $\{0,1\}$ assignment of $K_n$ mapping a variable to 1 if and only if it is in the edge set of $G$. A triangle is defined as the edges $\{i, j\}, \{j, k\}, \{k, i\}$, where $i, j, k$ are distinct. Let $T_n$ be the set of all triangles on $n$ vertices. Let $JS_n^A: \{0,1\}^{K_n}\to\{0,1\}$ be the function accepting exactly those graphs over $\{1,...,n\}$ that avoid all triangles in $A$. \citet{Jukna_2002} show that for every $n$ there exists an $A_n \subset T_n$ of size $O(n^2)$ so that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\Omega(n^2)}$. Call this function $JS_n$ the Jukna-Schnitger function. \citet{Jukna_2002}
+Tests triangle-freeness on graphs with respect to a fixed set of forbidden triangles $A \subset T_n$. \citet{Jukna_2002} show that for every $n$, there exists $A_n$ of size $O(n^2)$ such that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\Omega(n^2)}$. Has $PI$ size $O(n^2)$ but $DNNF$ size $2^{\Omega(n^2)}$. \citet{Jukna_2002}
 \end{definition}
 
 \begin{definition}[Pairwise CNF]\label{sf:pairwise-cnf}
 \textbf{$\Sigma_n = \bigwedge_{i=0}^{n-1} \left( x_{2i} \vee x_{2i+1} \right)$} \\
-This formula describes evaluating where given each pair $x_{2i}$ and $x_{2i+1}$, at least one of must be true. It is the dual to the Pairwise DNF. \citet{Darwiche_2002}
+Requires that in each pair $(x_{2i}, x_{2i+1})$, at least one is true. Dual to the Pairwise DNF. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}[Pairwise DNF]\label{sf:pairwise-dnf}
 \textbf{$\Pi_n = \bigvee_{i=0}^{n-1} \left( x_{2i} \wedge x_{2i+1} \right)$} \\
-This formula describes evaluating where after pairing $x_{2i}$ and $x_{2i+1}$, at least one pair must have both be true. It is the dual to the Pairwise CNF. \citet{Darwiche_2002}
+Requires that at least one pair $(x_{2i}, x_{2i+1})$ has both variables true. Dual to the Pairwise CNF. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}[Pairwise equivalence]\label{sf:pairwise-equivalence}
 \textbf{$\Sigma_n = \bigwedge_{i=1}^n (x_i \leftrightarrow y_i)$} \\
-(Description needed) \citet{Darwiche_2002}
+Requires that each pair $(x_i, y_i)$ has equal truth values. An $OBDD_<$ with interleaved order $x_1 < y_1 < \cdots < x_n < y_n$ is polynomial, but a separated order $x_1 < \cdots < x_n < y_1 < \cdots < y_n$ forces exponential size. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}[Parity]\label{sf:parity}

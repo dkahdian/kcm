@@ -103,13 +103,15 @@ const CANONICAL_STATUSES: Record<string, string> = {
  * Maps complexity code → canonical claim text fragment for operation support.
  */
 const CANONICAL_OP_COMPLEXITIES: Record<string, string> = {
-  'poly':                   'in polynomial time',
+  // Order matters: more specific patterns must come BEFORE less specific ones,
+  // since parseOpsLatex() uses body.includes(text) and breaks on first match.
   'no-poly-unknown-quasi':  'not in polynomial time (quasi-polynomial unknown)',
   'no-poly-quasi':          'not in polynomial time (but in quasi-polynomial time)',
   'unknown-poly-quasi':     'in unknown polynomial time (but in quasi-polynomial time)',
   'no-quasi':               'not in quasi-polynomial time',
   'unknown-both':           'in unknown complexity',
   'unknown-to-us':          'in unknown-to-us complexity',
+  'poly':                   'in polynomial time',
 };
 
 // =============================================================================
@@ -2053,7 +2055,8 @@ function updateOpsFromLatex(
     const existing = supportMap[safeKey];
 
     if (existing) {
-      // Update existing entry
+      // Update existing entry — always sync complexity from LaTeX
+      existing.complexity = claim.complexity;
       if (claim.description && claim.description !== '(Description needed)') {
         existing.description = claim.description;
       }

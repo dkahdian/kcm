@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Query Support Claims
 % Auto-generated from database.json
-% Generated: 2026-02-14T00:49:22.894Z
+% Generated: 2026-02-17T23:26:01.398Z
 %
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -65,7 +65,23 @@
 $CNF$ supports Consistency not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-(Description needed)
+Consistency checking for $CNF$ is NP-complete (the classic SAT problem). This is one of the foundational intractability results (\citet{Darwiche_2002}, Proposition 4.1, Table 16).
+\end{claimdescription}
+
+% lang=lang_89649e36, op=IM
+\begin{claim}
+$CNF$ supports Implicant in polynomial time \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+To check whether a consistent term $\alpha$ implies a $CNF$ sentence $\Sigma$, it suffices to verify that each clause of $\Sigma$ shares a literal with $\alpha$. This can be done in polynomial time (\citet{Darwiche_2002}, Proposition 4.1, Table 21).
+\end{claimdescription}
+
+% lang=lang_89649e36, op=VA
+\begin{claim}
+$CNF$ supports Validity in polynomial time \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+A $CNF$ sentence is valid iff every clause in it is valid (i.e., contains a complementary pair of literals). This can be checked in linear time (\citet{Darwiche_2002}, Proposition 4.1, Table 21).
 \end{claimdescription}
 
 % lang=lang_4c204bf3, op=VA
@@ -73,7 +89,31 @@ $CNF$ supports Consistency not in polynomial time (quasi-polynomial unknown) \ci
 $DNF$ supports Validity not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-(Description needed)
+Validity checking for $DNF$ is coNP-complete. A $DNF$ is valid iff every assignment satisfies at least one term, which requires checking that term coverage is complete (\citet{Darwiche_2002}, Proposition 4.1, Table 16).
+\end{claimdescription}
+
+% lang=lang_6ae90adc, op=CT
+\begin{claim}
+$IP$ supports Model Counting not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+By duality with $PI$: the negation of a formula in prime implicate form is in prime implicant ($IP$) form. The number of models of $\neg\Sigma$ over $\text{Vars}(\Sigma)$ is $2^n$ minus the model count of $\Sigma$. Hence the \#P-hardness of counting for $PI$ transfers to $IP$ (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
+\end{claimdescription}
+
+% lang=lang_6ae90adc, op=IM
+\begin{claim}
+$IP$ supports Implicant in polynomial time \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+By definition, $IP$ is the set of prime implicants of a formula. A consistent term $\alpha$ implies $\Sigma$ iff $\alpha$ entails some prime implicant of $\Sigma$. This entailment check between terms runs in polynomial time (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
+\end{claimdescription}
+
+% lang=lang_6ae90adc, op=SE
+\begin{claim}
+$IP$ supports Sentential Entailment in polynomial time \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+$IP \subseteq DNF$ and $IP$ satisfies IM, so checking sentential entailment reduces to checking implication between prime implicant forms. Two formulas are equivalent iff they share the same prime implicants (canonical form), giving SE (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
 \end{claimdescription}
 
 % lang=lang_e02902d0, op=CO
@@ -81,7 +121,7 @@ $DNF$ supports Validity not in polynomial time (quasi-polynomial unknown) \citet
 $MODS$ supports Consistency in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-A sentence $\Sigma$ is consistent iff it has at least one model. The number of models of $\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\Sigma$. Accordingly, CO can be achieved in polynomial time by checking if this count is nonzero (Table 18, Darwiche 2002).
+A sentence $\Sigma$ is consistent iff it has at least one model. In a $MODS$ representation, the number of models is given by the number of edges outgoing from the or-node. Accordingly, CO can be achieved in polynomial time by checking if this count is nonzero (\citet{Darwiche_2002}, Proposition 4.1, Table 18).
 \end{claimdescription}
 
 % lang=lang_e02902d0, op=CT
@@ -89,7 +129,7 @@ A sentence $\Sigma$ is consistent iff it has at least one model. The number of m
 $MODS$ supports Model Counting in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The number of models of $\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\Sigma$. Accordingly, CT (model counting) can be achieved in polynomial time by counting these edges (Table 18, Darwiche 2002).
+The number of models of $\Sigma$ is given by the number of edges outgoing from the or-node in any $MODS$ representation. Accordingly, CT can be achieved in polynomial time by counting these edges (\citet{Darwiche_2002}, Proposition 4.1, Table 18).
 \end{claimdescription}
 
 % lang=lang_e02902d0, op=VA
@@ -97,7 +137,7 @@ The number of models of $\Sigma$ is given by the number of edges outgoing from t
 $MODS$ supports Validity in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-A sentence $\Sigma$ is valid iff it has $2^n$ models, where $n = |\text{Vars}(\Sigma)|$. The number of models of $\Sigma$ is given by the number of edges outgoing from the or-node in any MODS representation of $\Sigma$. Accordingly, VA can be achieved in polynomial time by checking if this count equals $2^n$ (Table 18, Darwiche 2002).
+A sentence $\Sigma$ is valid iff it has $2^n$ models, where $n = |\text{Vars}(\Sigma)|$. In $MODS$, the model count is directly available. Thus VA can be achieved in polynomial time by checking if this count equals $2^n$ (\citet{Darwiche_2002}, Proposition 4.1, Table 18).
 \end{claimdescription}
 
 % lang=lang_b9d72a7c, op=CO
@@ -105,7 +145,7 @@ A sentence $\Sigma$ is valid iff it has $2^n$ models, where $n = |\text{Vars}(\S
 $OBDD$ supports Consistency in polynomial time \citet{Bryant_1986,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \citet{Darwiche_2002}.
+Any query concerning $OBDD$ is equivalent to the corresponding query concerning $OBDD_<$ when only one DAG is involved. Since $OBDD_<$ satisfies CO, VA and CT, so does $OBDD$ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_b9d72a7c, op=CT
@@ -113,7 +153,15 @@ Any query concerning OBDD is equivalent to the corresponding query concerning OB
 $OBDD$ supports Model Counting in polynomial time \citet{Bryant_1986,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \citet{Darwiche_2002}.
+Any query concerning $OBDD$ is equivalent to the corresponding query concerning $OBDD_<$ when only one DAG is involved. Since $OBDD_<$ satisfies CO, VA and CT, so does $OBDD$ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
+\end{claimdescription}
+
+% lang=lang_b9d72a7c, op=EQ
+\begin{claim}
+$OBDD$ supports Equivalence in polynomial time \citet{Meinel_Theobald_1998,Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+$OBDD$ satisfies EQ (Theorem 8.11, Meinel \& Theobald 1998). Any equivalence query on a single $OBDD$ reduces to the corresponding query on $OBDD_<$, and $OBDD_<$ supports EQ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_b9d72a7c, op=VA
@@ -121,7 +169,7 @@ Any query concerning OBDD is equivalent to the corresponding query concerning OB
 $OBDD$ supports Validity in polynomial time \citet{Bryant_1986,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Any query concerning OBDD is equivalent to the corresponding query concerning OBDD$_<$ when only one DAG is involved. Since OBDD$_<$ satisfies CO, VA and CT, so does OBDD \citet{Darwiche_2002}.
+Any query concerning $OBDD$ is equivalent to the corresponding query concerning $OBDD_<$ when only one DAG is involved. Since $OBDD_<$ satisfies CO, VA and CT, so does $OBDD$ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_d69995dd, op=CE
@@ -129,7 +177,7 @@ Any query concerning OBDD is equivalent to the corresponding query concerning OB
 $OBDD_<$ supports Clausal Entailment in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-(Description needed)
+$OBDD_<$ satisfies CO and CD. By Lemma A.4, CO and CD imply CE: to test $\Sigma \models \alpha$ for clause $\alpha$, condition on $\neg\alpha$ and check consistency (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_d69995dd, op=IM
@@ -137,7 +185,7 @@ $OBDD_<$ supports Clausal Entailment in polynomial time \citet{Darwiche_2002}
 $OBDD_<$ supports Implicant in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-(Description needed)
+$OBDD_<$ satisfies VA and CD. By Lemma A.7, VA and CD imply IM: to test whether term $\alpha \models \Sigma$, condition on $\alpha$ and check validity (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_d69995dd, op=SE
@@ -145,7 +193,31 @@ $OBDD_<$ supports Implicant in polynomial time \citet{Darwiche_2002}
 $OBDD_<$ supports Sentential Entailment in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-(Description needed)
+Since $OBDD_<$ satisfies CO, $\neg$C and $\land$BC, checking $\Sigma_1 \models \Sigma_2$ reduces to checking whether $\Sigma_1 \land \neg\Sigma_2$ is inconsistent, which can be computed in polytime (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
+\end{claimdescription}
+
+% lang=lang_27fffab2, op=CE
+\begin{claim}
+$PI$ supports Clausal Entailment in polynomial time \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+By definition, $PI$ is the set of prime implicates of a formula. A clause $\gamma$ is entailed by $\Sigma$ iff $\gamma$ subsumes (is a weakening of) some prime implicate of $\Sigma$. This subsumption check runs in polynomial time (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
+\end{claimdescription}
+
+% lang=lang_27fffab2, op=CT
+\begin{claim}
+$PI$ supports Model Counting not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002,Roth_1996}
+\end{claim}
+\begin{claimdescription}
+The model counting problem for monotone Krom formulas (conjunctions of clauses with at most two positive literals) is \#P-complete \citet{Roth_1996}. Such formulas can be converted to prime implicates form in polynomial time, so $PI$ does not satisfy CT (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
+\end{claimdescription}
+
+% lang=lang_27fffab2, op=SE
+\begin{claim}
+$PI$ supports Sentential Entailment in polynomial time \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+$PI \subseteq CNF$ and $PI$ satisfies CE, so checking $\Sigma_1 \models \Sigma_2$ for $CNF$ $\Sigma_2$ reduces to checking each clause of $\Sigma_2$ against the prime implicates of $\Sigma_1$. Two formulas are equivalent iff they share the same prime implicates (canonical form), giving SE (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
 \end{claimdescription}
 
 
@@ -182,7 +254,7 @@ OBDDs with a fixed variable ordering are canonical: two functions are equivalent
 $OBDD_<$ supports Model Enumeration in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
-(Description needed)
+Models of an OBDD can be enumerated in time polynomial in the output size by traversing all root-to-1-sink paths. Each path corresponds to a (partial) assignment that can be expanded to full models.
 \end{claimdescription}
 
 % lang=lang_d69995dd, op=VA
@@ -203,7 +275,7 @@ Validity is trivial for OBDDs: check if the diagram root equals the terminal 1 n
 $FBDD$ supports Consistency in polynomial time \citet{Gergov_1994}
 \end{claim}
 \begin{claimdescription}
-It is well-known that FBDD satisfies CO \citet{Gergov_1994, Darwiche_2002}. Consistency is polynomial: check if the BDD root is not the terminal 0 node.
+$FBDD$ satisfies CO \citet{Gergov_1994, Darwiche_2002}. Consistency is polynomial: check if the BDD root is not the terminal 0 node.
 \end{claimdescription}
 
 % lang=lang_684b1ca7, op=CT
@@ -211,7 +283,7 @@ It is well-known that FBDD satisfies CO \citet{Gergov_1994, Darwiche_2002}. Cons
 $FBDD$ supports Model Counting in polynomial time \citet{Gergov_1994}
 \end{claim}
 \begin{claimdescription}
-It is well-known that FBDD satisfies CT \citet{Gergov_1994, Darwiche_2002}. Model counting on FBDDs can be done in polynomial time by a single bottom-up pass counting satisfying assignments at each node.
+$FBDD$ satisfies CT \citet{Gergov_1994, Darwiche_2002}. Model counting on FBDDs can be done in polynomial time by a single bottom-up pass counting satisfying assignments at each node.
 \end{claimdescription}
 
 % lang=lang_684b1ca7, op=VA
@@ -219,7 +291,7 @@ It is well-known that FBDD satisfies CT \citet{Gergov_1994, Darwiche_2002}. Mode
 $FBDD$ supports Validity in polynomial time \citet{Gergov_1994}
 \end{claim}
 \begin{claimdescription}
-It is well-known that FBDD satisfies VA \citet{Gergov_1994, Darwiche_2002}. Validity is polynomial: check if the BDD root equals the terminal 1 node.
+$FBDD$ satisfies VA \citet{Gergov_1994, Darwiche_2002}. Validity is polynomial: check if the BDD root equals the terminal 1 node.
 \end{claimdescription}
 
 
@@ -232,7 +304,20 @@ It is well-known that FBDD satisfies VA \citet{Gergov_1994, Darwiche_2002}. Vali
 $OBDD$ supports Sentential Entailment not in polynomial time (quasi-polynomial unknown) \citet{Meinel_Theobald_1998}
 \end{claim}
 \begin{claimdescription}
-Checking sentential entailment for OBDD formulas is coNP-complete. Since OBDD satisfies $\neg$C and since $\alpha \land \beta$ is consistent iff $\alpha \not\models \neg\beta$, checking SE for OBDD is coNP-complete (Lemma 8.14, Meinel \& Theobald 1998). This is because checking consistency of two OBDD$_<$ formulas with different variable orderings is NP-complete.
+Checking sentential entailment for $OBDD$ formulas is coNP-complete. Since $OBDD$ satisfies $\neg$C, $\alpha \land \beta$ is consistent iff $\alpha \not\models \neg\beta$. Checking consistency of two $OBDD_<$ formulas with different variable orderings is NP-complete (Lemma 8.14, Meinel \& Theobald 1998), so SE for $OBDD$ is coNP-complete (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
+\end{claimdescription}
+
+
+% =============================
+\section{On the Tractable Counting of Theory Models and its Application to Truth Maintena...}
+% Reference ID: Darwiche_2001b
+% =============================
+% lang=lang_6c130090, op=CT
+\begin{claim}
+$d$-$DNNF$ supports Model Counting in polynomial time \citet{Darwiche_2001b}
+\end{claim}
+\begin{claimdescription}
+$d$-$DNNF$ satisfies CT: model counting can be performed in polynomial time by exploiting decomposability (multiplying counts at $\land$-nodes) and determinism (adding counts at $\lor$-nodes). This is the key tractability result motivating $d$-$DNNF$ as a compilation target \citet{Darwiche_2001b} (\citet{Darwiche_2002}, Proposition 4.1, Table 26).
 \end{claimdescription}
 
 
@@ -245,7 +330,7 @@ Checking sentential entailment for OBDD formulas is coNP-complete. Since OBDD sa
 $DNNF$ supports Clausal Entailment in polynomial time \citet{Darwiche_2001a}
 \end{claim}
 \begin{claimdescription}
-DNNF supports clause entailment (CE) in polynomial time (Darwiche, 2001a).
+$DNNF$ supports clause entailment (CE) in polynomial time \citet{Darwiche_2001a}. To test $\Sigma \models \gamma$ for clause $\gamma$, it suffices to test whether $\Sigma | \neg\gamma$ is inconsistent. Since $DNNF$ satisfies CD and CO, this can be done in polytime.
 \end{claimdescription}
 
 % =============================

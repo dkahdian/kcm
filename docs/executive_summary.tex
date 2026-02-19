@@ -45,8 +45,8 @@
 \maketitle
 
 \begin{abstract}
-We describe the algorithmic machinery behind the Updated Knowledge Compilation Map, an interactive tool for exploring succinctness relations and query tractability across KC languages. Starting from a hand-curated knowledge base of known results, we validate consistency via DFS-based reachability, then propagate derived facts through fixed-point upgrade and contradiction-driven downgrade algorithms. Query and transformation support is propagated analogously using succinctness relations and operation implication lemmas. Finally, we outline how the knowledge base can itself be encoded as a small CNF and compiled for further analysis. The project is publicly visible at \url{https://kcm.kahdian.com} and on Github at \url{https://github.com/dkahdian/kcm}
-\end{abstract}.
+We describe the algorithmic machinery behind the Updated Knowledge Compilation Map, an interactive tool for exploring succinctness relations and query tractability across KC languages. Starting from a hand-curated knowledge base of known results, we validate consistency via DFS-based reachability, then propagate derived facts through fixed-point upgrade and contradiction-driven downgrade algorithms. Query and transformation support is propagated analogously using succinctness relations and operation implication lemmas. We then encode the knowledge base as a propositional CNF formula, compile it to d-DNNF using c2d, and verify that the entailed literals match the graph-based propagation exactly---confirming soundness and completeness of our algorithms. The compiled representation further enables model counting ($\approx 2^{30.45}$ consistent worlds) and surprise analysis, ranking open problems by their information content. The project is publicly visible at \url{https://kcm.kahdian.com} and on Github at \url{https://github.com/dkahdian/kcm}.
+\end{abstract}
 
 \section{Setup}
 
@@ -75,7 +75,7 @@ The propagation logic relies on two families of lemmas.
 
 \paragraph{Succinctness transitivity.}
 If $L_1 \leq_p L_2$ and $L_2 \leq_p L_3$, then $L_1 \leq_p L_3$ (similarly for $\leq_q$). By contrapositive: if $L_1 \not\leq_p L_3$, then $L_1 \not\leq_p L_2$ or $L_2 \not\leq_p L_3$.
-
+ 
 \paragraph{Query-by-compiling.}
 If $L_1 \leq_p L_2$ and $L_2$ supports query~$q$ in polytime, then $L_1$ supports $q$ in polytime (compile first, then query). Contrapositive: if $L_1$ cannot perform~$q$ in polytime and $L_1 \leq_p L_2$, then $L_2$ cannot perform~$q$ in polytime either.
 
@@ -140,39 +140,114 @@ Phases 3--5 are each repeated to a fixed point, since one inference may enable a
 
 \section{Meta-Knowledge Compilation}
 
-The knowledge base itself can be cast as a propositional satisfiability problem. This section outlines a (currently unimplemented) approach.
+The knowledge base itself can be cast as a propositional satisfiability problem. We have implemented this encoding and compiled it to d-DNNF, enabling model counting and surprise analysis over the space of consistent worlds.
 
 \subsection{Encoding}
 
-For each pair $(i,j)$ with $i \neq j$, introduce two Boolean variables: $P_{ij}$ (a polytime compilation $L_i \to L_j$ exists) and $Q_{ij}$ (a quasi-polytime compilation exists). The invariant $P_{ij} \Rightarrow Q_{ij}$ is encoded as $(\lnot P_{ij} \lor Q_{ij})$. For each language~$L$ and operation~$o$, introduce $p_{L,o}$ and $q_{L,o}$ for polytime and quasi-polytime support, with the same implication.
+We restrict attention to the $v = 21$ active languages (excluding 7~in-progress languages that lack any known edges). For each ordered pair $(i,j)$ with $i \neq j$, we introduce two Boolean variables: $P_{ij}$ (a polytime compilation $L_i \to L_j$ exists) and $Q_{ij}$ (a quasi-polytime compilation exists), for a total of $2 \cdot v(v-1) = 840$ variables. The invariant $P_{ij} \Rightarrow Q_{ij}$ is encoded as $(\lnot P_{ij} \lor Q_{ij})$.
 
-Known facts become unit clauses: for instance, a \texttt{poly} edge $i \to j$ asserts $P_{ij} = \top$; a \texttt{no-quasi} edge asserts $Q_{ij} = \bot$.
+Known facts become unit clauses: for instance, a \texttt{poly} edge $i \to j$ asserts $P_{ij} = \top$; a \texttt{no-quasi} edge asserts $Q_{ij} = \bot$. Edge statuses that leave one component unknown (e.g.\ \texttt{no-poly-unknown-quasi} constrains $P_{ij} = \bot$ but leaves $Q_{ij}$ free) contribute a single unit clause.
 
-The transitivity lemmas yield 3-literal clauses over all triples:
+The transitivity lemmas yield 3-literal clauses over all triples, for both the polynomial and quasi-polynomial layers:
 \[
-  \forall\, i,j,k:\quad (\lnot P_{ij} \lor \lnot P_{jk} \lor P_{ik})
+  \forall\, i,j,k:\quad (\lnot P_{ij} \lor \lnot P_{jk} \lor P_{ik}) \qquad\text{and}\qquad (\lnot Q_{ij} \lor \lnot Q_{jk} \lor Q_{ik})
 \]
-Query-by-compiling contributes:
-\[
-  \forall\, i,j,o:\quad (\lnot P_{ij} \lor \lnot p_{j,o} \lor p_{i,o})
-\]
-Operation implication lemmas contribute one clause per language per lemma. The resulting formula~$\Sigma$ is a CNF with $O(v^3 + v^2 Q + vL)$ clauses.
 
-\subsection{Applications}
+The resulting formula~$\Sigma$ has 840~variables and 17{,}121~clauses: 420 implication clauses ($P \Rightarrow Q$), 741 unit clauses from known facts, and 15{,}960 transitivity clauses.
 
-Since~$v \approx 20$ and $Q, L \approx 10$, $\Sigma$~is small enough to compile into a tractable target language (e.g.\ d-DNNF). Once compiled, standard KC queries become available:
+\subsection{Compilation and Results}
+
+The CNF was compiled to a smooth d-DNNF using c2d~v2.20 in approximately 14~seconds, producing a 243{,}170-node circuit (4.5\,MB). From this compiled representation we extract:
 
 \begin{itemize}
-  \item \textbf{Clausal entailment.} Determine whether $\Sigma \models \ell$ for any literal~$\ell$, recovering the same propagation results as Sections~3--4.
-  \item \textbf{Model counting.} $\text{MC}(\Sigma)$ counts the number of ``consistent worlds''---assignments to all unknown variables that are compatible with current knowledge.
-  \item \textbf{Surprise metric.} Given a new result $v_i = \textit{val}$, the ratio $\text{MC}(\Sigma) \,/\, \text{MC}(\Sigma \mid v_i = \textit{val})$ quantifies how much the result narrows the space of consistent worlds, providing a measure of how ``surprising'' or informative the finding is.
-  \item \textbf{Conditioning.} Fix a variable and propagate, producing the residual theory under a hypothetical assumption.
+  \item \textbf{Model count.} $\text{MC}(\Sigma) = 1{,}466{,}882{,}601 \approx 2^{30.45}$ consistent worlds.
+  \item \textbf{Clausal entailment.} Of the 840~variables, 241~are entailed true, 500~are entailed false, and 99~are free (unknown).
+  \item \textbf{Verification.} The set of entailed literals from the d-DNNF matches exactly the set of known and derived facts from the graph-based propagation algorithms of Sections~3--4. There are zero discrepancies in either direction, confirming empirically that the algorithmic propagation is both \emph{sound} (it derives nothing beyond what the axioms entail) and \emph{complete} (it derives everything the axioms entail).
 \end{itemize}
+
+\subsection{Surprise Analysis}
+
+For each free variable~$v$ and truth value $\textit{val} \in \{\top, \bot\}$, the \emph{surprise} of the hypothetical result $v = \textit{val}$ is:
+\[
+  \text{surprise}(v = \textit{val}) \;=\; \log_2 \frac{\text{MC}(\Sigma)}{\text{MC}(\Sigma \mid v = \textit{val})}
+\]
+Higher surprise means the result eliminates a larger fraction of consistent worlds. Table~\ref{tab:surprise} lists the 20~most informative open problems. The cSDD language dominates the ranking because it is a recently introduced language with few known succinctness relationships, making each potential result highly constraining.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Top 20 most informative open problems by maximum surprise (bits). $\text{s}(\top)$ and $\text{s}(\bot)$ denote the surprise of the variable being true or false, respectively. By nature, it is highly unlikely that any of these results holds; however, if we could resolve even one, it would yield a large amount of information about the structure of the KC landscape.}
+\label{tab:surprise}
+\begin{tabular}{clrr}
+\textbf{Rank} & \textbf{Variable} & $\mathbf{s(\top)}$ & $\mathbf{s(\bot)}$ \\ \hline
+1 & $P(\text{dec-SDNNF} \to \text{cSDD})$ & 11.84 & 0.00 \\
+2 & $P(\text{SDD} \to \text{cSDD})$ & 11.81 & 0.00 \\
+3 & $P(\text{IP} \to \text{cSDD})$ & 11.55 & 0.00 \\
+4 & $P(\text{uOBDD} \to \text{cSDD})$ & 11.35 & 0.00 \\
+5 & $Q(\text{DNF} \to \text{cSDD})$ & 10.48 & 0.00 \\
+6 & $P(\text{cSDD} \to \text{MODS})$ & 9.49 & 0.00 \\
+7 & $Q(\text{d-SDNNF} \to \text{cSDD})$ & 8.00 & 0.01 \\
+8 & $Q(\text{uOBDD} \to \text{cSDD})$ & 8.00 & 0.01 \\
+9 & $Q(\text{IP} \to \text{cSDD})$ & 7.99 & 0.01 \\
+10 & $Q(\text{SDD} \to \text{cSDD})$ & 7.15 & 0.01 \\
+11 & $P(\text{nOBDD} \to \text{FBDD})$ & 6.89 & 0.01 \\
+12 & $P(\text{SDNNF} \to \text{dec-DNNF})$ & 6.88 & 0.01 \\
+13 & $P(\text{OBDD} \to \text{cSDD})$ & 6.87 & 0.01 \\
+14 & $P(\text{DNF} \to \text{nOBDD})$ & 5.77 & 0.03 \\
+15 & $P(\text{IP} \to \text{uOBDD})$ & 5.35 & 0.04 \\
+16 & $Q(\text{cSDD} \to \text{FBDD})$ & 0.04 & 5.35 \\
+17 & $Q(\text{cSDD} \to \text{dec-DNNF})$ & 0.04 & 5.35 \\
+18 & $P(\text{OBDD}_< \to \text{cSDD})$ & 5.24 & 0.04 \\
+19 & $Q(\text{OBDD} \to \text{cSDD})$ & 4.98 & 0.05 \\
+20 & $Q(\text{dec-SDNNF} \to \text{cSDD})$ & 4.98 & 0.05 \\
+\end{tabular}
+\end{table}
+
+\subsection{Research Value}
+
+The surprise metric from Table~\ref{tab:surprise} ranks variables by how informative a single direction is, but many open problems are highly asymmetric: one outcome is very surprising while the other is nearly trivial.  To capture the value of investigating an open problem \emph{regardless of outcome}, we define the \textbf{research value}:
+\[
+  \text{RV}(v) \;=\; \text{surprise}(v = \top) \;\cdot\; \text{surprise}(v = \bot)
+\]
+A high research value means that both possible outcomes are roughly equally likely (in the sense that the model count of each outcome is similar), so resolving the problem is highly informative no matter the answer and worth investigating.
+
+Unlike the max-surprise ranking, which is dominated by cSDD-related variables with one-sided surprise, the research value ranking surfaces \emph{balanced} open problems---those where the outcome is genuinely uncertain from the perspective of our current knowledge. All top entries have research values near~1.0, corresponding to roughly equal surprise in both directions.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Top 20 open problems by research value $\text{RV} = \text{s}(\top) \cdot \text{s}(\bot)$.}
+\label{tab:rv}
+\begin{tabular}{clrrr}
+\textbf{Rank} & \textbf{Variable} & $\mathbf{s(\top)}$ & $\mathbf{s(\bot)}$ & \textbf{RV} \\ \hline
+1 & $Q(\text{cSDD} \to \text{IP})$ & 0.98 & 1.02 & 1.00 \\
+2 & $P(\text{cSDD} \to \text{DNF})$ & 1.09 & 0.91 & 1.00 \\
+3 & $Q(\text{d-SDNNF} \to \text{SDD})$ & 0.90 & 1.11 & 1.00 \\
+4 & $Q(\text{uOBDD} \to \text{SDD})$ & 0.90 & 1.11 & 1.00 \\
+5 & $P(\text{IP} \to \text{SDNNF})$ & 0.88 & 1.13 & 1.00 \\
+6 & $P(\text{uOBDD} \to \text{dec-DNNF})$ & 1.14 & 0.87 & 0.99 \\
+7 & $Q(\text{cSDD} \to \text{OBDD}_<)$ & 1.15 & 0.86 & 0.99 \\
+8 & $P(\text{cSDD} \to \text{FBDD})$ & 1.19 & 0.83 & 0.99 \\
+9 & $P(\text{nOBDD} \to \text{d-DNNF})$ & 0.83 & 1.20 & 0.99 \\
+10 & $P(\text{cSDD} \to \text{CNF})$ & 1.20 & 0.82 & 0.99 \\
+11 & $Q(\text{MODS} \to \text{PI})$ & 0.81 & 1.22 & 0.99 \\
+12 & $Q(\text{DNF} \to \text{nOBDD})$ & 1.25 & 0.79 & 0.98 \\
+13 & $Q(\text{DNF} \to \text{SDNNF})$ & 1.25 & 0.79 & 0.98 \\
+14 & $Q(\text{d-SDNNF} \to \text{FBDD})$ & 0.77 & 1.27 & 0.98 \\
+15 & $Q(\text{d-SDNNF} \to \text{dec-DNNF})$ & 0.77 & 1.27 & 0.98 \\
+16 & $Q(\text{uOBDD} \to \text{FBDD})$ & 0.77 & 1.27 & 0.98 \\
+17 & $Q(\text{uOBDD} \to \text{dec-DNNF})$ & 0.77 & 1.27 & 0.98 \\
+18 & $P(\text{SDD} \to \text{dec-DNNF})$ & 1.29 & 0.76 & 0.98 \\
+19 & $P(\text{DNF} \to \text{nFBDD})$ & 1.29 & 0.76 & 0.98 \\
+20 & $P(\text{SDD} \to \text{nFBDD})$ & 0.75 & 1.30 & 0.98 \\
+\end{tabular}
+\end{table}
 
 \subsection{Comparison to Algorithmic Propagation}
 
-While compiling~$\Sigma$ and querying it via clausal entailment would reproduce the propagation results of Sections~3--4, the dedicated algorithms above are preferable in practice for two reasons: (1)~they produce \emph{informative witness paths}---human-readable chains of citations and intermediate edges explaining \emph{why} each derived fact holds---whereas a compiled representation only answers ``entailed or not''; and (2)~they are simpler to implement and debug in a web application context. The meta-compilation approach is most compelling for queries that the current algorithms do not support, such as model counting and surprise quantification.
+The dedicated graph algorithms of Sections~3--4 remain preferable for the web application for two reasons: (1)~they produce \emph{informative witness paths}---human-readable chains of citations and intermediate edges explaining \emph{why} each derived fact holds---whereas a compiled representation only answers ``entailed or not''; and (2)~they are simpler and faster. The meta-compilation approach complements these algorithms by enabling queries they do not support (model counting, surprise quantification) and by providing an independent verification that the propagation is sound and complete.
 
+\clearpage
 % =============================
 % Bibliography
 % =============================

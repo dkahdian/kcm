@@ -403,6 +403,9 @@
             {submittingPreview ? 'Submitting...' : 'Submit'}
           </button>
         {:else}
+          <a href="/about" class="about-link">
+            About
+          </a>
           <a href="/contribute" target="_blank" class="contribute-link">
             Contribute
           </a>
@@ -694,6 +697,28 @@
   .btn-submit:hover:not(:disabled) {
     background: #059669;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .about-link {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .about-link:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .about-link:active {
+    transform: translateY(0);
   }
 
   .contribute-link {

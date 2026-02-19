@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Query Support Claims
 % Auto-generated from database.json
-% Generated: 2026-02-17T23:26:01.398Z
+% Generated: 2026-02-18T00:54:53.263Z
 %
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -69,11 +69,8 @@ Consistency checking for $CNF$ is NP-complete (the classic SAT problem). This is
 \end{claimdescription}
 
 % lang=lang_89649e36, op=IM
-\begin{claim}
-$CNF$ supports Implicant in polynomial time \citet{Darwiche_2002}
-\end{claim}
 \begin{claimdescription}
-To check whether a consistent term $\alpha$ implies a $CNF$ sentence $\Sigma$, it suffices to verify that each clause of $\Sigma$ shares a literal with $\alpha$. This can be done in polynomial time (\citet{Darwiche_2002}, Proposition 4.1, Table 21).
+To check whether a consistent term $\alpha$ implies a $CNF$ sentence $\Sigma$, it suffices to verify that each clause of $\Sigma$ is either a tautology or shares at least one true literal with $\alpha$. This requires only a single pass over the formula and runs in linear time (\citet{Darwiche_2002}, Proposition 4.1, Table 21).
 \end{claimdescription}
 
 % lang=lang_89649e36, op=VA
@@ -109,11 +106,8 @@ By definition, $IP$ is the set of prime implicants of a formula. A consistent te
 \end{claimdescription}
 
 % lang=lang_6ae90adc, op=SE
-\begin{claim}
-$IP$ supports Sentential Entailment in polynomial time \citet{Darwiche_2002}
-\end{claim}
 \begin{claimdescription}
-$IP \subseteq DNF$ and $IP$ satisfies IM, so checking sentential entailment reduces to checking implication between prime implicant forms. Two formulas are equivalent iff they share the same prime implicants (canonical form), giving SE (\citet{Darwiche_2002}, Proposition 4.1, Table 24).
+Although $IP \subseteq DNF$ (where SE is generally hard), $IP$ supports SE in polynomial time. To check if $\Sigma_1 \models \Sigma_2$, we just need to verify that every term in $\Sigma_1$ implies $\Sigma_2$. Since testing if a term implies an $IP$ formula is an Implicant (IM) query, and $IP$ supports IM in polynomial time, the entire SE check reduces to a polynomial number of IM checks (\citet{Darwiche_2002}, Proposition 4.1).
 \end{claimdescription}
 
 % lang=lang_e02902d0, op=CO
@@ -309,7 +303,7 @@ Checking sentential entailment for $OBDD$ formulas is coNP-complete. Since $OBDD
 
 
 % =============================
-\section{On the Tractable Counting of Theory Models and its Application to Truth Maintena...}
+\section{A. Darwiche, "On the Tractable Counting of Theory Models and its Application to ...}
 % Reference ID: Darwiche_2001b
 % =============================
 % lang=lang_6c130090, op=CT
@@ -331,6 +325,18 @@ $DNNF$ supports Clausal Entailment in polynomial time \citet{Darwiche_2001a}
 \end{claim}
 \begin{claimdescription}
 $DNNF$ supports clause entailment (CE) in polynomial time \citet{Darwiche_2001a}. To test $\Sigma \models \gamma$ for clause $\gamma$, it suffices to test whether $\Sigma | \neg\gamma$ is inconsistent. Since $DNNF$ satisfies CD and CO, this can be done in polytime.
+\end{claimdescription}
+
+% =============================
+\section{Alexis de Colnet and Kuldeep S. Meel, "An FPRAS for Model Counting for Non-Dete...}
+% Reference ID: Colnet_2025
+% =============================
+% lang=lang_1df07cc3, op=CT
+\begin{claim}
+$nFBDD$ supports Model Counting not in polynomial time (quasi-polynomial unknown) \citet{Colnet_2025}
+\end{claim}
+\begin{claimdescription}
+Exact model counting for non-deterministic read-once branching programs ($nFBDD$) is \#P-hard. This is because non-determinism allows multiple computational paths to satisfy the same assignment, making the counting of unique models significantly more difficult than in the deterministic ($FBDD$) case \citet{Colnet_2025}.
 \end{claimdescription}
 
 % =============================

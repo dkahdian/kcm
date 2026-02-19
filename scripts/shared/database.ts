@@ -26,6 +26,27 @@ export function loadDatabase(): DatabaseSchema {
 }
 
 export function saveDatabase(database: DatabaseSchema): void {
+  // Strip empty string caveats (should be undefined, not "")
+  for (const lang of database.languages) {
+    if (lang.properties?.queries) {
+      for (const op of Object.values(lang.properties.queries)) {
+        if (op && 'caveat' in op && !op.caveat) delete op.caveat;
+      }
+    }
+    if (lang.properties?.transformations) {
+      for (const op of Object.values(lang.properties.transformations)) {
+        if (op && 'caveat' in op && !op.caveat) delete op.caveat;
+      }
+    }
+  }
+  if (database.adjacencyMatrix?.matrix) {
+    for (const row of database.adjacencyMatrix.matrix) {
+      if (!row) continue;
+      for (const cell of row) {
+        if (cell && 'caveat' in cell && !cell.caveat) delete cell.caveat;
+      }
+    }
+  }
   const content = JSON.stringify(database, null, 2);
   fs.writeFileSync(DATABASE_PATH, content, 'utf-8');
 }

@@ -169,3 +169,30 @@ function collectVisibleEdgeIds(matrix: KCAdjacencyMatrix): Set<string> {
   }
   return ids;
 }
+
+/**
+ * @deprecated Use computeEffectiveFilterState + FilterDeltas instead.
+ * Creates initial filter state map with all filters set to their defaults for a given view mode
+ */
+export function createDefaultFilterState(
+  languageFilters: LanguageFilter[],
+  edgeFilters: EdgeFilter[] = [],
+  viewMode: ViewMode = 'graph'
+): FilterStateMap {
+  return computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, new Map());
+}
+
+/**
+ * @deprecated Use computeEffectiveFilterState + FilterDeltas instead.
+ * Adjusts filter states when switching view modes.
+ */
+export function adjustFilterStateForViewMode(
+  currentStates: FilterStateMap,
+  languageFilters: LanguageFilter[],
+  edgeFilters: EdgeFilter[],
+  _fromMode: ViewMode,
+  toMode: ViewMode
+): FilterStateMap {
+  const deltas = extractDeltasFromState(currentStates, languageFilters, edgeFilters);
+  return computeEffectiveFilterState(languageFilters, edgeFilters, toMode, deltas);
+}

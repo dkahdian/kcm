@@ -282,7 +282,6 @@
         <MathText as="h3" className="text-xl font-bold text-gray-900 mb-2" text={selectedLanguage.name} />
         <MathText as="h4" className="text-sm text-gray-600 mb-4" text={selectedLanguage.fullName} />
         
-        {#if !isOperationsView}
         <p class="text-gray-700 mb-6">
           <MathText 
             text={selectedLanguage.definition} 
@@ -315,7 +314,6 @@
               </span>
             {/each}
           </div>
-        {/if}
         {/if}
         
         <div class="space-y-4">

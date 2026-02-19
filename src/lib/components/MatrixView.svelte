@@ -155,7 +155,8 @@
     if (!relation) return `${colLang.name} → ${rowLang.name}: no relation`;
     const label = STATUS_LABELS[relation.status];
     const refs = relation.refs?.length ? ` · refs: ${relation.refs.join(', ')}` : '';
-    return `${colLang.name} → ${rowLang.name}: ${label}${refs}`;
+    const caveatStr = relation.caveat ? ` (unless ${relation.caveat})` : '';
+    return `${colLang.name} → ${rowLang.name}: ${label}${caveatStr}${refs}`;
   }
 
   // Dynamic cell sizing

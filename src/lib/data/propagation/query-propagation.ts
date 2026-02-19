@@ -1,16 +1,48 @@
-import type { GraphData, KCLanguage, KCOpSupport, OperationLemma } from '../../types.js';
+import type { GraphData, KCAdjacencyMatrix, KCLanguage, KCOpSupport, OperationLemma } from '../../types.js';
 import { idToName } from '../../utils/language-id.js';
 import { getAllQueryCodes, QUERIES } from '../operations.js';
 import {
   DEBUG_PROPAGATION,
   POLY_STATUS,
   QUASI_STATUS,
-  computeReachability
+  computeReachability,
+  reconstructPathIndices,
+  ensurePath,
+  collectCaveatsUnion
 } from './helpers.js';
 
 // =============================================================================
-// Level 2: Query Propagation
+// Reachability type with parent tracking for path reconstruction
 // =============================================================================
+type Reachability = { reach: boolean[][]; parent: number[][] };
+
+/**
+ * Merge multiple optional caveats into a single caveat string.
+ * Returns undefined if no caveats, a single caveat if only one unique,
+ * or caveats joined with " OR " if multiple unique caveats.
+ */
+function mergeCaveats(...caveats: (string | undefined)[]): string | undefined {
+  const set = new Set<string>();
+  for (const c of caveats) {
+    if (c) set.add(c);
+  }
+  if (set.size === 0) return undefined;
+  return Array.from(set).join(' OR ');
+}
+
+/**
+ * Collect edge caveats along the reachability path from source to target.
+ */
+function collectPathCaveats(
+  sourceIdx: number,
+  targetIdx: number,
+  parent: number[][],
+  matrix: KCAdjacencyMatrix
+): string | undefined {
+  const pathIndices = reconstructPathIndices(sourceIdx, targetIdx, parent[sourceIdx]);
+  const path = ensurePath(pathIndices, sourceIdx, targetIdx);
+  return collectCaveatsUnion(path, matrix);
+}
 
 /** Statuses that assert "no polynomial" */
 const NO_POLY_QUERY_STATUSES = new Set<string>(['no-poly-unknown-quasi', 'no-poly-quasi', 'no-quasi']);
@@ -60,13 +92,12 @@ function queryAssertsNoQuasi(complexity: string): boolean {
  */
 export function propagateQueriesViaSuccinctness(
   data: GraphData,
-  reachP: { reach: boolean[][] },
-  reachQ: { reach: boolean[][] },
+  reachP: Reachability,
+  reachQ: Reachability,
   polyOnly: boolean
 ): boolean {
   let changed = false;
   const { adjacencyMatrix, languages } = data;
-  const { languageIds } = adjacencyMatrix;
   const queryCodes = getAllQueryCodes();
 
   for (const queryCode of queryCodes) {
@@ -80,6 +111,7 @@ export function propagateQueriesViaSuccinctness(
 
       // Check poly upgrades
       if (polyOnly && queryGuaranteesPoly(l2Complexity)) {
+        const l2Support = getOperationSupport(l2, queryCode);
         for (let l1Idx = 0; l1Idx < languages.length; l1Idx++) {
           const l1 = languages[l1Idx];
           const l1Id = l1.id;
@@ -95,6 +127,11 @@ export function propagateQueriesViaSuccinctness(
               const l2Name = idToName(l2Id);
               const description = `${l1Name} transforms to ${l2Name} in polynomial time, and ${l2Name} supports ${queryCode} in polynomial time. Therefore ${l1Name} supports ${queryCode} in polynomial time.`;
               
+              // Merge caveats from the edge path and L2's query caveat
+              const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
+              const queryCaveat = l2Support?.caveat;
+              const caveat = mergeCaveats(pathCaveat, queryCaveat);
+
               if (DEBUG_PROPAGATION) {
                 console.log(`[Query Propagation] UPGRADE ${l1Name}.${queryCode}: ${l1Complexity} -> poly`);
               }
@@ -103,7 +140,8 @@ export function propagateQueriesViaSuccinctness(
                 complexity: 'poly',
                 refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
                 derived: true,
-                description
+                description,
+                ...(caveat && { caveat })
               });
               changed = true;
             }
@@ -113,6 +151,7 @@ export function propagateQueriesViaSuccinctness(
 
       // Check quasi upgrades
       if (!polyOnly && queryGuaranteesQuasi(l2Complexity)) {
+        const l2Support = getOperationSupport(l2, queryCode);
         for (let l1Idx = 0; l1Idx < languages.length; l1Idx++) {
           const l1 = languages[l1Idx];
           const l1Id = l1.id;
@@ -132,6 +171,11 @@ export function propagateQueriesViaSuccinctness(
             const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
             const description = `${l1Name} transforms to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${queryCode}. Therefore ${l1Name} supports ${queryCode} in at most quasi-polynomial time.`;
             
+            // Merge caveats from the edge path and L2's query caveat
+            const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
+            const queryCaveat = l2Support?.caveat;
+            const caveat = mergeCaveats(pathCaveat, queryCaveat);
+
             if (DEBUG_PROPAGATION) {
               console.log(`[Query Propagation] UPGRADE ${l1Name}.${queryCode}: ${l1Complexity} -> ${newComplexity}`);
             }
@@ -140,7 +184,8 @@ export function propagateQueriesViaSuccinctness(
               complexity: newComplexity,
               refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
               derived: true,
-              description
+              description,
+              ...(caveat && { caveat })
             });
             changed = true;
           }
@@ -168,6 +213,7 @@ export function propagateQueriesViaLemmas(
       // Check if all antecedent operations are supported
       let allSupported = true;
       let worstComplexity = 'poly'; // Start with best, find worst
+      const antecedentCaveats: (string | undefined)[] = [];
 
       for (const antecedentOp of lemma.antecedent) {
         const support = getOperationSupport(language, antecedentOp);
@@ -176,6 +222,7 @@ export function propagateQueriesViaLemmas(
           break;
         }
 
+        antecedentCaveats.push(support.caveat);
         const complexity = support.complexity;
         if (polyOnly) {
           if (!queryGuaranteesPoly(complexity)) {
@@ -212,6 +259,9 @@ export function propagateQueriesViaLemmas(
         const antecedentNames = lemma.antecedent.join(', ');
         const description = `Since ${langName} supports ${antecedentNames}, it also supports ${lemma.consequent}. ${lemma.description}`;
 
+        // Merge caveats from all antecedent operations
+        const caveat = mergeCaveats(...antecedentCaveats);
+
         if (DEBUG_PROPAGATION) {
           console.log(`[Query Propagation] LEMMA ${langName}.${lemma.consequent}: ${consequentComplexity} -> ${targetComplexity} (via ${lemma.id})`);
         }
@@ -223,7 +273,8 @@ export function propagateQueriesViaLemmas(
             complexity: targetComplexity,
             refs: lemma.refs,
             derived: true,
-            description
+            description,
+            ...(caveat && { caveat })
           });
         } else {
           // Transformation consequent
@@ -233,7 +284,8 @@ export function propagateQueriesViaLemmas(
             complexity: targetComplexity,
             refs: lemma.refs,
             derived: true,
-            description
+            description,
+            ...(caveat && { caveat })
           };
         }
         changed = true;
@@ -258,8 +310,8 @@ export function propagateQueriesViaLemmas(
  */
 export function propagateQueryDowngrades(
   data: GraphData,
-  reachP: { reach: boolean[][] },
-  reachQ: { reach: boolean[][] }
+  reachP: Reachability,
+  reachQ: Reachability
 ): boolean {
   let changed = false;
   const { adjacencyMatrix, languages } = data;
@@ -275,6 +327,7 @@ export function propagateQueryDowngrades(
 
       // No-poly propagation: L1 has no-poly, propagate via poly edges
       if (queryAssertsNoPoly(l1Complexity)) {
+        const l1Support = getOperationSupport(l1, queryCode);
         for (const l2 of languages) {
           if (l2.id === l1.id) continue;
           const l2MatrixIdx = adjacencyMatrix.indexByLanguage[l2.id];
@@ -290,6 +343,11 @@ export function propagateQueryDowngrades(
           const l2Name = idToName(l2.id);
           const description = `${l1Name} does not support ${queryCode} in polynomial time, and ${l1Name} transforms to ${l2Name} in polynomial time. If ${l2Name} supported ${queryCode} in polynomial time, then ${l1Name} could too by transforming first. Therefore ${l2Name} does not support ${queryCode} in polynomial time.`;
 
+          // Merge caveats from L1's query and the edge path
+          const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
+          const queryCaveat = l1Support?.caveat;
+          const caveat = mergeCaveats(pathCaveat, queryCaveat);
+
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-poly-unknown-quasi`);
           }
@@ -298,7 +356,8 @@ export function propagateQueryDowngrades(
             complexity: 'no-poly-unknown-quasi',
             refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
             derived: true,
-            description
+            description,
+            ...(caveat && { caveat })
           });
           changed = true;
         }
@@ -306,6 +365,7 @@ export function propagateQueryDowngrades(
 
       // No-quasi propagation: L1 has no-quasi, propagate via quasi edges
       if (queryAssertsNoQuasi(l1Complexity)) {
+        const l1Support = getOperationSupport(l1, queryCode);
         for (const l2 of languages) {
           if (l2.id === l1.id) continue;
           const l2MatrixIdx = adjacencyMatrix.indexByLanguage[l2.id];
@@ -321,6 +381,11 @@ export function propagateQueryDowngrades(
           const l2Name = idToName(l2.id);
           const description = `${l1Name} does not support ${queryCode} in quasi-polynomial time, and ${l1Name} transforms to ${l2Name} in quasi-polynomial time. If ${l2Name} supported ${queryCode}, then ${l1Name} could too by transforming first. Therefore ${l2Name} does not support ${queryCode} in quasi-polynomial time.`;
 
+          // Merge caveats from L1's query and the edge path
+          const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
+          const queryCaveat = l1Support?.caveat;
+          const caveat = mergeCaveats(pathCaveat, queryCaveat);
+
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-quasi`);
           }
@@ -329,7 +394,8 @@ export function propagateQueryDowngrades(
             complexity: 'no-quasi',
             refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
             derived: true,
-            description
+            description,
+            ...(caveat && { caveat })
           });
           changed = true;
         }
@@ -386,6 +452,7 @@ export function propagateDowngradesViaLemmaContrapositives(
           // Check if ALL OTHER antecedents support poly
           let allOthersPolySupported = true;
           const otherAntecedents: string[] = [];
+          const otherCaveats: (string | undefined)[] = [];
           for (let k = 0; k < lemma.antecedent.length; k++) {
             if (k === j) continue;
             const otherOp = lemma.antecedent[k];
@@ -396,6 +463,7 @@ export function propagateDowngradesViaLemmaContrapositives(
               allOthersPolySupported = false;
               break;
             }
+            otherCaveats.push(otherSupport?.caveat);
           }
 
           if (!allOthersPolySupported) continue;
@@ -405,6 +473,9 @@ export function propagateDowngradesViaLemmaContrapositives(
             ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in polynomial time,`
             : '';
           const description = `Since ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent},${othersDesc} if ${langName} cannot support ${lemma.consequent} in polynomial time, it cannot support ${targetOp} in polynomial time either.`;
+
+          // Merge caveats from the consequent and all other antecedents
+          const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
@@ -417,7 +488,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               complexity: 'no-poly-unknown-quasi',
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
-              description
+              description,
+              ...(caveat && { caveat })
             });
           } else {
             if (!language.properties) language.properties = {};
@@ -426,7 +498,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               complexity: 'no-poly-unknown-quasi',
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
-              description
+              description,
+              ...(caveat && { caveat })
             };
           }
           changed = true;
@@ -447,6 +520,7 @@ export function propagateDowngradesViaLemmaContrapositives(
           // Check if ALL OTHER antecedents support quasi
           let allOthersQuasiSupported = true;
           const otherAntecedents: string[] = [];
+          const otherCaveats: (string | undefined)[] = [];
           for (let k = 0; k < lemma.antecedent.length; k++) {
             if (k === j) continue;
             const otherOp = lemma.antecedent[k];
@@ -457,6 +531,7 @@ export function propagateDowngradesViaLemmaContrapositives(
               allOthersQuasiSupported = false;
               break;
             }
+            otherCaveats.push(otherSupport?.caveat);
           }
 
           if (!allOthersQuasiSupported) continue;
@@ -466,6 +541,9 @@ export function propagateDowngradesViaLemmaContrapositives(
             ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in quasi-polynomial time,`
             : '';
           const description = `Since ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent},${othersDesc} if ${langName} cannot support ${lemma.consequent} in quasi-polynomial time, it cannot support ${targetOp} in quasi-polynomial time either.`;
+
+          // Merge caveats from the consequent and all other antecedents
+          const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
@@ -478,7 +556,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               complexity: 'no-quasi',
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
-              description
+              description,
+              ...(caveat && { caveat })
             });
           } else {
             if (!language.properties) language.properties = {};
@@ -487,7 +566,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               complexity: 'no-quasi',
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
-              description
+              description,
+              ...(caveat && { caveat })
             };
           }
           changed = true;

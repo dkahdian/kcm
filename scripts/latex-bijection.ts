@@ -933,7 +933,7 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
     // Update caveat from claim line
     if (claim.caveat) {
       existing.caveat = claim.caveat;
-    } else if (existing.caveat) {
+    } else if ('caveat' in existing) {
       // If caveat was removed from LaTeX, remove it from DB too
       delete existing.caveat;
     }
@@ -1056,14 +1056,30 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
     if (existingRef) {
       // Update existing reference - normalize the bibtex key to match our ID
       const normalizedBibtex = normalizeBibtexKey(bibtex, existingRef.id);
+      let changed = false;
       if (existingRef.bibtex !== normalizedBibtex) {
         existingRef.bibtex = normalizedBibtex;
-        updated++;
+        changed = true;
       }
+      // Regenerate title if it's still just the raw paper title (not a full citation)
+      const rawTitle = extractTitleFromBibtex(bibtex);
+      if (rawTitle && existingRef.title === rawTitle) {
+        existingRef.title = buildCitationFromBibtex(bibtex, existingRef.id);
+        changed = true;
+      }
+      // Update href if missing
+      if (existingRef.href === '#') {
+        const href = extractUrlFromBibtex(bibtex);
+        if (href) {
+          existingRef.href = href;
+          changed = true;
+        }
+      }
+      if (changed) updated++;
     } else {
       // Add new reference with normalized key
       const normalizedBibtex = normalizeBibtexKey(bibtex, key);
-      const title = extractTitleFromBibtex(bibtex) || key;
+      const title = buildCitationFromBibtex(bibtex, key);
       const href = extractUrlFromBibtex(bibtex) || '#';
       
       database.references.push({
@@ -1080,13 +1096,71 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
 }
 
 /**
+ * Extract a BibTeX field value (handles both {braced} and "quoted" values).
+ */
+function extractBibtexField(bibtex: string, field: string): string | null {
+  const re = new RegExp(String.raw`${field}\s*=\s*\{([^}]+)\}`, 'i');
+  const match = bibtex.match(re) || bibtex.match(new RegExp(String.raw`${field}\s*=\s*"([^"]+)"`, 'i'));
+  return match ? match[1].replace(/\s+/g, ' ').trim() : null;
+}
+
+/**
  * Extract title from BibTeX entry
  */
 function extractTitleFromBibtex(bibtex: string): string | null {
-  // Match title = {...} or title = "..."
-  const match = bibtex.match(/title\s*=\s*\{([^}]+)\}/i) || 
-                bibtex.match(/title\s*=\s*"([^"]+)"/i);
-  return match ? match[1].replace(/\s+/g, ' ').trim() : null;
+  return extractBibtexField(bibtex, 'title');
+}
+
+/**
+ * Build a human-readable citation string from BibTeX fields.
+ * Format: "Author(s), \"Title,\" Venue, vol. V, pp. P, Year."
+ */
+function buildCitationFromBibtex(bibtex: string, fallbackKey: string): string {
+  const author = extractBibtexField(bibtex, 'author');
+  const title = extractBibtexField(bibtex, 'title');
+  const journal = extractBibtexField(bibtex, 'journal');
+  const booktitle = extractBibtexField(bibtex, 'booktitle');
+  const volume = extractBibtexField(bibtex, 'volume');
+  const pages = extractBibtexField(bibtex, 'pages');
+  const year = extractBibtexField(bibtex, 'year');
+
+  if (!title) return fallbackKey;
+
+  const parts: string[] = [];
+  if (author) {
+    // Abbreviate first names: "de Colnet, Alexis and Meel, Kuldeep S." → "A. de Colnet and K. S. Meel"
+    const authors = author.split(/\s+and\s+/).map(a => {
+      const commaMatch = a.match(/^(.+?),\s*(.+)$/);
+      if (commaMatch) {
+        const last = commaMatch[1].trim();
+        const firstNames = commaMatch[2].trim().split(/\s+/).map(n => n.endsWith('.') ? n : n[0] + '.').join(' ');
+        return `${firstNames} ${last}`;
+      }
+      // "First Last" format
+      const spaceParts = a.trim().split(/\s+/);
+      if (spaceParts.length >= 2) {
+        const last = spaceParts[spaceParts.length - 1];
+        const firsts = spaceParts.slice(0, -1).map(n => n.endsWith('.') ? n : n[0] + '.').join(' ');
+        return `${firsts} ${last}`;
+      }
+      return a.trim();
+    });
+    parts.push(authors.join(' and '));
+  }
+
+  parts.push(`"${title}"`);
+
+  const venue = journal || booktitle;
+  if (venue) {
+    let venueStr = venue;
+    if (volume) venueStr += `, vol. ${volume}`;
+    if (pages) venueStr += `, pp. ${pages.replace('--', '–')}`;
+    parts.push(venueStr);
+  }
+
+  if (year) parts.push(year);
+
+  return parts.join(', ') + '.';
 }
 
 /**
@@ -2065,7 +2139,7 @@ function updateOpsFromLatex(
       }
       if (claim.caveat) {
         existing.caveat = claim.caveat;
-      } else if (existing.caveat) {
+      } else if ('caveat' in existing) {
         delete existing.caveat;
       }
     } else {

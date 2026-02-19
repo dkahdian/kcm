@@ -150,7 +150,8 @@
     const opDef = operations[opCode];
     if (!support) return `${language.name} - ${opDef?.label ?? opCode}: no data`;
     const complexity = getComplexity(support.complexity);
-    return `${language.name} - ${opDef?.label ?? opCode}: ${complexity.label}`;
+    const caveatStr = support.caveat ? ` (unless ${support.caveat})` : '';
+    return `${language.name} - ${opDef?.label ?? opCode}: ${complexity.label}${caveatStr}`;
   }
 
   // Dynamic cell sizing
@@ -230,7 +231,7 @@
                   onclick={() => handleCellClick(language, opCode)}
                   title={getCellTitle(language, opCode, support)}
                 >
-                  <span class="cell-emoji">{complexity?.emoji ?? '❓'}</span>
+                  <span class="cell-emoji">{complexity?.emoji ?? '❓'}{#if support?.caveat}*{/if}</span>
                 </button>
                 {:else}
                 <span class="matrix-cell matrix-cell--empty" title={`${language.name}: ${opCode} — no data`}>&nbsp;</span>

@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-02-17T23:26:01.388Z
+% Generated: 2026-02-18T00:54:53.255Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -305,7 +305,7 @@ It is well-known that some $CNF$ formulas (i.e. the negation of the parity funct
 $d$-$DNNF$ is polynomial-time transformable to $DNNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by \citet{Darwiche_2002}, $d$-$DNNF$ is a subset of $DNNF$, so a polynomial transformation is trivial.
+As formalized by \citet{Darwiche_2002} and originally introduced in Darwiche (2001), $d$-$DNNF$ is a subset of $DNNF$ satisfying the determinism property, making a polynomial transformation trivial.
 \end{claimdescription}
 
 % separators=$OR_n$
@@ -320,7 +320,7 @@ The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d$-$
 $DNF$ is not polynomial-time transformable to $d$-$DNNF$ unless the polynomial hierarchy collapses \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-A polytime $DNF$-to-$d$-$DNNF$ transformation would enable polytime clausal entailment on $CNF$, collapsing the polynomial hierarchy \citep{Darwiche_2002}.
+Because counting the models of a $d$-$DNNF$ is in P and counting the models of a $DNF$ is \#P-complete, $DNF$ cannot be polynomially compiled into $d$-$DNNF$ unconditionally. Such a transformation implies P = \#P, collapsing the polynomial hierarchy \citep{Darwiche_2002}.
 \end{claimdescription}
 
 \begin{claim}
@@ -364,7 +364,7 @@ As defined by \citet{Darwiche_2002}, $FBDD$ is a subset of $d$-$DNNF$, so a poly
 $IP$ is not quasi-polynomial-time transformable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The pairwise DNF $\Pi_n = \bigvee_{i=0}^{n-1}(x_{2i} \wedge x_{2i+1})$ has $2^n$ prime implicants; its negation $\neg\Pi_n \in IP$ therefore has $2^n$ essential prime implicates, forcing any $CNF$ representation to have at least $2^n$ clauses \citep{Darwiche_2002}.
+While \citet{Darwiche_2002} cites specific examples like the negation of the pairwise DNF $\Pi_n$, the exponential blowup is fundamentally a structural translation issue: distributing a $DNF$ (of which $IP$ is a subset) into a $CNF$ inherently risks an exponential explosion of clauses.
 \end{claimdescription}
 
 \begin{claim}
@@ -524,7 +524,7 @@ Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has $
 $PI$ is not quasi-polynomial-time transformable to $DNNF$ \citet{Bova_2016}
 \end{claim}
 \begin{claimdescription}
-Proposition 11 of \citet{Bova_2016} shows that the $JS_n$ has $PI$ size $O(n^2)$. Proposition 12 of \citet{Bova_2016} shows that $JS_n$ has $DNNF$ size $2^{\Omega(n^2)}$.
+While \citet{Bova_2016} generalizes this separation using communication complexity on the $JS_n$ function (Proposition 11 showing $PI$ size $O(n^2)$ and Proposition 12 showing $DNNF$ size $2^{\Omega(n^2)}$), the foundational unconditional strongly exponential separation of $CNF$ (and by extension $PI$) from $DNNF$ was originally established in \citet{Bova_2014}.
 \end{claimdescription}
 
 
@@ -579,7 +579,7 @@ $d$-$DNNF$s can polynomially represent the disjunction of two functions with con
 $d$-$SDNNF$ is not polynomial-time transformable to $SDD$ \citet{Vinall-Smeeth_2024}
 \end{claim}
 \begin{claimdescription}
-Theorem 1 of \citet{Vinall-Smeeth_2024} proved that there exists a family of functions $f_n$ with $d$-$SDNNF$ of size $n$ but any $SDD$ representing $f_n$ has size $n^{\Omega(log(n))}$
+Theorem 1 of \citet{Vinall-Smeeth_2024} proved that there exists a family of functions $f_n$ with $d$-$SDNNF$ of size $n$ but any $SDD$ representing $f_n$ has size $n^{\Omega(log(n))}$.
 \end{claimdescription}
 
 
@@ -641,8 +641,10 @@ $OBDD$ representations of $HWB_n$ are $2^{\Omega(n)}$\citet{Bryant_1986}, but an
 $OBDD$ is polynomial-time transformable to $SDD$ \citet{Darwiche_2011}
 \end{claim}
 \begin{claimdescription}
-Every $OBDD$ is a right-linear $SDD$; $SDD$ generalizes $OBDD$.
+As established by \citet{Darwiche_2011}, which introduced SDDs as a new central canonical representation, every $OBDD$ is a right-linear $SDD$. Thus, $SDD$ strictly generalizes $OBDD$.
 \end{claimdescription}
+
+
 
 % =============================
 % Bibliography

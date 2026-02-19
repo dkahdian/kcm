@@ -1,7 +1,7 @@
 {
   "languages": [
     {
-      "fullName": "-",
+      "fullName": "Algebraic Normal Form",
       "name": "ANF",
       "properties": {
         "queries": {},
@@ -9,7 +9,7 @@
       },
       "tags": [],
       "id": "lang_8f666aa0",
-      "definition": "-",
+      "definition": "A Boolean formula represented exclusively using the exclusive-OR (XOR) and AND logical operators, taking the shape of a XOR sum of conjunctions. Originally introduced as Zhegalkin polynomials, it is highly structured but generally less space-efficient for standard compilation tasks compared to decision graphs \\citet{Zhegalkin_1927}.",
       "definitionRefs": []
     },
     {
@@ -21,14 +21,14 @@
       },
       "tags": [],
       "id": "lang_bb65ddb5",
-      "definition": "-",
+      "definition": "A directed acyclic graph where each internal node represents a true/false decision on a specific boolean variable. Paths from the root to the leaf nodes explicitly map sequential variable assignments to a final 0 or 1 output \\citet{Lee_1959}.",
       "definitionRefs": []
     },
     {
       "id": "lang_89649e36",
       "name": "CNF",
       "fullName": "Conjunctive Normal Form",
-      "definition": "-",
+      "definition": "A standard logical representation where a formula is an AND of clauses, with each clause being an OR of literals. While it is the foundational input format for modern SAT solvers, it supports very few polynomial-time operations natively \\citet{Boole_1847}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -157,7 +157,7 @@
       "tags": []
     },
     {
-      "fullName": "-",
+      "fullName": "Canonical/Compressed Sentential Decision Diagram",
       "name": "cSDD",
       "properties": {
         "queries": {
@@ -214,7 +214,7 @@
       },
       "tags": [],
       "id": "lang_83e3b023",
-      "definition": "-",
+      "definition": "A Sentential Decision Diagram that has been aggressively compressed by merging isomorphic subgraphs and eliminating redundant decision nodes. This structural compression is critical for ensuring the representation remains as succinct as possible \\citet{Darwiche_2011}.",
       "definitionRefs": []
     },
     {
@@ -332,7 +332,7 @@
       },
       "tags": [],
       "id": "lang_6c130090",
-      "definition": "-",
+      "definition": "A variant of DNNF where the children of every OR node represent mutually exclusive (deterministic) formulas. This added determinism is the critical property that enables efficient, linear-time model counting and probabilistic inference \\citet{Darwiche_2001a}.",
       "definitionRefs": []
     },
     {
@@ -386,7 +386,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since d-SDNNF supports CO, CD, it also supports ME. CO and CD imply ME: First test consistency (polytime via CO). If inconsistent, return the empty set. Otherwise, build a decision tree of models by iterating over variables $x_1, \\ldots, x_n$ and using CD to test consistency of $\\Sigma | \\alpha \\land x_i$ and $\\Sigma | \\alpha \\land \\neg x_i$ for each leaf term $\\alpha$. Since one branch must succeed for consistent terms, the tree has $O(mn)$ tests where $m$ is the model count and $n$ is the variable count."
+            "description": "d-SDNNF transforms to d-DNNF in polynomial time, and d-DNNF supports ME in polynomial time. Therefore d-SDNNF supports ME in polynomial time."
           },
           "IM": {
             "complexity": "poly",
@@ -394,50 +394,36 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since d-SDNNF supports VA, CD, it also supports IM. VA and CD imply IM: To test whether consistent term $\\alpha$ entails sentence $\\Sigma$, i.e. $\\alpha \\models \\Sigma$, test whether $\\neg\\alpha \\lor \\Sigma$ is valid. This is equivalent to $\\neg\\alpha \\lor (\\Sigma | \\alpha)$. Since $\\neg\\alpha$ and $\\Sigma | \\alpha$ share no variables, the disjunction is valid iff $\\neg\\alpha$ is valid or $\\Sigma | \\alpha$ is valid. Since $\\alpha$ is consistent, $\\neg\\alpha$ cannot be valid. Thus we test validity of $\\Sigma | \\alpha$, constructible in polytime via CD and testable in polytime via VA."
+            "description": "d-SDNNF transforms to d-DNNF in polynomial time, and d-DNNF supports IM in polynomial time. Therefore d-SDNNF supports IM in polynomial time."
           }
         },
         "transformations": {
-          "CD": {
-            "complexity": "poly",
+          "NOT_C": {
+            "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Vinall-Smeeth_2024"
             ],
-            "description": "Conditioning preserves smoothness, decomposability, and determinism. If $\\text{Vars}(\\alpha) = \\text{Vars}(\\beta)$, then $\\text{Vars}(\\alpha|\\gamma) = \\text{Vars}(\\beta|\\gamma)$ (\\citet{Darwiche_2002}, Proposition 5.1)."
-          },
-          "SFO": {
-            "complexity": "no-poly-unknown-quasi",
-            "refs": [
-              "Darwiche_2002"
-            ],
-            "description": "Since d-DNNF does not satisfy SFO unless P = NP, and every d-DNNF formula can be turned into an equivalent d-SDNNF formula in polytime, d-SDNNF also does not satisfy SFO (\\citet{Darwiche_2002}, Proposition 5.1)."
-          },
-          "FO": {
-            "complexity": "no-poly-unknown-quasi",
-            "refs": [
-              "Darwiche_2002"
-            ],
-            "description": "Since d-DNNF does not satisfy FO unless P = NP, and every d-DNNF formula can be turned into an equivalent d-SDNNF formula in polytime, d-SDNNF also does not satisfy FO (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "Structured deterministic DNNF ($d$-$SDNNF$) is not closed under negation. \\citet{Vinall-Smeeth_2024} formally proves that there exist Boolean functions with polynomial-size $d$-$SDNNF$ representations whose exact negations require exponential-size $d$-$SDNNF$s."
           },
           "OR_BC": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Vinall-Smeeth_2024"
             ],
-            "description": "Since d-DNNF does not satisfy $\\lor$BC unless P = NP, and every d-DNNF formula can be turned into an equivalent d-SDNNF formula in polytime, d-SDNNF also does not satisfy $\\lor$BC (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "Unlike $OBDD$, structured $d$-$SDNNF$ does not support quasi-polynomial-time disjunction. The combination of strict determinism and a rigid vtree structure prevents tractable $\\vee$BC operations without an exponential worst-case blowup \\citet{Vinall-Smeeth_2024}."
           },
-          "AND_BC": {
-            "complexity": "no-poly-unknown-quasi",
+          "FO": {
+            "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Vinall-Smeeth_2024"
             ],
-            "description": "Since d-SDNNF satisfies CO and every d-DNNF can be smoothed in polytime, the NP-completeness of consistency checking for two OBDDs with different orderings transfers: d-SDNNF cannot satisfy $\\land$BC unless P = NP (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "Existential quantification (Forgetting) is not supported in polynomial time for $d$-$SDNNF$. Forgetting variables generally destroys the determinism of the underlying circuit. Restoring determinism while strictly adhering to the structural vtree constraints incurs an exponential blowup \\citet{Vinall-Smeeth_2024}."
           }
         }
       },
       "tags": [],
       "id": "lang_ea9b5299",
-      "definition": "-",
+      "definition": "A deterministic DNNF where the variable decomposition across the graph is governed by a hierarchical variable tree (vtree). This tree-driven structure standardizes the graph's layout while retaining the powerful tractability of determinism \\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
@@ -449,14 +435,14 @@
       },
       "tags": [],
       "id": "lang_91f812d0",
-      "definition": "-",
+      "definition": "A deterministic structured DNNF whose decomposition structure adheres exactly to a specific, fixed vtree $T$. This strict conformation enables advanced polytime operations, such as equivalence checking, when the vtree is shared \\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
       "id": "lang_4c204bf3",
       "name": "DNF",
       "fullName": "Disjunctive Normal Form",
-      "definition": "-",
+      "definition": "A logical formula expressed as an OR of terms, where each term is an AND of literals. Although it natively supports polynomial-time validity checks, converting arbitrary Boolean formulas into DNF often triggers an exponential blowup in size \\citet{Boole_1847}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -716,7 +702,7 @@
       },
       "tags": [],
       "id": "lang_3bebcab7",
-      "definition": "-",
+      "definition": "A Negation Normal Form circuit where the children of every AND node operate on completely disjoint sets of variables. This non-overlapping variable property, known as decomposability, guarantees polynomial-time consistency checking \\citet{Darwiche_2001a}.",
       "definitionRefs": []
     },
     {
@@ -749,7 +735,6 @@
             "description": "$FBDD$ satisfies CT \\citet{Gergov_1994, Darwiche_2002}. Model counting on FBDDs can be done in polynomial time by a single bottom-up pass counting satisfying assignments at each node."
           },
           "EQ": {
-            "caveat": "",
             "complexity": "unknown-to-us",
             "refs": [],
             "description": "Unlike OBDDs, FBDDs are not canonical, so equivalence checking is not straightforward. The complexity of EQ for FBDDs requires further investigation."
@@ -848,7 +833,7 @@
       },
       "tags": [],
       "id": "lang_684b1ca7",
-      "definition": "-",
+      "definition": "A Binary Decision Diagram that allows variables to be tested in any order along any given path, provided no variable is tested more than once per path. This relaxation of strict linear ordering allows for significantly more succinct representations than OBDDs for certain functions \\citet{Gergov_1994}.",
       "definitionRefs": []
     },
     {
@@ -934,28 +919,28 @@
             "description": "$\\text{IP}(\\alpha_1 \\land \\alpha_2) = \\max(\\{\\beta_1 \\land \\beta_2 \\mid \\beta_1 \\in \\text{IP}(\\alpha_1), \\beta_2 \\in \\text{IP}(\\alpha_2)\\}, \\models)$ (dual of Proposition 40, Marquis 2000). The maximization removes subsuming terms, yielding an IP form in polytime (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "OR_BC": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "Combining prime implicants via disjunction requires distributing and re-minimizing terms, which can lead to an exponential explosion of new prime implicants. Let $\\alpha_1 = \\bigwedge_{i=1}^k p_i$ (one prime implicant) and $\\alpha_2 = \\bigvee_{i=1}^k \\bigvee_{j=1}^m (\\neg p_i \\land q_{i,j})$ ($mk$ prime implicants). Then $\\alpha_1 \\lor \\alpha_2$ has $(m+1)^k + mk$ prime implicants, an exponential blowup \\citet{Chandra_1978} (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "NOT_C": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "Dual of PI: $\\Sigma_n = \\bigvee_{i=0}^{n-1}(x_{2i} \\land x_{2i+1})$ is in IP form but has $2^n$ prime implicates. Its negation has $2^n$ prime implicants. Hence IP cannot satisfy $\\neg$C (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "SFO": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "The number of prime implicants of $\\exists x.\\Sigma$ can be exponentially greater than the number of prime implicants of $\\Sigma$ \\citet{Chandra_1978}. A specific construction with $mk+1$ prime implicants produces $(m+1)^k + mk$ prime implicants after forgetting one variable (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "FO": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
@@ -979,7 +964,7 @@
       },
       "tags": [],
       "id": "lang_6ae90adc",
-      "definition": "-",
+      "definition": "A formula represented exactly as the disjunction of all its minimal entailing conjunctions (prime implicants). It is extensively used in logical diagnosis and circuit minimization tasks \\citet{Quine_1952}.",
       "definitionRefs": []
     },
     {
@@ -1077,28 +1062,28 @@
             "description": "The bounded conjunction of two MODS formulas (over the same variables) is simply taking the intersection of their model sets. If the variables differ, it is the intersection of their cylindrical extensions. The result is a MODS sentence in polytime (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "NOT_C": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "$\\Sigma = \\bigwedge_{i=1}^n x_i$ has only one model over $\\{x_1,\\ldots,x_n\\}$ but its negation $\\neg\\Sigma$ has $2^n - 1$ models. Hence MODS cannot satisfy $\\neg$C (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "OR_C": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "Let $\\alpha_1 = \\bigwedge_{i=1}^n x_i$ (1 model) and $\\alpha_2 = y$ (1 model). Then $\\alpha_1 \\lor \\alpha_2$ has $2^n + 1$ models over $\\text{Vars}(\\alpha_1) \\cup \\text{Vars}(\\alpha_2)$. Hence MODS cannot satisfy $\\lor$C (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "AND_C": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "Let $\\Sigma_i = (x_{i,1} \\lor x_{i,2})$ for $i = 1,\\ldots,n$. Each $\\Sigma_i$ has 3 models. But $\\Sigma = \\bigwedge_{i=1}^n \\Sigma_i$ has $3^n$ models, so no polynomial-size MODS representation exists (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "OR_BC": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
@@ -1115,11 +1100,11 @@
       },
       "tags": [],
       "id": "lang_e02902d0",
-      "definition": "-",
+      "definition": "An explicit representation where a formula is defined purely by enumerating all of its satisfying truth assignments. While mathematically trivial to query, it is almost always exponentially large in practice \\citet{Darwiche_2002}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Nondeterministic Free Binary Decision Diagram",
       "name": "nFBDD",
       "properties": {
         "queries": {
@@ -1154,13 +1139,20 @@
             ],
             "derived": true,
             "description": "nFBDD transforms to DNNF in polynomial time, and DNNF supports ME in polynomial time. Therefore nFBDD supports ME in polynomial time."
+          },
+          "CT": {
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Colnet_2025"
+            ],
+            "description": "Exact model counting for non-deterministic read-once branching programs ($nFBDD$) is \\#P-hard. This is because non-determinism allows multiple computational paths to satisfy the same assignment, making the counting of unique models significantly more difficult than in the deterministic ($FBDD$) case \\citet{Colnet_2025}."
           }
         },
         "transformations": {}
       },
       "tags": [],
       "id": "lang_1df07cc3",
-      "definition": "-",
+      "definition": "A theoretical generalization of the FBDD that allows for nondeterministic \"guess\" nodes in addition to standard variable decisions. While extremely succinct, this nondeterminism generally ruins the polytime querying capabilities of the diagram \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -1294,11 +1286,11 @@
       },
       "tags": [],
       "id": "lang_5bf00851",
-      "definition": "-",
+      "definition": "A boolean formula constructed strictly with AND, OR, and literals, where negations are only allowed directly on the variables. It serves as the broad, foundational structural superset for most tractable knowledge compilation languages \\citet{Darwiche_2002}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "nondeterministic Ordered Binary Decision Diagram",
       "name": "nOBDD",
       "properties": {
         "queries": {
@@ -1339,7 +1331,7 @@
       },
       "tags": [],
       "id": "lang_d24efe0e",
-      "definition": "-",
+      "definition": "A generalization of the OBDD that permits nondeterministic branching while still enforcing a global linear variable ordering for its standard decision nodes. This allows for smaller circuit sizes at the cost of losing tractability for many standard queries \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -1348,7 +1340,6 @@
       "properties": {
         "queries": {
           "CE": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Darwiche_2002"
@@ -1356,7 +1347,6 @@
             "description": "$OBDD_<$ satisfies CO and CD. By Lemma A.4, CO and CD imply CE: to test $\\Sigma \\models \\alpha$ for clause $\\alpha$, condition on $\\neg\\alpha$ and check consistency (\\citet{Darwiche_2002}, Proposition 4.1, Table 20)."
           },
           "CO": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1364,7 +1354,6 @@
             "description": "Consistency is trivial for OBDDs: check if the diagram root is not the terminal 0 node \\citet{Bryant_1986}."
           },
           "CT": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1372,7 +1361,6 @@
             "description": "Model counting on OBDDs can be done in polynomial time by a single bottom-up pass \\citet{Bryant_1986, Bryant_1992}."
           },
           "EQ": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986",
@@ -1382,7 +1370,6 @@
             "description": "OBDDs with a fixed variable ordering are canonical: two functions are equivalent iff their reduced OBDDs are identical. This makes EQ trivial (structural isomorphism check) \\citet{Bryant_1986, Bryant_1992, Meinel_Theobald_1998} (Theorem 8.11)."
           },
           "IM": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Darwiche_2002"
@@ -1390,7 +1377,6 @@
             "description": "$OBDD_<$ satisfies VA and CD. By Lemma A.7, VA and CD imply IM: to test whether term $\\alpha \\models \\Sigma$, condition on $\\alpha$ and check validity (\\citet{Darwiche_2002}, Proposition 4.1, Table 20)."
           },
           "ME": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1398,7 +1384,6 @@
             "description": "Models of an OBDD can be enumerated in time polynomial in the output size by traversing all root-to-1-sink paths. Each path corresponds to a (partial) assignment that can be expanded to full models."
           },
           "SE": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Darwiche_2002"
@@ -1406,7 +1391,6 @@
             "description": "Since $OBDD_<$ satisfies CO, $\\neg$C and $\\land$BC, checking $\\Sigma_1 \\models \\Sigma_2$ reduces to checking whether $\\Sigma_1 \\land \\neg\\Sigma_2$ is inconsistent, which can be computed in polytime (\\citet{Darwiche_2002}, Proposition 4.1, Table 20)."
           },
           "VA": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1416,7 +1400,6 @@
         },
         "transformations": {
           "AND_BC": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1424,7 +1407,6 @@
             "description": "The Apply algorithm computes the conjunction of two OBDD$_<$ sentences sharing the same variable ordering in polynomial time. The result is a reduced OBDD$_<$ \\citet{Bryant_1986}."
           },
           "AND_C": {
-            "caveat": "",
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "Darwiche_2002"
@@ -1432,7 +1414,6 @@
             "description": "It is straightforward to convert a clause into an equivalent OBDD$_<$ formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent OBDD$_<$ formulas in polynomial space (CNF $\\not\\leq$ OBDD$_<$), OBDD$_<$ does not satisfy $\\land$C (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "CD": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1440,7 +1421,6 @@
             "description": "Conditioning (the restrict operation) on OBDD$_<$ replaces each node labeled by a variable in the conditioning term with one of its children, according to the sign of the variable. The result is a valid OBDD$_<$ \\citet{Bryant_1986}."
           },
           "FO": {
-            "caveat": "",
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "Darwiche_2002"
@@ -1448,7 +1428,6 @@
             "description": "If OBDD$_<$ satisfies FO, then every DNF sentence $\\Gamma$ can be compiled to an equivalent OBDD$_<$ of polynomial size (using fresh selector variables and then applying FO). Since DNF $\\not\\leq$ OBDD$_<$, this is impossible (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "NOT_C": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1456,7 +1435,6 @@
             "description": "Negation of an OBDD$_<$ is achieved by switching the labels of the 0-sink and 1-sink. The result is an OBDD$_<$ of identical size \\citet{Bryant_1986}."
           },
           "OR_BC": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Bryant_1986"
@@ -1464,7 +1442,6 @@
             "description": "The Apply algorithm computes the disjunction of two OBDD$_<$ sentences sharing the same variable ordering in polynomial time. The result is a reduced OBDD$_<$ \\citet{Bryant_1986}."
           },
           "OR_C": {
-            "caveat": "",
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "Darwiche_2002"
@@ -1472,7 +1449,6 @@
             "description": "It is straightforward to convert any term into an equivalent OBDD$_<$ formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent OBDD$_<$ formulas in polynomial space (DNF $\\not\\leq$ OBDD$_<$), OBDD$_<$ does not satisfy $\\lor$C (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "SFO": {
-            "caveat": "",
             "complexity": "poly",
             "refs": [
               "Darwiche_2002"
@@ -1483,7 +1459,7 @@
       },
       "tags": [],
       "id": "lang_d69995dd",
-      "definition": "Ordered Binary Decision Diagram with respect to a fixed variable order",
+      "definition": "An OBDD where the specific linear ordering of variables is fixed universally and known in advance. This strictness allows the equivalence of two distinct functions to be checked in constant time \\citet{Bryant_1986}.",
       "definitionRefs": [
         "Bryant_1986"
       ]
@@ -1579,14 +1555,14 @@
             "description": "$\\text{PI}(\\alpha_1 \\lor \\alpha_2) = \\min(\\{\\beta_1 \\lor \\beta_2 \\mid \\beta_1 \\in \\text{PI}(\\alpha_1), \\beta_2 \\in \\text{PI}(\\alpha_2)\\}, \\models)$ (Proposition 40, Marquis 2000). The minimization removes subsumed clauses, yielding a PI form in polytime (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "AND_BC": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
             "description": "Combining prime implicates via conjunction requires distributing and re-minimizing clauses, which can lead to an exponential explosion of new prime implicates. Let $\\alpha_1 = \\bigvee_{i=1}^k p_i$ (one prime implicate) and $\\alpha_2 = \\bigwedge_{i=1}^k \\bigwedge_{j=1}^m (\\neg p_i \\lor q_{i,j})$ ($mk$ prime implicates). Then $\\alpha_1 \\land \\alpha_2$ has $(m+1)^k + mk$ prime implicates, an exponential blowup \\citet{Chandra_1978} (\\citet{Darwiche_2002}, Proposition 5.1)."
           },
           "NOT_C": {
-            "complexity": "no-poly-unknown-quasi",
+            "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002"
             ],
@@ -1617,11 +1593,11 @@
       },
       "tags": [],
       "id": "lang_27fffab2",
-      "definition": "-",
+      "definition": "A formula represented exactly as the conjunction of all its minimal entailed disjunctive clauses (prime implicates). It is heavily utilized in consequence finding and hypothesis generation \\citet{Quine_1952}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Sentential Decision Diagram",
       "name": "SDD",
       "properties": {
         "queries": {
@@ -1686,11 +1662,11 @@
       },
       "tags": [],
       "id": "lang_1afefbe2",
-      "definition": "-",
+      "definition": "A representation that generalizes OBDDs by replacing strict linear variable orderings with a hierarchical variable partitioning tree (vtree). SDDs tend to be significantly more succinct than OBDDs while retaining comparable polynomial-time logical operations \\citet{Darwiche_2011}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Sentential Decision Diagram (wrt a fixed variable tree)",
       "name": "SDD$_T$",
       "properties": {
         "queries": {},
@@ -1698,11 +1674,11 @@
       },
       "tags": [],
       "id": "lang_9c84a267",
-      "definition": "-",
+      "definition": "An SDD constructed specifically to adhere to a fixed variable tree (vtree) $T$. When operations are restricted to SDDs sharing the same vtree, they benefit from polytime combination functions \\citet{Darwiche_2011}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Structured Decomposable Negation Normal Form",
       "name": "SDNNF",
       "properties": {
         "queries": {
@@ -1743,11 +1719,11 @@
       },
       "tags": [],
       "id": "lang_b13b0d78",
-      "definition": "-",
+      "definition": "A Decomposable Negation Normal Form (DNNF) where the decomposability of variables across AND nodes is strictly governed by a hierarchical variable tree (vtree). This guarantees that variable partitions occur systematically \\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Structured Decomposable Negation Normal Form (wrt a fixed variable tree)",
       "name": "SDNNF$_T$",
       "properties": {
         "queries": {},
@@ -1755,11 +1731,11 @@
       },
       "tags": [],
       "id": "lang_3c803ba1",
-      "definition": "-",
+      "definition": "A Structured DNNF compiled to adhere exactly to the variable partitions defined by a fixed vtree $T$. Aligning to a fixed vtree allows separate structures to be compared or combined more reliably \\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Unambiguous Free Binary Decision Diagram",
       "name": "uFBDD",
       "properties": {
         "queries": {
@@ -1824,11 +1800,11 @@
       },
       "tags": [],
       "id": "lang_4e62a038",
-      "definition": "-",
+      "definition": "A restricted form of a nondeterministic FBDD where every satisfying assignment has exactly one valid accepting path. This \"unambiguity\" preserves the ability to perform efficient model counting while allowing for greater compression \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Unambiguous Ordered Binary Decision Diagram",
       "name": "uOBDD",
       "properties": {
         "queries": {
@@ -1893,7 +1869,7 @@
       },
       "tags": [],
       "id": "lang_c2df8c2b",
-      "definition": "-",
+      "definition": "A nondeterministic OBDD restricted to unambiguous choices, maintaining efficient counting capabilities while strictly following a global variable order. It provides a middle ground between the strictness of OBDDs and the compression of nondeterminism \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -2030,7 +2006,7 @@
       },
       "tags": [],
       "id": "lang_b9d72a7c",
-      "definition": "-",
+      "definition": "A Binary Decision Diagram where all variable decisions must follow a strict, uniform linear order across every path in the graph. They are strongly canonical and support powerful polytime Boolean operations, making them ubiquitous in formal hardware verification \\citet{Bryant_1986}.",
       "definitionRefs": [
         "Darwiche_2002"
       ]
@@ -2038,7 +2014,7 @@
     {
       "id": "lang_981b62f0",
       "name": "dec-DNNF",
-      "fullName": "-",
+      "fullName": "Decision Decomposable Negation Normal Form",
       "properties": {
         "queries": {
           "CE": {
@@ -2101,13 +2077,13 @@
         "transformations": {}
       },
       "tags": [],
-      "definition": "-",
+      "definition": "A subset of DNNF where standard logical OR nodes are entirely replaced by decision nodes, similar to those found in BDDs. Because it relies explicitly on variable conditioning, it serves as the natural compilation trace of exhaustive DPLL-based SAT solvers \\citet{Oztok_2014}.",
       "definitionRefs": []
     },
     {
       "id": "lang_0f27d539",
       "name": "dec-SDNNF",
-      "fullName": "-",
+      "fullName": "Structured Decision Decomposable Negation Normal Form",
       "properties": {
         "queries": {
           "CE": {
@@ -2179,31 +2155,31 @@
         "transformations": {}
       },
       "tags": [],
-      "definition": "-",
+      "definition": "A decision DNNF whose underlying variable decisions strictly follow a hierarchical variable tree (vtree). This tree-driven structure standardizes the compilation trace and bridges the gap to sentential decision diagrams \\citet{Oztok_2014}.",
       "definitionRefs": []
     },
     {
       "id": "lang_4ae03bc8",
       "name": "dec-SDNNF$_<$",
-      "fullName": "-",
+      "fullName": "Structured Decision Decomposable Negation Normal Form (wrt a fixed variable tree)",
       "properties": {
         "queries": {},
         "transformations": {}
       },
       "tags": [],
-      "definition": "-",
+      "definition": "A decision structured DNNF where the variables are evaluated in a strict, predefined linear order across the entire graph. This effectively restricts the language to mimic the strict linear evaluations seen in ordered decision diagrams \\citet{Oztok_2014}.",
       "definitionRefs": []
     },
     {
       "id": "lang_82fa749e",
       "name": "cSDD$_T$",
-      "fullName": "-",
+      "fullName": "Canonical/Compressed Sentential Decision Diagram (wrt a fixed variable tree)",
       "properties": {
         "queries": {},
         "transformations": {}
       },
       "tags": [],
-      "definition": "-",
+      "definition": "A compressed SDD that strictly conforms to a predefined variable tree (vtree) $T$. By adhering to a fixed vtree alongside aggressive node compression, the resulting Boolean representation is guaranteed to be strictly canonical \\citet{Darwiche_2011}.",
       "definitionRefs": []
     }
   ],
@@ -2372,33 +2348,75 @@
     },
     {
       "id": "Darwiche_2001b",
-      "title": "On the Tractable Counting of Theory Models and its Application to Truth Maintenance and Belief Revision",
-      "href": "#",
-      "bibtex": "@inproceedings{Darwiche_2001b,\n  author = {Darwiche, Adnan},\n  title = {On the Tractable Counting of Theory Models and its Application to Truth Maintenance and Belief Revision},\n  booktitle = {Journal of Applied Non-Classical Logics},\n  volume = {11},\n  number = {1--2},\n  pages = {11--34},\n  year = {2001},\n  publisher = {Taylor \\& Francis}\n}"
+      "bibtex": "@inproceedings{Darwiche_2001b,\n  author = {Darwiche, Adnan},\n  title = {On the Tractable Counting of Theory Models and its Application to Truth Maintenance and Belief Revision},\n  booktitle = {Journal of Applied Non-Classical Logics},\n  volume = {11},\n  number = {1--2},\n  pages = {11--34},\n  year = {2001},\n  publisher = {Taylor \\& Francis}\n}",
+      "title": "A. Darwiche, \"On the Tractable Counting of Theory Models and its Application to Truth Maintenance and Belief Revision,\" Journal of Applied Non-Classical Logics, 2001.",
+      "href": "https://doi.org/10.3166/jancl.11.11-34"
     },
     {
       "id": "Roth_1996",
-      "title": "On the Hardness of Approximate Reasoning",
-      "href": "#",
-      "bibtex": "@article{Roth_1996,\n  author = {Roth, Dan},\n  title = {On the Hardness of Approximate Reasoning},\n  journal = {Artificial Intelligence},\n  volume = {82},\n  number = {1--2},\n  pages = {273--302},\n  year = {1996},\n  publisher = {Elsevier}\n}"
+      "bibtex": "@article{Roth_1996,\n  author = {Roth, Dan},\n  title = {On the Hardness of Approximate Reasoning},\n  journal = {Artificial Intelligence},\n  volume = {82},\n  number = {1--2},\n  pages = {273--302},\n  year = {1996},\n  publisher = {Elsevier}\n}",
+      "title": "D. Roth, \"On the Hardness of Approximate Reasoning,\" Artificial Intelligence, 1996.",
+      "href": "https://doi.org/10.1016/0004-3702(94)00092-1"
     },
     {
       "id": "Marquis_2000",
-      "title": "Consequence Finding Algorithms",
-      "href": "#",
-      "bibtex": "@article{Marquis_2000,\n  author = {Marquis, Pierre},\n  title = {Consequence Finding Algorithms},\n  journal = {Handbook of Defeasible Reasoning and Uncertainty Management Systems},\n  volume = {5},\n  pages = {41--145},\n  year = {2000},\n  publisher = {Springer}\n}"
+      "bibtex": "@article{Marquis_2000,\n  author = {Marquis, Pierre},\n  title = {Consequence Finding Algorithms},\n  journal = {Handbook of Defeasible Reasoning and Uncertainty Management Systems},\n  volume = {5},\n  pages = {41--145},\n  year = {2000},\n  publisher = {Springer}\n}",
+      "title": "P. Marquis, \"Consequence Finding Algorithms,\" Handbook of Defeasible Reasoning and Uncertainty Management Systems, Springer, 2000.",
+      "href": "https://doi.org/10.1007/978-94-017-1735-9_2"
     },
     {
       "id": "Lang_2000",
-      "title": "Propositional Independence: Formula-Variable Independence and Forgetting",
-      "href": "#",
-      "bibtex": "@article{Lang_2000,\n  author = {Lang, J\\'er\\^ome and Liberatore, Paolo and Marquis, Pierre},\n  title = {Propositional Independence: Formula-Variable Independence and Forgetting},\n  journal = {Journal of Artificial Intelligence Research},\n  volume = {18},\n  pages = {391--443},\n  year = {2003},\n  publisher = {AAAI Press}\n}"
+      "bibtex": "@article{Lang_2000,\n  author = {Lang, J\\'er\\^ome and Liberatore, Paolo and Marquis, Pierre},\n  title = {Propositional Independence: Formula-Variable Independence and Forgetting},\n  journal = {Journal of Artificial Intelligence Research},\n  volume = {18},\n  pages = {391--443},\n  year = {2003},\n  publisher = {AAAI Press}\n}",
+      "title": "J. Lang, P. Liberatore, and P. Marquis, \"Propositional Independence: Formula-Variable Independence and Forgetting,\" Journal of Artificial Intelligence Research, 2003.",
+      "href": "https://doi.org/10.1613/jair.1158"
     },
     {
       "id": "Chandra_1978",
-      "title": "On the Number of Prime Implicants",
-      "href": "#",
-      "bibtex": "@article{Chandra_1978,\n  author = {Chandra, Ashok K. and Markowsky, George},\n  title = {On the Number of Prime Implicants},\n  journal = {Discrete Mathematics},\n  volume = {24},\n  number = {1},\n  pages = {7--11},\n  year = {1978},\n  publisher = {Elsevier}\n}"
+      "bibtex": "@article{Chandra_1978,\n  author = {Chandra, Ashok K. and Markowsky, George},\n  title = {On the Number of Prime Implicants},\n  journal = {Discrete Mathematics},\n  volume = {24},\n  number = {1},\n  pages = {7--11},\n  year = {1978},\n  publisher = {Elsevier}\n}",
+      "title": "A. K. Chandra and G. Markowsky, \"On the Number of Prime Implicants,\" Discrete Mathematics, 1978.",
+      "href": "https://doi.org/10.1016/0012-365X(78)90172-1"
+    },
+    {
+      "id": "Zhegalkin_1927",
+      "bibtex": "@article{Zhegalkin_1927,\n  title={On the Technique of Calculating Propositions in Symbolic Logic},\n  author={Zhegalkin, Ivan I},\n  journal={Matematicheskii Sbornik},\n  volume={34},\n  number={1},\n  pages={9--28},\n  year={1927}\n}",
+      "title": "I. I. Zhegalkin, \"On the Technique of Calculating Propositions in Symbolic Logic,\" Matematicheskii Sbornik, 1927.",
+      "href": "https://mathnet.ru/eng/sm7277"
+    },
+    {
+      "id": "Lee_1959",
+      "bibtex": "@article{Lee_1959,\n  title={Representation of Switching Circuits by Binary-Decision Programs},\n  author={Lee, C. Y.},\n  journal={Bell System Technical Journal},\n  volume={38},\n  number={4},\n  pages={985--999},\n  year={1959},\n  publisher={Alcatel-Lucent}\n}",
+      "title": "C. Y. Lee, \"Representation of Switching Circuits by Binary-Decision Programs,\" Bell System Technical Journal, 1959.",
+      "href": "https://doi.org/10.1002/j.1538-7305.1959.tb01585.x"
+    },
+    {
+      "id": "Boole_1847",
+      "bibtex": "@book{Boole_1847,\n  title={The Mathematical Analysis of Logic: Being an Essay Towards a Calculus of Deductive Reasoning},\n  author={Boole, George},\n  year={1847},\n  publisher={Macmillan, Barclay, \\& Macmillan}\n}",
+      "title": "G. Boole, \"The Mathematical Analysis of Logic: Being an Essay Towards a Calculus of Deductive Reasoning,\" Macmillan, Barclay, & Macmillan, 1847.",
+      "href": "https://archive.org/details/mathematicalana00boolgoog"
+    },
+    {
+      "id": "Quine_1952",
+      "bibtex": "@article{Quine_1952,\n  title={The Problem of Simplifying Truth Functions},\n  author={Quine, Willard V.},\n  journal={The American Mathematical Monthly},\n  volume={59},\n  number={8},\n  pages={521--531},\n  year={1952},\n  publisher={Taylor \\& Francis}\n}",
+      "title": "W. V. Quine, \"The Problem of Simplifying Truth Functions,\" The American Mathematical Monthly, 1952.",
+      "href": "https://doi.org/10.2307/2308219"
+    },
+    {
+      "id": "Pipatsrisawat_2008",
+      "bibtex": "@inproceedings{Pipatsrisawat_2008,\n  title={New Compilation Languages Based on Structured Decomposability},\n  author={Pipatsrisawat, Knot and Darwiche, Adnan},\n  booktitle={Proceedings of the 23rd National Conference on Artificial Intelligence - Volume 1},\n  pages={517--522},\n  year={2008},\n  publisher={AAAI Press}\n}",
+      "title": "K. Pipatsrisawat and A. Darwiche, \"New Compilation Languages Based on Structured Decomposability,\" Proceedings of the 23rd National Conference on Artificial Intelligence, AAAI Press, 2008.",
+      "href": "https://dl.acm.org/doi/10.5555/1620163.1620241"
+    },
+    {
+      "id": "Oztok_2014",
+      "bibtex": "@inproceedings{Oztok_2014,\n  title={On Compiling CNF into Decision-DNNF},\n  author={Oztok, Umut and Darwiche, Adnan},\n  booktitle={International Conference on Principles and Practice of Constraint Programming},\n  pages={42--57},\n  year={2014},\n  publisher={Springer}\n}",
+      "title": "U. Oztok and A. Darwiche, \"On Compiling CNF into Decision-DNNF,\" International Conference on Principles and Practice of Constraint Programming, Springer, 2014.",
+      "href": "https://doi.org/10.1007/978-3-319-10428-7_6"
+    },
+    {
+      "id": "Colnet_2025",
+      "title": "A. de Colnet and K. S. Meel, \"An FPRAS for Model Counting for Non-Deterministic Read-Once Branching Programs\", 28th International Conference on Database Theory (ICDT 2025), 2025.",
+      "href": "https://doi.org/10.4230/LIPIcs.ICDT.2025.10",
+      "bibtex": "@inproceedings{Colnet_2025,\n  author={de Colnet, Alexis and Meel, Kuldeep S.},\n  title={An FPRAS for Model Counting for Non-Deterministic Read-Once Branching Programs},\n  booktitle={28th International Conference on Database Theory (ICDT 2025)},\n  year={2025},\n  doi={10.4230/LIPIcs.ICDT.2025.10},\n  note={See also arXiv:2406.16515}\n}"
     }
   ],
   "tags": {
@@ -2989,7 +3007,7 @@
         },
         {
           "status": "poly",
-          "description": "As defined by \\citet{Darwiche_2002}, $d$-$DNNF$ is a subset of $DNNF$, so a polynomial transformation is trivial.",
+          "description": "As formalized by \\citet{Darwiche_2002} and originally introduced in Darwiche (2001), $d$-$DNNF$ is a subset of $DNNF$ satisfying the determinism property, making a polynomial transformation trivial.",
           "refs": [
             "Darwiche_2002"
           ]
@@ -3340,7 +3358,7 @@
         },
         {
           "status": "no-poly-unknown-quasi",
-          "description": "Theorem 1 of \\citet{Vinall-Smeeth_2024} proved that there exists a family of functions $f_n$ with $d$-$SDNNF$ of size $n$ but any $SDD$ representing $f_n$ has size $n^{\\Omega(log(n))}$",
+          "description": "Theorem 1 of \\citet{Vinall-Smeeth_2024} proved that there exists a family of functions $f_n$ with $d$-$SDNNF$ of size $n$ but any $SDD$ representing $f_n$ has size $n^{\\Omega(log(n))}$.",
           "refs": [
             "Vinall-Smeeth_2024"
           ],
@@ -3497,7 +3515,7 @@
         {
           "status": "no-poly-unknown-quasi",
           "caveat": "the polynomial hierarchy collapses",
-          "description": "A polytime $DNF$-to-$d$-$DNNF$ transformation would enable polytime clausal entailment on $CNF$, collapsing the polynomial hierarchy \\citep{Darwiche_2002}.",
+          "description": "Because counting the models of a $d$-$DNNF$ is in P and counting the models of a $DNF$ is \\#P-complete, $DNF$ cannot be polynomially compiled into $d$-$DNNF$ unconditionally. Such a transformation implies P = \\#P, collapsing the polynomial hierarchy \\citep{Darwiche_2002}.",
           "refs": [
             "Darwiche_2002"
           ],
@@ -4075,7 +4093,7 @@
         null,
         {
           "status": "no-quasi",
-          "description": "The pairwise DNF $\\Pi_n = \\bigvee_{i=0}^{n-1}(x_{2i} \\wedge x_{2i+1})$ has $2^n$ prime implicants; its negation $\\neg\\Pi_n \\in IP$ therefore has $2^n$ essential prime implicates, forcing any $CNF$ representation to have at least $2^n$ clauses \\citep{Darwiche_2002}.",
+          "description": "While \\citet{Darwiche_2002} cites specific examples like the negation of the pairwise DNF $\\Pi_n$, the exponential blowup is fundamentally a structural translation issue: distributing a $DNF$ (of which $IP$ is a subset) into a $CNF$ inherently risks an exponential explosion of clauses.",
           "refs": [
             "Darwiche_2002"
           ],
@@ -5253,7 +5271,7 @@
         },
         {
           "status": "no-quasi",
-          "description": "Proposition 11 of \\citet{Bova_2016} shows that the $JS_n$ has $PI$ size $O(n^2)$. Proposition 12 of \\citet{Bova_2016} shows that $JS_n$ has $DNNF$ size $2^{\\Omega(n^2)}$.",
+          "description": "While \\citet{Bova_2016} generalizes this separation using communication complexity on the $JS_n$ function (Proposition 11 showing $PI$ size $O(n^2)$ and Proposition 12 showing $DNNF$ size $2^{\\Omega(n^2)}$), the foundational unconditional strongly exponential separation of $CNF$ (and by extension $PI$) from $DNNF$ was originally established in \\citet{Bova_2014}.",
           "refs": [
             "Bova_2016"
           ],
@@ -6396,7 +6414,7 @@
         },
         {
           "status": "poly",
-          "description": "Every $OBDD$ is a right-linear $SDD$; $SDD$ generalizes $OBDD$.",
+          "description": "As established by \\citet{Darwiche_2011}, which introduced SDDs as a new central canonical representation, every $OBDD$ is a right-linear $SDD$. Thus, $SDD$ strictly generalizes $OBDD$.",
           "refs": [
             "Darwiche_2011"
           ],

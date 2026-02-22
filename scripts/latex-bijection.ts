@@ -811,8 +811,12 @@ function parseLatex(latexContent: string): ParsedClaim[] {
       // Find and collect description content
       let proofContent = '';
       while (i < lines.length && !lines[i].includes('\\begin{claimdescription}')) {
-        // Skip empty lines and comments between claim and description
-        if (lines[i].trim() && !lines[i].trim().startsWith('%')) {
+        // Check for separator metadata in comments between claim and description
+        const sepMatchInner = lines[i].match(/^%\s*separators=(.+)$/);
+        if (sepMatchInner) {
+          pendingSeparators = sepMatchInner[1].split(',').map(s => s.trim()).filter(s => s.length > 0);
+        } else if (lines[i].trim() && !lines[i].trim().startsWith('%')) {
+          // Skip empty lines and comments between claim and description
           console.warn(`Unexpected content between claim and description: ${lines[i]}`);
         }
         i++;
@@ -1626,14 +1630,24 @@ function updateSepFuncsFromLatex(database: DatabaseSchema, parsed: ParsedSepFunc
   }
 
   let updated = 0;
+  let created = 0;
   let skipped = 0;
 
   for (const p of parsed) {
     const sf = byShortName.get(p.shortName);
 
     if (!sf) {
-      console.warn(`Unknown separating function in LaTeX: ${p.shortName}`);
-      skipped++;
+      // Create a new separating function entry
+      const newSf: KCSeparatingFunction = {
+        shortName: p.shortName,
+        name: p.name || p.shortName,
+        description: p.description || '(Description needed)',
+        refs: p.refs,
+      };
+      database.separatingFunctions.push(newSf);
+      byShortName.set(p.shortName, newSf);
+      console.log(`  Created new separating function: ${p.shortName}`);
+      created++;
       continue;
     }
 
@@ -1655,7 +1669,7 @@ function updateSepFuncsFromLatex(database: DatabaseSchema, parsed: ParsedSepFunc
     updated++;
   }
 
-  console.log(`Updated ${updated} separating functions, skipped ${skipped}`);
+  console.log(`Updated ${updated} separating functions, created ${created} new, skipped ${skipped}`);
 }
 
 // =============================================================================

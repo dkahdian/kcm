@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Transformation Support Claims
 % Auto-generated from database.json
-% Generated: 2026-02-21T00:06:44.112Z
+% Generated: 2026-02-22T02:16:23.990Z
 %
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -108,7 +108,6 @@ $CNF$ supports Forgetting not in polynomial time (quasi-polynomial unknown) unle
 If CNF satisfies FO, then the consistency of any CNF sentence $\Sigma$ could be tested in polytime: compute $\exists\text{Vars}(\Sigma).\Sigma$ and check validity. Since CNF does not satisfy CO, this implies P = NP (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-
 % lang=lang_6c130090, op=AND_BC
 \begin{claim}
 $d$-$DNNF$ supports Bounded Conjunction not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002}
@@ -139,14 +138,6 @@ $d$-$DNNF$ supports Singleton Forgetting not in polynomial time (quasi-polynomia
 \end{claim}
 \begin{claimdescription}
 If d-DNNF satisfies SFO, then it satisfies $\lor$BC (since $\alpha_1 \lor \alpha_2 \equiv \exists x . ((x \land \alpha_1) \lor (\neg x \land \alpha_2))$ for fresh $x$). But d-DNNF does not satisfy $\lor$BC unless P = NP (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_4c204bf3, op=NOT_C
-\begin{claim}
-$DNF$ supports Negation not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The negation of a DNF formula is a CNF formula. If DNF satisfied $\neg$C, any CNF formula could be turned into an equivalent DNF in polytime (by double negation). Since CNF $\not\leq$ DNF, this is impossible (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % lang=lang_4c204bf3, op=AND_BC
@@ -309,14 +300,6 @@ $IP$ supports Bounded Disjunction not in quasi-polynomial time \citet{Darwiche_2
 Combining prime implicants via disjunction requires distributing and re-minimizing terms, which can lead to an exponential explosion of new prime implicants. Let $\alpha_1 = \bigwedge_{i=1}^k p_i$ (one prime implicant) and $\alpha_2 = \bigvee_{i=1}^k \bigvee_{j=1}^m (\neg p_i \land q_{i,j})$ ($mk$ prime implicants). Then $\alpha_1 \lor \alpha_2$ has $(m+1)^k + mk$ prime implicants, an exponential blowup \citet{Chandra_1978} (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_6ae90adc, op=OR_C
-\begin{claim}
-$IP$ supports Disjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert any term into an equivalent IP formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent IP formulas in polynomial space (DNF $\not\leq$ IP), IP does not satisfy $\lor$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_6ae90adc, op=CD
 \begin{claim}
 $IP$ supports Conditioning in polynomial time \citet{Darwiche_2002}
@@ -357,7 +340,6 @@ $MODS$ supports Conjunction not in quasi-polynomial time \citet{Darwiche_2002}
 Let $\Sigma_i = (x_{i,1} \lor x_{i,2})$ for $i = 1,\ldots,n$. Each $\Sigma_i$ has 3 models. But $\Sigma = \bigwedge_{i=1}^n \Sigma_i$ has $3^n$ models, so no polynomial-size MODS representation exists (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-
 % lang=lang_e02902d0, op=OR_C
 \begin{claim}
 $MODS$ supports Disjunction not in quasi-polynomial time \citet{Darwiche_2002}
@@ -382,7 +364,6 @@ $NNF$ supports Negation in polynomial time \citet{Darwiche_2002}
 NNF trivially satisfies $\neg$C since any propositional sentence can be converted to NNF by pushing negations to literals and this preserves the NNF property (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-
 % lang=lang_5bf00851, op=AND_C
 \begin{claim}
 $NNF$ supports Conjunction in polynomial time \citet{Darwiche_2002}
@@ -390,7 +371,6 @@ $NNF$ supports Conjunction in polynomial time \citet{Darwiche_2002}
 \begin{claimdescription}
 Taking the conjunction of NNF sentences $\alpha_1 \land \alpha_2 \land \ldots$ trivially produces another NNF sentence, since NNF places no restrictions on $\land$-nodes (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
-
 
 % lang=lang_5bf00851, op=OR_C
 \begin{claim}
@@ -528,14 +508,6 @@ $PI$ supports Bounded Conjunction not in quasi-polynomial time \citet{Darwiche_2
 Combining prime implicates via conjunction requires distributing and re-minimizing clauses, which can lead to an exponential explosion of new prime implicates. Let $\alpha_1 = \bigvee_{i=1}^k p_i$ (one prime implicate) and $\alpha_2 = \bigwedge_{i=1}^k \bigwedge_{j=1}^m (\neg p_i \lor q_{i,j})$ ($mk$ prime implicates). Then $\alpha_1 \land \alpha_2$ has $(m+1)^k + mk$ prime implicates, an exponential blowup \citet{Chandra_1978} (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_27fffab2, op=AND_C
-\begin{claim}
-$PI$ supports Conjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert a clause into an equivalent PI formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent PI formulas in polynomial space (CNF $\not\leq$ PI), PI does not satisfy $\land$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_27fffab2, op=OR_BC
 \begin{claim}
 $PI$ supports Bounded Disjunction in polynomial time \citet{Darwiche_2002}
@@ -567,7 +539,6 @@ $PI$ supports Forgetting in polynomial time \citet{Darwiche_2002}
 \begin{claimdescription}
 The prime implicates of $\exists X.\Sigma$ are exactly the prime implicates of $\Sigma$ that do not contain any variable from $X$ (Proposition 55, Marquis 2000). Hence FO for PI simply filters out clauses containing forgotten variables (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
-
 
 
 % =============================
@@ -608,6 +579,43 @@ Conditioning (the restrict operation) on OBDD$_<$ replaces each node labeled by 
 
 
 % =============================
+\section{A. Darwiche, "SDD: a new canonical representation of propositional knowledge bas...}
+% Reference ID: Darwiche_2011
+% =============================
+% lang=lang_1afefbe2, op=NOT_C
+\begin{claim}
+$SDD$ supports Negation in polynomial time \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+An SDD can be negated in polytime by applying exclusive-or with $\top$ using the Apply algorithm \citet{Darwiche_2011}.
+\end{claimdescription}
+
+% lang=lang_1afefbe2, op=AND_BC
+\begin{claim}
+$SDD$ supports Bounded Conjunction in polynomial time \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+The Apply algorithm combines two SDDs using any Boolean operator in polytime. In particular, two SDDs can be conjoined in polytime via Apply \citet{Darwiche_2011}.
+\end{claimdescription}
+
+% lang=lang_1afefbe2, op=OR_BC
+\begin{claim}
+$SDD$ supports Bounded Disjunction in polynomial time \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+The Apply algorithm combines two SDDs using any Boolean operator in polytime. In particular, two SDDs can be disjoined in polytime via Apply \citet{Darwiche_2011}.
+\end{claimdescription}
+
+% lang=lang_1afefbe2, op=CD
+\begin{claim}
+$SDD$ supports Conditioning in polynomial time \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+Conditioning an SDD $f$ on a literal $l$ is equivalent to computing $f \land l$. Since any literal is a trivially small SDD and SDD supports $\land$BC in polytime via Apply, conditioning is polytime \citet{Darwiche_2011}.
+\end{claimdescription}
+
+
+% =============================
 \section{Harry Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation," 2024.}
 % Reference ID: Vinall-Smeeth_2024
 % =============================
@@ -619,7 +627,6 @@ $d$-$SDNNF$ supports Negation not in quasi-polynomial time \citet{Vinall-Smeeth_
 Structured deterministic DNNF ($d$-$SDNNF$) is not closed under negation. \citet{Vinall-Smeeth_2024} formally proves that there exist Boolean functions with polynomial-size $d$-$SDNNF$ representations whose exact negations require exponential-size $d$-$SDNNF$s.
 TODO: Check that this result truly holds to $d-SDNNF$, not just $d-SDNNF_T$
 \end{claimdescription}
-
 
 
 % =============================
@@ -645,42 +652,6 @@ $DNNF$ supports Forgetting in polynomial time \citet{Darwiche_2001a}
 \end{claim}
 \begin{claimdescription}
 DNNF satisfies FO: forgetting a set of variables in a DNNF sentence can be performed in polynomial time while preserving decomposability \citet{Darwiche_2001a} (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% =============================
-\section{A. Darwiche, "SDD: a new canonical representation of propositional knowledge bas...}
-% Reference ID: Darwiche_2011
-% =============================
-% lang=lang_1afefbe2, op=AND_BC
-\begin{claim}
-$SDD$ supports Bounded Conjunction in polynomial time \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-The Apply algorithm combines two SDDs using any Boolean operator in polytime. In particular, two SDDs can be conjoined in polytime via Apply \citet{Darwiche_2011}.
-\end{claimdescription}
-
-% lang=lang_1afefbe2, op=OR_BC
-\begin{claim}
-$SDD$ supports Bounded Disjunction in polynomial time \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-The Apply algorithm combines two SDDs using any Boolean operator in polytime. In particular, two SDDs can be disjoined in polytime via Apply \citet{Darwiche_2011}.
-\end{claimdescription}
-
-% lang=lang_1afefbe2, op=NOT_C
-\begin{claim}
-$SDD$ supports Negation in polynomial time \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-An SDD can be negated in polytime by applying exclusive-or with $\top$ using the Apply algorithm \citet{Darwiche_2011}.
-\end{claimdescription}
-
-% lang=lang_1afefbe2, op=CD
-\begin{claim}
-$SDD$ supports Conditioning in polynomial time \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-Conditioning an SDD $f$ on a literal $l$ is equivalent to computing $f \land l$. Since any literal is a trivially small SDD and SDD supports $\land$BC in polytime via Apply, conditioning is polytime \citet{Darwiche_2011}.
 \end{claimdescription}
 
 % =============================

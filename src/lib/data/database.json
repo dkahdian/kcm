@@ -2340,7 +2340,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "dec-SDNNF compiles to SDD in quasi-polynomial time, and SDD supports Equivalence in quasi-polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Equivalence in at most quasi-polynomial time."
+            "description": "dec-SDNNF compiles to cSDD in quasi-polynomial time, and cSDD supports Equivalence in quasi-polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Equivalence in at most quasi-polynomial time."
           },
           "SE": {
             "complexity": "unknown-poly-quasi",
@@ -2348,7 +2348,7 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "dec-SDNNF compiles to SDD in quasi-polynomial time, and SDD supports Sentential Entailment in quasi-polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Sentential Entailment in at most quasi-polynomial time."
+            "description": "dec-SDNNF compiles to cSDD in quasi-polynomial time, and cSDD supports Sentential Entailment in quasi-polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Sentential Entailment in at most quasi-polynomial time."
           }
         },
         "transformations": {}
@@ -2911,11 +2911,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Darwiche_2002",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "MODS compiles to d-DNNF in polynomial time \\citet{Darwiche_2002}. If CNF compiles to MODS in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "MODS compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If CNF compiles to MODS in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -2946,11 +2947,11 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-DNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If CNF compiles to OBDD$_<$ in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If CNF compiles to OBDD$_<$ in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -3002,11 +3003,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD compiles to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF compiles to OBDD in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. If CNF compiles to OBDD in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -3020,11 +3021,14 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to d-DNNF in polynomial time \\citet{Amarilli_2018}. If CNF compiles to dec-SDNNF in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "dec-SDNNF compiles to cSDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011}. If CNF compiles to dec-SDNNF in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         null
@@ -3032,7 +3036,16 @@
       [
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If cSDD compiles to CNF in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
+        },
         null,
         {
           "status": "poly",
@@ -3054,7 +3067,16 @@
           "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. Therefore a polynomial compilation exists from cSDD to d-SDNNF."
         },
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If cSDD compiles to DNF in quasi-polynomial time, then OBDD$_<$ compiles to DNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002}."
+        },
         {
           "status": "poly",
           "refs": [
@@ -3066,8 +3088,24 @@
           "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. SDNNF compiles to DNNF in polynomial time \\citet{Amarilli_2018}. Therefore a polynomial compilation exists from cSDD to DNNF."
         },
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If cSDD compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If cSDD compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
+        },
         {
           "status": "unknown-poly-quasi",
           "refs": [
@@ -3103,8 +3141,24 @@
           "derived": true,
           "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. d-SDNNF compiles to uOBDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. uOBDD compiles to nOBDD in polynomial time \\citet{Amarilli_2018}. Therefore a quasi-polynomial compilation exists from cSDD to nOBDD."
         },
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. If cSDD compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If cSDD compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
+        },
         {
           "status": "poly",
           "description": "As defined by \\citet{Van den Broeck_2015}, $cSDD$ is the compressed subset of $SDD$, so compilation is trivial.",
@@ -3149,9 +3203,30 @@
           "derived": true,
           "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. d-SDNNF compiles to uOBDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. Therefore a quasi-polynomial compilation exists from cSDD to uOBDD."
         },
+        {
+          "status": "no-quasi",
+          "description": "Theorem 4 of \\citet{Bova_2016_a} constructs a generalized hidden weighted bit function $F_n$ on $2n+1$ variables with $cSDD$ size $O(n^3)$ but $OBDD$ size $2^{\\Omega(n)}$. The function $F_n$ augments $HWB_n$ with fresh variables $y_0, \\ldots, y_n$ to ensure the resulting SDD is compressed; conditioning $F_n$ on $y_i = 1$ recovers $HWB_n$, preserving Bryant's exponential $OBDD$ lower bound.",
+          "refs": [
+            "Bova_2016_a"
+          ],
+          "derived": false,
+          "separatingFunctionIds": [
+            "Generalized_HWB"
+          ]
+        },
         null,
-        null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If cSDD compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
+        },
         null,
         null
       ],
@@ -3161,12 +3236,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-DNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If d-DNNF compiles to CNF in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If d-DNNF compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -3194,13 +3269,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Amarilli_2018",
-            "Wegener_2000"
+            "Van den Broeck_2015",
+            "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "FBDD compiles to d-DNNF in polynomial time \\citet{Darwiche_2002}. DNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If d-DNNF compiles to DNF in quasi-polynomial time, then FBDD compiles to SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to SDNNF in quasi-polynomial time \\citet{Capelli_2016,Pipatsrisawat_2010}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If d-DNNF compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -3220,11 +3294,13 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If d-DNNF compiles to IP in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If d-DNNF compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -3282,21 +3358,23 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If d-DNNF compiles to OBDD$_<$ in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If d-DNNF compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If d-DNNF compiles to PI in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If d-DNNF compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -3359,11 +3437,12 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If d-DNNF compiles to OBDD in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If d-DNNF compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -3376,11 +3455,15 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Van den Broeck_2015",
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If d-DNNF compiles to dec-SDNNF in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If d-DNNF compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -3391,12 +3474,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Amarilli_2018"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If d-SDNNF compiles to CNF in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. If d-SDNNF compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-poly-unknown-quasi",
@@ -3420,12 +3502,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Amarilli_2018"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If d-SDNNF compiles to DNF in quasi-polynomial time, then OBDD$_<$ compiles to DNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. If d-SDNNF compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -3448,20 +3529,22 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to IP in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to MODS in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-poly-quasi",
@@ -3534,20 +3617,21 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to OBDD$_<$ in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. If d-SDNNF compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to PI in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-poly-unknown-quasi",
@@ -3628,11 +3712,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If d-SDNNF compiles to OBDD in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. If d-SDNNF compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -3648,12 +3732,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If d-SDNNF compiles to dec-SDNNF in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If d-SDNNF compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -3798,7 +3885,7 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
@@ -3860,7 +3947,7 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018",
+            "Darwiche_2011",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
@@ -3899,11 +3986,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Van den Broeck_2015",
+            "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to CNF in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If DNNF compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -3935,11 +4023,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Van den Broeck_2015",
+            "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to DNF in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If DNNF compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         null,
         {
@@ -3954,20 +4043,24 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to IP in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to MODS in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-poly-quasi",
@@ -4014,21 +4107,23 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If DNNF compiles to OBDD$_<$ in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If DNNF compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to PI in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If DNNF compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -4077,12 +4172,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. OBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If DNNF compiles to OBDD in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If DNNF compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -4098,12 +4193,15 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Amarilli_2018"
+            "Van den Broeck_2015",
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to DNNF in polynomial time \\citet{Darwiche_2002}. dec-SDNNF compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If DNNF compiles to dec-SDNNF in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to DNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If DNNF compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -4216,11 +4314,11 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If FBDD compiles to OBDD$_<$ in quasi-polynomial time, then FBDD compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018}."
+          "description": "OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If FBDD compiles to OBDD$_<$ in quasi-polynomial time, then FBDD compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -4287,11 +4385,14 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If FBDD compiles to dec-SDNNF in quasi-polynomial time, then FBDD compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018}."
+          "description": "dec-SDNNF compiles to cSDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011}. If FBDD compiles to dec-SDNNF in quasi-polynomial time, then FBDD compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         null
@@ -4513,7 +4614,16 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "MODS compiles to OBDD$_<$ in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. Therefore a polynomial compilation exists from MODS to cSDD."
+        },
         {
           "status": "poly",
           "description": "As defined by \\citet{Darwiche_2002}, $MODS$ is a subset of $d$-$DNNF$. Therefore, a polynomial compilation is trivial.",
@@ -4615,11 +4725,12 @@
           "status": "poly",
           "refs": [
             "Darwiche_2002",
-            "Darwiche_2011"
+            "Darwiche_2011",
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "MODS compiles to OBDD$_<$ in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD compiles to SDD in polynomial time \\citet{Darwiche_2011}. Therefore a polynomial compilation exists from MODS to SDD."
+          "description": "MODS compiles to OBDD$_<$ in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. Therefore a polynomial compilation exists from MODS to SDD."
         },
         null,
         {
@@ -4691,13 +4802,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Wegener_2000"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If nFBDD compiles to CNF in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nFBDD compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -4735,12 +4848,14 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If nFBDD compiles to DNF in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nFBDD compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -4761,25 +4876,29 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Wegener_2000",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If nFBDD compiles to IP in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If nFBDD compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nFBDD compiles to MODS in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nFBDD compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         null,
         {
@@ -4805,25 +4924,29 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiles to OBDD$_<$ in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nFBDD compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Wegener_2000",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nFBDD compiles to PI in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nFBDD compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -4875,13 +4998,14 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
-            "Darwiche_2002"
+            "Bollig_2018",
+            "Beame_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. OBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If nFBDD compiles to OBDD in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nFBDD compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -4896,12 +5020,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. dec-SDNNF compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If nFBDD compiles to dec-SDNNF in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If nFBDD compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -4912,11 +5039,13 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
+            "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. If NNF compiles to CNF in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to NNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Darwiche_2002}. If NNF compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -4986,11 +5115,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Darwiche_2002",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. MODS compiles to d-DNNF in polynomial time \\citet{Darwiche_2002}. If NNF compiles to MODS in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. MODS compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If NNF compiles to MODS in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -5017,11 +5147,11 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ compiles to d-DNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If NNF compiles to OBDD$_<$ in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If NNF compiles to OBDD$_<$ in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -5079,11 +5209,11 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. OBDD compiles to d-DNNF in polynomial time \\citet{Amarilli_2018}. If NNF compiles to OBDD in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. If NNF compiles to OBDD in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -5099,11 +5229,14 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. dec-SDNNF compiles to d-DNNF in polynomial time \\citet{Amarilli_2018}. If NNF compiles to dec-SDNNF in quasi-polynomial time, then CNF compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "CNF compiles to NNF in polynomial time \\citet{Darwiche_2002}. dec-SDNNF compiles to cSDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011}. If NNF compiles to dec-SDNNF in quasi-polynomial time, then CNF compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that CNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         null
@@ -5114,6 +5247,7 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -5121,7 +5255,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiles to CNF in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -5165,6 +5299,7 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -5172,7 +5307,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiles to DNF in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -5200,6 +5335,7 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -5208,20 +5344,20 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to IP in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Wegener_2000",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to MODS in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -5245,20 +5381,20 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Wegener_2000",
             "Darwiche_2002"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to OBDD$_<$ in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time unless the polynomial hierarchy collapses \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -5267,7 +5403,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to PI in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -5313,16 +5449,14 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
-            "Beame_2015",
-            "Wegener_2000",
-            "Darwiche_2002"
+            "Beame_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. OBDD compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If nOBDD compiles to OBDD in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time unless the polynomial hierarchy collapses \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -5341,16 +5475,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Wegener_2000",
-            "Beame_2013"
+            "Darwiche_2002"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If nOBDD compiles to dec-SDNNF in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time unless the polynomial hierarchy collapses \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to nOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If nOBDD compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -5366,7 +5499,16 @@
           ],
           "derived": false
         },
-        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Darwiche_2002",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. Therefore a polynomial compilation exists from OBDD$_<$ to cSDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -5477,11 +5619,12 @@
           "status": "poly",
           "refs": [
             "Darwiche_2002",
-            "Darwiche_2011"
+            "Darwiche_2011",
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD compiles to SDD in polynomial time \\citet{Darwiche_2011}. Therefore a polynomial compilation exists from OBDD$_<$ to SDD."
+          "description": "OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. Therefore a polynomial compilation exists from OBDD$_<$ to SDD."
         },
         null,
         {
@@ -5656,11 +5799,11 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to d-DNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If PI compiles to OBDD$_<$ in quasi-polynomial time, then PI compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If PI compiles to OBDD$_<$ in quasi-polynomial time, then PI compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that PI cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         {
@@ -5705,11 +5848,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD compiles to d-DNNF in polynomial time \\citet{Amarilli_2018}. If PI compiles to OBDD in quasi-polynomial time, then PI compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. If PI compiles to OBDD in quasi-polynomial time, then PI compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that PI cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -5723,11 +5866,14 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to d-DNNF in polynomial time \\citet{Amarilli_2018}. If PI compiles to dec-SDNNF in quasi-polynomial time, then PI compiles to d-DNNF in at most quasi-polynomial time. This contradicts the fact that PI cannot compile to d-DNNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "dec-SDNNF compiles to cSDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011}. If PI compiles to dec-SDNNF in quasi-polynomial time, then PI compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that PI cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         null
@@ -5738,12 +5884,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Darwiche_2011"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If SDD compiles to CNF in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. If SDD compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         null,
         {
@@ -5768,12 +5913,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Darwiche_2011"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If SDD compiles to DNF in quasi-polynomial time, then OBDD$_<$ compiles to DNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. If SDD compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -5796,22 +5940,22 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Darwiche_2011"
+            "Van den Broeck_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If SDD compiles to IP in quasi-polynomial time, then OBDD$_<$ compiles to DNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If SDD compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Darwiche_2011"
+            "Van den Broeck_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDD compiles to MODS in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDD compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "unknown-poly-quasi",
@@ -5851,21 +5995,21 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002"
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If SDD compiles to OBDD$_<$ in quasi-polynomial time, then SDD compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that SDD cannot compile to FBDD in quasi-polynomial time \\citet{Bollig_2018}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. If SDD compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Darwiche_2011"
+            "Van den Broeck_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to SDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDD compiles to PI in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDD compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         null,
         null,
@@ -5906,12 +6050,12 @@
         },
         {
           "status": "no-quasi",
-          "description": "$OBDD$ representations of $HWB_n$ are $2^{\\Omega(n)}$\\citet{Bryant_1986}, but an $SDD$ can represent $HWB_n$ in size $O(n^3)$\\citet{Bova_2016_a}.",
           "refs": [
-            "Bryant_1986",
-            "Bova_2016_a"
+            "Van den Broeck_2015"
           ],
-          "derived": false
+          "hidden": false,
+          "derived": true,
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. If SDD compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -5926,12 +6070,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If SDD compiles to dec-SDNNF in quasi-polynomial time, then SDD compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that SDD cannot compile to FBDD in quasi-polynomial time \\citet{Bollig_2018}."
+          "description": "cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If SDD compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -5972,11 +6119,12 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. If SDNNF compiles to CNF in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If SDNNF compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -6014,11 +6162,12 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. If SDNNF compiles to DNF in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If SDNNF compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -6040,22 +6189,24 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to IP in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to MODS in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-poly-quasi",
@@ -6127,22 +6278,23 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018",
-            "Darwiche_2002"
+            "Van den Broeck_2015",
+            "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to OBDD$_<$ in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If SDNNF compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to PI in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -6180,12 +6332,12 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018",
-            "Darwiche_2002"
+            "Van den Broeck_2015",
+            "Amarilli_2018"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. OBDD compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If SDNNF compiles to OBDD in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. If SDNNF compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -6200,12 +6352,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If SDNNF compiles to dec-SDNNF in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to SDNNF in polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If SDNNF compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -6246,12 +6401,14 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If uFBDD compiles to CNF in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uFBDD compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -6285,12 +6442,14 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If uFBDD compiles to DNF in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uFBDD compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -6314,24 +6473,28 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If uFBDD compiles to IP in quasi-polynomial time, then d-DNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If uFBDD compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uFBDD compiles to MODS in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uFBDD compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -6364,24 +6527,28 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If uFBDD compiles to OBDD$_<$ in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uFBDD compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
+            "Bollig_2018",
+            "Beame_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uFBDD compiles to PI in quasi-polynomial time, then d-DNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uFBDD compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
@@ -6422,13 +6589,14 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013",
-            "Darwiche_2002"
+            "Bollig_2018",
+            "Beame_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. OBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If uFBDD compiles to OBDD in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uFBDD compiles to OBDD in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         {
           "status": "no-quasi",
@@ -6443,12 +6611,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
-            "Beame_2013"
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to uFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. dec-SDNNF compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If uFBDD compiles to dec-SDNNF in quasi-polynomial time, then d-DNNF compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uFBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If uFBDD compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -6459,6 +6630,7 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -6466,7 +6638,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If uOBDD compiles to CNF in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uOBDD compiles to CNF in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         null,
         {
@@ -6490,6 +6662,7 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -6497,7 +6670,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If uOBDD compiles to DNF in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uOBDD compiles to DNF in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -6523,6 +6696,7 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -6530,11 +6704,12 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to IP in quasi-polynomial time, then d-SDNNF compiles to DNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to IP in quasi-polynomial time, then cSDD compiles to DNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to DNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -6542,7 +6717,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to MODS in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. MODS compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to MODS in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         {
           "status": "poly",
@@ -6574,19 +6749,20 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Van den Broeck_2015",
             "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to OBDD$_<$ in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If uOBDD compiles to OBDD$_<$ in quasi-polynomial time, then cSDD compiles to OBDD$_<$ in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD$_<$ in quasi-polynomial time \\citet{Darwiche_2002}."
         },
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
@@ -6594,7 +6770,7 @@
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to PI in quasi-polynomial time, then d-SDNNF compiles to CNF in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. PI compiles to CNF in polynomial time \\citet{Darwiche_2002}. If uOBDD compiles to PI in quasi-polynomial time, then cSDD compiles to CNF in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002,Darwiche_2011}."
         },
         null,
         null,
@@ -6641,15 +6817,15 @@
         {
           "status": "no-quasi",
           "refs": [
+            "Van den Broeck_2015",
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Van den Broeck_2015",
-            "Beame_2013"
+            "Darwiche_2002"
           ],
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. If uOBDD compiles to dec-SDNNF in quasi-polynomial time, then d-SDNNF compiles to FBDD in at most quasi-polynomial time. This contradicts the fact that d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. dec-SDNNF compiles to OBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}. If uOBDD compiles to dec-SDNNF in quasi-polynomial time, then cSDD compiles to OBDD in at most quasi-polynomial time. This contradicts the fact that cSDD cannot compile to OBDD in quasi-polynomial time \\citet{Bova_2016_a}."
         },
         null,
         null
@@ -6666,7 +6842,14 @@
           "derived": true,
           "description": "OBDD$_<$ compiles to OBDD in polynomial time \\citet{Darwiche_2002}. If OBDD compiles to CNF in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "poly",
+          "description": "As established by \\citet{Darwiche_2011}, every $OBDD$ is a right-linear $SDD$, which is already compressed (canonical). Thus, $cSDD$ strictly generalizes $OBDD$.",
+          "refs": [
+            "Darwiche_2011"
+          ],
+          "derived": false
+        },
         {
           "status": "poly",
           "refs": [
@@ -6777,11 +6960,13 @@
         },
         {
           "status": "poly",
-          "description": "As established by \\citet{Darwiche_2011}, every $OBDD$ is a right-linear $SDD$. Thus, $SDD$ strictly generalizes $OBDD$.",
           "refs": [
-            "Darwiche_2011"
+            "Darwiche_2011",
+            "Van den Broeck_2015"
           ],
-          "derived": false
+          "hidden": false,
+          "derived": true,
+          "description": "OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. Therefore a polynomial compilation exists from OBDD to SDD."
         },
         null,
         {
@@ -6984,11 +7169,12 @@
           "status": "no-quasi",
           "refs": [
             "Amarilli_2018",
-            "Darwiche_2002"
+            "Darwiche_2002",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "FBDD compiles to dec-DNNF in polynomial time \\citet{Amarilli_2018}. OBDD$_<$ compiles to d-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If dec-DNNF compiles to OBDD$_<$ in quasi-polynomial time, then FBDD compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018}."
+          "description": "FBDD compiles to dec-DNNF in polynomial time \\citet{Amarilli_2018}. OBDD$_<$ compiles to cSDD in polynomial time \\citet{Darwiche_2002,Darwiche_2011}. If dec-DNNF compiles to OBDD$_<$ in quasi-polynomial time, then FBDD compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         {
           "status": "no-quasi",
@@ -7061,21 +7247,25 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Amarilli_2018",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "FBDD compiles to dec-DNNF in polynomial time \\citet{Amarilli_2018}. OBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If dec-DNNF compiles to OBDD in quasi-polynomial time, then FBDD compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018}."
+          "description": "FBDD compiles to dec-DNNF in polynomial time \\citet{Amarilli_2018}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. If dec-DNNF compiles to OBDD in quasi-polynomial time, then FBDD compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018"
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2011"
           ],
           "hidden": false,
           "derived": true,
-          "description": "FBDD compiles to dec-DNNF in polynomial time \\citet{Amarilli_2018}. dec-SDNNF compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. If dec-DNNF compiles to dec-SDNNF in quasi-polynomial time, then FBDD compiles to d-SDNNF in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018}."
+          "description": "FBDD compiles to dec-DNNF in polynomial time \\citet{Amarilli_2018}. dec-SDNNF compiles to cSDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011}. If dec-DNNF compiles to dec-SDNNF in quasi-polynomial time, then FBDD compiles to cSDD in at most quasi-polynomial time. This contradicts the fact that FBDD cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018}."
         },
         null,
         null
@@ -7093,7 +7283,18 @@
           "derived": true,
           "description": "OBDD$_<$ compiles to dec-SDNNF in polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If dec-SDNNF compiles to CNF in quasi-polynomial time, then OBDD$_<$ compiles to CNF in at most quasi-polynomial time. This contradicts the fact that OBDD$_<$ cannot compile to CNF in quasi-polynomial time \\citet{Darwiche_2002}."
         },
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015",
+            "Darwiche_2011"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "dec-SDNNF compiles to OBDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. Therefore a quasi-polynomial compilation exists from dec-SDNNF to cSDD."
+        },
         {
           "status": "poly",
           "refs": [
@@ -7267,11 +7468,12 @@
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Darwiche_2011"
+            "Darwiche_2011",
+            "Van den Broeck_2015"
           ],
           "hidden": false,
           "derived": true,
-          "description": "dec-SDNNF compiles to OBDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. OBDD compiles to SDD in polynomial time \\citet{Darwiche_2011}. Therefore a quasi-polynomial compilation exists from dec-SDNNF to SDD."
+          "description": "dec-SDNNF compiles to OBDD in at worst quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. OBDD compiles to cSDD in polynomial time \\citet{Darwiche_2011}. cSDD compiles to SDD in polynomial time \\citet{Van den Broeck_2015}. Therefore a quasi-polynomial compilation exists from dec-SDNNF to SDD."
         },
         null,
         {
@@ -7547,6 +7749,14 @@
       "description": "Tests triangle-freeness on graphs with respect to a fixed set of forbidden triangles $A \\subset T_n$. \\citet{Jukna_2002} show that for every $n$, there exists $A_n$ of size $O(n^2)$ such that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\\Omega(n^2)}$. Has $PI$ size $O(n^2)$ but $DNNF$ size $2^{\\Omega(n^2)}$.",
       "refs": [
         "Jukna_2002"
+      ]
+    },
+    {
+      "shortName": "Generalized_HWB",
+      "name": "Generalized Hidden Weighted Bit",
+      "description": "A variant of $HWB_n$ introduced by \\citet{Bova_2016_a} on $2n+1$ variables $x_1, \\ldots, x_n, y_0, \\ldots, y_n$. Defined as $F_n = (P_0 \\wedge \\neg y_0) \\vee (P_n \\wedge y_n) \\vee \\bigvee_{i=1}^{n-1}((P_{i,0} \\wedge \\neg y_i) \\vee (P_{i,1} \\wedge y_i))$, where $P_j$ and $P_{i,b}$ are the partition functions from the HWB SDD construction. The $y_i$ variables ensure all sub-SDDs are pairwise non-equivalent, making the SDD compressed. Has $cSDD$ size $O(n^3)$ but $OBDD$ size $2^{\\Omega(n)}$, since conditioning on $y_i = 1$ recovers $HWB_n$.",
+      "refs": [
+        "Bova_2016_a"
       ]
     }
   ],

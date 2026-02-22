@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Separating Functions
 % Auto-generated from database.json
-% Generated: 2026-02-21T00:06:44.121Z
+% Generated: 2026-02-22T02:16:23.992Z
 %
 % EDITING INSTRUCTIONS:
 % - Short names in brackets are auto-generated identifiers. Do NOT edit.
@@ -53,6 +53,11 @@ Separates languages that compactly represent disjunctions from those that cannot
 \begin{definition}[Clique]\label{sf:clique}
 \textbf{Clique Detection Instances} \\
 Tests whether a directed graph on $n$ vertices (encoded as $I \in \{0,1\}^{n^2}$) contains a bidirectional clique of size $k$: $\Sigma_{n,k}(I) = 1 \iff I$ contains such a clique. Has $O(n^3)$ prime implicants but exponential $FBDD$ size for suitable $k$. \citet{Darwiche_2002,Wegener_1987}
+\end{definition}
+
+\begin{definition}[Generalized_HWB]\label{sf:generalized-hwb}
+\textbf{Generalized Hidden Weighted Bit} \\
+A variant of $HWB_n$ introduced by \citet{Bova_2016_a} on $2n+1$ variables $x_1, \ldots, x_n, y_0, \ldots, y_n$. Defined as $F_n = (P_0 \wedge \neg y_0) \vee (P_n \wedge y_n) \vee \bigvee_{i=1}^{n-1}((P_{i,0} \wedge \neg y_i) \vee (P_{i,1} \wedge y_i))$, where $P_j$ and $P_{i,b}$ are the partition functions from the HWB SDD construction. The $y_i$ variables ensure all sub-SDDs are pairwise non-equivalent, making the SDD compressed. Has $cSDD$ size $O(n^3)$ but $OBDD$ size $2^{\Omega(n)}$, since conditioning on $y_i = 1$ recovers $HWB_n$. \citet{Bova_2016_a}
 \end{definition}
 
 \begin{definition}[HWB]\label{sf:hwb}

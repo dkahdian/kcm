@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Query Support Claims
 % Auto-generated from database.json
-% Generated: 2026-02-21T00:06:44.099Z
+% Generated: 2026-02-22T02:16:23.983Z
 %
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -244,19 +244,6 @@ $FBDD$ supports Validity in polynomial time \citet{Gergov_1994}
 \end{claim}
 \begin{claimdescription}
 $FBDD$ satisfies VA \citet{Gergov_1994, Darwiche_2002}. Simply check if the BDD root equals the terminal 1 node.
-\end{claimdescription}
-
-
-% =============================
-\section{C. Meinel and T. Theobald, "Algorithms and Data Structures in VLSI Design: OBDD ...}
-% Reference ID: Meinel_Theobald_1998
-% =============================
-% lang=lang_b9d72a7c, op=SE
-\begin{claim}
-$OBDD$ supports Sentential Entailment not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Meinel_Theobald_1998}
-\end{claim}
-\begin{claimdescription}
-Checking sentential entailment for $OBDD$ formulas is coNP-complete. Since $OBDD$ satisfies $\neg$C, $\alpha \land \beta$ is consistent iff $\alpha \not\models \neg\beta$. Checking consistency of two $OBDD_<$ formulas with different variable orderings is NP-complete (Lemma 8.14, Meinel \& Theobald 1998), so SE for $OBDD$ is coNP-complete (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 

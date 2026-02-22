@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-02-21T00:06:44.092Z
+% Generated: 2026-02-22T02:16:23.976Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -128,7 +128,7 @@ As defined by \citet{Amarilli_2018}, a $dec$-$SDNNF$ is simply a structured $dec
 $dec$-$SDNNF$ is not polynomial-time compilable to $nFBDD$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
-Shown by Proposition 3.10 of \citet{Amarilli_2018} (TODO: write intuitive explanation, not just a pointer)
+Shown by Proposition 3.10 of \citet{Amarilli_2018}
 \end{claimdescription}
 
 \begin{claim}
@@ -136,6 +136,13 @@ $dec$-$SDNNF$ has unknown polynomial-time (but has quasi-polynomial-time) compil
 \end{claim}
 \begin{claimdescription}
 Theorem 2 of \citet{Bollig_2018} shows that $SDNNF$ can be compiled into $nOBDD$ by adapting the compilation of \citet{Beame_2015} from $DNNF$ to $nFBDD$; proposition 2 of \citet{Bollig_2018} shows that this $nOBDD$ is unambiguous if the $SDNNF$ is deterministic. Additionally, the same compilation yields an $OBDD$ if the input is a $dec$-$SDNNF$ since there are no $\vee$-gates that are not decision gates in a $dec$-$SDNNF$.
+\end{claimdescription}
+
+\begin{claim}
+$DNF$ is polynomial-time compilable to $nOBDD$ \citet{Amarilli_2018,Wegener_2000}
+\end{claim}
+\begin{claimdescription}
+Fix any variable order $<$. Each term of a $DNF$ can be represented as an $OBDD_<$ of linear size (a chain of decision nodes for each literal in the term). The nondeterministic disjunction of these $OBDD_<$s yields an $nOBDD$ of size $O(|\phi|)$, since the variable order is shared across all branches \citet{Amarilli_2018,Wegener_2000}.
 \end{claimdescription}
 
 \begin{claim}
@@ -206,13 +213,6 @@ $OBDD$ is polynomial-time compilable to $dec$-$SDNNF$ \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
 Construct a right-linear v-tree from the variable order, then rewrite each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The v-tree alignment ensures structuredness, and since all $\vee$-gates arise from decision node rewrites, every $\vee$-gate is a decision gate, yielding a $dec$-$SDNNF$ in linear time \citet{Amarilli_2018}.
-\end{claimdescription}
-
-\begin{claim}
-$DNF$ is polynomial-time compilable to $nOBDD$ \citet{Amarilli_2018,Wegener_2000}
-\end{claim}
-\begin{claimdescription}
-Fix any variable order $<$. Each term of a $DNF$ can be represented as an $OBDD_<$ of linear size (a chain of decision nodes for each literal in the term). The nondeterministic disjunction of these $OBDD_<$s yields an $nOBDD$ of size $O(|\phi|)$, since the variable order is shared across all branches \citet{Amarilli_2018,Wegener_2000}.
 \end{claimdescription}
 
 \begin{claim}
@@ -318,7 +318,12 @@ $d$-$DNNF$ is not quasi-polynomial-time compilable to $MODS$ \citet{Darwiche_200
 The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a $d$-$DNNF$ formula but has $2^n-1$ models.
 \end{claimdescription}
 
-
+\begin{claim}
+$DNF$ is not polynomial-time compilable to $d$-$DNNF$ unless the polynomial hierarchy collapses \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Because counting the models of a $d$-$DNNF$ is in P and counting the models of a $DNF$ is \#P-complete, $DNF$ cannot be polynomially compiled into $d$-$DNNF$ unconditionally. Such a compilation implies P = \#P, collapsing the polynomial hierarchy \citep{Darwiche_2002}.
+\end{claimdescription}
 
 \begin{claim}
 $DNF$ is polynomial-time compilable to $DNNF$ \citet{Darwiche_2002}
@@ -490,6 +495,18 @@ Shown by Corollary 3.5 of \citet{Beame_2013}.
 
 
 % =============================
+\section{Beate Bollig and Matthias Buttkus, "On the Relative Succinctness of Sentential D...}
+% Reference ID: Bollig_2018
+% =============================
+\begin{claim}
+$SDD$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Bollig_2018}
+\end{claim}
+\begin{claimdescription}
+The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Corollary 3 of \citet{Bollig_2018}), but has exponential $FBDD$ size. Therefore, $P(SDD) \not\subseteq P(FBDD)$, which combined with the known result $P(FBDD) \not\subseteq P(SDD)$ from \citet{Beame_2015}, establishes that $SDD$ and $FBDD$ are incomparable (Corollary 4 of \citet{Bollig_2018}).
+\end{claimdescription}
+
+
+% =============================
 \section{S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, "Knowledge Compilation Meets C...}
 % Reference ID: Bova_2016
 % =============================
@@ -523,7 +540,7 @@ The Quine-McCluskey algorithm generates an $IP$ formula in polynomial time.
 % =============================
 \section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
 % Reference ID: Van den Broeck_2015
-% ================================
+% =============================
 \begin{claim}
 $cSDD$ is polynomial-time compilable to $SDD$ \citet{Van den Broeck_2015}
 \end{claim}
@@ -536,6 +553,19 @@ $SDD$ is polynomial-time compilable to $d$-$SDNNF$ \citet{Van den Broeck_2015}
 \end{claim}
 \begin{claimdescription}
 $SDD$ is a strict subset of $d$-$SDNNF$.
+\end{claimdescription}
+
+
+% =============================
+\section{S. Bova, "SDDs Are Exponentially More Succinct than OBDDs," Proceedings of the A...}
+% Reference ID: Bova_2016_a
+% =============================
+% separators=Generalized_HWB
+\begin{claim}
+$cSDD$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Bova_2016_a}
+\end{claim}
+\begin{claimdescription}
+Theorem 4 of \citet{Bova_2016_a} constructs a generalized hidden weighted bit function $F_n$ on $2n+1$ variables with $cSDD$ size $O(n^3)$ but $OBDD$ size $2^{\Omega(n)}$. The function $F_n$ augments $HWB_n$ with fresh variables $y_0, \ldots, y_n$ to ensure the resulting SDD is compressed; conditioning $F_n$ on $y_i = 1$ recovers $HWB_n$, preserving Bryant's exponential $OBDD$ lower bound.
 \end{claimdescription}
 
 
@@ -600,38 +630,14 @@ $MODS$ is not polynomial-time compilable to $PI$ \citet{Kaleyski_2016}
 
 
 % =============================
-\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation," Comput...}
-% Reference ID: Bryant_1986
-% =============================
-\begin{claim}
-$SDD$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Bryant_1986,Bova_2016_a}
-\end{claim}
-\begin{claimdescription}
-$OBDD$ representations of $HWB_n$ are $2^{\Omega(n)}$\citet{Bryant_1986}, but an $SDD$ can represent $HWB_n$ in size $O(n^3)$\citet{Bova_2016_a}.
-\end{claimdescription}
-
-
-% =============================
-\section{B. Bollig and M. Buttkus, "On the relative succinctness of sentential decision d...}
-% Reference ID: Bollig_2018
-% =============================
-\begin{claim}
-$SDD$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Bollig_2018}
-\end{claim}
-\begin{claimdescription}
-The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Corollary 3 of \citet{Bollig_2018}), but has exponential $FBDD$ size. Therefore, $P(SDD) \not\subseteq P(FBDD)$, which combined with the known result $P(FBDD) \not\subseteq P(SDD)$ from \citet{Beame_2015}, establishes that $SDD$ and $FBDD$ are incomparable (Corollary 4 of \citet{Bollig_2018}).
-\end{claimdescription}
-
-
-% =============================
 \section{A. Darwiche, "SDD: a new canonical representation of propositional knowledge bas...}
 % Reference ID: Darwiche_2011
 % =============================
 \begin{claim}
-$OBDD$ is polynomial-time compilable to $SDD$ \citet{Darwiche_2011}
+$OBDD$ is polynomial-time compilable to $cSDD$ \citet{Darwiche_2011}
 \end{claim}
 \begin{claimdescription}
-As established by \citet{Darwiche_2011}, every $OBDD$ is a right-linear $SDD$. Thus, $SDD$ strictly generalizes $OBDD$.
+As established by \citet{Darwiche_2011}, every $OBDD$ is a right-linear $SDD$, which is already compressed (canonical). Thus, $cSDD$ strictly generalizes $OBDD$.
 \end{claimdescription}
 
 % =============================

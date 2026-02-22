@@ -291,7 +291,7 @@
                 class="ref-badge"
                 onclick={scrollToReferences}
                 title="View reference"
-              >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+              >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
         </p>
 
         {#if selectedLanguage.tags?.length}
@@ -308,8 +308,6 @@
                       title="View reference"
                     >[{getGlobalRefNumber(refId) ?? '?'}]</button>
                   {/each}
-                {:else}
-                  <span class="missing-ref inline" title="Missing reference">[missing ref]</span>
                 {/if}
               </span>
             {/each}
@@ -348,7 +346,7 @@
                               onclick={scrollToReferences}
                               onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
                               title="View reference"
-                            >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{:else}<span class="missing-ref" title="Missing reference">[missing ref]</span>{/if}
+                            >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{/if}
                       {/if}
                     </div>
                     {#if !isOperationsView}
@@ -396,8 +394,6 @@
                           title="View reference"
                         >[{getGlobalRefNumber(refId) ?? '?'}]</button>
                       {/each}
-                    {:else}
-                      <span class="missing-ref" title="Missing reference">[missing ref]</span>
                     {/if}
                   </div>
                 </div>
@@ -431,25 +427,6 @@
     }
 
     .ref-badge.inline {
-      margin-left: 0.25em;
-    }
-
-    .missing-ref {
-      display: inline;
-      font-size: 0.65em;
-      vertical-align: super;
-      line-height: 0;
-      color: #dc2626;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 0.25rem;
-      padding: 0.1em 0.3em;
-      margin: 0 0.2em;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .missing-ref.inline {
       margin-left: 0.25em;
     }
 

@@ -28,7 +28,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
   poly: {
     code: 'poly',
     label: 'Polynomial',
-    description: 'Polynomial transformation exists',
+    description: 'Polynomial compilation exists',
+    opDescription: 'Polynomial transformation exists',
     notation: '$\\leq_p$',
     emoji: '🟢',
     color: '#22c55e', // green-500
@@ -40,7 +41,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
   'no-poly-unknown-quasi': {
     code: 'no-poly-unknown-quasi',
     label: 'No Poly, Quasi Unknown',
-    description: 'No polynomial transformation; quasi-polynomial unknown',
+    description: 'No polynomial compilation; quasi-polynomial unknown',
+    opDescription: 'No polynomial transformation; quasi-polynomial unknown',
     notation: '$\\not\\leq_p$ · $\\leq_q^?$',
     emoji: '⚠️',
     color: '#ef4444', // red-500
@@ -52,7 +54,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
   'no-poly-quasi': {
     code: 'no-poly-quasi',
     label: 'No Poly, Quasi Exists',
-    description: 'No polynomial transformation; quasi-polynomial exists',
+    description: 'No polynomial compilation; quasi-polynomial exists',
+    opDescription: 'No polynomial transformation; quasi-polynomial exists',
     notation: '$\\not\\leq_p$ · $\\leq_q$',
     emoji: '⚡',
     color: '#f97316', // orange-500
@@ -65,6 +68,7 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'unknown-poly-quasi',
     label: 'Poly Unknown, Quasi Exists',
     description: 'Polynomial unknown; quasi-polynomial exists',
+    opDescription: 'Polynomial unknown; quasi-polynomial exists',
     notation: '$\\leq_p^?$ · $\\leq_q$',
     emoji: '⚡',
     color: '#eab308', // yellow-500
@@ -77,6 +81,7 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'unknown-both',
     label: 'Unknown',
     description: 'Both polynomial and quasi-polynomial unknown',
+    opDescription: 'Both polynomial and quasi-polynomial unknown',
     notation: '$?$',
     emoji: '❔',
     color: '#6b7280', // gray-500
@@ -89,7 +94,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'unknown',
     internal: true,
     label: 'Unknown',
-    description: 'Unknown whether polynomial transformation exists',
+    description: 'Unknown whether polynomial compilation exists',
+    opDescription: 'Unknown whether polynomial transformation exists',
     notation: '$?$',
     emoji: '❔',
     color: '#6b7280', // gray-500
@@ -101,7 +107,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
   'no-quasi': {
     code: 'no-quasi',
     label: 'No Quasi',
-    description: 'No quasi-polynomial transformation (implies no polynomial)',
+    description: 'No quasi-polynomial compilation (implies no polynomial)',
+    opDescription: 'No quasi-polynomial transformation (implies no polynomial)',
     notation: '$\\not\\leq_q$',
     emoji: '❌',
     color: '#dc2626', // red-600
@@ -114,7 +121,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'not-poly',
     internal: true,
     label: 'Not Polynomial',
-    description: 'No polynomial transformation',
+    description: 'No polynomial compilation',
+    opDescription: 'No polynomial transformation',
     notation: '$\\not\\leq$',
     emoji: '❌',
     color: '#ef4444', // red-500
@@ -127,6 +135,7 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     code: 'unknown-to-us',
     label: 'Unknown to Us',
     description: 'Not yet researched or documented',
+    opDescription: 'Not yet researched or documented',
     notation: '?',
     emoji: '❓',
     color: '#9ca3af', // gray-400

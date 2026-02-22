@@ -81,9 +81,9 @@ export function phraseForStatus(status: string): string {
     case 'poly':
       return 'in polynomial time';
     case 'unknown-poly-quasi':
-      return 'in at worst quasipolynomial time';
+      return 'in at worst quasi-polynomial time';
     case 'no-poly-quasi':
-      return 'in quasipolynomial time';
+      return 'in quasi-polynomial time';
     default:
       return 'in unknown time';
   }
@@ -91,16 +91,16 @@ export function phraseForStatus(status: string): string {
 
 /**
  * Convert a status code to a human-readable contradiction phrase.
- * E.g., "no-poly-quasi" becomes "This contradicts the fact that X cannot transform to Y in polynomial time"
+ * E.g., "no-poly-quasi" becomes "This contradicts the fact that X cannot compile to Y in polynomial time"
  */
 export function formatStatusContradiction(srcName: string, tgtName: string, status: string): string {
   switch (status) {
     case 'no-poly-quasi':
-      return `This contradicts the fact that ${srcName} cannot transform to ${tgtName} in polynomial time`;
+      return `This contradicts the fact that ${srcName} cannot compile to ${tgtName} in polynomial time`;
     case 'no-poly-unknown-quasi':
-      return `This contradicts the fact that ${srcName} cannot transform to ${tgtName} in polynomial time`;
+      return `This contradicts the fact that ${srcName} cannot compile to ${tgtName} in polynomial time`;
     case 'no-quasi':
-      return `This contradicts the fact that ${srcName} cannot transform to ${tgtName} in quasipolynomial time`;
+      return `This contradicts the fact that ${srcName} cannot compile to ${tgtName} in quasi-polynomial time`;
     default:
       return `This contradicts the existing relationship from ${srcName} to ${tgtName}`;
   }
@@ -155,7 +155,7 @@ export function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): stri
     const status = relation?.status ?? 'unknown';
     const refs = relation?.refs ?? [];
     const caveat = relation?.caveat;
-    parts.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(status)}${formatCaveat(caveat)}${formatCitations(refs)}.`);
+    parts.push(`${idToName(fromId)} compiles to ${idToName(toId)} ${phraseForStatus(status)}${formatCaveat(caveat)}${formatCitations(refs)}.`);
   }
   return parts.join(' ');
 }
@@ -165,10 +165,10 @@ export function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): stri
  */
 export function buildNoPolyQuasiDescription(noPolyDescription: DescriptionComponent, quasiDescription: DescriptionComponent): string {
   const parts: string[] = [];
-  parts.push('First, we show no polynomial transformation exists.');
+  parts.push('First, we show no polynomial compilation exists.');
   parts.push(noPolyDescription.description);
   parts.push('');
-  parts.push('Now, we show a quasipolynomial transformation exists.');
+  parts.push('Now, we show a quasi-polynomial compilation exists.');
   parts.push(quasiDescription.description);
   return parts.join('\n');
 }

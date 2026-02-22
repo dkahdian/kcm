@@ -113,6 +113,21 @@
     return complexity.description;
   }
 
+  /**
+   * Split a compound status label at the semicolon so the caveat can be
+   * inserted after the first part (the primary claim) rather than at the
+   * very end.  For simple statuses (no semicolon) prefix is the full label
+   * and suffix is empty.
+   */
+  function splitStatusLabel(status: string): { prefix: string; suffix: string } {
+    const label = getStatusLabel(status);
+    const idx = label.indexOf(';');
+    if (idx !== -1) {
+      return { prefix: label.slice(0, idx), suffix: label.slice(idx) };
+    }
+    return { prefix: label, suffix: '' };
+  }
+
   function scrollToReferences(e: MouseEvent) {
     e.preventDefault();
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -143,26 +158,22 @@
                 <span> → </span>
                 <MathText text={toName} className="inline" />
               </h5>
-              <p class="text-sm text-gray-700 mb-2">
-                {getStatusLabel(relation.status)}{#if relation.caveat}{' '}unless {relation.caveat}{/if}{#if relation.refs.length}{' '}{#each relation.refs as refId}<button 
+              {#if true}
+                {@const parts = splitStatusLabel(relation.status)}
+                <p class="text-sm text-gray-700 mb-2">
+                  {parts.prefix}{#if relation.caveat}{' '}unless <MathText text={relation.caveat} className="inline" />{/if}{parts.suffix}{#if relation.refs.length}{' '}{#each relation.refs as refId}<button 
                       class="ref-badge"
                       onclick={scrollToReferences}
                       title="View reference"
                     >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
-              </p>
+                </p>
+              {/if}
               {#if relation.description}
                 <MathText 
                   text={relation.description} 
                   className="text-sm text-gray-600 mb-2 italic block" 
                   onCitationClick={handleCitationClick}
                 />
-              {/if}
-
-              {#if relation.derived}
-                <div class="derived-notice mt-2 mb-2">
-                  <span class="derived-badge">Derived</span>
-                  <span class="text-xs text-gray-500">This was inferred from other data</span>
-                </div>
               {/if}
               
               {#if separatingFns.length > 0}

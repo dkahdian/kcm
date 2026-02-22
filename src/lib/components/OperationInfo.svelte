@@ -132,13 +132,21 @@
           ({selectedOperationCell.operationType})
         </div>
 
-        <p class="text-sm text-gray-700 mb-2">
-          {complexity.description}{#if selectedOperationCell.support.caveat}{' '}unless <MathText 
-              text={selectedOperationCell.support.caveat} 
-              className="inline"
-              onCitationClick={handleCitationClick}
-            />{/if}
-        </p>
+        {#if true}
+          {@const label = complexity.opDescription}
+          {@const semiIdx = label.indexOf(';')}
+          <p class="text-sm text-gray-700 mb-2">
+            {#if semiIdx !== -1}{label.slice(0, semiIdx)}{#if selectedOperationCell.support.caveat}{' '}unless <MathText 
+                text={selectedOperationCell.support.caveat} 
+                className="inline"
+                onCitationClick={handleCitationClick}
+              />{/if}{label.slice(semiIdx)}{:else}{label}{#if selectedOperationCell.support.caveat}{' '}unless <MathText 
+                text={selectedOperationCell.support.caveat} 
+                className="inline"
+                onCitationClick={handleCitationClick}
+              />{/if}{/if}
+          </p>
+        {/if}
 
         {#if selectedOperationCell.support.description}
           <div class="description-section mb-4">
@@ -147,13 +155,6 @@
               className="text-sm text-gray-700"
               onCitationClick={handleCitationClick}
             />
-          </div>
-        {/if}
-
-        {#if selectedOperationCell.support.derived}
-          <div class="derived-notice mb-4">
-            <span class="derived-badge">Derived</span>
-            <span class="text-xs text-gray-500">This was inferred from other data</span>
           </div>
         {/if}
 

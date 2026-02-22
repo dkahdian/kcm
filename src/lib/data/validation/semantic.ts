@@ -22,9 +22,9 @@ function phraseForStatus(status: string): string {
     case 'poly':
       return 'in polynomial time';
     case 'unknown-poly-quasi':
-      return 'in at worst quasipolynomial time';
+      return 'in at worst quasi-polynomial time';
     case 'no-poly-quasi':
-      return 'in quasipolynomial time';
+      return 'in quasi-polynomial time';
     default:
       return 'in unknown time';
   }
@@ -103,7 +103,7 @@ function describePath(path: number[], matrix: KCAdjacencyMatrix): string {
     const to = path[i + 1];
     const status = getEdgeStatus(matrix, from, to) ?? 'unknown';
     const phrase = phraseForStatus(status);
-    parts.push(`${languageIds[from]} transforms to ${languageIds[to]} ${phrase}.`);
+    parts.push(`${languageIds[from]} compiles to ${languageIds[to]} ${phrase}.`);
   }
   return parts.join(' ');
 }

@@ -136,19 +136,19 @@
       case 'poly':
         return { linkText, suffixText: ' in polynomial time' };
       case 'not-poly':
-        return { linkText: `No polynomial transformation from ${from} to ${to}`, suffixText: '' };
+        return { linkText: `No polynomial compilation from ${from} to ${to}`, suffixText: '' };
       case 'no-quasi':
         return { linkText: `Exponential gap between ${from} and ${to}`, suffixText: '' };
       case 'no-poly-quasi':
         return { linkText, suffixText: ' in quasi-polynomial time only' };
       case 'no-poly-unknown-quasi':
-        return { linkText: `No polynomial transformation from ${from} to ${to}`, suffixText: '; quasi-polynomial unknown' };
+        return { linkText: `No polynomial compilation from ${from} to ${to}`, suffixText: '; quasi-polynomial unknown' };
       case 'unknown-poly-quasi':
-        return { linkText: `Polynomial transformation unknown from ${from} to ${to}`, suffixText: '; quasi-polynomial exists' };
+        return { linkText: `Polynomial compilation unknown from ${from} to ${to}`, suffixText: '; quasi-polynomial exists' };
       case 'unknown-both':
-        return { linkText: `Complexity of transformation from ${from} to ${to}`, suffixText: ' is unknown' };
+        return { linkText: `Complexity of compilation from ${from} to ${to}`, suffixText: ' is unknown' };
       case 'unknown':
-        return { linkText: `Complexity of transformation from ${from} to ${to}`, suffixText: ' is unknown' };
+        return { linkText: `Complexity of compilation from ${from} to ${to}`, suffixText: ' is unknown' };
       default:
         return { linkText: `${from} relates to ${to}`, suffixText: '' };
     }

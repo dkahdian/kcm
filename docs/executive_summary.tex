@@ -45,15 +45,19 @@
 \maketitle
 
 \begin{abstract}
-We describe the algorithmic machinery behind the Updated Knowledge Compilation Map, an interactive tool for exploring succinctness relations and query tractability across KC languages. Starting from a hand-curated knowledge base of known results, we validate consistency via DFS-based reachability, then propagate derived facts through fixed-point upgrade and contradiction-driven downgrade algorithms. Query and transformation support is propagated analogously using succinctness relations and operation implication lemmas. We then encode the knowledge base as a propositional CNF formula, compile it to d-DNNF using c2d, and verify that the entailed literals match the graph-based propagation exactly---confirming soundness and completeness of our algorithms. The compiled representation further enables model counting ($\approx 2^{30.45}$ consistent worlds) and surprise analysis, ranking open problems by their information content. The project is publicly visible at \url{https://kcm.kahdian.com} and on Github at \url{https://github.com/dkahdian/kcm}.
+We describe the Updated Knowledge Compilation Map. This project is meant as a modernization of \citet{Darwiche_2002}. At the lowest level, the project is a survey of the Knowledge Compilation landscape. We collected only "direct" results, that is, results that are not derived via transitive relations from other results. Internally, we represent these results as a graph, and use a DFS reachability algorithm to validate consistency. We use this algorithm to build a propagator, which uses transitive and other simple lemmas to derive related results. This gives us expanded versions of each of the tables in \citet{Darwiche_2002}.
+
+To further validate our results, we encode the knowledge base as a propositional CNF formula, compile it to d-DNNF using $\text{c2d}$, and verify that the entailed literals match the graph-based propagation exactly. The compiled representation further enables model counting and surprise analysis, ranking open problems by their information content. The project is publicly visible at \url{https://kcm.kahdian.com} and on Github at \url{https://github.com/dkahdian/kcm}.
 \end{abstract}
 
 \section{Setup}
 
-\subsection{Data}
-Data was primarily sourced from \citet{Darwiche_2002}, \citet{Amarilli_2018}, \citet{Bova_2016}, and related works. The knowledge base stores: (1)~a set of KC languages~$V$, (2)~a directed adjacency matrix of succinctness relations on $V \times V$, and (3)~per-language query/transformation support tables.
+\subsection{Data representation}
+Data was primarily sourced from \citet{Darwiche_2002}, \citet{Amarilli_2018}, \citet{Bova_2016}, and related works.
 
-Each directed edge $L_i \to L_j$ carries one of six statuses capturing the existence or non-existence of polynomial (P) and quasi-polynomial (Q) compilations:
+The knowledge base stores a set of KC languages~$\textbf{L}$ and some relations on $\textbf{L}$ as defined below.
+
+Each succinctness relationship carries one of six statuses capturing the existence or non-existence of polynomial (P) and quasi-polynomial (Q) compilations. For instance, $\texttt{no-poly-unknown-quasi}$ implies that no polynomial compilation is possible, but a quasipolynomial compilation has not been shown or ruled out. Let $S$ be the set of statuses listed below:
 \begin{center}
 \small
 \begin{tabular}{lcc}
@@ -67,80 +71,121 @@ Each directed edge $L_i \to L_j$ carries one of six statuses capturing the exist
 \end{tabular}
 \end{center}
 
-Query/transformation entries carry the same status vocabulary: each operation on each language records whether it can be performed in polynomial time, quasi-polynomial time, or not at all.
+Thus, the matrix of succinctness relations $M_s$ may be represented as a mapping $M_s:\textbf{L} \times \textbf{L} \to \textbf{S}$, where $M_s(L_1,L_2)$ represents the complexity of compiling from $L_1$ to $L_2$  We use succinctness relations $\leq_p, \leq_q$ in the expected way; for instance $L_2 \leq_q L_1 \iff M_s(L_1, L_2) \in \{\texttt{poly},\texttt{no-poly-quasi},\texttt{unknown-poly-quasi}\}$. For the rest of this paper, we will focus only on $\tilde S = \{ \texttt{poly}, \texttt{no-poly}, \texttt{unknown}\}$. All algorithms and logic for $\tilde S$ is easily extended to $S$.
+
+
+Query/transformation entries carry the same status vocabulary $\tilde S$, but instead represent the \emph{tractability} of an operation on a language. Thus, if $\textbf{O}=\textbf{Q} \cup \textbf{T}$ is the set of all operations we store, the operations matrix may be represented as a mapping $M_o:\textbf{L} \times \textbf{O} \to \textbf{S}$. 
+
+For simplicity we use the notation $L.o = M_o(L,o)$
+
+We say a language $L \in \textbf{L}$ \emph{supports} an operation $o \in \textbf{O}$ in status $s \in \tilde S$ if $L.o=\texttt{poly}$, and \emph{is unsupported} $o$ if $M_o(L,o)=\texttt{no-poly}$.
+
+Note that "not supported" (which could be \texttt{no-poly} or \texttt{unknown}) is distinct from "unsupported" (which means strictly \texttt{no-poly}).
+
+\paragraph{Caveats.}
+Many \texttt{no-poly} results are conditional on complexity-theoretic assumptions such as $\text{P} \neq \text{NP}$ or the polynomial hierarchy not collapsing. Each entry in $M_s$ or $M_o$ may carry an optional \emph{caveat} string $c$ (e.g.\ ``$\text{P} = \text{NP}$''), meaning the result holds \emph{unless} $c$ is true. When a derived result has multiple unique caveats, these are merged by union. As such, the handling of the caveats in the algorithms below is as expected. 
+
+However, the current implementation does have a small flaw: the propagator does not "prioritize" unconditional results over conditional results, so we may end up with conditional results that could be upgraded to unconditional. Implementing a system that prioritizes unconditional results is simple: we would only need to double the status space $S$ and thus also double the runtime.
+
+
 
 \subsection{Transitivity Lemmas}
 
-The propagation logic relies on two families of lemmas.
+The propagation logic relies on the following simple lemmas. We always assume $L_1,L_2 \in \textbf{L}, q \in Q, t \in T$.
 
 \paragraph{Succinctness transitivity.}
-If $L_1 \leq_p L_2$ and $L_2 \leq_p L_3$, then $L_1 \leq_p L_3$ (similarly for $\leq_q$). By contrapositive: if $L_1 \not\leq_p L_3$, then $L_1 \not\leq_p L_2$ or $L_2 \not\leq_p L_3$.
+\begin{itemize}
+  \item{If $L_1 \leq_p L_2$ and $L_2 \leq_p L_3$, then $L_1 \leq_p L_3$.}
+  \item{Corollary: if $L_1 \not\leq_p L_3$, then either $L_1 \not\leq_p L_2$ or $L_2 \not\leq_p L_3$.}
+\end{itemize}
  
-\paragraph{Query-by-compiling.}
-If $L_1 \leq_p L_2$ and $L_2$ supports query~$q$ in polytime, then $L_1$ supports $q$ in polytime (compile first, then query). Contrapositive: if $L_1$ cannot perform~$q$ in polytime and $L_1 \leq_p L_2$, then $L_2$ cannot perform~$q$ in polytime either.
+\paragraph{Query-by-compiling}
+\begin{itemize}
+\item{If $L_1 \leq_p L_2$ and $L_2$ supports $q$, then $L_1$ supports $q$ (compile, then query).}
+\item{Corollary: if $L_1$ does not support $q$, but $L_1 \leq_p L_2$, then $L_2$ does not support $q$ either.}
+\item{Corollary: if $L_1$ supports $q$, but $L_2$ does not support $q$, then $L_2$ cannot be compiled to $L_1$.}
+\end{itemize}
+
+Warning: a similar result does not apply for transformations.
 
 \paragraph{Operation implication lemmas.}
-A fixed set of ``hardcoded'' lemmas of the form $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$ hold within any single language. For example, $\text{CO} \wedge \lnot\text{C} \Rightarrow \text{VA}$. Their contrapositives are also exploited.
+We additionally have a \emph{family} of lemmas $F_l \subset \mathcal{P}(O) \times O$ of the form $o_1 \wedge \cdots \wedge o_n \Rightarrow o_{n+1}$, for $o_i\in \textbf{O}$, in the sense that if a language $L$ supports all the operations $o_1, \cdots, o_n$, it also supports $o_{n+1}$. For example, $\text{CO} \wedge \lnot\text{C} \Rightarrow \text{VA}$. Their contrapositives are also exploited, i.e. $\neg(\text{VA}) \wedge (\neg \text{C}) \Rightarrow \neg(\text{CO})$. These lemmas are obvious from definitions and are mostly sourced from \citet{Darwiche_2002}. 
 
 \section{Validation}
 
-Represent the knowledge base as a directed graph $G = (V, E)$ with $|V| = v \approx 20$ languages and $|E| = e \approx 400$ edges. Each edge carries a positive label (compilation exists) or a negative label (compilation does not exist).
+\textbf{Motivation.} The "validator" checks whether the data represented by the knowledge base is consistent with the above lemmas. We wish to have this algorithm to check contributions and as a subroutine for the propagator, described later.
 
-\textbf{Succinctness validation.} A contradiction occurs when a positive path (chain of ``exists'' edges) connects $L_i$ to $L_j$ but the direct edge $L_i \to L_j$ is negative. We run a DFS from every vertex on the subgraph of positive edges, yielding $O(v(v + e))$ time. Witness paths for contradictions are extracted from the DFS parent pointers.
+\textbf{Description.} The validator is formally a mapping $(M_s, M_o) \mapsto \{\top, \bot\}$. The propagator benefits from explanations of \emph{why} a knowledge base is invalid, so our algorithm will return a plain-text description of the contradiction as well.
 
-\textbf{Query/transformation validation.} Two checks: (1)~for each language and each operation lemma $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$, verify that it is not the case that all antecedents are supported while the consequent is marked unsupported ($O(vL)$ for $L \approx 10$ lemmas); (2)~for each pair $(L_1, L_2)$ with $L_1 \leq_p L_2$, verify that no query $q$ is supported on $L_2$ but marked impossible on $L_1$ ($O(v^2 Q)$ for $Q \approx 10$ queries).
 
-\section{Succinctness Propagation}
+\textbf{Succinctness validation.} Represent the succinctness relationships as a graph $G = (\textbf{L}, E)$, where $(L_1, L_2, s) \in E \iff M_s(L_1, L_2) = s$. There is a contradiction if and only if, for languages $L_i, L_j$, there exists a path of $\texttt{poly}$ edges while $M_s(L_i, L_j) = \texttt{no-poly}$. A DFS finds any such contradictions, with the corresponding witness path, in $O((\#\textbf{L})^2)$ time.
 
-The propagation algorithm fills in derived relations that follow logically from the hand-entered data. It operates in two phases, both run to a fixed point.
+\textbf{Query-by-compile validation.} We consider each pair of languages $L_i, L_j \in \textbf{L}$ so that a path of $\texttt{poly}$ edges exists from $L_i$ to $L_j$. For such pairs, we ensure that every query $q$ supported by $L_2$ is not unsupported by $L_1$. This requires a similar DFS algorithm taking $O((\#\textbf{L})^2(\#Q)$ time.
 
-\subsection{Phase 1: Upgrades (Fixed-Point)}
+\textbf{Implication lemma validation.} For each language $L \in \textbf{L}$ and for each lemma $l=(\{o_1, ..., o_n\}, o_{n+1}) \in F_l$, we check that $L.o_{n+1})=\texttt{no-poly}) \wedge (\bigwedge_{i=1}^n  L.o_i=\texttt{no-poly})$ does not hold. This takes $O((\#\textbf{L})(\#F_l)(\#\textbf{O}))$ time.
 
-An \emph{upgrade} strengthens an edge status---for example, marking an unknown edge as \texttt{poly}. The core idea is transitive closure: we repeatedly compute the reachability matrix on the subgraph of polytime edges (via DFS from every vertex), then for each pair $(i,j)$ that is reachable but whose direct edge does not yet reflect this, we upgrade $i \to j$ to \texttt{poly} and record the witness path from the DFS parent pointers. If an upgrade would contradict a known negative edge, a contradiction is raised.
+\section{Propagation}
 
-This repeats until no further upgrades are possible (fixed point). Each iteration costs $O(v(v+e))$ for the DFS. Since each edge can only be upgraded a bounded number of times and there are $O(v^2)$ edges, the loop runs at most $O(v^2)$ iterations for a total of $O(v^3(v+e))$, though in practice it converges in 2--3 passes. The quasi-polynomial case is handled identically with a broader set of qualifying edge statuses.
+\paragraph{Motivation.} The propagation algorithm fills in derived relations that follow logically from the hand-entered data. This is useful for the following purposes:
+\begin{itemize}
+    \item{Reducing manual labor, both in terms of data entry and thinking about transitivity}
+    \item{Provides intuitive explanations for how claims hold.}
+    \item{Allows researchers to easily check the implications of any assumed relationship}
+\end{itemize}
 
-\subsection{Phase 2: Downgrades (Fixed-Point)}
+\paragraph{Description.} The propagator can be viewed as a mapping $(M_s, M_o) \mapsto (\widetilde M_s, \widetilde M_o)$ which replaces $\texttt{unknown}$ edges with $\texttt{poly}$ or $\texttt{no-poly}$ edges based on the lemmas in \textbf{1.2}. The algorithms below are complete in the sense that they infer all possible information, although we have not drafted proofs of this.
 
-A \emph{downgrade} narrows an edge status based on contradiction. The algorithm tentatively assumes a stronger status for an edge and checks (using the validator) whether that would create a path contradicting a known negative edge. If so, the stronger status is ruled out.
+\subsection{Phase 1: Succinctness Upgrades (Fixed-Point)}
 
-Concretely, for each edge $i \to j$ with status \texttt{null} or \texttt{unknown-both}:
-\begin{enumerate}
-\item Tentatively set $i \to j$ to \texttt{poly} and run the consistency checker. If a contradiction is found, downgrade to \texttt{no-poly-unknown-quasi} (``poly is impossible'').
-\item If poly was not eliminated, tentatively set $i \to j$ to \texttt{unknown-poly-quasi} and run consistency. If contradiction, downgrade to \texttt{no-quasi}.
-\end{enumerate}
+An \emph{upgrade} changes an \texttt{unknown} to \texttt{poly}. We use a fixed-point DFS-based transitive closure algorithm. We find paths of \texttt{poly} edges between languages $L_i, L_j$, and map $M_s(L_i, L_j, \texttt{unknown})$ to $M_s(L_i, L_j, \texttt{poly})$. We then use that witness path to write a plaintext explanation of how the upgrade was derived.
 
-Similarly, \texttt{unknown-poly-quasi} edges are tested for a poly upgrade (yielding \texttt{no-poly-quasi} on failure), and \texttt{no-poly-unknown-quasi} edges are tested for a quasi upgrade (yielding \texttt{no-quasi} on failure).
+This repeats until no further upgrades are possible (fixed point). Each iteration costs $O((\#\textbf{L})^2)$ for the DFS. Since each edge can only be upgraded a bounded number of times and there are $O((\#\textbf{L})^2))$ unknown edges, the loop runs at most $O((\#\textbf{L})^2))$ iterations for a total of $O((\#\textbf{L})^4))$, though in practice it converges in only 2--3 passes.
 
-This phase also runs to a fixed point because a downgrade on one edge may enable further downgrades elsewhere. Each trial consistency check costs $O(v(v+e))$, and there are $O(v^2)$ edges to test per iteration, giving $O(v^2 \cdot v(v+e))$ per round.
+Note that, when handling the full set of statuses $S$, we apply the algorithm to upgrade to $\texttt{poly}$ first, then to $\texttt{quasi}$, in separate fixed-point iterations.
 
-Witness paths from the DFS are stored as human-readable proof descriptions on each derived edge, enabling the UI to display \emph{why} a relation was inferred.
+\subsection{Phase 2: Succinctness Downgrades (Fixed-Point)}
 
-\section{Query/Transformation Propagation}
+A \emph{downgrade} changes an \texttt{unknown} to \texttt{no-poly}. The approach is via exhaustive search: for each \texttt{unknown} edge, we temporarily set the edge to \texttt{poly} and check (using the \texttt{validator}) whether that creates a contradiction. If so, the stronger status is ruled out, and we use the contradicting path as an explanation for why.
 
-After succinctness propagation, we propagate query and transformation support across languages in three sub-phases.
+This phase also runs to a fixed point because a downgrade on one edge may enable further downgrades elsewhere. Each trial consistency check costs $O((\#\textbf{L})^2))$, and there are $O((\#\textbf{L})^2))$ edges to test per iteration, and we must run the validator (which takes $O((\#\textbf{L})^2)))$ giving $O((\#\textbf{L})^6))$ overall runtime.
+
+Note that, when handling $S$ instead of $\tilde S$, during each iteration of the fixed point, we first try setting the edge to $\texttt{poly}$; then, if no contradiction is created, to $\texttt{unknown-poly-quasi}$. This interleaving is critical for correctness.
+
+\subsection{Query/Transformation Propagation}
+
+After phase 2, $\widetilde M_s$ is finalized (ignoring Phase~6), so we move on to $\widetilde M_o$. We propagate query and transformation support across languages in three sub-phases.
 
 \subsection{Phase 3: Upgrades via Succinctness}
 
-Using the query-by-compiling principle: if $L_1 \leq_p L_2$ (from the now-complete reachability matrix) and $L_2$ supports query $q$ in polytime, then $L_1$ also supports $q$ in polytime. The quasi analogue holds as well. Process poly upgrades first (to a fixed point), then quasi upgrades. Cost: $O(v^2 Q)$ per iteration.
+This is another fixed-point algorithm using the query-by-compiling principle: if $L_1 \leq_p L_2$ (because we now have transitive closure, this is equivalent to checking all paths) and $L_2.q = \texttt{poly}$, then $L_1.q = \texttt{poly}$. Checking all triples $(L_1, L_2, q)$ takes $O((\#\textbf{L})^2(\#Q))$ time. Since there are at most $O((\#\textbf{L})^2))$ upgrades to check, this takes at most $O((\#\textbf{L})^4(\#Q))$ time, although, again, we typically converge after very few iterations.
+
+When dealing with the full set of statuses $S$, we process \texttt{poly} upgrades first (to a fixed point), then worry about quasi-polynomial status upgrades.
 
 \subsection{Phase 4: Upgrades via Lemmas}
 
-For each language $L$ and each operation lemma $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$: if $L$ supports all antecedents in polytime, mark the consequent as polytime-supported (similarly for quasi, with complexity bounded by the worst antecedent). This is interleaved with Phase~3 in the same fixed-point loop. Cost: $O(vL)$ per iteration.
+For each language $L$ and each operation lemma $(\{o_1,...o_n\}, o_{n+1})$: if $L$ supports all $o_i: i \in [n]$, set $L.o_{n+1}$ to $\texttt{poly}$. Note that this is interleaved with Phase~3 in the same fixed-point loop. Cost: $O((\#F_l)(\#\textbf{L}))$ per iteration, with $O((\#F_l)(\#L))$ iterations, for a total complexity of $O((\#F_l)^2(\#\textbf{L})^2)$.
 
 \subsection{Phase 5: Downgrades}
 
 \paragraph{Via succinctness (contrapositive of query-by-compiling).}
-If $L_1$ cannot perform $q$ in polytime and $L_1 \leq_p L_2$, then $L_2$ cannot perform $q$ in polytime. (If it could, $L_1$ would compile to $L_2$ and query there---contradiction.) The quasi analogue applies with $\leq_q$. Cost: $O(v^2 Q)$.
+If $L_1.q = \texttt{no-poly}$ and $L_1 \leq_p L_2$, then $L_2.q = \texttt{no-poly}$. (If $L_2.q = \texttt{poly}$, $L_1$ would compile to $L_2$ and query there---contradiction.) Checking this for each pair of languages and for each query takes $O((\#\textbf{L})^2)(\#Q))$ per iteration.
 
-\paragraph{Via lemma contrapositives.}
-Given $O_1 \wedge \cdots \wedge O_n \Rightarrow O_{n+1}$, if the consequent $O_{n+1}$ is impossible (say, no-poly) and all antecedents except $O_j$ are supported, then $O_j$ must be impossible too. Each lemma is checked against every language. Cost: $O(vLn)$.
+\paragraph{Via operation implications lemmas corollary.}
+For each language $L$ and each lemma $l=(\{o_1,o_2,...,o_n\},o_{n+1})$, if we have that $L$ supports $o_i$ for all $i$ except $\tilde i$ (which forces $L.o_{\tilde i}=\texttt{unknown}$), set $L.o_{\tilde i}$ to $\texttt{no-poly}$, for otherwise the lemma would imply $L_o$ supports $o_{n+1}$. This takes $O((\#\textbf{L})(\#F_l))$ time per iteration.
 
-Phases 3--5 are each repeated to a fixed point, since one inference may enable another. All derived entries are tagged \texttt{derived = true} with human-readable proof descriptions and references.
+In theory, this can downgrade $\texttt{unknown}$ results to $\texttt{no-poly}$ for \emph{transformations} as well as queries. Unfortunately, in practice no such downgrades are applicable.
 
-\section{Meta-Knowledge Compilation}
+Phases 3--5 are each repeated to a fixed point, since one inference may enable another. This takes at most $O((\#\textbf{L})^4(\#Q + \#F_l))$ time. (All derived entries are tagged \texttt{derived = true} with human-readable proof descriptions and references.)
 
-The knowledge base itself can be cast as a propositional satisfiability problem. We have implemented this encoding and compiled it to d-DNNF, enabling model counting and surprise analysis over the space of consistent worlds.
+\subsection{Phase 6: Succinctness Downgrades via Query Differences}
+
+For each pair of languages $L_1, L_2$ and each query $q$, if $q$ is unsupported by $L_1$ but supported by $L_2$, we may set $M_s(L_1,L_2)$ to $\texttt{no-poly}$ (for else we could query $L_1$ by compiling to $L_2$). This takes at most $O((\#\textbf{L})^2(\#Q))$ time per iteration.
+
+Since Phase~6 may alter $M_s$, which may affect earlier phases, the entire propagator (Phases~1--6) is wrapped in a global fixed-point loop, although usually this requires no more than 2 iterations to converge.
+
+\section{Meta-Knowledge Compilation (Needs rewrite)}
+
+As hinted above, the knowledge base itself can be cast as a propositional satisfiability problem. We have implemented this encoding and compiled it to d-DNNF, enabling model counting and surprise analysis over the space of consistent worlds.
 
 \subsection{Encoding}
 
@@ -171,6 +216,7 @@ For each free variable~$v$ and truth value $\textit{val} \in \{\top, \bot\}$, th
 \[
   \text{surprise}(v = \textit{val}) \;=\; \log_2 \frac{\text{MC}(\Sigma)}{\text{MC}(\Sigma \mid v = \textit{val})}
 \]
+\oliver{I've now thought about it, and this definition makes perfect sense! The quantity $-\log_2 p(E)$ is sometimes called \emph{surprisal} (or \emph{self-information}) of the event $E$, and the (Shannon) entropy of a random variable (indicator for the event) is exactly the expectation of the surprisal. Specifically, if we consider the uniform distribution over the models of $\Sigma$, then it is easy (and worthwhile) to check that your above definition of surprise is exactly computing the \emph{surprisal} of the event v=val. Maybe you already had this in mind during the meeting, but I did not follow all this if you did already have it in mind, and I think this additional context completely justifies the definition. (And, funnily, I don't think you really need to add any such justification in the writing, I'm more just glad that it exists, convincing me that this is the "right" definition/quantity to use.}
 Higher surprise means the result eliminates a larger fraction of consistent worlds. Table~\ref{tab:surprise} lists the 20~most informative open problems. The cSDD language dominates the ranking because it is a recently introduced language with few known succinctness relationships, making each potential result highly constraining.
 
 \begin{table}[ht]

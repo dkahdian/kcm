@@ -178,7 +178,7 @@
     <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto" onclick={(e) => e.stopPropagation()}>
       <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 sticky top-0 z-10">
         <h2 class="text-2xl font-bold text-white">Manage Relationship</h2>
-        <p class="text-blue-100 mt-1">Add or update transformation relationships</p>
+        <p class="text-blue-100 mt-1">Add or update succinctness relationships</p>
       </div>
 
       <div class="p-6 space-y-4">
@@ -250,7 +250,7 @@
             bind:value={description}
             rows="3"
             class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
-            placeholder="Describe this transformation relationship (optional)..."
+            placeholder="Describe this succinctness relationship (optional)..."
           ></textarea>
         </div>
 

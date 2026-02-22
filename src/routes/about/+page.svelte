@@ -111,6 +111,10 @@
 </div>
 
 <style>
+	:global(body) {
+		overflow: auto;
+	}
+
 	.about-page {
 		max-width: 48rem;
 		margin: 0 auto;

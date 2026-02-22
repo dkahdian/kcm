@@ -86,16 +86,16 @@ interface Edge {
 // =============================================================================
 
 /**
- * All valid complexity/transformation status codes.
+ * All valid complexity/compilation status codes.
  * Maps status code → canonical claim text fragment (human-readable English).
  */
 const CANONICAL_STATUSES: Record<string, string> = {
-  'poly':                   'is polynomial-time transformable to',
-  'no-poly-unknown-quasi':  'is not polynomial-time transformable to',
-  'no-poly-quasi':          'is not polynomial-time (but is quasi-polynomial-time) transformable to',
-  'unknown-poly-quasi':     'has unknown polynomial-time (but has quasi-polynomial-time) transformation to',
-  'no-quasi':               'is not quasi-polynomial-time transformable to',
-  'unknown-both':           'has unknown transformation to',
+  'poly':                   'is polynomial-time compilable to',
+  'no-poly-unknown-quasi':  'is not polynomial-time compilable to',
+  'no-poly-quasi':          'is not polynomial-time (but is quasi-polynomial-time) compilable to',
+  'unknown-poly-quasi':     'has unknown polynomial-time (but has quasi-polynomial-time) compilation to',
+  'no-quasi':               'is not quasi-polynomial-time compilable to',
+  'unknown-both':           'has unknown compilation to',
 };
 
 /**
@@ -885,6 +885,7 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
   }
   
   let updated = 0;
+  let created = 0;
   let skipped = 0;
   
   for (const claim of claims) {
@@ -913,17 +914,38 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
       continue;
     }
     
-    // Get existing relation to modify in-place (preserves key order)
-    const existing = matrix[fromIdx][toIdx] as DirectedSuccinctnessRelation | null;
+    // Get existing relation or create a new one
+    let existing = matrix[fromIdx][toIdx] as DirectedSuccinctnessRelation | null;
     
     if (!existing) {
-      console.warn(`No existing edge for: ${claim.fromName} -> ${claim.toName}`);
-      skipped++;
+      // Create a new edge from the parsed claim
+      existing = {
+        status: claim.status,
+        description: claim.proofSketch,
+        refs: claim.refs,
+        derived: false,
+      };
+      if (claim.caveat) {
+        existing.caveat = claim.caveat;
+      }
+      if (claim.separatingFunctionIds && claim.separatingFunctionIds.length > 0) {
+        existing.separatingFunctionIds = claim.separatingFunctionIds;
+      }
+      matrix[fromIdx][toIdx] = existing;
+      console.log(`  Created new edge: ${claim.fromName} -> ${claim.toName} (${claim.status})`);
+      created++;
       continue;
     }
     
-    // Update description field
-    existing.description = claim.proofSketch;
+    // Update description field.
+    // For edges with a canonical quasiDescription (e.g. unknown-poly-quasi),
+    // the LaTeX claimdescription is the quasi proof sketch, not the main
+    // description (which is derived from the composite no-poly + quasi proofs).
+    if (existing.quasiDescription && !existing.quasiDescription.derived) {
+      existing.quasiDescription.description = claim.proofSketch;
+    } else {
+      existing.description = claim.proofSketch;
+    }
     
     // Update references from claim line (this was missing before!)
     if (claim.refs.length > 0) {
@@ -953,7 +975,7 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
     updated++;
   }
   
-  console.log(`Updated ${updated} edges, skipped ${skipped} (derived or unresolved)`);
+  console.log(`Updated ${updated} edges, created ${created} new edges, skipped ${skipped} (derived or unresolved)`);
 }
 
 // =============================================================================

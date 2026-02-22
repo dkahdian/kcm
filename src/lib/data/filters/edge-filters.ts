@@ -173,7 +173,7 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
 export const positiveResultsOnly: EdgeFilter<boolean> = {
   id: 'positive-results-only',
   name: 'Positive Results Only',
-  description: 'Hide negative/unknown results (keep only edges that assert existence of a transformation)',
+  description: 'Hide negative/unknown results (keep only edges that assert existence of a compilation)',
   category: 'Visibility',
   defaultParam: false,
   controlType: 'checkbox',

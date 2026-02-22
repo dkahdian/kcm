@@ -1,6 +1,6 @@
-import type { GraphData, KCAdjacencyMatrix, KCLanguage, KCOpSupport, OperationLemma } from '../../types.js';
+import type { GraphData, KCAdjacencyMatrix, KCLanguage, KCOpSupport, OperationLemma, DescriptionComponent } from '../../types.js';
 import { idToName } from '../../utils/language-id.js';
-import { getAllQueryCodes, QUERIES } from '../operations.js';
+import { getAllQueryCodes, QUERIES, TRANSFORMATIONS } from '../operations.js';
 import {
   DEBUG_PROPAGATION,
   POLY_STATUS,
@@ -8,7 +8,10 @@ import {
   computeReachability,
   reconstructPathIndices,
   ensurePath,
-  collectCaveatsUnion
+  collectCaveatsUnion,
+  formatCitations,
+  buildNoPolyQuasiDescription,
+  contradictionError
 } from './helpers.js';
 
 // =============================================================================
@@ -44,12 +47,19 @@ function collectPathCaveats(
   return collectCaveatsUnion(path, matrix);
 }
 
+/** Map an operation safe key (e.g. AND_C) to its human-readable label (e.g. Conjunction). */
+function opLabel(code: string): string {
+  const q = QUERIES[code];
+  if (q) return q.label;
+  const t = TRANSFORMATIONS[code];
+  if (t) return t.label;
+  return code;
+}
+
 /** Statuses that assert "no polynomial" */
 const NO_POLY_QUERY_STATUSES = new Set<string>(['no-poly-unknown-quasi', 'no-poly-quasi', 'no-quasi']);
-/** Statuses that assert "no quasi-polynomial" */
-const NO_QUASI_QUERY_STATUSES = new Set<string>(['no-quasi', 'no-poly-quasi']);
-/** Statuses that are unknown and can be upgraded/downgraded */
-const UNKNOWN_QUERY_STATUSES = new Set<string>(['unknown-both', 'unknown-to-us']);
+/** Statuses that assert "no quasi-polynomial" (only no-quasi; no-poly-quasi means quasi EXISTS) */
+const NO_QUASI_QUERY_STATUSES = new Set<string>(['no-quasi']);
 
 function getOperationSupport(language: KCLanguage, opCode: string): KCOpSupport | undefined {
   return language.properties?.queries?.[opCode] ?? language.properties?.transformations?.[opCode];
@@ -125,7 +135,8 @@ export function propagateQueriesViaSuccinctness(
               // Upgrade L1's query to poly
               const l1Name = idToName(l1Id);
               const l2Name = idToName(l2Id);
-              const description = `${l1Name} transforms to ${l2Name} in polynomial time, and ${l2Name} supports ${queryCode} in polynomial time. Therefore ${l1Name} supports ${queryCode} in polynomial time.`;
+              const l2Refs = l2.properties?.queries?.[queryCode]?.refs ?? [];
+              const description = `${l1Name} compiles to ${l2Name} in polynomial time, and ${l2Name} supports ${opLabel(queryCode)} in polynomial time${formatCitations(l2Refs)}. Therefore ${l1Name} supports ${opLabel(queryCode)} in polynomial time.`;
               
               // Merge caveats from the edge path and L2's query caveat
               const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
@@ -169,7 +180,8 @@ export function propagateQueriesViaSuccinctness(
             const l1Name = idToName(l1Id);
             const l2Name = idToName(l2Id);
             const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
-            const description = `${l1Name} transforms to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${queryCode}. Therefore ${l1Name} supports ${queryCode} in at most quasi-polynomial time.`;
+            const l2Refs = l2.properties?.queries?.[queryCode]?.refs ?? [];
+            const description = `${l1Name} compiles to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${opLabel(queryCode)} in quasi-polynomial time${formatCitations(l2Refs)}. Therefore ${l1Name} supports ${opLabel(queryCode)} in at most quasi-polynomial time.`;
             
             // Merge caveats from the edge path and L2's query caveat
             const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
@@ -256,8 +268,8 @@ export function propagateQueriesViaLemmas(
 
       if (shouldUpgrade) {
         const langName = idToName(language.id);
-        const antecedentNames = lemma.antecedent.join(', ');
-        const description = `Since ${langName} supports ${antecedentNames}, it also supports ${lemma.consequent}. ${lemma.description}`;
+        const antecedentNames = lemma.antecedent.map(opLabel).join(', ');
+        const description = `Since ${langName} supports ${antecedentNames}, it also supports ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}.`;
 
         // Merge caveats from all antecedent operations
         const caveat = mergeCaveats(...antecedentCaveats);
@@ -341,7 +353,8 @@ export function propagateQueryDowngrades(
           if (queryAssertsNoPoly(l2Complexity)) continue;
 
           const l2Name = idToName(l2.id);
-          const description = `${l1Name} does not support ${queryCode} in polynomial time, and ${l1Name} transforms to ${l2Name} in polynomial time. If ${l2Name} supported ${queryCode} in polynomial time, then ${l1Name} could too by transforming first. Therefore ${l2Name} does not support ${queryCode} in polynomial time.`;
+          const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
+          const description = `${opLabel(queryCode)} is unsupported by ${l1Name}${formatCitations(l1Refs)}, and ${l1Name} compiles to ${l2Name} in polynomial time. If ${l2Name} supported ${opLabel(queryCode)} in polynomial time, then ${l1Name} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${l2Name}.`;
 
           // Merge caveats from L1's query and the edge path
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
@@ -379,7 +392,8 @@ export function propagateQueryDowngrades(
           if (queryAssertsNoQuasi(l2Complexity)) continue;
 
           const l2Name = idToName(l2.id);
-          const description = `${l1Name} does not support ${queryCode} in quasi-polynomial time, and ${l1Name} transforms to ${l2Name} in quasi-polynomial time. If ${l2Name} supported ${queryCode}, then ${l1Name} could too by transforming first. Therefore ${l2Name} does not support ${queryCode} in quasi-polynomial time.`;
+          const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
+          const description = `${opLabel(queryCode)} is unsupported by ${l1Name} in quasi-polynomial time${formatCitations(l1Refs)}, and ${l1Name} compiles to ${l2Name} in quasi-polynomial time. If ${l2Name} supported ${opLabel(queryCode)} in quasi-polynomial time, then ${l1Name} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${l2Name} in quasi-polynomial time.`;
 
           // Merge caveats from L1's query and the edge path
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
@@ -469,10 +483,11 @@ export function propagateDowngradesViaLemmaContrapositives(
           if (!allOthersPolySupported) continue;
 
           // All other antecedents support poly, consequent is no-poly → target must be no-poly
+          const consequentRefs = consequentSupport?.refs ?? [];
           const othersDesc = otherAntecedents.length > 0 
-            ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in polynomial time,`
+            ? ` and since ${otherAntecedents.map(opLabel).join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in polynomial time,`
             : '';
-          const description = `Since ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent},${othersDesc} if ${langName} cannot support ${lemma.consequent} in polynomial time, it cannot support ${targetOp} in polynomial time either.`;
+          const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since ${opLabel(lemma.consequent)} is unsupported by ${langName}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${langName} as well.`;
 
           // Merge caveats from the consequent and all other antecedents
           const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
@@ -537,10 +552,11 @@ export function propagateDowngradesViaLemmaContrapositives(
           if (!allOthersQuasiSupported) continue;
 
           // All other antecedents support quasi, consequent is no-quasi → target must be no-quasi
+          const consequentRefs = consequentSupport?.refs ?? [];
           const othersDesc = otherAntecedents.length > 0 
-            ? ` Since ${otherAntecedents.join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in quasi-polynomial time,`
+            ? ` and since ${otherAntecedents.map(opLabel).join(' and ')} ${otherAntecedents.length === 1 ? 'is' : 'are'} supported in quasi-polynomial time,`
             : '';
-          const description = `Since ${lemma.antecedent.join(' ∧ ')} → ${lemma.consequent},${othersDesc} if ${langName} cannot support ${lemma.consequent} in quasi-polynomial time, it cannot support ${targetOp} in quasi-polynomial time either.`;
+          const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since ${opLabel(lemma.consequent)} is unsupported by ${langName} in quasi-polynomial time${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${langName} in quasi-polynomial time as well.`;
 
           // Merge caveats from the consequent and all other antecedents
           const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
@@ -579,12 +595,245 @@ export function propagateDowngradesViaLemmaContrapositives(
   return changed;
 }
 
+// =============================================================================
+// Phase 6: Succinctness by Query
+// =============================================================================
+
+/** Edge statuses that already assert "no polynomial compilation" */
+const EDGE_NO_POLY = new Set<string>(['no-poly-unknown-quasi', 'no-poly-quasi', 'no-quasi']);
+
+/**
+ * Phase 6: Derive succinctness (edge) results from query differences.
+ *
+ * Lemma "Succinctness by Query":
+ * If language A supports query Q in polynomial time, and language B does NOT
+ * support Q in polynomial time, then B cannot be compiled to A in
+ * polynomial time.
+ *
+ * Proof: If B → A were poly, then B supports Q by first compiling to A (poly)
+ * then running A's poly-time query algorithm. But B doesn't support Q in poly.
+ * Contradiction.
+ *
+ * Similarly for quasi-polynomial time.
+ *
+ * NOTE: This lemma applies only to QUERIES, not transformations. Transformations
+ * are language-specific operations that don't transfer via compilation.
+ */
+export function propagateSuccinctnessViaQueries(data: GraphData): boolean {
+  let changed = false;
+  const { adjacencyMatrix, languages } = data;
+  const queryCodes = getAllQueryCodes();
+
+  for (const queryCode of queryCodes) {
+    for (const langA of languages) {
+      const aIdx = adjacencyMatrix.indexByLanguage[langA.id];
+      if (aIdx === undefined) continue;
+      const aComplexity = getQueryComplexity(langA, queryCode);
+      const aSupport = getOperationSupport(langA, queryCode);
+
+      for (const langB of languages) {
+        if (langB.id === langA.id) continue;
+        const bIdx = adjacencyMatrix.indexByLanguage[langB.id];
+        if (bIdx === undefined) continue;
+        const bComplexity = getQueryComplexity(langB, queryCode);
+        const bSupport = getOperationSupport(langB, queryCode);
+
+        // === Poly case ===
+        // A supports Q in poly, B asserts no-poly for Q → B → A is not poly
+        if (queryGuaranteesPoly(aComplexity) && queryAssertsNoPoly(bComplexity)) {
+          if (deriveNoPolyEdge(adjacencyMatrix, bIdx, aIdx, langB, langA, queryCode, aSupport, bSupport)) {
+            changed = true;
+          }
+        }
+
+        // === Quasi case ===
+        // A supports Q in quasi, B has no-quasi for Q → B → A is not quasi
+        // NOTE: Only 'no-quasi' means "no quasi algorithm exists".
+        // 'no-poly-quasi' means quasi EXISTS (just not poly), so it does not qualify.
+        if (queryGuaranteesQuasi(aComplexity) && bComplexity === 'no-quasi') {
+          if (deriveNoQuasiEdge(adjacencyMatrix, bIdx, aIdx, langB, langA, queryCode, aSupport, bSupport)) {
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+
+  return changed;
+}
+
+/**
+ * Derive a no-poly edge B → A from query difference evidence.
+ * Returns true if the edge was changed.
+ */
+function deriveNoPolyEdge(
+  adjacencyMatrix: KCAdjacencyMatrix,
+  bIdx: number,
+  aIdx: number,
+  langB: KCLanguage,
+  langA: KCLanguage,
+  queryCode: string,
+  aSupport: KCOpSupport | undefined,
+  bSupport: KCOpSupport | undefined
+): boolean {
+  const currentRelation = adjacencyMatrix.matrix[bIdx][aIdx];
+  const currentStatus = currentRelation?.status ?? null;
+
+  // Skip if already asserts no-poly
+  if (currentStatus !== null && EDGE_NO_POLY.has(currentStatus)) return false;
+
+  const aName = idToName(langA.id);
+  const bName = idToName(langB.id);
+
+  // Contradiction: edge claims poly but we derived no-poly
+  if (currentStatus === 'poly') {
+    contradictionError(
+      `Contradiction (succinctness by query): ${bName} → ${aName} is marked as poly, ` +
+      `but ${aName} supports ${opLabel(queryCode)} in polynomial time while ${opLabel(queryCode)} is unsupported by ${bName}. ` +
+      `If the polynomial compilation existed, ${bName} could support ${opLabel(queryCode)} by compiling to ${aName}.`
+    );
+  }
+
+  const aRefs = aSupport?.refs ?? [];
+  const bRefs = bSupport?.refs ?? [];
+  const description =
+    `${aName} supports ${opLabel(queryCode)} in polynomial time${formatCitations(aRefs)}, but ${opLabel(queryCode)} is unsupported ` +
+    `by ${bName}${formatCitations(bRefs)}. If ${bName} could compile to ${aName} in ` +
+    `polynomial time, ${bName} could support ${opLabel(queryCode)} by first compiling to ${aName}. ` +
+    `Therefore ${bName} cannot compile to ${aName} in polynomial time.`;
+  const caveat = mergeCaveats(aSupport?.caveat, bSupport?.caveat);
+  const refs = [...new Set([...(aSupport?.refs ?? []), ...(bSupport?.refs ?? [])])];
+
+  if (currentStatus === 'unknown-poly-quasi' && currentRelation) {
+    // Transition: unknown-poly-quasi → no-poly-quasi (structured proof)
+    const quasiDescription = currentRelation.quasiDescription ?? {
+      description: currentRelation.description ?? '',
+      refs: currentRelation.refs ?? [],
+      derived: currentRelation.derived ?? false
+    };
+    const noPolyDescription: DescriptionComponent = {
+      description,
+      refs,
+      derived: true
+    };
+    const allRefs = [...new Set([...noPolyDescription.refs, ...quasiDescription.refs])];
+
+    // Merge caveats: query-derived caveat + original relation caveat
+    const allCaveats = new Set<string>();
+    if (caveat) {
+      for (const c of caveat.split(' OR ')) allCaveats.add(c.trim());
+    }
+    if (currentRelation.caveat) {
+      for (const c of currentRelation.caveat.split(' OR ')) allCaveats.add(c.trim());
+    }
+    const mergedCaveat = allCaveats.size > 0 ? Array.from(allCaveats).join(' OR ') : undefined;
+
+    const fullyDerived = noPolyDescription.derived && quasiDescription.derived;
+
+    adjacencyMatrix.matrix[bIdx][aIdx] = {
+      status: 'no-poly-quasi',
+      refs: allRefs,
+      caveat: mergedCaveat,
+      separatingFunctionIds: currentRelation.separatingFunctionIds,
+      hidden: false,
+      derived: fullyDerived,
+      noPolyDescription,
+      quasiDescription,
+      description: buildNoPolyQuasiDescription(noPolyDescription, quasiDescription)
+    };
+  } else {
+    // Transition: null / unknown-both → no-poly-unknown-quasi
+    adjacencyMatrix.matrix[bIdx][aIdx] = {
+      status: 'no-poly-unknown-quasi',
+      refs,
+      caveat,
+      separatingFunctionIds: undefined,
+      hidden: false,
+      derived: true,
+      description
+    };
+  }
+
+  if (DEBUG_PROPAGATION) {
+    console.log(
+      `[Succinctness by Query] EDGE ${bName} → ${aName}: ` +
+      `${currentStatus ?? 'null'} → ${adjacencyMatrix.matrix[bIdx][aIdx]!.status} (via ${queryCode} poly)`
+    );
+  }
+  return true;
+}
+
+/**
+ * Derive a no-quasi edge B → A from query difference evidence.
+ * Returns true if the edge was changed.
+ */
+function deriveNoQuasiEdge(
+  adjacencyMatrix: KCAdjacencyMatrix,
+  bIdx: number,
+  aIdx: number,
+  langB: KCLanguage,
+  langA: KCLanguage,
+  queryCode: string,
+  aSupport: KCOpSupport | undefined,
+  bSupport: KCOpSupport | undefined
+): boolean {
+  const currentRelation = adjacencyMatrix.matrix[bIdx][aIdx];
+  const currentStatus = currentRelation?.status ?? null;
+
+  // Skip if already asserts no-quasi
+  if (currentStatus === 'no-quasi') return false;
+
+  const aName = idToName(langA.id);
+  const bName = idToName(langB.id);
+
+  // Contradiction: edge guarantees quasi exists, but we derived no-quasi
+  if (currentStatus === 'poly' || currentStatus === 'unknown-poly-quasi' || currentStatus === 'no-poly-quasi') {
+    contradictionError(
+      `Contradiction (succinctness by query): ${bName} → ${aName} is marked as ${currentStatus} ` +
+      `(guaranteeing quasi-poly), but ${aName} supports ${opLabel(queryCode)} in quasi-polynomial time ` +
+      `while ${opLabel(queryCode)} is unsupported by ${bName} in quasi-polynomial time. If the quasi-polynomial ` +
+      `compilation existed, ${bName} could support ${opLabel(queryCode)} by compiling to ${aName}.`
+    );
+  }
+
+  const aRefs = aSupport?.refs ?? [];
+  const bRefs = bSupport?.refs ?? [];
+  const description =
+    `${aName} supports ${opLabel(queryCode)} in quasi-polynomial time${formatCitations(aRefs)}, but ${opLabel(queryCode)} is ` +
+    `unsupported by ${bName} in quasi-polynomial time${formatCitations(bRefs)}. If ${bName} could compile to ${aName} in ` +
+    `quasi-polynomial time, ${bName} could support ${opLabel(queryCode)} by first compiling to ${aName}. ` +
+    `Therefore ${bName} cannot compile to ${aName} in quasi-polynomial time.`;
+  const queryCaveat = mergeCaveats(aSupport?.caveat, bSupport?.caveat);
+  // Merge with existing edge caveat (e.g., from a prior no-poly-unknown-quasi derivation)
+  const caveat = mergeCaveats(queryCaveat, currentRelation?.caveat);
+  const refs = [...new Set([...(aSupport?.refs ?? []), ...(bSupport?.refs ?? []), ...(currentRelation?.refs ?? [])])];
+
+  // Transition: null / unknown-both / no-poly-unknown-quasi → no-quasi
+  adjacencyMatrix.matrix[bIdx][aIdx] = {
+    status: 'no-quasi',
+    refs,
+    caveat,
+    separatingFunctionIds: currentRelation?.separatingFunctionIds,
+    hidden: false,
+    derived: true,
+    description
+  };
+
+  if (DEBUG_PROPAGATION) {
+    console.log(
+      `[Succinctness by Query] EDGE ${bName} → ${aName}: ` +
+      `${currentStatus ?? 'null'} → no-quasi (via ${queryCode} quasi)`
+    );
+  }
+  return true;
+}
+
 /**
  * Validate query consistency.
  * Checks for contradictions:
  * 1. If L1 -> L2 and L2 supports q, but L1 claims no support (upgrade direction)
  * 2. If L1 doesn't support q and L1 -> L2, but L2 claims to support q (downgrade direction)
- * (If you can transform L1 to L2 and L2 supports a query, L1 must also support it.)
+ * (If you can compile L1 to L2 and L2 supports a query, L1 must also support it.)
  */
 export function validateQueryConsistency(data: GraphData): { ok: boolean; error?: string } {
   const { adjacencyMatrix, languages } = data;
@@ -612,36 +861,22 @@ export function validateQueryConsistency(data: GraphData): { ok: boolean; error?
         const l1Name = idToName(l1Id);
         const l2Name = idToName(l2Id);
 
-        // Check poly contradiction (upgrade direction): L1 -> L2, L2 supports q in poly, but L1 claims no-poly
+        // Check poly contradiction: L1 -> L2, L2 supports q in poly, but L1 claims no-poly
         if (reachP.reach[l1MatrixIdx][l2MatrixIdx]) {
           if (queryGuaranteesPoly(l2Complexity) && queryAssertsNoPoly(l1Complexity)) {
             return {
               ok: false,
-              error: `Contradiction: ${l1Name} transforms to ${l2Name} in polynomial time, and ${l2Name} supports ${queryCode} in polynomial time, but ${l1Name} is marked as not supporting ${queryCode} in polynomial time.`
-            };
-          }
-          // Check poly contradiction (downgrade direction): L1 -> L2, L1 claims no-poly, but L2 supports q in poly
-          if (queryAssertsNoPoly(l1Complexity) && queryGuaranteesPoly(l2Complexity)) {
-            return {
-              ok: false,
-              error: `Contradiction: ${l1Name} does not support ${queryCode} in polynomial time and transforms to ${l2Name} in polynomial time, but ${l2Name} is marked as supporting ${queryCode} in polynomial time.`
+              error: `Contradiction: ${l1Name} compiles to ${l2Name} in polynomial time, and ${l2Name} supports ${opLabel(queryCode)} in polynomial time, but ${opLabel(queryCode)} is marked as unsupported by ${l1Name}.`
             };
           }
         }
 
-        // Check quasi contradiction (upgrade direction): L1 -> L2, L2 supports q in quasi, but L1 claims no-quasi
+        // Check quasi contradiction: L1 -> L2, L2 supports q in quasi, but L1 claims no-quasi
         if (reachQ.reach[l1MatrixIdx][l2MatrixIdx]) {
           if (queryGuaranteesQuasi(l2Complexity) && queryAssertsNoQuasi(l1Complexity)) {
             return {
               ok: false,
-              error: `Contradiction: ${l1Name} transforms to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${queryCode} in quasi-polynomial time, but ${l1Name} is marked as not supporting ${queryCode} in quasi-polynomial time.`
-            };
-          }
-          // Check quasi contradiction (downgrade direction): L1 -> L2, L1 claims no-quasi, but L2 supports q
-          if (queryAssertsNoQuasi(l1Complexity) && queryGuaranteesQuasi(l2Complexity)) {
-            return {
-              ok: false,
-              error: `Contradiction: ${l1Name} does not support ${queryCode} in quasi-polynomial time and transforms to ${l2Name} in quasi-polynomial time, but ${l2Name} is marked as supporting ${queryCode} in quasi-polynomial time.`
+              error: `Contradiction: ${l1Name} compiles to ${l2Name} in quasi-polynomial time, and ${l2Name} supports ${opLabel(queryCode)} in quasi-polynomial time, but ${opLabel(queryCode)} is marked as unsupported by ${l1Name} in quasi-polynomial time.`
             };
           }
         }

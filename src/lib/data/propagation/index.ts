@@ -14,6 +14,7 @@ import {
   propagateQueriesViaLemmas,
   propagateQueryDowngrades,
   propagateDowngradesViaLemmaContrapositives,
+  propagateSuccinctnessViaQueries,
   validateQueryConsistency
 } from './query-propagation.js';
 
@@ -21,7 +22,11 @@ export { validateQueryConsistency } from './query-propagation.js';
 
 /**
  * Implicit propagation pass: rebuild indices, enforce fixed-point quasi/poly upgrades (Phase 1),
- * then perform contradiction-based downgrades (Phase 2).
+ * then perform contradiction-based downgrades (Phase 2), query propagation (Phases 3-5),
+ * and succinctness-by-query derivation (Phase 6).
+ *
+ * A global fixed-point loop ensures that Phase 6's new negative edges are fed back
+ * into earlier phases until no more changes occur.
  */
 export function propagateImplicitRelations(data: GraphData): GraphData {
   const { adjacencyMatrix } = data;
@@ -36,33 +41,44 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
     throw new Error(consistencyResult.error ?? 'Adjacency consistency validation failed');
   }
 
-  // Phase 1: fixed-point upgrades
-  let changed = true;
-  while (changed) {
-    const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
-    const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
-    const upgrades = phaseOneUpgrade(adjacencyMatrix, reachP, reachQ);
-    changed = upgrades > 0;
-  }
+  // Global fixed-point: Phases 1-2 → Phases 3-5 → Phase 6 → repeat if changed
+  let globalChanged = true;
+  while (globalChanged) {
+    globalChanged = false;
 
-  // Phase 2: contradiction-driven downgrades (repeat-until-stable)
-  let downgraded = true;
-  while (downgraded) {
-    downgraded = false;
-    const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
-    const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
-    for (let i = 0; i < adjacencyMatrix.languageIds.length; i += 1) {
-      for (let j = 0; j < adjacencyMatrix.languageIds.length; j += 1) {
-        if (i === j) continue;
-        if (tryDowngrade(data, i, j, reachP, reachQ)) {
-          downgraded = true;
+    // Phase 1: fixed-point upgrades
+    let changed = true;
+    while (changed) {
+      const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
+      const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
+      const upgrades = phaseOneUpgrade(adjacencyMatrix, reachP, reachQ);
+      changed = upgrades > 0;
+    }
+
+    // Phase 2: contradiction-driven downgrades (repeat-until-stable)
+    let downgraded = true;
+    while (downgraded) {
+      downgraded = false;
+      const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
+      const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
+      for (let i = 0; i < adjacencyMatrix.languageIds.length; i += 1) {
+        for (let j = 0; j < adjacencyMatrix.languageIds.length; j += 1) {
+          if (i === j) continue;
+          if (tryDowngrade(data, i, j, reachP, reachQ)) {
+            downgraded = true;
+          }
         }
       }
     }
-  }
 
-  // Phase 3-5: Query propagation
-  propagateQueryOperations(data);
+    // Phase 3-5: Query propagation
+    propagateQueryOperations(data);
+
+    // Phase 6: Succinctness by query — derive negative edges from query differences
+    if (propagateSuccinctnessViaQueries(data)) {
+      globalChanged = true;
+    }
+  }
 
   return data;
 }

@@ -127,7 +127,7 @@ function applyNoPolyQuasiUpgrade(
   // Create derived quasiDescription
   const pathIds = path.map((idx) => languageIds[idx]);
   const pathDesc = describePath(pathIds, matrix);
-  const quasiDesc = `${pathDesc} Therefore a quasi-polynomial transformation exists from ${srcName} to ${tgtName}.`;
+  const quasiDesc = `${pathDesc} Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
   const quasiRefs = collectRefsUnion(path, matrix);
   const quasiDescription: DescriptionComponent = {
     description: quasiDesc,
@@ -190,7 +190,7 @@ export function phaseOneUpgrade(
           const ids = path.map((idx) => languageIds[idx]);
           const desc = describePath(ids, matrix);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${srcName} transforms to ${tgtName} in quasipolynomial time, but ${srcName} is marked as not transforming to ${tgtName} in quasipolynomial time.`
+            `Contradiction: ${desc} Therefore ${srcName} compiles to ${tgtName} in quasi-polynomial time, but ${srcName} is marked as not compiling to ${tgtName} in quasi-polynomial time.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
@@ -204,7 +204,7 @@ export function phaseOneUpgrade(
           applyNoPolyQuasiUpgrade(matrix, i, j, path, relation);
         } else {
           // Standard upgrade to unknown-poly-quasi
-          const derivedDesc = `Therefore a quasi-polynomial transformation exists from ${srcName} to ${tgtName}.`;
+          const derivedDesc = `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
           applySimpleUpgrade(matrix, path, newStatus, derivedDesc);
         }
         changes += 1;
@@ -218,11 +218,11 @@ export function phaseOneUpgrade(
           const ids = path.map((idx) => languageIds[idx]);
           const desc = describePath(ids, matrix);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${srcName} transforms to ${tgtName} in polynomial time, but ${srcName} is marked as not transforming to ${tgtName} in polynomial time.`
+            `Contradiction: ${desc} Therefore ${srcName} compiles to ${tgtName} in polynomial time, but ${srcName} is marked as not compiling to ${tgtName} in polynomial time.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
-        const derivedDesc = `Therefore a polynomial transformation exists from ${srcName} to ${tgtName}.`;
+        const derivedDesc = `Therefore a polynomial compilation exists from ${srcName} to ${tgtName}.`;
         if (DEBUG_PROPAGATION) {
           console.log(`[Propagation] UPGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> poly`);
         }
@@ -273,7 +273,7 @@ export function tryDowngrade(
     // witnessIds is the path that would exist if the tested edge had `triedStatus`
     // The contradiction is that the path endpoints have an incompatible status
     if (witnessIds.length < 2) {
-      return `If ${srcName} transforms to ${tgtName} ${phraseForStatus(triedStatus)}, a contradiction arises.`;
+      return `If ${srcName} compiles to ${tgtName} ${phraseForStatus(triedStatus)}, a contradiction arises.`;
     }
 
     const pathStart = witnessIds[0];
@@ -301,7 +301,7 @@ export function tryDowngrade(
       const edgeStatus = edgeRelation?.status ?? 'unknown';
       const edgeRefs = edgeRelation?.refs ?? [];
       const edgeCaveat = edgeRelation?.caveat;
-      existingEdges.push(`${idToName(fromId)} transforms to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
+      existingEdges.push(`${idToName(fromId)} compiles to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
     }
 
     const existingPart = existingEdges.length > 0 ? existingEdges.join('. ') + '. ' : '';
@@ -309,7 +309,7 @@ export function tryDowngrade(
     const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
     const contradictionPhrase = formatStatusContradiction(pathStartName, pathEndName, actualStatus);
 
-    return `${existingPart}If ${srcName} transforms to ${tgtName} ${triedPhrase}, then ${pathStartName} transforms to ${pathEndName} ${impliedPhrase}. ${contradictionPhrase}${formatCaveat(mergedCaveat)}${formatCitations(actualRefs)}.`;
+    return `${existingPart}If ${srcName} compiles to ${tgtName} ${triedPhrase}, then ${pathStartName} compiles to ${pathEndName} ${impliedPhrase}. ${contradictionPhrase}${formatCaveat(mergedCaveat)}${formatCitations(actualRefs)}.`;
   };
 
   /**

@@ -293,7 +293,7 @@
   .matrix-table.measured th,
   .matrix-table.measured td {
     width: var(--cell-width, auto);
-    min-width: var(--cell-width, auto);
+    min-width: max(var(--cell-width, auto), 75px);
     max-width: var(--cell-width, none);
     height: var(--cell-height, auto);
   }
@@ -335,14 +335,14 @@
   .col-header button {
     width: 100%;
     height: 100%;
-    padding: 0.25rem 0.35rem;
+    padding: 0.05rem 0.15rem;
     text-align: left;
     background: transparent;
     border: none;
     cursor: pointer;
     font-weight: 600;
     color: #1f2937;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .row-header.is-active,
@@ -368,7 +368,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.1rem;
+    gap: 0.025rem;
     border: none;
     cursor: default;
     font-size: 0.6rem;
@@ -377,7 +377,7 @@
   .matrix-cell--button {
     cursor: pointer;
     transition: background 0.15s ease, box-shadow 0.15s ease;
-    padding: 0.2rem 0.25rem;
+    padding: 0.025rem 0.05rem;
   }
 
   .matrix-cell--button:is(:hover, :focus-visible) {
@@ -410,7 +410,7 @@
 
   .cell-short {
     font-weight: 600;
-    font-size: 0.65rem;
+    font-size: 0.85rem;
   }
 
   .cell-label {

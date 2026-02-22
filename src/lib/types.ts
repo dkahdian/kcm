@@ -63,8 +63,10 @@ export interface Complexity {
   notation: string;
   /** Emoji representation - used for query/transformation operations */
   emoji: string;
-  /** Full description, supports LaTeX */
+  /** Full description, supports LaTeX (used for succinctness edges) */
   description: string;
+  /** Operation-context description (used for query/transformation operations) */
+  opDescription: string;
   /** CSS color value (saturated, for icons/text) */
   color: string;
   /** Pastel version of color (for backgrounds) */

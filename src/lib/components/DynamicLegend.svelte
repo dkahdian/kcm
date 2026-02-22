@@ -277,7 +277,7 @@
       {#if viewMode === 'graph'}
         <!-- Graph view: show arrowhead examples -->
         <p class="text-gray-600 text-sm mb-4">
-          A transforms to B in _______
+          A compiles to B in _______
         </p>
         <div class="legend-items">
           {#each visibleEdgeTypes as edge (edge.status)}
@@ -317,7 +317,7 @@
       {#each visibleComplexities as complexity}
         <div class="legend-row">
           <span class="complexity-emoji">{complexity.emoji}</span>
-          <span title={complexity.description}>{complexity.label}</span>
+          <span title={complexity.opDescription}>{complexity.label}</span>
         </div>
       {/each}
     </div>

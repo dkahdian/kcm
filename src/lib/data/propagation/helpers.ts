@@ -122,38 +122,12 @@ export function phraseForStatus(status: string): string {
 }
 
 /**
- * Convert a status code to a human-readable contradiction phrase.
- * E.g., "no-poly-quasi" becomes "This contradicts the fact that X cannot compile to Y in polynomial time"
- */
-export function formatStatusContradiction(srcName: string, tgtName: string, status: string): string {
-  switch (status) {
-    case 'no-poly-quasi':
-      return `This contradicts the fact that ${srcName} cannot compile to ${tgtName} in polynomial time`;
-    case 'no-poly-unknown-quasi':
-      return `This contradicts the fact that ${srcName} cannot compile to ${tgtName} in polynomial time`;
-    case 'no-quasi':
-      return `This contradicts the fact that ${srcName} cannot compile to ${tgtName} in quasi-polynomial time`;
-    default:
-      return `This contradicts the existing relationship from ${srcName} to ${tgtName}`;
-  }
-}
-
-/**
  * Format reference IDs as inline citations.
  * Returns a string like " \\citet{ref1,ref2}" or empty string if no refs.
  */
 export function formatCitations(refs: string[]): string {
   if (!refs || refs.length === 0) return '';
   return ` \\citet{${refs.join(',')}}`;
-}
-
-/**
- * Format a caveat as an "unless" clause (sentence-final style).
- * Returns " unless {caveat}" or empty string if no caveat.
- */
-export function formatCaveat(caveat: string | undefined): string {
-  if (!caveat) return '';
-  return ` unless ${caveat}`;
 }
 
 /**

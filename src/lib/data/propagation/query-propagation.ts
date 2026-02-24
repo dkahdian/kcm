@@ -486,13 +486,12 @@ export function propagateDowngradesViaLemmaContrapositives(
 
           // All other antecedents support poly, consequent is no-poly → target must be no-poly
           const consequentRefs = consequentSupport?.refs ?? [];
+          // Merge caveats from the consequent and all other antecedents
+          const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
           const othersDesc = otherAntecedents.length > 0 
             ? ` and since ${otherAntecedents.map((op, idx) => `${opLabel(op)} is supported in polynomial time${formatInlineCaveat(otherCaveats[idx])}`).join(' and ')},`
             : '';
           const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since ${opLabel(lemma.consequent)} is unsupported by ${langName}${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${langName} as well${formatInlineCaveat(caveat)}.`;
-
-          // Merge caveats from the consequent and all other antecedents
-          const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
@@ -555,13 +554,12 @@ export function propagateDowngradesViaLemmaContrapositives(
 
           // All other antecedents support quasi, consequent is no-quasi → target must be no-quasi
           const consequentRefs = consequentSupport?.refs ?? [];
+          // Merge caveats from the consequent and all other antecedents
+          const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
           const othersDesc = otherAntecedents.length > 0 
             ? ` and since ${otherAntecedents.map((op, idx) => `${opLabel(op)} is supported in quasi-polynomial time${formatInlineCaveat(otherCaveats[idx])}`).join(' and ')},`
             : '';
           const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since ${opLabel(lemma.consequent)} is unsupported by ${langName} in quasi-polynomial time${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${langName} in quasi-polynomial time as well${formatInlineCaveat(caveat)}.`;
-
-          // Merge caveats from the consequent and all other antecedents
-          const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);

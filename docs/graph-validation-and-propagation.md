@@ -115,7 +115,52 @@ When a derived result depends on multiple edges with different caveats, those ar
 function collectCaveatsUnion(path: number[], matrix: KCAdjacencyMatrix): string | undefined
 ```
 
-**Known limitation.** The propagator does not prioritize unconditional results over conditional ones. This means a conditional result may survive where an unconditional proof exists. Fixing this would require doubling the status space.
+#### Caveat provenance in descriptions
+
+Each derived description places inline caveats on the individual premises that carry them and a merged caveat on the conclusion. The format uses parenthetical `(unless ...)`:
+
+```
+A compiles to B in polynomial time.
+B cannot compile to C in polynomial time (unless the polynomial hierarchy collapses) [ref].
+If A compiled to C in polynomial time, then ...
+Therefore A cannot compile to C in polynomial time (unless the polynomial hierarchy collapses).
+```
+
+This is implemented via `formatInlineCaveat(caveat)` which returns `" (unless ...)"` or `""`.
+
+#### Two-pass reachability (prefer unconditional paths)
+
+`computeReachability()` uses a two-pass DFS so that uncaveated edges are preferred when building parent chains:
+
+1. **Pass 1** — consider only edges with `caveat === undefined`. Build the reachability and parent arrays.
+2. **Pass 2** — consider all edges (including caveated ones). Fill in remaining reachable nodes without overwriting parent pointers from pass 1.
+
+This ensures that when both a caveated and an uncaveated path exist between two nodes, the parent chain always follows the uncaveated path. Downstream code (e.g., `collectCaveatsUnion`, `describePath`) therefore produces caveat-free descriptions when possible.
+
+Additionally, Phase 3 (query upgrade via succinctness) implements **prefer-unconditional**: if a language already has a caveated, derived result for a query and a new derivation via an uncaveated path is found, the new uncaveated result overwrites the old caveated one.
+
+#### Future consideration: multi-path caveats (DNF approach)
+
+The current system stores a single merged caveat string per derived result. A more precise approach would track **multiple independent witness paths**, each carrying its own set of caveats:
+
+- A derived result could be justified by **k** independent proofs, each with caveat set `C_i`.
+- The result is unconditional if any `C_i = ∅`; otherwise it is conditional on the disjunction `C_1 ∨ C_2 ∨ ... ∨ C_k`.
+- This is a **DNF of caveat sets**: the result fails only if *all* witness paths' caveats are simultaneously true.
+
+For example, if path A→B→C proves `A ≤_p C` unconditionally but path A→D→C proves it assuming P ≠ NP, the result is unconditional (the first path suffices). The current system already handles this via two-pass reachability. The DNF approach would extend this to cases where the current system cannot distinguish, e.g., when two independent contradiction arguments each carry different caveats.
+
+**Implementation sketch** (not currently implemented):
+```typescript
+interface CaveatWitness {
+  caveatSet: Set<string>;   // caveats for this proof
+  pathDescription: string;  // human-readable proof
+}
+// A derived result would store:
+witnesses: CaveatWitness[];
+// The effective caveat is the DNF: ⋁_i (⋀ caveatSet_i)
+```
+
+This was deferred because: (1) the current database has only two distinct caveat strings ("P = NP" and "the polynomial hierarchy collapses"), and (2) the two-pass reachability already handles the most common case of preferring unconditional paths.
 
 ### 1.5 Transitivity Lemmas
 
@@ -441,9 +486,10 @@ All derived entries carry human-readable descriptions with inline LaTeX citation
 | Helper | Purpose |
 |--------|---------|
 | `formatCitations(refs)` | Returns `" \citet{ref1,ref2}"` with leading space, or empty string |
-| `formatCaveat(caveat)` | Returns `" unless {caveat}"` or empty string |
-| `describePath(pathIds, matrix)` | Joins per-hop descriptions: `"{A} compiles to {B} in polynomial time \citet{...}."` |
+| `formatInlineCaveat(caveat)` | Returns `" (unless {caveat})"` or empty string — used for inline provenance |
+| `describePath(pathIds, matrix)` | Joins per-hop descriptions with inline caveats: `"{A} compiles to {B} in polynomial time (unless ...) \citet{...}."` |
 | `phraseForStatus(status)` | Returns `"in polynomial time"`, `"in quasi-polynomial time"`, etc. |
+| `formatContradictingPremise(src, tgt, status, caveat, refs)` | Returns e.g. `"A cannot compile to B in polynomial time (unless ...) \citet{...}"` |
 | `buildNoPolyQuasiDescription(noPoly, quasi)` | Combines two `DescriptionComponent`s for composite statuses |
 
 ### Composite status descriptions (`no-poly-quasi`)

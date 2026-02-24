@@ -293,7 +293,7 @@
   .matrix-table.measured th,
   .matrix-table.measured td {
     width: var(--cell-width, auto);
-    min-width: max(var(--cell-width, auto), 75px);
+    min-width: var(--cell-width, auto);
     max-width: var(--cell-width, none);
     height: var(--cell-height, auto);
   }
@@ -304,12 +304,14 @@
     background: #f8fafc;
     z-index: 5;
     border-bottom: 1px solid #e5e7eb;
+    height: 5rem !important;
   }
 
   .corner-cell {
     background: #e5e7eb;
     z-index: 6;
     border-left: 1px solid #e5e7eb;
+    height: 5rem;
   }
 
   .row-header,
@@ -335,14 +337,23 @@
   .col-header button {
     width: 100%;
     height: 100%;
-    padding: 0.05rem 0.15rem;
+    padding: 0 0.05rem;
     text-align: left;
     background: transparent;
     border: none;
     cursor: pointer;
     font-weight: 600;
     color: #1f2937;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
+    line-height: 1.1;
+  }
+
+  .col-header button {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    white-space: nowrap;
+    padding: 0.1rem 0;
   }
 
   .row-header.is-active,
@@ -359,6 +370,7 @@
     border-bottom: 1px solid #e5e7eb;
     text-align: center;
     padding: 0;
+    overflow: hidden;
   }
 
   .matrix-cell {
@@ -368,16 +380,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.025rem;
+    gap: 0;
     border: none;
     cursor: default;
     font-size: 0.6rem;
+    padding: 0;
+    line-height: 1;
   }
 
   .matrix-cell--button {
     cursor: pointer;
     transition: background 0.15s ease, box-shadow 0.15s ease;
-    padding: 0.025rem 0.05rem;
+    padding: 0;
   }
 
   .matrix-cell--button:is(:hover, :focus-visible) {
@@ -395,7 +409,9 @@
     border: none;
     cursor: pointer;
     color: #9ca3af;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
+    padding: 0;
+    line-height: 1;
   }
 
   .diagonal-button:hover {
@@ -410,7 +426,8 @@
 
   .cell-short {
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    line-height: 1;
   }
 
   .cell-label {
@@ -456,6 +473,12 @@
   .matrix-cell.is-dimmed .cell-short {
     position: relative;
     z-index: 2;
+  }
+
+  /* Tighten KaTeX rendering inside matrix cells */
+  .matrix-table :global(.katex) {
+    font-size: 0.9em;
+    line-height: 1;
   }
 
   @media (max-width: 1024px) {

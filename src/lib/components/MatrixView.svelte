@@ -5,9 +5,84 @@
     FilteredGraphData,
     KCLanguage,
     SelectedEdge,
-    DirectedSuccinctnessRelation
+    DirectedSuccinctnessRelation,
+    KCAdjacencyMatrix
   } from '$lib/types.js';
   import { measureCellSize } from '$lib/utils/matrix-cell-size.js';
+
+  /**
+   * Topologically sort language IDs by succinctness (poly edges only).
+   * More succinct languages (targets of ≤_p) come first.
+   * Uses alphabetical order (by language name) as tie-breaker via Kahn's algorithm
+   * with a sorted frontier.
+   */
+  function topoSortBySuccinctness(ids: string[], adjacencyMatrix: KCAdjacencyMatrix): string[] {
+    const idSet = new Set(ids);
+
+    // Build a DAG: edge from B → A means B is more succinct than A
+    // (i.e., A ≤_p B in the matrix means A can be compiled to B, so B is at least as succinct)
+    // We want more succinct first, so edge direction = "must come before"
+    const inDegree = new Map<string, number>();
+    const successors = new Map<string, Set<string>>();
+
+    for (const id of ids) {
+      inDegree.set(id, 0);
+      successors.set(id, new Set());
+    }
+
+    for (const sourceId of ids) {
+      const sourceIdx = adjacencyMatrix.indexByLanguage[sourceId];
+      if (sourceIdx === undefined) continue;
+      for (const targetId of ids) {
+        if (sourceId === targetId) continue;
+        const targetIdx = adjacencyMatrix.indexByLanguage[targetId];
+        if (targetIdx === undefined) continue;
+
+        const relation = adjacencyMatrix.matrix[sourceIdx]?.[targetIdx];
+        if (relation && relation.status === 'poly') {
+          // sourceId ≤_p targetId → targetId is at least as succinct
+          // So targetId should come before sourceId
+          // Edge: targetId → sourceId (target must come before source in output)
+          if (idSet.has(targetId) && idSet.has(sourceId)) {
+            successors.get(targetId)!.add(sourceId);
+            inDegree.set(sourceId, (inDegree.get(sourceId) ?? 0) + 1);
+          }
+        }
+      }
+    }
+
+    // Kahn's algorithm with alphabetical tie-breaking
+    const result: string[] = [];
+    // Use a sorted queue: nodes with in-degree 0, sorted alphabetically by name
+    const getName = (id: string) => languageLookup.get(id)?.name?.toLowerCase() ?? id;
+    const queue = ids.filter((id) => inDegree.get(id) === 0).sort((a, b) => getName(a).localeCompare(getName(b)));
+
+    while (queue.length > 0) {
+      const node = queue.shift()!;
+      result.push(node);
+
+      for (const succ of successors.get(node) ?? []) {
+        const d = (inDegree.get(succ) ?? 1) - 1;
+        inDegree.set(succ, d);
+        if (d === 0) {
+          // Insert into sorted position
+          const name = getName(succ);
+          let insertIdx = queue.findIndex((q) => getName(q).localeCompare(name) > 0);
+          if (insertIdx === -1) insertIdx = queue.length;
+          queue.splice(insertIdx, 0, succ);
+        }
+      }
+    }
+
+    // If there are cycles (shouldn't happen in the KC map), append remaining nodes
+    if (result.length < ids.length) {
+      const resultSet = new Set(result);
+      const remaining = ids.filter((id) => !resultSet.has(id)).sort((a, b) => getName(a).localeCompare(getName(b)));
+      result.push(...remaining);
+    }
+
+    return result;
+  }
 
   let {
     graphData,
@@ -40,11 +115,11 @@
   });
 
   const visibleLanguageIds = $derived.by<string[]>(() => {
-    const ids = graphData.adjacencyMatrix.languageIds.filter((id) => languageLookup.has(id));
+    let ids = graphData.adjacencyMatrix.languageIds.filter((id) => languageLookup.has(id));
     if ('visibleLanguageIds' in graphData && graphData.visibleLanguageIds.size > 0) {
-      return ids.filter((id) => graphData.visibleLanguageIds.has(id));
+      ids = ids.filter((id) => graphData.visibleLanguageIds.has(id));
     }
-    return ids;
+    return topoSortBySuccinctness(ids, graphData.adjacencyMatrix);
   });
 
   type MatrixLanguageEntry = {

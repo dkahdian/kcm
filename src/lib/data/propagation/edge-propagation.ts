@@ -14,9 +14,9 @@ import {
   reconstructPathIndices,
   ensurePath,
   phraseForStatus,
-  formatStatusContradiction,
+  formatContradictingPremise,
   formatCitations,
-  formatCaveat,
+  formatInlineCaveat,
   collectCaveatsUnion,
   describePath,
   buildNoPolyQuasiDescription,
@@ -90,7 +90,11 @@ function applySimpleUpgrade(
   const caveat = collectCaveatsUnion(path, matrix);
   const pathIds = path.map((idx) => languageIds[idx]);
   const pathDesc = describePath(pathIds, matrix);
-  const description = `${pathDesc} ${derivedDescription}`.trim();
+  // Append merged caveat to conclusion for provenance
+  const conclusionWithCaveat = caveat
+    ? derivedDescription.replace(/\.\s*$/, '') + formatInlineCaveat(caveat) + '.'
+    : derivedDescription;
+  const description = `${pathDesc} ${conclusionWithCaveat}`.trim();
   matrix.matrix[source][target] = {
     status: newStatus,
     refs,
@@ -127,7 +131,11 @@ function applyNoPolyQuasiUpgrade(
   // Create derived quasiDescription
   const pathIds = path.map((idx) => languageIds[idx]);
   const pathDesc = describePath(pathIds, matrix);
-  const quasiDesc = `${pathDesc} Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
+  const pathCaveat = collectCaveatsUnion(path, matrix);
+  const quasiConclusion = pathCaveat
+    ? `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName} (unless ${pathCaveat}).`
+    : `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
+  const quasiDesc = `${pathDesc} ${quasiConclusion}`;
   const quasiRefs = collectRefsUnion(path, matrix);
   const quasiDescription: DescriptionComponent = {
     description: quasiDesc,
@@ -139,7 +147,6 @@ function applyNoPolyQuasiUpgrade(
   const allRefs = [...new Set([...noPolyDescription.refs, ...quasiDescription.refs])];
   
   // Merge caveats: original caveat + path caveats
-  const pathCaveat = collectCaveatsUnion(path, matrix);
   const originalCaveat = originalRelation.caveat;
   const allCaveats = new Set<string>();
   if (originalCaveat) allCaveats.add(originalCaveat);
@@ -273,7 +280,7 @@ export function tryDowngrade(
     // witnessIds is the path that would exist if the tested edge had `triedStatus`
     // The contradiction is that the path endpoints have an incompatible status
     if (witnessIds.length < 2) {
-      return `If ${srcName} compiles to ${tgtName} ${phraseForStatus(triedStatus)}, a contradiction arises.`;
+      return `If ${srcName} compiled to ${tgtName} ${phraseForStatus(triedStatus)}, a contradiction arises${formatInlineCaveat(mergedCaveat)}.`;
     }
 
     const pathStart = witnessIds[0];
@@ -287,9 +294,10 @@ export function tryDowngrade(
     const actualRelation = adjacencyMatrix.matrix[startIdx]?.[endIdx];
     const actualStatus = actualRelation?.status ?? 'unknown';
     const actualRefs = actualRelation?.refs ?? [];
+    const actualCaveat = actualRelation?.caveat;
 
-    // Build description of existing edges in the path (excluding the tested edge)
-    const existingEdges: string[] = [];
+    // Build premises: existing path edges (excluding the tested edge), each with inline caveats
+    const premises: string[] = [];
     for (let i = 0; i < witnessIds.length - 1; i++) {
       const fromId = witnessIds[i];
       const toId = witnessIds[i + 1];
@@ -301,15 +309,17 @@ export function tryDowngrade(
       const edgeStatus = edgeRelation?.status ?? 'unknown';
       const edgeRefs = edgeRelation?.refs ?? [];
       const edgeCaveat = edgeRelation?.caveat;
-      existingEdges.push(`${idToName(fromId)} compiles to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
+      premises.push(`${idToName(fromId)} compiles to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatInlineCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
     }
 
-    const existingPart = existingEdges.length > 0 ? existingEdges.join('. ') + '. ' : '';
+    // State the contradicting fact as a premise with its own inline caveat
+    premises.push(formatContradictingPremise(pathStartName, pathEndName, actualStatus, actualCaveat, actualRefs));
+
+    const premisesPart = premises.join('. ') + '. ';
     const triedPhrase = phraseForStatus(triedStatus);
     const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
-    const contradictionPhrase = formatStatusContradiction(pathStartName, pathEndName, actualStatus);
 
-    return `${existingPart}If ${srcName} compiles to ${tgtName} ${triedPhrase}, then ${pathStartName} compiles to ${pathEndName} ${impliedPhrase}. ${contradictionPhrase}${formatCaveat(mergedCaveat)}${formatCitations(actualRefs)}.`;
+    return `${premisesPart}If ${srcName} compiled to ${tgtName} ${triedPhrase}, then ${pathStartName} would compile to ${pathEndName} ${impliedPhrase}, contradicting the above. Therefore ${srcName} cannot compile to ${tgtName} ${triedPhrase}${formatInlineCaveat(mergedCaveat)}.`;
   };
 
   /**

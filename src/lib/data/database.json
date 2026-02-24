@@ -2959,7 +2959,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Parity"
+          ]
         },
         {
           "status": "no-quasi",
@@ -3308,7 +3311,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "$OR_n$"
+          ]
         },
         {
           "status": "no-poly-quasi",
@@ -3831,10 +3837,9 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. IP cannot compile to FBDD in quasi-polynomial time \\citet{Darwiche_2002,Wegener_1987}. If DNF compiled to FBDD in quasi-polynomial time, then IP would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to FBDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "IP compiles to DNF in polynomial time \\citet{Darwiche_2002}. IP cannot compile to FBDD in quasi-polynomial time \\citet{Darwiche_2002,Wegener_1987}. If DNF compiled to FBDD in quasi-polynomial time, then IP would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to FBDD in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -3842,7 +3847,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Parity"
+          ]
         },
         {
           "status": "no-quasi",
@@ -3884,13 +3892,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Darwiche_2011"
+            "Darwiche_2002"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. DNF cannot compile to FBDD in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If DNF compiled to OBDD$_<$ in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to OBDD$_<$ in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "OBDD$_<$ compiles to FBDD in polynomial time \\citet{Darwiche_2002}. DNF cannot compile to FBDD in quasi-polynomial time \\citet{Darwiche_2002}. If DNF compiled to OBDD$_<$ in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to OBDD$_<$ in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -3947,13 +3953,22 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2011",
             "Darwiche_2002"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "OBDD compiles to FBDD in polynomial time \\citet{Darwiche_2002}. DNF cannot compile to FBDD in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If DNF compiled to OBDD in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to OBDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "OBDD compiles to FBDD in polynomial time \\citet{Darwiche_2002}. DNF cannot compile to FBDD in quasi-polynomial time \\citet{Darwiche_2002}. If DNF compiled to OBDD in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to OBDD in quasi-polynomial time."
+        },
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Beame_2013",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "dec-DNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. DNF cannot compile to FBDD in quasi-polynomial time \\citet{Darwiche_2002}. If DNF compiled to dec-DNNF in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to dec-DNNF in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -3961,21 +3976,9 @@
             "Amarilli_2018",
             "Beame_2013"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "dec-DNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. DNF cannot compile to FBDD in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If DNF compiled to dec-DNNF in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to dec-DNNF in quasi-polynomial time (unless the polynomial hierarchy collapses)."
-        },
-        {
-          "status": "no-quasi",
-          "refs": [
-            "Amarilli_2018",
-            "Beame_2013"
-          ],
-          "caveat": "the polynomial hierarchy collapses",
-          "hidden": false,
-          "derived": true,
-          "description": "dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. DNF cannot compile to FBDD in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If DNF compiled to dec-SDNNF in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to dec-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "dec-SDNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. DNF cannot compile to FBDD in quasi-polynomial time \\citet{Darwiche_2002}. If DNF compiled to dec-SDNNF in quasi-polynomial time, then DNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore DNF cannot compile to dec-SDNNF in quasi-polynomial time."
         },
         null,
         null
@@ -4008,7 +4011,10 @@
           "refs": [
             "Bova_2016"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Sauerhoff"
+          ]
         },
         {
           "status": "no-quasi",
@@ -4372,7 +4378,10 @@
           "refs": [
             "Gergov_1994"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "HWB"
+          ]
         },
         {
           "status": "poly",
@@ -4406,7 +4415,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Pairwise DNF"
+          ]
         },
         {
           "status": "no-poly-unknown-quasi",
@@ -4465,7 +4477,10 @@
             "Darwiche_2002",
             "Wegener_1987"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Clique"
+          ]
         },
         null,
         {
@@ -4474,7 +4489,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "$OR_n$"
+          ]
         },
         {
           "status": "poly",
@@ -4817,12 +4835,13 @@
           "refs": [
             "Amarilli_2018",
             "Beame_2013",
-            "Wegener_2000"
+            "Darwiche_2002",
+            "Bodlaender_1993",
+            "Van den Broeck_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. d-DNNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Van den Broeck_2015}. If nFBDD compiled to cSDD in quasi-polynomial time, then d-DNNF would compile to cSDD in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to cSDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. d-DNNF cannot compile to cSDD in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018,Van den Broeck_2015}. If nFBDD compiled to cSDD in quasi-polynomial time, then d-DNNF would compile to cSDD in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to cSDD in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -4830,19 +4849,22 @@
           "refs": [
             "Amarilli_2018"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Sauerhoff"
+          ]
         },
         {
           "status": "no-quasi",
           "refs": [
             "Amarilli_2018",
             "Beame_2013",
-            "Wegener_2000"
+            "Darwiche_2002",
+            "Bodlaender_1993"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to d-SDNNF in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to d-SDNNF in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to d-SDNNF in quasi-polynomial time."
         },
         null,
         {
@@ -4953,13 +4975,13 @@
           "refs": [
             "Amarilli_2018",
             "Beame_2013",
-            "Wegener_2000",
+            "Darwiche_2002",
+            "Bodlaender_1993",
             "Van den Broeck_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to SDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to SDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to SDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to SDD in quasi-polynomial time."
         },
         null,
         {
@@ -4981,19 +5003,22 @@
           "refs": [
             "Amarilli_2018"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Sauerhoff"
+          ]
         },
         {
           "status": "no-quasi",
           "refs": [
             "Amarilli_2018",
             "Beame_2013",
-            "Wegener_2000"
+            "Darwiche_2002",
+            "Bodlaender_1993"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. uOBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to uOBDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to uOBDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-DNNF compiles to nFBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. uOBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. d-DNNF cannot compile to d-SDNNF in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to uOBDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to uOBDD in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -5260,16 +5285,14 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018",
-            "Wegener_2000",
             "Van den Broeck_2015",
+            "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. nOBDD cannot compile to uOBDD in quasi-polynomial time \\citet{Amarilli_2018}. If nOBDD compiled to cSDD in quasi-polynomial time, then nOBDD would compile to uOBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to cSDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "cSDD compiles to uOBDD in at worst quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. nOBDD cannot compile to uOBDD in quasi-polynomial time \\citet{Amarilli_2018}. If nOBDD compiled to cSDD in quasi-polynomial time, then nOBDD would compile to uOBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to cSDD in quasi-polynomial time."
         },
         {
           "status": "no-poly-unknown-quasi",
@@ -5286,14 +5309,12 @@
           "status": "no-quasi",
           "refs": [
             "Amarilli_2018",
-            "Wegener_2000",
             "Bollig_2018",
             "Beame_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. nOBDD cannot compile to uOBDD in quasi-polynomial time \\citet{Amarilli_2018}. If nOBDD compiled to d-SDNNF in quasi-polynomial time, then nOBDD would compile to uOBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-SDNNF compiles to uOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. nOBDD cannot compile to uOBDD in quasi-polynomial time \\citet{Amarilli_2018}. If nOBDD compiled to d-SDNNF in quasi-polynomial time, then nOBDD would compile to uOBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to d-SDNNF in quasi-polynomial time."
         },
         null,
         {
@@ -5324,13 +5345,11 @@
             "Amarilli_2018",
             "Bollig_2018",
             "Beame_2015",
-            "Wegener_2000",
-            "Darwiche_2002"
+            "Wegener_2000"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}. If nOBDD compiled to FBDD in quasi-polynomial time, then d-SDNNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to FBDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}. If nOBDD compiled to FBDD in quasi-polynomial time, then d-SDNNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to FBDD in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -5408,14 +5427,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018",
-            "Wegener_2000",
             "Van den Broeck_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Amarilli_2018,Wegener_2000,Bollig_2018,Beame_2015}. If nOBDD compiled to SDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to SDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiled to SDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to SDD in quasi-polynomial time."
         },
         null,
         {
@@ -5467,10 +5483,9 @@
             "Wegener_2000",
             "Beame_2013"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. dec-DNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}. If nOBDD compiled to dec-DNNF in quasi-polynomial time, then d-SDNNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to dec-DNNF in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "d-SDNNF compiles to nOBDD in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. dec-DNNF compiles to FBDD in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. d-SDNNF cannot compile to FBDD in quasi-polynomial time \\citet{Van den Broeck_2015}. If nOBDD compiled to dec-DNNF in quasi-polynomial time, then d-SDNNF would compile to FBDD in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to dec-DNNF in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -5497,7 +5512,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Parity"
+          ]
         },
         {
           "status": "poly",
@@ -5536,7 +5554,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Parity"
+          ]
         },
         {
           "status": "poly",
@@ -5732,6 +5753,9 @@
           "description": "The pairwise CNF $\\Sigma_n = \\bigwedge_{i=0}^{n-1}(x_{2i} \\vee x_{2i+1})$ has $2^n$ prime implicates; its negation $\\neg\\Sigma_n \\in PI$ therefore has $2^n$ essential prime implicants, forcing any $DNF$ representation to have at least $2^n$ terms \\citet{Darwiche_2002}.",
           "refs": [
             "Darwiche_2002"
+          ],
+          "separatingFunctionIds": [
+            "Pairwise CNF"
           ]
         },
         {
@@ -5740,7 +5764,10 @@
           "refs": [
             "Bova_2016"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "JS"
+          ]
         },
         {
           "status": "no-quasi",
@@ -5749,7 +5776,10 @@
             "Wegener_1987",
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Clique"
+          ]
         },
         {
           "status": "no-quasi",
@@ -5766,7 +5796,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "$OR_n$"
+          ]
         },
         {
           "status": "no-quasi",
@@ -6131,10 +6164,9 @@
           "refs": [
             "Amarilli_2018"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. nOBDD cannot compile to cSDD in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Amarilli_2018,Wegener_2000,Van den Broeck_2015,Bollig_2018,Beame_2015}. If SDNNF compiled to cSDD in quasi-polynomial time, then nOBDD would compile to cSDD in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to cSDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. nOBDD cannot compile to cSDD in quasi-polynomial time \\citet{Van den Broeck_2015,Amarilli_2018,Bollig_2018,Beame_2015}. If SDNNF compiled to cSDD in quasi-polynomial time, then nOBDD would compile to cSDD in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to cSDD in quasi-polynomial time."
         },
         {
           "status": "no-poly-unknown-quasi",
@@ -6150,13 +6182,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2018",
-            "Wegener_2000"
+            "Amarilli_2018"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Amarilli_2018,Wegener_2000,Bollig_2018,Beame_2015}. If SDNNF compiled to d-SDNNF in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If SDNNF compiled to d-SDNNF in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to d-SDNNF in quasi-polynomial time."
         },
         null,
         {
@@ -6302,10 +6332,9 @@
             "Amarilli_2018",
             "Van den Broeck_2015"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Amarilli_2018,Wegener_2000,Bollig_2018,Beame_2015}. If SDNNF compiled to SDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to SDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. SDD compiles to d-SDNNF in polynomial time \\citet{Van den Broeck_2015}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If SDNNF compiled to SDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to SDD in quasi-polynomial time."
         },
         null,
         null,
@@ -6324,10 +6353,9 @@
           "refs": [
             "Amarilli_2018"
           ],
-          "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. uOBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time (unless the polynomial hierarchy collapses) \\citet{Amarilli_2018,Wegener_2000,Bollig_2018,Beame_2015}. If SDNNF compiled to uOBDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to uOBDD in quasi-polynomial time (unless the polynomial hierarchy collapses)."
+          "description": "nOBDD compiles to SDNNF in polynomial time \\citet{Amarilli_2018}. uOBDD compiles to d-SDNNF in polynomial time \\citet{Amarilli_2018}. nOBDD cannot compile to d-SDNNF in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If SDNNF compiled to uOBDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to uOBDD in quasi-polynomial time."
         },
         {
           "status": "no-quasi",
@@ -6799,7 +6827,10 @@
           "refs": [
             "Amarilli_2018"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "HWB"
+          ]
         },
         {
           "status": "no-quasi",
@@ -6947,7 +6978,10 @@
           "refs": [
             "Darwiche_2002"
           ],
-          "derived": false
+          "derived": false,
+          "separatingFunctionIds": [
+            "Pairwise equivalence"
+          ]
         },
         {
           "status": "no-quasi",

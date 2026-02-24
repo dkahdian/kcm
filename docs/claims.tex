@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-02-22T02:16:23.976Z
+% Generated: 2026-02-24T02:47:29.089Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
@@ -159,6 +159,7 @@ $FBDD$ is polynomial-time compilable to $uFBDD$ \citet{Amarilli_2018}
 As defined by \citet{Amarilli_2018}, $FBDD$ is the subset of $uFBDD$ with no $\vee$-nodes.
 \end{claimdescription}
 
+% separators=Sauerhoff
 \begin{claim}
 $nFBDD$ is not quasi-polynomial-time compilable to $d$-$DNNF$ \citet{Amarilli_2018}
 \end{claim}
@@ -180,6 +181,7 @@ $nFBDD$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Amarilli_2018}
 Consider the Boolean functions $\psi_n,\phi_n:\{0,1\}^{n^2}\to\{0,1\}$ that respectively test whether, in an $n \times n$ Boolean matrix, either the number of 1's is odd and there is a full row of 1's, or the number of 1's is even and there is a column full of 1's. An $FBDD$ of size $O(n^2)$ may simulate either $\psi_n$ or $\phi_n$, and thus the $uFBDD$ $\psi_n\vee\phi_n$ is of size $O(n^2)$; however, an $FBDD$ for $\psi_n\vee\phi_n$ is provably of size $2^{\Omega(n^{1/2})}$ \citet{Amarilli_2018}.
 \end{claimdescription}
 
+% separators=Sauerhoff
 \begin{claim}
 $nFBDD$ is not quasi-polynomial-time compilable to $uFBDD$ \citet{Amarilli_2018}
 \end{claim}
@@ -271,6 +273,7 @@ $uOBDD$ is polynomial-time compilable to $nOBDD$ \citet{Amarilli_2018}
 As defined by \citet{Amarilli_2018}, $uOBDD$ is the subset of $nOBDD$ satisfying unambiguity.
 \end{claimdescription}
 
+% separators=HWB
 \begin{claim}
 $uOBDD$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Amarilli_2018}
 \end{claim}
@@ -297,6 +300,7 @@ $CNF$ is polynomial-time compilable to $NNF$ \citet{Darwiche_2002}
 As defined by \citet{Darwiche_2002}, $CNF$ is a subset of $NNF$. Therefore, a polynomial compilation is trivial.
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $CNF$ is not quasi-polynomial-time compilable to $PI$ \citet{Darwiche_2002}
 \end{claim}
@@ -311,6 +315,7 @@ $d$-$DNNF$ is polynomial-time compilable to $DNNF$ \citet{Darwiche_2002}
 As formalized by \citet{Darwiche_2002} and originally introduced in \citet{Darwiche_2001}, $d$-$DNNF$ is a subset of $DNNF$ satisfying the determinism property, making a polynomial compilation trivial.
 \end{claimdescription}
 
+% separators=$OR_n$
 \begin{claim}
 $d$-$DNNF$ is not quasi-polynomial-time compilable to $MODS$ \citet{Darwiche_2002}
 \end{claim}
@@ -332,6 +337,7 @@ $DNF$ is polynomial-time compilable to $DNNF$ \citet{Darwiche_2002}
 As defined by \citet{Darwiche_2002}, $DNF$ is a subset of $DNNF$. Therefore, a polynomial compilation is trivial.
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $DNF$ is not quasi-polynomial-time compilable to $IP$ \citet{Darwiche_2002}
 \end{claim}
@@ -360,6 +366,7 @@ $FBDD$ is polynomial-time compilable to $d$-$DNNF$ \citet{Darwiche_2002}
 As defined by \citet{Darwiche_2002}, $FBDD$ is a subset of $d$-$DNNF$, so a polynomial compilation is trivial.
 \end{claimdescription}
 
+% separators=Pairwise DNF
 \begin{claim}
 $IP$ is not quasi-polynomial-time compilable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
@@ -377,12 +384,21 @@ As defined by \citet{Darwiche_2002}, $IP$ is a subset of $DNF$. Therefore, a pol
 \end{claimdescription}
 
 \begin{claim}
+$IP$ has unknown compilation to $d$-$DNNF$ \citet{Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+This is listed as an open problem in the Knowledge Compilation Map (2002).
+\end{claimdescription}
+
+% separators=Clique
+\begin{claim}
 $IP$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Darwiche_2002,Wegener_1987}
 \end{claim}
 \begin{claimdescription}
 The negation of the clique detection function $\neg\Sigma_{n,k}$ has $O(n^3)$ prime implicants (hence polynomial $IP$ size), but any $FBDD$ for $\neg\Sigma_{n,k}$ has exponential size for suitable $k$ \citet{Darwiche_2002,Wegener_1987}.
 \end{claimdescription}
 
+% separators=$OR_n$
 \begin{claim}
 $IP$ is not quasi-polynomial-time compilable to $MODS$ \citet{Darwiche_2002}
 \end{claim}
@@ -425,6 +441,7 @@ $OBDD$ is polynomial-time compilable to $FBDD$ \citet{Darwiche_2002}
 As defined by \citet{Darwiche_2002}, $OBDD$ is a subset of $FBDD$. Therefore a polynomial time compilation is trivial.
 \end{claimdescription}
 
+% separators=Pairwise equivalence
 \begin{claim}
 $OBDD$ is not quasi-polynomial-time compilable to $OBDD_<$ \citet{Darwiche_2002}
 \end{claim}
@@ -432,6 +449,7 @@ $OBDD$ is not quasi-polynomial-time compilable to $OBDD_<$ \citet{Darwiche_2002}
 The function $\bigwedge_{i=1}^n(x_i\Leftrightarrow y_i)$ has an $OBDD_<$ representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $OBDD_<$ is not quasi-polynomial-time compilable to $CNF$ \citet{Darwiche_2002}
 \end{claim}
@@ -439,6 +457,7 @@ $OBDD_<$ is not quasi-polynomial-time compilable to $CNF$ \citet{Darwiche_2002}
 The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size $OBDD_<$ representations but only exponential size $CNF$ representations.
 \end{claimdescription}
 
+% separators=Parity
 \begin{claim}
 $OBDD_<$ is not quasi-polynomial-time compilable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
@@ -460,6 +479,7 @@ $PI$ is polynomial-time compilable to $CNF$ \citet{Darwiche_2002}
 As defined by \citet{Darwiche_2002}, $PI$ is a subset of $CNF$. Therefore, a polynomial compilation is trivial.
 \end{claimdescription}
 
+% separators=Pairwise CNF
 \begin{claim}
 $PI$ is not quasi-polynomial-time compilable to $DNF$ \citet{Darwiche_2002}
 \end{claim}
@@ -467,6 +487,7 @@ $PI$ is not quasi-polynomial-time compilable to $DNF$ \citet{Darwiche_2002}
 The pairwise CNF $\Sigma_n = \bigwedge_{i=0}^{n-1}(x_{2i} \vee x_{2i+1})$ has $2^n$ prime implicates; its negation $\neg\Sigma_n \in PI$ therefore has $2^n$ essential prime implicants, forcing any $DNF$ representation to have at least $2^n$ terms \citet{Darwiche_2002}.
 \end{claimdescription}
 
+% separators=Clique
 \begin{claim}
 $PI$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Wegener_1987,Darwiche_2002}
 \end{claim}
@@ -474,6 +495,7 @@ $PI$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Wegener_1987,Darwi
 The clique detection function $\Sigma_{n,k}$ has $O(n^3)$ prime implicates (hence polynomial $PI$ size), but any $FBDD$ for $\Sigma_{n,k}$ has exponential size for suitable $k$ \citet{Wegener_1987,Darwiche_2002}.
 \end{claimdescription}
 
+% separators=$OR_n$
 \begin{claim}
 $PI$ is not quasi-polynomial-time compilable to $MODS$ \citet{Darwiche_2002}
 \end{claim}
@@ -510,6 +532,7 @@ The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Co
 \section{S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, "Knowledge Compilation Meets C...}
 % Reference ID: Bova_2016
 % =============================
+% separators=Sauerhoff
 \begin{claim}
 $DNNF$ is not quasi-polynomial-time compilable to $d$-$DNNF$ \citet{Bova_2016}
 \end{claim}
@@ -517,6 +540,7 @@ $DNNF$ is not quasi-polynomial-time compilable to $d$-$DNNF$ \citet{Bova_2016}
 Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has $DNNF$ size $O(n^2)$. Theorem 9 shows that $S_n$ has $d$-$DNNF$ size $2^{\Omega(n)}$.
 \end{claimdescription}
 
+% separators=JS
 \begin{claim}
 $PI$ is not quasi-polynomial-time compilable to $DNNF$ \citet{Bova_2016}
 \end{claim}
@@ -609,6 +633,7 @@ Appendix D.2 of \citet{Pipatsrisawat_2010} and Section 6.3 of \citet{Capelli_201
 \section{J. Gergov and C. Meinel, "Efficient Boolean manipulation with OBDD's can be exte...}
 % Reference ID: Gergov_1994
 % =============================
+% separators=HWB
 \begin{claim}
 $FBDD$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Gergov_1994}
 \end{claim}
@@ -626,6 +651,19 @@ $MODS$ is not polynomial-time compilable to $PI$ \citet{Kaleyski_2016}
 \end{claim}
 \begin{claimdescription}
 \citet{Kaleyski_2016} constructs a family of Boolean functions $\psi_i$ with $MODS$ size $\Theta(2^{2i})$ but $PI$ size $\Omega(2^{(i-1)^2/4})$, ruling out a polynomial compilation. Whether an exponential separation exists remains open.
+\end{claimdescription}
+
+
+% =============================
+\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation," Comput...}
+% Reference ID: Bryant_1986
+% =============================
+% separators=HWB
+\begin{claim}
+$SDD$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Bryant_1986,Bova_2016_a}
+\end{claim}
+\begin{claimdescription}
+$OBDD$ representations of $HWB_n$ are $2^{\Omega(n)}$ \citet{Bryant_1986}, but an $SDD$ can represent $HWB_n$ in size $O(n^3)$ \citet{Bova_2016_a}.
 \end{claimdescription}
 
 

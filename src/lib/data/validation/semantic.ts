@@ -148,23 +148,33 @@ export function validateAdjacencyConsistency(data: GraphData): SemanticValidatio
   const reachP = computeReachability(adjacencyMatrix, POLY_STATUS);
   const reachQ = computeReachability(adjacencyMatrix, QUASI_STATUS);
 
+  // Prefer contradictions where the contradicting edge has NO caveat,
+  // so that derived results are unconditional when possible.
+  let fallback: SemanticValidationResult | null = null;
+
   for (let i = 0; i < size; i += 1) {
     for (let j = 0; j < size; j += 1) {
       if (i === j) continue;
       const status = getEdgeStatus(adjacencyMatrix, i, j);
+      const relation = adjacencyMatrix.matrix[i]?.[j];
       if (reachP.reach[i][j] && status && NO_POLY_STATUSES.has(status)) {
         const path = reconstructPathIndices(i, j, reachP.parent[i]);
         const message = buildContradictionMessage(i, j, 'poly', path, adjacencyMatrix);
-        return { ok: false, error: message, witnessPath: pathToIds(path, adjacencyMatrix.languageIds) };
+        const result: SemanticValidationResult = { ok: false, error: message, witnessPath: pathToIds(path, adjacencyMatrix.languageIds) };
+        if (!relation?.caveat) return result;
+        if (!fallback) fallback = result;
       }
       if (reachQ.reach[i][j] && status === 'no-quasi') {
         const path = reconstructPathIndices(i, j, reachQ.parent[i]);
         const message = buildContradictionMessage(i, j, 'quasi', path, adjacencyMatrix);
-        return { ok: false, error: message, witnessPath: pathToIds(path, adjacencyMatrix.languageIds) };
+        const result: SemanticValidationResult = { ok: false, error: message, witnessPath: pathToIds(path, adjacencyMatrix.languageIds) };
+        if (!relation?.caveat) return result;
+        if (!fallback) fallback = result;
       }
     }
   }
 
+  if (fallback) return fallback;
   return { ok: true };
 }
 

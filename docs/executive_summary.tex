@@ -15,7 +15,7 @@
 \usepackage{fourier}
 \usepackage{algorithmic}
 \usepackage{algorithm}
-\definecolor{lightskyblue}{rgb}{0.53, 0.81, 0.98}\newcommand{\oliver}[1]{{\small{\color{lightskyblue}[Oliver: #1]}}}
+% \definecolor{lightskyblue}{rgb}{0.53, 0.81, 0.98}\newcommand{\oliver}[1]{{\small{\color{lightskyblue}[Oliver: #1]}}}
 \usepackage[margin=1in,bottom=1in,top=1in]{geometry}
 \usepackage{palatino}
 \usetikzlibrary{calc}
@@ -47,7 +47,7 @@
 \begin{abstract}
 We describe the Updated Knowledge Compilation Map. This project is meant as a modernization of \citet{Darwiche_2002}. At the lowest level, the project is a survey of the Knowledge Compilation landscape. We collected only "direct" results, that is, results that are not derived via transitive relations from other results. Internally, we represent these results as a graph, and use a DFS reachability algorithm to validate consistency. We use this algorithm to build a propagator, which uses transitive and other simple lemmas to derive related results. This gives us expanded versions of each of the tables in \citet{Darwiche_2002}.
 
-To further validate our results, we encode the knowledge base as a propositional CNF formula, compile it to d-DNNF using $\text{c2d}$, and verify that the entailed literals match the graph-based propagation exactly. The compiled representation further enables model counting and surprise analysis, ranking open problems by their information content. The project is publicly visible at \url{https://kcm.kahdian.com} and on Github at \url{https://github.com/dkahdian/kcm}.
+To further validate our results, we encode the knowledge base as a propositional CNF formula, compile it to d-DNNF using $\text{c2d}$, and verify that the entailed literals match the graph-based propagation exactly. The compiled representation further enables model counting and surprise analysis, ranking open problems by their information content. Additionally, the propagator emits machine-checkable proof traces that are verified by the Lean~4 proof assistant, ensuring that every derived claim is a valid consequence of the axioms and lemmas. The project is publicly visible at \url{https://kcm.kahdian.com} and on Github at \url{https://github.com/dkahdian/kcm}.
 \end{abstract}
 
 \section{Setup}
@@ -164,7 +164,6 @@ When dealing with the full set of statuses $S$, we process \texttt{poly} upgrade
 \subsection{Phase 4: Upgrades via Lemmas}
 
 For each language $L$ and each operation lemma $(\{o_1,...o_n\}, o_{n+1})$: if $L$ supports all $o_i: i \in [n]$, set $L.o_{n+1}$ to $\texttt{poly}$. Note that this is interleaved with Phase~3 in the same fixed-point loop. Cost: $O((\#F_l)(\#\textbf{L}))$ per iteration, with $O((\#F_l)(\#L))$ iterations, for a total complexity of $O((\#F_l)^2(\#\textbf{L})^2)$.
-
 \subsection{Phase 5: Downgrades}
 
 \paragraph{Via succinctness (contrapositive of query-by-compiling).}
@@ -207,7 +206,7 @@ The CNF was compiled to a smooth d-DNNF using c2d~v2.20 in approximately 14~seco
 \begin{itemize}
   \item \textbf{Model count.} $\text{MC}(\Sigma) = 1{,}466{,}882{,}601 \approx 2^{30.45}$ consistent worlds.
   \item \textbf{Clausal entailment.} Of the 840~variables, 241~are entailed true, 500~are entailed false, and 99~are free (unknown).
-  \item \textbf{Verification.} The set of entailed literals from the d-DNNF matches exactly the set of known and derived facts from the graph-based propagation algorithms of Sections~3--4. There are zero discrepancies in either direction, confirming empirically that the algorithmic propagation is both \emph{sound} (it derives nothing beyond what the axioms entail) and \emph{complete} (it derives everything the axioms entail).
+  \item \textbf{Verification.} The set of entailed literals from the d-DNNF matches exactly the set of known and derived facts from the graph-based propagation algorithms of Sections~3--4. There are zero discrepancies in either direction, confirming empirically that the algorithmic propagation is both \emph{sound} (it derives nothing beyond what the axioms entail) and \emph{complete} (it derives everything the axioms entail). As an additional layer of assurance, the propagator records proof traces for each derived fact, and a code generator emits Lean~4 theorems that are type-checked against the axiom set, providing a machine-verified certificate of consistency.
 \end{itemize}
 
 \subsection{Surprise Analysis}
@@ -216,7 +215,7 @@ For each free variable~$v$ and truth value $\textit{val} \in \{\top, \bot\}$, th
 \[
   \text{surprise}(v = \textit{val}) \;=\; \log_2 \frac{\text{MC}(\Sigma)}{\text{MC}(\Sigma \mid v = \textit{val})}
 \]
-\oliver{I've now thought about it, and this definition makes perfect sense! The quantity $-\log_2 p(E)$ is sometimes called \emph{surprisal} (or \emph{self-information}) of the event $E$, and the (Shannon) entropy of a random variable (indicator for the event) is exactly the expectation of the surprisal. Specifically, if we consider the uniform distribution over the models of $\Sigma$, then it is easy (and worthwhile) to check that your above definition of surprise is exactly computing the \emph{surprisal} of the event v=val. Maybe you already had this in mind during the meeting, but I did not follow all this if you did already have it in mind, and I think this additional context completely justifies the definition. (And, funnily, I don't think you really need to add any such justification in the writing, I'm more just glad that it exists, convincing me that this is the "right" definition/quantity to use.}
+% \oliver{I've now thought about it, and this definition makes perfect sense! The quantity $-\log_2 p(E)$ is sometimes called \emph{surprisal} (or \emph{self-information}) of the event $E$, and the (Shannon) entropy of a random variable (indicator for the event) is exactly the expectation of the surprisal. Specifically, if we consider the uniform distribution over the models of $\Sigma$, then it is easy (and worthwhile) to check that your above definition of surprise is exactly computing the \emph{surprisal} of the event v=val. Maybe you already had this in mind during the meeting, but I did not follow all this if you did already have it in mind, and I think this additional context completely justifies the definition. (And, funnily, I don't think you really need to add any such justification in the writing, I'm more just glad that it exists, convincing me that this is the "right" definition/quantity to use.}
 Higher surprise means the result eliminates a larger fraction of consistent worlds. Table~\ref{tab:surprise} lists the 20~most informative open problems. The cSDD language dominates the ranking because it is a recently introduced language with few known succinctness relationships, making each potential result highly constraining.
 
 \begin{table}[ht]

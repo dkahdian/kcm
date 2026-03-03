@@ -1,4 +1,4 @@
-import type { GraphData, KCAdjacencyMatrix, KCLanguage, KCOpSupport, OperationLemma, DescriptionComponent } from '../../types.js';
+import type { GraphData, KCAdjacencyMatrix, KCLanguage, KCOpSupport, OperationLemma, DescriptionComponent, ProofTrace } from '../../types.js';
 import { idToName } from '../../utils/language-id.js';
 import { getAllQueryCodes, QUERIES, TRANSFORMATIONS } from '../operations.js';
 import {
@@ -12,7 +12,8 @@ import {
   formatCitations,
   formatInlineCaveat,
   buildNoPolyQuasiDescription,
-  contradictionError
+  contradictionError,
+  nextDerivationOrder
 } from './helpers.js';
 
 // =============================================================================
@@ -156,6 +157,8 @@ export function propagateQueriesViaSuccinctness(
                 refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
                 derived: true,
                 description,
+                derivationOrder: nextDerivationOrder(),
+                proofTrace: { rule: 'query-via-succinctness', sourceLanguageId: l1Id, targetLanguageId: l2Id, operation: queryCode, level: 'poly' },
                 ...(caveat && { caveat })
               });
               changed = true;
@@ -201,6 +204,8 @@ export function propagateQueriesViaSuccinctness(
               refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
               derived: true,
               description,
+              derivationOrder: nextDerivationOrder(),
+              proofTrace: { rule: 'query-via-succinctness', sourceLanguageId: l1Id, targetLanguageId: l2Id, operation: queryCode, level: 'quasi' },
               ...(caveat && { caveat })
             });
             changed = true;
@@ -283,6 +288,9 @@ export function propagateQueriesViaLemmas(
         }
 
         // Determine if this is a query or transformation
+        const lemmaLevel: 'poly' | 'quasi' = polyOnly ? 'poly' : 'quasi';
+        const lemmaTrace: ProofTrace = { rule: 'lemma-forward', lemmaId: lemma.id, languageId: language.id, level: lemmaLevel };
+        const lemmaDerOrder = nextDerivationOrder();
         const isQuery = lemma.consequent in (QUERIES ?? {});
         if (isQuery) {
           setQuerySupport(language, lemma.consequent, {
@@ -290,6 +298,8 @@ export function propagateQueriesViaLemmas(
             refs: lemma.refs,
             derived: true,
             description,
+            derivationOrder: lemmaDerOrder,
+            proofTrace: lemmaTrace,
             ...(caveat && { caveat })
           });
         } else {
@@ -301,6 +311,8 @@ export function propagateQueriesViaLemmas(
             refs: lemma.refs,
             derived: true,
             description,
+            derivationOrder: lemmaDerOrder,
+            proofTrace: lemmaTrace,
             ...(caveat && { caveat })
           };
         }
@@ -373,6 +385,8 @@ export function propagateQueryDowngrades(
             refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
             derived: true,
             description,
+            derivationOrder: nextDerivationOrder(),
+            proofTrace: { rule: 'query-downgrade-via-succinctness', sourceLanguageId: l1.id, targetLanguageId: l2.id, operation: queryCode, level: 'poly' },
             ...(caveat && { caveat })
           });
           changed = true;
@@ -411,6 +425,8 @@ export function propagateQueryDowngrades(
             refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
             derived: true,
             description,
+            derivationOrder: nextDerivationOrder(),
+            proofTrace: { rule: 'query-downgrade-via-succinctness', sourceLanguageId: l1.id, targetLanguageId: l2.id, operation: queryCode, level: 'quasi' },
             ...(caveat && { caveat })
           });
           changed = true;
@@ -498,6 +514,8 @@ export function propagateDowngradesViaLemmaContrapositives(
           }
 
           // Determine if this is a query or transformation
+          const noPolyContraTrace: ProofTrace = { rule: 'lemma-contrapositive', lemmaId: lemma.id, languageId: language.id, pivotOp: targetOp, level: 'poly' };
+          const noPolyContraOrder = nextDerivationOrder();
           const isQuery = targetOp in (QUERIES ?? {});
           if (isQuery) {
             setQuerySupport(language, targetOp, {
@@ -505,6 +523,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
               description,
+              derivationOrder: noPolyContraOrder,
+              proofTrace: noPolyContraTrace,
               ...(caveat && { caveat })
             });
           } else {
@@ -515,6 +535,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
               description,
+              derivationOrder: noPolyContraOrder,
+              proofTrace: noPolyContraTrace,
               ...(caveat && { caveat })
             };
           }
@@ -566,6 +588,8 @@ export function propagateDowngradesViaLemmaContrapositives(
           }
 
           // Determine if this is a query or transformation
+          const noQuasiContraTrace: ProofTrace = { rule: 'lemma-contrapositive', lemmaId: lemma.id, languageId: language.id, pivotOp: targetOp, level: 'quasi' };
+          const noQuasiContraOrder = nextDerivationOrder();
           const isQuery = targetOp in (QUERIES ?? {});
           if (isQuery) {
             setQuerySupport(language, targetOp, {
@@ -573,6 +597,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
               description,
+              derivationOrder: noQuasiContraOrder,
+              proofTrace: noQuasiContraTrace,
               ...(caveat && { caveat })
             });
           } else {
@@ -583,6 +609,8 @@ export function propagateDowngradesViaLemmaContrapositives(
               refs: consequentSupport?.refs ?? lemma.refs,
               derived: true,
               description,
+              derivationOrder: noQuasiContraOrder,
+              proofTrace: noQuasiContraTrace,
               ...(caveat && { caveat })
             };
           }
@@ -709,12 +737,16 @@ function deriveNoPolyEdge(
     const quasiDescription = currentRelation.quasiDescription ?? {
       description: currentRelation.description ?? '',
       refs: currentRelation.refs ?? [],
-      derived: currentRelation.derived ?? false
+      derived: currentRelation.derived ?? false,
+      ...(currentRelation.derivationOrder !== undefined && { derivationOrder: currentRelation.derivationOrder }),
+      ...(currentRelation.proofTrace && { proofTrace: currentRelation.proofTrace })
     };
     const noPolyDescription: DescriptionComponent = {
       description,
       refs,
-      derived: true
+      derived: true,
+      derivationOrder: nextDerivationOrder(),
+      proofTrace: { rule: 'query-difference', operation: queryCode, posLanguageId: langA.id, negLanguageId: langB.id, level: 'poly' }
     };
     const allRefs = [...new Set([...noPolyDescription.refs, ...quasiDescription.refs])];
 
@@ -750,7 +782,9 @@ function deriveNoPolyEdge(
       separatingFunctionIds: undefined,
       hidden: false,
       derived: true,
-      description
+      description,
+      derivationOrder: nextDerivationOrder(),
+      proofTrace: { rule: 'query-difference', operation: queryCode, posLanguageId: langA.id, negLanguageId: langB.id, level: 'poly' }
     };
   }
 
@@ -816,7 +850,9 @@ function deriveNoQuasiEdge(
     separatingFunctionIds: currentRelation?.separatingFunctionIds,
     hidden: false,
     derived: true,
-    description
+    description,
+    derivationOrder: nextDerivationOrder(),
+    proofTrace: { rule: 'query-difference', operation: queryCode, posLanguageId: langA.id, negLanguageId: langB.id, level: 'quasi' }
   };
 
   if (DEBUG_PROPAGATION) {

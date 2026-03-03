@@ -1,11 +1,11 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-02-24T02:47:29.089Z
+% Generated: 2026-02-25T05:30:10.885Z
 % 
 % EDITING INSTRUCTIONS:
-% - Claims (\begin{claim}...\end{claim}) are auto-generated. Do NOT edit.
-% - Descriptions (\begin{claimdescription}...\end{claimdescription}) are EDITABLE.
+% - Claim environments are auto-generated. Do NOT edit.
+% - Description environments (claimdescription) are EDITABLE.
 % - Lines starting with "% [DERIVED" indicate auto-propagated edges.
 % - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json <this-file>
 % =============================
@@ -383,13 +383,6 @@ $IP$ is polynomial-time compilable to $DNF$ \citet{Darwiche_2002}
 As defined by \citet{Darwiche_2002}, $IP$ is a subset of $DNF$. Therefore, a polynomial compilation is trivial.
 \end{claimdescription}
 
-\begin{claim}
-$IP$ has unknown compilation to $d$-$DNNF$ \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-This is listed as an open problem in the Knowledge Compilation Map (2002).
-\end{claimdescription}
-
 % separators=Clique
 \begin{claim}
 $IP$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Darwiche_2002,Wegener_1987}
@@ -651,19 +644,6 @@ $MODS$ is not polynomial-time compilable to $PI$ \citet{Kaleyski_2016}
 \end{claim}
 \begin{claimdescription}
 \citet{Kaleyski_2016} constructs a family of Boolean functions $\psi_i$ with $MODS$ size $\Theta(2^{2i})$ but $PI$ size $\Omega(2^{(i-1)^2/4})$, ruling out a polynomial compilation. Whether an exponential separation exists remains open.
-\end{claimdescription}
-
-
-% =============================
-\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation," Comput...}
-% Reference ID: Bryant_1986
-% =============================
-% separators=HWB
-\begin{claim}
-$SDD$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Bryant_1986,Bova_2016_a}
-\end{claim}
-\begin{claimdescription}
-$OBDD$ representations of $HWB_n$ are $2^{\Omega(n)}$ \citet{Bryant_1986}, but an $SDD$ can represent $HWB_n$ in size $O(n^3)$ \citet{Bova_2016_a}.
 \end{claimdescription}
 
 

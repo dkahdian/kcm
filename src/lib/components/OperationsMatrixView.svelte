@@ -12,6 +12,7 @@
   import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { measureCellSize } from '$lib/utils/matrix-cell-size.js';
+  import { compareByCanonicalOrder } from '$lib/utils/canonical-order.js';
 
   type OperationType = 'queries' | 'transformations';
 
@@ -47,11 +48,12 @@
   });
 
   const visibleLanguageIds = $derived.by<string[]>(() => {
-    const ids = graphData.adjacencyMatrix.languageIds.filter((id) => languageLookup.has(id));
+    let ids = graphData.adjacencyMatrix.languageIds.filter((id) => languageLookup.has(id));
     if ('visibleLanguageIds' in graphData && graphData.visibleLanguageIds.size > 0) {
-      return ids.filter((id) => graphData.visibleLanguageIds.has(id));
+      ids = ids.filter((id) => graphData.visibleLanguageIds.has(id));
     }
-    return ids;
+    const getName = (id: string) => languageLookup.get(id)?.name?.toLowerCase() ?? id;
+    return [...ids].sort((a, b) => compareByCanonicalOrder(a, b, getName));
   });
 
   const visibleLanguages = $derived.by<KCLanguage[]>(() => {

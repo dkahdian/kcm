@@ -13,7 +13,9 @@
 		"deploy": "npm run build",
 		"refresh": "npx tsx scripts/refresh-derived.ts",
 		"to-json": "npx tsx scripts/latex-bijection.ts --to-json",
-		"to-latex": "npx tsx scripts/latex-bijection.ts --to-latex"
+		"to-latex": "npx tsx scripts/latex-bijection.ts --to-latex",
+		"generate-lean": "npx tsx scripts/generate-lean.ts",
+		"lean-check": "cd lean && lake build"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.1",

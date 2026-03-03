@@ -6,7 +6,9 @@ import {
   POLY_STATUS,
   QUASI_STATUS,
   rebuildIndexMap,
-  computeReachability
+  computeReachability,
+  resetDerivationCounter,
+  getDerivationCount
 } from './helpers.js';
 import { phaseOneUpgrade, tryDowngrade } from './edge-propagation.js';
 import {
@@ -34,6 +36,9 @@ export function propagateImplicitRelations(data: GraphData): GraphData {
 
   // Initialize the name map for id-to-name resolution
   initNameMap(data.languages);
+
+  // Reset derivation counter for Lean proof ordering
+  resetDerivationCounter();
 
   // Phase 0: consistency guard
   const consistencyResult = validateAdjacencyConsistency(data);

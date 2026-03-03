@@ -1,4 +1,4 @@
-import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix, DescriptionComponent } from '../../types.js';
+import type { GraphData, DirectedSuccinctnessRelation, KCAdjacencyMatrix, DescriptionComponent, ProofTrace } from '../../types.js';
 import {
   validateAdjacencyConsistency,
   guaranteesPoly,
@@ -20,7 +20,8 @@ import {
   collectCaveatsUnion,
   describePath,
   buildNoPolyQuasiDescription,
-  contradictionError
+  contradictionError,
+  nextDerivationOrder
 } from './helpers.js';
 
 /**
@@ -41,7 +42,9 @@ function extractNoPolyDescription(relation: DirectedSuccinctnessRelation | null)
     return {
       description: relation.description ?? '',
       refs: relation.refs ?? [],
-      derived: relation.derived ?? false
+      derived: relation.derived ?? false,
+      ...(relation.derivationOrder !== undefined && { derivationOrder: relation.derivationOrder }),
+      ...(relation.proofTrace && { proofTrace: relation.proofTrace })
     };
   }
   
@@ -66,7 +69,9 @@ function extractQuasiDescription(relation: DirectedSuccinctnessRelation | null):
     return {
       description: relation.description ?? '',
       refs: relation.refs ?? [],
-      derived: relation.derived ?? false
+      derived: relation.derived ?? false,
+      ...(relation.derivationOrder !== undefined && { derivationOrder: relation.derivationOrder }),
+      ...(relation.proofTrace && { proofTrace: relation.proofTrace })
     };
   }
   
@@ -80,7 +85,8 @@ function applySimpleUpgrade(
   matrix: KCAdjacencyMatrix,
   path: number[],
   newStatus: string,
-  derivedDescription: string
+  derivedDescription: string,
+  proofTrace: ProofTrace
 ): void {
   if (path.length === 0) return;
   const { languageIds } = matrix;
@@ -102,7 +108,9 @@ function applySimpleUpgrade(
     separatingFunctionIds: undefined,
     hidden: false,
     derived: true,
-    description
+    description,
+    derivationOrder: nextDerivationOrder(),
+    proofTrace
   } satisfies DirectedSuccinctnessRelation;
 }
 
@@ -140,7 +148,9 @@ function applyNoPolyQuasiUpgrade(
   const quasiDescription: DescriptionComponent = {
     description: quasiDesc,
     refs: quasiRefs,
-    derived: true
+    derived: true,
+    derivationOrder: nextDerivationOrder(),
+    proofTrace: { rule: 'transitivity', path: pathIds, level: 'quasi' }
   };
   
   // Combine refs from both proofs
@@ -212,7 +222,8 @@ export function phaseOneUpgrade(
         } else {
           // Standard upgrade to unknown-poly-quasi
           const derivedDesc = `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
-          applySimpleUpgrade(matrix, path, newStatus, derivedDesc);
+          const pathIds = path.map((idx) => languageIds[idx]);
+          applySimpleUpgrade(matrix, path, newStatus, derivedDesc, { rule: 'transitivity', path: pathIds, level: 'quasi' });
         }
         changes += 1;
         continue; // allow re-evaluation in next fixed-point iteration
@@ -233,7 +244,8 @@ export function phaseOneUpgrade(
         if (DEBUG_PROPAGATION) {
           console.log(`[Propagation] UPGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> poly`);
         }
-        applySimpleUpgrade(matrix, path, 'poly', derivedDesc);
+        const polyPathIds = path.map((idx) => languageIds[idx]);
+        applySimpleUpgrade(matrix, path, 'poly', derivedDesc, { rule: 'transitivity', path: polyPathIds, level: 'poly' });
         changes += 1;
       }
     }
@@ -374,7 +386,9 @@ export function tryDowngrade(
       hidden: false,
       derived: true,
       separatingFunctionIds: undefined,
-      description: newDesc.trim()
+      description: newDesc.trim(),
+      derivationOrder: nextDerivationOrder(),
+      proofTrace: { rule: 'contradiction', triedStatus, witnessPath: witnessIds }
     };
   };
 
@@ -409,10 +423,13 @@ export function tryDowngrade(
     // Create derived noPolyDescription from contradiction (with merged caveat)
     const noPolyDesc = buildContradictionDescription('poly', witnessIds, mergedCaveat);
     const noPolyRefs = collectRefsUnion(pathIndices, adjacencyMatrix);
+    const noPolyDerivOrder = nextDerivationOrder();
     const noPolyDescription: DescriptionComponent = {
       description: noPolyDesc,
       refs: noPolyRefs,
-      derived: true
+      derived: true,
+      derivationOrder: noPolyDerivOrder,
+      proofTrace: { rule: 'contradiction', triedStatus: 'poly', witnessPath: witnessIds }
     };
     
     // Combine refs from both proofs

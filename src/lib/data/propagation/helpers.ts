@@ -4,6 +4,29 @@ import { idToName } from '../../utils/language-id.js';
 // Debug flag - set to true to see propagation decisions in console
 export const DEBUG_PROPAGATION = false;
 
+// ===========================================================================
+// Global derivation counter for Lean proof generation ordering
+// ===========================================================================
+
+/** Global counter that monotonically increases each time a derived fact is created.
+ *  This ensures that Lean proofs can be emitted in dependency order. */
+let _derivationCounter = 0;
+
+/** Get the next derivation order number and increment the counter. */
+export function nextDerivationOrder(): number {
+  return _derivationCounter++;
+}
+
+/** Reset the derivation counter (call before starting propagation). */
+export function resetDerivationCounter(): void {
+  _derivationCounter = 0;
+}
+
+/** Get the current derivation counter value (for reporting). */
+export function getDerivationCount(): number {
+  return _derivationCounter;
+}
+
 export const POLY_STATUS = new Set<string>(['poly']);
 export const QUASI_STATUS = new Set<string>(['poly', 'unknown-poly-quasi', 'no-poly-quasi']);
 

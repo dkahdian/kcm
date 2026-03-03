@@ -118,7 +118,7 @@
           >
             <MathText text={selectedOperationCell.language.name} className="inline text-lg font-bold" />
           </button>
-          <span class="separator">→</span>
+          <span class="separator">:</span>
           <button 
             type="button"
             class="operation-code-link"

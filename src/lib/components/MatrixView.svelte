@@ -1,5 +1,4 @@
 <script lang="ts">
-  import MathText from './MathText.svelte';
   import type {
     GraphData,
     FilteredGraphData,
@@ -36,14 +35,33 @@
     return Object.fromEntries(Object.values(graphData.complexities).map((c) => [c.code, c.cssClass]));
   });
 
-  const STATUS_SHORT = $derived.by<Record<string, string>>(() => {
-    return Object.fromEntries(Object.values(graphData.complexities).map((c) => [c.code, c.notation]));
+  import { renderMathText } from '$lib/utils/math-text.js';
+
+  /** Pre-rendered KaTeX HTML for each status notation — uses renderMathText cache 
+   *  so KaTeX is called once per unique notation, then reused across all cells. */
+  const STATUS_SHORT_HTML = $derived.by<Record<string, string>>(() => {
+    return Object.fromEntries(
+      Object.values(graphData.complexities).map((c) => {
+        const result = renderMathText(c.notation);
+        return [c.code, result.html ?? c.notation];
+      })
+    );
   });
 
   const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {
     const map = new Map<string, KCLanguage>();
     for (const language of graphData.languages) {
       map.set(language.id, language);
+    }
+    return map;
+  });
+
+  /** Pre-rendered HTML for language names — avoids MathText component overhead per header cell */
+  const languageNameHtml = $derived.by<Map<string, string>>(() => {
+    const map = new Map<string, string>();
+    for (const language of graphData.languages) {
+      const result = renderMathText(language.name);
+      map.set(language.id, result.html ?? language.name);
     }
     return map;
   });
@@ -173,12 +191,32 @@
   let tableEl: HTMLTableElement;
   let cellSize = $state({ width: 0, height: 0 });
   let measured = $state(false);
+  let lastContainerSize = { width: 0, height: 0 };
+  let lastLanguageCount = 0;
 
   function updateCellSize() {
-    const numCells = matrixLanguages.length + 1; // +1 for header
+    if (!matrixScrollEl || !tableEl) return;
+    
+    const containerWidth = matrixScrollEl.clientWidth;
+    const containerHeight = matrixScrollEl.clientHeight;
+    const langCount = matrixLanguages.length;
+    
+    // Skip re-measurement if container size and language count haven't changed
+    if (measured && containerWidth === lastContainerSize.width 
+        && containerHeight === lastContainerSize.height 
+        && langCount === lastLanguageCount) {
+      return;
+    }
+    
+    const numCells = langCount + 1; // +1 for header
     const result = measureCellSize(matrixScrollEl, tableEl, numCells, numCells);
     if (result) {
-      cellSize = result;
+      // Only update if dimensions actually changed
+      if (result.width !== cellSize.width || result.height !== cellSize.height) {
+        cellSize = result;
+      }
+      lastContainerSize = { width: containerWidth, height: containerHeight };
+      lastLanguageCount = langCount;
       measured = true;
     }
   }
@@ -216,7 +254,7 @@
           {#each matrixLanguages as column}
             <th class={`col-header ${selectedNode?.id === column.id ? 'is-active' : ''}`}>
               <button type="button" onclick={() => handleColumnHeaderClick(column.language)} title={`Select ${column.language.name}`}>
-                <MathText text={column.language.name} className="inline" />
+                <span class="math-text inline" aria-label={column.language.name}>{@html languageNameHtml.get(column.id) ?? column.language.name}</span>
               </button>
             </th>
           {/each}
@@ -227,7 +265,7 @@
           <tr>
             <th class={`row-header ${selectedNode?.id === rowLanguage.id ? 'is-active' : ''}`}>
               <button type="button" onclick={() => handleRowHeaderClick(rowLanguage.language)} title={`Select ${rowLanguage.language.name}`}>
-                <MathText text={rowLanguage.language.name} className="inline" />
+                <span class="math-text inline" aria-label={rowLanguage.language.name}>{@html languageNameHtml.get(rowLanguage.id) ?? rowLanguage.language.name}</span>
               </button>
             </th>
             {#each matrixLanguages as colLanguage}
@@ -253,7 +291,7 @@
                       onclick={() => handleCellClick(colLanguage.id, rowLanguage.id, relation)}
                       title={getCellTitle(rowLanguage.language, colLanguage.language, relation)}
                     >
-                      <span class="cell-short"><MathText text={STATUS_SHORT[relation.status]} className="inline" />{#if relation.caveat}*{/if}</span>
+                      <span class="cell-short">{@html STATUS_SHORT_HTML[relation.status]}{#if relation.caveat}*{/if}</span>
                     </button>
                   </td>
                 {:else}

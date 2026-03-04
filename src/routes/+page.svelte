@@ -99,6 +99,9 @@
   ];
   let viewMode = $state<ViewMode>('graph');
   
+  /** Once true, succinctness MatrixView stays in DOM (keep-alive) */
+  let succinctnessMounted = $state(false);
+  
   // Filter deltas: only user changes from defaults (view-mode-agnostic)
   let filterDeltas = $state<FilterDeltas>(new Map());
   // Effective filter state: defaults for current view + deltas applied on top
@@ -122,6 +125,7 @@
     $effect(() => {
       if (browser) {
         localStorage.setItem('kcm_view_mode', viewMode);
+        if (viewMode === 'succinctness') succinctnessMounted = true;
       }
     });
 
@@ -447,9 +451,13 @@
     <section class="visual-panel" data-view={viewMode}>
       {#if viewMode === 'graph'}
         <KCGraph graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
-      {:else if viewMode === 'succinctness'}
-        <MatrixView graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
-      {:else if viewMode === 'queries'}
+      {/if}
+      {#if succinctnessMounted}
+        <div class="keep-alive-wrapper" class:is-active={viewMode === 'succinctness'}>
+          <MatrixView graphData={filteredGraphData} bind:selectedNode bind:selectedEdge />
+        </div>
+      {/if}
+      {#if viewMode === 'queries'}
         <OperationsMatrixView 
           graphData={filteredGraphData} 
           operationType="queries"
@@ -761,6 +769,20 @@
     flex-direction: column;
     padding: 0.5rem;
     overflow: hidden;
+  }
+
+  /* Keep-alive wrapper: hidden views stay in DOM but are invisible and non-interactive.
+     Uses offscreen positioning so ResizeObserver still fires when shown. */
+  .keep-alive-wrapper {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+  .keep-alive-wrapper.is-active {
+    display: flex;
+    flex-direction: column;
   }
   
   .side-panel {

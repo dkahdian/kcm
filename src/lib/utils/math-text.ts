@@ -4,6 +4,14 @@ const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{)/;
 const LATEX_FRAGMENT = /(\$\$[\s\S]+?\$\$|\$[\s\S]+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\))/g;
 const CITATION_PATTERN = /\\cite[tp]?\{([^}]+)\}/g;
 
+/**
+ * LRU-style render cache for renderMathText results.
+ * Avoids re-running KaTeX for identical input strings (e.g., the same
+ * status notation rendered in hundreds of matrix cells).
+ */
+const renderCache = new Map<string, MathRenderResult>();
+const RENDER_CACHE_MAX = 512;
+
 export interface MathRenderResult {
   hasLatex: boolean;
   html: string | null;
@@ -80,13 +88,28 @@ export function renderMathText(input?: string | null): MathRenderResult {
     return { hasLatex: false, html: null, plainText: text, citationKeys: [] };
   }
 
+  // Check render cache first
+  const cached = renderCache.get(text);
+  if (cached) return cached;
+
   // Extract citation keys first
   const citationKeys = extractCitationKeys(text);
+
+  /** Store result in cache and return it */
+  function cacheAndReturn(result: MathRenderResult): MathRenderResult {
+    if (renderCache.size >= RENDER_CACHE_MAX) {
+      // Evict oldest entry
+      const firstKey = renderCache.keys().next().value;
+      if (firstKey !== undefined) renderCache.delete(firstKey);
+    }
+    renderCache.set(text, result);
+    return result;
+  }
 
   if (!containsLatex(text)) {
     // No LaTeX, but still convert newlines to <br> for proper display
     const htmlWithBreaks = escapeHtml(text).replace(/\n/g, '<br>');
-    return { hasLatex: false, html: htmlWithBreaks, plainText: text, citationKeys };
+    return cacheAndReturn({ hasLatex: false, html: htmlWithBreaks, plainText: text, citationKeys });
   }
 
   LATEX_FRAGMENT.lastIndex = 0;
@@ -106,11 +129,11 @@ export function renderMathText(input?: string | null): MathRenderResult {
 
   if (!foundLatex) {
     const htmlWithBreaks = escapeHtml(text).replace(/\n/g, '<br>');
-    return { hasLatex: false, html: htmlWithBreaks, plainText: text, citationKeys };
+    return cacheAndReturn({ hasLatex: false, html: htmlWithBreaks, plainText: text, citationKeys });
   }
 
   html += escapeHtml(text.slice(cursor)).replace(/\n/g, '<br>');
-  return { hasLatex: true, html, plainText: text, citationKeys };
+  return cacheAndReturn({ hasLatex: true, html, plainText: text, citationKeys });
 }
 
 export function containsLatex(input?: string | null): boolean {

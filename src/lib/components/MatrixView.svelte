@@ -189,7 +189,7 @@
   // Dynamic cell sizing
   let matrixScrollEl: HTMLDivElement;
   let tableEl: HTMLTableElement;
-  let cellSize = $state({ width: 0, height: 0 });
+  let cellSize = $state({ width: 0, height: 0, headerWidth: 0 });
   let measured = $state(false);
   let lastContainerSize = { width: 0, height: 0 };
   let lastLanguageCount = 0;
@@ -212,7 +212,7 @@
     const result = measureCellSize(matrixScrollEl, tableEl, numCells, numCells);
     if (result) {
       // Only update if dimensions actually changed
-      if (result.width !== cellSize.width || result.height !== cellSize.height) {
+      if (result.width !== cellSize.width || result.height !== cellSize.height || result.headerWidth !== cellSize.headerWidth) {
         cellSize = result;
       }
       lastContainerSize = { width: containerWidth, height: containerHeight };
@@ -246,6 +246,7 @@
       bind:this={tableEl}
       style:--cell-width="{cellSize.width}px"
       style:--cell-height="{cellSize.height}px"
+      style:--header-width="{cellSize.headerWidth}px"
       class:measured
     >
       <thead>
@@ -337,11 +338,26 @@
   }
 
   /* After measurement, use computed cell size */
-  .matrix-table.measured th,
   .matrix-table.measured td {
     width: var(--cell-width, auto);
     min-width: var(--cell-width, auto);
     max-width: var(--cell-width, none);
+    height: var(--cell-height, auto);
+  }
+
+  /* Column headers (thead th except corner) use data-column width */
+  .matrix-table.measured thead th:not(.corner-cell) {
+    width: var(--cell-width, auto);
+    min-width: var(--cell-width, auto);
+    max-width: var(--cell-width, none);
+  }
+
+  /* Row headers + corner use separate header width */
+  .matrix-table.measured .corner-cell,
+  .matrix-table.measured tbody th {
+    width: var(--header-width, auto);
+    min-width: var(--header-width, auto);
+    max-width: var(--header-width, none);
     height: var(--cell-height, auto);
   }
 
@@ -393,6 +409,8 @@
     color: #1f2937;
     font-size: 0.6rem;
     line-height: 1.1;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .col-header button {
@@ -527,6 +545,12 @@
     font-size: 1.2em;
     line-height: 1;
     padding: 0;
+  }
+
+  /* Reduce inter-atom spacing in data cells for compact minimum width */
+  .cell-short :global(.katex .mspace) {
+    margin-right: 0.15em !important;
+    margin-left: 0 !important;
   }
 
 

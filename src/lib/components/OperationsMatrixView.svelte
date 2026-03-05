@@ -269,6 +269,10 @@
     font-size: 0.75rem;
   }
 
+  .matrix-table:not(.measured) {
+    table-layout: auto;
+  }
+
   .matrix-table:not(.measured) th,
   .matrix-table:not(.measured) td {
     width: auto;

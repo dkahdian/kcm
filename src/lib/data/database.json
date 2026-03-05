@@ -62,7 +62,7 @@
             ],
             "derived": true,
             "description": "Model Counting is unsupported by PI (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002,Roth_1996}, and PI compiles to CNF in polynomial time. If CNF supported Model Counting in polynomial time, then PI could too by compiling first. Therefore Model Counting is unsupported by CNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 787,
+            "derivationOrder": 788,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_27fffab2",
@@ -79,7 +79,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Consistency \\citet{Darwiche_2002}, and since Consistency is unsupported by CNF (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 788,
+            "derivationOrder": 789,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-co",
@@ -96,7 +96,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by CNF (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 789,
+            "derivationOrder": 790,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -113,7 +113,7 @@
             ],
             "derived": true,
             "description": "Since Clausal Entailment implies Consistency \\citet{Darwiche_2002}, and since Consistency is unsupported by CNF (unless P = NP) \\citet{Darwiche_2002}, then Clausal Entailment is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 790,
+            "derivationOrder": 791,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "ce-co",
@@ -130,7 +130,7 @@
             ],
             "derived": true,
             "description": "Since Model Enumeration implies Consistency \\citet{Darwiche_2002}, and since Consistency is unsupported by CNF (unless P = NP) \\citet{Darwiche_2002}, then Model Enumeration is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 791,
+            "derivationOrder": 792,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "me-co",
@@ -442,10 +442,6 @@
               "languageId": "lang_6c130090",
               "level": "poly"
             }
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
         "transformations": {
@@ -487,7 +483,7 @@
             ],
             "derived": true,
             "description": "Since Conjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since Bounded Conjunction is unsupported by d-DNNF (unless P = NP) \\citet{Darwiche_2002}, then Conjunction is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 792,
+            "derivationOrder": 793,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "and-c-and-bc",
@@ -504,7 +500,7 @@
             ],
             "derived": true,
             "description": "Since Conditioning ∧ Bounded Disjunction implies Singleton Forgetting \\citet{Darwiche_2002}, and since Singleton Forgetting is unsupported by d-DNNF (unless P = NP) \\citet{Darwiche_2002}, and since Conditioning is supported in polynomial time, then Bounded Disjunction is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 793,
+            "derivationOrder": 794,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "cd-or-bc-sfo",
@@ -521,7 +517,7 @@
             ],
             "derived": true,
             "description": "Since Disjunction implies Bounded Disjunction \\citet{Darwiche_2002}, and since Bounded Disjunction is unsupported by d-DNNF (unless P = NP) \\citet{Darwiche_2002}, then Disjunction is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 826,
+            "derivationOrder": 827,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "or-c-or-bc",
@@ -812,7 +808,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by DNF (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by DNF as well (unless P = NP).",
-            "derivationOrder": 794,
+            "derivationOrder": 795,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -829,7 +825,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by DNF (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by DNF as well (unless P = NP).",
-            "derivationOrder": 795,
+            "derivationOrder": 796,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -846,7 +842,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by DNF (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by DNF as well (unless P = NP).",
-            "derivationOrder": 796,
+            "derivationOrder": 797,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -865,7 +861,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since Conjunction is unsupported by DNF in quasi-polynomial time \\citet{Darwiche_2002}, and since Disjunction is supported in quasi-polynomial time, then Negation is unsupported by DNF in quasi-polynomial time as well.",
-            "derivationOrder": 798,
+            "derivationOrder": 799,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-c-and-c",
@@ -1009,7 +1005,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by DNNF (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 800,
+            "derivationOrder": 801,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -1043,7 +1039,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by DNNF (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 799,
+            "derivationOrder": 800,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -1060,7 +1056,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by DNNF (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 801,
+            "derivationOrder": 802,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -1146,7 +1142,7 @@
             ],
             "derived": true,
             "description": "Since Conjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since Bounded Conjunction is unsupported by DNNF (unless P = NP) \\citet{Darwiche_2002}, then Conjunction is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 802,
+            "derivationOrder": 803,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "and-c-and-bc",
@@ -1234,10 +1230,6 @@
               "languageId": "lang_684b1ca7",
               "level": "poly"
             }
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
         "transformations": {
@@ -1447,7 +1439,7 @@
             ],
             "derived": true,
             "description": "Since Disjunction implies Bounded Disjunction \\citet{Darwiche_2002}, and since Bounded Disjunction is unsupported by IP in quasi-polynomial time \\citet{Darwiche_2002}, then Disjunction is unsupported by IP in quasi-polynomial time as well.",
-            "derivationOrder": 804,
+            "derivationOrder": 805,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "or-c-or-bc",
@@ -1477,7 +1469,7 @@
             ],
             "derived": true,
             "description": "Since Forgetting implies Singleton Forgetting \\citet{Darwiche_2002}, and since Singleton Forgetting is unsupported by IP in quasi-polynomial time \\citet{Darwiche_2002}, then Forgetting is unsupported by IP in quasi-polynomial time as well.",
-            "derivationOrder": 806,
+            "derivationOrder": 807,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "fo-sfo",
@@ -1689,14 +1681,6 @@
       "name": "nFBDD",
       "properties": {
         "queries": {
-          "CT": {
-            "complexity": "no-poly-unknown-quasi",
-            "refs": [
-              "Colnet_2025"
-            ],
-            "caveat": "the polynomial hierarchy collapses",
-            "description": "Exact model counting for non-deterministic read-once branching programs ($nFBDD$) is \\#P-hard. This is because non-determinism allows multiple computational paths to satisfy the same assignment \\citet{Colnet_2025}."
-          },
           "CE": {
             "complexity": "poly",
             "refs": [
@@ -1751,7 +1735,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by nFBDD (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 808,
+            "derivationOrder": 809,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -1785,7 +1769,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by nFBDD (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 807,
+            "derivationOrder": 808,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -1802,7 +1786,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by nFBDD (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 809,
+            "derivationOrder": 810,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -1811,6 +1795,23 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CT": {
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and IP compiles to nFBDD in polynomial time. If nFBDD supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nFBDD (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 784,
+            "proofTrace": {
+              "rule": "query-downgrade-via-succinctness",
+              "sourceLanguageId": "lang_6ae90adc",
+              "targetLanguageId": "lang_1df07cc3",
+              "operation": "CT",
+              "level": "poly"
+            },
+            "caveat": "the polynomial hierarchy collapses"
           }
         },
         "transformations": {
@@ -1821,7 +1822,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Consistency implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by nFBDD (unless P = NP) \\citet{Darwiche_2002}, and since Consistency is supported in polynomial time, then Negation is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 810,
+            "derivationOrder": 811,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-co-va",
@@ -1884,7 +1885,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by NNF (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 812,
+            "derivationOrder": 813,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -1901,7 +1902,7 @@
             ],
             "derived": true,
             "description": "Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and IP compiles to NNF in polynomial time. If NNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by NNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 784,
+            "derivationOrder": 785,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -1918,7 +1919,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Consistency \\citet{Darwiche_2002}, and since Consistency is unsupported by NNF (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 811,
+            "derivationOrder": 812,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-co",
@@ -1935,7 +1936,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by NNF (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 813,
+            "derivationOrder": 814,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -1952,7 +1953,7 @@
             ],
             "derived": true,
             "description": "Since Clausal Entailment implies Consistency \\citet{Darwiche_2002}, and since Consistency is unsupported by NNF (unless P = NP) \\citet{Darwiche_2002}, then Clausal Entailment is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 814,
+            "derivationOrder": 815,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "ce-co",
@@ -1969,7 +1970,7 @@
             ],
             "derived": true,
             "description": "Since Model Enumeration implies Consistency \\citet{Darwiche_2002}, and since Consistency is unsupported by NNF (unless P = NP) \\citet{Darwiche_2002}, then Model Enumeration is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 815,
+            "derivationOrder": 816,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "me-co",
@@ -2128,7 +2129,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by nOBDD (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 817,
+            "derivationOrder": 818,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -2162,7 +2163,7 @@
             ],
             "derived": true,
             "description": "Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and IP compiles to nOBDD in polynomial time. If nOBDD supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nOBDD (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 785,
+            "derivationOrder": 786,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -2179,7 +2180,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by nOBDD (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 816,
+            "derivationOrder": 817,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -2196,7 +2197,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by nOBDD (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 818,
+            "derivationOrder": 819,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -2215,7 +2216,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Consistency implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by nOBDD (unless P = NP) \\citet{Darwiche_2002}, and since Consistency is supported in polynomial time, then Negation is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 819,
+            "derivationOrder": 820,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-co-va",
@@ -2515,7 +2516,7 @@
             ],
             "derived": true,
             "description": "Since Conjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since Bounded Conjunction is unsupported by PI in quasi-polynomial time \\citet{Darwiche_2002}, then Conjunction is unsupported by PI in quasi-polynomial time as well.",
-            "derivationOrder": 821,
+            "derivationOrder": 822,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "and-c-and-bc",
@@ -2823,7 +2824,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since Equivalence is unsupported by SDNNF (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 823,
+            "derivationOrder": 824,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -2857,7 +2858,7 @@
             ],
             "derived": true,
             "description": "Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and IP compiles to SDNNF in polynomial time. If SDNNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by SDNNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 786,
+            "derivationOrder": 787,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -2874,7 +2875,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by SDNNF (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 822,
+            "derivationOrder": 823,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -2891,7 +2892,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since Validity is unsupported by SDNNF (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 824,
+            "derivationOrder": 825,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -2910,7 +2911,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since Conjunction is unsupported by SDNNF (unless P = NP) \\citet{Pipatsrisawat_2008}, and since Disjunction is supported in polynomial time, then Negation is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 825,
+            "derivationOrder": 826,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-c-and-c",
@@ -3111,10 +3112,6 @@
               "operation": "ME",
               "level": "poly"
             }
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
         "transformations": {}
@@ -3541,10 +3538,6 @@
               "operation": "ME",
               "level": "poly"
             }
-          },
-          "SE": {
-            "complexity": "unknown-to-us",
-            "refs": []
           }
         },
         "transformations": {}
@@ -3836,12 +3829,6 @@
       "href": "#"
     },
     {
-      "id": "Van den Broeck_2015",
-      "bibtex": "@article{Van den Broeck_Darwiche_2015, title={On the Role of Canonicity in Knowledge Compilation}, volume={29}, url={https://ojs.aaai.org/index.php/AAAI/article/view/9423}, DOI={10.1609/aaai.v29i1.9423}, abstractNote={ &lt;p&gt; Knowledge compilation is a powerful reasoning paradigm with many applications across AI and computer science more broadly. We consider the problem of bottom-up compilation of knowledge bases, which is usually predicated on the existence of a polytime function for combining compilations using Boolean operators (usually called an Apply function). While such a polytime Apply function is known to exist for certain languages (e.g., OBDDs) and not exist for others (e.g., DNNFs), its existence for certain languages remains unknown. Among the latter is the recently introduced language of Sentential Decision Diagrams (SDDs): while a polytime Apply function exists for SDDs, it was unknown whether such a function exists for the important subset of compressed SDDs which are canonical. We resolve this open question in this paper and consider some of its theoretical and practical implications. Some of the findings we report question the common wisdom on the relationship between bottom-up compilation, language canonicity and the complexity of the Apply function. &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Van den Broeck, Guy and Darwiche, Adnan}, year={2015}, month={Feb.} }",
-      "title": "G. Van den Broeck and A. Darwiche, \"On the Role of Canonicity in Knowledge Compilation,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 29, 2015.",
-      "href": "https://ojs.aaai.org/index.php/AAAI/article/view/9423"
-    },
-    {
       "id": "Bova_2016_a",
       "bibtex": "@article{Bova_2016_a, title={SDDs Are Exponentially More Succinct than OBDDs}, volume={30}, url={https://ojs.aaai.org/index.php/AAAI/article/view/10107}, DOI={10.1609/aaai.v30i1.10107}, abstractNote={ &lt;p&gt; Introduced by Darwiche (2011), sentential decision diagrams (SDDs) are essentially as tractable as ordered binary decision diagrams (OBDDs), but tend to be more succinct in practice. This makes SDDs a prominent representation language, with many applications in artificial intelligence and knowledge compilation. We prove that SDDs are more succinct than OBDDs also in theory, by constructing a family of boolean functions where each member has polynomial SDD size but exponential OBDD size. This exponential separation improves a quasipolynomial separation recently established by Razgon (2014), and settles an open problem in knowledge compilation (Darwiche, 2011). &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Bova, Simone}, year={2016}, month={Feb.} }",
       "title": "S. Bova, \"SDDs Are Exponentially More Succinct than OBDDs,\" Proceedings of the AAAI Conference on Artificial Intelligence, vol. 30, 2016.",
@@ -3942,12 +3929,6 @@
       "bibtex": "@inproceedings{Oztok_2014,\n  title={On Compiling CNF into Decision-DNNF},\n  author={Oztok, Umut and Darwiche, Adnan},\n  booktitle={International Conference on Principles and Practice of Constraint Programming},\n  pages={42--57},\n  year={2014},\n  publisher={Springer}\n}",
       "title": "U. Oztok and A. Darwiche, \"On Compiling CNF into Decision-DNNF,\" International Conference on Principles and Practice of Constraint Programming, Springer, 2014.",
       "href": "https://doi.org/10.1007/978-3-319-10428-7_6"
-    },
-    {
-      "id": "Colnet_2025",
-      "title": "A. de Colnet and K. S. Meel, \"An FPRAS for Model Counting for Non-Deterministic Read-Once Branching Programs\", 28th International Conference on Database Theory (ICDT 2025), 2025.",
-      "href": "https://doi.org/10.4230/LIPIcs.ICDT.2025.10",
-      "bibtex": "@inproceedings{Colnet_2025,\n  author={de Colnet, Alexis and Meel, Kuldeep S.},\n  title={An FPRAS for Model Counting for Non-Deterministic Read-Once Branching Programs},\n  booktitle={28th International Conference on Database Theory (ICDT 2025)},\n  year={2025},\n  doi={10.4230/LIPIcs.ICDT.2025.10},\n  note={See also arXiv:2406.16515}\n}"
     }
   ],
   "tags": {
@@ -7000,7 +6981,7 @@
           "hidden": false,
           "derived": true,
           "description": "cSDD supports Model Counting in polynomial time \\citet{Darwiche_2001b}, but Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to cSDD in polynomial time, IP could support Model Counting by first compiling to cSDD. Therefore IP cannot compile to cSDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 827,
+          "derivationOrder": 828,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -7019,7 +7000,7 @@
           "hidden": false,
           "derived": true,
           "description": "d-DNNF supports Model Counting in polynomial time \\citet{Darwiche_2001b}, but Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-DNNF in polynomial time, IP could support Model Counting by first compiling to d-DNNF. Therefore IP cannot compile to d-DNNF in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 828,
+          "derivationOrder": 829,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -7038,7 +7019,7 @@
           "hidden": false,
           "derived": true,
           "description": "d-SDNNF supports Model Counting in polynomial time \\citet{Darwiche_2001b}, but Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-SDNNF in polynomial time, IP could support Model Counting by first compiling to d-SDNNF. Therefore IP cannot compile to d-SDNNF in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 829,
+          "derivationOrder": 830,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -7209,7 +7190,7 @@
           "hidden": false,
           "derived": true,
           "description": "SDD supports Model Counting in polynomial time \\citet{Darwiche_2001b}, but Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to SDD in polynomial time, IP could support Model Counting by first compiling to SDD. Therefore IP cannot compile to SDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 830,
+          "derivationOrder": 831,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -7252,7 +7233,7 @@
           "hidden": false,
           "derived": true,
           "description": "uFBDD supports Model Counting in polynomial time \\citet{Darwiche_2001b}, but Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uFBDD in polynomial time, IP could support Model Counting by first compiling to uFBDD. Therefore IP cannot compile to uFBDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 831,
+          "derivationOrder": 832,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -7271,7 +7252,7 @@
           "hidden": false,
           "derived": true,
           "description": "uOBDD supports Model Counting in polynomial time \\citet{Darwiche_2001b}, but Model Counting is unsupported by IP (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uOBDD in polynomial time, IP could support Model Counting by first compiling to uOBDD. Therefore IP cannot compile to uOBDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 832,
+          "derivationOrder": 833,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",

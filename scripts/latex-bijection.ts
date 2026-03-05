@@ -1060,7 +1060,7 @@ function parseBibtex(content: string): Map<string, string> {
  * Update database references from parsed BibTeX entries.
  * - Updates existing references if bibtex content changed
  * - Adds new references if they don't exist
- * - Does NOT remove references that are not in the BibTeX file
+ * - Removes references that are no longer in the BibTeX file
  */
 function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map<string, string>): void {
   const existingRefs = new Map<string, KCReference>();
@@ -1118,7 +1118,13 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
     }
   }
   
-  console.log(`References: ${added} added, ${updated} updated`);
+  // Remove references no longer in the BibTeX file
+  const bibtexKeys = new Set(bibtexEntries.keys());
+  const before = database.references.length;
+  database.references = database.references.filter(ref => bibtexKeys.has(ref.id));
+  const removed = before - database.references.length;
+
+  console.log(`References: ${added} added, ${updated} updated, ${removed} removed`);
 }
 
 /**
@@ -2194,7 +2200,22 @@ function updateOpsFromLatex(
     updated++;
   }
 
-  console.log(`Updated ${updated} ${opType} entries, skipped ${skipped}`);
+  // Remove non-derived entries that are no longer in the LaTeX source
+  const claimKeys = new Set(parsedClaims.map(c => `${c.langId}:${c.opCode}`));
+  let removed = 0;
+  for (const lang of database.languages) {
+    const supportMap = lang.properties?.[opType];
+    if (!supportMap) continue;
+    for (const opKey of Object.keys(supportMap)) {
+      const entry = supportMap[opKey];
+      if (entry && !entry.derived && !claimKeys.has(`${lang.id}:${opKey}`)) {
+        delete supportMap[opKey];
+        removed++;
+      }
+    }
+  }
+
+  console.log(`Updated ${updated} ${opType} entries, skipped ${skipped}, removed ${removed}`);
 }
 
 // =============================================================================

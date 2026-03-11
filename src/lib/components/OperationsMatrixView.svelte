@@ -159,7 +159,7 @@
   // Dynamic cell sizing
   let matrixScrollEl: HTMLDivElement;
   let tableEl: HTMLTableElement;
-  let cellSize = $state({ width: 0, height: 0 });
+  let cellSize = $state({ width: 0, height: 0, headerWidth: 0 });
   let measured = $state(false);
 
   function updateCellSize() {
@@ -195,6 +195,7 @@
       bind:this={tableEl}
       style:--cell-width="{cellSize.width}px"
       style:--cell-height="{cellSize.height}px"
+      style:--header-width="{cellSize.headerWidth}px"
       class:measured
     >
       <thead>
@@ -280,11 +281,19 @@
     max-width: none;
   }
 
-  .matrix-table.measured th,
-  .matrix-table.measured td {
+  .matrix-table.measured td,
+  .matrix-table.measured thead th:not(.corner-cell) {
     width: var(--cell-width, auto);
     min-width: var(--cell-width, auto);
     max-width: var(--cell-width, none);
+    height: var(--cell-height, auto);
+  }
+
+  .matrix-table.measured .corner-cell,
+  .matrix-table.measured tbody th {
+    width: var(--header-width, auto);
+    min-width: var(--header-width, auto);
+    max-width: var(--header-width, none);
     height: var(--cell-height, auto);
   }
 

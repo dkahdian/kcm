@@ -1087,19 +1087,18 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
         existingRef.bibtex = normalizedBibtex;
         changed = true;
       }
-      // Regenerate title if it's still just the raw paper title (not a full citation)
+      // Regenerate title when bibtex changed or title is just the raw paper title
       const rawTitle = extractTitleFromBibtex(bibtex);
-      if (rawTitle && existingRef.title === rawTitle) {
-        existingRef.title = buildCitationFromBibtex(bibtex, existingRef.id);
+      const newTitle = buildCitationFromBibtex(bibtex, existingRef.id);
+      if (existingRef.title !== newTitle) {
+        existingRef.title = newTitle;
         changed = true;
       }
-      // Update href if missing
-      if (existingRef.href === '#') {
-        const href = extractUrlFromBibtex(bibtex);
-        if (href) {
-          existingRef.href = href;
-          changed = true;
-        }
+      // Update href from bibtex when available (keeps href in sync with bibtex source)
+      const hrefFromBibtex = extractUrlFromBibtex(bibtex);
+      if (hrefFromBibtex && existingRef.href !== hrefFromBibtex) {
+        existingRef.href = hrefFromBibtex;
+        changed = true;
       }
       if (changed) updated++;
     } else {
@@ -1123,6 +1122,9 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
   const before = database.references.length;
   database.references = database.references.filter(ref => bibtexKeys.has(ref.id));
   const removed = before - database.references.length;
+
+  // Sort references alphabetically by ID
+  database.references.sort((a, b) => a.id.localeCompare(b.id));
 
   console.log(`References: ${added} added, ${updated} updated, ${removed} removed`);
 }
@@ -1160,8 +1162,10 @@ function buildCitationFromBibtex(bibtex: string, fallbackKey: string): string {
 
   const parts: string[] = [];
   if (author) {
+    // Clean BibTeX grouping braces (e.g., \{Hans L.\} → Hans L.) before processing
+    const cleanAuthor = author.replace(/\\{/g, '').replace(/\\}/g, '');
     // Abbreviate first names: "de Colnet, Alexis and Meel, Kuldeep S." → "A. de Colnet and K. S. Meel"
-    const authors = author.split(/\s+and\s+/).map(a => {
+    const authors = cleanAuthor.split(/\s+and\s+/).map(a => {
       const commaMatch = a.match(/^(.+?),\s*(.+)$/);
       if (commaMatch) {
         const last = commaMatch[1].trim();

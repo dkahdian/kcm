@@ -23,7 +23,7 @@ export function cloneOperationSupport(
       const key = convertToSafeKeys ? displayCodeToSafeKey(code) : code;
       cloned[key] = {
         complexity: support.complexity,
-        note: support.note,
+        caveat: support.caveat,
         refs: Array.isArray(support.refs) ? [...support.refs] : []
       };
     }

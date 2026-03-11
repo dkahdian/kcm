@@ -60,18 +60,24 @@
   let selectedExistingRefs = $state<string[]>([]);
   let errorMessage = $state<string | null>(null);
 
-  // Initialize from initial data if editing
+  // Initialize from initial data if editing, and always reset init flags
+  // so the fill-all-slots effect re-runs (guards against stale state when
+  // the modal is closed by switching to a different modal without resetForm).
   $effect(() => {
-    if (isOpen && isEdit && initialData) {
-      name = initialData.name;
-      fullName = initialData.fullName;
-      definition = initialData.definition;
-      definitionRefs = [...initialData.definitionRefs];
-      querySupport = { ...initialData.queries };
-      transformationSupport = { ...initialData.transformations };
-      selectedTags = [...initialData.tags];
-      selectedExistingRefs = [...initialData.existingReferences];
-      errorMessage = null;
+    if (isOpen) {
+      if (isEdit && initialData) {
+        name = initialData.name;
+        fullName = initialData.fullName;
+        definition = initialData.definition;
+        definitionRefs = [...initialData.definitionRefs];
+        querySupport = { ...initialData.queries };
+        transformationSupport = { ...initialData.transformations };
+        selectedTags = [...initialData.tags];
+        selectedExistingRefs = [...initialData.existingReferences];
+        errorMessage = null;
+      }
+      queriesInitialized = false;
+      transformationsInitialized = false;
     }
   });
 

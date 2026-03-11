@@ -181,6 +181,9 @@
     } catch (error) {
       console.warn('Failed to restore filter state from storage', error);
     } finally {
+      // Always recompute effective state for the (possibly restored) view mode,
+      // even when there are no stored deltas / no migration happened.
+      filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
       filterPersistenceReady = true;
     }
   });
@@ -409,6 +412,9 @@
         {:else}
           <a href="/about" class="about-link">
             About
+          </a>
+          <a href="/bibliography" class="bib-link">
+            Bibliography
           </a>
           <a href="/contribute" target="_blank" class="contribute-link">
             Contribute
@@ -726,6 +732,28 @@
   }
 
   .about-link:active {
+    transform: translateY(0);
+  }
+
+  .bib-link {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .bib-link:hover {
+    background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+
+  .bib-link:active {
     transform: translateY(0);
   }
 

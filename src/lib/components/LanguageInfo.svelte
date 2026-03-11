@@ -338,25 +338,21 @@
                         <MathText text={op.label} className="inline" />
                         <span>)</span>
                       {/if}
-                      {#if !isOperationsView}
-                        {#if op.refs?.length}{#each op.refs as refId}<span 
-                              class="ref-badge"
-                              role="link"
-                              tabindex="0"
-                              onclick={scrollToReferences}
-                              onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
-                              title="View reference"
-                            >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{/if}
-                      {/if}
+                      {#if op.refs?.length}{#each op.refs as refId}<span 
+                            class="ref-badge"
+                            role="link"
+                            tabindex="0"
+                            onclick={scrollToReferences}
+                            onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
+                            title="View reference"
+                          >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{/if}
                     </div>
-                    {#if !isOperationsView}
-                      {#if op.caveat}
-                        <MathText 
-                          text={`Unless ${op.caveat}`} 
-                          className="text-xs text-gray-500"
-                          onCitationClick={handleCitationClick}
-                        />
-                      {/if}
+                    {#if op.caveat}
+                      <MathText 
+                        text={`Unless ${op.caveat}`} 
+                        className="text-xs text-gray-500"
+                        onCitationClick={handleCitationClick}
+                      />
                     {/if}
                   </div>
                 </button>

@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Transformation Support Claims
 % Auto-generated from database.json
-% Generated: 2026-03-10T22:01:12.749Z
+% Generated: 2026-03-12T16:50:01.864Z
 %
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -45,18 +45,17 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\eps}{\varepsilon}
-
-% -------- Title info --------
-\title{Knowledge Compilation Map: Transformation Support}
-\date{\today}
-
-
-% -------- Entity link macros (rendered as links in the web UI) --------
+% Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
 \newcommand{\nopref}[2]{#2 is unsupported by #1}
+
+% -------- Title info --------
+\title{Knowledge Compilation Map: Transformation Support}
+\date{\today}
+
 \begin{document}
 \maketitle
 
@@ -64,17 +63,9 @@
 \newpage
 
 % =============================
-\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map," Journal of Artificial...}
+\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map", Journal of Artificial...}
 % Reference ID: Darwiche_2002
 % =============================
-% lang=lang_89649e36, op=NOT_C
-\begin{claim}
-$CNF$ supports Negation not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-The negation of a CNF formula is a DNF formula. If CNF satisfied $\neg$C, any DNF formula could be turned into an equivalent CNF in polytime (by double negation). Since DNF $\not\leq$ CNF, this is impossible (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_89649e36, op=AND_C
 \begin{claim}
 $CNF$ supports Conjunction in polynomial time \citet{Darwiche_2002}
@@ -131,14 +122,6 @@ $d$-$DNNF$ supports Conditioning in polynomial time \citet{Darwiche_2002}
 Conditioning preserves both decomposability and determinism. If $\alpha \land \beta \models \bot$ then $(\alpha|\gamma) \land (\beta|\gamma) \models \bot$ for any consistent term $\gamma$, since $((\alpha \land \beta)|\gamma) \land \gamma \models \bot$ and $\gamma$ is consistent (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_6c130090, op=FO
-\begin{claim}
-$d$-$DNNF$ supports Forgetting not in polynomial time (quasi-polynomial unknown) unless the polynomial hierarchy collapses \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-If d-DNNF satisfies FO, then every DNF can be compiled to an equivalent d-DNNF of polynomial size (using fresh selector variables and then applying FO). Since DNF $\not\leq$ d-DNNF, this is impossible (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_6c130090, op=SFO
 \begin{claim}
 $d$-$DNNF$ supports Singleton Forgetting not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002}
@@ -169,22 +152,6 @@ $DNF$ supports Disjunction in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 Disjunction of DNF sentences is trivially another DNF sentence: simply take the union of all terms (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_4c204bf3, op=CD
-\begin{claim}
-$DNF$ supports Conditioning in polynomial time \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-CD is trivially satisfied: replacing literals of the conditioning term by Boolean constants in a DNF and removing inconsistent terms preserves the DNF property (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_3bebcab7, op=NOT_C
-\begin{claim}
-$DNNF$ supports Negation not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-If DNNF satisfies $\neg$C, then any CNF formula could be converted to DNNF in polytime (negate a DNF equivalent of $\neg\Sigma$). Since DNNF satisfies CO, this would give P = NP (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % lang=lang_3bebcab7, op=AND_BC
@@ -219,52 +186,12 @@ $FBDD$ supports Negation in polynomial time \citet{Darwiche_2002}
 Negation of an FBDD is achieved by switching the labels of the 0-sink and 1-sink. The decision property and read-once property are preserved (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_684b1ca7, op=AND_BC
-\begin{claim}
-$FBDD$ supports Bounded Conjunction not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Since OBDD $\subseteq$ FBDD and FBDD satisfies CO, the NP-completeness of consistency checking for two OBDDs (which may possess different underlying orderings) implies FBDD does not satisfy $\land$BC unless P = NP (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_684b1ca7, op=AND_C
-\begin{claim}
-$FBDD$ supports Conjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert a clause into an equivalent FBDD formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent FBDD formulas in polynomial space (CNF $\not\leq$ FBDD), FBDD does not satisfy $\land$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_684b1ca7, op=OR_BC
-\begin{claim}
-$FBDD$ supports Bounded Disjunction not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Since OBDD satisfies $\neg$C and OBDD $\subseteq$ FBDD, if FBDD satisfied $\lor$BC then $\neg\alpha_1 \lor \neg\alpha_2$ could be computed and checked for validity in polytime. Since d-DNNF satisfies VA and FBDD $\subseteq$ d-DNNF, this would solve an NP-hard problem (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_684b1ca7, op=OR_C
-\begin{claim}
-$FBDD$ supports Disjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert any term into an equivalent FBDD formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent FBDD formulas in polynomial space (DNF $\not\leq$ FBDD), FBDD does not satisfy $\lor$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_684b1ca7, op=CD
 \begin{claim}
 $FBDD$ supports Conditioning in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 Conditioning on FBDD is the restrict operation: replace each node labeled by a variable in the conditioning term with one of its children. This preserves the free (read-once) property (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_684b1ca7, op=FO
-\begin{claim}
-$FBDD$ supports Forgetting not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-If FBDD satisfies FO, then every DNF can be compiled to an equivalent FBDD of polynomial size. Since DNF $\not\leq$ FBDD, this is impossible (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % lang=lang_684b1ca7, op=SFO
@@ -347,12 +274,12 @@ $MODS$ supports Conjunction not in quasi-polynomial time \citet{Darwiche_2002}
 Let $\Sigma_i = (x_{i,1} \lor x_{i,2})$ for $i = 1,\ldots,n$. Each $\Sigma_i$ has 3 models. But $\Sigma = \bigwedge_{i=1}^n \Sigma_i$ has $3^n$ models, so no polynomial-size MODS representation exists (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_e02902d0, op=OR_C
+% lang=lang_e02902d0, op=OR_BC
 \begin{claim}
-$MODS$ supports Disjunction not in quasi-polynomial time \citet{Darwiche_2002}
+$MODS$ supports Bounded Disjunction not in quasi-polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Let $\alpha_1 = \bigwedge_{i=1}^n x_i$ (1 model) and $\alpha_2 = y$ (1 model). Then $\alpha_1 \lor \alpha_2$ has $2^n + 1$ models over $\text{Vars}(\alpha_1) \cup \text{Vars}(\alpha_2)$. Hence MODS cannot satisfy $\lor$C (\citet{Darwiche_2002}, Proposition 5.1).
+Let $\alpha_1 = \bigwedge_{i=1}^n x_i$ (1 model) and $\alpha_2 = y$ (1 model). Then $\alpha_1 \lor \alpha_2$ has $2^n + 1$ models over $\text{Vars}(\alpha_1) \cup \text{Vars}(\alpha_2)$. Since this already uses the disjunction of just two MODS sentences, MODS does not satisfy $\lor$BC (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % lang=lang_e02902d0, op=FO
@@ -377,14 +304,6 @@ $NNF$ supports Conjunction in polynomial time \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 Taking the conjunction of NNF sentences $\alpha_1 \land \alpha_2 \land \ldots$ trivially produces another NNF sentence, since NNF places no restrictions on $\land$-nodes (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_5bf00851, op=OR_C
-\begin{claim}
-$NNF$ supports Disjunction in polynomial time \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Taking the disjunction of NNF sentences $\alpha_1 \lor \alpha_2 \lor \ldots$ trivially produces another NNF sentence, since NNF places no restrictions on $\lor$-nodes (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % lang=lang_5bf00851, op=CD
@@ -419,30 +338,6 @@ $OBDD$ supports Bounded Conjunction not in polynomial time (quasi-polynomial unk
 Checking consistency of two OBDDs (which may possess different underlying orderings) is NP-complete (Lemma 8.14, \citet{Meinel_Theobald_1998}). Since OBDD satisfies CO, if OBDD satisfied $\land$BC consistency could be tested in polytime, implying P = NP (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_b9d72a7c, op=AND_C
-\begin{claim}
-$OBDD$ supports Conjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert a clause into an equivalent OBDD formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent OBDD formulas in polynomial space (CNF $\not\leq$ OBDD), OBDD does not satisfy $\land$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_b9d72a7c, op=OR_BC
-\begin{claim}
-$OBDD$ supports Bounded Disjunction not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Since OBDD satisfies $\neg$C, $\alpha_1 \land \alpha_2$ is inconsistent iff $\neg\alpha_1 \lor \neg\alpha_2$ is valid. If OBDD satisfied $\lor$BC, the disjunction could be computed in polytime and validity tested (OBDD satisfies VA). Since consistency of two OBDDs with different orderings is NP-hard, P = NP would follow (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_b9d72a7c, op=OR_C
-\begin{claim}
-$OBDD$ supports Disjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert any term into an equivalent OBDD formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent OBDD formulas in polynomial space (DNF $\not\leq$ OBDD), OBDD does not satisfy $\lor$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_b9d72a7c, op=CD
 \begin{claim}
 $OBDD$ supports Conditioning in polynomial time \citet{Darwiche_2002}
@@ -475,28 +370,12 @@ $OBDD_<$ supports Conjunction not in polynomial time (quasi-polynomial unknown) 
 It is straightforward to convert a clause into an equivalent OBDD$_<$ formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent OBDD$_<$ formulas in polynomial space (CNF $\not\leq$ OBDD$_<$), OBDD$_<$ does not satisfy $\land$C (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
-% lang=lang_d69995dd, op=OR_C
-\begin{claim}
-$OBDD_<$ supports Disjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-It is straightforward to convert any term into an equivalent OBDD$_<$ formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent OBDD$_<$ formulas in polynomial space (DNF $\not\leq$ OBDD$_<$), OBDD$_<$ does not satisfy $\lor$C (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
 % lang=lang_d69995dd, op=FO
 \begin{claim}
 $OBDD_<$ supports Forgetting not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 If OBDD$_<$ satisfies FO, then every DNF sentence $\Gamma$ can be compiled to an equivalent OBDD$_<$ of polynomial size (using fresh selector variables and then applying FO). Since DNF $\not\leq$ OBDD$_<$, this is impossible (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-% lang=lang_d69995dd, op=SFO
-\begin{claim}
-$OBDD_<$ supports Singleton Forgetting in polynomial time \citet{Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-$\exists x . \Sigma \equiv (\Sigma|x) \lor (\Sigma|\neg x)$. Since OBDD$_<$ satisfies CD and $\lor$BC, singleton forgetting can be computed in polytime \citet{Bryant_1986, Darwiche_2002} (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % lang=lang_27fffab2, op=NOT_C
@@ -626,7 +505,7 @@ Forgetting preserves structured decomposability. Replacing all occurrences of li
 
 
 % =============================
-\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation," Comput...}
+\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation", IEEE T...}
 % Reference ID: Bryant_1986
 % =============================
 % lang=lang_d69995dd, op=NOT_C
@@ -700,7 +579,7 @@ Conditioning an SDD $f$ on a literal $l$ is equivalent to computing $f \land l$.
 
 
 % =============================
-\section{Harry Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation," 2024.}
+\section{H. Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation", Proceedings ...}
 % Reference ID: Vinall-Smeeth_2024
 % =============================
 % lang=lang_ea9b5299, op=NOT_C
@@ -713,7 +592,7 @@ Structured deterministic DNNF (\langref{d-SDNNF}) is not closed under negation i
 
 
 % =============================
-\section{J. Lang, P. Liberatore, and P. Marquis, "Propositional Independence: Formula-Var...}
+\section{J. Lang and P. Liberatore and P. Marquis, "Propositional Independence: Formula-V...}
 % Reference ID: Lang_2003
 % =============================
 % lang=lang_4c204bf3, op=FO
@@ -726,7 +605,7 @@ DNF satisfies FO \citet{Lang_2003}. Forgetting variables from a DNF sentence can
 
 
 % =============================
-\section{Adnan Darwiche, "Decomposable Negation Normal Form," Journal of the ACM, vol. 48...}
+\section{A. Darwiche, "Decomposable Negation Normal Form", Journal of the ACM, vol. 48, p...}
 % Reference ID: Darwiche_2001a
 % =============================
 % lang=lang_3bebcab7, op=FO

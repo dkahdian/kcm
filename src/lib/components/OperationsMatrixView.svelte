@@ -270,6 +270,12 @@
     font-size: 0.75rem;
   }
 
+  /* border-box so measured getBoundingClientRect() widths map directly to CSS width */
+  .matrix-table th,
+  .matrix-table td {
+    box-sizing: border-box;
+  }
+
   .matrix-table:not(.measured) {
     table-layout: auto;
   }

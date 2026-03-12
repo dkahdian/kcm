@@ -96,19 +96,18 @@ export function measureCellSize(
 	const numBodyRows = Math.max(numRows - 1, 1);
 	const availableHeight = containerHeight - headerHeight;
 
-	// Account for 1px borders on each cell
-	const borderWidth = 1;
+	// getBoundingClientRect() returns border-box dimensions; table cells use
+	// box-sizing: border-box so setting CSS width/height to these values keeps
+	// the same total size — no separate border correction needed.
 	const numDataCols = numCols - 1; // exclude header column
-	const totalBorderX = numCols * borderWidth + borderWidth;
-	const totalBorderY = numBodyRows * borderWidth;
 
-	// Available width for data columns after subtracting header column + borders
-	const availableDataWidth = containerWidth - maxHeaderWidth - totalBorderX;
+	// Available width for data columns after subtracting header column
+	const availableDataWidth = containerWidth - maxHeaderWidth;
 	const fitDataWidth = numDataCols > 0 ? Math.floor(availableDataWidth / numDataCols) : 0;
 
 	const finalWidth = Math.max(maxDataWidth, fitDataWidth);
 	const finalHeaderWidth = maxHeaderWidth;
-	const finalHeight = Math.max(maxHeight, Math.floor((availableHeight - totalBorderY) / numBodyRows));
+	const finalHeight = Math.max(maxHeight, Math.floor(availableHeight / numBodyRows));
 
 	return { width: finalWidth, height: finalHeight, headerWidth: finalHeaderWidth };
 }

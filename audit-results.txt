@@ -1,0 +1,87 @@
+=== DERIVABLE Transformations (candidates for removal) ===
+
+  CNF / NOT_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  d-DNNF / FO => no-poly-unknown-quasi  refs: Darwiche_2002
+  DNF / CD => poly  refs: Darwiche_2002
+  DNNF / NOT_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  FBDD / AND_BC => no-poly-unknown-quasi  refs: Darwiche_2002
+  FBDD / AND_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  FBDD / OR_BC => no-poly-unknown-quasi  refs: Darwiche_2002
+  FBDD / OR_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  FBDD / FO => no-poly-unknown-quasi  refs: Darwiche_2002
+  IP / NOT_C => no-quasi  refs: Darwiche_2002
+  IP / OR_BC => no-quasi  refs: Darwiche_2002
+  NNF / AND_C => poly  refs: Darwiche_2002
+  NNF / OR_C => poly  refs: Darwiche_2002
+  OBDD$_<$ / AND_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD$_<$ / OR_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD$_<$ / SFO => poly  refs: Darwiche_2002
+  OBDD$_<$ / AND_BC => poly  refs: Bryant_1986
+  OBDD$_<$ / OR_BC => poly  refs: Bryant_1986
+  OBDD$_<$ / CD => poly  refs: Bryant_1986
+  PI / NOT_C => no-quasi  refs: Darwiche_2002
+  SDD / AND_BC => poly  refs: Darwiche_2011
+  SDD / OR_BC => poly  refs: Darwiche_2011
+  OBDD / AND_BC => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD / AND_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD / OR_BC => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD / OR_C => no-poly-unknown-quasi  refs: Darwiche_2002
+
+=== NOT DERIVABLE Transformations (must keep) ===
+
+  CNF / AND_C => poly  refs: Darwiche_2002
+  CNF / OR_BC => poly  refs: Darwiche_2002
+  CNF / OR_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  CNF / CD => poly  refs: Darwiche_2002
+  CNF / FO => no-poly-unknown-quasi  refs: Darwiche_2002
+  d-DNNF / AND_BC => no-poly-unknown-quasi  refs: Darwiche_2002
+  d-DNNF / CD => poly  refs: Darwiche_2002
+  d-DNNF / SFO => no-poly-unknown-quasi  refs: Darwiche_2002
+  d-SDNNF / NOT_C => no-poly-unknown-quasi  refs: Vinall-Smeeth_2024
+  d-SDNNF / AND_BC => poly  refs: Pipatsrisawat_2008
+  d-SDNNF / CD => poly  refs: Pipatsrisawat_2008
+  d-SDNNF / FO => no-quasi  refs: Pipatsrisawat_2008
+  d-SDNNF / AND_C => no-quasi  refs: Pipatsrisawat_2008
+  d-SDNNF / OR_C => no-quasi  refs: Pipatsrisawat_2008
+  DNF / AND_BC => poly  refs: Darwiche_2002
+  DNF / AND_C => no-quasi  refs: Darwiche_2002
+  DNF / OR_C => poly  refs: Darwiche_2002
+  DNF / FO => poly  refs: Lang_2003
+  DNNF / AND_BC => no-poly-unknown-quasi  refs: Darwiche_2002
+  DNNF / OR_C => poly  refs: Darwiche_2002
+  DNNF / CD => poly  refs: Darwiche_2002
+  DNNF / FO => poly  refs: Darwiche_2001a
+  FBDD / NOT_C => poly  refs: Darwiche_2002
+  FBDD / CD => poly  refs: Darwiche_2002
+  FBDD / SFO => no-poly-unknown-quasi  refs: Darwiche_2002
+  IP / AND_BC => poly  refs: Darwiche_2002
+  IP / AND_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  IP / CD => poly  refs: Darwiche_2002
+  IP / SFO => no-quasi  refs: Darwiche_2002
+  MODS / NOT_C => no-quasi  refs: Darwiche_2002
+  MODS / AND_BC => poly  refs: Darwiche_2002
+  MODS / AND_C => no-quasi  refs: Darwiche_2002
+  MODS / OR_C => no-quasi  refs: Darwiche_2002
+  MODS / FO => poly  refs: Darwiche_2002
+  NNF / NOT_C => poly  refs: Darwiche_2002
+  NNF / CD => poly  refs: Darwiche_2002
+  NNF / FO => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD$_<$ / FO => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD$_<$ / NOT_C => poly  refs: Bryant_1986
+  PI / AND_BC => no-quasi  refs: Darwiche_2002
+  PI / OR_BC => poly  refs: Darwiche_2002
+  PI / OR_C => no-poly-unknown-quasi  refs: Darwiche_2002
+  PI / CD => poly  refs: Darwiche_2002
+  PI / FO => poly  refs: Darwiche_2002
+  SDD / NOT_C => poly  refs: Darwiche_2011
+  SDD / CD => poly  refs: Darwiche_2011
+  SDNNF / AND_BC => poly  refs: Pipatsrisawat_2008
+  SDNNF / FO => poly  refs: Pipatsrisawat_2008
+  SDNNF / OR_C => poly  refs: Pipatsrisawat_2008
+  SDNNF / AND_C => no-poly-unknown-quasi  refs: Pipatsrisawat_2008
+  OBDD / NOT_C => poly  refs: Darwiche_2002
+  OBDD / CD => poly  refs: Darwiche_2002
+  OBDD / FO => no-poly-unknown-quasi  refs: Darwiche_2002
+  OBDD / SFO => poly  refs: Darwiche_2002
+
+Total: 26 derivable, 54 not derivable out of 80

@@ -179,16 +179,19 @@ export function propagateQueriesViaSuccinctness(
 
           if (reachQ.reach[l1MatrixIdx][l2MatrixIdx]) {
             const l1Complexity = getQueryComplexity(l1, queryCode);
-            // Don't upgrade if L1 already guarantees quasi OR if L1 asserts no-quasi
-            // (no-quasi means it's proven impossible, so we can't upgrade it)
-            if (queryGuaranteesQuasi(l1Complexity) || queryAssertsNoQuasi(l1Complexity)) continue;
+            const l1Support = getOperationSupport(l1, queryCode);
+            // Don't upgrade if L1 asserts no-quasi (proven impossible)
+            if (queryAssertsNoQuasi(l1Complexity)) continue;
 
-            // Compute caveats early for description
+            // Compute caveats early for description and prefer-unconditional check
             const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
             const queryCaveat = l2Support?.caveat;
             const caveat = mergeCaveats(pathCaveat, queryCaveat);
+            const needsUpgrade = !queryGuaranteesQuasi(l1Complexity);
+            const canImproveCaveat = queryGuaranteesQuasi(l1Complexity) && l1Support?.caveat && l1Support?.derived && !caveat;
+            if (!needsUpgrade && !canImproveCaveat) continue;
 
-            // Upgrade L1's query to quasi
+            // Upgrade L1's query to quasi (or remove caveat from existing quasi)
             const l1Name = idToName(l1Id);
             const l2Name = idToName(l2Id);
             const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
@@ -196,7 +199,8 @@ export function propagateQueriesViaSuccinctness(
             const description = `\\edgeref{${l1Id}}{${l2Id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}, and \\opref{${l2Id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in at most quasi-polynomial time${formatInlineCaveat(caveat)}.`;
 
             if (DEBUG_PROPAGATION) {
-              console.log(`[Query Propagation] UPGRADE ${l1Name}.${queryCode}: ${l1Complexity} -> ${newComplexity}`);
+              const reason = canImproveCaveat ? 'CAVEAT-IMPROVE' : 'UPGRADE';
+              console.log(`[Query Propagation] ${reason} ${l1Name}.${queryCode}: ${l1Complexity} -> ${newComplexity}`);
             }
             
             setQuerySupport(l1, queryCode, {
@@ -270,21 +274,23 @@ export function propagateQueriesViaLemmas(
 
       const targetComplexity = polyOnly ? 'poly' : worstComplexity;
 
-      // Only upgrade if current complexity is worse
+      // Merge caveats from all antecedent operations
+      const caveat = mergeCaveats(...antecedentCaveats);
+
+      // Only upgrade if current complexity is worse, or we can improve a caveated derived result
       const shouldUpgrade = polyOnly
         ? !queryGuaranteesPoly(consequentComplexity)
         : !queryGuaranteesQuasi(consequentComplexity);
+      const canImproveCaveat = !shouldUpgrade && consequentSupport?.caveat && consequentSupport?.derived && !caveat;
 
-      if (shouldUpgrade) {
+      if (shouldUpgrade || canImproveCaveat) {
         const langName = idToName(language.id);
         const antecedentNames = lemma.antecedent.map(opLabel).join(', ');
         const description = `Since \\langref{${language.id}} supports ${antecedentNames}, it also supports ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}.`;
 
-        // Merge caveats from all antecedent operations
-        const caveat = mergeCaveats(...antecedentCaveats);
-
         if (DEBUG_PROPAGATION) {
-          console.log(`[Query Propagation] LEMMA ${langName}.${lemma.consequent}: ${consequentComplexity} -> ${targetComplexity} (via ${lemma.id})`);
+          const reason = canImproveCaveat ? 'CAVEAT-IMPROVE' : 'LEMMA';
+          console.log(`[Query Propagation] ${reason} ${langName}.${lemma.consequent}: ${consequentComplexity} -> ${targetComplexity} (via ${lemma.id})`);
         }
 
         // Determine if this is a query or transformation
@@ -365,15 +371,19 @@ export function propagateQueryDowngrades(
           if (!reachP.reach[l1MatrixIdx][l2MatrixIdx]) continue;
 
           const l2Complexity = getQueryComplexity(l2, queryCode);
-          // Skip if L2 already asserts no-poly
-          if (queryAssertsNoPoly(l2Complexity)) continue;
+          const l2Support = getOperationSupport(l2, queryCode);
 
-          const l2Name = idToName(l2.id);
-          const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
-          // Compute caveats early for description
+          // Compute caveats early for prefer-unconditional check
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
           const queryCaveat = l1Support?.caveat;
           const caveat = mergeCaveats(pathCaveat, queryCaveat);
+
+          // Skip if L2 already asserts no-poly, unless we can improve a caveated derived result
+          const canImproveCaveatNoPoly = queryAssertsNoPoly(l2Complexity) && l2Support?.caveat && l2Support?.derived && !caveat;
+          if (queryAssertsNoPoly(l2Complexity) && !canImproveCaveatNoPoly) continue;
+
+          const l2Name = idToName(l2.id);
+          const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
           const description = `\\nopref{${l1.id}}{${queryCode}}${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in polynomial time${formatInlineCaveat(pathCaveat)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)}${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
@@ -405,15 +415,19 @@ export function propagateQueryDowngrades(
           if (!reachQ.reach[l1MatrixIdx][l2MatrixIdx]) continue;
 
           const l2Complexity = getQueryComplexity(l2, queryCode);
-          // Skip if L2 already asserts no-quasi
-          if (queryAssertsNoQuasi(l2Complexity)) continue;
+          const l2SupportNoQuasi = getOperationSupport(l2, queryCode);
 
-          const l2Name = idToName(l2.id);
-          const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
-          // Compute caveats early for description
+          // Compute caveats early for prefer-unconditional check
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
           const queryCaveat = l1Support?.caveat;
           const caveat = mergeCaveats(pathCaveat, queryCaveat);
+
+          // Skip if L2 already asserts no-quasi, unless we can improve a caveated derived result
+          const canImproveCaveatNoQuasi = queryAssertsNoQuasi(l2Complexity) && l2SupportNoQuasi?.caveat && l2SupportNoQuasi?.derived && !caveat;
+          if (queryAssertsNoQuasi(l2Complexity) && !canImproveCaveatNoQuasi) continue;
+
+          const l2Name = idToName(l2.id);
+          const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
           const description = `\\nopref{${l1.id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in quasi-polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
@@ -478,8 +492,8 @@ export function propagateDowngradesViaLemmaContrapositives(
           const targetSupport = getOperationSupport(language, targetOp);
           const targetComplexity = targetSupport?.complexity ?? 'unknown-to-us';
 
-          // Skip if target already asserts no-poly
-          if (queryAssertsNoPoly(targetComplexity)) continue;
+          // Skip if target already asserts no-poly without caveat (no improvement possible)
+          if (queryAssertsNoPoly(targetComplexity) && (!targetSupport?.caveat || !targetSupport?.derived)) continue;
 
           // Check if ALL OTHER antecedents support poly
           let allOthersPolySupported = true;
@@ -504,13 +518,18 @@ export function propagateDowngradesViaLemmaContrapositives(
           const consequentRefs = consequentSupport?.refs ?? [];
           // Merge caveats from the consequent and all other antecedents
           const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
+
+          // If already asserting no-poly, only continue if we can improve the caveat
+          if (queryAssertsNoPoly(targetComplexity) && caveat) continue;
+
           const othersDesc = otherAntecedents.length > 0 
             ? ` and since ${otherAntecedents.map((op, idx) => `${opLabel(op)} is supported in polynomial time${formatInlineCaveat(otherCaveats[idx])}`).join(' and ')},`
             : '';
           const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since \\nopref{${language.id}}{${lemma.consequent}}${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${idToName(language.id)} as well${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
-            console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
+            const reason = queryAssertsNoPoly(targetComplexity) ? 'CAVEAT-IMPROVE' : 'CONTRAPOSITIVE';
+            console.log(`[Query Propagation] ${reason} ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
           }
 
           // Determine if this is a query or transformation
@@ -552,8 +571,8 @@ export function propagateDowngradesViaLemmaContrapositives(
           const targetSupport = getOperationSupport(language, targetOp);
           const targetComplexity = targetSupport?.complexity ?? 'unknown-to-us';
 
-          // Skip if target already asserts no-quasi
-          if (queryAssertsNoQuasi(targetComplexity)) continue;
+          // Skip if target already asserts no-quasi without caveat (no improvement possible)
+          if (queryAssertsNoQuasi(targetComplexity) && (!targetSupport?.caveat || !targetSupport?.derived)) continue;
 
           // Check if ALL OTHER antecedents support quasi
           let allOthersQuasiSupported = true;
@@ -578,13 +597,18 @@ export function propagateDowngradesViaLemmaContrapositives(
           const consequentRefs = consequentSupport?.refs ?? [];
           // Merge caveats from the consequent and all other antecedents
           const caveat = mergeCaveats(consequentSupport?.caveat, ...otherCaveats);
+
+          // If already asserting no-quasi, only continue if we can improve the caveat
+          if (queryAssertsNoQuasi(targetComplexity) && caveat) continue;
+
           const othersDesc = otherAntecedents.length > 0 
             ? ` and since ${otherAntecedents.map((op, idx) => `${opLabel(op)} is supported in quasi-polynomial time${formatInlineCaveat(otherCaveats[idx])}`).join(' and ')},`
             : '';
           const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since \\nopref{${language.id}}{${lemma.consequent}} in quasi-polynomial time${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${idToName(language.id)} in quasi-polynomial time as well${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
-            console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
+            const reason = queryAssertsNoQuasi(targetComplexity) ? 'CAVEAT-IMPROVE' : 'CONTRAPOSITIVE';
+            console.log(`[Query Propagation] ${reason} ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
           }
 
           // Determine if this is a query or transformation

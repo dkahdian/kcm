@@ -329,6 +329,12 @@
     font-size: 0.75rem;
   }
 
+  /* border-box so measured getBoundingClientRect() widths map directly to CSS width */
+  .matrix-table th,
+  .matrix-table td {
+    box-sizing: border-box;
+  }
+
   /* Before measurement, let cells size naturally */
   .matrix-table:not(.measured) th,
   .matrix-table:not(.measured) td {

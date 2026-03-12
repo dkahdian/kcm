@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Query Support Claims
 % Auto-generated from database.json
-% Generated: 2026-03-10T22:01:12.743Z
+% Generated: 2026-03-12T16:50:01.855Z
 %
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -45,18 +45,17 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\eps}{\varepsilon}
-
-% -------- Title info --------
-\title{Knowledge Compilation Map: Query Support}
-\date{\today}
-
-
-% -------- Entity link macros (rendered as links in the web UI) --------
+% Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
 \newcommand{\nopref}[2]{#2 is unsupported by #1}
+
+% -------- Title info --------
+\title{Knowledge Compilation Map: Query Support}
+\date{\today}
+
 \begin{document}
 \maketitle
 
@@ -64,7 +63,7 @@
 \newpage
 
 % =============================
-\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map," Journal of Artificial...}
+\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map", Journal of Artificial...}
 % Reference ID: Darwiche_2002
 % =============================
 % lang=lang_89649e36, op=CO
@@ -181,7 +180,7 @@ $PI \subseteq CNF$ and \langref{PI} satisfies CE, so checking $\Sigma_1 \models 
 
 
 % =============================
-\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation," Comput...}
+\section{R. E. Bryant, "Graph-based algorithms for boolean function manipulation", IEEE T...}
 % Reference ID: Bryant_1986
 % =============================
 % lang=lang_d69995dd, op=CO
@@ -255,6 +254,19 @@ $FBDD$ supports Validity in polynomial time \citet{Gergov_1994}
 
 
 % =============================
+\section{A. Darwiche and J. Huang, "Testing equivalence probabilistically", 2002.}
+% Reference ID: Darwiche_Huang_2002
+% =============================
+% lang=lang_6c130090, op=EQ
+\begin{claim}
+$d$-$DNNF$ supports Equivalence in polynomial time unless $P \neq$ BPP \citet{Darwiche_Huang_2002}
+\end{claim}
+\begin{claimdescription}
+\citet{Darwiche_Huang_2002} showed that equivalence of d-DNNF sentences can be tested in randomized polynomial time by reducing it to the problem of checking whether two d-DNNFs agree on a randomly chosen assignment. Under the derandomization hypothesis P = BPP, this yields a deterministic polynomial-time algorithm and hence \langref{d-DNNF} satisfies EQ.
+\end{claimdescription}
+
+
+% =============================
 \section{A. Darwiche, "On the Tractable Counting of Theory Models and its Application to ...}
 % Reference ID: Darwiche_2001b
 % =============================
@@ -268,7 +280,7 @@ $d$-$DNNF$ supports Model Counting in polynomial time \citet{Darwiche_2001b}
 
 
 % =============================
-\section{Adnan Darwiche, "Decomposable Negation Normal Form," Journal of the ACM, vol. 48...}
+\section{A. Darwiche, "Decomposable Negation Normal Form", Journal of the ACM, vol. 48, p...}
 % Reference ID: Darwiche_2001a
 % =============================
 % lang=lang_3bebcab7, op=CE
@@ -277,6 +289,19 @@ $DNNF$ supports Clausal Entailment in polynomial time \citet{Darwiche_2001a}
 \end{claim}
 \begin{claimdescription}
 \langref{DNNF} supports clause entailment (CE) in polynomial time \citet{Darwiche_2001a}. To test $\Sigma \models \gamma$ for clause $\gamma$, it suffices to test whether $\Sigma | \neg\gamma$ is inconsistent. Since \langref{DNNF} satisfies CD and CO, this can be done in polytime.
+\end{claimdescription}
+
+
+% =============================
+\section{M. Blum and A. K. Chandra and M. N. Wegman, "Equivalence of free boolean graphs ...}
+% Reference ID: Blum_1980
+% =============================
+% lang=lang_684b1ca7, op=EQ
+\begin{claim}
+$FBDD$ supports Equivalence in polynomial time unless $P \neq$ BPP \citet{Blum_1980}
+\end{claim}
+\begin{claimdescription}
+\citet{Blum_1980} showed that equivalence of free Boolean graphs (FBDDs) can be decided in randomized polynomial time (BPP). Under the derandomization hypothesis P = BPP, this gives polynomial-time equivalence testing for \langref{FBDD}.
 \end{claimdescription}
 
 % =============================

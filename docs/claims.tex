@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-03-10T22:01:12.729Z
+% Generated: 2026-03-12T16:50:01.845Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -53,18 +53,17 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\eps}{\varepsilon}
-
-% -------- Title info --------
-\title{Knowledge Compilation Map: Claims}
-\date{\today}
-
-
-% -------- Entity link macros (rendered as links in the web UI) --------
+% Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
 \newcommand{\nopref}[2]{#2 is unsupported by #1}
+
+% -------- Title info --------
+\title{Knowledge Compilation Map: Claims}
+\date{\today}
+
 \begin{document}
 \maketitle
 
@@ -72,14 +71,14 @@
 \newpage
 
 % =============================
-\section{Antoine Amarilli, Florent Capelli, Mikaël Monet, and Pierre Senellart, "Connecti...}
+\section{A. Amarilli and F. Capelli and Mika{\"{e, "Connecting Knowledge Compilation Clas...}
 % Reference ID: Amarilli_2018
 % =============================
 \begin{claim}
 $d$-$DNNF$ has unknown polynomial-time (but has quasi-polynomial-time) compilation to $uFBDD$ \citet{Amarilli_2018,Beame_2013}
 \end{claim}
 \begin{claimdescription}
-The quasi-polynomial compilation from \langref{dec-DNNF} to \langref{FBDD} yields a \langref{uFBDD} when applied to a \langref{d-DNNF}.
+The quasi-polynomial compilation from $dec$-$DNNF$ to $FBDD$ yields a $uFBDD$ when applied to a $d$-$DNNF$.
 \end{claimdescription}
 
 \begin{claim}
@@ -297,7 +296,7 @@ As defined by \citet{Amarilli_2018}, \langref{uOBDD} is the subset of \langref{u
 
 
 % =============================
-\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map," Journal of Artificial...}
+\section{A. Darwiche and P. Marquis, "A Knowledge Compilation Map", Journal of Artificial...}
 % Reference ID: Darwiche_2002
 % =============================
 \begin{claim}
@@ -505,7 +504,7 @@ The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a \lang
 
 
 % =============================
-\section{Paul Beame, Jerry Li, Sudeepa Roy, and Dan Suciu, "Model Counting of Query Expre...}
+\section{P. Beame and J. Li and S. Roy and D. Suciu, "Model Counting of Query Expressions...}
 % Reference ID: Beame_2013
 % =============================
 \begin{claim}
@@ -517,7 +516,7 @@ Shown by Corollary 3.5 of \citet{Beame_2013}.
 
 
 % =============================
-\section{Beate Bollig and Matthias Buttkus, "On the Relative Succinctness of Sentential D...}
+\section{B. Bollig and M. Buttkus, "On the Relative Succinctness of Sentential Decision D...}
 % Reference ID: Bollig_2018
 % =============================
 \begin{claim}
@@ -529,7 +528,19 @@ The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Co
 
 
 % =============================
-\section{S. Bova, F. Capelli, S. Mengel, and F. Slivovsky, "Knowledge Compilation Meets C...}
+\section{P. Beame and V. Liew, "New Limits for Knowledge Compilation and Applications to ...}
+% Reference ID: Beame_2015
+% =============================
+\begin{claim}
+$FBDD$ is not quasi-polynomial-time compilable to $SDD$ \citet{Beame_2015}
+\end{claim}
+\begin{claimdescription}
+\citet{Beame_2015} relate the size of SDD representations to best-partition communication complexity and derive simple examples for which FBDDs are exponentially more concise than SDDs. This establishes $P(\langref{FBDD}) \not\subseteq P(\langref{SDD})$.
+\end{claimdescription}
+
+
+% =============================
+\section{S. Bova and F. Capelli and S. Mengel and F. Slivovsky, "{Knowledge Compilation M...}
 % Reference ID: Bova_2016
 % =============================
 % separators=Sauerhoff
@@ -537,7 +548,7 @@ The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Co
 $DNNF$ is not quasi-polynomial-time compilable to $d$-$DNNF$ \citet{Bova_2016}
 \end{claim}
 \begin{claimdescription}
-Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has \langref{DNNF} size $O(n^2)$. Theorem 9 shows that $S_n$ has \langref{d-DNNF} size $2^{\Omega(n)}$.
+Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has \langref{DNNF} size $O(n^2)$. Theorem 9 shows that $S_n$ has \langref{d-DNNF} size $2^{\Omega(n)}$. (Also see \citet{Bova_2014}.)
 \end{claimdescription}
 
 % separators=JS
@@ -545,12 +556,12 @@ Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has \
 $PI$ is not quasi-polynomial-time compilable to $DNNF$ \citet{Bova_2016}
 \end{claim}
 \begin{claimdescription}
-Proposition 11 of \citet{Bova_2016} shows that the $JS_n$ has \langref{PI} size $O(n^2)$. Proposition 12 of \citet{Bova_2016} shows that $JS_n$ has \langref{DNNF} size $2^{\Omega(n^2)}$.
+Proposition 11 of \citet{Bova_2016} shows that the $JS_n$ has \langref{PI} size $O(n^2)$. Proposition 12 of \citet{Bova_2016} shows that $JS_n$ has \langref{DNNF} size $2^{\Omega(n^2)}$. (Also see \citet{Bova_2014}.)
 \end{claimdescription}
 
 
 % =============================
-\section{Ingo Wegener, "The Complexity of Boolean Functions," 1987.}
+\section{I. Wegener, "The Complexity of Boolean Functions", 1987.}
 % Reference ID: Wegener_1987
 % =============================
 \begin{claim}
@@ -562,7 +573,7 @@ The Quine-McCluskey algorithm generates an \langref{IP} formula in polynomial ti
 
 
 % =============================
-\section{VanDenBroeck_2015}
+\section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
 % Reference ID: VanDenBroeck_2015
 % =============================
 \begin{claim}
@@ -581,7 +592,7 @@ $SDD$ is polynomial-time compilable to $d$-$SDNNF$ \citet{VanDenBroeck_2015}
 
 
 % =============================
-\section{S. Bova, "SDDs Are Exponentially More Succinct than OBDDs," Proceedings of the A...}
+\section{S. Bova, "SDDs Are Exponentially More Succinct than OBDDs", Proceedings of the A...}
 % Reference ID: Bova_2016_a
 % =============================
 % separators=Generalized_HWB
@@ -594,7 +605,7 @@ Theorem 4 of \citet{Bova_2016_a} constructs a generalized hidden weighted bit fu
 
 
 % =============================
-\section{Adnan Darwiche, "On the tractable counting of theory models and its application ...}
+\section{A. Darwiche, "On the tractable counting of theory models and its application to ...}
 % Reference ID: Darwiche_2000
 % =============================
 \begin{claim}
@@ -606,7 +617,7 @@ $d$-$DNNF$ is not quasi-polynomial-time compilable to $FBDD$ \citet{Darwiche_200
 
 
 % =============================
-\section{Harry Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation," 2024.}
+\section{H. Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation", Proceedings ...}
 % Reference ID: Vinall-Smeeth_2024
 % =============================
 \begin{claim}
@@ -618,7 +629,19 @@ Theorem 1 of \citet{Vinall-Smeeth_2024} proved that there exists a family of fun
 
 
 % =============================
-\section{Florent Capelli, "Structural Restrictions of CNF-formulas: Applications to Model...}
+\section{S. Devadas, "Comparing two-level and ordered binary decision diagram representat...}
+% Reference ID: Devadas_1993
+% =============================
+\begin{claim}
+$DNF$ is not quasi-polynomial-time compilable to $OBDD$ \citet{Devadas_1993}
+\end{claim}
+\begin{claimdescription}
+\citet{Devadas_1993} showed that there exist Boolean functions with polynomial-size \langref{DNF} representations but requiring exponential-size \langref{OBDD} representations for any variable ordering. This establishes $P(\langref{DNF}) \not\subseteq P(\langref{OBDD})$.
+\end{claimdescription}
+
+
+% =============================
+\section{F. Capelli, "Structural Restrictions of CNF-formulas: Applications to Model Coun...}
 % Reference ID: Capelli_2016
 % =============================
 \begin{claim}
@@ -643,7 +666,7 @@ The hidden weighted bit function $HWB_n$ has \langref{OBDD} size $2^{\Omega(n/4)
 
 
 % =============================
-\section{N. S. Kaleyski, "Boolean methods in knowledge compilation," 2016.}
+\section{N. S. Kaleyski, "Boolean methods in knowledge compilation", 2016.}
 % Reference ID: Kaleyski_2016
 % =============================
 \begin{claim}

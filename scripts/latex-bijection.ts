@@ -706,10 +706,10 @@ function parseCanonicalClaim(
   
   // Extract caveat if present (comes before citation)
   let caveat = '';
-  const unlessMatch = body.match(/\s+unless\s+(.+)$/i);
-  if (unlessMatch) {
-    caveat = unlessMatch[1].trim();
-    body = body.slice(0, unlessMatch.index).trim();
+  const caveatMatch = body.match(/\s+unless\s+(.+)$/i);
+  if (caveatMatch) {
+    caveat = caveatMatch[1].trim();
+    body = body.slice(0, caveatMatch.index).trim();
   }
   
   // Now body should be: $LANG1$ TRANSFORMATION_TYPE $LANG2$
@@ -947,6 +947,29 @@ function updateDatabase(database: DatabaseSchema, claims: ParsedClaim[]): void {
       continue;
     }
     
+    // If the existing edge was derived but we now have a direct claim for it,
+    // promote it to a direct (non-derived) edge.
+    if (existing.derived) {
+      existing.derived = false;
+      existing.status = claim.status;
+      existing.description = claim.proofSketch;
+      existing.refs = claim.refs;
+      if (claim.caveat) {
+        existing.caveat = claim.caveat;
+      } else {
+        delete existing.caveat;
+      }
+      if (claim.separatingFunctionIds && claim.separatingFunctionIds.length > 0) {
+        existing.separatingFunctionIds = claim.separatingFunctionIds;
+      }
+      // Clean up derivation metadata
+      delete existing.derivationOrder;
+      delete existing.proofTrace;
+      console.log(`  Promoted derived edge to direct: ${claim.fromName} -> ${claim.toName} (${claim.status})`);
+      updated++;
+      continue;
+    }
+
     // Update description field.
     // For edges with a canonical quasiDescription (e.g. unknown-poly-quasi),
     // the LaTeX claimdescription is the quasi proof sketch, not the main
@@ -2109,10 +2132,10 @@ function parseOpsLatex(latexContent: string): ParsedOpClaim[] {
 
       // Extract caveat
       let caveat = '';
-      const unlessMatch = body.match(/\s+unless\s+(.+)$/i);
-      if (unlessMatch) {
-        caveat = unlessMatch[1].trim();
-        body = body.slice(0, unlessMatch.index).trim();
+      const caveatMatch2 = body.match(/\s+unless\s+(.+)$/i);
+      if (caveatMatch2) {
+        caveat = caveatMatch2[1].trim();
+        body = body.slice(0, caveatMatch2.index).trim();
       }
 
       // Determine complexity from canonical text
@@ -2199,6 +2222,11 @@ function updateOpsFromLatex(
     const existing = supportMap[safeKey];
 
     if (existing) {
+      // Claims present in LaTeX are explicit, so clear any derived metadata.
+      delete existing.derived;
+      delete existing.derivationOrder;
+      delete existing.proofTrace;
+
       // Update existing entry — always sync complexity from LaTeX
       existing.complexity = claim.complexity;
       if (claim.description && claim.description !== '(Description needed)') {

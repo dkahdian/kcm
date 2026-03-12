@@ -42,6 +42,13 @@
 \title{Knowledge Compilation Map: Separating Functions}
 \date{\today}
 
+
+% -------- Entity link macros (rendered as links in the web UI) --------
+\newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\edgeref}[2]{#1 compiles to #2}
+\newcommand{\nedgeref}[2]{#1 cannot compile to #2}
+\newcommand{\opref}[2]{#1 supports #2}
+\newcommand{\nopref}[2]{#2 is unsupported by #1}
 \begin{document}
 \maketitle
 
@@ -52,22 +59,22 @@ Separates languages that compactly represent disjunctions from those that cannot
 
 \begin{definition}[Clique]\label{sf:clique}
 \textbf{Clique Detection Instances} \\
-Tests whether a directed graph on $n$ vertices (encoded as $I \in \{0,1\}^{n^2}$) contains a bidirectional clique of size $k$: $\Sigma_{n,k}(I) = 1 \iff I$ contains such a clique. Has $O(n^3)$ prime implicants but exponential $FBDD$ size for suitable $k$. \citet{Darwiche_2002,Wegener_1987}
+Tests whether a directed graph on $n$ vertices (encoded as $I \in \{0,1\}^{n^2}$) contains a bidirectional clique of size $k$: $\Sigma_{n,k}(I) = 1 \iff I$ contains such a clique. Has $O(n^3)$ prime implicants but exponential \langref{FBDD} size for suitable $k$. \citet{Darwiche_2002,Wegener_1987}
 \end{definition}
 
 \begin{definition}[Generalized_HWB]\label{sf:generalized-hwb}
 \textbf{Generalized Hidden Weighted Bit} \\
-A variant of $HWB_n$ introduced by \citet{Bova_2016_a} on $2n+1$ variables $x_1, \ldots, x_n, y_0, \ldots, y_n$. Defined as $F_n = (P_0 \wedge \neg y_0) \vee (P_n \wedge y_n) \vee \bigvee_{i=1}^{n-1}((P_{i,0} \wedge \neg y_i) \vee (P_{i,1} \wedge y_i))$, where $P_j$ and $P_{i,b}$ are the partition functions from the HWB SDD construction. The $y_i$ variables ensure all sub-SDDs are pairwise non-equivalent, making the SDD compressed. Has $cSDD$ size $O(n^3)$ but $OBDD$ size $2^{\Omega(n)}$, since conditioning on $y_i = 1$ recovers $HWB_n$. \citet{Bova_2016_a}
+A variant of $HWB_n$ introduced by \citet{Bova_2016_a} on $2n+1$ variables $x_1, \ldots, x_n, y_0, \ldots, y_n$. Defined as $F_n = (P_0 \wedge \neg y_0) \vee (P_n \wedge y_n) \vee \bigvee_{i=1}^{n-1}((P_{i,0} \wedge \neg y_i) \vee (P_{i,1} \wedge y_i))$, where $P_j$ and $P_{i,b}$ are the partition functions from the HWB SDD construction. The $y_i$ variables ensure all sub-SDDs are pairwise non-equivalent, making the SDD compressed. Has \langref{cSDD} size $O(n^3)$ but \langref{OBDD} size $2^{\Omega(n)}$, since conditioning on $y_i = 1$ recovers $HWB_n$. \citet{Bova_2016_a}
 \end{definition}
 
 \begin{definition}[HWB]\label{sf:hwb}
 \textbf{Hidden Weighted Bit} \\
-Let $w = \sum_{i=1}^n x_i$ be the Hamming weight of the input. Then $HWB_n(x_1, \ldots, x_n) = x_w$ (the $w$-th input bit). Has $OBDD$ size $2^{\Omega(n)}$ but polynomial $SDD$ and $FBDD$ size. \citet{Bryant_1986}
+Let $w = \sum_{i=1}^n x_i$ be the Hamming weight of the input. Then $HWB_n(x_1, \ldots, x_n) = x_w$ (the $w$-th input bit). Has \langref{OBDD} size $2^{\Omega(n)}$ but polynomial \langref{SDD} and \langref{FBDD} size. \citet{Bryant_1986}
 \end{definition}
 
 \begin{definition}[JS]\label{sf:js}
 \textbf{Jukna-Schnitger function} \\
-Tests triangle-freeness on graphs with respect to a fixed set of forbidden triangles $A \subset T_n$. \citet{Jukna_2002} show that for every $n$, there exists $A_n$ of size $O(n^2)$ such that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\Omega(n^2)}$. Has $PI$ size $O(n^2)$ but $DNNF$ size $2^{\Omega(n^2)}$. \citet{Jukna_2002}
+Tests triangle-freeness on graphs with respect to a fixed set of forbidden triangles $A \subset T_n$. \citet{Jukna_2002} show that for every $n$, there exists $A_n$ of size $O(n^2)$ such that any balanced rectangle cover of $JS_n^{A_n}$ has size $2^{\Omega(n^2)}$. Has \langref{PI} size $O(n^2)$ but \langref{DNNF} size $2^{\Omega(n^2)}$. \citet{Jukna_2002}
 \end{definition}
 
 \begin{definition}[Pairwise CNF]\label{sf:pairwise-cnf}

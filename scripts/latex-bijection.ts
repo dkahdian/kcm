@@ -630,6 +630,12 @@ function generateLatex(database: DatabaseSchema): string {
 \\newcommand{\\R}{\\mathbb{R}}
 \\newcommand{\\N}{\\mathbb{N}}
 \\newcommand{\\eps}{\\varepsilon}
+% Cross-reference commands (rendered as links in the web UI)
+\\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\edgeref}[2]{#1 compiles to #2}
+\\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
+\\newcommand{\\opref}[2]{#1 supports #2}
+\\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
 \\title{Knowledge Compilation Map: Claims}
@@ -1305,6 +1311,12 @@ function generateLanguagesLatex(database: DatabaseSchema): string {
 \\newcommand{\\R}{\\mathbb{R}}
 \\newcommand{\\N}{\\mathbb{N}}
 \\newcommand{\\eps}{\\varepsilon}
+% Cross-reference commands (rendered as links in the web UI)
+\\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\edgeref}[2]{#1 compiles to #2}
+\\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
+\\newcommand{\\opref}[2]{#1 supports #2}
+\\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
 \\title{Knowledge Compilation Map: Language Definitions}
@@ -1532,6 +1544,12 @@ function generateSepFuncsLatex(database: DatabaseSchema): string {
 \\newcommand{\\R}{\\mathbb{R}}
 \\newcommand{\\N}{\\mathbb{N}}
 \\newcommand{\\eps}{\\varepsilon}
+% Cross-reference commands (rendered as links in the web UI)
+\\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\edgeref}[2]{#1 compiles to #2}
+\\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
+\\newcommand{\\opref}[2]{#1 supports #2}
+\\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
 \\title{Knowledge Compilation Map: Separating Functions}
@@ -1963,6 +1981,12 @@ function generateOpsLatex(database: DatabaseSchema, opType: 'queries' | 'transfo
 \\newcommand{\\R}{\\mathbb{R}}
 \\newcommand{\\N}{\\mathbb{N}}
 \\newcommand{\\eps}{\\varepsilon}
+% Cross-reference commands (rendered as links in the web UI)
+\\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\edgeref}[2]{#1 compiles to #2}
+\\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
+\\newcommand{\\opref}[2]{#1 supports #2}
+\\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
 \\title{Knowledge Compilation Map: ${opTypeLabel} Support}

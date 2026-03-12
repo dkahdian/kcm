@@ -1,6 +1,12 @@
 <script lang="ts">
-  import { renderMathText, renderTextWithCitations, containsCitations } from '$lib/utils/math-text';
+  import { renderMathText, renderTextWithCitations, containsCitations, containsEntityLinks, renderEntityLinks } from '$lib/utils/math-text';
   import { getGlobalRefNumber } from '$lib/data/references.js';
+  import { idToName, nameToId } from '$lib/utils/language-id.js';
+  import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
+
+  function opCodeToLabel(code: string): string {
+    return QUERIES[code]?.label ?? TRANSFORMATIONS[code]?.label ?? code;
+  }
 
   let {
     text = '',
@@ -27,30 +33,49 @@
 
   const result = $derived(renderMathText(text));
   
-  // Process HTML to replace citations with clickable links using global reference numbers
+  // Process HTML to replace citations and entity links with clickable elements
   const processedHtml = $derived.by(() => {
     if (!result.html) return null;
-    if (!containsCitations(text ?? '')) {
-      return result.html;
+    let html = result.html;
+    
+    if (containsCitations(text ?? '')) {
+      html = renderTextWithCitations(html, getGlobalRefNumber);
     }
     
-    return renderTextWithCitations(
-      result.html,
-      getGlobalRefNumber
-    );
+    if (containsEntityLinks(text ?? '')) {
+      html = renderEntityLinks(html, idToName, opCodeToLabel, nameToId);
+    }
+    
+    return html;
   });
 
   const resolvedElement = $derived((href ? 'a' : as) as keyof HTMLElementTagNameMap | 'span');
   const resolvedRel = $derived(rel ?? (target === '_blank' ? 'noreferrer noopener' : undefined));
   
-  // Handle citation clicks via event delegation
+  // Handle clicks via event delegation for citations and entity links
   function handleClick(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains('citation-link')) {
-      const key = target.dataset.citationKey;
+    const el = event.target as HTMLElement;
+    // Walk up to find the clickable element (in case click was on a child like KaTeX span)
+    const link = el.closest('.citation-link, .entity-link') as HTMLElement | null;
+    if (!link) return;
+
+    if (link.classList.contains('citation-link')) {
+      const key = link.dataset.citationKey;
       if (key && onCitationClick) {
         event.preventDefault();
         onCitationClick(key);
+      }
+      return;
+    }
+
+    if (link.classList.contains('entity-link')) {
+      // Allow Ctrl+click / Cmd+click / middle-click to open in new tab naturally
+      if (event.ctrlKey || event.metaKey || event.button === 1) return;
+      // For regular clicks, use SPA hash navigation
+      event.preventDefault();
+      const href = link.getAttribute('href');
+      if (href) {
+        window.location.hash = href.replace(/^#/, '');
       }
     }
   }
@@ -140,5 +165,30 @@
     line-height: 0;
     color: #dc2626;
     font-weight: 600;
+  }
+
+  .math-text :global(.entity-link) {
+    display: inline;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: #2563eb;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(37, 99, 235, 0.3);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s ease, color 0.15s ease;
+  }
+
+  .math-text :global(.entity-link:hover) {
+    text-decoration-color: rgba(37, 99, 235, 0.8);
+    color: #1d4ed8;
+  }
+
+  .math-text :global(.entity-link:visited) {
+    color: #2563eb;
   }
 </style>

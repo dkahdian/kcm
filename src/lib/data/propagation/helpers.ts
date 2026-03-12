@@ -193,7 +193,7 @@ export function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): stri
     const status = relation?.status ?? 'unknown';
     const refs = relation?.refs ?? [];
     const caveat = relation?.caveat;
-    parts.push(`${idToName(fromId)} compiles to ${idToName(toId)} ${phraseForStatus(status)}${formatInlineCaveat(caveat)}${formatCitations(refs)}.`);
+    parts.push(`\\edgeref{${fromId}}{${toId}} ${phraseForStatus(status)}${formatInlineCaveat(caveat)}${formatCitations(refs)}.`);
   }
   return parts.join(' ');
 }
@@ -203,8 +203,8 @@ export function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): stri
  * inline caveat.  E.g. "A cannot compile to B in polynomial time (unless P = NP) [refs]".
  */
 export function formatContradictingPremise(
-  srcName: string,
-  tgtName: string,
+  srcId: string,
+  tgtId: string,
   status: string,
   caveat: string | undefined,
   refs: string[]
@@ -212,11 +212,11 @@ export function formatContradictingPremise(
   switch (status) {
     case 'no-poly-quasi':
     case 'no-poly-unknown-quasi':
-      return `${srcName} cannot compile to ${tgtName} in polynomial time${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
+      return `\\nedgeref{${srcId}}{${tgtId}} in polynomial time${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
     case 'no-quasi':
-      return `${srcName} cannot compile to ${tgtName} in quasi-polynomial time${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
+      return `\\nedgeref{${srcId}}{${tgtId}} in quasi-polynomial time${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
     default:
-      return `${srcName} and ${tgtName} have an incompatible relationship${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
+      return `${idToName(srcId)} and ${idToName(tgtId)} have an incompatible relationship${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
   }
 }
 

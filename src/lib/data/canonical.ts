@@ -5,6 +5,10 @@ import { adjacencyMatrixData } from './edges.js';
 import { relationTypes } from './complexities.js';
 import { allReferences } from './references.js';
 import { COMPLEXITIES } from './complexities.js';
+import { initNameMap } from '../utils/language-id.js';
+
+// Initialize the language ID → name map so idToName() works at runtime
+initNameMap(allLanguages);
 
 const separatingFunctions = (database.separatingFunctions ?? []) as KCSeparatingFunction[];
 const metadata = ('metadata' in database

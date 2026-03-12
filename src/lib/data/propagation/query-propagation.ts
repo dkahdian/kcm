@@ -145,7 +145,7 @@ export function propagateQueriesViaSuccinctness(
               const l1Name = idToName(l1Id);
               const l2Name = idToName(l2Id);
               const l2Refs = l2.properties?.queries?.[queryCode]?.refs ?? [];
-              const description = `${l1Name} compiles to ${l2Name} in polynomial time${formatInlineCaveat(pathCaveat)}, and ${l2Name} supports ${opLabel(queryCode)} in polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${l1Name} supports ${opLabel(queryCode)} in polynomial time${formatInlineCaveat(caveat)}.`;
+              const description = `\\edgeref{${l1Id}}{${l2Id}} in polynomial time${formatInlineCaveat(pathCaveat)}, and \\opref{${l2Id}}{${queryCode}} in polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in polynomial time${formatInlineCaveat(caveat)}.`;
 
               if (DEBUG_PROPAGATION) {
                 const reason = canImproveCaveat ? 'CAVEAT-IMPROVE' : 'UPGRADE';
@@ -193,7 +193,7 @@ export function propagateQueriesViaSuccinctness(
             const l2Name = idToName(l2Id);
             const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
             const l2Refs = l2.properties?.queries?.[queryCode]?.refs ?? [];
-            const description = `${l1Name} compiles to ${l2Name} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}, and ${l2Name} supports ${opLabel(queryCode)} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${l1Name} supports ${opLabel(queryCode)} in at most quasi-polynomial time${formatInlineCaveat(caveat)}.`;
+            const description = `\\edgeref{${l1Id}}{${l2Id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}, and \\opref{${l2Id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in at most quasi-polynomial time${formatInlineCaveat(caveat)}.`;
 
             if (DEBUG_PROPAGATION) {
               console.log(`[Query Propagation] UPGRADE ${l1Name}.${queryCode}: ${l1Complexity} -> ${newComplexity}`);
@@ -278,7 +278,7 @@ export function propagateQueriesViaLemmas(
       if (shouldUpgrade) {
         const langName = idToName(language.id);
         const antecedentNames = lemma.antecedent.map(opLabel).join(', ');
-        const description = `Since ${langName} supports ${antecedentNames}, it also supports ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}.`;
+        const description = `Since \\langref{${language.id}} supports ${antecedentNames}, it also supports ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}.`;
 
         // Merge caveats from all antecedent operations
         const caveat = mergeCaveats(...antecedentCaveats);
@@ -374,7 +374,7 @@ export function propagateQueryDowngrades(
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
           const queryCaveat = l1Support?.caveat;
           const caveat = mergeCaveats(pathCaveat, queryCaveat);
-          const description = `${opLabel(queryCode)} is unsupported by ${l1Name}${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and ${l1Name} compiles to ${l2Name} in polynomial time${formatInlineCaveat(pathCaveat)}. If ${l2Name} supported ${opLabel(queryCode)} in polynomial time, then ${l1Name} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${l2Name}${formatInlineCaveat(caveat)}.`;
+          const description = `\\nopref{${l1.id}}{${queryCode}}${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in polynomial time${formatInlineCaveat(pathCaveat)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)}${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-poly-unknown-quasi`);
@@ -414,7 +414,7 @@ export function propagateQueryDowngrades(
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
           const queryCaveat = l1Support?.caveat;
           const caveat = mergeCaveats(pathCaveat, queryCaveat);
-          const description = `${opLabel(queryCode)} is unsupported by ${l1Name} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and ${l1Name} compiles to ${l2Name} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}. If ${l2Name} supported ${opLabel(queryCode)} in quasi-polynomial time, then ${l1Name} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${l2Name} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
+          const description = `\\nopref{${l1.id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in quasi-polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-quasi`);
@@ -507,7 +507,7 @@ export function propagateDowngradesViaLemmaContrapositives(
           const othersDesc = otherAntecedents.length > 0 
             ? ` and since ${otherAntecedents.map((op, idx) => `${opLabel(op)} is supported in polynomial time${formatInlineCaveat(otherCaveats[idx])}`).join(' and ')},`
             : '';
-          const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since ${opLabel(lemma.consequent)} is unsupported by ${langName}${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${langName} as well${formatInlineCaveat(caveat)}.`;
+          const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since \\nopref{${language.id}}{${lemma.consequent}}${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${idToName(language.id)} as well${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-poly-unknown-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
@@ -581,7 +581,7 @@ export function propagateDowngradesViaLemmaContrapositives(
           const othersDesc = otherAntecedents.length > 0 
             ? ` and since ${otherAntecedents.map((op, idx) => `${opLabel(op)} is supported in quasi-polynomial time${formatInlineCaveat(otherCaveats[idx])}`).join(' and ')},`
             : '';
-          const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since ${opLabel(lemma.consequent)} is unsupported by ${langName} in quasi-polynomial time${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${langName} in quasi-polynomial time as well${formatInlineCaveat(caveat)}.`;
+          const description = `Since ${lemma.antecedent.map(opLabel).join(' ∧ ')} implies ${opLabel(lemma.consequent)}${formatCitations(lemma.refs)}, and since \\nopref{${language.id}}{${lemma.consequent}} in quasi-polynomial time${formatInlineCaveat(consequentSupport?.caveat)}${formatCitations(consequentRefs)},${othersDesc} then ${opLabel(targetOp)} is unsupported by ${idToName(language.id)} in quasi-polynomial time as well${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] CONTRAPOSITIVE ${langName}.${targetOp}: ${targetComplexity} -> no-quasi (via ¬${lemma.consequent}${otherAntecedents.length > 0 ? ', with ' + otherAntecedents.join('+') + ' supported' : ''})`);
@@ -726,10 +726,10 @@ function deriveNoPolyEdge(
   const bRefs = bSupport?.refs ?? [];
   const caveat = mergeCaveats(aSupport?.caveat, bSupport?.caveat);
   const description =
-    `${aName} supports ${opLabel(queryCode)} in polynomial time${formatInlineCaveat(aSupport?.caveat)}${formatCitations(aRefs)}, but ${opLabel(queryCode)} is unsupported ` +
-    `by ${bName}${formatInlineCaveat(bSupport?.caveat)}${formatCitations(bRefs)}. If ${bName} could compile to ${aName} in ` +
-    `polynomial time, ${bName} could support ${opLabel(queryCode)} by first compiling to ${aName}. ` +
-    `Therefore ${bName} cannot compile to ${aName} in polynomial time${formatInlineCaveat(caveat)}.`;
+    `\\opref{${langA.id}}{${queryCode}} in polynomial time${formatInlineCaveat(aSupport?.caveat)}${formatCitations(aRefs)}, but ` +
+    `\\nopref{${langB.id}}{${queryCode}}${formatInlineCaveat(bSupport?.caveat)}${formatCitations(bRefs)}. If ${idToName(langB.id)} could compile to ${idToName(langA.id)} in ` +
+    `polynomial time, ${idToName(langB.id)} could support ${opLabel(queryCode)} by first compiling to ${idToName(langA.id)}. ` +
+    `Therefore ${idToName(langB.id)} cannot compile to ${idToName(langA.id)} in polynomial time${formatInlineCaveat(caveat)}.`;
   const refs = [...new Set([...(aSupport?.refs ?? []), ...(bSupport?.refs ?? [])])];
 
   if (currentStatus === 'unknown-poly-quasi' && currentRelation) {
@@ -836,10 +836,10 @@ function deriveNoQuasiEdge(
   // Merge with existing edge caveat (e.g., from a prior no-poly-unknown-quasi derivation)
   const caveat = mergeCaveats(queryCaveat, currentRelation?.caveat);
   const description =
-    `${aName} supports ${opLabel(queryCode)} in quasi-polynomial time${formatInlineCaveat(aSupport?.caveat)}${formatCitations(aRefs)}, but ${opLabel(queryCode)} is ` +
-    `unsupported by ${bName} in quasi-polynomial time${formatInlineCaveat(bSupport?.caveat)}${formatCitations(bRefs)}. If ${bName} could compile to ${aName} in ` +
-    `quasi-polynomial time, ${bName} could support ${opLabel(queryCode)} by first compiling to ${aName}. ` +
-    `Therefore ${bName} cannot compile to ${aName} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
+    `\\opref{${langA.id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(aSupport?.caveat)}${formatCitations(aRefs)}, but ` +
+    `\\nopref{${langB.id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(bSupport?.caveat)}${formatCitations(bRefs)}. If ${idToName(langB.id)} could compile to ${idToName(langA.id)} in ` +
+    `quasi-polynomial time, ${idToName(langB.id)} could support ${opLabel(queryCode)} by first compiling to ${idToName(langA.id)}. ` +
+    `Therefore ${idToName(langB.id)} cannot compile to ${idToName(langA.id)} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
   const refs = [...new Set([...(aSupport?.refs ?? []), ...(bSupport?.refs ?? []), ...(currentRelation?.refs ?? [])])];
 
   // Transition: null / unknown-both / no-poly-unknown-quasi → no-quasi

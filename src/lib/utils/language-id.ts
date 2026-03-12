@@ -24,6 +24,7 @@ export function generateLanguageId(name: string): string {
  * Must be initialized via initNameMap() before use.
  */
 let _nameMap: Map<string, string> = new Map();
+let _nameToIdMap: Map<string, string> = new Map();
 
 /**
  * Initialize the name map from a list of languages.
@@ -31,9 +32,11 @@ let _nameMap: Map<string, string> = new Map();
  */
 export function initNameMap(languages: Array<{ id?: string; name: string }>): void {
   _nameMap = new Map();
+  _nameToIdMap = new Map();
   for (const lang of languages) {
     if (lang.id) {
       _nameMap.set(lang.id, lang.name);
+      _nameToIdMap.set(lang.name, lang.id);
     }
   }
 }
@@ -44,4 +47,12 @@ export function initNameMap(languages: Array<{ id?: string; name: string }>): vo
  */
 export function idToName(id: string): string {
   return _nameMap.get(id) ?? id;
+}
+
+/**
+ * Resolve a language display name to its ID.
+ * Returns undefined if not found.
+ */
+export function nameToId(name: string): string | undefined {
+  return _nameToIdMap.get(name);
 }

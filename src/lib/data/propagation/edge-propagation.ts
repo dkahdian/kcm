@@ -126,8 +126,8 @@ function applyNoPolyQuasiUpgrade(
   originalRelation: DirectedSuccinctnessRelation
 ): void {
   const { languageIds } = matrix;
-  const srcName = idToName(languageIds[sourceIdx]);
-  const tgtName = idToName(languageIds[targetIdx]);
+  const srcId = languageIds[sourceIdx];
+  const tgtId = languageIds[targetIdx];
   
   // Extract original noPolyDescription
   const noPolyDescription = extractNoPolyDescription(originalRelation) ?? {
@@ -141,8 +141,8 @@ function applyNoPolyQuasiUpgrade(
   const pathDesc = describePath(pathIds, matrix);
   const pathCaveat = collectCaveatsUnion(path, matrix);
   const quasiConclusion = pathCaveat
-    ? `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName} (unless ${pathCaveat}).`
-    : `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
+    ? `Therefore ${idToName(srcId)} compiles to ${idToName(tgtId)} in quasi-polynomial time (unless ${pathCaveat}).`
+    : `Therefore ${idToName(srcId)} compiles to ${idToName(tgtId)} in quasi-polynomial time.`;
   const quasiDesc = `${pathDesc} ${quasiConclusion}`;
   const quasiRefs = collectRefsUnion(path, matrix);
   const quasiDescription: DescriptionComponent = {
@@ -197,8 +197,10 @@ export function phaseOneUpgrade(
       if (i === j) continue;
       const relation = matrix.matrix[i][j];
       const status = relation?.status ?? null;
-      const srcName = idToName(languageIds[i]);
-      const tgtName = idToName(languageIds[j]);
+      const srcId = languageIds[i];
+      const tgtId = languageIds[j];
+      const srcName = idToName(srcId);
+      const tgtName = idToName(tgtId);
 
       // Quasi upgrades
       if (reachQ.reach[i][j] && !guaranteesQuasi(status)) {
@@ -207,7 +209,7 @@ export function phaseOneUpgrade(
           const ids = path.map((idx) => languageIds[idx]);
           const desc = describePath(ids, matrix);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${srcName} compiles to ${tgtName} in quasi-polynomial time, but ${srcName} is marked as not compiling to ${tgtName} in quasi-polynomial time.`
+            `Contradiction: ${desc} Therefore ${idToName(srcId)} compiles to ${idToName(tgtId)} in quasi-polynomial time, but ${idToName(srcId)} is marked as not compiling to ${idToName(tgtId)} in quasi-polynomial time.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachQ.parent[i]), i, j);
@@ -221,7 +223,7 @@ export function phaseOneUpgrade(
           applyNoPolyQuasiUpgrade(matrix, i, j, path, relation);
         } else {
           // Standard upgrade to unknown-poly-quasi
-          const derivedDesc = `Therefore a quasi-polynomial compilation exists from ${srcName} to ${tgtName}.`;
+          const derivedDesc = `Therefore ${idToName(srcId)} compiles to ${idToName(tgtId)} in quasi-polynomial time.`;
           const pathIds = path.map((idx) => languageIds[idx]);
           applySimpleUpgrade(matrix, path, newStatus, derivedDesc, { rule: 'transitivity', path: pathIds, level: 'quasi' });
         }
@@ -236,11 +238,11 @@ export function phaseOneUpgrade(
           const ids = path.map((idx) => languageIds[idx]);
           const desc = describePath(ids, matrix);
           contradictionError(
-            `Contradiction: ${desc} Therefore ${srcName} compiles to ${tgtName} in polynomial time, but ${srcName} is marked as not compiling to ${tgtName} in polynomial time.`
+            `Contradiction: ${desc} Therefore ${idToName(srcId)} compiles to ${idToName(tgtId)} in polynomial time, but ${idToName(srcId)} is marked as not compiling to ${idToName(tgtId)} in polynomial time.`
           );
         }
         const path = ensurePath(reconstructPathIndices(i, j, reachP.parent[i]), i, j);
-        const derivedDesc = `Therefore a polynomial compilation exists from ${srcName} to ${tgtName}.`;
+        const derivedDesc = `Therefore ${idToName(srcId)} compiles to ${idToName(tgtId)} in polynomial time.`;
         if (DEBUG_PROPAGATION) {
           console.log(`[Propagation] UPGRADE ${srcName} -> ${tgtName}: ${status ?? 'null'} -> poly`);
         }
@@ -265,8 +267,10 @@ export function tryDowngrade(
   const relation = adjacencyMatrix.matrix[source][target];
   const status = relation?.status ?? null;
   const languageIds = adjacencyMatrix.languageIds;
-  const srcName = idToName(languageIds[source]);
-  const tgtName = idToName(languageIds[target]);
+  const srcId = languageIds[source];
+  const tgtId = languageIds[target];
+  const srcName = idToName(srcId);
+  const tgtName = idToName(tgtId);
 
   const runConsistency = (nextStatus: string): { ok: boolean; witnessPath?: string[]; error?: string } => {
     const original = adjacencyMatrix.matrix[source][target];
@@ -292,13 +296,11 @@ export function tryDowngrade(
     // witnessIds is the path that would exist if the tested edge had `triedStatus`
     // The contradiction is that the path endpoints have an incompatible status
     if (witnessIds.length < 2) {
-      return `If ${srcName} compiled to ${tgtName} ${phraseForStatus(triedStatus)}, a contradiction arises${formatInlineCaveat(mergedCaveat)}.`;
+      return `If ${idToName(srcId)} compiled to ${idToName(tgtId)} ${phraseForStatus(triedStatus)}, a contradiction arises${formatInlineCaveat(mergedCaveat)}.`;
     }
 
     const pathStart = witnessIds[0];
     const pathEnd = witnessIds[witnessIds.length - 1];
-    const pathStartName = idToName(pathStart);
-    const pathEndName = idToName(pathEnd);
 
     // Get the actual status of the path endpoints (the contradiction)
     const startIdx = languageIds.indexOf(pathStart);
@@ -321,17 +323,17 @@ export function tryDowngrade(
       const edgeStatus = edgeRelation?.status ?? 'unknown';
       const edgeRefs = edgeRelation?.refs ?? [];
       const edgeCaveat = edgeRelation?.caveat;
-      premises.push(`${idToName(fromId)} compiles to ${idToName(toId)} ${phraseForStatus(edgeStatus)}${formatInlineCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
+      premises.push(`\\edgeref{${fromId}}{${toId}} ${phraseForStatus(edgeStatus)}${formatInlineCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
     }
 
     // State the contradicting fact as a premise with its own inline caveat
-    premises.push(formatContradictingPremise(pathStartName, pathEndName, actualStatus, actualCaveat, actualRefs));
+    premises.push(formatContradictingPremise(pathStart, pathEnd, actualStatus, actualCaveat, actualRefs));
 
     const premisesPart = premises.join('. ') + '. ';
     const triedPhrase = phraseForStatus(triedStatus);
     const impliedPhrase = triedStatus === 'poly' ? 'in polynomial time' : 'in at most quasi-polynomial time';
 
-    return `${premisesPart}If ${srcName} compiled to ${tgtName} ${triedPhrase}, then ${pathStartName} would compile to ${pathEndName} ${impliedPhrase}, contradicting the above. Therefore ${srcName} cannot compile to ${tgtName} ${triedPhrase}${formatInlineCaveat(mergedCaveat)}.`;
+    return `${premisesPart}If ${idToName(srcId)} compiled to ${idToName(tgtId)} ${triedPhrase}, then ${idToName(pathStart)} would compile to ${idToName(pathEnd)} ${impliedPhrase}, contradicting the above. Therefore ${idToName(srcId)} cannot compile to ${idToName(tgtId)} ${triedPhrase}${formatInlineCaveat(mergedCaveat)}.`;
   };
 
   /**

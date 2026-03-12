@@ -1,8 +1,15 @@
 import katex from 'katex';
 
-const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{)/;
+const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{|\\langref\{|\\n?edgeref\{|\\n?opref\{)/;
 const LATEX_FRAGMENT = /(\$\$[\s\S]+?\$\$|\$[\s\S]+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\))/g;
 const CITATION_PATTERN = /\\cite[tp]?\{([^}]+)\}/g;
+
+// Entity link patterns (processed after HTML rendering)
+const LANGREF_PATTERN = /\\langref\{([^}]+)\}/g;
+const EDGEREF_PATTERN = /\\edgeref\{([^}]+)\}\{([^}]+)\}/g;
+const NEDGEREF_PATTERN = /\\nedgeref\{([^}]+)\}\{([^}]+)\}/g;
+const OPREF_PATTERN = /\\opref\{([^}]+)\}\{([^}]+)\}/g;
+const NOPREF_PATTERN = /\\nopref\{([^}]+)\}\{([^}]+)\}/g;
 
 /**
  * LRU-style render cache for renderMathText results.
@@ -165,4 +172,106 @@ export function renderTextWithCitations(
     });
     return numbers.join('');
   });
+}
+
+/**
+ * Check if text contains entity link commands (\langref, \edgeref, \opref)
+ */
+export function containsEntityLinks(text: string): boolean {
+  return /\\(langref|n?edgeref|n?opref)\{/.test(text);
+}
+
+/**
+ * Render a language name, applying KaTeX if it contains LaTeX fragments.
+ */
+function renderNameHtml(name: string): string {
+  if (containsLatex(name)) {
+    const result = renderMathText(name);
+    return result.html ?? escapeHtml(name);
+  }
+  return escapeHtml(name);
+}
+
+/**
+ * Replace entity link commands with clickable <a> elements.
+ * 
+ * Supported commands:
+ * - \langref{langId} → link to language info panel
+ * - \edgeref{srcId}{tgtId} → link to edge info panel
+ * - \opref{langId}{opCode} → link to operation cell info panel
+ *
+ * Uses <a> tags with href so Ctrl+click opens in a new tab.
+ */
+export function renderEntityLinks(
+  html: string,
+  idToName: (id: string) => string,
+  opCodeToLabel?: (code: string) => string,
+  nameToId?: (name: string) => string | undefined
+): string {
+  let result = html;
+
+  /**
+   * Resolve a langref argument that may be either an ID (lang_xxx) or a display name.
+   * Returns { id, name } for building the link.
+   */
+  const resolveLang = (ref: string): { id: string; name: string } => {
+    if (ref.startsWith('lang_')) {
+      return { id: ref, name: idToName(ref) };
+    }
+    const resolvedId = nameToId?.(ref);
+    if (resolvedId) {
+      return { id: resolvedId, name: ref };
+    }
+    return { id: ref, name: ref };
+  };
+
+  // Replace \langref{langId or langName}
+  result = result.replace(LANGREF_PATTERN, (_match, langRef: string) => {
+    const { id, name } = resolveLang(langRef);
+    const nameHtml = renderNameHtml(name);
+    const safeId = escapeHtml(id);
+    return `<a class="entity-link lang-link" href="#lang/${safeId}" data-entity-type="lang" data-lang-id="${safeId}">${nameHtml}</a>`;
+  });
+
+  // Replace \edgeref{srcRef}{tgtRef}
+  result = result.replace(EDGEREF_PATTERN, (_match, srcRef: string, tgtRef: string) => {
+    const src = resolveLang(srcRef);
+    const tgt = resolveLang(tgtRef);
+    const labelHtml = `${renderNameHtml(src.name)} compiles to ${renderNameHtml(tgt.name)}`;
+    const safeSrc = escapeHtml(src.id);
+    const safeTgt = escapeHtml(tgt.id);
+    return `<a class="entity-link edge-link" href="#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
+  });
+
+  // Replace \nedgeref{srcRef}{tgtRef} (negative edge: "cannot compile to")
+  result = result.replace(NEDGEREF_PATTERN, (_match, srcRef: string, tgtRef: string) => {
+    const src = resolveLang(srcRef);
+    const tgt = resolveLang(tgtRef);
+    const labelHtml = `${renderNameHtml(src.name)} cannot compile to ${renderNameHtml(tgt.name)}`;
+    const safeSrc = escapeHtml(src.id);
+    const safeTgt = escapeHtml(tgt.id);
+    return `<a class="entity-link edge-link" href="#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
+  });
+
+  // Replace \opref{langRef}{opCode}
+  result = result.replace(OPREF_PATTERN, (_match, langRef: string, opCode: string) => {
+    const lang = resolveLang(langRef);
+    const opLabel = opCodeToLabel ? opCodeToLabel(opCode) : opCode;
+    const labelHtml = `${renderNameHtml(lang.name)} supports ${escapeHtml(opLabel)}`;
+    const safeId = escapeHtml(lang.id);
+    const safeCode = escapeHtml(opCode);
+    return `<a class="entity-link op-link" href="#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
+  });
+
+  // Replace \nopref{langRef}{opCode} (negative op: "is unsupported by")
+  result = result.replace(NOPREF_PATTERN, (_match, langRef: string, opCode: string) => {
+    const lang = resolveLang(langRef);
+    const opLabel = opCodeToLabel ? opCodeToLabel(opCode) : opCode;
+    const labelHtml = `${escapeHtml(opLabel)} is unsupported by ${renderNameHtml(lang.name)}`;
+    const safeId = escapeHtml(lang.id);
+    const safeCode = escapeHtml(opCode);
+    return `<a class="entity-link op-link" href="#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
+  });
+
+  return result;
 }

@@ -13,6 +13,7 @@
   import type { KCLanguage, LanguageFilter, EdgeFilter, FilterParamValue, FilterStateMap, SelectedEdge, SelectedOperation, SelectedOperationCell, GraphData, ViewMode } from '$lib/types.js';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
+  import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
 
   import {
     hasQueuedChanges,
@@ -129,6 +130,19 @@
       }
     });
 
+    // Handle hash-based entity navigation
+    function onHashChange() {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) navigateToHash(hash);
+    }
+    window.addEventListener('hashchange', onHashChange);
+    // Process initial hash on page load
+    const initialHash = window.location.hash.replace(/^#/, '');
+    if (initialHash) {
+      // Defer so data is fully loaded
+      queueMicrotask(() => navigateToHash(initialHash));
+    }
+
     // Check for preview mode
     if (hasQueuedChanges()) {
       const dataset = loadPreviewDataset();
@@ -186,6 +200,10 @@
       filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
       filterPersistenceReady = true;
     }
+
+    return () => {
+      window.removeEventListener('hashchange', onHashChange);
+    };
   });
 
   function handleDiscardPreview() {
@@ -317,6 +335,89 @@
       : languageFilters
   );
   const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, activeLanguageFilters, edgeFilters, filterStates));
+
+  // =========================================================================
+  // Hash-based navigation for entity links (lang, edge, op)
+  // =========================================================================
+  function navigateToHash(hash: string) {
+    const data = baseGraphData;
+    const parts = hash.split('/');
+    const type = parts[0];
+
+    if (type === 'lang' && parts[1]) {
+      const langId = parts[1];
+      const lang = data.languages.find(l => l.id === langId);
+      if (lang) {
+        selectedEdge = null;
+        selectedOperation = null;
+        selectedOperationCell = null;
+        selectedNode = lang;
+      }
+    } else if (type === 'edge' && parts[1] && parts[2]) {
+      const srcId = parts[1];
+      const tgtId = parts[2];
+      const { adjacencyMatrix } = data;
+      const srcIdx = adjacencyMatrix.indexByLanguage[srcId];
+      const tgtIdx = adjacencyMatrix.indexByLanguage[tgtId];
+      if (srcIdx !== undefined && tgtIdx !== undefined) {
+        const srcLang = data.languages.find(l => l.id === srcId);
+        const tgtLang = data.languages.find(l => l.id === tgtId);
+        if (srcLang && tgtLang) {
+          selectedNode = null;
+          selectedOperation = null;
+          selectedOperationCell = null;
+          selectedEdge = {
+            id: `${srcId}-${tgtId}`,
+            source: srcId,
+            target: tgtId,
+            sourceName: srcLang.name,
+            targetName: tgtLang.name,
+            forward: adjacencyMatrix.matrix[srcIdx]?.[tgtIdx] ?? null,
+            backward: adjacencyMatrix.matrix[tgtIdx]?.[srcIdx] ?? null,
+            refs: [
+              ...(adjacencyMatrix.matrix[srcIdx]?.[tgtIdx]?.refs ?? []),
+              ...(adjacencyMatrix.matrix[tgtIdx]?.[srcIdx]?.refs ?? [])
+            ]
+          };
+          // Switch to graph/succinctness view if in operations view
+          if (viewMode === 'queries' || viewMode === 'transforms') {
+            viewMode = 'graph';
+            filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+          }
+        }
+      }
+    } else if (type === 'op' && parts[1] && parts[2]) {
+      const langId = parts[1];
+      const opCode = parts[2];
+      const lang = data.languages.find(l => l.id === langId);
+      if (lang) {
+        const opDef = QUERIES[opCode] ?? TRANSFORMATIONS[opCode];
+        const opType: 'query' | 'transformation' = opCode in QUERIES ? 'query' : 'transformation';
+        const supportMap = opType === 'query' ? lang.properties?.queries : lang.properties?.transformations;
+        const support = supportMap?.[opCode];
+        if (support) {
+          const opLabel = opDef?.label ?? opCode;
+          selectedNode = null;
+          selectedEdge = null;
+          selectedOperation = null;
+          selectedOperationCell = {
+            language: lang,
+            operationCode: opCode,
+            operationLabel: opLabel,
+            operationType: opType,
+            support: { ...support, code: opCode, label: opLabel }
+          };
+          // Switch to appropriate operations view
+          if (viewMode !== 'queries' && viewMode !== 'transforms') {
+            viewMode = opType === 'query' ? 'queries' : 'transforms';
+            filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+          }
+        }
+      }
+    }
+    // Clear hash after navigation so it doesn't interfere with subsequent navigations
+    if (browser) history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
 
   // Handler for individual filter changes from FilterDropdown
   function handleFilterChange(filter: LanguageFilter | EdgeFilter, value: FilterParamValue) {

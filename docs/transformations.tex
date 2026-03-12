@@ -50,6 +50,13 @@
 \title{Knowledge Compilation Map: Transformation Support}
 \date{\today}
 
+
+% -------- Entity link macros (rendered as links in the web UI) --------
+\newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\edgeref}[2]{#1 compiles to #2}
+\newcommand{\nedgeref}[2]{#1 cannot compile to #2}
+\newcommand{\opref}[2]{#1 supports #2}
+\newcommand{\nopref}[2]{#2 is unsupported by #1}
 \begin{document}
 \maketitle
 
@@ -550,7 +557,7 @@ The prime implicates of $\exists X.\Sigma$ are exactly the prime implicates of $
 $d$-$SDNNF$ supports Bounded Conjunction in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Bounded conjunction of two $d$-$SDNNF$ formulas sharing the same vtree can be performed in polytime via the Apply algorithm, preserving both determinism and structured decomposability (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
+Bounded conjunction of two \langref{d-SDNNF} formulas sharing the same vtree can be performed in polytime via the Apply algorithm, preserving both determinism and structured decomposability (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
 \end{claimdescription}
 
 % lang=lang_ea9b5299, op=AND_C
@@ -558,7 +565,7 @@ Bounded conjunction of two $d$-$SDNNF$ formulas sharing the same vtree can be pe
 $d$-$SDNNF$ supports Conjunction not in quasi-polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Any clause can be trivially expressed as a $d$-$SDNNF$ formula. If $d$-$SDNNF$ satisfied $\land$C, any $CNF$ could be compiled to $d$-$SDNNF$ in polytime. Since specific $CNF$s require exponential-size $d$-$SDNNF$ representations (unconditionally), this is impossible (\citet{Pipatsrisawat_2008}, Proposition 4).
+Any clause can be trivially expressed as a \langref{d-SDNNF} formula. If \langref{d-SDNNF} satisfied $\land$C, any \langref{CNF} could be compiled to \langref{d-SDNNF} in polytime. Since specific \langref{CNF}s require exponential-size \langref{d-SDNNF} representations (unconditionally), this is impossible (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_ea9b5299, op=OR_C
@@ -566,7 +573,7 @@ Any clause can be trivially expressed as a $d$-$SDNNF$ formula. If $d$-$SDNNF$ s
 $d$-$SDNNF$ supports Disjunction not in quasi-polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Any term can be trivially expressed as a $d$-$SDNNF$ formula. If $d$-$SDNNF$ satisfied $\lor$C, any $DNF$ could be compiled to $d$-$SDNNF$ in polytime. Since specific $DNF$s require exponential-size $d$-$SDNNF$ representations (unconditionally), this is impossible (\citet{Pipatsrisawat_2008}, Proposition 4).
+Any term can be trivially expressed as a \langref{d-SDNNF} formula. If \langref{d-SDNNF} satisfied $\lor$C, any \langref{DNF} could be compiled to \langref{d-SDNNF} in polytime. Since specific \langref{DNF}s require exponential-size \langref{d-SDNNF} representations (unconditionally), this is impossible (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_ea9b5299, op=CD
@@ -582,7 +589,7 @@ Conditioning preserves both structured decomposability and determinism. The vtre
 $d$-$SDNNF$ supports Forgetting not in quasi-polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-If $d$-$SDNNF$ satisfied FO, then every $DNF$ could be compiled to an equivalent $d$-$SDNNF$ of polynomial size (using fresh selector variables and applying FO). Since specific $DNF$s require exponential-size $d$-$SDNNF$ representations (unconditionally), this is impossible. This unconditional result applies to the fixed-vtree case (\citet{Pipatsrisawat_2008}, Proposition 4).
+If \langref{d-SDNNF} satisfied FO, then every \langref{DNF} could be compiled to an equivalent \langref{d-SDNNF} of polynomial size (using fresh selector variables and applying FO). Since specific \langref{DNF}s require exponential-size \langref{d-SDNNF} representations (unconditionally), this is impossible. This unconditional result applies to the fixed-vtree case (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_b13b0d78, op=AND_BC
@@ -590,7 +597,7 @@ If $d$-$SDNNF$ satisfied FO, then every $DNF$ could be compiled to an equivalent
 $SDNNF$ supports Bounded Conjunction in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Bounded conjunction of two $SDNNF$ formulas sharing the same vtree can be performed in polytime via the Apply algorithm. The vtree governs variable partitioning at $\land$-nodes, enabling an efficient recursive traversal (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
+Bounded conjunction of two \langref{SDNNF} formulas sharing the same vtree can be performed in polytime via the Apply algorithm. The vtree governs variable partitioning at $\land$-nodes, enabling an efficient recursive traversal (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
 \end{claimdescription}
 
 % lang=lang_b13b0d78, op=AND_C
@@ -598,7 +605,7 @@ Bounded conjunction of two $SDNNF$ formulas sharing the same vtree can be perfor
 $SDNNF$ supports Conjunction not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Any clause can be trivially expressed as an $SDNNF$ formula. If $SDNNF$ satisfied $\land$C, any $CNF$ could be compiled to $SDNNF$ in polytime by conjoining its clauses. Since $SDNNF$ satisfies CO, this would give polytime $CNF$ satisfiability, implying P = NP (\citet{Pipatsrisawat_2008}, Proposition 4).
+Any clause can be trivially expressed as an \langref{SDNNF} formula. If \langref{SDNNF} satisfied $\land$C, any \langref{CNF} could be compiled to \langref{SDNNF} in polytime by conjoining its clauses. Since \langref{SDNNF} satisfies CO, this would give polytime \langref{CNF} satisfiability, implying P = NP (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_b13b0d78, op=OR_C
@@ -606,7 +613,7 @@ Any clause can be trivially expressed as an $SDNNF$ formula. If $SDNNF$ satisfie
 $SDNNF$ supports Disjunction in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Disjunction of $SDNNF$ formulas (sharing the same vtree) preserves structured decomposability, since decomposability only constrains $\land$-nodes and a top-level $\lor$-node introduces no new $\land$-node constraints (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
+Disjunction of \langref{SDNNF} formulas (sharing the same vtree) preserves structured decomposability, since decomposability only constrains $\land$-nodes and a top-level $\lor$-node introduces no new $\land$-node constraints (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
 \end{claimdescription}
 
 % lang=lang_b13b0d78, op=FO
@@ -614,7 +621,7 @@ Disjunction of $SDNNF$ formulas (sharing the same vtree) preserves structured de
 $SDNNF$ supports Forgetting in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Forgetting preserves structured decomposability. Replacing all occurrences of literal $x$ and $\neg x$ with $\top$ in an $SDNNF$ preserves the vtree structure, since the decomposition at $\land$-nodes remains valid after variable removal. Inherited from $DNNF$ (\citet{Pipatsrisawat_2008}, Proposition 4).
+Forgetting preserves structured decomposability. Replacing all occurrences of literal $x$ and $\neg x$ with $\top$ in an \langref{SDNNF} preserves the vtree structure, since the decomposition at $\land$-nodes remains valid after variable removal. Inherited from \langref{DNNF} (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 
@@ -701,7 +708,7 @@ Conditioning an SDD $f$ on a literal $l$ is equivalent to computing $f \land l$.
 $d$-$SDNNF$ supports Negation not in polynomial time (quasi-polynomial unknown) \citet{Vinall-Smeeth_2024}
 \end{claim}
 \begin{claimdescription}
-Structured deterministic DNNF ($d$-$SDNNF$) is not closed under negation in polytime. \citet{Vinall-Smeeth_2024} proves that for every $n \in \mathbb{N}$, there exists a Boolean function $f$ with an equivalent structured $d$-DNNF of size $n$ such that any structured DNNF equivalent to $\neg f$ has size $n^{\Omega(\tilde{\log}\, n)}$. This super-polynomial lower bound holds for every vtree (not just a single tree), so the result applies to $d$-$SDNNF$ (not just $d$-$SDNNF_T$). Whether quasi-polynomial closure holds remains open.
+Structured deterministic DNNF (\langref{d-SDNNF}) is not closed under negation in polytime. \citet{Vinall-Smeeth_2024} proves that for every $n \in \mathbb{N}$, there exists a Boolean function $f$ with an equivalent structured $d$-DNNF of size $n$ such that any structured DNNF equivalent to $\neg f$ has size $n^{\Omega(\tilde{\log}\, n)}$. This super-polynomial lower bound holds for every vtree (not just a single tree), so the result applies to \langref{d-SDNNF} (not just $d$-$SDNNF_T$). Whether quasi-polynomial closure holds remains open.
 \end{claimdescription}
 
 

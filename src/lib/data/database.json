@@ -3908,6 +3908,186 @@
       "tags": [],
       "definition": "The set of all cSDD formulas that respect a predefined variable tree (vtree) $T$. \\citet{Darwiche_2011}.",
       "definitionRefs": []
+    },
+    {
+      "id": "lang_d7403a53",
+      "name": "TDD",
+      "fullName": "Tree Decision Diagrams",
+      "definition": "...",
+      "definitionRefs": [],
+      "properties": {
+        "queries": {
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2001a}. Therefore TDD supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 38,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_6c130090",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CO} in polynomial time \\citet{Darwiche_2002}. Therefore TDD supports Consistency in polynomial time.",
+            "derivationOrder": 36,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_6c130090",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CT": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001b"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore TDD supports Model Counting in polynomial time.",
+            "derivationOrder": 43,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_6c130090",
+              "operation": "CT",
+              "level": "poly"
+            }
+          },
+          "EQ": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time, and \\opref{lang_ea9b5299}{EQ} in polynomial time \\citet{Darwiche_2002}. Therefore TDD supports Equivalence in polynomial time.",
+            "derivationOrder": 41,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_ea9b5299",
+              "operation": "EQ",
+              "level": "poly"
+            }
+          },
+          "IM": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore TDD supports Implicant in polynomial time.",
+            "derivationOrder": 39,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_6c130090",
+              "operation": "IM",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore TDD supports Model Enumeration in polynomial time.",
+            "derivationOrder": 44,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_6c130090",
+              "operation": "ME",
+              "level": "poly"
+            }
+          },
+          "SE": {
+            "complexity": "poly",
+            "refs": [],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time, and \\opref{lang_ea9b5299}{SE} in polynomial time. Therefore TDD supports Sentential Entailment in polynomial time.",
+            "derivationOrder": 42,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_ea9b5299",
+              "operation": "SE",
+              "level": "poly"
+            }
+          },
+          "VA": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{VA} in polynomial time \\citet{Darwiche_2002}. Therefore TDD supports Validity in polynomial time.",
+            "derivationOrder": 37,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d7403a53",
+              "targetLanguageId": "lang_6c130090",
+              "operation": "VA",
+              "level": "poly"
+            }
+          }
+        },
+        "transformations": {
+          "CD": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "FO": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "SFO": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "¬C": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∧BC": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∧C": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∨BC": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          },
+          "∨C": {
+            "caveat": "",
+            "complexity": "unknown-to-us",
+            "refs": []
+          }
+        }
+      },
+      "tags": []
     }
   ],
   "references": [
@@ -3931,9 +4111,9 @@
     },
     {
       "id": "Blum_1980",
+      "bibtex": "@article{Blum_1980,\n  title={Equivalence of free boolean graphs can be decided probabilistically in polynomial time},\n  author={Blum, Manuel and Chandra, Ashok K. and Wegman, Mark N.},\n  journal={Information Processing Letters},\n  volume={10},\n  number={2},\n  pages={80--82},\n  year={1980},\n  publisher={Elsevier},\n  doi={10.1016/S0020-0190(80)90078-2}\n}",
       "title": "M. Blum and A. K. Chandra and M. N. Wegman, \"Equivalence of free boolean graphs can be decided probabilistically in polynomial time\", Information Processing Letters, vol. 10, pp. 80–82, 1980.",
-      "href": "https://doi.org/10.1016/S0020-0190(80)90078-2",
-      "bibtex": "@article{Blum_1980,\n  title={Equivalence of free boolean graphs can be decided probabilistically in polynomial time},\n  author={Blum, Manuel and Chandra, Ashok K. and Wegman, Mark N.},\n  journal={Information Processing Letters},\n  volume={10},\n  number={2},\n  pages={80--82},\n  year={1980},\n  publisher={Elsevier},\n  doi={10.1016/S0020-0190(80)90078-2}\n}"
+      "href": "https://doi.org/10.1016/S0020-0190(80)90078-2"
     },
     {
       "id": "Bodlaender_1993",
@@ -3955,9 +4135,9 @@
     },
     {
       "id": "Bova_2014",
+      "bibtex": "@unpublished{Bova_2014,\n  title={Expander {CNFs} have exponential {DNNF} size},\n  author={Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  year={2014},\n  note={Unpublished manuscript},\n  url={http://www.cril.univ-artois.fr/~mengel/papers/cnf-to-dnnf-lower-bound.pdf}\n}",
       "title": "S. Bova and F. Capelli and S. Mengel and F. Slivovsky, \"Expander {CNFs\", 2014.",
-      "href": "http://www.cril.univ-artois.fr/~mengel/papers/cnf-to-dnnf-lower-bound.pdf",
-      "bibtex": "@unpublished{Bova_2014,\n  title={Expander {CNFs} have exponential {DNNF} size},\n  author={Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  year={2014},\n  note={Unpublished manuscript},\n  url={http://www.cril.univ-artois.fr/~mengel/papers/cnf-to-dnnf-lower-bound.pdf}\n}"
+      "href": "http://www.cril.univ-artois.fr/~mengel/papers/cnf-to-dnnf-lower-bound.pdf"
     },
     {
       "id": "Bova_2016",
@@ -4033,15 +4213,15 @@
     },
     {
       "id": "Darwiche_Huang_2002",
+      "bibtex": "@techreport{Darwiche_Huang_2002,\n  title={Testing equivalence probabilistically},\n  author={Darwiche, Adnan and Huang, Jinbo},\n  institution={Computer Science Department, University of California, Los Angeles},\n  number={D-123},\n  year={2002},\n  url={https://users.cecs.anu.edu.au/~jinbo/02-d123.pdf}\n}",
       "title": "A. Darwiche and J. Huang, \"Testing equivalence probabilistically\", 2002.",
-      "href": "https://users.cecs.anu.edu.au/~jinbo/02-d123.pdf",
-      "bibtex": "@techreport{Darwiche_Huang_2002,\n  title={Testing equivalence probabilistically},\n  author={Darwiche, Adnan and Huang, Jinbo},\n  institution={Computer Science Department, University of California, Los Angeles},\n  number={D-123},\n  year={2002},\n  url={https://users.cecs.anu.edu.au/~jinbo/02-d123.pdf}\n}"
+      "href": "https://users.cecs.anu.edu.au/~jinbo/02-d123.pdf"
     },
     {
       "id": "Devadas_1993",
+      "bibtex": "@article{Devadas_1993,\n  title={Comparing two-level and ordered binary decision diagram representations of logic functions},\n  author={Devadas, Srinivas},\n  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},\n  volume={12},\n  number={5},\n  pages={722--723},\n  year={1993},\n  publisher={IEEE},\n  doi={10.1109/43.277617}\n}",
       "title": "S. Devadas, \"Comparing two-level and ordered binary decision diagram representations of logic functions\", IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems, vol. 12, pp. 722–723, 1993.",
-      "href": "https://doi.org/10.1109/43.277617",
-      "bibtex": "@article{Devadas_1993,\n  title={Comparing two-level and ordered binary decision diagram representations of logic functions},\n  author={Devadas, Srinivas},\n  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},\n  volume={12},\n  number={5},\n  pages={722--723},\n  year={1993},\n  publisher={IEEE},\n  doi={10.1109/43.277617}\n}"
+      "href": "https://doi.org/10.1109/43.277617"
     },
     {
       "id": "Gergov_1994",
@@ -4069,9 +4249,9 @@
     },
     {
       "id": "Lang_2003",
+      "bibtex": "@article{Lang_2003,\n  author = {Lang, J\\'er\\^ome and Liberatore, Paolo and Marquis, Pierre},\n  title = {Propositional Independence: Formula-Variable Independence and Forgetting},\n  journal = {Journal of Artificial Intelligence Research},\n  volume = {18},\n  pages = {391--443},\n  year = {2003},\n  publisher = {AAAI Press},\n  doi={10.1613/jair.1113}\n}",
       "title": "J. Lang and P. Liberatore and P. Marquis, \"Propositional Independence: Formula-Variable Independence and Forgetting\", Journal of Artificial Intelligence Research, vol. 18, pp. 391–443, 2003.",
-      "href": "https://doi.org/10.1613/jair.1113",
-      "bibtex": "@article{Lang_2003,\n  author = {Lang, J\\'er\\^ome and Liberatore, Paolo and Marquis, Pierre},\n  title = {Propositional Independence: Formula-Variable Independence and Forgetting},\n  journal = {Journal of Artificial Intelligence Research},\n  volume = {18},\n  pages = {391--443},\n  year = {2003},\n  publisher = {AAAI Press},\n  doi={10.1613/jair.1113}\n}"
+      "href": "https://doi.org/10.1613/jair.1113"
     },
     {
       "id": "Lee_1959",
@@ -4135,9 +4315,9 @@
     },
     {
       "id": "VanDenBroeck_2015",
+      "bibtex": "@inproceedings{VanDenBroeck_2015,\n  title={On the Role of Canonicity in Knowledge Compilation},\n  author={Van den Broeck, Guy and Darwiche, Adnan},\n  booktitle={Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence},\n  pages={1641--1648},\n  year={2015},\n  publisher={AAAI Press},\n  doi={10.1609/aaai.v29i1.9423}\n}",
       "title": "G. Van den Broeck and A. Darwiche, \"On the Role of Canonicity in Knowledge Compilation\", Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence, pp. 1641–1648, 2015.",
-      "href": "https://doi.org/10.1609/aaai.v29i1.9423",
-      "bibtex": "@inproceedings{VanDenBroeck_2015,\n  title={On the Role of Canonicity in Knowledge Compilation},\n  author={Van den Broeck, Guy and Darwiche, Adnan},\n  booktitle={Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence},\n  pages={1641--1648},\n  year={2015},\n  publisher={AAAI Press},\n  doi={10.1609/aaai.v29i1.9423}\n}"
+      "href": "https://doi.org/10.1609/aaai.v29i1.9423"
     },
     {
       "id": "Vinall-Smeeth_2024",
@@ -4321,7 +4501,8 @@
       "lang_981b62f0",
       "lang_0f27d539",
       "lang_4ae03bc8",
-      "lang_82fa749e"
+      "lang_82fa749e",
+      "lang_d7403a53"
     ],
     "matrix": [
       [
@@ -4352,9 +4533,11 @@
         null,
         null,
         null,
+        null,
         null
       ],
       [
+        null,
         null,
         null,
         null,
@@ -4762,7 +4945,26 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}. \\nedgeref{lang_89649e36}{lang_6c130090} in quasi-polynomial time \\citet{Darwiche_2002}. If CNF compiled to TDD in quasi-polynomial time, then CNF would compile to d-DNNF in at most quasi-polynomial time, contradicting the above. Therefore CNF cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 25,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_89649e36",
+              "lang_d7403a53",
+              "lang_6c130090"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -5133,6 +5335,7 @@
             ]
           }
         },
+        null,
         null,
         null
       ],
@@ -5551,7 +5754,24 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_6c130090}{lang_ea9b5299} in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If d-DNNF compiled to TDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore d-DNNF cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 26,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_6c130090",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -6034,9 +6254,11 @@
           }
         },
         null,
+        null,
         null
       ],
       [
+        null,
         null,
         null,
         null,
@@ -6418,7 +6640,27 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "caveat": "the polynomial hierarchy collapses",
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}. \\nedgeref{lang_4c204bf3}{lang_6c130090} in polynomial time (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If DNF compiled to TDD in polynomial time, then DNF would compile to d-DNNF in polynomial time, contradicting the above. Therefore DNF cannot compile to TDD in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 14,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "poly",
+            "witnessPath": [
+              "lang_4c204bf3",
+              "lang_d7403a53",
+              "lang_6c130090"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -6835,7 +7077,27 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_6c130090}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}. \\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_6c130090}{lang_ea9b5299} in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If DNNF compiled to TDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore DNNF cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 27,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_6c130090",
+              "lang_3bebcab7",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -7169,7 +7431,24 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_684b1ca7}{lang_ea9b5299} in quasi-polynomial time \\citet{Amarilli_2018}. If FBDD compiled to TDD in quasi-polynomial time, then FBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore FBDD cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 28,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_684b1ca7",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -7535,7 +7814,27 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "caveat": "the polynomial hierarchy collapses",
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}. \\nedgeref{lang_6ae90adc}{lang_6c130090} in polynomial time (unless the polynomial hierarchy collapses) \\citet{Darwiche_2001b,Darwiche_2002}. If IP compiled to TDD in polynomial time, then IP would compile to d-DNNF in polynomial time, contradicting the above. Therefore IP cannot compile to TDD in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 17,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "poly",
+            "witnessPath": [
+              "lang_6ae90adc",
+              "lang_d7403a53",
+              "lang_6c130090"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -7888,6 +8187,7 @@
             "level": "poly"
           }
         },
+        null,
         null,
         null
       ],
@@ -8301,7 +8601,28 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Beame_2013"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_6c130090}{lang_1df07cc3} in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. \\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_6c130090}{lang_ea9b5299} in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If nFBDD compiled to TDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nFBDD cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 29,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_6c130090",
+              "lang_1df07cc3",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -8723,7 +9044,28 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Darwiche_2002",
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_89649e36}{lang_5bf00851} in polynomial time \\citet{Darwiche_2002}. \\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}. \\nedgeref{lang_89649e36}{lang_6c130090} in quasi-polynomial time \\citet{Darwiche_2002}. If NNF compiled to TDD in quasi-polynomial time, then CNF would compile to d-DNNF in at most quasi-polynomial time, contradicting the above. Therefore NNF cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 30,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_89649e36",
+              "lang_5bf00851",
+              "lang_d7403a53",
+              "lang_6c130090"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -9137,7 +9479,24 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_d24efe0e}{lang_ea9b5299} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If nOBDD compiled to TDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore nOBDD cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 31,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_d24efe0e",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -9531,6 +9890,7 @@
           }
         },
         null,
+        null,
         null
       ],
       [
@@ -9883,7 +10243,26 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}. \\nedgeref{lang_27fffab2}{lang_6c130090} in quasi-polynomial time \\citet{Darwiche_2002}. If PI compiled to TDD in quasi-polynomial time, then PI would compile to d-DNNF in at most quasi-polynomial time, contradicting the above. Therefore PI cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 32,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_27fffab2",
+              "lang_d7403a53",
+              "lang_6c130090"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -10269,9 +10648,11 @@
           }
         },
         null,
+        null,
         null
       ],
       [
+        null,
         null,
         null,
         null,
@@ -10755,9 +11136,30 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d24efe0e}{lang_b13b0d78} in polynomial time \\citet{Amarilli_2018}. \\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_d24efe0e}{lang_ea9b5299} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. If SDNNF compiled to TDD in quasi-polynomial time, then nOBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore SDNNF cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 33,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_d24efe0e",
+              "lang_b13b0d78",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
+        null,
         null,
         null,
         null,
@@ -11193,7 +11595,28 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Beame_2013"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_6c130090}{lang_4e62a038} in quasi-polynomial time \\citet{Amarilli_2018,Beame_2013}. \\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_6c130090}{lang_ea9b5299} in quasi-polynomial time \\citet{Darwiche_2002,Amarilli_2018}. If uFBDD compiled to TDD in quasi-polynomial time, then d-DNNF would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore uFBDD cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 34,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_6c130090",
+              "lang_4e62a038",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -11550,6 +11973,7 @@
           }
         },
         null,
+        null,
         null
       ],
       [
@@ -11900,6 +12324,7 @@
           ],
           "derived": false
         },
+        null,
         null,
         null
       ],
@@ -12376,7 +12801,27 @@
           }
         },
         null,
-        null
+        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_684b1ca7}{lang_981b62f0} in polynomial time \\citet{Amarilli_2018}. \\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\nedgeref{lang_684b1ca7}{lang_ea9b5299} in quasi-polynomial time \\citet{Amarilli_2018}. If dec-DNNF compiled to TDD in quasi-polynomial time, then FBDD would compile to d-SDNNF in at most quasi-polynomial time, contradicting the above. Therefore dec-DNNF cannot compile to TDD in quasi-polynomial time.",
+          "derivationOrder": 35,
+          "proofTrace": {
+            "rule": "contradiction",
+            "triedStatus": "no-poly-quasi",
+            "witnessPath": [
+              "lang_684b1ca7",
+              "lang_981b62f0",
+              "lang_d7403a53",
+              "lang_ea9b5299"
+            ]
+          }
+        }
       ],
       [
         null,
@@ -12921,6 +13366,38 @@
         },
         null,
         null,
+        null,
+        null
+      ],
+      [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         null
       ],
       [
@@ -12951,6 +13428,7 @@
         null,
         null,
         null,
+        null,
         null
       ],
       [
@@ -12958,24 +13436,183 @@
         null,
         null,
         null,
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}. Therefore TDD compiles to d-DNNF in polynomial time.",
+          "derivationOrder": 8,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_6c130090"
+            ],
+            "level": "poly"
+          }
+        },
+        {
+          "status": "poly",
+          "description": "Theorem 3 of new Capelli/Choi/Menge/Muñoz/Van den Broeck paper",
+          "refs": [],
+          "derived": false
+        },
+        null,
+        null,
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}. Therefore TDD compiles to DNNF in polynomial time.",
+          "derivationOrder": 9,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_3bebcab7"
+            ],
+            "level": "poly"
+          }
+        },
+        null,
+        null,
+        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_1df07cc3} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. Therefore TDD compiles to nFBDD in quasi-polynomial time.",
+          "derivationOrder": 2,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_1df07cc3"
+            ],
+            "level": "quasi"
+          }
+        },
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018",
+            "Darwiche_2002"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_5bf00851} in polynomial time \\citet{Amarilli_2018,Darwiche_2002}. Therefore TDD compiles to NNF in polynomial time.",
+          "derivationOrder": 10,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_5bf00851"
+            ],
+            "level": "poly"
+          }
+        },
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_d24efe0e} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. Therefore TDD compiles to nOBDD in quasi-polynomial time.",
+          "derivationOrder": 4,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_d24efe0e"
+            ],
+            "level": "quasi"
+          }
+        },
         null,
         null,
         null,
         null,
+        {
+          "status": "poly",
+          "refs": [
+            "Amarilli_2018"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_b13b0d78} in polynomial time \\citet{Amarilli_2018}. Therefore TDD compiles to SDNNF in polynomial time.",
+          "derivationOrder": 11,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_b13b0d78"
+            ],
+            "level": "poly"
+          }
+        },
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_4e62a038} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. Therefore TDD compiles to uFBDD in quasi-polynomial time.",
+          "derivationOrder": 6,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_4e62a038"
+            ],
+            "level": "quasi"
+          }
+        },
+        {
+          "status": "unknown-poly-quasi",
+          "refs": [
+            "Amarilli_2018",
+            "Bollig_2018",
+            "Beame_2015"
+          ],
+          "hidden": false,
+          "derived": true,
+          "description": "\\edgeref{lang_d7403a53}{lang_ea9b5299} in polynomial time. \\edgeref{lang_ea9b5299}{lang_c2df8c2b} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015}. Therefore TDD compiles to uOBDD in quasi-polynomial time.",
+          "derivationOrder": 7,
+          "proofTrace": {
+            "rule": "transitivity",
+            "path": [
+              "lang_d7403a53",
+              "lang_ea9b5299",
+              "lang_c2df8c2b"
+            ],
+            "level": "quasi"
+          }
+        },
         null,
         null,
         null,
@@ -12983,37 +13620,7 @@
         null,
         null
       ]
-    ],
-    "indexByLanguage": {
-      "lang_8f666aa0": 0,
-      "lang_bb65ddb5": 1,
-      "lang_89649e36": 2,
-      "lang_83e3b023": 3,
-      "lang_6c130090": 4,
-      "lang_ea9b5299": 5,
-      "lang_91f812d0": 6,
-      "lang_4c204bf3": 7,
-      "lang_3bebcab7": 8,
-      "lang_684b1ca7": 9,
-      "lang_6ae90adc": 10,
-      "lang_e02902d0": 11,
-      "lang_1df07cc3": 12,
-      "lang_5bf00851": 13,
-      "lang_d24efe0e": 14,
-      "lang_d69995dd": 15,
-      "lang_27fffab2": 16,
-      "lang_1afefbe2": 17,
-      "lang_9c84a267": 18,
-      "lang_b13b0d78": 19,
-      "lang_3c803ba1": 20,
-      "lang_4e62a038": 21,
-      "lang_c2df8c2b": 22,
-      "lang_b9d72a7c": 23,
-      "lang_981b62f0": 24,
-      "lang_0f27d539": 25,
-      "lang_4ae03bc8": 26,
-      "lang_82fa749e": 27
-    }
+    ]
   },
   "separatingFunctions": [
     {
@@ -13104,7 +13711,7 @@
       "id": "poly",
       "name": "Polynomial",
       "label": "$\\leq_p$",
-      "description": "Polynomial transformation exists",
+      "description": "Polynomial compilation exists",
       "style": {
         "lineStyle": "solid",
         "width": 2,
@@ -13122,8 +13729,8 @@
     {
       "id": "no-poly-unknown-quasi",
       "name": "No Poly, Quasi Unknown",
-      "label": "$\\not\\leq_p$ · $\\leq_q^?$",
-      "description": "No polynomial algorithm; quasi-polynomial unknown",
+      "label": "$\\not\\leq_p \\ \\leq_q^?$",
+      "description": "No polynomial compilation; quasi-polynomial unknown",
       "style": {
         "lineStyle": "solid",
         "width": 2,
@@ -13141,8 +13748,8 @@
     {
       "id": "no-poly-quasi",
       "name": "No Poly, Quasi Exists",
-      "label": "$\\not\\leq_p$ · $\\leq_q$",
-      "description": "No polynomial algorithm; quasi-polynomial unknown",
+      "label": "$\\not\\leq_p \\ \\leq_q$",
+      "description": "No polynomial compilation; quasi-polynomial exists",
       "style": {
         "lineStyle": "solid",
         "width": 2,
@@ -13160,7 +13767,7 @@
     {
       "id": "unknown-poly-quasi",
       "name": "Poly Unknown, Quasi Exists",
-      "label": "$\\leq_p^?$ · $\\leq_q$",
+      "label": "$\\leq_p^? \\ \\leq_q$",
       "description": "Polynomial unknown; quasi-polynomial exists",
       "style": {
         "lineStyle": "solid",
@@ -13199,7 +13806,7 @@
       "id": "no-quasi",
       "name": "No Quasi",
       "label": "$\\not\\leq_q$",
-      "description": "No quasi-polynomial algorithm (implies no polynomial)",
+      "description": "No quasi-polynomial compilation (implies no polynomial)",
       "style": {
         "lineStyle": "solid",
         "width": 2,

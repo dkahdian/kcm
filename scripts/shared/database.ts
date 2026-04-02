@@ -2,7 +2,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import type { KCAdjacencyMatrix, KCLanguage, KCReference, KCSeparatingFunction } from '../../src/lib/types.js';
+import type {
+  KCAdjacencyMatrix,
+  KCLanguage,
+  KCReference,
+  KCSeparatingFunction,
+  NodePositionsByLanguageName
+} from '../../src/lib/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +20,7 @@ export interface DatabaseSchema {
   adjacencyMatrix: KCAdjacencyMatrix;
   references: KCReference[];
   separatingFunctions: KCSeparatingFunction[];
+  defaultNodePositionsByLanguageName?: NodePositionsByLanguageName;
   tags?: Record<string, unknown>;
   metadata?: Record<string, unknown>;
   operations: Record<string, unknown>;

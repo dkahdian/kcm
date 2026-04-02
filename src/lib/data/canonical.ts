@@ -1,4 +1,8 @@
-import type { GraphData, KCSeparatingFunction } from '../types.js';
+import type {
+  GraphData,
+  KCSeparatingFunction,
+  NodePositionsByLanguageName
+} from '../types.js';
 import database from './database.json';
 import { allLanguages } from './languages.js';
 import { adjacencyMatrixData } from './edges.js';
@@ -11,6 +15,27 @@ import { initNameMap } from '../utils/language-id.js';
 initNameMap(allLanguages);
 
 const separatingFunctions = (database.separatingFunctions ?? []) as KCSeparatingFunction[];
+const rawDefaultNodePositions = (database as { defaultNodePositionsByLanguageName?: unknown })
+  .defaultNodePositionsByLanguageName;
+const defaultNodePositionsByLanguageName: NodePositionsByLanguageName | undefined = (() => {
+  if (!rawDefaultNodePositions || typeof rawDefaultNodePositions !== 'object') {
+    return undefined;
+  }
+
+  const normalized: NodePositionsByLanguageName = {};
+  for (const [languageName, rawPosition] of Object.entries(rawDefaultNodePositions as Record<string, unknown>)) {
+    if (!rawPosition || typeof rawPosition !== 'object') continue;
+
+    const x = (rawPosition as { x?: unknown }).x;
+    const y = (rawPosition as { y?: unknown }).y;
+    if (typeof x !== 'number' || typeof y !== 'number') continue;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+
+    normalized[languageName] = { x, y };
+  }
+
+  return Object.keys(normalized).length > 0 ? normalized : undefined;
+})();
 const metadata = ('metadata' in database
   ? (database as { metadata?: Record<string, unknown> }).metadata
   : undefined);
@@ -22,5 +47,6 @@ export const canonicalDataset: GraphData = {
   complexities: COMPLEXITIES,
   references: allReferences,
   separatingFunctions,
+  defaultNodePositionsByLanguageName,
   metadata
 };

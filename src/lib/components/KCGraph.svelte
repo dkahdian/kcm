@@ -10,6 +10,7 @@
       GraphData,
       FilteredGraphData,
       KCLanguage,
+      NodePosition,
       SelectedEdge
     } from '$lib/types.js';
   import { getEdgeEndpointStyle } from '$lib/data/complexities.js';
@@ -25,11 +26,6 @@
     cytoscape.use(dagre);
     nodeEdgeHtmlLabel(cytoscape as any);
     pluginsRegistered = true;
-  }
-
-  interface NodePosition {
-    x: number;
-    y: number;
   }
 
   type StoredNodePositions = Record<string, NodePosition>;
@@ -191,6 +187,7 @@
     
     const visibleLanguages = graphData.languages
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
+    const configuredDefaultPositions = graphData.defaultNodePositionsByLanguageName ?? {};
 
     const storedPositions = loadStoredNodePositions();
     
@@ -356,18 +353,22 @@
       
       members.forEach((nodeId, idx) => {
         const lang = visibleLanguages.find(l => l.id === nodeId)!;
-        const defaultPosition = {
+        const computedDefaultPosition = {
           x: startX + idx * spacing,
           y: centerPos.y
         };
-        const defaultPositionClone = { ...defaultPosition };
+        const configuredDefaultPosition = configuredDefaultPositions[lang.name];
+        const defaultPosition = configuredDefaultPosition
+          ? { x: configuredDefaultPosition.x, y: configuredDefaultPosition.y }
+          : { ...computedDefaultPosition };
+
         // Store default position (clone to prevent later mutation)
-        defaultPositions.set(lang.id, defaultPositionClone);
+        defaultPositions.set(lang.id, { ...defaultPosition });
 
         const storedPosition = storedPositions[lang.id];
         const initialPosition = storedPosition
           ? { x: storedPosition.x, y: storedPosition.y }
-          : { ...defaultPositionClone };
+          : { ...defaultPosition };
 
         const labelPrefix = lang.visual?.labelPrefix || '';
         const labelSuffix = lang.visual?.labelSuffix || '';

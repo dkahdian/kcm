@@ -345,6 +345,13 @@ export interface KCAdjacencyMatrix {
   matrix: (DirectedSuccinctnessRelation | null)[][];
 }
 
+export interface NodePosition {
+  x: number;
+  y: number;
+}
+
+export type NodePositionsByLanguageName = Record<string, NodePosition>;
+
 export interface GraphData {
   languages: KCLanguage[];
   /** Directed succinctness relationships stored as an adjacency matrix */
@@ -357,6 +364,8 @@ export interface GraphData {
   references: KCReference[];
   /** separating function registry */
   separatingFunctions: KCSeparatingFunction[];
+  /** optional default node positions, keyed by language name */
+  defaultNodePositionsByLanguageName?: NodePositionsByLanguageName;
   /** optional metadata copied from database.json */
   metadata?: Record<string, unknown>;
 }

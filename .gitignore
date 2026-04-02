@@ -27,3 +27,8 @@ vite.config.ts.timestamp-*
 
 # Meta-Knowledge-Compilation files
 /notebooks
+/audit-results.txt
+
+# Lean build artifacts
+lean/.lake
+lean/build

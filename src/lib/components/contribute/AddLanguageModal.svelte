@@ -2,6 +2,7 @@
   import type { ReferenceForTooltip } from '../../../routes/contribute/logic.js';
 
   type Language = {
+    id?: string;
     name: string;
     fullName: string;
     definition: string;
@@ -51,6 +52,7 @@
   }: Props = $props();
 
   let name = $state('');
+  let languageId = $state<string | undefined>(undefined);
   let fullName = $state('');
   let definition = $state('');
   let definitionRefs = $state<string[]>([]);
@@ -66,6 +68,7 @@
   $effect(() => {
     if (isOpen) {
       if (isEdit && initialData) {
+        languageId = initialData.id;
         name = initialData.name;
         fullName = initialData.fullName;
         definition = initialData.definition;
@@ -82,6 +85,7 @@
   });
 
   function resetForm() {
+    languageId = undefined;
     name = '';
     fullName = '';
     definition = '';
@@ -103,6 +107,7 @@
 
     try {
       const result = await onAdd({
+        id: languageId,
         name: name.trim(),
         fullName: fullName.trim(),
         definition: definition.trim(),

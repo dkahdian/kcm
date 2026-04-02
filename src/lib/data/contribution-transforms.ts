@@ -58,7 +58,7 @@ function convertToKCLanguage(
   }
 
   return {
-    id: generateLanguageId(language.name),
+    id: language.id ?? generateLanguageId(language.name),
     name: language.name,
     fullName: language.fullName,
     definition: language.definition,
@@ -216,7 +216,7 @@ export function applyContributionQueue(
         break;
       }
       case 'language:edit': {
-        const langId = generateLanguageId(entry.payload.name);
+        const langId = entry.payload.id ?? generateLanguageId(entry.payload.name);
         const index = merged.languages.findIndex((existing) => existing.id === langId);
         if (index === -1) {
           // If language not present yet, treat as addition to keep queue idempotent

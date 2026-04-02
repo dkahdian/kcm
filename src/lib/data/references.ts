@@ -1,96 +1,7 @@
 import type { KCReference } from '../types.js';
 import { extractCitationKey } from '../utils/reference-id.js';
+import { extractBibtexField, cleanBibtexText } from '../utils/bibtex.js';
 import database from './database.json';
-
-/**
- * Extract a BibTeX field value, handling nested braces properly.
- * Supports both {value} and "value" delimiters.
- */
-function extractBibtexField(bibtex: string, fieldName: string): string | null {
-  // Match field = {value} or field = "value" or field = value (for simple values like year)
-  const fieldPattern = new RegExp(
-    `${fieldName}\\s*=\\s*(?:\\{|"|)`,
-    'i'
-  );
-  
-  const match = fieldPattern.exec(bibtex);
-  if (!match) return null;
-  
-  const startPos = match.index + match[0].length;
-  const delimiter = match[0].slice(-1);
-  
-  // For undelimited values (like year = 2002)
-  if (delimiter !== '{' && delimiter !== '"') {
-    const valueMatch = bibtex.slice(match.index).match(new RegExp(`${fieldName}\\s*=\\s*([^,}\\s]+)`, 'i'));
-    return valueMatch ? valueMatch[1] : null;
-  }
-  
-  const closeDelimiter = delimiter === '{' ? '}' : '"';
-  
-  let depth = delimiter === '{' ? 1 : 0;
-  let pos = startPos;
-  
-  while (pos < bibtex.length) {
-    const char = bibtex[pos];
-    
-    if (delimiter === '{') {
-      if (char === '{') depth++;
-      else if (char === '}') {
-        depth--;
-        if (depth === 0) break;
-      }
-    } else {
-      // For quoted strings, just find the closing quote (ignoring escaped quotes)
-      if (char === '"' && bibtex[pos - 1] !== '\\') break;
-    }
-    pos++;
-  }
-  
-  return bibtex.slice(startPos, pos);
-}
-
-/**
- * Clean LaTeX escape sequences and formatting from a string.
- * Converts common LaTeX accents to Unicode characters.
- */
-function cleanLatexString(str: string): string {
-  return str
-    // Handle double-escaped braces (from JSON encoding)
-    .replace(/\\\\/g, '\\')
-    // Common LaTeX accents - must handle both {\"{e}} and \"{e} forms
-    .replace(/\{?\\"\{([aeiouAEIOU])\}\}?/g, (_, c) => {
-      const map: Record<string, string> = { a: 'ä', e: 'ë', i: 'ï', o: 'ö', u: 'ü', A: 'Ä', E: 'Ë', I: 'Ï', O: 'Ö', U: 'Ü' };
-      return map[c] || c;
-    })
-    .replace(/\\"([aeiouAEIOU])/g, (_, c) => {
-      const map: Record<string, string> = { a: 'ä', e: 'ë', i: 'ï', o: 'ö', u: 'ü', A: 'Ä', E: 'Ë', I: 'Ï', O: 'Ö', U: 'Ü' };
-      return map[c] || c;
-    })
-    .replace(/\{?\\'([aeiouAEIOU])\}?/g, (_, c) => {
-      const map: Record<string, string> = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú', A: 'Á', E: 'É', I: 'Í', O: 'Ó', U: 'Ú' };
-      return map[c] || c;
-    })
-    .replace(/\{?\\`([aeiouAEIOU])\}?/g, (_, c) => {
-      const map: Record<string, string> = { a: 'à', e: 'è', i: 'ì', o: 'ò', u: 'ù', A: 'À', E: 'È', I: 'Ì', O: 'Ò', U: 'Ù' };
-      return map[c] || c;
-    })
-    .replace(/\{?\\~([nNaAoO])\}?/g, (_, c) => {
-      const map: Record<string, string> = { n: 'ñ', N: 'Ñ', a: 'ã', A: 'Ã', o: 'õ', O: 'Õ' };
-      return map[c] || c;
-    })
-    .replace(/\{?\\c\{([cC])\}\}?/g, (_, c) => c === 'c' ? 'ç' : 'Ç')
-    .replace(/\{?\\v\{([sczSCZ])\}\}?/g, (_, c) => {
-      const map: Record<string, string> = { s: 'š', c: 'č', z: 'ž', S: 'Š', C: 'Č', Z: 'Ž' };
-      return map[c] || c;
-    })
-    // Remove remaining braces used for grouping
-    .replace(/\{([^{}]*)\}/g, '$1')
-    // Convert -- to en-dash
-    .replace(/--/g, '–')
-    // Clean up extra whitespace
-    .replace(/\s+/g, ' ')
-    .trim();
-}
 
 /**
  * Parse BibTeX entry to extract metadata and format as IEEE citation
@@ -121,7 +32,7 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
     const authorList = authorRaw.split(/\s+and\s+/i);
     
     const formattedAuthors = authorList.map(author => {
-      const cleaned = cleanLatexString(author);
+      const cleaned = cleanBibtexText(author);
       const parts = cleaned.split(',').map(s => s.trim());
       if (parts.length >= 2) {
         const lastName = parts[0];
@@ -144,14 +55,14 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
       authorsStr = formattedAuthors.slice(0, -1).join(', ') + ', and ' + formattedAuthors[formattedAuthors.length - 1];
     }
     
-    const titleText = cleanLatexString(titleRaw);
+    const titleText = cleanBibtexText(titleRaw);
     
     title = `${authorsStr}, "${titleText},"`;
     
     // Use journal or booktitle (for conference papers)
     const venue = journal || booktitle;
     if (venue) {
-      title += ` ${cleanLatexString(venue)},`;
+      title += ` ${cleanBibtexText(venue)},`;
     }
     
     if (volume) {
@@ -159,12 +70,12 @@ export function parseBibtex(bibtex: string): { id: string; title: string; href: 
     }
     
     if (pages) {
-      title += ` pp. ${cleanLatexString(pages)},`;
+      title += ` pp. ${cleanBibtexText(pages)},`;
     }
     
     title += ` ${year}.`;
   } else if (titleRaw) {
-    title = cleanLatexString(titleRaw);
+    title = cleanBibtexText(titleRaw);
   }
   
   return { id, title, href };

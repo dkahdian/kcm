@@ -133,6 +133,23 @@ interface DerivedOpFact {
 
 type DerivedFact = DerivedEdgeFact | DerivedOpFact;
 
+function validateLanguageConstructors(languages: KCLanguage[]): void {
+  const missing = languages
+    .filter((lang) => !LANG_CONSTRUCTOR[lang.id])
+    .map((lang) => `${lang.id} (${lang.name})`)
+    .sort();
+
+  if (missing.length === 0) return;
+
+  throw new Error(
+    [
+      'Lean language mapping is incomplete.',
+      'Add constructors for these IDs in LANG_CONSTRUCTOR (scripts/generate-lean.ts):',
+      ...missing.map((m) => `  - ${m}`)
+    ].join('\n')
+  );
+}
+
 // Edge status → Lean claims
 
 /** All statuses that carry a "compilesInPoly" positive claim. */
@@ -490,6 +507,7 @@ let allLemmas: OperationLemma[] = [];
 function main(): void {
   const db = loadDatabase();
   const { languages, adjacencyMatrix: am, operationLemmas } = db;
+  validateLanguageConstructors(languages);
   allLemmas = (operationLemmas ?? []) as OperationLemma[];
 
   const lines: string[] = [];

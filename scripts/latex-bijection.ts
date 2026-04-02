@@ -38,6 +38,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { DATABASE_PATH, loadDatabase, saveDatabase, type DatabaseSchema } from './shared/database.js';
+import { cleanBibtexText, extractBibtexField } from '../src/lib/utils/bibtex.js';
 
 // Get script directory (still needed for LaTeX/BibTeX paths)
 const __filename = fileURLToPath(import.meta.url);
@@ -1159,83 +1160,10 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
 }
 
 /**
- * Extract a BibTeX field value (handles both {braced} and "quoted" values).
- */
-function extractBibtexField(bibtex: string, field: string): string | null {
-  const fieldPattern = new RegExp(`${field}\\s*=\\s*`, 'i');
-  const match = fieldPattern.exec(bibtex);
-  if (!match) return null;
-
-  let pos = match.index + match[0].length;
-  while (pos < bibtex.length && /\s/.test(bibtex[pos])) pos++;
-  if (pos >= bibtex.length) return null;
-
-  const delimiter = bibtex[pos];
-
-  if (delimiter === '{') {
-    const start = pos + 1;
-    let depth = 1;
-    pos = start;
-
-    while (pos < bibtex.length && depth > 0) {
-      const char = bibtex[pos];
-      if (char === '{') depth++;
-      else if (char === '}') depth--;
-      pos++;
-    }
-
-    if (depth !== 0) return null;
-    return bibtex.slice(start, pos - 1).replace(/\s+/g, ' ').trim();
-  }
-
-  if (delimiter === '"') {
-    const start = pos + 1;
-    pos = start;
-    while (pos < bibtex.length) {
-      if (bibtex[pos] === '"' && bibtex[pos - 1] !== '\\') {
-        return bibtex.slice(start, pos).replace(/\s+/g, ' ').trim();
-      }
-      pos++;
-    }
-    return null;
-  }
-
-  const start = pos;
-  while (pos < bibtex.length && bibtex[pos] !== ',' && bibtex[pos] !== '\n' && bibtex[pos] !== '\r') {
-    pos++;
-  }
-  return bibtex.slice(start, pos).trim() || null;
-}
-
-/**
  * Extract title from BibTeX entry
  */
 function extractTitleFromBibtex(bibtex: string): string | null {
   return extractBibtexField(bibtex, 'title');
-}
-
-/**
- * Convert common BibTeX/LaTeX escapes in display strings to plain text.
- */
-function cleanBibtexText(value: string): string {
-  const umlautMap: Record<string, string> = {
-    a: '\u00E4', A: '\u00C4',
-    e: '\u00EB', E: '\u00CB',
-    i: '\u00EF', I: '\u00CF',
-    o: '\u00F6', O: '\u00D6',
-    u: '\u00FC', U: '\u00DC'
-  };
-
-  return value
-    .replace(/\\\\/g, '\\')
-    .replace(/\{\\"\{([aeiouAEIOU])\}\}/g, (_, c) => umlautMap[c] ?? c)
-    .replace(/\\"\{([aeiouAEIOU])\}/g, (_, c) => umlautMap[c] ?? c)
-    .replace(/\\"([aeiouAEIOU])/g, (_, c) => umlautMap[c] ?? c)
-    .replace(/\\\{/g, '')
-    .replace(/\\\}/g, '')
-    .replace(/\{([^{}]*)\}/g, '$1')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 /**

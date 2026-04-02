@@ -118,8 +118,8 @@ export function getAvailableLanguages(
   languagesToEdit: LanguageToAdd[]
 ): Array<{ id: string; name: string }> {
   const existing = existingLanguages.map((l) => ({ id: l.id, name: l.name }));
-  const newLangs = languagesToAdd.map((l) => ({ id: generateLanguageId(l.name), name: l.name }));
-  const editedLangs = languagesToEdit.map((l) => ({ id: generateLanguageId(l.name), name: l.name }));
+  const newLangs = languagesToAdd.map((l) => ({ id: l.id ?? generateLanguageId(l.name), name: l.name }));
+  const editedLangs = languagesToEdit.map((l) => ({ id: l.id ?? generateLanguageId(l.name), name: l.name }));
   return [...existing, ...newLangs, ...editedLangs];
 }
 
@@ -128,6 +128,7 @@ export function getAvailableLanguages(
  */
 export function convertLanguageForEdit(lang: any): LanguageToAdd {
   return {
+    id: lang.id,
     name: lang.name,
     fullName: lang.fullName || '',
     definition: lang.definition || '',

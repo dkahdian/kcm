@@ -32,6 +32,7 @@ export type ReferenceToAdd = {
 };
 
 export type LanguageToAdd = {
+  id?: string;
   name: string;
   fullName: string;
   definition: string;

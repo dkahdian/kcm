@@ -1,5 +1,0 @@
-{"log":
- [{"message":
-   ".> LEAN_PATH=.\\.\\.lake\\build\\lib PATH c:\\Users\\david\\.elan\\toolchains\\leanprover--lean4---v4.14.0\\bin\\lean.exe -DautoImplicit=false .\\.\\.\\.\\KCMap\\Basic.lean -R .\\.\\.\\. -o .\\.\\.lake\\build\\lib\\KCMap\\Basic.olean -i .\\.\\.lake\\build\\lib\\KCMap\\Basic.ilean -c .\\.\\.lake\\build\\ir\\KCMap\\Basic.c --json",
-   "level": "trace"}],
- "depHash": "18096340353613376722"}

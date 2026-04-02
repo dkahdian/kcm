@@ -381,9 +381,15 @@
   function handleLanguageAddSubmit(language: LanguageToAdd): OperationResult {
     if (modal.kind === 'edit-queued-add') {
       const entry = languagesToAdd[modal.index];
-      if (entry) updateQueueEntry(entry.queueEntryId, 'language:new', cloneLanguageEntry(language));
+      if (entry) {
+        const payload = cloneLanguageEntry(language);
+        payload.id = entry.payload.id ?? payload.id ?? generateLanguageId(payload.name);
+        updateQueueEntry(entry.queueEntryId, 'language:new', payload);
+      }
     } else {
-      addQueueEntry({ id: createQueueEntryId(), kind: 'language:new', payload: cloneLanguageEntry(language) });
+      const payload = cloneLanguageEntry(language);
+      payload.id = payload.id ?? generateLanguageId(payload.name);
+      addQueueEntry({ id: createQueueEntryId(), kind: 'language:new', payload });
     }
     return { success: true };
   }
@@ -391,13 +397,24 @@
   function handleLanguageEditSubmit(language: LanguageToAdd): OperationResult {
     if (modal.kind === 'edit-queued-edit') {
       const entry = languagesToEdit[modal.index];
-      if (entry) updateQueueEntry(entry.queueEntryId, 'language:edit', cloneLanguageEntry(language));
+      if (entry) {
+        const payload = cloneLanguageEntry(language);
+        payload.id = entry.payload.id ?? payload.id;
+        updateQueueEntry(entry.queueEntryId, 'language:edit', payload);
+      }
     } else {
-      const existing = languagesToEdit.find((e) => e.payload.name === language.name);
+      const languageId = language.id ?? generateLanguageId(language.name);
+      const existing = languagesToEdit.find((e) =>
+        (e.payload.id ?? generateLanguageId(e.payload.name)) === languageId
+      );
       if (existing) {
-        updateQueueEntry(existing.queueEntryId, 'language:edit', cloneLanguageEntry(language));
+        const payload = cloneLanguageEntry(language);
+        payload.id = languageId;
+        updateQueueEntry(existing.queueEntryId, 'language:edit', payload);
       } else {
-        addQueueEntry({ id: createQueueEntryId(), kind: 'language:edit', payload: cloneLanguageEntry(language) });
+        const payload = cloneLanguageEntry(language);
+        payload.id = languageId;
+        addQueueEntry({ id: createQueueEntryId(), kind: 'language:edit', payload });
       }
     }
     return { success: true };
@@ -442,13 +459,15 @@
   function handleDeleteLanguageToAdd(index: number) {
     const entry = languagesToAdd[index];
     if (!entry) return;
-    deleteLanguage(entry.queueEntryId, entry.payload.name);
+    const langId = entry.payload.id ?? generateLanguageId(entry.payload.name);
+    deleteLanguage(entry.queueEntryId, langId);
   }
 
   function handleDeleteLanguageToEdit(index: number) {
     const entry = languagesToEdit[index];
     if (!entry) return;
-    deleteLanguage(entry.queueEntryId, entry.payload.name);
+    const langId = entry.payload.id ?? generateLanguageId(entry.payload.name);
+    deleteLanguage(entry.queueEntryId, langId);
   }
 
   function handleDeleteRelationship(index: number) {
@@ -459,9 +478,7 @@
   }
 
   // Cascade delete: when a language is deleted, remove its relationships
-  function deleteLanguage(queueEntryId: string, langName: string) {
-    // Generate the language ID from the name to match against relationships
-    const langId = generateLanguageId(langName);
+  function deleteLanguage(queueEntryId: string, langId: string) {
     const relatedRelationshipIds = relationships
       .filter((entry) => entry.payload.sourceId === langId || entry.payload.targetId === langId)
       .map((entry) => entry.queueEntryId);
@@ -473,7 +490,7 @@
       if (current.size === 0) return current;
       const updated = new Set(current);
       for (const key of Array.from(updated)) {
-        if (key.startsWith(`${langName}->`) || key.endsWith(`->${langName}`)) {
+        if (key.startsWith(`${langId}->`) || key.endsWith(`->${langId}`)) {
           updated.delete(key);
         }
       }

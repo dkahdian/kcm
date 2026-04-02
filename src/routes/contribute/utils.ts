@@ -73,6 +73,7 @@ export function sanitizeSubmissionId(value: unknown): string | null {
 
 export function cloneLanguageEntry(entry: LanguageToAdd): LanguageToAdd {
   return {
+    id: entry.id,
     name: entry.name,
     fullName: entry.fullName,
     definition: entry.definition,

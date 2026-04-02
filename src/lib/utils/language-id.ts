@@ -56,3 +56,4 @@ export function idToName(id: string): string {
 export function nameToId(name: string): string | undefined {
   return _nameToIdMap.get(name);
 }
+

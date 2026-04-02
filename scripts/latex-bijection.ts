@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 /**
  * Bidirectional transformation between JSON database and LaTeX/Overleaf format.
  * 
@@ -19,12 +21,12 @@
  * 
  * CANONICAL CLAIM FORMAT for edges (strictly enforced):
  *   \begin{claim}[status=STATUS]
- *   $LANG1$ transforms to $LANG2$ (unless CAVEAT)?
+ *   \langref{LANG1} transforms to \langref{LANG2} (unless CAVEAT)?
  *   \end{claim}
  * 
  * CANONICAL CLAIM FORMAT for operations (strictly enforced):
  *   \begin{claim}[lang=LANG_ID, op=OP_CODE]
- *   $LANG$ supports OP_LABEL COMPLEXITY_TEXT (unless CAVEAT)?
+ *   \langref{LANG} supports OP_LABEL COMPLEXITY_TEXT (unless CAVEAT)?
  *   \end{claim}
  * 
  * Usage:
@@ -123,25 +125,15 @@ const CANONICAL_OP_COMPLEXITIES: Record<string, string> = {
  * This is a bijection - must be reversible by parseLanguageName().
  * 
  * Examples:
- *   "NNF" → "$NNF$"
- *   "OBDD$_<$" → "$OBDD_<$"
- *   "d-DNNF" → "$d$-$DNNF$"
- *   "dec-SDNNF" → "$dec$-$SDNNF$"
+ *   "NNF" → "\\langref{NNF}"
+ *   "OBDD$_<$" → "\\langref{$OBDD_<$}"
+ *   "d-DNNF" → "\\langref{d-DNNF}"
+ *   "dec-SDNNF" → "\\langref{dec-SDNNF}"
  */
 function languageToLatex(name: string): string {
-  // If it already has $ signs, handle subscript notation
-  if (name.includes('$')) {
-    // OBDD$_<$ → $OBDD_<$
-    return '$' + name.replace(/\$/g, '') + '$';
-  }
-  
-  // Handle hyphenated names: d-DNNF → $d$-$DNNF$, dec-SDNNF → $dec$-$SDNNF$
-  if (name.includes('-')) {
-    return name.split('-').map(p => `$${p}$`).join('-');
-  }
-  
-  // Simple names: NNF → $NNF$
-  return `$${name}$`;
+  const stripped = name.replace(/\$/g, '');
+  const escaped = stripped.replace(/_/g, '\\_');
+  return `\\langref{${escaped}}`;
 }
 
 /**
@@ -149,14 +141,21 @@ function languageToLatex(name: string): string {
  * Inverse of languageToLatex().
  * 
  * Examples:
- *   "$NNF$" → "NNF"
- *   "$OBDD_<$" → "OBDD$_<$"
- *   "$d$-$DNNF$" → "d-DNNF"
+ *   "\\langref{NNF}" → "NNF"
+ *   "\\langref{$OBDD_<$}" → "OBDD$_<$"
+ *   "\\langref{d-DNNF}" → "d-DNNF"
+ *   "$d$-$DNNF$" → "d-DNNF" (legacy)
  */
 function parseLanguageName(latex: string): string {
   let name = latex.trim();
+
+  // Handle \langref{...} wrapper first.
+  const langRefMatch = name.match(/^\\langref\{([\s\S]+)\}$/);
+  if (langRefMatch) {
+    name = langRefMatch[1].trim().replace(/\\_/g, '_');
+  }
   
-  // Handle $d$-$DNNF$ format → d-DNNF
+  // Handle legacy $d$-$DNNF$ format → d-DNNF
   if (name.includes('-')) {
     // Split by -, parse each part, rejoin
     return name.split('-').map(part => {
@@ -168,12 +167,12 @@ function parseLanguageName(latex: string): string {
     }).join('-');
   }
   
-  // Handle $OBDD_<$ format → OBDD$_<$
+  // Handle $OBDD_<$ format → OBDD$_<$ (and similar subscripted names)
   if (name.startsWith('$') && name.endsWith('$')) {
     const inner = name.slice(1, -1);
-    // If it has subscript notation, convert back
-    if (inner.includes('_<') || inner.includes('_>')) {
-      return inner.replace(/(_[<>])/g, '$$$1$$');
+    // If it has subscript notation, convert back to the DB style with $...$.
+    if (inner.includes('_')) {
+      return inner.replace(/(_[A-Za-z0-9<>]+)/g, '$$$1$$');
     }
     // Otherwise just return the inner part
     return inner;
@@ -682,7 +681,8 @@ interface ParsedClaim {
  * 
  * Expected format:
  *   \begin{claim}
- *   $LANG1$ TRANSFORMATION_TYPE $LANG2$ (unless CAVEAT)? (\citet{REFS})?
+ *   LANG1 TRANSFORMATION_TYPE LANG2 (unless CAVEAT)? (\citet{REFS})?
+ *   where LANG is either legacy $...$ tokenization or \langref{...}
  *   \end{claim}
  * 
  * Returns null if the format doesn't match exactly.
@@ -712,7 +712,7 @@ function parseCanonicalClaim(
     body = body.slice(0, caveatMatch.index).trim();
   }
   
-  // Now body should be: $LANG1$ TRANSFORMATION_TYPE $LANG2$
+  // Now body should be: LANG1 TRANSFORMATION_TYPE LANG2
   // We need to infer the status from the transformation text
   
   // Find which CANONICAL_STATUS the transformation text matches
@@ -733,9 +733,9 @@ function parseCanonicalClaim(
     return null;
   }
   
-  // Build regex to match: $LANG1$ TRANSFORMATION_TYPE $LANG2$
-  // LANG can be like: $NNF$, $OBDD_<$, $d$-$DNNF$
-  const langPattern = '(\\$[^$]+\\$(?:-\\$[^$]+\\$)?)';  // Matches $X$ or $X$-$Y$
+  // Build regex to match: LANG1 TRANSFORMATION_TYPE LANG2
+  // LANG can be legacy $NNF$, $d$-$DNNF$ or \langref{NNF}, \langref{$OBDD_<$}
+  const langPattern = '(\\\\langref\{[^}]+\}|\\$[^$]+\\$(?:-\\$[^$]+\\$)*)';
   const claimRegex = new RegExp(
     `^${langPattern}\\s+${escapeRegex(transformText)}\\s+${langPattern}$`
   );
@@ -743,7 +743,7 @@ function parseCanonicalClaim(
   const claimMatch = body.match(claimRegex);
   if (!claimMatch) {
     console.warn(`Claim body doesn't match expected format for status="${status}":`);
-    console.warn(`  Expected: $LANG1$ ${transformText} $LANG2$`);
+    console.warn(`  Expected: LANG1 ${transformText} LANG2`);
     console.warn(`  Got: ${body}`);
     return null;
   }
@@ -1162,9 +1162,49 @@ function updateReferencesFromBibtex(database: DatabaseSchema, bibtexEntries: Map
  * Extract a BibTeX field value (handles both {braced} and "quoted" values).
  */
 function extractBibtexField(bibtex: string, field: string): string | null {
-  const re = new RegExp(String.raw`${field}\s*=\s*\{([^}]+)\}`, 'i');
-  const match = bibtex.match(re) || bibtex.match(new RegExp(String.raw`${field}\s*=\s*"([^"]+)"`, 'i'));
-  return match ? match[1].replace(/\s+/g, ' ').trim() : null;
+  const fieldPattern = new RegExp(`${field}\\s*=\\s*`, 'i');
+  const match = fieldPattern.exec(bibtex);
+  if (!match) return null;
+
+  let pos = match.index + match[0].length;
+  while (pos < bibtex.length && /\s/.test(bibtex[pos])) pos++;
+  if (pos >= bibtex.length) return null;
+
+  const delimiter = bibtex[pos];
+
+  if (delimiter === '{') {
+    const start = pos + 1;
+    let depth = 1;
+    pos = start;
+
+    while (pos < bibtex.length && depth > 0) {
+      const char = bibtex[pos];
+      if (char === '{') depth++;
+      else if (char === '}') depth--;
+      pos++;
+    }
+
+    if (depth !== 0) return null;
+    return bibtex.slice(start, pos - 1).replace(/\s+/g, ' ').trim();
+  }
+
+  if (delimiter === '"') {
+    const start = pos + 1;
+    pos = start;
+    while (pos < bibtex.length) {
+      if (bibtex[pos] === '"' && bibtex[pos - 1] !== '\\') {
+        return bibtex.slice(start, pos).replace(/\s+/g, ' ').trim();
+      }
+      pos++;
+    }
+    return null;
+  }
+
+  const start = pos;
+  while (pos < bibtex.length && bibtex[pos] !== ',' && bibtex[pos] !== '\n' && bibtex[pos] !== '\r') {
+    pos++;
+  }
+  return bibtex.slice(start, pos).trim() || null;
 }
 
 /**
@@ -1172,6 +1212,30 @@ function extractBibtexField(bibtex: string, field: string): string | null {
  */
 function extractTitleFromBibtex(bibtex: string): string | null {
   return extractBibtexField(bibtex, 'title');
+}
+
+/**
+ * Convert common BibTeX/LaTeX escapes in display strings to plain text.
+ */
+function cleanBibtexText(value: string): string {
+  const umlautMap: Record<string, string> = {
+    a: '\u00E4', A: '\u00C4',
+    e: '\u00EB', E: '\u00CB',
+    i: '\u00EF', I: '\u00CF',
+    o: '\u00F6', O: '\u00D6',
+    u: '\u00FC', U: '\u00DC'
+  };
+
+  return value
+    .replace(/\\\\/g, '\\')
+    .replace(/\{\\"\{([aeiouAEIOU])\}\}/g, (_, c) => umlautMap[c] ?? c)
+    .replace(/\\"\{([aeiouAEIOU])\}/g, (_, c) => umlautMap[c] ?? c)
+    .replace(/\\"([aeiouAEIOU])/g, (_, c) => umlautMap[c] ?? c)
+    .replace(/\\\{/g, '')
+    .replace(/\\\}/g, '')
+    .replace(/\{([^{}]*)\}/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 /**
@@ -1191,8 +1255,7 @@ function buildCitationFromBibtex(bibtex: string, fallbackKey: string): string {
 
   const parts: string[] = [];
   if (author) {
-    // Clean BibTeX grouping braces (e.g., \{Hans L.\} → Hans L.) before processing
-    const cleanAuthor = author.replace(/\\{/g, '').replace(/\\}/g, '');
+    const cleanAuthor = cleanBibtexText(author);
     // Abbreviate first names: "de Colnet, Alexis and Meel, Kuldeep S." → "A. de Colnet and K. S. Meel"
     const authors = cleanAuthor.split(/\s+and\s+/).map(a => {
       const commaMatch = a.match(/^(.+?),\s*(.+)$/);
@@ -1213,13 +1276,13 @@ function buildCitationFromBibtex(bibtex: string, fallbackKey: string): string {
     parts.push(authors.join(' and '));
   }
 
-  parts.push(`"${title}"`);
+  parts.push(`"${cleanBibtexText(title)}"`);
 
   const venue = journal || booktitle;
   if (venue) {
-    let venueStr = venue;
+    let venueStr = cleanBibtexText(venue);
     if (volume) venueStr += `, vol. ${volume}`;
-    if (pages) venueStr += `, pp. ${pages.replace('--', '–')}`;
+    if (pages) venueStr += `, pp. ${cleanBibtexText(pages).replace(/--/g, '\u2013')}`;
     parts.push(venueStr);
   }
 
@@ -1232,16 +1295,17 @@ function buildCitationFromBibtex(bibtex: string, fallbackKey: string): string {
  * Extract URL from BibTeX entry
  */
 function extractUrlFromBibtex(bibtex: string): string | null {
-  const match = bibtex.match(/url\s*=\s*\{([^}]+)\}/i) ||
-                bibtex.match(/doi\s*=\s*\{([^}]+)\}/i);
-  if (match) {
-    const value = match[1].trim();
-    // If it's a DOI, convert to URL
-    if (bibtex.toLowerCase().includes('doi') && !value.startsWith('http')) {
-      return `https://doi.org/${value}`;
-    }
-    return value;
+  const url = extractBibtexField(bibtex, 'url');
+  if (url) {
+    return url.trim();
   }
+
+  const doi = extractBibtexField(bibtex, 'doi');
+  if (doi) {
+    const value = doi.trim();
+    return value.startsWith('http') ? value : `https://doi.org/${value}`;
+  }
+
   return null;
 }
 
@@ -2058,7 +2122,7 @@ interface ParsedOpClaim {
  * Expected format:
  *   % lang=LANG_ID, op=OP_SAFE_KEY
  *   \begin{claim}
- *   $LANG$ supports OP_LABEL COMPLEXITY_TEXT (unless CAVEAT)? (\citet{REFS})?
+ *   LANG supports OP_LABEL COMPLEXITY_TEXT (unless CAVEAT)? (\citet{REFS})?
  *   \end{claim}
  *   \begin{claimdescription}
  *   DESCRIPTION

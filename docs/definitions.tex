@@ -1,0 +1,100 @@
+% =============================
+% Knowledge Compilation Map - Conceptual Definitions
+% Auto-generated from database.json
+% Generated: 2026-04-07T00:00:00.000Z
+%
+% EDITING INSTRUCTIONS:
+% - Definition IDs in [id=...] are auto-generated identifiers. Do NOT edit.
+% - Titles (\textbf{...}) are EDITABLE.
+% - Statement content (after the title line) is EDITABLE.
+% - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
+% =============================
+\documentclass[11pt]{article}
+
+% -------- Packages --------
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage{natbib}
+
+% -------- Hyperref setup --------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% -------- Theorem styles --------
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+% -------- Handy macros --------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+% Cross-reference commands (rendered as links in the web UI)
+\newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\edgeref}[2]{#1 compiles to #2}
+\newcommand{\nedgeref}[2]{#1 cannot compile to #2}
+\newcommand{\opref}[2]{#1 supports #2}
+\newcommand{\nopref}[2]{#2 is unsupported by #1}
+
+% -------- Title info --------
+\title{Knowledge Compilation Map: Conceptual Definitions}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{definition}[id=boolean-formula]\label{kdef:boolean-formula}
+\textbf{Boolean Formula} \\
+TODO: Define the propositional objects the map ranges over: Boolean formulas as syntactic representations of Boolean functions, together with the usual semantic equivalence relation. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[id=representation-language]\label{kdef:representation-language}
+\textbf{Representation Language} \\
+TODO: A representation language is a set of formulas together with an intended semantics and a size measure that makes compilation statements meaningful. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[id=language-family]\label{kdef:language-family}
+\textbf{Language Family} \\
+TODO: A language family is a parameterized collection of representation languages, such as OBDD$_<$ or cSDD$_T$, where the parameter indexes a particular sublanguage. \citet{Darwiche_2002,Amarilli_2018}
+\end{definition}
+
+\begin{definition}[id=succinctness-language]\label{kdef:succinctness-language}
+\textbf{Succinctness Between Languages} \\
+TODO: For languages $L_1$ and $L_2$, we write $L_1 \leq_p L_2$ when every formula in $L_1$ can be compiled into $L_2$ in polynomial time. This is the basic notion behind the edge labels in the map. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[id=succinctness-family]\label{kdef:succinctness-family}
+\textbf{Succinctness Between Families} \\
+TODO: For families $F_1$ and $F_2$, one natural reading is $F_1 \leq_p F_2$ when for every language $L_2 \in F_2$ there exists a language $L_1 \in F_1$ such that $L_1 \leq_p L_2$. We will tune the quantifier order carefully before formalizing it in LaTeX. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[id=tractability]\label{kdef:tractability}
+\textbf{Tractability} \\
+TODO: An operation is tractable on a language when it can be performed in polynomial time on every instance represented in that language. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[id=query-operation]\label{kdef:query-operation}
+\textbf{Query Operation} \\
+TODO: Query operations are semantic decision tasks such as consistency, validity, entailment, satisfiability, and model counting. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}[id=transformation-operation]\label{kdef:transformation-operation}
+\textbf{Transformation Operation} \\
+TODO: Transformation operations are compilation-preserving map-like tasks such as conditioning, forgetting, conjunction, and disjunction. \citet{Darwiche_2002}
+\end{definition}
+
+% =============================
+% Bibliography
+% =============================
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

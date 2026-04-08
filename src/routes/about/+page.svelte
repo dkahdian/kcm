@@ -35,9 +35,8 @@
 		<section>
 			<h2>Definitions</h2>
 			<p>
-				The definitions below are sourced from the canonical JSON dataset. They are kept
-				lightweight for now so we can fill in the formal language gradually while preserving
-				math notation and citations.
+				These definitions intend to provide a concise overview of the key concepts in knowledge compilation. They are kept
+				lightweight and informal for accessibility, but each is linked to more formal statements in the literature.
 			</p>
 			<div class="definition-list">
 				{#each definitions as definition}

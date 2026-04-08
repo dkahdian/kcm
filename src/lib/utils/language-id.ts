@@ -25,6 +25,18 @@ export function generateLanguageId(name: string): string {
  */
 let _nameMap: Map<string, string> = new Map();
 let _nameToIdMap: Map<string, string> = new Map();
+let _normalizedNameToIdMap: Map<string, string> = new Map();
+
+function normalizeLanguageNameKey(value: string): string {
+  return value
+    .trim()
+    .replace(/\$/g, '')
+    .replace(/\\_/g, '_')
+    .replace(/([A-Za-z0-9-])_([A-Za-z0-9<]+)/g, '$1$_$2$')
+    .replace(/([A-Za-z0-9-])_</g, '$1$_<$')
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+}
 
 /**
  * Initialize the name map from a list of languages.
@@ -33,10 +45,12 @@ let _nameToIdMap: Map<string, string> = new Map();
 export function initNameMap(languages: Array<{ id?: string; name: string }>): void {
   _nameMap = new Map();
   _nameToIdMap = new Map();
+  _normalizedNameToIdMap = new Map();
   for (const lang of languages) {
     if (lang.id) {
       _nameMap.set(lang.id, lang.name);
       _nameToIdMap.set(lang.name, lang.id);
+      _normalizedNameToIdMap.set(normalizeLanguageNameKey(lang.name), lang.id);
     }
   }
 }
@@ -54,6 +68,8 @@ export function idToName(id: string): string {
  * Returns undefined if not found.
  */
 export function nameToId(name: string): string | undefined {
-  return _nameToIdMap.get(name);
+  const exact = _nameToIdMap.get(name);
+  if (exact) return exact;
+  return _normalizedNameToIdMap.get(normalizeLanguageNameKey(name));
 }
 

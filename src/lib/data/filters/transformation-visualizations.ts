@@ -1,10 +1,12 @@
 import type { LanguageFilter } from '../../types.js';
 import { createTransformationVisualizationFilters } from './operation-visualizations.js';
+import { TRANSFORMATIONS } from '../operations.js';
 
 export const transformationVisualizationFilters: LanguageFilter[] =
-	createTransformationVisualizationFilters([
-		{ code: 'CD', name: 'Conditioning' },
-		{ code: 'FO', name: 'Forgetting' },
-		{ code: '∧C', name: 'Conjunction' },
-		{ code: '¬C', name: 'Negation' }
-	]);
+	createTransformationVisualizationFilters(
+		Object.entries(TRANSFORMATIONS).map(([safeKey, op]) => ({
+			id: safeKey,
+			code: op.code,
+			name: op.label
+		}))
+	);

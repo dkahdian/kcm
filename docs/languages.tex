@@ -68,7 +68,9 @@ A standard logical representation where a formula is an AND of clauses, with eac
 
 \begin{definition}[\langref{cSDD}]\label{def:lang_83e3b023}
 \textbf{Canonical/Compressed Sentential Decision Diagram} \\
-A Sentential Decision Diagram is called \emph{compressed}(\emph{canonical}) if, at each decision node, no two primes have the same sub \citet{Darwiche_2011}.
+There are two definitions for a cSDD ("canonical SDD").
+First, we say an SDD is \emph{compressed} if no two primes share equivalent subs, \emph{normalized} if each partition follows the current vtree split, and \emph{trimmed} if it has trivial true/false wrapper partitions removed.
+Under a fixed vtree, either compressed+normalized or compressed+trimmed entail canonicicity. Since normalization and trimming are efficient, all results apply to either definition. \citet{VanDenBroeck_2015,Darwiche_2011}.
 \end{definition}
 
 \begin{definition}[\langref{cSDD\_T}]\label{def:lang_82fa749e}

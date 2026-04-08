@@ -66,7 +66,7 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
     if (mode === 'include-quasipolynomial') {
       return data;
     }
-    const mapped = mapRelationsInDataset(data, (relation) => {
+    let mapped = mapRelationsInDataset(data, (relation) => {
       if (!relation) return null;
       let newStatus = relation.status;
       switch (relation.status) {
@@ -83,6 +83,44 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
           break;
       }
       return newStatus === relation.status ? relation : { ...relation, status: newStatus };
+    });
+
+    // Keep operations views consistent with the succinctness collapse by mapping
+    // quasi-level operation outcomes into a binary poly vs not-poly representation.
+    mapped = mapLanguagesInDataset(mapped, (language) => {
+      const collapseOpMap = (ops: Record<string, import('$lib/types.js').KCOpSupport> | undefined) => {
+        const result: Record<string, import('$lib/types.js').KCOpSupport> = {};
+        for (const [opCode, support] of Object.entries(ops ?? {})) {
+          let newComplexity = support.complexity;
+          switch (support.complexity) {
+            case 'poly':
+              break;
+            case 'no-poly-unknown-quasi':
+            case 'no-poly-quasi':
+            case 'no-quasi':
+              newComplexity = 'not-poly';
+              break;
+            case 'unknown-poly-quasi':
+            case 'unknown-both':
+              newComplexity = 'unknown';
+              break;
+          }
+          result[opCode] =
+            newComplexity === support.complexity
+              ? support
+              : { ...support, complexity: newComplexity };
+        }
+        return result;
+      };
+
+      return {
+        ...language,
+        properties: {
+          ...language.properties,
+          queries: collapseOpMap(language.properties.queries),
+          transformations: collapseOpMap(language.properties.transformations)
+        }
+      };
     });
 
     // Also adjust complexity display definitions to match the collapsed view.

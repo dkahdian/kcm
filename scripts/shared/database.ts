@@ -4,6 +4,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import type {
   KCAdjacencyMatrix,
+  KCDefinition,
   KCLanguage,
   KCReference,
   KCSeparatingFunction,
@@ -17,6 +18,7 @@ export const DATABASE_PATH = path.join(__dirname, '..', '..', 'src', 'lib', 'dat
 
 export interface DatabaseSchema {
   languages: KCLanguage[];
+  definitions?: KCDefinition[];
   adjacencyMatrix: KCAdjacencyMatrix;
   references: KCReference[];
   separatingFunctions: KCSeparatingFunction[];

@@ -19,19 +19,21 @@
   
   let referencesSection: HTMLElement | null = $state(null);
 
-  // Look up the original (unfiltered) edge data from graphData's adjacency matrix
+  // Look up edge data from the currently displayed graph when available so
+  // status text reflects active filters (e.g. poly/quasi collapse mode).
   const originalEdge = $derived.by(() => {
     if (!selectedEdge) return null;
-    
-    const { adjacencyMatrix } = graphData;
+
+    const sourceData = filteredGraphData ?? graphData;
+    const { adjacencyMatrix } = sourceData;
     const sourceIdx = adjacencyMatrix.indexByLanguage[selectedEdge.source];
     const targetIdx = adjacencyMatrix.indexByLanguage[selectedEdge.target];
-    
+
     if (sourceIdx === undefined || targetIdx === undefined) return selectedEdge;
-    
+
     const forwardRelation = adjacencyMatrix.matrix[sourceIdx][targetIdx];
     const backwardRelation = adjacencyMatrix.matrix[targetIdx][sourceIdx];
-    
+
     return {
       ...selectedEdge,
       forward: forwardRelation,

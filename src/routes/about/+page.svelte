@@ -1,5 +1,9 @@
 <script lang="ts">
 	import MathText from '$lib/components/MathText.svelte';
+	import { initialGraphData } from '$lib/data/index.js';
+	import { getReferences } from '$lib/data/references.js';
+
+	const definitions = initialGraphData.definitions ?? [];
 </script>
 
 <svelte:head>
@@ -16,15 +20,51 @@
 		<section>
 			<h2>What is this?</h2>
 			<p>
-				The Knowledge Compilation Map is an interactive tool for exploring
-				<strong>succinctness relations</strong> and <strong>tractability results</strong>
-				across propositional language classes used in knowledge compilation. It is based on
-				the foundational work of
+				The Knowledge Compilation Map is an interactive summary of the core
+				<MathText text="succinctness" /> and <MathText text="tractability" /> concepts
+				that organize propositional knowledge compilation. It presents a curated graph of
+				representation languages, the operations they support, and the known compilation
+				relationships between them, building on the foundational work of
 				<a href="https://doi.org/10.1613/jair.1391" target="_blank" rel="noopener">
 					Darwiche &amp; Marquis (2002)
 				</a>
 				and incorporates results from subsequent research.
 			</p>
+		</section>
+
+		<section>
+			<h2>Definitions</h2>
+			<p>
+				The definitions below are sourced from the canonical JSON dataset. They are kept
+				lightweight for now so we can fill in the formal language gradually while preserving
+				math notation and citations.
+			</p>
+			<div class="definition-list">
+				{#each definitions as definition}
+					<article class="definition-card" id={definition.id}>
+						<header class="definition-card-header">
+							<h3>{definition.title}</h3>
+							<span class="definition-id">{definition.id}</span>
+						</header>
+						<div class="definition-statement">
+							<MathText text={definition.statement} as="p" />
+						</div>
+						{#if definition.explanation}
+							<div class="definition-explanation">
+								<MathText text={definition.explanation} as="p" />
+							</div>
+						{/if}
+						{#if definition.refs.length > 0}
+							<div class="definition-refs">
+								<span>References:</span>
+								{#each getReferences(...definition.refs) as ref, index}
+									<a href={ref.href} target="_blank" rel="noopener noreferrer">{ref.title}</a>{index < definition.refs.length - 1 ? ', ' : ''}
+								{/each}
+							</div>
+						{/if}
+					</article>
+				{/each}
+			</div>
 		</section>
 
 		<section>
@@ -154,6 +194,58 @@
 
 	.about-content section {
 		margin-bottom: 1.5rem;
+	}
+
+	.definition-list {
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.definition-card {
+		padding: 1rem 1rem 0.875rem;
+		border: 1px solid #e2e8f0;
+		border-radius: 0.875rem;
+		background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+		box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+	}
+
+	.definition-card-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.definition-card h3 {
+		font-size: 1rem;
+		font-weight: 700;
+		color: #0f172a;
+		margin: 0;
+	}
+
+	.definition-id {
+		font-size: 0.75rem;
+		color: #64748b;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	}
+
+	.definition-statement,
+	.definition-explanation {
+		margin: 0.4rem 0;
+		line-height: 1.65;
+		color: #475569;
+	}
+
+	.definition-refs {
+		margin-top: 0.5rem;
+		font-size: 0.875rem;
+		color: #64748b;
+	}
+
+	.definition-refs span {
+		font-weight: 600;
+		color: #334155;
 	}
 
 	p {

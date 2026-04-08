@@ -2,6 +2,7 @@ import type {
   GraphData,
   DirectedSuccinctnessRelation,
   KCAdjacencyMatrix,
+  KCDefinition,
   KCLanguage,
   KCOpSupport,
   KCSeparatingFunction,
@@ -244,6 +245,38 @@ function validateLanguage(
   }
 }
 
+function validateDefinitions(
+  definitions: KCDefinition[] | undefined,
+  knownRefs: Set<string>,
+  errors: string[]
+): void {
+  if (!definitions) return;
+
+  const seenIds = new Set<string>();
+  for (const definition of definitions) {
+    if (!definition?.id) {
+      errors.push('A definition is missing an id');
+      continue;
+    }
+
+    if (seenIds.has(definition.id)) {
+      errors.push(`Duplicate definition id "${definition.id}"`);
+    } else {
+      seenIds.add(definition.id);
+    }
+
+    if (typeof definition.title !== 'string' || !definition.title.trim()) {
+      errors.push(`Definition "${definition.id}" is missing a title`);
+    }
+
+    if (typeof definition.statement !== 'string' || !definition.statement.trim()) {
+      errors.push(`Definition "${definition.id}" is missing statement text`);
+    }
+
+    ensureRefsExist(definition.refs, `Definition "${definition.id}" refs`, knownRefs, errors);
+  }
+}
+
 function validateSeparatingFunctions(
   separatingFunctions: KCSeparatingFunction[],
   knownRefs: Set<string>,
@@ -321,6 +354,8 @@ export function validateDatasetStructure(data: GraphData): TransformValidationRe
   for (const language of data.languages) {
     validateLanguage(language, knownLanguages, globalReferenceRegistry, errors);
   }
+
+  validateDefinitions(data.definitions, globalReferenceRegistry, errors);
 
   const separatingFunctionIds = validateSeparatingFunctions(data.separatingFunctions ?? [], globalReferenceRegistry, errors);
   validateRelations(data.adjacencyMatrix, globalReferenceRegistry, separatingFunctionIds, errors);

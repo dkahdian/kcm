@@ -202,6 +202,23 @@ export interface KCLanguage {
 }
 
 /**
+ * A conceptual definition shown on the About page.
+ * These entries are intentionally lightweight and mathtext-friendly.
+ */
+export interface KCDefinition {
+  /** Unique identifier for the definition */
+  id: string;
+  /** Human-readable title */
+  title: string;
+  /** Main text shown in the UI; may include LaTeX/math and citations */
+  statement: string;
+  /** Optional follow-up explanation or editorial note */
+  explanation?: string;
+  /** Reference IDs supporting the definition */
+  refs: string[];
+}
+
+/**
  * Style configuration for a single endpoint of an edge
  */
 export interface EdgeEndpointStyle {
@@ -354,6 +371,8 @@ export type NodePositionsByLanguageName = Record<string, NodePosition>;
 
 export interface GraphData {
   languages: KCLanguage[];
+  /** Conceptual definitions shown on the About page */
+  definitions?: KCDefinition[];
   /** Directed succinctness relationships stored as an adjacency matrix */
   adjacencyMatrix: KCAdjacencyMatrix;
   /** catalog of relation types used by relations and legend */

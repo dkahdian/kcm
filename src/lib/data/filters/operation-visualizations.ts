@@ -2,6 +2,7 @@ import type { LanguageFilter } from '../../types.js';
 import { createOperationVisualizer } from './helpers.js';
 
 type OperationVisualizationConfig = {
+	id?: string;
 	code: string;
 	name: string;
 	description?: string;
@@ -12,7 +13,8 @@ function createVisualizationFilter(
 	type: 'query' | 'transformation',
 	category: string
 ): LanguageFilter {
-	const id = `visualize-${config.code.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+	const idBase = config.id ?? config.code;
+	const id = `visualize-${idBase.toLowerCase().replace(/[^a-z0-9-]/g, '-')}`;
 	const description =
 		config.description || `Display ${config.name} (${config.code}) status on nodes`;
 

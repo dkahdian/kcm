@@ -361,7 +361,7 @@
       },
       "tags": [],
       "id": "lang_83e3b023",
-      "definition": "A Sentential Decision Diagram is called \\emph{compressed}(\\emph{canonical}) if, at each decision node, no two primes have the same sub \\citet{Darwiche_2011}.",
+      "definition": "There are two definitions for a cSDD (\"canonical SDD\").\nFirst, we say an SDD is \\emph{compressed} if no two primes share equivalent subs, \\emph{normalized} if each partition follows the current vtree split, and \\emph{trimmed} if it has trivial true/false wrapper partitions removed.\nUnder a fixed vtree, either compressed+normalized or compressed+trimmed entail canonicicity. Since normalization and trimming are efficient, all results apply to either definition. \\citet{VanDenBroeck_2015,Darwiche_2011}.",
       "definitionRefs": []
     },
     {
@@ -13330,6 +13330,73 @@
         }
       },
       "defaultVisible": true
+    }
+  ],
+  "definitions": [
+    {
+      "id": "boolean-formula",
+      "title": "Boolean Formula",
+      "statement": "TODO: Define the propositional objects the map ranges over: Boolean formulas as syntactic representations of Boolean functions, together with the usual semantic equivalence relation.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "representation-language",
+      "title": "Representation Language",
+      "statement": "TODO: A representation language is a set of formulas together with an intended semantics and a size measure that makes compilation statements meaningful.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "language-family",
+      "title": "Language Family",
+      "statement": "TODO: A language family is a parameterized collection of representation languages, such as OBDD$_<$ or cSDD$_T$, where the parameter indexes a particular sublanguage.",
+      "refs": [
+        "Darwiche_2002",
+        "Amarilli_2018"
+      ]
+    },
+    {
+      "id": "succinctness-language",
+      "title": "Succinctness Between Languages",
+      "statement": "TODO: For languages $L_1$ and $L_2$, we write $L_1 \\leq_p L_2$ when every formula in $L_1$ can be compiled into $L_2$ in polynomial time. This is the basic notion behind the edge labels in the map.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "succinctness-family",
+      "title": "Succinctness Between Families",
+      "statement": "TODO: For families $F_1$ and $F_2$, one natural reading is $F_1 \\leq_p F_2$ when for every language $L_2 \\in F_2$ there exists a language $L_1 \\in F_1$ such that $L_1 \\leq_p L_2$. We will tune the quantifier order carefully before formalizing it in LaTeX.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "tractability",
+      "title": "Tractability",
+      "statement": "TODO: An operation is tractable on a language when it can be performed in polynomial time on every instance represented in that language.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-operation",
+      "title": "Query Operation",
+      "statement": "TODO: Query operations are semantic decision tasks such as consistency, validity, entailment, satisfiability, and model counting.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-operation",
+      "title": "Transformation Operation",
+      "statement": "TODO: Transformation operations are compilation-preserving map-like tasks such as conditioning, forgetting, conjunction, and disjunction.",
+      "refs": [
+        "Darwiche_2002"
+      ]
     }
   ],
   "operationLemmas": [

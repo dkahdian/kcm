@@ -1,9 +1,11 @@
 import type { LanguageFilter } from '../../types.js';
 import { createQueryVisualizationFilters } from './operation-visualizations.js';
+import { QUERIES } from '../operations.js';
 
-export const queryVisualizationFilters: LanguageFilter[] = createQueryVisualizationFilters([
-	{ code: 'CO', name: 'Consistency' },
-	{ code: 'VA', name: 'Validity' },
-	{ code: 'CE', name: 'Clausal Entailment' },
-	{ code: 'CT', name: 'Model Counting' }
-]);
+export const queryVisualizationFilters: LanguageFilter[] = createQueryVisualizationFilters(
+	Object.entries(QUERIES).map(([safeKey, op]) => ({
+		id: safeKey,
+		code: op.code,
+		name: op.label
+	}))
+);

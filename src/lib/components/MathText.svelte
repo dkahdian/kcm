@@ -1,5 +1,13 @@
 <script lang="ts">
-  import { renderMathText, renderTextWithCitations, containsCitations, containsEntityLinks, renderEntityLinks } from '$lib/utils/math-text';
+  import {
+    renderMathText,
+    renderTextWithCitations,
+    containsCitations,
+    containsEntityLinks,
+    renderEntityLinks,
+    containsLatexTextFormatting,
+    renderLatexTextFormatting
+  } from '$lib/utils/math-text';
   import { getGlobalRefNumber } from '$lib/data/references.js';
   import { idToName, nameToId } from '$lib/utils/language-id.js';
   import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
@@ -37,6 +45,10 @@
   const processedHtml = $derived.by(() => {
     if (!result.html) return null;
     let html = result.html;
+
+    if (containsLatexTextFormatting(text ?? '')) {
+      html = renderLatexTextFormatting(html);
+    }
     
     if (containsCitations(text ?? '')) {
       html = renderTextWithCitations(html, getGlobalRefNumber);

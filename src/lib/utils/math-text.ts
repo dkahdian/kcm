@@ -10,6 +10,8 @@ const EDGEREF_PATTERN = /\\edgeref\{([^}]+)\}\{([^}]+)\}/g;
 const NEDGEREF_PATTERN = /\\nedgeref\{([^}]+)\}\{([^}]+)\}/g;
 const OPREF_PATTERN = /\\opref\{([^}]+)\}\{([^}]+)\}/g;
 const NOPREF_PATTERN = /\\nopref\{([^}]+)\}\{([^}]+)\}/g;
+const EMPH_PATTERN = /\\emph\{([^}]+)\}/g;
+const TEXTIT_PATTERN = /\\textit\{([^}]+)\}/g;
 
 /**
  * LRU-style render cache for renderMathText results.
@@ -172,6 +174,22 @@ export function renderTextWithCitations(
     });
     return numbers.join('');
   });
+}
+
+/**
+ * Check if text contains lightweight LaTeX text-formatting commands.
+ */
+export function containsLatexTextFormatting(text: string): boolean {
+  return /\\(emph|textit)\{/.test(text);
+}
+
+/**
+ * Render lightweight LaTeX text-formatting commands into HTML.
+ */
+export function renderLatexTextFormatting(html: string): string {
+  return html
+    .replace(EMPH_PATTERN, (_match, content: string) => `<em>${content}</em>`)
+    .replace(TEXTIT_PATTERN, (_match, content: string) => `<em>${content}</em>`);
 }
 
 /**

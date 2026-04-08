@@ -9,6 +9,7 @@
  *    - Reads database.json
  *    - Generates claims.tex (succinctness edges, grouped by reference)
  *    - Generates languages.tex (language definitions)
+ *    - Generates definitions.tex (core conceptual definitions)
  *    - Generates queries.tex (query operation support claims, non-derived only)
  *    - Generates transformations.tex (transformation operation support claims, non-derived only)
  *    - Generates separating-functions.tex (separating function definitions)
@@ -47,6 +48,7 @@ const __dirname = path.dirname(__filename);
 // Default Paths (LaTeX-specific, not shared)
 const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'claims.tex');
 const DEFAULT_LANGUAGES_OUTPUT = path.join(__dirname, '..', 'docs', 'languages.tex');
+const DEFAULT_DEFINITIONS_OUTPUT = path.join(__dirname, '..', 'docs', 'definitions.tex');
 const DEFAULT_BIBTEX_OUTPUT = path.join(__dirname, '..', 'docs', 'refs.bib');
 const DEFAULT_QUERIES_OUTPUT = path.join(__dirname, '..', 'docs', 'queries.tex');
 const DEFAULT_TRANSFORMS_OUTPUT = path.join(__dirname, '..', 'docs', 'transformations.tex');
@@ -56,6 +58,7 @@ const DEFAULT_SEPFUNCS_OUTPUT = path.join(__dirname, '..', 'docs', 'separating-f
 import type { 
   DirectedSuccinctnessRelation, 
   KCAdjacencyMatrix, 
+  KCDefinition,
   KCLanguage, 
   KCReference,
   KCSeparatingFunction,
@@ -1475,6 +1478,226 @@ function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLa
 }
 
 // =============================================================================
+// Conceptual Definitions LaTeX Generation and Parsing
+// =============================================================================
+
+/**
+ * Generate a single conceptual definition block.
+ *
+ * Format:
+ *   \begin{definition}[id=DEF_ID]\label{kdef:DEF_ID}
+ *   \textbf{TITLE} \\
+ *   STATEMENT \citet{REFS}?
+ *   \end{definition}
+ */
+function generateConceptualDefinition(definition: KCDefinition): string {
+  const statement = definition.statement && definition.statement !== '-'
+    ? definition.statement
+    : '(Definition needed)';
+
+  let content = `\\textbf{${definition.title}} \\\\
+${statement}`;
+
+  if (definition.refs && definition.refs.length > 0) {
+    content += ` \\citet{${definition.refs.join(',')}}`;
+  }
+
+  return `\\begin{definition}[id=${definition.id}]\\label{kdef:${definition.id}}
+${content}
+\\end{definition}
+`;
+}
+
+/**
+ * Generate the full conceptual definitions LaTeX document.
+ */
+function generateDefinitionsLatex(database: DatabaseSchema): string {
+  const definitions = (database.definitions ?? [])
+    .map((definition) => generateConceptualDefinition(definition))
+    .join('\n');
+
+  const preamble = `% =============================
+% Knowledge Compilation Map - Conceptual Definitions
+% Auto-generated from database.json
+% Generated: ${new Date().toISOString()}
+%
+% EDITING INSTRUCTIONS:
+% - Definition IDs in [id=...] are auto-generated identifiers. Do NOT edit.
+% - Titles (\\textbf{...}) are EDITABLE.
+% - Statement content (after the title line) is EDITABLE.
+% - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
+% =============================
+\\documentclass[11pt]{article}
+
+% -------- Packages --------
+\\usepackage[margin=1in]{geometry}
+\\usepackage{amsmath, amssymb, amsthm}
+\\usepackage{mathtools}
+\\usepackage{enumitem}
+\\usepackage{hyperref}
+\\usepackage{cleveref}
+\\usepackage{xcolor}
+\\usepackage{natbib}
+
+% -------- Hyperref setup --------
+\\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% -------- Theorem styles --------
+\\theoremstyle{definition}
+\\newtheorem{definition}{Definition}
+
+% -------- Handy macros --------
+\\newcommand{\\R}{\\mathbb{R}}
+\\newcommand{\\N}{\\mathbb{N}}
+\\newcommand{\\eps}{\\varepsilon}
+% Cross-reference commands (rendered as links in the web UI)
+\\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\edgeref}[2]{#1 compiles to #2}
+\\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
+\\newcommand{\\opref}[2]{#1 supports #2}
+\\newcommand{\\nopref}[2]{#2 is unsupported by #1}
+
+% -------- Title info --------
+\\title{Knowledge Compilation Map: Conceptual Definitions}
+\\date{\\today}
+
+\\begin{document}
+\\maketitle
+
+`;
+
+  const postamble = `
+% =============================
+% Bibliography
+% =============================
+\\bibliographystyle{plainnat}
+\\bibliography{refs}
+
+\\end{document}
+`;
+
+  return preamble + definitions + postamble;
+}
+
+interface ParsedConceptualDefinition {
+  id: string;
+  title: string;
+  statement: string;
+  refs: string[];
+}
+
+/**
+ * Parse conceptual definitions from LaTeX file.
+ *
+ * Expected format:
+ *   \begin{definition}[id=DEF_ID]\label{kdef:DEF_ID}
+ *   \textbf{TITLE} \\
+ *   STATEMENT \citet{REFS}?
+ *   \end{definition}
+ */
+function parseDefinitionsLatex(latexContent: string): ParsedConceptualDefinition[] {
+  const results: ParsedConceptualDefinition[] = [];
+  const lines = latexContent.split('\n');
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const defMatch = line.match(/\\begin\{definition\}\[id=([^\]]+)\]\\label\{kdef:([^}]+)\}/);
+    if (!defMatch) {
+      i++;
+      continue;
+    }
+
+    const idFromOpt = defMatch[1].trim();
+    const idFromLabel = defMatch[2].trim();
+    const id = idFromOpt || idFromLabel;
+
+    let content = '';
+    i++;
+    while (i < lines.length && !lines[i].includes('\\end{definition}')) {
+      content += lines[i] + '\n';
+      i++;
+    }
+    i++; // Skip \end{definition}
+
+    content = content.trim();
+
+    let title = '';
+    const titleExtracted = extractBraceContent(content, '\\textbf{');
+    if (titleExtracted) {
+      title = titleExtracted.content;
+      content = titleExtracted.rest.replace(/^\s*\\\\\s*/, '').trim();
+    }
+
+    let refs: string[] = [];
+    const citeMatch = content.match(/\\citet?\{([^}]+)\}\s*$/);
+    if (citeMatch) {
+      refs = citeMatch[1].split(',').map((s) => s.trim()).filter(Boolean);
+      content = content.slice(0, citeMatch.index).trim();
+    }
+
+    results.push({
+      id,
+      title,
+      statement: content,
+      refs,
+    });
+  }
+
+  return results;
+}
+
+/**
+ * Update database conceptual definitions from parsed LaTeX definitions.
+ */
+function updateDefinitionsFromLatex(database: DatabaseSchema, parsed: ParsedConceptualDefinition[]): void {
+  const byId = new Map<string, KCDefinition>();
+  const current = database.definitions ?? [];
+  for (const definition of current) {
+    byId.set(definition.id, definition);
+  }
+
+  let updated = 0;
+  let created = 0;
+
+  for (const item of parsed) {
+    const existing = byId.get(item.id);
+    if (!existing) {
+      const newDefinition: KCDefinition = {
+        id: item.id,
+        title: item.title || item.id,
+        statement: item.statement || '(Definition needed)',
+        refs: item.refs,
+      };
+      current.push(newDefinition);
+      byId.set(item.id, newDefinition);
+      created++;
+      continue;
+    }
+
+    if (item.title && item.title.length > 0) {
+      existing.title = item.title;
+    }
+    if (item.statement && item.statement !== '(Definition needed)') {
+      existing.statement = item.statement;
+    }
+    if (item.refs.length > 0) {
+      existing.refs = item.refs;
+    }
+
+    updated++;
+  }
+
+  database.definitions = current;
+  console.log(`Updated ${updated} conceptual definitions, created ${created} new`);
+}
+
+// =============================================================================
 // Separating Functions LaTeX Generation and Parsing
 // =============================================================================
 
@@ -2288,6 +2511,7 @@ Options:
 Output files (--to-latex):
   docs/claims.tex               - Succinctness claims and proofs
   docs/languages.tex            - Language definitions
+  docs/definitions.tex          - Core conceptual definitions
   docs/queries.tex              - Query operation support claims
   docs/transformations.tex      - Transformation operation support claims
   docs/separating-functions.tex - Separating function definitions
@@ -2296,6 +2520,7 @@ Output files (--to-latex):
 Input files (--to-json):
   docs/claims.tex               - Updates adjacency matrix descriptions
   docs/languages.tex            - Updates language definitions
+  docs/definitions.tex          - Updates conceptual definitions
   docs/queries.tex              - Updates query operation support
   docs/transformations.tex      - Updates transformation operation support
   docs/separating-functions.tex - Updates separating functions
@@ -2371,6 +2596,7 @@ async function main(): Promise<void> {
     // JSON → LaTeX + BibTeX
     const claimsPath = DEFAULT_LATEX_OUTPUT;
     const languagesPath = DEFAULT_LANGUAGES_OUTPUT;
+    const definitionsPath = DEFAULT_DEFINITIONS_OUTPUT;
     const bibtexPath = DEFAULT_BIBTEX_OUTPUT;
     const queriesPath = DEFAULT_QUERIES_OUTPUT;
     const transformsPath = DEFAULT_TRANSFORMS_OUTPUT;
@@ -2382,6 +2608,7 @@ async function main(): Promise<void> {
     const database = loadDatabase();
     
     console.log(`Found ${database.languages.length} languages`);
+    console.log(`Found ${(database.definitions ?? []).length} conceptual definitions`);
     console.log(`Found ${database.references.length} references`);
     console.log(`Found ${database.separatingFunctions.length} separating functions`);
     
@@ -2394,6 +2621,11 @@ async function main(): Promise<void> {
     const languagesLatex = generateLanguagesLatex(database);
     fs.writeFileSync(languagesPath, languagesLatex, 'utf-8');
     console.log(`Wrote language definitions to: ${languagesPath}`);
+
+    // Generate and write conceptual definitions LaTeX
+    const definitionsLatex = generateDefinitionsLatex(database);
+    fs.writeFileSync(definitionsPath, definitionsLatex, 'utf-8');
+    console.log(`Wrote conceptual definitions to: ${definitionsPath}`);
     
     // Generate and write queries LaTeX
     const queriesLatex = generateOpsLatex(database, 'queries', 'Query');
@@ -2422,6 +2654,7 @@ async function main(): Promise<void> {
     // LaTeX → JSON
     const claimsPath = DEFAULT_LATEX_OUTPUT;
     const languagesPath = DEFAULT_LANGUAGES_OUTPUT;
+    const definitionsPath = DEFAULT_DEFINITIONS_OUTPUT;
     const bibtexPath = DEFAULT_BIBTEX_OUTPUT;
     const queriesPath = DEFAULT_QUERIES_OUTPUT;
     const transformsPath = DEFAULT_TRANSFORMS_OUTPUT;
@@ -2469,6 +2702,19 @@ async function main(): Promise<void> {
       updateLanguagesFromLatex(database, languageDefs);
     } else {
       console.log(`\nNote: Languages file not found: ${languagesPath} (skipping language definition updates)`);
+    }
+
+    // Update from definitions.tex if file exists
+    if (fs.existsSync(definitionsPath)) {
+      console.log(`\nReading conceptual definitions from: ${definitionsPath}`);
+      const definitionsContent = fs.readFileSync(definitionsPath, 'utf-8');
+      const parsedDefinitions = parseDefinitionsLatex(definitionsContent);
+      console.log(`Parsed ${parsedDefinitions.length} conceptual definitions`);
+
+      console.log(`Updating conceptual definitions...`);
+      updateDefinitionsFromLatex(database, parsedDefinitions);
+    } else {
+      console.log(`\nNote: Definitions file not found: ${definitionsPath} (skipping conceptual definition updates)`);
     }
 
     // Update from queries.tex if file exists

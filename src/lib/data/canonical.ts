@@ -1,6 +1,7 @@
 import type {
   GraphData,
   KCSeparatingFunction,
+  KCDefinition,
   NodePositionsByLanguageName
 } from '../types.js';
 import database from './database.json';
@@ -15,6 +16,7 @@ import { initNameMap } from '../utils/language-id.js';
 initNameMap(allLanguages);
 
 const separatingFunctions = (database.separatingFunctions ?? []) as KCSeparatingFunction[];
+const definitions = (database.definitions ?? []) as KCDefinition[];
 const rawDefaultNodePositions = (database as { defaultNodePositionsByLanguageName?: unknown })
   .defaultNodePositionsByLanguageName;
 const defaultNodePositionsByLanguageName: NodePositionsByLanguageName | undefined = (() => {
@@ -42,6 +44,7 @@ const metadata = ('metadata' in database
 
 export const canonicalDataset: GraphData = {
   languages: allLanguages,
+  definitions,
   adjacencyMatrix: adjacencyMatrixData,
   relationTypes,
   complexities: COMPLEXITIES,

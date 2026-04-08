@@ -7,7 +7,7 @@
  * 
  * 1. JSON → LaTeX (--to-latex):
  *    - Reads database.json
- *    - Generates claims.tex (succinctness edges, grouped by reference)
+ *    - Generates succinctness.tex (succinctness edges, grouped by reference)
  *    - Generates languages.tex (language definitions)
  *    - Generates definitions.tex (core conceptual definitions)
  *    - Generates queries.tex (query operation support claims, non-derived only)
@@ -46,7 +46,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Default Paths (LaTeX-specific, not shared)
-const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'claims.tex');
+const DEFAULT_LATEX_OUTPUT = path.join(__dirname, '..', 'docs', 'succinctness.tex');
 const DEFAULT_LANGUAGES_OUTPUT = path.join(__dirname, '..', 'docs', 'languages.tex');
 const DEFAULT_DEFINITIONS_OUTPUT = path.join(__dirname, '..', 'docs', 'definitions.tex');
 const DEFAULT_BIBTEX_OUTPUT = path.join(__dirname, '..', 'docs', 'refs.bib');
@@ -579,7 +579,7 @@ function generateLatex(database: DatabaseSchema): string {
   
   // Build full document
   const preamble = `% =============================
-% Knowledge Compilation Map - Claims and Descriptions
+% Knowledge Compilation Map - Succinctness Claims and Descriptions
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 % 
@@ -641,7 +641,7 @@ function generateLatex(database: DatabaseSchema): string {
 \\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: Claims}
+\\title{Knowledge Compilation Map: Succinctness Claims}
 \\date{\\today}
 
 \\begin{document}
@@ -1502,7 +1502,7 @@ ${statement}`;
     content += ` \\citet{${definition.refs.join(',')}}`;
   }
 
-  return `\\begin{definition}[id=${definition.id}]\\label{kdef:${definition.id}}
+  return `\\begin{definition}\\label{kdef:${definition.id}}
 ${content}
 \\end{definition}
 `;
@@ -1522,7 +1522,7 @@ function generateDefinitionsLatex(database: DatabaseSchema): string {
 % Generated: ${new Date().toISOString()}
 %
 % EDITING INSTRUCTIONS:
-% - Definition IDs in [id=...] are auto-generated identifiers. Do NOT edit.
+% - Definition IDs are preserved in \\label{...}. Do NOT edit.
 % - Titles (\\textbf{...}) are EDITABLE.
 % - Statement content (after the title line) is EDITABLE.
 % - To sync back to JSON, run: npx tsx scripts/latex-bijection.ts --to-json
@@ -1607,13 +1607,13 @@ function parseDefinitionsLatex(latexContent: string): ParsedConceptualDefinition
 
   while (i < lines.length) {
     const line = lines[i];
-    const defMatch = line.match(/\\begin\{definition\}\[id=([^\]]+)\]\\label\{kdef:([^}]+)\}/);
+    const defMatch = line.match(/\\begin\{definition\}(?:\[id=([^\]]+)\])?\\label\{kdef:([^}]+)\}/);
     if (!defMatch) {
       i++;
       continue;
     }
 
-    const idFromOpt = defMatch[1].trim();
+    const idFromOpt = defMatch[1] ? defMatch[1].trim() : null;
     const idFromLabel = defMatch[2].trim();
     const id = idFromOpt || idFromLabel;
 
@@ -2509,7 +2509,7 @@ Options:
   -h, --help      Show this help message
 
 Output files (--to-latex):
-  docs/claims.tex               - Succinctness claims and proofs
+  docs/succinctness.tex         - Succinctness claims and proofs
   docs/languages.tex            - Language definitions
   docs/definitions.tex          - Core conceptual definitions
   docs/queries.tex              - Query operation support claims
@@ -2518,7 +2518,7 @@ Output files (--to-latex):
   docs/refs.bib                 - BibTeX references
 
 Input files (--to-json):
-  docs/claims.tex               - Updates adjacency matrix descriptions
+  docs/succinctness.tex         - Updates adjacency matrix descriptions
   docs/languages.tex            - Updates language definitions
   docs/definitions.tex          - Updates conceptual definitions
   docs/queries.tex              - Updates query operation support
@@ -2678,7 +2678,7 @@ async function main(): Promise<void> {
       console.log(`\nNote: BibTeX file not found: ${bibtexPath} (skipping reference updates)`);
     }
     
-    // Update from claims.tex if file exists
+    // Update from succinctness.tex if file exists
     if (fs.existsSync(claimsPath)) {
       console.log(`\nReading claims from: ${claimsPath}`);
       const claimsContent = fs.readFileSync(claimsPath, 'utf-8');

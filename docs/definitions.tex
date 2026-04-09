@@ -53,42 +53,83 @@
 
 \begin{definition}\label{kdef:boolean-formula}
 \textbf{Boolean Formula} \\
-TODO: Define the propositional objects the map ranges over: Boolean formulas as syntactic representations of Boolean functions, together with the usual semantic equivalence relation. \citet{Darwiche_2002}
+Fix a countable set $X = \{x_1, x_2, \ldots\}$ of propositional variables \citep{Boole_1847}.
+
+A \emph{Boolean formula} is a syntactic expression built inductively from variables $x_i \in X$, constants $\top$ and $\bot$, and connectives $\neg, \wedge, \vee$ in the usual way.
+
+Each formula $\alpha$ of arity $n$ over variables $\vec{x} = (x_1, x_2, \cdots, x_n)$ denotes a Boolean function $\alpha : \{0,1\}^n \to \{0,1\}$. Two formulas are \emph{semantically equivalent}, written $\alpha \equiv \beta$, when they agree on every truth assignment ($\alpha(\vec{x}) = \beta(\vec{x}), \forall \vec{x} \in \{0,1\}^n$). For the purposes of this project we only consider formulas with finite arity.
 \end{definition}
 
 \begin{definition}\label{kdef:representation-language}
 \textbf{Representation Language} \\
-TODO: A representation language is a set of formulas together with an intended semantics and a size measure that makes compilation statements meaningful. \citet{Darwiche_2002}
-\end{definition}
+A \emph{representation language} $L$ is a set of Boolean formulas sharing a common syntactic structure, endowed with the standard Boolean semantics and a size measure $|\cdot|$. (TODO: Consider more formally defining the size measure or use a rigorous definition?)
 
-\begin{definition}\label{kdef:language-family}
-\textbf{Language Family} \\
-TODO: A language family is a parameterized collection of representation languages, such as OBDD$_<$ or cSDD$_T$, where the parameter indexes a particular sublanguage. \citet{Darwiche_2002,Amarilli_2018}
+\citet{Darwiche_2002} distinguish a representation language from a \emph{target compilation language}: the former is intended to be natural for humans to read and write (e.g. CNF), while the latter need not be human-intelligible but must support a non-trivial class of polytime queries and transformations.
+
+For a language to qualify as a target compilation language, \citet{Darwiche_2002} require at minimum that clausal entailment is decidable in polynomial time; polytime consistency alone does not suffice to justify the cost of off-line compilation.
 \end{definition}
 
 \begin{definition}\label{kdef:succinctness-language}
 \textbf{Succinctness Between Languages} \\
-TODO: For languages $L_1$ and $L_2$, we write $L_1 \leq_p L_2$ when every formula in $L_1$ can be compiled into $L_2$ in polynomial time. This is the basic notion behind the edge labels in the map. \citet{Darwiche_2002}
+There are two intuitive definitions of succinctness: a \emph{time} requirement, i.e. that an efficient compilation algorithm exists between two languages; or the \emph{space} requirement, that formulas remain ``small'' in the new language. Since, for any computation, runtime is lower-bounded by output size, the latter definition is weaker.
+
+We fix the convention that succinctness between representation languages is a size-only relation, with no requirement that a conversion algorithm exist \citep{Gogic_1995}. However, to the best of our knowledge, all known proofs of succinctness use a compilation algorithm to establish the size relationship; and all proofs that \emph{no} efficient compilation algorithm exists use size bounds. An example to the contrary would be highly interesting. (TODO: Deeply search to make sure this truly holds)
+
+Formally, let $L_1$ and $L_2$ be two languages. $L_1$ is \emph{at least as succinct as} $L_2$, written $L_1 \leq L_2$, if there exists a polynomial $p$ such that for every $\alpha \in L_2$ there exists an equivalent $\beta \in L_1$ with $|\beta| \leq p(|\alpha|)$.
+
+We say $L_1$ \emph{polynomially compiles into} $L_2$, and write $L_1 \leq_p L_2$, if there exists a polynomial-time algorithm that converts any $\alpha \in L_1$ into an equivalent $\beta \in L_2$; again, for the purposes of this project, the two definitions are functionally equivalent.
+
+We additionally define quasi-polynomial succinctness identically, except we require a quasi-polynomial function $q(n) \in O\!\left(n^{\log^k n}\right)$ satisfying the above properties and use the notation $\leq_q$.
+\end{definition}
+
+\begin{definition}\label{kdef:language-family}
+\textbf{Language Family} \\
+We also introduce a notion of Language Families. A \emph{language family} is a parameterized collection $\mathcal{L} = \{L_\theta\}_{\theta \in \Theta}$ of representation languages.
+For example, consider the \emph{family} \langref{OBDD\_<} parameterized by total variable orderings $<$ on $X$, and the \emph{language} \langref{OBDD} $= \bigcup_< \langref{OBDD\_<}$. One of the main contributions of this paper is to rigorously differentiate the results between language families and their corresponding languages, results on which are sometimes vastly different.
 \end{definition}
 
 \begin{definition}\label{kdef:succinctness-family}
 \textbf{Succinctness Between Families} \\
-TODO: For families $F_1$ and $F_2$, one natural reading is $F_1 \leq_p F_2$ when for every language $L_2 \in F_2$ there exists a language $L_1 \in F_1$ such that $L_1 \leq_p L_2$. We will tune the quantifier order carefully before formalizing it in LaTeX. \citet{Darwiche_2002}
+Let $\mathcal{L}_1 = \{L^{(1)}_\theta\}$ and $\mathcal{L}_2 = \{L^{(2)}_\phi\}$ be language families. We extend the language-level succinctness definition of \citet{Gogic_1995} to families by writing: $\mathcal{L}_1$ is \emph{at least as succinct as} $\mathcal{L}_2$, written $\mathcal{L}_1 \leq \mathcal{L}_2$, if for every parameter $\phi$ there exists a parameter $\theta$ and a polynomial $p$ such that for every $\alpha \in L^{(2)}_\phi$ there exists an equivalent $\beta \in L^{(1)}_\theta$ with $|\beta| \leq p(|\alpha|)$.
+
+Intuitively, this forces all languages in the ``source'' family to efficiently compile into at least one member of the ``target.''
+
+As with the language-level definition, succinctness between families is purely existential with respect to size and places no requirement on algorithmic time complexity. We also extend this definition to define a succinctness relationship between an individual language $L$ and a family $\mathcal{L}$ by applying the above definition to the singleton $\{L\}$ and $\mathcal{L}$.
 \end{definition}
 
 \begin{definition}\label{kdef:tractability}
-\textbf{Tractability} \\
-TODO: An operation is tractable on a language when it can be performed in polynomial time on every instance represented in that language. \citet{Darwiche_2002}
+\textbf{Tractability of an Operation} \\
+An operation $\mathcal{O}$ is \emph{tractable} on a representation language $L$ if there exists a polynomial-time (resp. quasi-polynomial-time) algorithm that performs $\mathcal{O}$ on any input formula in $L$. Following \citet{Selman_1996}: a propositional theory is compiled off-line into a target language $L$, after which all subsequent on-line queries are answered efficiently \citep{Darwiche_2002}.
 \end{definition}
 
 \begin{definition}\label{kdef:query-operation}
 \textbf{Query Operation} \\
-TODO: Query operations are semantic decision tasks such as consistency, validity, entailment, satisfiability, and model counting. \citet{Darwiche_2002}
+A \emph{query operation} takes a formula $\alpha \in L$ (and possibly auxiliary inputs) and returns a Boolean answer or a numerical value without modifying $\alpha$. We consider the query operations below, as laid out in \citet{Darwiche_2002}.
+\begin{itemize}[noitemsep]
+  \item \emph{Consistency} (CO): is $\alpha$ satisfiable? (i.e. is there an $\vec{x}$ so that $\alpha(\vec{x}) = \top$?)
+  \item \emph{Validity} (VA): is $\alpha \equiv \top$?
+  \item \emph{Clausal entailment} (CE): given a clause $c$, does $\alpha \models c$? (i.e. is $\alpha \wedge \neg c$ unsatisfiable?)
+  \item \emph{Implicant} (IM): given a term $t$, does $t \models \alpha$? (i.e. is $t \wedge \neg \alpha$ unsatisfiable?)
+  \item \emph{Equivalence} (EQ): is $\alpha \equiv \beta$ for a given $\beta$? (i.e. does $\alpha(\vec{x}) = \beta(\vec{x})$ for all $\vec{x}$?)
+  \item \emph{Model counting} (CT): compute $|\{ \vec{x} : \alpha(\vec{x}) = \top \}|$.
+  \item \emph{Model enumeration} (ME): enumerate all satisfying assignments (i.e. return $\{ \vec{x} : \alpha(\vec{x}) = \top \}$).
+  \item \emph{Sentential entailment} (SE): does $\alpha \models \beta$ for a given sentence $\beta$?
+\end{itemize}
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-operation}
 \textbf{Transformation Operation} \\
-TODO: Transformation operations are compilation-preserving map-like tasks such as conditioning, forgetting, conjunction, and disjunction. \citet{Darwiche_2002}
+A \emph{transformation operation} maps one or more formulas in a language $L$ to a new formula. We require the output formula to be in $L$. The canonical transformations cataloged by \citet{Darwiche_2002} are:
+\begin{itemize}[noitemsep]
+  \item \emph{Conditioning} (CD): given a partial assignment $\gamma$, compute $\alpha|_{\gamma}$ (i.e. ``plug in'' the assignment $\gamma$).
+  \item \emph{Singleton Forgetting} (SFO): given a variable $x_i$, compute $(\alpha|_{x_i=0}) \vee (\alpha|_{x_i=1})$.
+  \item \emph{Forgetting} (FO): given a \emph{subset} of variables $\gamma = \{x_{i_1}, x_{i_2}, \ldots, x_{i_k}\} \subseteq X$, compute $\bigvee_{\gamma \in \{0,1\}^k} \alpha \mid \gamma$.
+  \item \emph{Conjunction} ($\wedge$C): compute $\alpha \wedge \beta$.
+  \item \emph{Disjunction} ($\vee$C): compute $\alpha \vee \beta$.
+\end{itemize}
+Unlike query operations, transformations must produce new representable elements; tractability therefore requires both efficient execution \emph{and} that the output remains in $L$.
+
+(TODO: double check that these are the full set to include)
 \end{definition}
 
 % =============================

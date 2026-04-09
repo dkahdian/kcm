@@ -58,8 +58,16 @@
   // Combine all filters for UI display
   const allFilters = $derived([...languageFilters, ...edgeFilters]);
   
-  // Filter out hidden filters from UI
-  const visibleFilters = $derived(allFilters.filter(f => !f.hidden));
+  // Filter out hidden/internal filters and view-incompatible controls from UI.
+  const visibleFilters = $derived(
+    allFilters.filter((f) => {
+      if (f.hidden) return false;
+      if ((viewMode === 'queries' || viewMode === 'transforms') && f.id === 'poly-display') {
+        return false;
+      }
+      return true;
+    })
+  );
   
   // Organize filters by category
   const categories = $derived(organizeFiltersByCategory(visibleFilters as LanguageFilter[]));

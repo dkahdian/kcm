@@ -130,6 +130,14 @@ export function organizeFiltersByCategory(filters: LanguageFilter[]): FilterCate
     name, // Use the original category name as-is
     filters
   }));
+
+  categories.sort((a, b) => {
+    const aVisibility = a.name.toLowerCase() === 'visibility';
+    const bVisibility = b.name.toLowerCase() === 'visibility';
+    if (aVisibility && !bVisibility) return -1;
+    if (!aVisibility && bVisibility) return 1;
+    return 0;
+  });
   
   return categories;
 }

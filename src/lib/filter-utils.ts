@@ -12,6 +12,14 @@ import { transformData } from './data/transforms.js';
 
 type AnyFilter = LanguageFilter | EdgeFilter;
 
+function getViewForcedFilterValue(filterId: string, viewMode: ViewMode): FilterParamValue | undefined {
+  // In operations views, quasi distinctions are not meaningful for op cells.
+  if ((viewMode === 'queries' || viewMode === 'transforms') && filterId === 'poly-display') {
+    return 'polytime-vs-not';
+  }
+  return undefined;
+}
+
 /**
  * Check if view mode is a matrix-based view (succinctness, queries, or transforms)
  */
@@ -51,6 +59,11 @@ export function computeEffectiveFilterState(
 
   for (const filter of allFilters) {
     const defaultVal = getFilterDefault(filter, viewMode);
+    const forcedVal = getViewForcedFilterValue(filter.id, viewMode);
+    if (forcedVal !== undefined) {
+      stateMap.set(filter.id, forcedVal);
+      continue;
+    }
     // If user has a delta, use it; otherwise use the view-mode default
     const value = deltas.has(filter.id) ? deltas.get(filter.id)! : defaultVal;
     stateMap.set(filter.id, value);

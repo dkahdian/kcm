@@ -39,6 +39,7 @@
 \newcommand{\eps}{\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\langfam}[2]{\textbf{#1$_{#2}$}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
@@ -79,20 +80,20 @@ Formally, let $L_1$ and $L_2$ be two languages. $L_1$ is \emph{at least as succi
 
 We say $L_1$ \emph{polynomially compiles into} $L_2$, and write $L_1 \leq_p L_2$, if there exists a polynomial-time algorithm that converts any $\alpha \in L_1$ into an equivalent $\beta \in L_2$; again, for the purposes of this project, the two definitions are functionally equivalent.
 
-We additionally define quasi-polynomial succinctness identically, except we require a quasi-polynomial function $q(n) \in O\!\left(n^{\log^k n}\right)$ satisfying the above properties and use the notation $\leq_q$.
+We additionally define quasi-polynomial succinctness identically, except we require a quasi-polynomial function $q(n) \in n^{log^{O(1)}(n)}$ satisfying the above properties and use the notation $\leq_q$.
 \end{definition}
 
 \begin{definition}\label{kdef:language-family}
 \textbf{Language Family} \\
 We also introduce a notion of Language Families. A \emph{language family} is a parameterized collection $\mathcal{F} = \{L_\theta\}_{\theta \in \Theta}$ of representation languages.
-For example, consider the \emph{family} \langref{OBDD\_<} parameterized by total variable orderings $<$ on $X$, and the \emph{language} \langref{OBDD} $= \bigcup_< \langref{OBDD\_<}$. One of the main contributions of this paper is to rigorously differentiate the results between language families and their corresponding languages, results on which are sometimes vastly different.
+For example, consider the \emph{family} \langfam{OBDD}{<} parameterized by total variable orderings $<$ on $X$, and the \emph{language} \langref{OBDD} $= \bigcup_< \langfam{OBDD}{<}$. One of the main contributions of this paper is to rigorously differentiate the results between language families and their corresponding languages, results on which are sometimes vastly different.
 \end{definition}
 
 \begin{definition}\label{kdef:succinctness-family}
 \textbf{Succinctness Between Families} \\
 Let $\mathcal{F}_1$ and $\mathcal{F}_2$ be language families. We extend the language-level succinctness definition of \citet{Gogic_1995} to families by writing: $\mathcal{F}_1$ is \emph{at least as succinct as} $\mathcal{F}_2$, written $\mathcal{F}_1 \leq \mathcal{F}_2$, if for every $L_2 \in \mathcal{F}_2$ there exists $L_1 \in \mathcal{F}_1$ so that $L_1 \leq L_2$.
 
-Intuitively, this forces all languages in the ``source'' family to efficiently compile into at least one member of the ``target.''
+Intuitively, this forces all languages in the ``source'' family ($\mathcal{F}_2$) to efficiently compile into at least one member of the ``target'' ($\mathcal{F}_1$).
 
 As with the language-level definition, succinctness between families is purely existential with respect to size and places no requirement on algorithmic time complexity. We also extend this definition to define a succinctness relationship between an individual language $L$ and a family $\mathcal{F}$ by applying the above definition to the singleton $\{L\}$ and $\mathcal{F}$.
 \end{definition}

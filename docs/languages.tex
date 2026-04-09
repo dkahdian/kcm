@@ -39,6 +39,7 @@
 \newcommand{\eps}{\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\langfam}[2]{\textbf{#1$_{#2}$}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
@@ -73,7 +74,7 @@ First, we say an SDD is \emph{compressed} if no two primes share equivalent subs
 Under a fixed vtree, either compressed+normalized or compressed+trimmed entail canonicicity. Since normalization and trimming are efficient, all results apply to either definition. \citet{VanDenBroeck_2015,Darwiche_2011}.
 \end{definition}
 
-\begin{definition}[\langref{cSDD\_T}]\label{def:lang_82fa749e}
+\begin{definition}[\langfam{cSDD}{T}]\label{def:lang_82fa749e}
 \textbf{Canonical/Compressed Sentential Decision Diagram (wrt a fixed variable tree)} \\
 The set of all cSDD formulas that respect a predefined variable tree (vtree) $T$. \citet{Darwiche_2011}.
 \end{definition}
@@ -88,7 +89,7 @@ A variant of DNNF where the children of every OR node represent mutually exclusi
 A deterministic DNNF where the variable decomposition across the graph is governed by a hierarchical variable tree (vtree). \citet{Pipatsrisawat_2008}.
 \end{definition}
 
-\begin{definition}[\langref{d-SDNNF\_T}]\label{def:lang_91f812d0}
+\begin{definition}[\langfam{d-SDNNF}{T}]\label{def:lang_91f812d0}
 \textbf{-} \\
 The set of all d-SDNNF formulas that follow a fixed vtree $T$ \citet{Pipatsrisawat_2008}.
 \end{definition}
@@ -103,7 +104,7 @@ A subset of DNNF where standard logical OR nodes are entirely replaced by decisi
 A decision DNNF whose underlying variable decisions strictly follow a hierarchical variable tree (vtree). This tree-driven structure standardizes the compilation trace and bridges the gap to sentential decision diagrams \citet{Oztok_2014}.
 \end{definition}
 
-\begin{definition}[\langref{dec-SDNNF\_<}]\label{def:lang_4ae03bc8}
+\begin{definition}[\langfam{dec-SDNNF}{T}]\label{def:lang_4ae03bc8}
 \textbf{Structured Decision Decomposable Negation Normal Form (wrt a fixed variable tree)} \\
 The set of all dec-SDNNF$_T$ formulas that follow a fixed vtree $T$. \citet{Oztok_2014}.
 \end{definition}
@@ -148,12 +149,17 @@ A boolean formula constructed strictly with AND, OR, and literals, where negatio
 A generalization of the OBDD that permits nondeterministic branching while still enforcing a global linear variable ordering for its standard decision nodes. \citet{Wegener_2000}.
 \end{definition}
 
+\begin{definition}[\langfam{nOBDD}{<}]\label{def:lang_e827cf31}
+\textbf{Nondeterministic Ordered Binary Decision Diagram (wrt a fixed variable order)} \\
+The set of all nOBDD formulas that follow one fixed variable order $<$. \citet{Wegener_2000}.
+\end{definition}
+
 \begin{definition}[\langref{OBDD}]\label{def:lang_b9d72a7c}
 \textbf{Ordered Binary Decision Diagram} \\
 A Binary Decision Diagram where all variable decisions must follow a strict, uniform linear order $<$ across every path in the graph. They are strongly canonical and support powerful polytime Boolean operations, making them ubiquitous in formal hardware verification \citet{Bryant_1986}. \citet{Darwiche_2002}
 \end{definition}
 
-\begin{definition}[\langref{OBDD\_<}]\label{def:lang_d69995dd}
+\begin{definition}[\langfam{OBDD}{<}]\label{def:lang_d69995dd}
 \textbf{Ordered Binary Decision Diagram (wrt a fixed variable order)} \\
 The set of all OBDD formulas following a fixed variable order $<$, which is known in advance. This strictness allows the equivalence of two distinct functions to be checked in constant time \citet{Bryant_1986}. \citet{Bryant_1986}
 \end{definition}
@@ -168,7 +174,7 @@ A formula represented exactly as the conjunction of all its minimal entailed dis
 A representation that generalizes OBDDs by replacing binary decision nodes with "primes" and "subs", which are subcircuits also represented as SDDs. At each decision node, there is a set of (mutually exclusive and exhaustive) "primes", each with a corresponding "sub". Evaluating a decision node entails checking which prime is satisfied by the input variables, then evaluating that prime's sub. The SDD respects a vtree $T$ in the same way as an SDNNF \citet{Darwiche_2011}.
 \end{definition}
 
-\begin{definition}[\langref{SDD\_T}]\label{def:lang_9c84a267}
+\begin{definition}[\langfam{SDD}{T}]\label{def:lang_9c84a267}
 \textbf{Sentential Decision Diagram (wrt a fixed variable tree)} \\
 The set of all SDD formulas respecting a fixed variable tree (vtree) $T$. \citet{Darwiche_2011}.
 \end{definition}
@@ -178,7 +184,7 @@ The set of all SDD formulas respecting a fixed variable tree (vtree) $T$. \citet
 A DNNF that respects a vtree $T$, in the sense that the decomposability of variables across AND nodes is strictly governed by the hierarchical structure of $T$. This guarantees that variable partitions occur systematically \citet{Pipatsrisawat_2008}.
 \end{definition}
 
-\begin{definition}[\langref{SDNNF\_T}]\label{def:lang_3c803ba1}
+\begin{definition}[\langfam{SDNNF}{T}]\label{def:lang_3c803ba1}
 \textbf{Structured Decomposable Negation Normal Form (wrt a fixed variable tree)} \\
 The set of all SDNNF formulas respecting a fixed vtree $T$. \citet{Pipatsrisawat_2008}.
 \end{definition}
@@ -191,6 +197,11 @@ A restricted form of a nondeterministic FBDD where every satisfying assignment h
 \begin{definition}[\langref{uOBDD}]\label{def:lang_c2df8c2b}
 \textbf{Unambiguous Ordered Binary Decision Diagram} \\
 A nondeterministic OBDD restricted to unambiguous choices, maintaining efficient counting capabilities while strictly following a global variable order. It provides a middle ground between the strictness of OBDDs and the compression of nondeterminism \citet{Wegener_2000}.
+\end{definition}
+
+\begin{definition}[\langfam{uOBDD}{<}]\label{def:lang_43a33aec}
+\textbf{Unambiguous Ordered Binary Decision Diagram (wrt a fixed variable order)} \\
+The set of all uOBDD formulas that follow one fixed variable order $<$. \citet{Wegener_2000}.
 \end{definition}
 
 % =============================

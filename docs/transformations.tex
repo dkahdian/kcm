@@ -47,6 +47,7 @@
 \newcommand{\eps}{\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\langfam}[2]{\textbf{#1$_{#2}$}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
@@ -364,7 +365,7 @@ Since only one OBDD sentence is considered in the transformation, and OBDD$_<$ s
 
 % lang=lang_d69995dd, op=AND_C
 \begin{claim}
-\langref{OBDD\_<} supports Conjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
+\langfam{OBDD}{<} supports Conjunction not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 It is straightforward to convert a clause into an equivalent OBDD$_<$ formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent OBDD$_<$ formulas in polynomial space (CNF $\not\leq$ OBDD$_<$), OBDD$_<$ does not satisfy $\land$C (\citet{Darwiche_2002}, Proposition 5.1).
@@ -372,7 +373,7 @@ It is straightforward to convert a clause into an equivalent OBDD$_<$ formula in
 
 % lang=lang_d69995dd, op=FO
 \begin{claim}
-\langref{OBDD\_<} supports Forgetting not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
+\langfam{OBDD}{<} supports Forgetting not in polynomial time (quasi-polynomial unknown) \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
 If OBDD$_<$ satisfies FO, then every DNF sentence $\Gamma$ can be compiled to an equivalent OBDD$_<$ of polynomial size (using fresh selector variables and then applying FO). Since DNF $\not\leq$ OBDD$_<$, this is impossible (\citet{Darwiche_2002}, Proposition 5.1).
@@ -510,7 +511,7 @@ Forgetting preserves structured decomposability. Replacing all occurrences of li
 % =============================
 % lang=lang_d69995dd, op=NOT_C
 \begin{claim}
-\langref{OBDD\_<} supports Negation in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Negation in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 Negation of an OBDD$_<$ is achieved by switching the labels of the 0-sink and 1-sink. The result is an OBDD$_<$ of identical size \citet{Bryant_1986}.
@@ -518,7 +519,7 @@ Negation of an OBDD$_<$ is achieved by switching the labels of the 0-sink and 1-
 
 % lang=lang_d69995dd, op=AND_BC
 \begin{claim}
-\langref{OBDD\_<} supports Bounded Conjunction in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Bounded Conjunction in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 The Apply algorithm computes the conjunction of two OBDD$_<$ sentences sharing the same variable ordering in polynomial time. The result is a reduced OBDD$_<$ \citet{Bryant_1986}.
@@ -526,7 +527,7 @@ The Apply algorithm computes the conjunction of two OBDD$_<$ sentences sharing t
 
 % lang=lang_d69995dd, op=OR_BC
 \begin{claim}
-\langref{OBDD\_<} supports Bounded Disjunction in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Bounded Disjunction in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 The Apply algorithm computes the disjunction of two OBDD$_<$ sentences sharing the same variable ordering in polynomial time. The result is a reduced OBDD$_<$ \citet{Bryant_1986}.
@@ -534,7 +535,7 @@ The Apply algorithm computes the disjunction of two OBDD$_<$ sentences sharing t
 
 % lang=lang_d69995dd, op=CD
 \begin{claim}
-\langref{OBDD\_<} supports Conditioning in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Conditioning in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 Conditioning (the restrict operation) on OBDD$_<$ replaces each node labeled by a variable in the conditioning term with one of its children, according to the sign of the variable. The result is a valid OBDD$_<$ \citet{Bryant_1986}.
@@ -587,7 +588,7 @@ Conditioning an SDD $f$ on a literal $l$ is equivalent to computing $f \land l$.
 \langref{d-SDNNF} supports Negation not in polynomial time (quasi-polynomial unknown) \citet{Vinall-Smeeth_2024}
 \end{claim}
 \begin{claimdescription}
-Structured deterministic DNNF (\langref{d-SDNNF}) is not closed under negation in polytime. \citet{Vinall-Smeeth_2024} proves that for every $n \in \mathbb{N}$, there exists a Boolean function $f$ with an equivalent structured $d$-DNNF of size $n$ such that any structured DNNF equivalent to $\neg f$ has size $n^{\Omega(\tilde{\log}\, n)}$. This super-polynomial lower bound holds for every vtree (not just a single tree), so the result applies to \langref{d-SDNNF} (not just \langref{d-SDNNF\_T}). Whether quasi-polynomial closure holds remains open.
+Structured deterministic DNNF (\langref{d-SDNNF}) is not closed under negation in polytime. \citet{Vinall-Smeeth_2024} proves that for every $n \in \mathbb{N}$, there exists a Boolean function $f$ with an equivalent structured $d$-DNNF of size $n$ such that any structured DNNF equivalent to $\neg f$ has size $n^{\Omega(\tilde{\log}\, n)}$. This super-polynomial lower bound holds for every vtree (not just a single tree), so the result applies to \langref{d-SDNNF} (not just \langfam{d-SDNNF}{T}). Whether quasi-polynomial closure holds remains open.
 \end{claimdescription}
 
 

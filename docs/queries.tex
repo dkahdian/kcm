@@ -47,6 +47,7 @@
 \newcommand{\eps}{\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\langfam}[2]{\textbf{#1$_{#2}$}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
@@ -143,7 +144,7 @@ We need only take the cardinality of the set of models (which can be done in lin
 \langref{OBDD} supports Model Counting in polynomial time \citet{Bryant_1986,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-Any query concerning \langref{OBDD} is equivalent to the corresponding query concerning \langref{OBDD\_<} when only one DAG is involved. Since \langref{OBDD\_<} satisfies CO, VA and CT, so does \langref{OBDD} (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
+Any query concerning \langref{OBDD} is equivalent to the corresponding query concerning \langfam{OBDD}{<} when only one DAG is involved. Since \langfam{OBDD}{<} satisfies CO, VA and CT, so does \langref{OBDD} (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_b9d72a7c, op=EQ
@@ -151,7 +152,7 @@ Any query concerning \langref{OBDD} is equivalent to the corresponding query con
 \langref{OBDD} supports Equivalence in polynomial time \citet{Meinel_Theobald_1998,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-\langref{OBDD} satisfies EQ (Theorem 8.11, Meinel \& Theobald 1998). Any equivalence query on a single \langref{OBDD} reduces to the corresponding query on \langref{OBDD\_<}, and \langref{OBDD\_<} supports EQ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
+\langref{OBDD} satisfies EQ (Theorem 8.11, Meinel \& Theobald 1998). Any equivalence query on a single \langref{OBDD} reduces to the corresponding query on \langfam{OBDD}{<}, and \langfam{OBDD}{<} supports EQ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_27fffab2, op=CE
@@ -185,7 +186,7 @@ $PI \subseteq CNF$ and \langref{PI} satisfies CE, so checking $\Sigma_1 \models 
 % =============================
 % lang=lang_d69995dd, op=CO
 \begin{claim}
-\langref{OBDD\_<} supports Consistency in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Consistency in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 Consistency is trivial for OBDDs: check if the diagram root is not the terminal 0 node \citet{Bryant_1986}.
@@ -193,7 +194,7 @@ Consistency is trivial for OBDDs: check if the diagram root is not the terminal 
 
 % lang=lang_d69995dd, op=CT
 \begin{claim}
-\langref{OBDD\_<} supports Model Counting in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Model Counting in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 Model counting on OBDDs can be done in polynomial time by a single bottom-up pass \citet{Bryant_1986, Bryant_1992}.
@@ -201,7 +202,7 @@ Model counting on OBDDs can be done in polynomial time by a single bottom-up pas
 
 % lang=lang_d69995dd, op=EQ
 \begin{claim}
-\langref{OBDD\_<} supports Equivalence in polynomial time \citet{Bryant_1986,Bryant_1992,Meinel_Theobald_1998}
+\langfam{OBDD}{<} supports Equivalence in polynomial time \citet{Bryant_1986,Bryant_1992,Meinel_Theobald_1998}
 \end{claim}
 \begin{claimdescription}
 OBDDs with a fixed variable ordering are canonical: two functions are equivalent iff their reduced OBDDs are identical. This makes EQ trivial (structural isomorphism check) \citet{Bryant_1986, Bryant_1992, Meinel_Theobald_1998} (Theorem 8.11).
@@ -209,7 +210,7 @@ OBDDs with a fixed variable ordering are canonical: two functions are equivalent
 
 % lang=lang_d69995dd, op=ME
 \begin{claim}
-\langref{OBDD\_<} supports Model Enumeration in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Model Enumeration in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 Models of an OBDD can be enumerated in time polynomial in the output size by traversing all root-to-1-sink paths. Each path corresponds to a (partial) assignment that can be expanded to full models.
@@ -217,7 +218,7 @@ Models of an OBDD can be enumerated in time polynomial in the output size by tra
 
 % lang=lang_d69995dd, op=VA
 \begin{claim}
-\langref{OBDD\_<} supports Validity in polynomial time \citet{Bryant_1986}
+\langfam{OBDD}{<} supports Validity in polynomial time \citet{Bryant_1986}
 \end{claim}
 \begin{claimdescription}
 Validity is trivial for OBDDs: check if the diagram root equals the terminal 1 node \citet{Bryant_1986}.

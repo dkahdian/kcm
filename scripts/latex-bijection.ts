@@ -135,9 +135,61 @@ const CANONICAL_OP_COMPLEXITIES: Record<string, string> = {
  *   "dec-SDNNF" → "\\langref{dec-SDNNF}"
  */
 function languageToLatex(name: string): string {
+  const familyMatch = name.match(/^(.+)\$_(.+)\$$/);
+  if (familyMatch) {
+    const base = familyMatch[1].replace(/\$/g, '');
+    const index = familyMatch[2].replace(/\$/g, '');
+    return `\\langfam{${base}}{${index}}`;
+  }
+
   const stripped = name.replace(/\$/g, '');
-  const escaped = stripped.replace(/_/g, '\\_');
+  const escaped = stripped
+    .replace(/_/g, '\\_');
   return `\\langref{${escaped}}`;
+}
+
+function normalizeLanguageName(value: string): string {
+  let normalized = value
+    .trim()
+    .replace(/^\\langfam\{([^{}]+)\}\{([^{}]+)\}$/i, '$1_$2')
+    .replace(/^\\langref\{([\s\S]+)\}$/i, '$1')
+    .replace(/\\textless\{\}/gi, '<')
+    .replace(/\\textless(?![A-Za-z])/gi, '<')
+    .replace(/\$<\$/g, '<')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&amp;/gi, '&')
+    .replace(/\\_/g, '_')
+    .replace(/_\{\s*([^{}]+)\s*\}/g, '_$1')
+    .replace(/\s+/g, ' ');
+
+  // Legacy form: $d$-$DNNF$ -> d-DNNF
+  if (normalized.includes('-')) {
+    normalized = normalized
+      .split('-')
+      .map((part) => {
+        const trimmed = part.trim();
+        if (trimmed.startsWith('$') && trimmed.endsWith('$')) {
+          return trimmed.slice(1, -1);
+        }
+        return trimmed;
+      })
+      .join('-');
+  }
+
+  // Strip an outer $...$ wrapper while preserving subscript structure.
+  if (normalized.startsWith('$') && normalized.endsWith('$')) {
+    normalized = normalized.slice(1, -1);
+  }
+
+  // Canonical DB style for indexed families, e.g. OBDD_< -> OBDD$_<$.
+  if (normalized.includes('_') && !normalized.includes('$')) {
+    normalized = normalized
+      .replace(/([A-Za-z0-9-])_<(?![A-Za-z0-9])/g, '$1$_<$')
+      .replace(/([A-Za-z0-9-])_([A-Za-z0-9]+)(?![A-Za-z0-9])/g, '$1$_$2$');
+  }
+
+  return normalized;
 }
 
 /**
@@ -151,38 +203,7 @@ function languageToLatex(name: string): string {
  *   "$d$-$DNNF$" → "d-DNNF" (legacy)
  */
 function parseLanguageName(latex: string): string {
-  let name = latex.trim();
-
-  // Handle \langref{...} wrapper first.
-  const langRefMatch = name.match(/^\\langref\{([\s\S]+)\}$/);
-  if (langRefMatch) {
-    name = langRefMatch[1].trim().replace(/\\_/g, '_');
-  }
-  
-  // Handle legacy $d$-$DNNF$ format → d-DNNF
-  if (name.includes('-')) {
-    // Split by -, parse each part, rejoin
-    return name.split('-').map(part => {
-      part = part.trim();
-      if (part.startsWith('$') && part.endsWith('$')) {
-        return part.slice(1, -1);
-      }
-      return part;
-    }).join('-');
-  }
-  
-  // Handle $OBDD_<$ format → OBDD$_<$ (and similar subscripted names)
-  if (name.startsWith('$') && name.endsWith('$')) {
-    const inner = name.slice(1, -1);
-    // If it has subscript notation, convert back to the DB style with $...$.
-    if (inner.includes('_')) {
-      return inner.replace(/(_[A-Za-z0-9<>]+)/g, '$$$1$$');
-    }
-    // Otherwise just return the inner part
-    return inner;
-  }
-  
-  return name;
+  return normalizeLanguageName(latex);
 }
 
 /**
@@ -635,6 +656,7 @@ function generateLatex(database: DatabaseSchema): string {
 \\newcommand{\\eps}{\\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\langfam}[2]{\\textbf{#1$_{#2}$}}
 \\newcommand{\\edgeref}[2]{#1 compiles to #2}
 \\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
 \\newcommand{\\opref}[2]{#1 supports #2}
@@ -739,7 +761,7 @@ function parseCanonicalClaim(
   
   // Build regex to match: LANG1 TRANSFORMATION_TYPE LANG2
   // LANG can be legacy $NNF$, $d$-$DNNF$ or \langref{NNF}, \langref{$OBDD_<$}
-  const langPattern = '(\\\\langref\{[^}]+\}|\\$[^$]+\\$(?:-\\$[^$]+\\$)*)';
+  const langPattern = '(\\\\langfam\\{[^{}]+\\}\\{[^{}]+\\}|\\\\langref\\{(?:[^{}]|\\{[^{}]*\\})+\\}|\\$[^$]+\\$(?:-\\$[^$]+\\$)*)';
   const claimRegex = new RegExp(
     `^${langPattern}\\s+${escapeRegex(transformText)}\\s+${langPattern}$`
   );
@@ -873,10 +895,13 @@ function parseLatex(latexContent: string): ParsedClaim[] {
 function buildNameToIdMap(languages: KCLanguage[]): Map<string, string> {
   const map = new Map<string, string>();
   for (const lang of languages) {
-    map.set(lang.name, lang.id);
-    // Also add normalized versions
-    map.set(lang.name.toLowerCase(), lang.id);
-    map.set(lang.name.replace(/\$/g, ''), lang.id);
+    const exact = lang.name.trim();
+    const normalized = normalizeLanguageName(exact);
+    map.set(exact, lang.id);
+    map.set(exact.toLowerCase(), lang.id);
+    map.set(normalized, lang.id);
+    map.set(normalized.toLowerCase(), lang.id);
+    map.set(exact.replace(/\$/g, ''), lang.id);
   }
   return map;
 }
@@ -1331,6 +1356,7 @@ function generateLanguagesLatex(database: DatabaseSchema): string {
 \\newcommand{\\eps}{\\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\langfam}[2]{\\textbf{#1$_{#2}$}}
 \\newcommand{\\edgeref}[2]{#1 compiles to #2}
 \\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
 \\newcommand{\\opref}[2]{#1 supports #2}
@@ -1448,19 +1474,55 @@ function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLa
   for (const lang of database.languages) {
     idToLang.set(lang.id, lang);
   }
+
+  const { adjacencyMatrix } = database;
+
+  function appendLanguageToAdjacencyMatrix(languageId: string): void {
+    const currentSize = adjacencyMatrix.languageIds.length;
+    adjacencyMatrix.languageIds.push(languageId);
+    adjacencyMatrix.indexByLanguage[languageId] = currentSize;
+
+    for (let row = 0; row < currentSize; row++) {
+      adjacencyMatrix.matrix[row].push(null);
+    }
+
+    adjacencyMatrix.matrix.push(Array(currentSize + 1).fill(null));
+  }
   
   let updated = 0;
-  let skipped = 0;
+  let created = 0;
   
   for (const def of parsedDefs) {
-    const lang = idToLang.get(def.id);
-    
+    let lang = idToLang.get(def.id);
+
     if (!lang) {
-      console.warn(`Unknown language ID in LaTeX: ${def.id} (${def.name})`);
-      skipped++;
-      continue;
+      lang = {
+        id: def.id,
+        name: def.name,
+        fullName: def.fullName || '-',
+        definition: def.definition && def.definition !== '(Definition needed)' ? def.definition : '-',
+        definitionRefs: def.definitionRefs,
+        properties: {
+          queries: {},
+          transformations: {}
+        },
+        references: []
+      };
+
+      database.languages.push(lang);
+      idToLang.set(lang.id, lang);
+      appendLanguageToAdjacencyMatrix(lang.id);
+      created++;
     }
     
+    // Keep language metadata in sync with docs.
+    if (def.name) {
+      lang.name = def.name;
+    }
+    if (def.fullName) {
+      lang.fullName = def.fullName;
+    }
+
     // Update definition (the editable part)
     if (def.definition && def.definition !== '(Definition needed)') {
       lang.definition = def.definition;
@@ -1474,7 +1536,7 @@ function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLa
     updated++;
   }
   
-  console.log(`Updated ${updated} language definitions, skipped ${skipped}`);
+  console.log(`Updated ${updated} language definitions, created ${created} new`);
 }
 
 // =============================================================================
@@ -1557,6 +1619,7 @@ function generateDefinitionsLatex(database: DatabaseSchema): string {
 \\newcommand{\\eps}{\\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\langfam}[2]{\\textbf{#1$_{#2}$}}
 \\newcommand{\\edgeref}[2]{#1 compiles to #2}
 \\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
 \\newcommand{\\opref}[2]{#1 supports #2}
@@ -1784,6 +1847,7 @@ function generateSepFuncsLatex(database: DatabaseSchema): string {
 \\newcommand{\\eps}{\\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\langfam}[2]{\\textbf{#1$_{#2}$}}
 \\newcommand{\\edgeref}[2]{#1 compiles to #2}
 \\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
 \\newcommand{\\opref}[2]{#1 supports #2}
@@ -2221,6 +2285,7 @@ function generateOpsLatex(database: DatabaseSchema, opType: 'queries' | 'transfo
 \\newcommand{\\eps}{\\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \\newcommand{\\langref}[1]{\\textbf{#1}}
+\\newcommand{\\langfam}[2]{\\textbf{#1$_{#2}$}}
 \\newcommand{\\edgeref}[2]{#1 compiles to #2}
 \\newcommand{\\nedgeref}[2]{#1 cannot compile to #2}
 \\newcommand{\\opref}[2]{#1 supports #2}

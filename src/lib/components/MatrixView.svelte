@@ -255,7 +255,7 @@
           {#each matrixLanguages as column}
             <th class={`col-header ${selectedNode?.id === column.id ? 'is-active' : ''}`}>
               <button type="button" onclick={() => handleColumnHeaderClick(column.language)} title={`Select ${column.language.name}`}>
-                <span class="math-text inline" aria-label={column.language.name}>{@html languageNameHtml.get(column.id) ?? column.language.name}</span>
+                <span class="math-text inline column-label" aria-label={column.language.name}>{@html languageNameHtml.get(column.id) ?? column.language.name}</span>
               </button>
             </th>
           {/each}
@@ -420,11 +420,21 @@
   }
 
   .col-header button {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    white-space: normal;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .col-header .column-label {
+    display: inline-block;
+    transform: rotate(-90deg);
+    transform-origin: center;
     white-space: nowrap;
-    padding: 0.1rem 0;
+    line-height: 1;
   }
 
   .row-header.is-active,

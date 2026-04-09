@@ -207,4 +207,18 @@
   .math-text :global(.entity-link:visited) {
     color: #2563eb;
   }
+
+  .math-text :global(.latex-list) {
+    margin: 0.35rem 0 0.35rem 1.1rem;
+    padding: 0;
+  }
+
+  .math-text :global(.latex-list li) {
+    margin: 0.2rem 0;
+  }
+
+  .math-text :global(code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+  }
 </style>

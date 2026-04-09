@@ -27,15 +27,35 @@ let _nameMap: Map<string, string> = new Map();
 let _nameToIdMap: Map<string, string> = new Map();
 let _normalizedNameToIdMap: Map<string, string> = new Map();
 
-function normalizeLanguageNameKey(value: string): string {
+function decodeMinimalEntities(value: string): string {
   return value
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&amp;/gi, '&');
+}
+
+function normalizeLanguageNameKey(value: string): string {
+  let normalized = decodeMinimalEntities(value)
     .trim()
+    .replace(/^\\langfam\{([^{}]+)\}\{([^{}]+)\}$/i, '$1_$2')
+    .replace(/^\\langref\{([\s\S]+)\}$/i, '$1')
+    .replace(/\\textless\{\}/gi, '<')
+    .replace(/\\textless(?![A-Za-z])/gi, '<')
+    .replace(/\$<\$/g, '<')
     .replace(/\$/g, '')
     .replace(/\\_/g, '_')
-    .replace(/([A-Za-z0-9-])_([A-Za-z0-9<]+)/g, '$1$_$2$')
-    .replace(/([A-Za-z0-9-])_</g, '$1$_<$')
+    .replace(/_\{\s*([^{}]+)\s*\}/g, '_$1')
+    .replace(/([A-Za-z0-9-])_<(?![A-Za-z0-9])/g, '$1$_<$')
+    .replace(/([A-Za-z0-9-])_([A-Za-z0-9]+)(?![A-Za-z0-9])/g, '$1$_$2$')
     .replace(/\s+/g, ' ')
     .toLowerCase();
+
+  // Canonicalize accidental mixed forms like OBDD$_<{ }$ -> OBDD$_<$
+  normalized = normalized
+    .replace(/\$_\{\s*</g, '$_<')
+    .replace(/\$_\{\s*([a-z0-9]+)\s*\}\$/g, '$_$1$');
+
+  return normalized;
 }
 
 /**

@@ -39,6 +39,7 @@
 \newcommand{\eps}{\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\langfam}[2]{\textbf{#1$_{#2}$}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
@@ -88,7 +89,7 @@ Requires that at least one pair $(x_{2i}, x_{2i+1})$ has both variables true. Du
 
 \begin{definition}[Pairwise equivalence]\label{sf:pairwise-equivalence}
 \textbf{$\Sigma_n = \bigwedge_{i=1}^n (x_i \leftrightarrow y_i)$} \\
-Requires that each pair $(x_i, y_i)$ has equal truth values. An \langref{OBDD\_<} with interleaved order $x_1 < y_1 < \cdots < x_n < y_n$ is polynomial, but a separated order $x_1 < \cdots < x_n < y_1 < \cdots < y_n$ forces exponential size. \citet{Darwiche_2002}
+Requires that each pair $(x_i, y_i)$ has equal truth values. An \langfam{OBDD}{<} with interleaved order $x_1 < y_1 < \cdots < x_n < y_n$ is polynomial, but a separated order $x_1 < \cdots < x_n < y_1 < \cdots < y_n$ forces exponential size. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}[Parity]\label{sf:parity}

@@ -55,6 +55,7 @@
 \newcommand{\eps}{\varepsilon}
 % Cross-reference commands (rendered as links in the web UI)
 \newcommand{\langref}[1]{\textbf{#1}}
+\newcommand{\langfam}[2]{\textbf{#1$_{#2}$}}
 \newcommand{\edgeref}[2]{#1 compiles to #2}
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
@@ -155,7 +156,7 @@ Corollary 7.6 of \citet{Amarilli_2018} gives a lower bound of $2^{\Omega(tw(\phi
 \langref{DNF} is polynomial-time compilable to \langref{nOBDD} \citet{Amarilli_2018,Wegener_2000}
 \end{claim}
 \begin{claimdescription}
-Fix any variable order $<$. Each term of a \langref{DNF} can be represented as an \langref{OBDD\_<} of linear size (a chain of decision nodes for each literal in the term). The nondeterministic disjunction of these \langref{OBDD\_<}s yields an \langref{nOBDD} of size $O(|\phi|)$, since the variable order is shared across all branches \citet{Amarilli_2018,Wegener_2000}.
+Fix any variable order $<$. Each term of a \langref{DNF} can be represented as an \langfam{OBDD}{<} of linear size (a chain of decision nodes for each literal in the term). The nondeterministic disjunction of these \langfam{OBDD}{<}s yields an \langref{nOBDD} of size $O(|\phi|)$, since the variable order is shared across all branches \citet{Amarilli_2018,Wegener_2000}.
 \end{claimdescription}
 
 \begin{claim}
@@ -207,6 +208,13 @@ The Sauerhoff function has an \langref{nFBDD} of size $O(n^2)$ over $n^2$ variab
 \end{claim}
 \begin{claimdescription}
 As defined by \citet{Amarilli_2018}, \langref{nOBDD} is the subset of \langref{nFBDD} satisfying an order of the variables, so compilation entails discarding the order.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{nOBDD}{<} is polynomial-time compilable to \langref{nOBDD} \citet{Wegener_2000}
+\end{claim}
+\begin{claimdescription}
+\langref{nOBDD} is the union of fixed-order languages \langfam{nOBDD}{<}. Hence any \langfam{nOBDD}{<} formula is already an \langref{nOBDD} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 \begin{claim}
@@ -299,6 +307,13 @@ The hidden weighted bit function $HWB_n$ has polynomial \langref{uOBDD} size, bu
 \end{claim}
 \begin{claimdescription}
 As defined by \citet{Amarilli_2018}, \langref{uOBDD} is the subset of \langref{uFBDD} satisfying an order of the variables, so compilation entails discarding the order.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{uOBDD}{<} is polynomial-time compilable to \langref{uOBDD} \citet{Wegener_2000}
+\end{claim}
+\begin{claimdescription}
+\langref{uOBDD} is the union of fixed-order languages \langfam{uOBDD}{<}. Hence any \langfam{uOBDD}{<} formula is already a \langref{uOBDD} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 
@@ -434,10 +449,10 @@ As defined by \citet{Darwiche_2002}, \langref{MODS} is a subset of \langref{DNF}
 \end{claimdescription}
 
 \begin{claim}
-\langref{MODS} is polynomial-time compilable to \langref{OBDD\_<} \citet{Darwiche_2002}
+\langref{MODS} is polynomial-time compilable to \langfam{OBDD}{<} \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-A Shannon tree for any \langref{MODS} formula following order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding \langref{OBDD\_<} in polynomial time \citet{Darwiche_2002}.
+A Shannon tree for any \langref{MODS} formula following order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding \langfam{OBDD}{<} in polynomial time \citet{Darwiche_2002}.
 \end{claimdescription}
 
 \begin{claim}
@@ -449,33 +464,33 @@ As defined by \citet{Darwiche_2002}, \langref{OBDD} is a subset of \langref{FBDD
 
 % separators=Pairwise equivalence
 \begin{claim}
-\langref{OBDD} is not quasi-polynomial-time compilable to \langref{OBDD\_<} \citet{Darwiche_2002}
+\langref{OBDD} is not quasi-polynomial-time compilable to \langfam{OBDD}{<} \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The function $\bigwedge_{i=1}^n(x_i\Leftrightarrow y_i)$ has an \langref{OBDD\_<} representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$
+The function $\bigwedge_{i=1}^n(x_i\Leftrightarrow y_i)$ has an \langfam{OBDD}{<} representation of size polynomial in $n$ whenever $<$ satisfies $x_1<y_1<...<x_n<y_n$ but exponential in $n$ if $<$ satisfies $x_1<x_2<...<x_n<y_1<y_2<...<y_n$
 \end{claimdescription}
 
 % separators=Parity
 \begin{claim}
-\langref{OBDD\_<} is not quasi-polynomial-time compilable to \langref{CNF} \citet{Darwiche_2002}
+\langfam{OBDD}{<} is not quasi-polynomial-time compilable to \langref{CNF} \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size \langref{OBDD\_<} representations but only exponential size \langref{CNF} representations.
+The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size \langfam{OBDD}{<} representations but only exponential size \langref{CNF} representations.
 \end{claimdescription}
 
 % separators=Parity
 \begin{claim}
-\langref{OBDD\_<} is not quasi-polynomial-time compilable to \langref{DNF} \citet{Darwiche_2002}
+\langfam{OBDD}{<} is not quasi-polynomial-time compilable to \langref{DNF} \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size \langref{OBDD\_<} representations but only exponential size \langref{DNF} representations.
+The parity function $PARITY_n=\bigoplus_{i=1}^n x_i$ has linear size \langfam{OBDD}{<} representations but only exponential size \langref{DNF} representations.
 \end{claimdescription}
 
 \begin{claim}
-\langref{OBDD\_<} is polynomial-time compilable to \langref{OBDD} \citet{Darwiche_2002}
+\langfam{OBDD}{<} is polynomial-time compilable to \langref{OBDD} \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-As defined by \citet{Darwiche_2002}, \langref{OBDD\_<} is a subset of \langref{OBDD}. Therefore, a polynomial compilation is trivial.
+As defined by \citet{Darwiche_2002}, \langfam{OBDD}{<} is a subset of \langref{OBDD}. Therefore, a polynomial compilation is trivial.
 \end{claimdescription}
 
 \begin{claim}
@@ -696,17 +711,17 @@ As established by \citet{Darwiche_2011}, every \langref{OBDD} is a right-linear 
 \end{claimdescription}
 
 \begin{claim}
-\langref{SDD\_T} is polynomial-time compilable to \langref{SDD} \citet{Darwiche_2011}
+\langfam{SDD}{T} is polynomial-time compilable to \langref{SDD} \citet{Darwiche_2011}
 \end{claim}
 \begin{claimdescription}
-\langref{SDD} is the union of the fixed-vtree languages \langref{SDD\_T}. Hence any \langref{SDD\_T} formula is already an \langref{SDD} formula, so the compilation is trivial and polynomial-time.
+\langref{SDD} is the union of the fixed-vtree languages \langfam{SDD}{T}. Hence any \langfam{SDD}{T} formula is already an \langref{SDD} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 \begin{claim}
-\langref{cSDD\_T} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
+\langfam{cSDD}{T} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
 \end{claim}
 \begin{claimdescription}
-\langref{cSDD} is the union of the fixed-vtree languages \langref{cSDD\_T}. Hence any \langref{cSDD\_T} formula is already a \langref{cSDD} formula, so the compilation is trivial and polynomial-time.
+\langref{cSDD} is the union of the fixed-vtree languages \langfam{cSDD}{T}. Hence any \langfam{cSDD}{T} formula is already a \langref{cSDD} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 
@@ -715,17 +730,17 @@ As established by \citet{Darwiche_2011}, every \langref{OBDD} is a right-linear 
 % Reference ID: Pipatsrisawat_2008
 % =============================
 \begin{claim}
-\langref{SDNNF\_T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
+\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-\langref{SDNNF} is the union of the fixed-vtree families \langref{SDNNF\_T}. Hence any \langref{SDNNF\_T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
+\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 \begin{claim}
-\langref{d-SDNNF\_T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
+\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-\langref{d-SDNNF} is the union of the fixed-vtree languages \langref{d-SDNNF\_T}. Hence any \langref{d-SDNNF\_T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 
@@ -734,10 +749,10 @@ As established by \citet{Darwiche_2011}, every \langref{OBDD} is a right-linear 
 % Reference ID: Oztok_2014
 % =============================
 \begin{claim}
-\langref{dec-SDNNF\_<} is polynomial-time compilable to \langref{dec-SDNNF} \citet{Oztok_2014}
+\langfam{dec-SDNNF}{T} is polynomial-time compilable to \langref{dec-SDNNF} \citet{Oztok_2014}
 \end{claim}
 \begin{claimdescription}
-\langref{dec-SDNNF} is the union of fixed-vtree \langref{dec-SDNNF\_<} languages. Hence any fixed-family formula is already a \langref{dec-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\langref{dec-SDNNF} is the union of fixed-vtree \langfam{dec-SDNNF}{T} languages. Hence any fixed-family formula is already a \langref{dec-SDNNF} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 % =============================

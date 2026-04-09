@@ -1,17 +1,20 @@
 import katex from 'katex';
 
-const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{|\\langref\{|\\n?edgeref\{|\\n?opref\{)/;
+const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{|\\langref\{|\\langfam\{|\\n?edgeref\{|\\n?opref\{)/;
 const LATEX_FRAGMENT = /(\$\$[\s\S]+?\$\$|\$[\s\S]+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\))/g;
 const CITATION_PATTERN = /\\cite[tp]?\{([^}]+)\}/g;
 
 // Entity link patterns (processed after HTML rendering)
-const LANGREF_PATTERN = /\\langref\{([^}]+)\}/g;
+const LANGREF_PATTERN = /\\langref\{((?:[^{}]|\{[^{}]*\})+)\}/g;
+const LANGFAM_PATTERN = /\\langfam\{([^}]+)\}\{([^}]+)\}/g;
 const EDGEREF_PATTERN = /\\edgeref\{([^}]+)\}\{([^}]+)\}/g;
 const NEDGEREF_PATTERN = /\\nedgeref\{([^}]+)\}\{([^}]+)\}/g;
 const OPREF_PATTERN = /\\opref\{([^}]+)\}\{([^}]+)\}/g;
 const NOPREF_PATTERN = /\\nopref\{([^}]+)\}\{([^}]+)\}/g;
 const EMPH_PATTERN = /\\emph\{([^}]+)\}/g;
 const TEXTIT_PATTERN = /\\textit\{([^}]+)\}/g;
+const TEXTBF_PATTERN = /\\textbf\{([^}]+)\}/g;
+const TEXTTT_PATTERN = /\\texttt\{([^}]+)\}/g;
 
 /**
  * LRU-style render cache for renderMathText results.
@@ -180,34 +183,89 @@ export function renderTextWithCitations(
  * Check if text contains lightweight LaTeX text-formatting commands.
  */
 export function containsLatexTextFormatting(text: string): boolean {
-  return /\\(emph|textit)\{/.test(text);
+  return /\\(emph|textit|textbf|texttt|begin\{itemize\}|begin\{enumerate\})/.test(text);
+}
+
+function renderLatexListEnvironment(html: string, env: 'itemize' | 'enumerate'): string {
+  const pattern = new RegExp(`\\\\begin\\{${env}\\}(?:\\[[^\\]]*\\])?([\\s\\S]*?)\\\\end\\{${env}\\}`, 'g');
+  const listTag = env === 'enumerate' ? 'ol' : 'ul';
+
+  return html.replace(pattern, (_match, body: string) => {
+    const normalizedBody = body
+      .replace(/<br\s*\/?>/gi, '\n')
+      .trim();
+
+    if (!normalizedBody) {
+      return '';
+    }
+
+    const items = normalizedBody
+      .split(/\\item\s+/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (items.length === 0) {
+      return '';
+    }
+
+    const itemHtml = items.map((item) => `<li>${item}</li>`).join('');
+    return `<${listTag} class="latex-list latex-list-${env}">${itemHtml}</${listTag}>`;
+  });
 }
 
 /**
  * Render lightweight LaTeX text-formatting commands into HTML.
  */
 export function renderLatexTextFormatting(html: string): string {
-  return html
+  return renderLatexListEnvironment(renderLatexListEnvironment(html, 'itemize'), 'enumerate')
     .replace(EMPH_PATTERN, (_match, content: string) => `<em>${content}</em>`)
-    .replace(TEXTIT_PATTERN, (_match, content: string) => `<em>${content}</em>`);
+    .replace(TEXTIT_PATTERN, (_match, content: string) => `<em>${content}</em>`)
+    .replace(TEXTBF_PATTERN, (_match, content: string) => `<strong>${content}</strong>`)
+    .replace(TEXTTT_PATTERN, (_match, content: string) => `<code>${content}</code>`);
 }
 
 /**
  * Check if text contains entity link commands (\langref, \edgeref, \opref)
  */
 export function containsEntityLinks(text: string): boolean {
-  return /\\(langref|n?edgeref|n?opref)\{/.test(text);
+  return /\\(langref|langfam|n?edgeref|n?opref)\{/.test(text);
 }
 
 /**
  * Render a language name, applying KaTeX if it contains LaTeX fragments.
  */
 function renderNameHtml(name: string): string {
+  const indexedName = name.match(/^(.+)\$_(.+)\$$/);
+  if (indexedName) {
+    const base = indexedName[1];
+    const subscript = indexedName[2];
+    return `${escapeHtml(base)}<sub>${escapeHtml(subscript)}</sub>`;
+  }
+
   if (containsLatex(name)) {
     const result = renderMathText(name);
     return result.html ?? escapeHtml(name);
   }
   return escapeHtml(name);
+}
+
+function decodeMinimalEntities(value: string): string {
+  return value
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&amp;/gi, '&');
+}
+
+function normalizeLangRefArg(ref: string): string {
+  return decodeMinimalEntities(ref)
+    .trim()
+    .replace(/^\\langfam\{([^{}]+)\}\{([^{}]+)\}$/i, '$1_$2')
+    .replace(/\\textless\{\}/gi, '<')
+    .replace(/\\textless(?![A-Za-z])/gi, '<')
+    .replace(/\$<\$/g, '<')
+    .replace(/\\_/g, '_')
+    .replace(/_\{\s*([^{}]+)\s*\}/g, '_$1')
+    .replace(/\s+/g, ' ');
 }
 
 /**
@@ -233,19 +291,32 @@ export function renderEntityLinks(
    * Returns { id, name } for building the link.
    */
   const resolveLang = (ref: string): { id: string; name: string; resolved: boolean } => {
-    if (ref.startsWith('lang_')) {
-      return { id: ref, name: idToName(ref), resolved: true };
+    const normalizedRef = normalizeLangRefArg(ref);
+    if (normalizedRef.startsWith('lang_')) {
+      return { id: normalizedRef, name: idToName(normalizedRef), resolved: true };
     }
-    const resolvedId = nameToId?.(ref);
+    const resolvedId = nameToId?.(normalizedRef);
     if (resolvedId) {
-      return { id: resolvedId, name: ref, resolved: true };
+      return { id: resolvedId, name: idToName(resolvedId), resolved: true };
     }
-    return { id: ref, name: ref, resolved: false };
+    return { id: normalizedRef, name: normalizedRef, resolved: false };
   };
 
   // Replace \langref{langId or langName}
   result = result.replace(LANGREF_PATTERN, (_match, langRef: string) => {
     const { id, name } = resolveLang(langRef);
+    const nameHtml = renderNameHtml(name);
+    if (!id.startsWith('lang_')) {
+      return nameHtml;
+    }
+    const safeId = escapeHtml(id);
+    return `<a class="entity-link lang-link" href="/#lang/${safeId}" data-entity-type="lang" data-lang-id="${safeId}">${nameHtml}</a>`;
+  });
+
+  // Replace \langfam{Base}{Index} with linked family language names.
+  result = result.replace(LANGFAM_PATTERN, (_match, base: string, index: string) => {
+    const familyRef = `${base}_${index}`;
+    const { id, name } = resolveLang(familyRef);
     const nameHtml = renderNameHtml(name);
     if (!id.startsWith('lang_')) {
       return nameHtml;

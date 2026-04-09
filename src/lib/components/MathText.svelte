@@ -83,11 +83,15 @@
     if (link.classList.contains('entity-link')) {
       // Allow Ctrl+click / Cmd+click / middle-click to open in new tab naturally
       if (event.ctrlKey || event.metaKey || event.button === 1) return;
-      // For regular clicks, use SPA hash navigation
+      // For regular clicks, route to the map hash target.
       event.preventDefault();
       const href = link.getAttribute('href');
       if (href) {
-        window.location.hash = href.replace(/^#/, '');
+        if (href.startsWith('/#')) {
+          window.location.assign(href);
+        } else {
+          window.location.hash = href.replace(/^#/, '');
+        }
       }
     }
   }

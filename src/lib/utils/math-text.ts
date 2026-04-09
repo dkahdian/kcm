@@ -232,23 +232,26 @@ export function renderEntityLinks(
    * Resolve a langref argument that may be either an ID (lang_xxx) or a display name.
    * Returns { id, name } for building the link.
    */
-  const resolveLang = (ref: string): { id: string; name: string } => {
+  const resolveLang = (ref: string): { id: string; name: string; resolved: boolean } => {
     if (ref.startsWith('lang_')) {
-      return { id: ref, name: idToName(ref) };
+      return { id: ref, name: idToName(ref), resolved: true };
     }
     const resolvedId = nameToId?.(ref);
     if (resolvedId) {
-      return { id: resolvedId, name: ref };
+      return { id: resolvedId, name: ref, resolved: true };
     }
-    return { id: ref, name: ref };
+    return { id: ref, name: ref, resolved: false };
   };
 
   // Replace \langref{langId or langName}
   result = result.replace(LANGREF_PATTERN, (_match, langRef: string) => {
     const { id, name } = resolveLang(langRef);
     const nameHtml = renderNameHtml(name);
+    if (!id.startsWith('lang_')) {
+      return nameHtml;
+    }
     const safeId = escapeHtml(id);
-    return `<a class="entity-link lang-link" href="#lang/${safeId}" data-entity-type="lang" data-lang-id="${safeId}">${nameHtml}</a>`;
+    return `<a class="entity-link lang-link" href="/#lang/${safeId}" data-entity-type="lang" data-lang-id="${safeId}">${nameHtml}</a>`;
   });
 
   // Replace \edgeref{srcRef}{tgtRef}
@@ -256,9 +259,12 @@ export function renderEntityLinks(
     const src = resolveLang(srcRef);
     const tgt = resolveLang(tgtRef);
     const labelHtml = `${renderNameHtml(src.name)} compiles to ${renderNameHtml(tgt.name)}`;
+    if (!src.resolved || !tgt.resolved || !src.id.startsWith('lang_') || !tgt.id.startsWith('lang_')) {
+      return labelHtml;
+    }
     const safeSrc = escapeHtml(src.id);
     const safeTgt = escapeHtml(tgt.id);
-    return `<a class="entity-link edge-link" href="#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
+    return `<a class="entity-link edge-link" href="/#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
   });
 
   // Replace \nedgeref{srcRef}{tgtRef} (negative edge: "cannot compile to")
@@ -266,9 +272,12 @@ export function renderEntityLinks(
     const src = resolveLang(srcRef);
     const tgt = resolveLang(tgtRef);
     const labelHtml = `${renderNameHtml(src.name)} cannot compile to ${renderNameHtml(tgt.name)}`;
+    if (!src.resolved || !tgt.resolved || !src.id.startsWith('lang_') || !tgt.id.startsWith('lang_')) {
+      return labelHtml;
+    }
     const safeSrc = escapeHtml(src.id);
     const safeTgt = escapeHtml(tgt.id);
-    return `<a class="entity-link edge-link" href="#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
+    return `<a class="entity-link edge-link" href="/#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
   });
 
   // Replace \opref{langRef}{opCode}
@@ -276,9 +285,12 @@ export function renderEntityLinks(
     const lang = resolveLang(langRef);
     const opLabel = opCodeToLabel ? opCodeToLabel(opCode) : opCode;
     const labelHtml = `${renderNameHtml(lang.name)} supports ${escapeHtml(opLabel)}`;
+    if (!lang.resolved || !lang.id.startsWith('lang_')) {
+      return labelHtml;
+    }
     const safeId = escapeHtml(lang.id);
     const safeCode = escapeHtml(opCode);
-    return `<a class="entity-link op-link" href="#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
+    return `<a class="entity-link op-link" href="/#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
   });
 
   // Replace \nopref{langRef}{opCode} (negative op: "is unsupported by")
@@ -286,9 +298,12 @@ export function renderEntityLinks(
     const lang = resolveLang(langRef);
     const opLabel = opCodeToLabel ? opCodeToLabel(opCode) : opCode;
     const labelHtml = `${escapeHtml(opLabel)} is unsupported by ${renderNameHtml(lang.name)}`;
+    if (!lang.resolved || !lang.id.startsWith('lang_')) {
+      return labelHtml;
+    }
     const safeId = escapeHtml(lang.id);
     const safeCode = escapeHtml(opCode);
-    return `<a class="entity-link op-link" href="#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
+    return `<a class="entity-link op-link" href="/#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
   });
 
   return result;

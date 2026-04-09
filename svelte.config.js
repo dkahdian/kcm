@@ -15,7 +15,13 @@ const config = {
 			prerender: {
 				// Generate the root route as index.html alongside the SPA 404 fallback
 				entries: ['/'],
-				handleUnseenRoutes: 'ignore'
+				handleUnseenRoutes: 'ignore',
+				handleMissingId: ({ id }) => {
+					if (id.startsWith('lang/') || id.startsWith('edge/') || id.startsWith('op/')) {
+						return 'ignore';
+					}
+					return 'fail';
+				}
 			}
 	}
 };

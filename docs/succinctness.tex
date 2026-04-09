@@ -695,6 +695,51 @@ The hidden weighted bit function $HWB_n$ has \langref{OBDD} size $2^{\Omega(n/4)
 As established by \citet{Darwiche_2011}, every \langref{OBDD} is a right-linear \langref{SDD}, which is already compressed (canonical). Thus, \langref{cSDD} strictly generalizes \langref{OBDD}.
 \end{claimdescription}
 
+\begin{claim}
+\langref{SDD\_T} is polynomial-time compilable to \langref{SDD} \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+\langref{SDD} is the union of the fixed-vtree languages \langref{SDD\_T}. Hence any \langref{SDD\_T} formula is already an \langref{SDD} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langref{cSDD\_T} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+\langref{cSDD} is the union of the fixed-vtree languages \langref{cSDD\_T}. Hence any \langref{cSDD\_T} formula is already a \langref{cSDD} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+
+% =============================
+\section{K. Pipatsrisawat and A. Darwiche, "A New D-DNNF-Based Bound for #SAT", 2008.}
+% Reference ID: Pipatsrisawat_2008
+% =============================
+\begin{claim}
+\langref{SDNNF\_T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{SDNNF} is the union of the fixed-vtree families \langref{SDNNF\_T}. Hence any \langref{SDNNF\_T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langref{d-SDNNF\_T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{d-SDNNF} is the union of the fixed-vtree languages \langref{d-SDNNF\_T}. Hence any \langref{d-SDNNF\_T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+
+% =============================
+\section{U. Oztok and A. Darwiche, "A Top-Down Compiler for Sentential Decision Diagrams", 2014.}
+% Reference ID: Oztok_2014
+% =============================
+\begin{claim}
+\langref{dec-SDNNF\_<} is polynomial-time compilable to \langref{dec-SDNNF} \citet{Oztok_2014}
+\end{claim}
+\begin{claimdescription}
+\langref{dec-SDNNF} is the union of fixed-vtree \langref{dec-SDNNF\_<} languages. Hence any fixed-family formula is already a \langref{dec-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
 % =============================
 % Bibliography
 % =============================

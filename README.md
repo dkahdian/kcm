@@ -25,3 +25,25 @@ The project will support the following features:
 
 - Data transformation model: see `docs/data-transformation-model.md` for the unified GraphData model, queue processing, validation rules, and filter pipeline.
 - Graph validation & propagation: see `docs/graph-validation-and-propagation.md` for the Level-1 semantic validator and propagator specification.
+
+## Overleaf Sync
+
+- `npm run to-latex` now performs two steps:
+	1. Regenerate LaTeX files from JSON.
+	2. Mirror `docs/` to the Overleaf Git repository under `/git` and push.
+
+- Manual push only (without regeneration):
+	- `npm run push-overleaf`
+
+- Manual pull from Overleaf `/git` into local `docs/` (not wired into other scripts):
+	- `npm run pull-overleaf`
+	- If local `docs/` has uncommitted changes, pull is blocked unless `OVERLEAF_PULL_FORCE=1`.
+
+- Optional environment variables:
+	- `OVERLEAF_GIT_URL` (or `OVERLEAF_REPO_URL`): override default Overleaf remote URL.
+	- `OVERLEAF_BRANCH`: target branch to push to (defaults to cloned HEAD).
+	- `OVERLEAF_GIT_AUTHOR_NAME`: commit author name (default `starai-sync-bot`).
+	- `OVERLEAF_GIT_AUTHOR_EMAIL`: commit author email (default `starai-sync@example.com`).
+	- `OVERLEAF_COMMIT_MESSAGE`: custom commit message.
+	- `SKIP_OVERLEAF_PUSH=1`: skip push step (emergency/local-only generation).
+	- `OVERLEAF_PULL_FORCE=1`: allow overwrite pull even with local `docs/` changes.

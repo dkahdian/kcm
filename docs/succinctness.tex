@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Succinctness Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-04-08T00:35:09.453Z
+% Generated: 2026-04-10T00:19:04.983Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -211,13 +211,6 @@ As defined by \citet{Amarilli_2018}, \langref{nOBDD} is the subset of \langref{n
 \end{claimdescription}
 
 \begin{claim}
-\langfam{nOBDD}{<} is polynomial-time compilable to \langref{nOBDD} \citet{Wegener_2000}
-\end{claim}
-\begin{claimdescription}
-\langref{nOBDD} is the union of fixed-order languages \langfam{nOBDD}{<}. Hence any \langfam{nOBDD}{<} formula is already an \langref{nOBDD} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
 \langref{nOBDD} is polynomial-time compilable to \langref{SDNNF} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
@@ -307,13 +300,6 @@ The hidden weighted bit function $HWB_n$ has polynomial \langref{uOBDD} size, bu
 \end{claim}
 \begin{claimdescription}
 As defined by \citet{Amarilli_2018}, \langref{uOBDD} is the subset of \langref{uFBDD} satisfying an order of the variables, so compilation entails discarding the order.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{uOBDD}{<} is polynomial-time compilable to \langref{uOBDD} \citet{Wegener_2000}
-\end{claim}
-\begin{claimdescription}
-\langref{uOBDD} is the union of fixed-order languages \langfam{uOBDD}{<}. Hence any \langfam{uOBDD}{<} formula is already a \langref{uOBDD} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 
@@ -562,6 +548,25 @@ The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Co
 
 
 % =============================
+\section{I. Wegener, "Branching Programs and Binary Decision Diagrams: Theory and Applica...}
+% Reference ID: Wegener_2000
+% =============================
+\begin{claim}
+\langfam{nOBDD}{<} is polynomial-time compilable to \langref{nOBDD} \citet{Wegener_2000}
+\end{claim}
+\begin{claimdescription}
+\langref{nOBDD} is the union of fixed-order languages \langfam{nOBDD}{<}. Hence any \langfam{nOBDD}{<} formula is already an \langref{nOBDD} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{uOBDD}{<} is polynomial-time compilable to \langref{uOBDD} \citet{Wegener_2000}
+\end{claim}
+\begin{claimdescription}
+\langref{uOBDD} is the union of fixed-order languages \langfam{uOBDD}{<}. Hence any \langfam{uOBDD}{<} formula is already a \langref{uOBDD} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+
+% =============================
 \section{S. Bova and F. Capelli and S. Mengel and F. Slivovsky, "Knowledge Compilation Me...}
 % Reference ID: Bova_2016
 % =============================
@@ -595,6 +600,32 @@ The Quine-McCluskey algorithm generates an \langref{IP} formula in polynomial ti
 
 
 % =============================
+\section{A. Darwiche, "SDD: a new canonical representation of propositional knowledge bas...}
+% Reference ID: Darwiche_2011
+% =============================
+\begin{claim}
+\langfam{cSDD}{T} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+\langref{cSDD} is the union of the fixed-vtree languages \langfam{cSDD}{T}. Hence any \langfam{cSDD}{T} formula is already a \langref{cSDD} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langref{OBDD} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+As established by \citet{Darwiche_2011}, every \langref{OBDD} is a right-linear \langref{SDD}, which is already compressed (canonical). Thus, \langref{cSDD} strictly generalizes \langref{OBDD}.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{SDD}{T} is polynomial-time compilable to \langref{SDD} \citet{Darwiche_2011}
+\end{claim}
+\begin{claimdescription}
+\langref{SDD} is the union of the fixed-vtree languages \langfam{SDD}{T}. Hence any \langfam{SDD}{T} formula is already an \langref{SDD} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+
+% =============================
 \section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
 % Reference ID: VanDenBroeck_2015
 % =============================
@@ -610,6 +641,25 @@ As defined by \citet{VanDenBroeck_2015}, \langref{cSDD} is the compressed subset
 \end{claim}
 \begin{claimdescription}
 \langref{SDD} is a strict subset of \langref{d-SDNNF}.
+\end{claimdescription}
+
+
+% =============================
+\section{K. Pipatsrisawat and A. Darwiche, "New Compilation Languages Based on Structured...}
+% Reference ID: Pipatsrisawat_2008
+% =============================
+\begin{claim}
+\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 
@@ -700,52 +750,7 @@ The hidden weighted bit function $HWB_n$ has \langref{OBDD} size $2^{\Omega(n/4)
 
 
 % =============================
-\section{A. Darwiche, "SDD: a new canonical representation of propositional knowledge bas...}
-% Reference ID: Darwiche_2011
-% =============================
-\begin{claim}
-\langref{OBDD} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-As established by \citet{Darwiche_2011}, every \langref{OBDD} is a right-linear \langref{SDD}, which is already compressed (canonical). Thus, \langref{cSDD} strictly generalizes \langref{OBDD}.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{SDD}{T} is polynomial-time compilable to \langref{SDD} \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-\langref{SDD} is the union of the fixed-vtree languages \langfam{SDD}{T}. Hence any \langfam{SDD}{T} formula is already an \langref{SDD} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{cSDD}{T} is polynomial-time compilable to \langref{cSDD} \citet{Darwiche_2011}
-\end{claim}
-\begin{claimdescription}
-\langref{cSDD} is the union of the fixed-vtree languages \langfam{cSDD}{T}. Hence any \langfam{cSDD}{T} formula is already a \langref{cSDD} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-
-% =============================
-\section{K. Pipatsrisawat and A. Darwiche, "A New D-DNNF-Based Bound for \# SAT", 2008.}
-% Reference ID: Pipatsrisawat_2008
-% =============================
-\begin{claim}
-\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
-\end{claim}
-\begin{claimdescription}
-\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
-\end{claim}
-\begin{claimdescription}
-\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-
-% =============================
-\section{U. Oztok and A. Darwiche, "A Top-Down Compiler for Sentential Decision Diagrams", 2014.}
+\section{U. Oztok and A. Darwiche, "On Compiling CNF into Decision-DNNF", International C...}
 % Reference ID: Oztok_2014
 % =============================
 \begin{claim}

@@ -13,7 +13,9 @@
 		"deploy": "npm run build",
 		"refresh": "npx tsx scripts/refresh-derived.ts",
 		"to-json": "npx tsx scripts/latex-bijection.ts --to-json",
-		"to-latex": "npx tsx scripts/latex-bijection.ts --to-latex",
+		"to-latex": "npx tsx scripts/latex-bijection.ts --to-latex && npm run push-overleaf",
+		"push-overleaf": "npx tsx scripts/push-overleaf.ts",
+		"pull-overleaf": "npx tsx scripts/pull-overleaf.ts",
 		"generate-lean": "npx tsx scripts/generate-lean.ts",
 		"lean-check": "cd lean && lake build"
 	},

@@ -32,3 +32,6 @@ vite.config.ts.timestamp-*
 # Lean build artifacts
 lean/.lake
 lean/build
+
+# Temporary files
+tmp

@@ -95,6 +95,8 @@ Let $\mathcal{F}_1$ and $\mathcal{F}_2$ be language families. We extend the lang
 
 Intuitively, this forces all languages in the ``source'' family ($\mathcal{F}_2$) to efficiently compile into at least one member of the ``target'' ($\mathcal{F}_1$).
 
+Equivalently, in compilation-arrow notation, $\mathcal{F}_1 \leq \mathcal{F}_2$ means compilation flows from $\mathcal{F}_2$ to $\mathcal{F}_1$ (i.e., source $= \mathcal{F}_2$, target $= \mathcal{F}_1$).
+
 As with the language-level definition, succinctness between families is purely existential with respect to size and places no requirement on algorithmic time complexity. We also extend this definition to define a succinctness relationship between an individual language $L$ and a family $\mathcal{F}$ by applying the above definition to the singleton $\{L\}$ and $\mathcal{F}$. \citet{Darwiche_2002}
 \end{definition}
 

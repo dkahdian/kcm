@@ -432,12 +432,12 @@ The prime implicates of $\exists X.\Sigma$ are exactly the prime implicates of $
 \section{K. Pipatsrisawat and A. Darwiche, "New Compilation Languages Based on Structured...}
 % Reference ID: Pipatsrisawat_2008
 % =============================
-% lang=lang_ea9b5299, op=AND_BC
+% lang=lang_91f812d0, op=AND_BC
 \begin{claim}
-\langref{d-SDNNF} supports Bounded Conjunction in polynomial time \citet{Pipatsrisawat_2008}
+\langfam{d-SDNNF}{T} supports Bounded Conjunction in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Bounded conjunction of two \langref{d-SDNNF} formulas sharing the same vtree can be performed in polytime via the Apply algorithm, preserving both determinism and structured decomposability (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
+Bounded conjunction of two \langfam{d-SDNNF}{T} formulas can be performed in polytime via the Apply algorithm, preserving both determinism and structured decomposability (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_ea9b5299, op=AND_C
@@ -472,12 +472,12 @@ Conditioning preserves both structured decomposability and determinism. The vtre
 If \langref{d-SDNNF} satisfied FO, then every \langref{DNF} could be compiled to an equivalent \langref{d-SDNNF} of polynomial size (using fresh selector variables and applying FO). Since specific \langref{DNF}s require exponential-size \langref{d-SDNNF} representations (unconditionally), this is impossible. This unconditional result applies to the fixed-vtree case (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
-% lang=lang_b13b0d78, op=AND_BC
+% lang=lang_3c803ba1, op=AND_BC
 \begin{claim}
-\langref{SDNNF} supports Bounded Conjunction in polynomial time \citet{Pipatsrisawat_2008}
+\langfam{SDNNF}{T} supports Bounded Conjunction in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Bounded conjunction of two \langref{SDNNF} formulas sharing the same vtree can be performed in polytime via the Apply algorithm. The vtree governs variable partitioning at $\land$-nodes, enabling an efficient recursive traversal (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
+Bounded conjunction of two \langfam{SDNNF}{T} formulas can be performed in polytime via the Apply algorithm. The fixed vtree governs variable partitioning at $\land$-nodes, enabling an efficient recursive traversal (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_b13b0d78, op=AND_C
@@ -488,12 +488,12 @@ Bounded conjunction of two \langref{SDNNF} formulas sharing the same vtree can b
 Any clause can be trivially expressed as an \langref{SDNNF} formula. If \langref{SDNNF} satisfied $\land$C, any \langref{CNF} could be compiled to \langref{SDNNF} in polytime by conjoining its clauses. Since \langref{SDNNF} satisfies CO, this would give polytime \langref{CNF} satisfiability, implying P = NP (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
-% lang=lang_b13b0d78, op=OR_C
+% lang=lang_3c803ba1, op=OR_C
 \begin{claim}
-\langref{SDNNF} supports Disjunction in polynomial time \citet{Pipatsrisawat_2008}
+\langfam{SDNNF}{T} supports Disjunction in polynomial time \citet{Pipatsrisawat_2008}
 \end{claim}
 \begin{claimdescription}
-Disjunction of \langref{SDNNF} formulas (sharing the same vtree) preserves structured decomposability, since decomposability only constrains $\land$-nodes and a top-level $\lor$-node introduces no new $\land$-node constraints (\citet{Pipatsrisawat_2008}, Proposition 4). Note: requires formulas to follow the same vtree.
+Disjunction of \langfam{SDNNF}{T} formulas preserves structured decomposability, since decomposability only constrains $\land$-nodes and a top-level $\lor$-node introduces no new $\land$-node constraints (\citet{Pipatsrisawat_2008}, Proposition 4).
 \end{claimdescription}
 
 % lang=lang_b13b0d78, op=FO
@@ -554,20 +554,20 @@ Conditioning (the restrict operation) on OBDD$_<$ replaces each node labeled by 
 An SDD can be negated in polytime by applying exclusive-or with $\top$ using the Apply algorithm \citet{Darwiche_2011}.
 \end{claimdescription}
 
-% lang=lang_1afefbe2, op=AND_BC
+% lang=lang_9c84a267, op=AND_BC
 \begin{claim}
-\langref{SDD} supports Bounded Conjunction in polynomial time \citet{Darwiche_2011}
+\langfam{SDD}{T} supports Bounded Conjunction in polynomial time \citet{Darwiche_2011}
 \end{claim}
 \begin{claimdescription}
-The Apply algorithm combines two SDDs using any Boolean operator in polytime. In particular, two SDDs can be conjoined in polytime via Apply \citet{Darwiche_2011}.
+The Apply algorithm combines two \langfam{SDD}{T} sentences using any Boolean operator in polytime. In particular, two \langfam{SDD}{T} formulas can be conjoined in polytime via Apply \citet{Darwiche_2011}.
 \end{claimdescription}
 
-% lang=lang_1afefbe2, op=OR_BC
+% lang=lang_9c84a267, op=OR_BC
 \begin{claim}
-\langref{SDD} supports Bounded Disjunction in polynomial time \citet{Darwiche_2011}
+\langfam{SDD}{T} supports Bounded Disjunction in polynomial time \citet{Darwiche_2011}
 \end{claim}
 \begin{claimdescription}
-The Apply algorithm combines two SDDs using any Boolean operator in polytime. In particular, two SDDs can be disjoined in polytime via Apply \citet{Darwiche_2011}.
+The Apply algorithm combines two \langfam{SDD}{T} sentences using any Boolean operator in polytime. In particular, two \langfam{SDD}{T} formulas can be disjoined in polytime via Apply \citet{Darwiche_2011}.
 \end{claimdescription}
 
 % lang=lang_1afefbe2, op=CD

@@ -1,12 +1,160 @@
 <script lang="ts">
+	import ReferenceClaimTags from '$lib/components/ReferenceClaimTags.svelte';
+	import { initialGraphData } from '$lib/data/index.js';
+	import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
 	import { allReferences, getGlobalRefNumber } from '$lib/data/references.js';
 	import type { KCReference } from '$lib/types.js';
 
 	type SortMode = 'alpha' | 'year';
+	type ClaimKind = 'query' | 'transformation' | 'edge';
+
+	type ClaimTag =
+		| {
+				id: string;
+				kind: 'edge';
+				sourceName: string;
+				targetName: string;
+				href: string;
+				status: string;
+				title: string;
+		  }
+		| {
+				id: string;
+				kind: 'query' | 'transformation';
+				languageName: string;
+				operationCode: string;
+				href: string;
+				status: string;
+				title: string;
+		  };
 
 	let searchQuery = $state('');
 	let sortMode: SortMode = $state('alpha');
 	let copiedRefId: string | null = $state(null);
+
+	const claimTagsByRef = $derived.by(() => {
+		const languageById = new Map(initialGraphData.languages.map((language) => [language.id, language]));
+		const tagsByRef = new Map<string, Map<string, ClaimTag>>();
+
+		const registerTag = (refId: string, tag: ClaimTag) => {
+			const normalizedRefId = refId.toLowerCase();
+			const existing = tagsByRef.get(normalizedRefId) ?? new Map<string, ClaimTag>();
+			existing.set(tag.id, tag);
+			tagsByRef.set(normalizedRefId, existing);
+		};
+
+		const edgeLanguageIds = initialGraphData.adjacencyMatrix.languageIds;
+		const edgeMatrix = initialGraphData.adjacencyMatrix.matrix;
+
+		for (let sourceIndex = 0; sourceIndex < edgeLanguageIds.length; sourceIndex += 1) {
+			for (let targetIndex = 0; targetIndex < edgeLanguageIds.length; targetIndex += 1) {
+				const relation = edgeMatrix[sourceIndex]?.[targetIndex];
+				if (!relation) continue;
+				if (relation.derived) continue;
+
+				const sourceId = edgeLanguageIds[sourceIndex];
+				const targetId = edgeLanguageIds[targetIndex];
+				const sourceName = languageById.get(sourceId)?.name ?? sourceId;
+				const targetName = languageById.get(targetId)?.name ?? targetId;
+
+				const refIds = new Set<string>([
+					...(relation.refs ?? []),
+					...(relation.noPolyDescription && !relation.noPolyDescription.derived
+						? relation.noPolyDescription.refs
+						: []),
+					...(relation.quasiDescription && !relation.quasiDescription.derived
+						? relation.quasiDescription.refs
+						: [])
+				]);
+
+				if (refIds.size === 0) continue;
+
+				const edgeTag: ClaimTag = {
+					id: `edge:${sourceId}->${targetId}`,
+					kind: 'edge',
+					sourceName,
+					targetName,
+					href: `/#edge/${sourceId}/${targetId}`,
+					status: relation.status,
+					title: `Open ${sourceName} -> ${targetName} on the map`
+				};
+
+				for (const refId of refIds) {
+					registerTag(refId, edgeTag);
+				}
+			}
+		}
+
+		for (const language of initialGraphData.languages) {
+			for (const [safeKey, opDef] of Object.entries(QUERIES)) {
+				const support =
+					language.properties.queries?.[safeKey] ?? language.properties.queries?.[opDef.code];
+				if (!support?.refs?.length) continue;
+				if (support.derived) continue;
+
+				const queryTag: ClaimTag = {
+					id: `query:${language.id}:${safeKey}`,
+					kind: 'query',
+					languageName: language.name,
+					operationCode: opDef.code,
+					href: `/#op/${language.id}/${safeKey}`,
+					status: support.complexity ?? 'unknown-to-us',
+					title: `Open ${language.name}: ${opDef.code} on the map`
+				};
+
+				for (const refId of support.refs) {
+					registerTag(refId, queryTag);
+				}
+			}
+
+			for (const [safeKey, opDef] of Object.entries(TRANSFORMATIONS)) {
+				const support =
+					language.properties.transformations?.[safeKey] ??
+					language.properties.transformations?.[opDef.code];
+				if (!support?.refs?.length) continue;
+				if (support.derived) continue;
+
+				const transformationTag: ClaimTag = {
+					id: `transformation:${language.id}:${safeKey}`,
+					kind: 'transformation',
+					languageName: language.name,
+					operationCode: opDef.code,
+					href: `/#op/${language.id}/${safeKey}`,
+					status: support.complexity ?? 'unknown-to-us',
+					title: `Open ${language.name}: ${opDef.code} on the map`
+				};
+
+				for (const refId of support.refs) {
+					registerTag(refId, transformationTag);
+				}
+			}
+		}
+
+		const kindOrder: Record<ClaimKind, number> = {
+			query: 0,
+			transformation: 1,
+			edge: 2
+		};
+
+		const sortLabel = (tag: ClaimTag): string => {
+			if (tag.kind === 'edge') {
+				return `${tag.sourceName}->${tag.targetName}`;
+			}
+			return `${tag.languageName}:${tag.operationCode}`;
+		};
+
+		const finalized = new Map<string, ClaimTag[]>();
+		for (const [normalizedRefId, tagMap] of tagsByRef.entries()) {
+			const sortedTags = [...tagMap.values()].sort((left, right) => {
+				const kindDiff = kindOrder[left.kind] - kindOrder[right.kind];
+				if (kindDiff !== 0) return kindDiff;
+				return sortLabel(left).localeCompare(sortLabel(right));
+			});
+			finalized.set(normalizedRefId, sortedTags);
+		}
+
+		return finalized;
+	});
 
 	function extractYear(ref: KCReference): number {
 		const match = ref.bibtex.match(/year\s*=\s*[{"']?(\d{4})/i);
@@ -15,6 +163,10 @@
 
 	function extractLastName(ref: KCReference): string {
 		return ref.id.replace(/_\d+[a-z]?$/, '');
+	}
+
+	function getClaimTagsForRef(refId: string): ClaimTag[] {
+		return claimTagsByRef.get(refId.toLowerCase()) ?? [];
 	}
 
 	const filtered = $derived.by(() => {
@@ -102,6 +254,7 @@
 		<p class="count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</p>
 		<ul class="refs">
 			{#each filtered as ref (ref.id)}
+				{@const claimTags = getClaimTagsForRef(ref.id)}
 				<li class="ref" id={ref.id}>
 					<span class="ordinal">[{getGlobalRefNumber(ref.id) ?? '?'}]</span>
 					<span class="year-badge">{extractYear(ref) < 9999 ? extractYear(ref) : '—'}</span>
@@ -114,6 +267,9 @@
 							<span class="ref-text">{ref.title}</span>
 						{/if}
 						<span class="ref-key">{ref.id}</span>
+						{#if claimTags.length > 0}
+							<ReferenceClaimTags claimTags={claimTags} />
+						{/if}
 					</div>
 					<button
 						class="copy"
@@ -253,7 +409,7 @@
 
 	.ref {
 		display: flex;
-		align-items: baseline;
+		align-items: flex-start;
 		gap: 0.75rem;
 		padding: 0.625rem 0.5rem;
 		border-bottom: 1px solid #f1f5f9;
@@ -294,6 +450,7 @@
 	.ref-main {
 		flex: 1;
 		min-width: 0;
+		padding-top: 0.05rem;
 	}
 
 	.ref-link {
@@ -326,6 +483,8 @@
 
 	.copy {
 		flex-shrink: 0;
+		align-self: flex-start;
+		margin-top: 0.08rem;
 		font-size: 0.6875rem;
 		font-weight: 600;
 		color: #94a3b8;

@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Succinctness Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-04-10T00:19:04.983Z
+% Generated: 2026-04-21T23:09:59.166Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -97,6 +97,13 @@ As defined by \citet{Amarilli_2018}, \langref{d-SDNNF} is simply the subset of \
 \end{claimdescription}
 
 \begin{claim}
+\langref{d-SDNNF} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langref{uOBDD} \citet{Amarilli_2018,Bollig_2018,Beame_2015}
+\end{claim}
+\begin{claimdescription}
+Theorem 2 of \citet{Bollig_2018} shows that \langref{SDNNF} can be compiled into \langref{nOBDD} by adapting the compilation of \citet{Beame_2015} from \langref{DNNF} to \langref{nFBDD}; proposition 2 of \citet{Bollig_2018} shows that this \langref{nOBDD} is unambiguous if the \langref{SDNNF} is deterministic.
+\end{claimdescription}
+
+\begin{claim}
 \langfam{d-SDNNF}{T} is polynomial-time compilable to \langfam{SDNNF}{T} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
@@ -104,10 +111,10 @@ For any fixed vtree $T$, \langfam{d-SDNNF}{T} is exactly the subset of \langfam{
 \end{claimdescription}
 
 \begin{claim}
-\langref{d-SDNNF} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langref{uOBDD} \citet{Amarilli_2018,Bollig_2018,Beame_2015}
+\langfam{d-SDNNF}{T} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langfam{uOBDD}{<} \citet{Amarilli_2018,Bollig_2018,Beame_2015}
 \end{claim}
 \begin{claimdescription}
-Theorem 2 of \citet{Bollig_2018} shows that \langref{SDNNF} can be compiled into \langref{nOBDD} by adapting the compilation of \citet{Beame_2015} from \langref{DNNF} to \langref{nFBDD}; proposition 2 of \citet{Bollig_2018} shows that this \langref{nOBDD} is unambiguous if the \langref{SDNNF} is deterministic.
+For any fixed vtree $T$, Theorem 2 of \citet{Bollig_2018} gives a quasipolynomial simulation from structured \langref{DNNF} to \langref{nOBDD} that follows an induced variable order $<$. Proposition 2 of \citet{Bollig_2018} gives unambiguity for deterministic inputs, yielding a quasipolynomial compilation from \langfam{d-SDNNF}{T} to \langfam{uOBDD}{<}.
 \end{claimdescription}
 
 \begin{claim}
@@ -132,13 +139,6 @@ As defined by \citet{Amarilli_2018}, \langref{dec-SDNNF} is the subset of \langr
 \end{claimdescription}
 
 \begin{claim}
-\langfam{dec-SDNNF}{T} is polynomial-time compilable to \langfam{d-SDNNF}{T} \citet{Amarilli_2018}
-\end{claim}
-\begin{claimdescription}
-For any fixed vtree $T$, \langfam{dec-SDNNF}{T} is the subset of \langfam{d-SDNNF}{T} satisfying the decision property, so compilation is trivial.
-\end{claimdescription}
-
-\begin{claim}
 \langref{dec-SDNNF} is polynomial-time compilable to \langref{dec-DNNF} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
@@ -157,6 +157,13 @@ Shown by Proposition 3.10 of \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
 Theorem 2 of \citet{Bollig_2018} shows that \langref{SDNNF} can be compiled into \langref{nOBDD} by adapting the compilation of \citet{Beame_2015} from \langref{DNNF} to \langref{nFBDD}; proposition 2 of \citet{Bollig_2018} shows that this \langref{nOBDD} is unambiguous if the \langref{SDNNF} is deterministic. Additionally, the same compilation yields an \langref{OBDD} if the input is a \langref{dec-SDNNF} since there are no $\vee$-gates that are not decision gates in a \langref{dec-SDNNF}.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{dec-SDNNF}{T} is polynomial-time compilable to \langfam{d-SDNNF}{T} \citet{Amarilli_2018}
+\end{claim}
+\begin{claimdescription}
+For any fixed vtree $T$, \langfam{dec-SDNNF}{T} is the subset of \langfam{d-SDNNF}{T} satisfying the decision property, so compilation is trivial.
 \end{claimdescription}
 
 \begin{claim}
@@ -239,17 +246,17 @@ Construct a right-linear v-tree from the variable order, then rewrite each decis
 \end{claimdescription}
 
 \begin{claim}
-\langfam{nOBDD}{<} is polynomial-time compilable to \langfam{SDNNF}{T} \citet{Amarilli_2018}
-\end{claim}
-\begin{claimdescription}
-Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$ yields an output respecting $T$, so \langfam{nOBDD}{<} compiles to \langfam{SDNNF}{T} in linear time.
-\end{claimdescription}
-
-\begin{claim}
 \langref{nOBDD} is not quasi-polynomial-time compilable to \langref{uOBDD} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
 Any \langref{DNF} can be represented as an \langref{nOBDD} in linear time; however the family of \langref{DNF}s $(\phi_n)_{n\in\N}$ built from expander graphs have treewidth linear in their size. Thus, any \langref{uOBDD} for $\phi_n$ is of size $2^{\Omega(|\phi_n|)}$. (TODO: write intuitive explanation or define expander graph separator)
+\end{claimdescription}
+
+\begin{claim}
+\langfam{nOBDD}{<} is polynomial-time compilable to \langfam{SDNNF}{T} \citet{Amarilli_2018}
+\end{claim}
+\begin{claimdescription}
+Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$ yields an output respecting $T$, so \langfam{nOBDD}{<} compiles to \langfam{SDNNF}{T} in linear time.
 \end{claimdescription}
 
 \begin{claim}
@@ -260,17 +267,17 @@ Construct a right-linear v-tree from the variable order, then rewrite each decis
 \end{claimdescription}
 
 \begin{claim}
-\langfam{OBDD}{<} is polynomial-time compilable to \langfam{dec-SDNNF}{T} \citet{Amarilli_2018}
-\end{claim}
-\begin{claimdescription}
-Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$ yields a structured output that respects $T$, and all introduced $\vee$-gates are decision gates, producing \langfam{dec-SDNNF}{T} in linear time.
-\end{claimdescription}
-
-\begin{claim}
 \langref{OBDD} is polynomial-time compilable to \langref{uOBDD} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
 As defined by \citet{Amarilli_2018}, \langref{OBDD} is the subset of \langref{uOBDD} without any $\vee$-node.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{OBDD}{<} is polynomial-time compilable to \langfam{dec-SDNNF}{T} \citet{Amarilli_2018}
+\end{claim}
+\begin{claimdescription}
+Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$ yields a structured output that respects $T$, and all introduced $\vee$-gates are decision gates, producing \langfam{dec-SDNNF}{T} in linear time.
 \end{claimdescription}
 
 \begin{claim}
@@ -316,13 +323,6 @@ Construct a right-linear v-tree from the variable order, then rewrite each decis
 \end{claimdescription}
 
 \begin{claim}
-\langfam{uOBDD}{<} is polynomial-time compilable to \langfam{d-SDNNF}{T} \citet{Amarilli_2018}
-\end{claim}
-\begin{claimdescription}
-Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$ yields a structured output respecting $T$, and unambiguity ensures determinism of introduced $\vee$-gates, giving \langfam{d-SDNNF}{T} in linear time.
-\end{claimdescription}
-
-\begin{claim}
 \langref{uOBDD} is polynomial-time compilable to \langref{nOBDD} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
@@ -342,6 +342,13 @@ The hidden weighted bit function $HWB_n$ has polynomial \langref{uOBDD} size, bu
 \end{claim}
 \begin{claimdescription}
 As defined by \citet{Amarilli_2018}, \langref{uOBDD} is the subset of \langref{uFBDD} satisfying an order of the variables, so compilation entails discarding the order.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{uOBDD}{<} is polynomial-time compilable to \langfam{d-SDNNF}{T} \citet{Amarilli_2018}
+\end{claim}
+\begin{claimdescription}
+Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(x \wedge D_0) \vee (\neg x \wedge D_1)$ yields a structured output respecting $T$, and unambiguity ensures determinism of introduced $\vee$-gates, giving \langfam{d-SDNNF}{T} in linear time.
 \end{claimdescription}
 
 
@@ -554,18 +561,6 @@ The $OR_n$ function $\bigvee_{i=1}^nx_i$ can be represented in $O(n)$ as a \lang
 
 
 % =============================
-\section{P. Beame and J. Li and S. Roy and D. Suciu, "Model Counting of Query Expressions...}
-% Reference ID: Beame_2013
-% =============================
-\begin{claim}
-\langref{d-DNNF} is not quasi-polynomial-time compilable to \langref{dec-DNNF} \citet{Beame_2013}
-\end{claim}
-\begin{claimdescription}
-Shown by Corollary 3.5 of \citet{Beame_2013}.
-\end{claimdescription}
-
-
-% =============================
 \section{B. Bollig and M. Buttkus, "On the Relative Succinctness of Sentential Decision D...}
 % Reference ID: Bollig_2018
 % =============================
@@ -574,6 +569,13 @@ Shown by Corollary 3.5 of \citet{Beame_2013}.
 \end{claim}
 \begin{claimdescription}
 The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Corollary 3 of \citet{Bollig_2018}), but has exponential \langref{FBDD} size. Therefore, $P(SDD) \not\subseteq P(FBDD)$, which combined with the known result $P(FBDD) \not\subseteq P(SDD)$ from \citet{Beame_2015}, establishes that \langref{SDD} and \langref{FBDD} are incomparable (Corollary 4 of \citet{Bollig_2018}).
+\end{claimdescription}
+
+\begin{claim}
+\langfam{SDNNF}{T} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langfam{nOBDD}{<} \citet{Bollig_2018,Beame_2015}
+\end{claim}
+\begin{claimdescription}
+For any fixed vtree $T$, Theorem 2 of \citet{Bollig_2018} gives a quasipolynomial simulation from \langfam{SDNNF}{T} to a nondeterministic OBDD following an induced variable order $<$. Hence \langfam{SDNNF}{T} has quasipolynomial compilation to \langfam{nOBDD}{<}.
 \end{claimdescription}
 
 
@@ -609,35 +611,47 @@ The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ (Co
 
 
 % =============================
-\section{S. Bova and F. Capelli and S. Mengel and F. Slivovsky, "Knowledge Compilation Me...}
-% Reference ID: Bova_2016
+\section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
+% Reference ID: VanDenBroeck_2015
 % =============================
-% separators=Sauerhoff
 \begin{claim}
-\langref{DNNF} is not quasi-polynomial-time compilable to \langref{d-DNNF} \citet{Bova_2016}
+\langref{cSDD} is polynomial-time compilable to \langref{SDD} \citet{VanDenBroeck_2015}
 \end{claim}
 \begin{claimdescription}
-Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has \langref{DNNF} size $O(n^2)$. Theorem 9 shows that $S_n$ has \langref{d-DNNF} size $2^{\Omega(n)}$. (Also see \citet{Bova_2014}.)
+As defined by \citet{VanDenBroeck_2015}, \langref{cSDD} is the compressed subset of \langref{SDD}, so compilation is trivial.
 \end{claimdescription}
 
-% separators=JS
 \begin{claim}
-\langref{PI} is not quasi-polynomial-time compilable to \langref{DNNF} \citet{Bova_2016}
+\langfam{cSDD}{T} is polynomial-time compilable to \langfam{SDD}{T} \citet{VanDenBroeck_2015}
 \end{claim}
 \begin{claimdescription}
-Proposition 11 of \citet{Bova_2016} shows that the $JS_n$ has \langref{PI} size $O(n^2)$. Proposition 12 of \citet{Bova_2016} shows that $JS_n$ has \langref{DNNF} size $2^{\Omega(n^2)}$. (Also see \citet{Bova_2014}.)
+For any fixed vtree $T$, \langfam{cSDD}{T} is the compressed subset of \langfam{SDD}{T}, so compilation is trivial.
+\end{claimdescription}
+
+\begin{claim}
+\langref{SDD} is polynomial-time compilable to \langref{d-SDNNF} \citet{VanDenBroeck_2015}
+\end{claim}
+\begin{claimdescription}
+\langref{SDD} is a strict subset of \langref{d-SDNNF}.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{SDD}{T} is polynomial-time compilable to \langfam{d-SDNNF}{T} \citet{VanDenBroeck_2015}
+\end{claim}
+\begin{claimdescription}
+For any fixed vtree $T$, \langfam{SDD}{T} is a strict subset of \langfam{d-SDNNF}{T}, so compilation is trivial.
 \end{claimdescription}
 
 
 % =============================
-\section{I. Wegener, "The Complexity of Boolean Functions", 1987.}
-% Reference ID: Wegener_1987
+\section{P. Beame and J. Li and S. Roy and D. Suciu, "Model Counting of Query Expressions...}
+% Reference ID: Beame_2013
 % =============================
 \begin{claim}
-\langref{MODS} is polynomial-time compilable to \langref{IP} \citet{Wegener_1987}
+\langref{d-DNNF} is not quasi-polynomial-time compilable to \langref{dec-DNNF} \citet{Beame_2013}
 \end{claim}
 \begin{claimdescription}
-The Quine-McCluskey algorithm generates an \langref{IP} formula in polynomial time.
+Shown by Corollary 3.5 of \citet{Beame_2013}.
 \end{claimdescription}
 
 
@@ -675,35 +689,35 @@ Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. 
 
 
 % =============================
-\section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
-% Reference ID: VanDenBroeck_2015
+\section{S. Bova and F. Capelli and S. Mengel and F. Slivovsky, "Knowledge Compilation Me...}
+% Reference ID: Bova_2016
+% =============================
+% separators=Sauerhoff
+\begin{claim}
+\langref{DNNF} is not quasi-polynomial-time compilable to \langref{d-DNNF} \citet{Bova_2016}
+\end{claim}
+\begin{claimdescription}
+Proposition 7 of \citet{Bova_2016} shows that the Sauerhoff function $S_n$ has \langref{DNNF} size $O(n^2)$. Theorem 9 shows that $S_n$ has \langref{d-DNNF} size $2^{\Omega(n)}$. (Also see \citet{Bova_2014}.)
+\end{claimdescription}
+
+% separators=JS
+\begin{claim}
+\langref{PI} is not quasi-polynomial-time compilable to \langref{DNNF} \citet{Bova_2016}
+\end{claim}
+\begin{claimdescription}
+Proposition 11 of \citet{Bova_2016} shows that the $JS_n$ has \langref{PI} size $O(n^2)$. Proposition 12 of \citet{Bova_2016} shows that $JS_n$ has \langref{DNNF} size $2^{\Omega(n^2)}$. (Also see \citet{Bova_2014}.)
+\end{claimdescription}
+
+
+% =============================
+\section{I. Wegener, "The Complexity of Boolean Functions", 1987.}
+% Reference ID: Wegener_1987
 % =============================
 \begin{claim}
-\langref{cSDD} is polynomial-time compilable to \langref{SDD} \citet{VanDenBroeck_2015}
+\langref{MODS} is polynomial-time compilable to \langref{IP} \citet{Wegener_1987}
 \end{claim}
 \begin{claimdescription}
-As defined by \citet{VanDenBroeck_2015}, \langref{cSDD} is the compressed subset of \langref{SDD}, so compilation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{cSDD}{T} is polynomial-time compilable to \langfam{SDD}{T} \citet{VanDenBroeck_2015}
-\end{claim}
-\begin{claimdescription}
-For any fixed vtree $T$, \langfam{cSDD}{T} is the compressed subset of \langfam{SDD}{T}, so compilation is trivial.
-\end{claimdescription}
-
-\begin{claim}
-\langref{SDD} is polynomial-time compilable to \langref{d-SDNNF} \citet{VanDenBroeck_2015}
-\end{claim}
-\begin{claimdescription}
-\langref{SDD} is a strict subset of \langref{d-SDNNF}.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{SDD}{T} is polynomial-time compilable to \langfam{d-SDNNF}{T} \citet{VanDenBroeck_2015}
-\end{claim}
-\begin{claimdescription}
-For any fixed vtree $T$, \langfam{SDD}{T} is a strict subset of \langfam{d-SDNNF}{T}, so compilation is trivial.
+The Quine-McCluskey algorithm generates an \langref{IP} formula in polynomial time.
 \end{claimdescription}
 
 

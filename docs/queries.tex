@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Query Support Claims
 % Auto-generated from database.json
-% Generated: 2026-04-10T00:19:04.990Z
+% Generated: 2026-04-21T23:09:59.179Z
 %
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -226,31 +226,31 @@ Validity is trivial for OBDDs: check if the diagram root equals the terminal 1 n
 
 
 % =============================
-\section{J. Gergov and C. Meinel, "Efficient Boolean manipulation with OBDD's can be exte...}
-% Reference ID: Gergov_1994
+\section{R. E. Bryant, "Symbolic Boolean manipulation with ordered binary-decision diagra...}
+% Reference ID: Bryant_1992
 % =============================
 % lang=lang_684b1ca7, op=CO
 \begin{claim}
-\langref{FBDD} supports Consistency in polynomial time \citet{Gergov_1994}
+\langref{FBDD} supports Consistency in polynomial time \citet{Gergov_1994,Bryant_1992}
 \end{claim}
 \begin{claimdescription}
-\langref{FBDD} satisfies CO \citet{Gergov_1994, Darwiche_2002}. Consistency is polynomial: check if the BDD root is not the terminal 0 node.
+Consistency means existence of a satisfying root-to-1 path. For a general FBDD, run graph reachability from the root to terminal 1 in linear time \citet{Gergov_1994,Bryant_1992}.
 \end{claimdescription}
 
 % lang=lang_684b1ca7, op=CT
 \begin{claim}
-\langref{FBDD} supports Model Counting in polynomial time \citet{Gergov_1994}
+\langref{FBDD} supports Model Counting in polynomial time \citet{Gergov_1994,Bryant_1992}
 \end{claim}
 \begin{claimdescription}
-\langref{FBDD} satisfies CT \citet{Gergov_1994, Darwiche_2002}. Model counting on FBDDs can be done in polynomial time by a single bottom-up pass counting satisfying assignments at each node.
+Model counting is done by dynamic programming over the DAG representation of the free BDD, combining child counts at each decision node; total runtime is polynomial in graph size \citet{Gergov_1994,Bryant_1992}.
 \end{claimdescription}
 
 % lang=lang_684b1ca7, op=VA
 \begin{claim}
-\langref{FBDD} supports Validity in polynomial time \citet{Gergov_1994}
+\langref{FBDD} supports Validity in polynomial time \citet{Gergov_1994,Bryant_1992}
 \end{claim}
 \begin{claimdescription}
-\langref{FBDD} satisfies VA \citet{Gergov_1994, Darwiche_2002}. Simply check if the BDD root equals the terminal 1 node.
+Validity is equivalent to absence of any falsifying path. For a general FBDD, check that terminal 0 is unreachable from the root (equivalently, all root-to-terminal paths evaluate to true); this is graph reachability in polynomial time \citet{Gergov_1994,Bryant_1992}.
 \end{claimdescription}
 
 
@@ -281,19 +281,6 @@ Validity is trivial for OBDDs: check if the diagram root equals the terminal 1 n
 
 
 % =============================
-\section{A. Darwiche, "Decomposable Negation Normal Form", Journal of the ACM, vol. 48, p...}
-% Reference ID: Darwiche_2001a
-% =============================
-% lang=lang_3bebcab7, op=CE
-\begin{claim}
-\langref{DNNF} supports Clausal Entailment in polynomial time \citet{Darwiche_2001a}
-\end{claim}
-\begin{claimdescription}
-\langref{DNNF} supports clause entailment (CE) in polynomial time \citet{Darwiche_2001a}. To test $\Sigma \models \gamma$ for clause $\gamma$, it suffices to test whether $\Sigma | \neg\gamma$ is inconsistent. Since \langref{DNNF} satisfies CD and CO, this can be done in polytime.
-\end{claimdescription}
-
-
-% =============================
 \section{M. Blum and A. K. Chandra and M. N. Wegman, "Equivalence of free boolean graphs ...}
 % Reference ID: Blum_1980
 % =============================
@@ -302,7 +289,7 @@ Validity is trivial for OBDDs: check if the diagram root equals the terminal 1 n
 \langref{FBDD} supports Equivalence in polynomial time unless $P \neq$ BPP \citet{Blum_1980}
 \end{claim}
 \begin{claimdescription}
-\citet{Blum_1980} showed that equivalence of free Boolean graphs (FBDDs) can be decided in randomized polynomial time (BPP). Under the derandomization hypothesis P = BPP, this gives polynomial-time equivalence testing for \langref{FBDD}.
+\citet{Blum_1980} evaluate both free Boolean graphs under random assignments over a finite field; if values differ, the graphs are definitely distinct, and if values match, they are probably equivalent. Repetition decreases error probability exponentially. Under derandomization assumptions such as P = BPP, this also yields deterministic polynomial-time equivalence testing for \langref{FBDD}.
 \end{claimdescription}
 
 % =============================

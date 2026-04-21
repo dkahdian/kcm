@@ -1491,6 +1491,7 @@ function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLa
   
   let updated = 0;
   let created = 0;
+  let removed = 0;
   
   for (const def of parsedDefs) {
     let lang = idToLang.get(def.id);
@@ -1535,8 +1536,34 @@ function updateLanguagesFromLatex(database: DatabaseSchema, parsedDefs: ParsedLa
     
     updated++;
   }
+
+  const parsedIds = new Set(parsedDefs.map(def => def.id));
+  const removedIds = database.languages
+    .filter(lang => !parsedIds.has(lang.id))
+    .map(lang => lang.id);
+
+  if (removedIds.length > 0) {
+    const removedIdSet = new Set(removedIds);
+
+    database.languages = database.languages.filter(lang => !removedIdSet.has(lang.id));
+
+    const keptIds = adjacencyMatrix.languageIds.filter(id => !removedIdSet.has(id));
+    const oldIndexById = adjacencyMatrix.indexByLanguage;
+    const newMatrix = keptIds.map((fromId) => {
+      const fromIdx = oldIndexById[fromId];
+      return keptIds.map((toId) => adjacencyMatrix.matrix[fromIdx][oldIndexById[toId]]);
+    });
+
+    adjacencyMatrix.languageIds = keptIds;
+    adjacencyMatrix.indexByLanguage = Object.fromEntries(
+      keptIds.map((id, idx) => [id, idx])
+    );
+    adjacencyMatrix.matrix = newMatrix;
+
+    removed = removedIds.length;
+  }
   
-  console.log(`Updated ${updated} language definitions, created ${created} new`);
+  console.log(`Updated ${updated} language definitions, created ${created} new, removed ${removed}`);
 }
 
 // =============================================================================

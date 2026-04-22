@@ -5,11 +5,10 @@
   import LanguageInfo from '$lib/components/LanguageInfo.svelte';
   import EdgeInfo from '$lib/components/EdgeInfo.svelte';
   import OperationInfo from '$lib/components/OperationInfo.svelte';
-  import FilterDropdown from '$lib/components/FilterDropdown.svelte';
+  import FilterDrawer from '$lib/components/FilterDrawer.svelte';
 
-  import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters, allPredefinedFilters } from '$lib/data/index.js';
-  import { generateLanguageSelectionFilters } from '$lib/data/filters/index.js';
-  import { applyFiltersWithParams, computeEffectiveFilterState, extractDeltasFromState, updateDelta, type FilterDeltas } from '$lib/filter-utils.js';
+  import { initialGraphData, getAllLanguageFilters, getAllEdgeFilters } from '$lib/data/index.js';
+  import { applyFiltersWithParams, computeEffectiveFilterState, extractDeltasFromState, getVisibleFiltersForView, updateDelta, type FilterDeltas } from '$lib/filter-utils.js';
   import type { KCLanguage, LanguageFilter, EdgeFilter, FilterParamValue, FilterStateMap, SelectedEdge, SelectedOperation, SelectedOperationCell, GraphData, ViewMode } from '$lib/types.js';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
@@ -38,7 +37,7 @@
   } from '$lib/data/contribution-transforms.js';
   import { applyContributionQueue } from '$lib/data/contribution-transforms.js';
 
-  let languageFilters = getAllLanguageFilters();
+  const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
   const FILTER_STORAGE_KEY = 'kcm_filter_deltas_v2';
 
@@ -176,7 +175,7 @@
         if (Array.isArray(parsed)) {
           filterDeltas = new Map(parsed);
           // Recompute effective state for current view mode with restored deltas
-          filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+          filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
         }
       } else {
         // Try migrating from old storage format (v1)
@@ -185,8 +184,8 @@
           const parsed = JSON.parse(oldStored);
           if (Array.isArray(parsed)) {
             const oldStates: FilterStateMap = new Map(parsed);
-            filterDeltas = extractDeltasFromState(oldStates, activeLanguageFilters, edgeFilters);
-            filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+            filterDeltas = extractDeltasFromState(oldStates, languageFilters, edgeFilters);
+            filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
             // Clean up old key
             localStorage.removeItem('kcm_filter_state_v1');
           }
@@ -197,7 +196,7 @@
     } finally {
       // Always recompute effective state for the (possibly restored) view mode,
       // even when there are no stored deltas / no migration happened.
-      filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+      filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
       filterPersistenceReady = true;
     }
 
@@ -326,15 +325,11 @@
     }
   }
 
+  const allFilters = $derived([...languageFilters, ...edgeFilters]);
+
   // Compute filtered graph data reactively
   const baseGraphData = $derived(previewGraphData || initialGraphData);
-  // Regenerate language filters when in preview mode to include new languages
-  const activeLanguageFilters = $derived(
-    previewGraphData 
-      ? [...allPredefinedFilters, ...generateLanguageSelectionFilters(previewGraphData)]
-      : languageFilters
-  );
-  const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, activeLanguageFilters, edgeFilters, filterStates));
+  const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, languageFilters, edgeFilters, filterStates, viewMode));
 
   // =========================================================================
   // Hash-based navigation for entity links (lang, edge, op)
@@ -382,7 +377,7 @@
           // Switch to graph/succinctness view if in operations view
           if (viewMode === 'queries' || viewMode === 'transforms') {
             viewMode = 'graph';
-            filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+            filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
           }
         }
       }
@@ -410,7 +405,7 @@
           // Switch to appropriate operations view
           if (viewMode !== 'queries' && viewMode !== 'transforms') {
             viewMode = opType === 'query' ? 'queries' : 'transforms';
-            filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+            filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
           }
         }
       }
@@ -419,16 +414,20 @@
     if (browser) history.replaceState(null, '', window.location.pathname + window.location.search);
   }
 
-  // Handler for individual filter changes from FilterDropdown
+  // Handler for individual filter changes from the filter drawer
   function handleFilterChange(filter: LanguageFilter | EdgeFilter, value: FilterParamValue) {
     filterDeltas = updateDelta(filterDeltas, filter.id, value, filter);
-    filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+    filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
   }
 
-  // Handler for resetting all filters from FilterDropdown
-  function handleFilterReset() {
-    filterDeltas = new Map();
-    filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, viewMode, filterDeltas);
+  function handleFilterReset(currentViewMode: ViewMode) {
+    const visibleFilters = getVisibleFiltersForView(allFilters, currentViewMode);
+    const nextDeltas = new Map(filterDeltas);
+    for (const filter of visibleFilters) {
+      nextDeltas.delete(filter.id);
+    }
+    filterDeltas = nextDeltas;
+    filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, currentViewMode, filterDeltas);
   }
 
   $effect(() => {
@@ -532,7 +531,7 @@
                 if (viewMode !== newMode) {
                   viewMode = newMode;
                   // Recompute effective state: defaults for new view + existing deltas
-                  filterStates = computeEffectiveFilterState(activeLanguageFilters, edgeFilters, newMode, filterDeltas);
+                  filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, newMode, filterDeltas);
                 }
               }}
             >
@@ -540,14 +539,13 @@
             </button>
           {/each}
         </div>
-        <FilterDropdown 
-          languageFilters={activeLanguageFilters}
-          edgeFilters={edgeFilters}
+        <FilterDrawer 
+          filters={allFilters}
+          languages={baseGraphData.languages}
           {filterStates}
           {viewMode}
           onFilterChange={handleFilterChange}
           onReset={handleFilterReset}
-          class="filter-control"
         />
       </div>
     </div>

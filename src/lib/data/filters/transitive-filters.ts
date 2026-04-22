@@ -1,4 +1,4 @@
-import type { LanguageFilter, GraphData, KCAdjacencyMatrix } from '../../types.js';
+import type { EdgeFilter, GraphData, KCAdjacencyMatrix } from '../../types.js';
 import { cloneDataset } from '../transforms.js';
 
 /**
@@ -49,11 +49,13 @@ function getStrictEdgeType(
  *   - If yes: edge is transitive, keep hidden
  *   - If no: edge is needed, unhide it
  */
-export const omitTransitiveEdges: LanguageFilter<boolean> = {
+export const omitTransitiveEdges: EdgeFilter<boolean> = {
   id: 'omit-transitive-edges',
   name: 'Omit Transitive Edges',
   description: 'Hide edges that are redundant due to transitivity',
-  category: 'Edge Visibility',
+  applicableViews: ['graph'],
+  uiGroup: 'Visibility',
+  kind: 'edge-visibility',
   defaultParam: true, // ON BY DEFAULT for graph
   defaultParamMatrix: false, // OFF for matrix - show all edges
   controlType: 'checkbox',
@@ -244,6 +246,6 @@ function canReachStrict(
   return false;
 }
 
-export const transitiveFilters: LanguageFilter<boolean>[] = [
+export const transitiveFilters: EdgeFilter<boolean>[] = [
   omitTransitiveEdges
 ];

@@ -55,7 +55,9 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
   id: 'poly-display',
   name: 'Polynomial Display',
   description: 'Control how polynomial and quasipolynomial complexity edges are shown',
-  category: 'Visibility',
+  applicableViews: ['graph', 'succinctness'],
+  uiGroup: 'Display',
+  kind: 'matrix-display',
   defaultParam: 'polytime-vs-not',
   controlType: 'dropdown',
   options: [
@@ -136,7 +138,36 @@ export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
       };
     }
 
-    return mapped;
+  return mapped;
+  }
+};
+
+/**
+ * Omit separator functions - always off, not user-facing
+ */
+export const omitSeparatorFunctions: EdgeFilter = {
+  id: 'omit-separator-functions',
+  name: 'Omit Separator Functions',
+  description: 'Hide all separator functions from edges',
+  applicableViews: ['graph', 'succinctness'],
+  uiGroup: 'Advanced',
+  kind: 'internal',
+  // Locked on now that the UI toggle is gone.
+  defaultParam: true,
+  controlType: 'checkbox',
+  hidden: true,
+  lambda: (data, param) => {
+    if (!param) return data;
+    return mapRelationsInDataset(data, (relation) => {
+      if (!relation) return null;
+      if (relation.separatingFunctionIds && relation.separatingFunctionIds.length > 0) {
+        return {
+          ...relation,
+          separatingFunctionIds: []
+        };
+      }
+      return relation;
+    });
   }
 };
 
@@ -147,7 +178,9 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
   id: 'manage-unknowns',
   name: 'Manage Unknowns',
   description: 'Control how edges with unknown status are treated',
-  category: 'Visibility',
+  applicableViews: ['graph', 'succinctness'],
+  uiGroup: 'Visibility',
+  kind: 'edge-visibility',
   defaultParam: 'omit-all',
   defaultParamMatrix: 'expressively',
   controlType: 'dropdown',
@@ -204,35 +237,6 @@ export const manageUnknowns: EdgeFilter<ManageUnknownsMode> = {
 };
 
 /**
- * Positive results only - ON BY DEFAULT
- *
- * Hides edges that represent negative/impossible results or fully unknown status.
- */
-export const positiveResultsOnly: EdgeFilter<boolean> = {
-  id: 'positive-results-only',
-  name: 'Positive Results Only',
-  description: 'Hide negative/unknown results (keep only edges that assert existence of a compilation)',
-  category: 'Visibility',
-  defaultParam: false,
-  controlType: 'checkbox',
-  lambda: (data, param) => {
-    if (!param) return data;
-    return mapRelationsInDataset(data, (relation) => {
-      if (!relation) return null;
-      switch (relation.status) {
-        case 'no-poly-unknown-quasi':
-        case 'no-quasi':
-        case 'not-poly':
-        case 'unknown-both':
-          return null;
-        default:
-          return relation;
-      }
-    });
-  }
-};
-
-/**
  * Omit incomparable - ON BY DEFAULT
  *
  * Hides pairs where both directions are no-quasi (or null).
@@ -243,7 +247,9 @@ export const omitIncomparable: EdgeFilter<boolean> = {
   id: 'omit-incomparable',
   name: 'Omit Incomparable',
   description: 'Omit edges where both directions are no-quasi',
-  category: 'Edge Visibility',
+  applicableViews: ['graph'],
+  uiGroup: 'Visibility',
+  kind: 'edge-visibility',
   defaultParam: true,
   defaultParamMatrix: false,
   controlType: 'checkbox',
@@ -258,31 +264,6 @@ export const omitIncomparable: EdgeFilter<boolean> = {
 };
 
 /**
- * Omit separator functions - ON BY DEFAULT
- */
-export const omitSeparatorFunctions: EdgeFilter = {
-  id: 'omit-separator-functions',
-  name: 'Omit Separator Functions',
-  description: 'Hide all separator functions from edges',
-  category: 'Visibility',
-  defaultParam: true, // ON BY DEFAULT
-  controlType: 'checkbox',
-  lambda: (data, param) => {
-    if (!param) return data;
-    return mapRelationsInDataset(data, (relation) => {
-      if (!relation) return null;
-      if (relation.separatingFunctionIds && relation.separatingFunctionIds.length > 0) {
-        return {
-          ...relation,
-          separatingFunctionIds: []
-        };
-      }
-      return relation;
-    });
-  }
-};
-
-/**
  * Omit edges marked as hidden (used by transitive reduction)
  * This is an internal filter that should always be applied
  */
@@ -290,7 +271,9 @@ export const omitMarkedEdges: EdgeFilter = {
   id: 'omit-marked-edges',
   name: 'Omit Marked Edges',
   description: 'Omit edges that have been marked as hidden',
-  category: 'Edge Visibility',
+  applicableViews: ['graph', 'succinctness', 'queries', 'transforms'],
+  uiGroup: 'Advanced',
+  kind: 'internal',
   defaultParam: true,
   controlType: 'checkbox',
   hidden: true, // Internal filter, not shown in UI
@@ -317,7 +300,9 @@ export const omitImplicitEdges: EdgeFilter = {
   id: 'omit-implicit-edges',
   name: 'Omit Implicit Edges',
   description: 'Omit edges where both directions were inferred by propagation',
-  category: 'Edge Visibility',
+  applicableViews: ['graph'],
+  uiGroup: 'Visibility',
+  kind: 'edge-visibility',
   defaultParam: true, // ON by default for graph
   defaultParamMatrix: false, // OFF by default for matrix
   controlType: 'checkbox',
@@ -331,44 +316,31 @@ export const omitImplicitEdges: EdgeFilter = {
   }
 };
 
-type ImplicitEdgeTreatmentMode = 'none' | 'gray' | 'highlight-explicit';
+type ImplicitEdgeTreatmentMode = 'gray';
 
 /**
- * Implicit edge treatment - controls how derived vs explicit edges are displayed
- * 
- * - none: No visual distinction (default for graph view)
- * - gray: Gray stripes on implicit/derived edges (default for matrix view)
- * - highlight-explicit: Golden border on explicit edges (no styling on implicit)
+ * Implicit edge treatment.
+ *
+ * This is now an internal always-on gray styling pass rather than a user-facing
+ * filter. It keeps derived edges visually distinct without exposing a control.
  */
 export const implicitEdgeTreatment: EdgeFilter<ImplicitEdgeTreatmentMode> = {
   id: 'implicit-edge-treatment',
   name: 'Implicit Edge Treatment',
-  description: 'Control how implicit (derived) vs explicit edges are visually distinguished',
-  category: 'Visibility',
-  defaultParam: 'none', // None by default for graph
-  defaultParamMatrix: 'gray', // Gray by default for matrix
-  controlType: 'dropdown',
-  options: [
-    { value: 'none', label: 'None', description: 'No visual distinction between implicit and explicit edges' },
-    { value: 'gray', label: 'Gray implicit', description: 'Show implicit edges with gray stripes' },
-    { value: 'highlight-explicit', label: 'Highlight explicit', description: 'Add golden border to explicit (non-derived) edges' }
-    // TODO: Consider making 'highlight-explicit' the default
-  ],
+  description: 'Apply gray styling to implicit (derived) edges',
+  applicableViews: ['graph', 'succinctness', 'queries', 'transforms'],
+  uiGroup: 'Advanced',
+  kind: 'internal',
+  defaultParam: 'gray',
+  defaultParamMatrix: 'gray',
+  hidden: true,
   lambda: (data, mode) => {
-    if (mode === 'none') return data;
-    
     // Apply to succinctness edges
     let result = mapRelationsInDataset(data, (relation) => {
       if (!relation) return null;
-      
-      if (mode === 'gray') {
-        if (relation.derived) {
-          return { ...relation, dimmed: true };
-        }
-      } else if (mode === 'highlight-explicit') {
-        if (!relation.derived) {
-          return { ...relation, explicit: true };
-        }
+
+      if (relation.derived) {
+        return { ...relation, dimmed: true };
       }
       return relation;
     });
@@ -378,10 +350,8 @@ export const implicitEdgeTreatment: EdgeFilter<ImplicitEdgeTreatmentMode> = {
       const mapOps = (ops: Record<string, import('$lib/types.js').KCOpSupport>) => {
         const mapped: Record<string, import('$lib/types.js').KCOpSupport> = {};
         for (const [code, support] of Object.entries(ops)) {
-          if (mode === 'gray' && support.derived) {
+          if (support.derived) {
             mapped[code] = { ...support, dimmed: true };
-          } else if (mode === 'highlight-explicit' && !support.derived) {
-            mapped[code] = { ...support, explicit: true };
           } else {
             mapped[code] = support;
           }
@@ -433,7 +403,9 @@ export const hideInProgressLanguages: EdgeFilter = {
   id: 'hide-in-progress',
   name: 'Hide In Progress Languages',
   description: 'Hide languages that have no edges (not yet connected to the graph)',
-  category: 'Visibility',
+  applicableViews: ['graph'],
+  uiGroup: 'Visibility',
+  kind: 'edge-visibility',
   defaultParam: true, // ON BY DEFAULT
   controlType: 'checkbox',
   lambda: (data, param) => {
@@ -453,7 +425,6 @@ export const edgeFilters: EdgeFilter<any>[] = [
   omitIncomparable,
   omitImplicitEdges,
   implicitEdgeTreatment,
-  positiveResultsOnly,
   polyDisplay,
   omitSeparatorFunctions,
   omitMarkedEdges

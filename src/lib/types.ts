@@ -185,6 +185,8 @@ export interface KCLanguage {
   id: string;
   /** Display name (may contain LaTeX like OBDD$_<$) */
   name: string;
+  /** Whether this node is a plain language, a fixed-parameter family, or a union language */
+  classification?: LanguageClassification;
   fullName: string;
   /** Formal definition of the language (supports LaTeX) */
   definition: string;
@@ -395,9 +397,24 @@ export interface TransformValidationResult {
 }
 
 // Filter system types
-export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown';
-export type FilterParamValue = boolean | string | number;
 export type ViewMode = 'graph' | 'succinctness' | 'queries' | 'transforms';
+export type LanguageClassification = 'plain' | 'family' | 'union';
+export type LanguageScopeMode = 'families' | 'unions' | 'both';
+export type FilterUIGroup = 'Language Scope' | 'Visibility' | 'Display' | 'Advanced';
+export type FilterKind =
+  | 'language-visibility'
+  | 'edge-visibility'
+  | 'matrix-display'
+  | 'operation-visualization'
+  | 'internal';
+export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown' | 'language-picker';
+
+export interface LanguageVisibilityParam {
+  mode: 'all' | 'only' | 'except';
+  ids: string[];
+}
+
+export type FilterParamValue = boolean | string | number | LanguageVisibilityParam;
 
 /**
  * Selected operation for sidebar display
@@ -440,6 +457,10 @@ export interface DataFilter<T extends FilterParamValue = boolean> {
   name: string;
   description: string;
   category?: string;
+  applicableViews: ViewMode[];
+  uiGroup?: FilterUIGroup;
+  advanced?: boolean;
+  kind?: FilterKind;
   /** Whether this filter is internal/hidden from UI or can be edited by the user */
   hidden?: boolean;
   /** Default value for the filter parameter (used for graph mode, or both if no matrix default) */

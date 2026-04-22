@@ -1,23 +1,19 @@
-import type { GraphData, DataFilter } from '../types.js';
+import type { EdgeFilter, GraphData, LanguageFilter } from '../types.js';
 import { canonicalDataset } from './canonical.js';
-import { allPredefinedFilters, generateLanguageSelectionFilters, organizeFiltersByCategory, edgeFilters } from './filters/index.js';
+import { allPredefinedFilters, edgeFilters, transitiveFilters } from './filters/index.js';
 
 // Export main GraphData object
 export const initialGraphData: GraphData = canonicalDataset;
 
-// Export all language filters combined (predefined + dynamic language selection)
-export function getAllLanguageFilters(): DataFilter[] {
-  const languageSelectionFilters = generateLanguageSelectionFilters(initialGraphData);
-  return [...allPredefinedFilters, ...languageSelectionFilters];
+// Export all language filters
+export function getAllLanguageFilters(): LanguageFilter[] {
+  return [...allPredefinedFilters];
 }
 
 // Export all edge filters
-export function getAllEdgeFilters(): DataFilter[] {
-  return edgeFilters;
+export function getAllEdgeFilters(): EdgeFilter[] {
+  return [...transitiveFilters, ...edgeFilters];
 }
-
-// Re-export helper functions
-export { organizeFiltersByCategory } from './filters/index.js';
 
 // Re-export specific parts for convenience
 export { relationTypes } from './complexities.js';

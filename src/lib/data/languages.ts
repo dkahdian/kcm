@@ -1,6 +1,7 @@
 import type { KCLanguage } from '../types.js';
 import database from './database.json';
 import { getReferences } from './references.js';
+import { LANGUAGE_CLASSIFICATIONS } from './language-classifications.js';
 
 const rawLanguages = database.languages as any[];
 
@@ -33,6 +34,7 @@ function enrichLanguage(langJson: any): KCLanguage {
   
   return {
     ...langJson,
+    classification: LANGUAGE_CLASSIFICATIONS[langJson.id] ?? 'plain',
     references: getReferences(...Array.from(refIds))
   } as KCLanguage;
 }

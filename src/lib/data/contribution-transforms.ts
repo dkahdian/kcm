@@ -47,7 +47,8 @@ export interface ContributionSubmissionPayload {
 
 function convertToKCLanguage(
   language: LanguageToAdd,
-  referenceLookup: Map<string, KCReference>
+  referenceLookup: Map<string, KCReference>,
+  classification: KCLanguage['classification'] = 'plain'
 ): KCLanguage {
   const references: KCReference[] = [];
   for (const refId of language.definitionRefs) {
@@ -60,6 +61,7 @@ function convertToKCLanguage(
   return {
     id: language.id ?? generateLanguageId(language.name),
     name: language.name,
+    classification,
     fullName: language.fullName,
     definition: language.definition,
     definitionRefs: [...language.definitionRefs],
@@ -210,7 +212,7 @@ export function applyContributionQueue(
         break;
       }
       case 'language:new': {
-        const kcLanguage = convertToKCLanguage(entry.payload, referenceLookup);
+        const kcLanguage = convertToKCLanguage(entry.payload, referenceLookup, 'plain');
         merged.languages.push(kcLanguage);
         ensureLanguageInMatrix(kcLanguage.id);
         break;
@@ -220,11 +222,15 @@ export function applyContributionQueue(
         const index = merged.languages.findIndex((existing) => existing.id === langId);
         if (index === -1) {
           // If language not present yet, treat as addition to keep queue idempotent
-          const kcLanguage = convertToKCLanguage(entry.payload, referenceLookup);
+          const kcLanguage = convertToKCLanguage(entry.payload, referenceLookup, 'plain');
           merged.languages.push(kcLanguage);
           ensureLanguageInMatrix(kcLanguage.id);
         } else {
-          merged.languages[index] = convertToKCLanguage(entry.payload, referenceLookup);
+          merged.languages[index] = convertToKCLanguage(
+            entry.payload,
+            referenceLookup,
+            merged.languages[index].classification ?? 'plain'
+          );
         }
         break;
       }

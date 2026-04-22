@@ -1,4 +1,4 @@
-import type { LanguageFilter, GraphData, FilterCategory } from '../../types.js';
+import type { LanguageFilter, GraphData } from '../../types.js';
 import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '../operations.js';
 import { getComplexityFromCatalog } from '../complexities.js';
 import { mapLanguagesInDataset } from '../transforms.js';
@@ -39,27 +39,6 @@ export function createOperationVisualizer(
 }
 
 /**
- * Generates individual language selection filters dynamically.
- * Creates a filter for each language that controls visibility of that specific language.
- */
-export function generateLanguageSelectionFilters(graphData: GraphData): LanguageFilter[] {
-  return graphData.languages.map(lang => ({
-    id: `select-${lang.name}`,
-    name: lang.name,
-    description: `Show ${lang.fullName}`,
-    category: 'Show Languages',
-    defaultParam: true, // All languages visible by default
-    controlType: 'checkbox' as const,
-    lambda: (data: GraphData, param: boolean) => {
-      if (param) return data;
-      return mapLanguagesInDataset(data, (language) => {
-        return language.name === lang.name ? null : language;
-      });
-    }
-  }));
-}
-
-/**
  * Creates a hidden filter that normalizes operation data by resolving safe keys to operation codes.
  * Only includes operations that have explicit data in the source; missing operations stay absent
  * (rendered as blank cells in the matrix).
@@ -69,6 +48,9 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
     id: 'fill-unknown-operations',
     name: 'Fill Unknown Operations',
     description: 'Normalizes operation keys without adding unknown entries',
+    applicableViews: ['graph', 'succinctness', 'queries', 'transforms'],
+    uiGroup: 'Advanced',
+    kind: 'internal',
     hidden: true, // This is an internal filter - not shown in UI
     defaultParam: true,
     lambda: (data: GraphData, param: boolean) => {
@@ -108,36 +90,4 @@ export function createFillUnknownOperationsFilter(): LanguageFilter {
       });
     }
   };
-}
-
-/**
- * Organizes filters into categories for display.
- */
-export function organizeFiltersByCategory(filters: LanguageFilter[]): FilterCategory[] {
-  const categorizedFilters = filters.filter(f => f.category);
-  
-  const categoryMap = new Map<string, LanguageFilter[]>();
-  
-  categorizedFilters.forEach(filter => {
-    const categoryName = filter.category!;
-    if (!categoryMap.has(categoryName)) {
-      categoryMap.set(categoryName, []);
-    }
-    categoryMap.get(categoryName)!.push(filter);
-  });
-  
-  const categories: FilterCategory[] = Array.from(categoryMap.entries()).map(([name, filters]) => ({
-    name, // Use the original category name as-is
-    filters
-  }));
-
-  categories.sort((a, b) => {
-    const aVisibility = a.name.toLowerCase() === 'visibility';
-    const bVisibility = b.name.toLowerCase() === 'visibility';
-    if (aVisibility && !bVisibility) return -1;
-    if (!aVisibility && bVisibility) return 1;
-    return 0;
-  });
-  
-  return categories;
 }

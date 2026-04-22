@@ -6,18 +6,15 @@ import type {
   FilterStateMap, 
   FilterParamValue,
   KCAdjacencyMatrix,
-  ViewMode
+  ViewMode,
+  LanguageVisibilityParam
 } from './types.js';
 import { transformData } from './data/transforms.js';
 
 type AnyFilter = LanguageFilter | EdgeFilter;
 
-function getViewForcedFilterValue(filterId: string, viewMode: ViewMode): FilterParamValue | undefined {
-  // In operations views, quasi distinctions are not meaningful for op cells.
-  if ((viewMode === 'queries' || viewMode === 'transforms') && filterId === 'poly-display') {
-    return 'polytime-vs-not';
-  }
-  return undefined;
+function isLockedInternalFilter(filter: AnyFilter): boolean {
+  return filter.hidden === true || filter.kind === 'internal';
 }
 
 /**
@@ -36,6 +33,60 @@ export function getFilterDefault(filter: AnyFilter, viewMode: ViewMode = 'graph'
     return filter.defaultParamMatrix;
   }
   return filter.defaultParam;
+}
+
+function isLanguageVisibilityParam(value: FilterParamValue): value is LanguageVisibilityParam {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'mode' in value &&
+    'ids' in value &&
+    Array.isArray((value as LanguageVisibilityParam).ids)
+  );
+}
+
+function normalizeFilterValue(value: FilterParamValue): FilterParamValue {
+  if (!isLanguageVisibilityParam(value)) {
+    return value;
+  }
+
+  const uniqueSortedIds = Array.from(new Set(value.ids)).sort();
+  return {
+    mode: value.mode,
+    ids: uniqueSortedIds
+  };
+}
+
+export function areFilterValuesEqual(a: FilterParamValue, b: FilterParamValue): boolean {
+  const normalizedA = normalizeFilterValue(a);
+  const normalizedB = normalizeFilterValue(b);
+
+  if (isLanguageVisibilityParam(normalizedA) && isLanguageVisibilityParam(normalizedB)) {
+    return (
+      normalizedA.mode === normalizedB.mode &&
+      normalizedA.ids.length === normalizedB.ids.length &&
+      normalizedA.ids.every((id, index) => id === normalizedB.ids[index])
+    );
+  }
+
+  return normalizedA === normalizedB;
+}
+
+export function isFilterApplicable(filter: AnyFilter, viewMode: ViewMode): boolean {
+  return filter.applicableViews.includes(viewMode);
+}
+
+export function getApplicableFiltersForView<T extends AnyFilter>(filters: T[], viewMode: ViewMode): T[] {
+  return filters.filter((filter) => isFilterApplicable(filter, viewMode));
+}
+
+export function getVisibleFiltersForView<T extends AnyFilter>(filters: T[], viewMode: ViewMode): T[] {
+  return filters.filter(
+    (filter) =>
+      isFilterApplicable(filter, viewMode) &&
+      !filter.hidden &&
+      filter.kind !== 'internal'
+  );
 }
 
 /**
@@ -59,13 +110,10 @@ export function computeEffectiveFilterState(
 
   for (const filter of allFilters) {
     const defaultVal = getFilterDefault(filter, viewMode);
-    const forcedVal = getViewForcedFilterValue(filter.id, viewMode);
-    if (forcedVal !== undefined) {
-      stateMap.set(filter.id, forcedVal);
-      continue;
-    }
-    // If user has a delta, use it; otherwise use the view-mode default
-    const value = deltas.has(filter.id) ? deltas.get(filter.id)! : defaultVal;
+    // Hidden/internal filters are source-of-truth defaults only.
+    const value = isLockedInternalFilter(filter)
+      ? defaultVal
+      : (deltas.has(filter.id) ? deltas.get(filter.id)! : defaultVal);
     stateMap.set(filter.id, value);
   }
 
@@ -89,12 +137,13 @@ export function extractDeltasFromState(
   const allFilters: AnyFilter[] = [...languageFilters, ...edgeFilters];
 
   for (const filter of allFilters) {
+    if (isLockedInternalFilter(filter)) continue;
     const currentValue = filterStates.get(filter.id);
     if (currentValue === undefined) continue;
     
     // Compare against graph-mode default (canonical base default)
     const graphDefault = getFilterDefault(filter, 'graph');
-    if (currentValue !== graphDefault) {
+    if (!areFilterValuesEqual(currentValue, graphDefault)) {
       deltas.set(filter.id, currentValue);
     }
   }
@@ -113,10 +162,14 @@ export function updateDelta(
   value: FilterParamValue,
   filter: AnyFilter
 ): FilterDeltas {
+  if (isLockedInternalFilter(filter)) {
+    return deltas;
+  }
+
   const newDeltas = new Map(deltas);
   const graphDefault = getFilterDefault(filter, 'graph');
   
-  if (value === graphDefault) {
+  if (areFilterValuesEqual(value, graphDefault)) {
     newDeltas.delete(filterId);
   } else {
     newDeltas.set(filterId, value);
@@ -136,12 +189,15 @@ export function applyFiltersWithParams(
   graphData: GraphData, 
   languageFilters: LanguageFilter[],
   edgeFilters: EdgeFilter[],
-  filterStates: FilterStateMap
+  filterStates: FilterStateMap,
+  viewMode: ViewMode = 'graph'
 ): FilteredGraphData {
   const dataset = {
     ...graphData,
     separatingFunctions: graphData.separatingFunctions ?? []
   } as GraphData;
+  const applicableLanguageFilters = getApplicableFiltersForView(languageFilters, viewMode);
+  const applicableEdgeFilters = getApplicableFiltersForView(edgeFilters, viewMode);
   const transformStage = (current: GraphData, filter: LanguageFilter | EdgeFilter) => {
     const param = filterStates.get(filter.id) ?? filter.defaultParam;
     const result = transformData(current, (data) => filter.lambda(data, param as any)) ?? current;
@@ -155,8 +211,8 @@ export function applyFiltersWithParams(
     return filters.reduce<GraphData>((working, filter) => transformStage(working, filter), current);
   };
 
-  const afterLanguageFilters = applyStageList(dataset, languageFilters);
-  const afterEdgeFilters = applyStageList(afterLanguageFilters, edgeFilters);
+  const afterLanguageFilters = applyStageList(dataset, applicableLanguageFilters);
+  const afterEdgeFilters = applyStageList(afterLanguageFilters, applicableEdgeFilters);
 
   const visibleLanguageIds = new Set(afterEdgeFilters.languages.map((language) => language.id));
   const visibleEdgeIds = collectVisibleEdgeIds(afterEdgeFilters.adjacencyMatrix);

@@ -9,7 +9,7 @@
     SelectedOperationCell,
     Complexity
   } from '$lib/types.js';
-  import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
+  import { QUERIES, TRANSFORMATIONS, getOperationDescription } from '$lib/data/operations.js';
   import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { measureCellSize } from '$lib/utils/matrix-cell-size.js';
   import { compareByCanonicalOrder } from '$lib/utils/canonical-order.js';
@@ -108,7 +108,7 @@
     selectedOperation = {
       code: opDef.code,
       label: opDef.label,
-      description: opDef.description,
+      description: getOperationDescription(operationType === 'queries' ? 'query' : 'transformation', opDef.code, opDef.description),
       type: operationType === 'queries' ? 'query' : 'transformation'
     };
   }

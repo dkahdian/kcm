@@ -1,10 +1,11 @@
 import katex from 'katex';
 
-const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{|\\langref\{|\\langfam\{|\\n?edgeref\{|\\n?opref\{)/;
+const LATEX_TRIGGER = /(\$\$?[\s\S]*?\$|\\\[|\\\(|\\begin\{|\\cite[tp]?\{|\\defref\{|\\langref\{|\\langfam\{|\\n?edgeref\{|\\n?opref\{)/;
 const LATEX_FRAGMENT = /(\$\$[\s\S]+?\$\$|\$[\s\S]+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\))/g;
 const CITATION_PATTERN = /\\cite[tp]?\{([^}]+)\}/g;
 
 // Entity link patterns (processed after HTML rendering)
+const DEFREF_PATTERN = /\\defref\{((?:[^{}]|\{[^{}]*\})+)\}/g;
 const LANGREF_PATTERN = /\\langref\{((?:[^{}]|\{[^{}]*\})+)\}/g;
 const LANGFAM_PATTERN = /\\langfam\{([^}]+)\}\{([^}]+)\}/g;
 const EDGEREF_PATTERN = /\\edgeref\{([^}]+)\}\{([^}]+)\}/g;
@@ -228,7 +229,7 @@ export function renderLatexTextFormatting(html: string): string {
  * Check if text contains entity link commands (\langref, \edgeref, \opref)
  */
 export function containsEntityLinks(text: string): boolean {
-  return /\\(langref|langfam|n?edgeref|n?opref)\{/.test(text);
+  return /\\(defref|langref|langfam|n?edgeref|n?opref)\{/.test(text);
 }
 
 /**
@@ -282,7 +283,8 @@ export function renderEntityLinks(
   html: string,
   idToName: (id: string) => string,
   opCodeToLabel?: (code: string) => string,
-  nameToId?: (name: string) => string | undefined
+  nameToId?: (name: string) => string | undefined,
+  definitionRefResolver?: (ref: string) => { id: string; title: string; resolved: boolean }
 ): string {
   let result = html;
 
@@ -301,6 +303,23 @@ export function renderEntityLinks(
     }
     return { id: normalizedRef, name: normalizedRef, resolved: false };
   };
+
+  // Replace \defref{definitionId or definitionTitle}
+  result = result.replace(DEFREF_PATTERN, (_match, defRef: string) => {
+    const normalized = decodeMinimalEntities(defRef).trim();
+    const resolved = definitionRefResolver?.(normalized) ?? {
+      id: normalized,
+      title: normalized,
+      resolved: false
+    };
+
+    if (!resolved.resolved) {
+      return `<span class="entity-link entity-link--unknown def-link--unknown" title="Unknown definition: ${escapeHtml(normalized)}">[?]</span>`;
+    }
+
+    const safeId = escapeHtml(resolved.id);
+    return `<a class="entity-link def-link" href="/about#${safeId}" data-entity-type="def" data-def-id="${safeId}">${escapeHtml(resolved.title)}</a>`;
+  });
 
   // Replace \langref{langId or langName}
   result = result.replace(LANGREF_PATTERN, (_match, langRef: string) => {

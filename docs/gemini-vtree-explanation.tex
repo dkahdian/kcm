@@ -1,0 +1,14 @@
+\begin{definition}[Global vtree]
+A \emph{global vtree} $T$ is an infinite rooted binary tree where every internal node has exactly two children, and there is a bijection between the leaves of $T$ and the infinite set of all propositional symbols $\mathit{PS}$.
+\end{definition}
+
+\begin{definition}[vtree Restriction]
+Let $T$ be a global vtree over $\mathit{PS}$, and let $X \subset \mathit{PS}$ be a finite, nonempty set of variables. The \emph{restriction} of $T$ to $X$, denoted $T|_X$, is a finite vtree constructed via the following two steps:
+\begin{enumerate}
+    \item \textbf{Subtree Spanning:} Let $T'$ be the minimal connected subgraph of $T$ that contains the root of $T$ and all leaves corresponding to the variables in $X$.
+    \item \textbf{Homeomorphic Contraction:} Form $T|_X$ by iteratively removing any internal node $v$ in $T'$ that has exactly one child. When $v$ is removed, add an edge connecting the parent of $v$ directly to the single child of $v$. This edge needs to be in the same direction as the original edge from $v$ to its child (i.e. if $v$ was a left child, the new edge should also be a left edge), since for some languages the direction of edges is semantically meaningful.
+\end{enumerate}
+The resulting structure $T|_X$ is a strictly finite, full rooted binary tree whose leaves are in bijection with $X$. 
+
+Source to Cite: Phylogenetics by Charles Semple and Mike Steel (Oxford University Press, 2003). They formally define the restriction of a tree $T$ to a leaf subset $X$ (often denoted exactly as $T|_X$) using the exact spanning-and-smoothing construction I wrote out for you.
+\end{definition}

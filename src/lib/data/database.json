@@ -4,7 +4,7 @@
       "id": "lang_89649e36",
       "name": "CNF",
       "fullName": "Conjunctive Normal Form",
-      "definition": "A standard logical representation where a formula is an AND of clauses, with each clause being an OR of literals. While it is the foundational input format for modern SAT solvers, it supports very few polynomial-time operations natively \\citet{Boole_1847}.",
+      "definition": "A standard logical representation where a formula is a conjunction of clauses, where a clause is a disjunction of literals (i.e. the set $\\{\\bigwedge_{i=1}^m \\bigvee_{j=1}^n l_{i,j}\\}$, where each $l_{i,j} = x_k$ or $\\neg x_k$, for some $x_k \\in PS$ \\citet{Boole_1847}. Note that \\langref{CNF} $\\subset$ \\langref{NNF}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -345,7 +345,7 @@
       },
       "tags": [],
       "id": "lang_83e3b023",
-      "definition": "There are two definitions for a cSDD (\"canonical SDD\").\nFirst, we say an SDD is \\emph{compressed} if no two primes share equivalent subs, \\emph{normalized} if each partition follows the current vtree split, and \\emph{trimmed} if it has trivial true/false wrapper partitions removed.\nUnder a fixed vtree, either compressed+normalized or compressed+trimmed entail canonicicity. Since normalization and trimming are efficient, all results apply to either definition. \\citet{VanDenBroeck_2015,Darwiche_2011}.",
+      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{cSDD} $= \\bigcup_T$ \\langfam{cSDD}{T}.\n\\citet{VanDenBroeck_2015,Darwiche_2011}.",
       "definitionRefs": []
     },
     {
@@ -541,11 +541,11 @@
       },
       "tags": [],
       "id": "lang_6c130090",
-      "definition": "A variant of DNNF where the children of every OR node represent mutually exclusive (deterministic) formulas. This added determinism is the critical property that enables efficient, linear-time model counting and probabilistic inference \\citet{Darwiche_2001a}.",
+      "definition": "A subset of \\langref{DNNF} where the children of every $\\vee$ node represent mutually exclusive subformulas. \\citet{Darwiche_2001a}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Deterministic Structured Decomposable Negation Normal Form",
       "name": "d-SDNNF",
       "properties": {
         "queries": {
@@ -699,11 +699,11 @@
       },
       "tags": [],
       "id": "lang_ea9b5299",
-      "definition": "A deterministic DNNF where the variable decomposition across the graph is governed by a hierarchical variable tree (vtree). \\citet{Pipatsrisawat_2008}.",
+      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{d-SDNNF} $= \\bigcup_T$ \\langfam{d-SDNNF}{T}.\n\\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
-      "fullName": "-",
+      "fullName": "Deterministic Structured Decomposable Negation Normal Form (wrt a fixed vtree)",
       "name": "d-SDNNF$_T$",
       "properties": {
         "queries": {
@@ -861,14 +861,16 @@
       },
       "tags": [],
       "id": "lang_91f812d0",
-      "definition": "The set of all d-SDNNF formulas that follow a fixed vtree $T$ \\citet{Pipatsrisawat_2008}.",
-      "definitionRefs": []
+      "definition": "The subset of \\langref{d-DNNF} that respects the fixed \\defref{vtree} $T$.",
+      "definitionRefs": [
+        "Pipatsrisawat_2008"
+      ]
     },
     {
       "id": "lang_4c204bf3",
       "name": "DNF",
       "fullName": "Disjunctive Normal Form",
-      "definition": "A logical formula expressed as an OR of terms, where each term is an AND of literals.",
+      "definition": "A standard logical representation where a formula is a disjunction of terms, where a term is a conjunction of literals (i.e. the set $\\{\\bigvee_{i=1}^m \\bigwedge_{j=1}^n l_{i,j}\\}$, where each $l_{i,j} = x_k$ or $\\neg x_k$, for some $x_k \\in PS$) \\citet{Boole_1847}. Note that \\langref{DNF} $\\subset$ \\langref{NNF}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -1221,7 +1223,7 @@
       },
       "tags": [],
       "id": "lang_3bebcab7",
-      "definition": "The subset of NNF where the children of every AND node operate on completely disjoint sets of variables. This non-overlapping variable property, known as decomposability, guarantees polynomial-time consistency checking \\citet{Darwiche_2001a}.",
+      "definition": "The subset of \\langref{NNF} where the children of every AND node operate on completely disjoint sets of variables. This non-overlapping variable property, known as decomposability, guarantees polynomial-time consistency checking \\citet{Darwiche_2001a}.",
       "definitionRefs": []
     },
     {
@@ -1794,7 +1796,7 @@
       },
       "tags": [],
       "id": "lang_e02902d0",
-      "definition": "The set of satisfying truth assignments for a given formula. It may be interpreted as the disjunction of each model, and thus as a d-SDNNF formula \\citet{Darwiche_2002}.",
+      "definition": "The set of satisfying truth assignments for a given formula. It may be interpreted as the disjunction of each model, and thus as a \\langref{d-SDNNF} formula \\citet{Darwiche_2002}.",
       "definitionRefs": []
     },
     {
@@ -1900,7 +1902,7 @@
       },
       "tags": [],
       "id": "lang_1df07cc3",
-      "definition": "A generalization of the FBDD that allows for nondeterministic \"guess\" nodes in addition to standard variable decisions. \\citet{Wegener_2000}.",
+      "definition": "A generalization of \\langref{FBDD} that allows for nondeterministic \"guess\" nodes in addition to standard variable decisions. \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -2246,7 +2248,7 @@
       },
       "tags": [],
       "id": "lang_d24efe0e",
-      "definition": "A generalization of the OBDD that permits nondeterministic branching while still enforcing a global linear variable ordering for its standard decision nodes. \\citet{Wegener_2000}.",
+      "definition": "The language obtained by taking the union over all \\defref{order}s: \\langref{nOBDD} $= \\bigcup_<$ \\langfam{nOBDD}{<}.\n\\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -2416,7 +2418,7 @@
       },
       "tags": [],
       "id": "lang_d69995dd",
-      "definition": "The set of all OBDD formulas following a fixed variable order $<$, which is known in advance. This strictness allows the equivalence of two distinct functions to be checked in constant time \\citet{Bryant_1986}.",
+      "definition": "The set of \\langref{OBDD} formulas respecting a fixed \\defref{order} $<$. Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}.",
       "definitionRefs": [
         "Bryant_1986"
       ]
@@ -2769,11 +2771,11 @@
       },
       "tags": [],
       "id": "lang_1afefbe2",
-      "definition": "A representation that generalizes OBDDs by replacing binary decision nodes with \"primes\" and \"subs\", which are subcircuits also represented as SDDs. At each decision node, there is a set of (mutually exclusive and exhaustive) \"primes\", each with a corresponding \"sub\". Evaluating a decision node entails checking which prime is satisfied by the input variables, then evaluating that prime's sub. The SDD respects a vtree $T$ in the same way as an SDNNF \\citet{Darwiche_2011}.",
+      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{SDD} $= \\bigcup_T$ \\langfam{SDD}{T}.\n\\citet{Darwiche_2011}.",
       "definitionRefs": []
     },
     {
-      "fullName": "Sentential Decision Diagram (wrt a fixed variable tree)",
+      "fullName": "Sentential Decision Diagram (wrt a fixed vtree)",
       "name": "SDD$_T$",
       "properties": {
         "queries": {
@@ -2972,8 +2974,10 @@
       },
       "tags": [],
       "id": "lang_9c84a267",
-      "definition": "The set of all SDD formulas respecting a fixed variable tree (vtree) $T$. \\citet{Darwiche_2011}.",
-      "definitionRefs": []
+      "definition": "The set of \\langref{SDD} formulas respecting the fixed \\defref{vtree} $T$.",
+      "definitionRefs": [
+        "Darwiche_2011"
+      ]
     },
     {
       "fullName": "Structured Decomposable Negation Normal Form",
@@ -3101,11 +3105,11 @@
       },
       "tags": [],
       "id": "lang_b13b0d78",
-      "definition": "A DNNF that respects a vtree $T$, in the sense that the decomposability of variables across AND nodes is strictly governed by the hierarchical structure of $T$. This guarantees that variable partitions occur systematically \\citet{Pipatsrisawat_2008}.",
+      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{SDNNF} $= \\bigcup_T$ \\langfam{SDNNF}{T}.\n\\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
-      "fullName": "Structured Decomposable Negation Normal Form (wrt a fixed variable tree)",
+      "fullName": "Structured Decomposable Negation Normal Form (wrt a fixed vtree)",
       "name": "SDNNF$_T$",
       "properties": {
         "queries": {
@@ -3256,8 +3260,10 @@
       },
       "tags": [],
       "id": "lang_3c803ba1",
-      "definition": "The set of all SDNNF formulas respecting a fixed vtree $T$. \\citet{Pipatsrisawat_2008}.",
-      "definitionRefs": []
+      "definition": "The set of \\langref{SDNNF} formulas respecting the fixed \\defref{vtree} $T$.",
+      "definitionRefs": [
+        "Pipatsrisawat_2008"
+      ]
     },
     {
       "fullName": "Unambiguous Free Binary Decision Diagram",
@@ -3389,7 +3395,7 @@
       },
       "tags": [],
       "id": "lang_4e62a038",
-      "definition": "A restricted form of a nondeterministic FBDD where every satisfying assignment has exactly one valid accepting path. This \"unambiguity\" preserves the ability to perform efficient model counting while allowing for greater compression \\citet{Wegener_2000}.",
+      "definition": "A restricted form of \\langref{nFBDD} where every satisfying assignment has exactly one valid accepting path. This \"unambiguity\" preserves the ability to perform efficient model counting while allowing for greater compression \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -3531,7 +3537,7 @@
       },
       "tags": [],
       "id": "lang_c2df8c2b",
-      "definition": "A nondeterministic OBDD restricted to unambiguous choices, maintaining efficient counting capabilities while strictly following a global variable order. It provides a middle ground between the strictness of OBDDs and the compression of nondeterminism \\citet{Wegener_2000}.",
+      "definition": "The language obtained by taking the union over all \\defref{order}s: \\langref{uOBDD} $= \\bigcup_<$ \\langfam{uOBDD}{<}.\n\\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -3708,8 +3714,9 @@
       },
       "tags": [],
       "id": "lang_b9d72a7c",
-      "definition": "A Binary Decision Diagram where all variable decisions must follow a strict, uniform linear order $<$ across every path in the graph. They are strongly canonical and support powerful polytime Boolean operations, making them ubiquitous in formal hardware verification \\citet{Bryant_1986}.",
+      "definition": "The language obtained by taking the union over all \\defref{order}s: \\langref{OBDD} $= \\bigcup_<$ \\langfam{OBDD}{<}.",
       "definitionRefs": [
+        "Bryant_1986",
         "Darwiche_2002"
       ]
     },
@@ -3854,7 +3861,7 @@
         }
       },
       "tags": [],
-      "definition": "A subset of DNNF where standard logical OR nodes are entirely replaced by decision nodes, similar to those found in BDDs. Because it relies explicitly on variable conditioning, it serves as the natural compilation trace of exhaustive DPLL-based SAT solvers \\citet{Oztok_2014}.",
+      "definition": "A subset of \\langref{DNNF} where $\\vee$ nodes are entirely replaced by decision nodes, similar to those found in BDDs. \\citet{Oztok_2014}.",
       "definitionRefs": []
     },
     {
@@ -3996,13 +4003,13 @@
         }
       },
       "tags": [],
-      "definition": "A decision DNNF whose underlying variable decisions strictly follow a hierarchical variable tree (vtree). This tree-driven structure standardizes the compilation trace and bridges the gap to sentential decision diagrams \\citet{Oztok_2014}.",
+      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{dec-SDNNF} $= \\bigcup_T$ \\langfam{dec-SDNNF}{T}.\n\\citet{Oztok_2014}.",
       "definitionRefs": []
     },
     {
       "id": "lang_4ae03bc8",
       "name": "dec-SDNNF$_T$",
-      "fullName": "Structured Decision Decomposable Negation Normal Form (wrt a fixed variable tree)",
+      "fullName": "Structured Decision Decomposable Negation Normal Form (wrt a fixed vtree)",
       "properties": {
         "queries": {
           "CE": {
@@ -4152,13 +4159,15 @@
         }
       },
       "tags": [],
-      "definition": "The set of all dec-SDNNF$_T$ formulas that follow a fixed vtree $T$. \\citet{Oztok_2014}.",
-      "definitionRefs": []
+      "definition": "The subset of \\langref{dec-DNNF} that respects the fixed \\defref{vtree} $T$.",
+      "definitionRefs": [
+        "Oztok_2014"
+      ]
     },
     {
       "id": "lang_82fa749e",
       "name": "cSDD$_T$",
-      "fullName": "Canonical/Compressed Sentential Decision Diagram (wrt a fixed variable tree)",
+      "fullName": "Canonical/Compressed Sentential Decision Diagram (wrt a fixed vtree)",
       "properties": {
         "queries": {
           "CE": {
@@ -4358,14 +4367,16 @@
         }
       },
       "tags": [],
-      "definition": "The set of all cSDD formulas that respect a predefined variable tree (vtree) $T$. \\citet{Darwiche_2011}.",
-      "definitionRefs": []
+      "definition": "For a fixed \\defref{vtree} $T$, \\langfam{cSDD}{T} is the subset of \\langfam{SDD}{T} that is \\emph{compressed} (no two primes share equivalent subs), together with either normalization or trimming conventions.\n\nUnder fixed $T$, compressed+normalized and compressed+trimmed are both canonical (and efficiently inter-convertible), so all map claims apply to either convention.",
+      "definitionRefs": [
+        "Darwiche_2011"
+      ]
     },
     {
       "id": "lang_e827cf31",
       "name": "nOBDD$_<$",
       "fullName": "Nondeterministic Ordered Binary Decision Diagram (wrt a fixed variable order)",
-      "definition": "The set of all nOBDD formulas that follow one fixed variable order $<$. \\citet{Wegener_2000}.",
+      "definition": "The set of all \\langref{nOBDD} formulas that follow one fixed \\defref{order} $<$. Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}. \\citet{Wegener_2000}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -4472,7 +4483,7 @@
       "id": "lang_43a33aec",
       "name": "uOBDD$_<$",
       "fullName": "Unambiguous Ordered Binary Decision Diagram (wrt a fixed variable order)",
-      "definition": "The set of all uOBDD formulas that follow one fixed variable order $<$. \\citet{Wegener_2000}.",
+      "definition": "The set of all \\langref{uOBDD} formulas that follow one fixed \\defref{order} $<$. Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}. \\citet{Wegener_2000}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -19329,7 +19340,7 @@
     {
       "id": "boolean-formula",
       "title": "Boolean Formula",
-      "statement": "Fix a countable set $X = \\{x_1, x_2, \\ldots\\}$ of propositional variables \\citep{Boole_1847}.\n\nA \\emph{Boolean formula} is a syntactic expression built inductively from variables $x_i \\in X$, constants $\\top$ and $\\bot$, and connectives $\\neg, \\wedge, \\vee$ in the usual way.\n\nEach formula $\\alpha$ of arity $n$ over variables $\\vec{x} = (x_1, x_2, \\cdots, x_n)$ denotes a Boolean function $\\alpha : \\{0,1\\}^n \\to \\{0,1\\}$. Two formulas are \\emph{semantically equivalent}, written $\\alpha \\equiv \\beta$, when they agree on every truth assignment ($\\alpha(\\vec{x}) = \\beta(\\vec{x}), \\forall \\vec{x} \\in \\{0,1\\}^n$). For the purposes of this project we only consider formulas with finite arity.",
+      "statement": "Fix a countable set $\\text{PS} = \\{x_1, x_2, \\ldots\\}$ of propositional variables \\citep{Boole_1847}.\n\nA \\emph{Boolean formula} is a syntactic expression built inductively from variables $x_i \\in PS$, constants $\\top$ and $\\bot$, and connectives $\\neg, \\wedge, \\vee$ in the usual way.\n\nEach formula $\\alpha$ of arity $n$ over variables $X = (x_1, x_2, \\cdots, x_n)$ denotes a Boolean function $\\alpha : \\{0,1\\}^n \\to \\{0,1\\}$. Two formulas are \\emph{semantically equivalent}, written $\\alpha \\equiv \\beta$, when they agree on every truth assignment ($\\alpha(X) = \\beta(X), \\forall X \\in \\{0,1\\}^n$).",
       "refs": [
         "Darwiche_2002"
       ]
@@ -19337,15 +19348,24 @@
     {
       "id": "representation-language",
       "title": "Representation Language",
-      "statement": "A \\emph{representation language} $L$ is a set of Boolean formulas sharing a common syntactic structure, endowed with the standard Boolean semantics and a size measure $|\\cdot|$. (TODO: Consider more formally defining the size measure or use a rigorous definition?)\n\n\\citet{Darwiche_2002} distinguish a representation language from a \\emph{target compilation language}: the former is intended to be natural for humans to read and write (e.g. CNF), while the latter need not be human-intelligible but must support a non-trivial class of polytime queries and transformations.\n\nFor a language to qualify as a target compilation language, \\citet{Darwiche_2002} require at minimum that clausal entailment is decidable in polynomial time; polytime consistency alone does not suffice to justify the cost of off-line compilation.",
+      "statement": "A \\emph{representation language} $L$ is a set of Boolean formulas sharing a common syntactic structure, endowed with the standard Boolean semantics and a size measure $|\\cdot|$, usually simply the count of all variables and connectives in the formula.",
       "refs": [
         "Darwiche_2002"
       ]
     },
     {
+      "id": "variable-order",
+      "title": "Variable Order",
+      "statement": "A variable order is a total order $<$ on the propositional variables. When a formula mentions only finitely many variables, we implicitly restrict $<$ to the variables that appear in the formula.",
+      "refs": [
+        "Bryant_1986",
+        "Wegener_2000"
+      ]
+    },
+    {
       "id": "language-family",
       "title": "Language Family",
-      "statement": "We also introduce a notion of Language Families. A \\emph{language family} is a parameterized collection $\\mathcal{F} = \\{L_\\theta\\}_{\\theta \\in \\Theta}$ of representation languages.\nFor example, consider the \\emph{family} \\langfam{OBDD}{<} parameterized by total variable orderings $<$ on $X$, and the \\emph{language} \\langref{OBDD} $= \\bigcup_< \\langfam{OBDD}{<}$. One of the main contributions of this paper is to rigorously differentiate the results between language families and their corresponding languages, results on which are sometimes vastly different.",
+      "statement": "A \\emph{language family} is a parameterized collection $\\mathcal{F} = \\{L_\\theta\\}_{\\theta \\in \\Theta}$ of representation languages. The parameter $\\theta$ may be, for example, a variable order or a vtree.\n\nFor example, \\langfam{OBDD}{<} is parameterized by a variable order, and \\langref{OBDD} is the union over all such parameters: $\\langref{OBDD} = \\bigcup_< \\langfam{OBDD}{<}$. Distinguishing family-level from language-level claims is central in this project.",
       "refs": [
         "Darwiche_2002",
         "Amarilli_2018"
@@ -19354,7 +19374,7 @@
     {
       "id": "succinctness-language",
       "title": "Succinctness Between Languages",
-      "statement": "There are two intuitive definitions of succinctness: a \\emph{time} requirement, i.e. that an efficient compilation algorithm exists between two languages; or the \\emph{space} requirement, that formulas remain ``small'' in the new language. Since, for any computation, runtime is lower-bounded by output size, the latter definition is weaker.\n\nWe fix the convention that succinctness between representation languages is a size-only relation, with no requirement that a conversion algorithm exist \\citep{Gogic_1995}. However, to the best of our knowledge, all known proofs of succinctness use a compilation algorithm to establish the size relationship; and all proofs that \\emph{no} efficient compilation algorithm exists use size bounds. An example to the contrary would be highly interesting. (TODO: Deeply search to make sure this truly holds)\n\nFormally, let $L_1$ and $L_2$ be two languages. $L_1$ is \\emph{at least as succinct as} $L_2$, written $L_1 \\leq L_2$, if there exists a polynomial $p$ such that for every $\\alpha \\in L_2$ there exists an equivalent $\\beta \\in L_1$ with $|\\beta| \\leq p(|\\alpha|)$.\n\nWe say $L_1$ \\emph{polynomially compiles into} $L_2$, and write $L_1 \\leq_p L_2$, if there exists a polynomial-time algorithm that converts any $\\alpha \\in L_1$ into an equivalent $\\beta \\in L_2$; again, for the purposes of this project, the two definitions are functionally equivalent.\n\nWe additionally define quasi-polynomial succinctness identically, except we require a quasi-polynomial function $q(n) \\in n^{log^{O(1)}(n)}$ satisfying the above properties and use the notation $\\leq_q$.",
+      "statement": "There are two intuitive definitions of succinctness: a \\emph{time} requirement, i.e. that an efficient compilation algorithm exists between two languages; or the \\emph{space} requirement, that formulas remain ``small'' in the new language. Since, for any computation, runtime is lower-bounded by output size, the latter definition is weaker.\n\nWe fix the convention that succinctness between representation languages is a size-only relation, with no requirement that a conversion algorithm exist \\citep{Gogic_1995}. However, to the best of our knowledge, all known proofs of succinctness use a compilation algorithm to establish the size relationship; and all proofs that \\emph{no} time-efficient compilation algorithm exists use space complexity bounds. An example to the contrary would be highly interesting.\n\nFormally, let $L_1$ and $L_2$ be two languages. $L_1$ is \\emph{at least as succinct as} $L_2$, written $L_1 \\leq_p L_2$, if there exists a polynomial $p$ such that for every $\\alpha \\in L_2$ there exists an equivalent $\\beta \\in L_1$ with $|\\beta| \\leq p(|\\alpha|)$.\n\nWe say $L_1$ \\emph{polynomially compiles into} $L_2$ if there exists a polynomial-time algorithm that converts any $\\alpha \\in L_1$ into an equivalent $\\beta \\in L_2$.\n\nSince all claims in this project work with either definition, we will sometimes use them as if they were interchangeable.\n\nWe additionally define quasi-polynomial succinctness identically, except we require a quasi-polynomial function $q(n) \\in n^{log^{O(1)}(n)}$ satisfying the above properties and use the notation $\\leq_q$.",
       "refs": [
         "Darwiche_2002"
       ]
@@ -19362,31 +19382,184 @@
     {
       "id": "succinctness-family",
       "title": "Succinctness Between Families",
-      "statement": "Let $\\mathcal{F}_1$ and $\\mathcal{F}_2$ be language families. We extend the language-level succinctness definition of \\citet{Gogic_1995} to families by writing: $\\mathcal{F}_1$ is \\emph{at least as succinct as} $\\mathcal{F}_2$, written $\\mathcal{F}_1 \\leq \\mathcal{F}_2$, if for every $L_2 \\in \\mathcal{F}_2$ there exists $L_1 \\in \\mathcal{F}_1$ so that $L_1 \\leq L_2$.\n\nIntuitively, this forces all languages in the ``source'' family ($\\mathcal{F}_2$) to efficiently compile into at least one member of the ``target'' ($\\mathcal{F}_1$).\n\nEquivalently, in compilation-arrow notation, $\\mathcal{F}_1 \\leq \\mathcal{F}_2$ means compilation flows from $\\mathcal{F}_2$ to $\\mathcal{F}_1$ (i.e., source $= \\mathcal{F}_2$, target $= \\mathcal{F}_1$).\n\nAs with the language-level definition, succinctness between families is purely existential with respect to size and places no requirement on algorithmic time complexity. We also extend this definition to define a succinctness relationship between an individual language $L$ and a family $\\mathcal{F}$ by applying the above definition to the singleton $\\{L\\}$ and $\\mathcal{F}$.",
+      "statement": "Let $\\mathcal{F}_1$ and $\\mathcal{F}_2$ be language families. We write $\\mathcal{F}_1 \\leq_p \\mathcal{F}_2$ if for every $L_2 \\in \\mathcal{F}_2$ there exists $L_1 \\in \\mathcal{F}_1$ such that $L_1 \\leq_p L_2$.\n\nLikewise, we say $\\mathcal{F}_1$ polynomially compiles into $\\mathcal{F}_2$ if for every $L_1 \\in \\mathcal{F}_1$ there exists $L_2 \\in \\mathcal{F}_2$ such that $L_1$ polynomially compiles into $L_2$.\n\nThe same convention applies between a language $L$ and a family $\\mathcal{F}$ by identifying $L$ with the singleton family $\\{L\\}$.",
       "refs": [
-        "Darwiche_2002"
+        "Darwiche_2002",
+        "Gogic_1995"
       ]
     },
     {
       "id": "tractability",
       "title": "Tractability of an Operation",
-      "statement": "An operation $\\mathcal{O}$ is \\emph{tractable} on a representation language $L$ if there exists a polynomial-time (resp. quasi-polynomial-time) algorithm that performs $\\mathcal{O}$ on any input formula in $L$. Following \\citet{Selman_1996}: a propositional theory is compiled off-line into a target language $L$, after which all subsequent on-line queries are answered efficiently \\citep{Darwiche_2002}.",
+      "statement": "An operation $\\mathcal{O}$ is \\emph{tractable} on a representation language $L$ if there exists a polynomial-time (resp. quasi-polynomial-time) algorithm that performs $\\mathcal{O}$ on any input formula(s) in $L$. Following \\citet{Selman_1996}, the point is to compile a propositional theory off-line into a language where target operations are tractable.",
       "refs": [
         "Darwiche_2002"
       ]
     },
     {
       "id": "query-operation",
-      "title": "Query Operation",
-      "statement": "A \\emph{query operation} takes a formula $\\alpha \\in L$ (and possibly auxiliary inputs) and returns a Boolean answer or a numerical value without modifying $\\alpha$. We consider the query operations below, as laid out in \\citet{Darwiche_2002}.\n\\begin{itemize}[noitemsep]\n  \\item \\emph{Consistency} (CO): is $\\alpha$ satisfiable? (i.e. is there an $\\vec{x}$ so that $\\alpha(\\vec{x}) = \\top$?)\n  \\item \\emph{Validity} (VA): is $\\alpha \\equiv \\top$?\n  \\item \\emph{Clausal entailment} (CE): given a clause $c$, does $\\alpha \\models c$? (i.e. is $\\alpha \\wedge \\neg c$ unsatisfiable?)\n  \\item \\emph{Implicant} (IM): given a term $t$, does $t \\models \\alpha$? (i.e. is $t \\wedge \\neg \\alpha$ unsatisfiable?)\n  \\item \\emph{Equivalence} (EQ): is $\\alpha \\equiv \\beta$ for a given $\\beta$? (i.e. does $\\alpha(\\vec{x}) = \\beta(\\vec{x})$ for all $\\vec{x}$?)\n  \\item \\emph{Model counting} (CT): compute $|\\{ \\vec{x} : \\alpha(\\vec{x}) = \\top \\}|$.\n  \\item \\emph{Model enumeration} (ME): enumerate all satisfying assignments (i.e. return $\\{ \\vec{x} : \\alpha(\\vec{x}) = \\top \\}$).\n  \\item \\emph{Sentential entailment} (SE): does $\\alpha \\models \\beta$ for a given sentence $\\beta$?\n\\end{itemize}",
+      "title": "Query",
+      "statement": "A \\emph{query} takes a formula $\\alpha \\in L$ (and possibly auxiliary inputs) and returns a Boolean answer or a numerical value without modifying $\\alpha$.\n\nThe standard query operations in this project are \\defref{query-co}, \\defref{query-va}, \\defref{query-ce}, \\defref{query-im}, \\defref{query-eq}, \\defref{query-ct}, \\defref{query-me}, and \\defref{query-se}.",
       "refs": [
         "Darwiche_2002"
       ]
     },
     {
       "id": "transformation-operation",
-      "title": "Transformation Operation",
-      "statement": "A \\emph{transformation operation} maps one or more formulas in a language $L$ to a new formula. We require the output formula to be in $L$. The canonical transformations cataloged by \\citet{Darwiche_2002} are:\n\\begin{itemize}[noitemsep]\n  \\item \\emph{Conditioning} (CD): given a partial assignment $\\gamma$, compute $\\alpha|_{\\gamma}$ (i.e. ``plug in'' the assignment $\\gamma$).\n  \\item \\emph{Singleton Forgetting} (SFO): given a variable $x_i$, compute $(\\alpha|_{x_i=0}) \\vee (\\alpha|_{x_i=1})$.\n  \\item \\emph{Forgetting} (FO): given a \\emph{subset} of variables $\\gamma = \\{x_{i_1}, x_{i_2}, \\ldots, x_{i_k}\\} \\subseteq X$, compute $\\bigvee_{\\gamma \\in \\{0,1\\}^k} \\alpha \\mid \\gamma$.\n  \\item \\emph{Conjunction} ($\\wedge$C): compute $\\alpha \\wedge \\beta$.\n  \\item \\emph{Disjunction} ($\\vee$C): compute $\\alpha \\vee \\beta$.\n\n(TODO: Differentiate between bounded and unbounded conjunction/disjunction)\n\\end{itemize}\nUnlike query operations, transformations must produce new representable elements; tractability therefore requires both efficient execution \\emph{and} that the output remains in $L$.\n\n(TODO: double check that these are the full set to include)",
+      "title": "Transformation",
+      "statement": "A \\emph{transformation} maps one or more formulas from $\\alpha_1,\\alpha_2,..., \\alpha_m\\ \\in L$, where $m$ may be arbitrarily large, to a new formula $\\alpha_{m+1} \\in L$.\n\nThe standard transformations in this project are \\defref{transformation-cd}, \\defref{transformation-fo}, \\defref{transformation-sfo}, \\defref{transformation-and-c}, \\defref{transformation-and-bc}, \\defref{transformation-or-c}, \\defref{transformation-or-bc}, and \\defref{transformation-not-c}.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "order",
+      "title": "Variable Order",
+      "statement": "A \\emph{variable order} $<$ on $PS$ is a strict total order on $PS$. For any finite nonempty $X \\subseteq PS$, the induced order $<|_X$ is the restriction of $<$ to $X$.",
+      "refs": [
+        "Bryant_1986"
+      ]
+    },
+    {
+      "id": "vtree",
+      "title": "vtree",
+      "statement": "A \\emph{global vtree} $T$ over $PS$ is an infinite rooted binary tree where every internal node has exactly two children and leaves are in bijection with $PS$.\n\nFor any finite nonempty $X \\subseteq PS$, the \\emph{restriction} $T|_X$ is obtained by taking the minimal connected subgraph containing the root and the leaves for variables in $X$, then repeatedly contracting internal nodes with exactly one child while preserving left/right orientation. The result is a finite full rooted binary tree with leaves in bijection with $X$. \n\nA formula $f_n:X \\to \\{0,1\\}$ is said to respect the vtree $T$ if it respects the restriction $T|_X$.",
+      "refs": [
+        "Darwiche_2011"
+      ]
+    },
+    {
+      "id": "right-linear-vtree",
+      "title": "Right-Linear vtree",
+      "statement": "A finite vtree is \\emph{right-linear} if every internal node has a leaf as its left child. Equivalently, all non-leaf nodes form a single chain through right children. This construction is useful in its bijection with the total orders",
+      "refs": [
+        "Pipatsrisawat_2008"
+      ]
+    },
+    {
+      "id": "query-co",
+      "title": "Consistency (CO)",
+      "statement": "Given a sentence $\\alpha$, decide whether $\\alpha$ is satisfiable, i.e., whether there exists an assignment $X$ such that $\\alpha(X)=\\top$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-va",
+      "title": "Validity (VA)",
+      "statement": "Given a sentence $\\alpha$, decide whether $\\alpha$ is valid, i.e., $\\alpha \\equiv \\top$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-ce",
+      "title": "Clausal Entailment (CE)",
+      "statement": "Given a sentence $\\alpha$ and a clause $c$, decide whether $\\alpha \\models c$ (equivalently, whether $\\alpha \\wedge \\neg c$ is unsatisfiable).",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-im",
+      "title": "Implicant (IM)",
+      "statement": "Given a sentence $\\alpha$ and a term $t$, decide whether $t \\models \\alpha$ (equivalently, whether $t \\wedge \\neg \\alpha$ is unsatisfiable).",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-eq",
+      "title": "Equivalence (EQ)",
+      "statement": "Given two sentences $\\alpha$ and $\\beta$, decide whether $\\alpha \\equiv \\beta$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-ct",
+      "title": "Model Counting (CT)",
+      "statement": "Given a sentence $\\alpha$, compute the number of satisfying assignments: $|\\{X:\\alpha(X)=\\top\\}|$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-me",
+      "title": "Model Enumeration (ME)",
+      "statement": "Given a sentence $\\alpha$, enumerate all satisfying assignments, i.e., output $\\{X:\\alpha(X)=\\top\\}$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "query-se",
+      "title": "Sentential Entailment (SE)",
+      "statement": "Given sentences $\\alpha$ and $\\beta$, decide whether $\\alpha \\models \\beta$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-cd",
+      "title": "Conditioning (CD)",
+      "statement": "Given a sentence $\\alpha$ and a consistent term $\\gamma$, compute the conditioned sentence $\\alpha|_{\\gamma}$ obtained by substituting the assignments in $\\gamma$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-fo",
+      "title": "Forgetting (FO)",
+      "statement": "Given a sentence $\\alpha$ and a set of variables $Y$, compute $\\exists Y.\\alpha$ (existentially quantifying the variables in $Y$).",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-sfo",
+      "title": "Singleton Forgetting (SFO)",
+      "statement": "Given a sentence $\\alpha$ and a variable $x$, compute $\\exists x.\\alpha = (\\alpha|_{x=0}) \\vee (\\alpha|_{x=1})$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-and-c",
+      "title": "Conjunction (\\texorpdfstring{$\\wedge$}{AND}C)",
+      "statement": "Given sentences $\\alpha_1,\\ldots,\\alpha_m$, compute $\\bigwedge_{i=1}^m \\alpha_i$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-and-bc",
+      "title": "Bounded Conjunction (\\texorpdfstring{$\\wedge$}{AND}BC)",
+      "statement": "Given two sentences $\\alpha_1,\\alpha_2$, compute $\\alpha_1 \\wedge \\alpha_2$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-or-c",
+      "title": "Disjunction (\\texorpdfstring{$\\vee$}{OR}C)",
+      "statement": "Given sentences $\\alpha_1,\\ldots,\\alpha_m$, compute $\\bigvee_{i=1}^m \\alpha_i$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-or-bc",
+      "title": "Bounded Disjunction (\\texorpdfstring{$\\vee$}{OR}BC)",
+      "statement": "Given two sentences $\\alpha_1,\\alpha_2$, compute $\\alpha_1 \\vee \\alpha_2$.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "transformation-not-c",
+      "title": "Negation (\\texorpdfstring{$\\neg$}{NOT}C)",
+      "statement": "Given a sentence $\\alpha$, compute $\\neg \\alpha$.",
       "refs": [
         "Darwiche_2002"
       ]

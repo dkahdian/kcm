@@ -11,9 +11,46 @@
   import { getGlobalRefNumber } from '$lib/data/references.js';
   import { idToName, nameToId } from '$lib/utils/language-id.js';
   import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
+  import { initialGraphData } from '$lib/data/index.js';
 
   function opCodeToLabel(code: string): string {
     return QUERIES[code]?.label ?? TRANSFORMATIONS[code]?.label ?? code;
+  }
+
+  type DefinitionRefResolution = { id: string; title: string; resolved: boolean };
+  const definitionById = new Map((initialGraphData.definitions ?? []).map((d) => [d.id, d]));
+  const definitionByTitle = new Map((initialGraphData.definitions ?? []).map((d) => [d.title.toLowerCase(), d]));
+
+  function resolveDefinitionRef(ref: string): DefinitionRefResolution {
+    const normalized = ref.trim();
+    const byId = definitionById.get(normalized);
+    if (byId) {
+      return { id: byId.id, title: byId.title, resolved: true };
+    }
+
+    const lower = normalized.toLowerCase();
+    const byTitle = definitionByTitle.get(lower);
+    if (byTitle) {
+      return { id: byTitle.id, title: byTitle.title, resolved: true };
+    }
+
+    // Common fallback: \defref{vtree} should match id "vtree", and similarly
+    // for slug-like refs that may use spaces/underscores/hyphens interchangeably.
+    const slug = lower.replace(/[_\s]+/g, '-');
+    const candidates = [
+      normalized,
+      normalized.replace(/^kdef:/i, ''),
+      lower,
+      slug
+    ];
+    for (const candidate of candidates) {
+      const found = definitionById.get(candidate);
+      if (found) {
+        return { id: found.id, title: found.title, resolved: true };
+      }
+    }
+
+    return { id: normalized, title: normalized, resolved: false };
   }
 
   let {
@@ -55,7 +92,7 @@
     }
     
     if (containsEntityLinks(text ?? '')) {
-      html = renderEntityLinks(html, idToName, opCodeToLabel, nameToId);
+      html = renderEntityLinks(html, idToName, opCodeToLabel, nameToId, resolveDefinitionRef);
     }
     
     return html;
@@ -87,10 +124,12 @@
       event.preventDefault();
       const href = link.getAttribute('href');
       if (href) {
-        if (href.startsWith('/#')) {
+        if (href.startsWith('/')) {
           window.location.assign(href);
-        } else {
+        } else if (href.startsWith('#')) {
           window.location.hash = href.replace(/^#/, '');
+        } else {
+          window.location.assign(href);
         }
       }
     }
@@ -206,6 +245,13 @@
 
   .math-text :global(.entity-link:visited) {
     color: #2563eb;
+  }
+
+  .math-text :global(.entity-link--unknown) {
+    color: #dc2626;
+    text-decoration: none;
+    cursor: default;
+    font-weight: 600;
   }
 
   .math-text :global(.latex-list) {

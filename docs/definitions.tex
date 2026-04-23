@@ -44,6 +44,7 @@
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
 \newcommand{\nopref}[2]{#2 is unsupported by #1}
+\newcommand{\defref}[1]{\textit{#1}}
 
 % -------- Title info --------
 \title{Knowledge Compilation Map: Conceptual Definitions}
@@ -54,88 +55,167 @@
 
 \begin{definition}\label{kdef:boolean-formula}
 \textbf{Boolean Formula} \\
-Fix a countable set $X = \{x_1, x_2, \ldots\}$ of propositional variables \citep{Boole_1847}.
+Fix a countable set $\text{PS} = \{x_1, x_2, \ldots\}$ of propositional variables \citep{Boole_1847}.
 
-A \emph{Boolean formula} is a syntactic expression built inductively from variables $x_i \in X$, constants $\top$ and $\bot$, and connectives $\neg, \wedge, \vee$ in the usual way.
+A \emph{Boolean formula} is a syntactic expression built inductively from variables $x_i \in PS$, constants $\top$ and $\bot$, and connectives $\neg, \wedge, \vee$ in the usual way.
 
-Each formula $\alpha$ of arity $n$ over variables $\vec{x} = (x_1, x_2, \cdots, x_n)$ denotes a Boolean function $\alpha : \{0,1\}^n \to \{0,1\}$. Two formulas are \emph{semantically equivalent}, written $\alpha \equiv \beta$, when they agree on every truth assignment ($\alpha(\vec{x}) = \beta(\vec{x}), \forall \vec{x} \in \{0,1\}^n$). For the purposes of this project we only consider formulas with finite arity. \citet{Darwiche_2002}
+Each formula $\alpha$ of arity $n$ over variables $X = (x_1, x_2, \cdots, x_n)$ denotes a Boolean function $\alpha : \{0,1\}^n \to \{0,1\}$. Two formulas are \emph{semantically equivalent}, written $\alpha \equiv \beta$, when they agree on every truth assignment ($\alpha(X) = \beta(X), \forall X \in \{0,1\}^n$). \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:representation-language}
 \textbf{Representation Language} \\
-A \emph{representation language} $L$ is a set of Boolean formulas sharing a common syntactic structure, endowed with the standard Boolean semantics and a size measure $|\cdot|$. (TODO: Consider more formally defining the size measure or use a rigorous definition?)
-
-\citet{Darwiche_2002} distinguish a representation language from a \emph{target compilation language}: the former is intended to be natural for humans to read and write (e.g. CNF), while the latter need not be human-intelligible but must support a non-trivial class of polytime queries and transformations.
-
-For a language to qualify as a target compilation language, \citet{Darwiche_2002} require at minimum that clausal entailment is decidable in polynomial time; polytime consistency alone does not suffice to justify the cost of off-line compilation. \citet{Darwiche_2002}
+A \emph{representation language} $L$ is a set of Boolean formulas sharing a common syntactic structure, endowed with the standard Boolean semantics and a size measure $|\cdot|$, usually simply the count of all variables and connectives in the formula.
 \end{definition}
 
 \begin{definition}\label{kdef:language-family}
 \textbf{Language Family} \\
-We also introduce a notion of Language Families. A \emph{language family} is a parameterized collection $\mathcal{F} = \{L_\theta\}_{\theta \in \Theta}$ of representation languages.
-For example, consider the \emph{family} \langfam{OBDD}{<} parameterized by total variable orderings $<$ on $X$, and the \emph{language} \langref{OBDD} $= \bigcup_< \langfam{OBDD}{<}$. One of the main contributions of this paper is to rigorously differentiate the results between language families and their corresponding languages, results on which are sometimes vastly different. \citet{Darwiche_2002,Amarilli_2018}
+A \emph{language family} is a parameterized collection $\mathcal{F} = \{L_\theta\}_{\theta \in \Theta}$ of representation languages. The parameter $\theta$ may be, for example, a variable order or a vtree.
+
+For example, \langfam{OBDD}{<} is parameterized by a variable order, and \langref{OBDD} is the union over all such parameters: $\langref{OBDD} = \bigcup_< \langfam{OBDD}{<}$. Distinguishing family-level from language-level claims is central in this project. \citet{Darwiche_2002,Amarilli_2018}
 \end{definition}
 
 \begin{definition}\label{kdef:succinctness-language}
 \textbf{Succinctness Between Languages} \\
 There are two intuitive definitions of succinctness: a \emph{time} requirement, i.e. that an efficient compilation algorithm exists between two languages; or the \emph{space} requirement, that formulas remain ``small'' in the new language. Since, for any computation, runtime is lower-bounded by output size, the latter definition is weaker.
 
-We fix the convention that succinctness between representation languages is a size-only relation, with no requirement that a conversion algorithm exist \citep{Gogic_1995}. However, to the best of our knowledge, all known proofs of succinctness use a compilation algorithm to establish the size relationship; and all proofs that \emph{no} efficient compilation algorithm exists use size bounds. An example to the contrary would be highly interesting. (TODO: Deeply search to make sure this truly holds)
+We fix the convention that succinctness between representation languages is a size-only relation, with no requirement that a conversion algorithm exist \citep{Gogic_1995}. However, to the best of our knowledge, all known proofs of succinctness use a compilation algorithm to establish the size relationship; and all proofs that \emph{no} time-efficient compilation algorithm exists use space complexity bounds. An example to the contrary would be highly interesting.
 
-Formally, let $L_1$ and $L_2$ be two languages. $L_1$ is \emph{at least as succinct as} $L_2$, written $L_1 \leq L_2$, if there exists a polynomial $p$ such that for every $\alpha \in L_2$ there exists an equivalent $\beta \in L_1$ with $|\beta| \leq p(|\alpha|)$.
+Formally, let $L_1$ and $L_2$ be two languages. $L_1$ is \emph{at least as succinct as} $L_2$, written $L_1 \leq_p L_2$, if there exists a polynomial $p$ such that for every $\alpha \in L_2$ there exists an equivalent $\beta \in L_1$ with $|\beta| \leq p(|\alpha|)$.
 
-We say $L_1$ \emph{polynomially compiles into} $L_2$, and write $L_1 \leq_p L_2$, if there exists a polynomial-time algorithm that converts any $\alpha \in L_1$ into an equivalent $\beta \in L_2$; again, for the purposes of this project, the two definitions are functionally equivalent.
+We say $L_1$ \emph{polynomially compiles into} $L_2$ if there exists a polynomial-time algorithm that converts any $\alpha \in L_1$ into an equivalent $\beta \in L_2$.
+
+Since all claims in this project work with either definition, we will sometimes use them as if they were interchangeable.
 
 We additionally define quasi-polynomial succinctness identically, except we require a quasi-polynomial function $q(n) \in n^{log^{O(1)}(n)}$ satisfying the above properties and use the notation $\leq_q$. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:succinctness-family}
 \textbf{Succinctness Between Families} \\
-Let $\mathcal{F}_1$ and $\mathcal{F}_2$ be language families. We extend the language-level succinctness definition of \citet{Gogic_1995} to families by writing: $\mathcal{F}_1$ is \emph{at least as succinct as} $\mathcal{F}_2$, written $\mathcal{F}_1 \leq \mathcal{F}_2$, if for every $L_2 \in \mathcal{F}_2$ there exists $L_1 \in \mathcal{F}_1$ so that $L_1 \leq L_2$.
+Let $\mathcal{F}_1$ and $\mathcal{F}_2$ be language families. We write $\mathcal{F}_1 \leq_p \mathcal{F}_2$ if for every $L_2 \in \mathcal{F}_2$ there exists $L_1 \in \mathcal{F}_1$ such that $L_1 \leq_p L_2$.
 
-Intuitively, this forces all languages in the ``source'' family ($\mathcal{F}_2$) to efficiently compile into at least one member of the ``target'' ($\mathcal{F}_1$).
+Likewise, we say $\mathcal{F}_1$ polynomially compiles into $\mathcal{F}_2$ if for every $L_1 \in \mathcal{F}_1$ there exists $L_2 \in \mathcal{F}_2$ such that $L_1$ polynomially compiles into $L_2$.
 
-Equivalently, in compilation-arrow notation, $\mathcal{F}_1 \leq \mathcal{F}_2$ means compilation flows from $\mathcal{F}_2$ to $\mathcal{F}_1$ (i.e., source $= \mathcal{F}_2$, target $= \mathcal{F}_1$).
-
-As with the language-level definition, succinctness between families is purely existential with respect to size and places no requirement on algorithmic time complexity. We also extend this definition to define a succinctness relationship between an individual language $L$ and a family $\mathcal{F}$ by applying the above definition to the singleton $\{L\}$ and $\mathcal{F}$. \citet{Darwiche_2002}
+The same convention applies between a language $L$ and a family $\mathcal{F}$ by identifying $L$ with the singleton family $\{L\}$. \citet{Darwiche_2002,Gogic_1995}
 \end{definition}
 
 \begin{definition}\label{kdef:tractability}
 \textbf{Tractability of an Operation} \\
-An operation $\mathcal{O}$ is \emph{tractable} on a representation language $L$ if there exists a polynomial-time (resp. quasi-polynomial-time) algorithm that performs $\mathcal{O}$ on any input formula in $L$. Following \citet{Selman_1996}: a propositional theory is compiled off-line into a target language $L$, after which all subsequent on-line queries are answered efficiently \citep{Darwiche_2002}. \citet{Darwiche_2002}
+An operation $\mathcal{O}$ is \emph{tractable} on a representation language $L$ if there exists a polynomial-time (resp. quasi-polynomial-time) algorithm that performs $\mathcal{O}$ on any input formula(s) in $L$. Following \citet{Selman_1996}, the point is to compile a propositional theory off-line into a language where target operations are tractable. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:query-operation}
-\textbf{Query Operation} \\
-A \emph{query operation} takes a formula $\alpha \in L$ (and possibly auxiliary inputs) and returns a Boolean answer or a numerical value without modifying $\alpha$. We consider the query operations below, as laid out in \citet{Darwiche_2002}.
-\begin{itemize}[noitemsep]
-  \item \emph{Consistency} (CO): is $\alpha$ satisfiable? (i.e. is there an $\vec{x}$ so that $\alpha(\vec{x}) = \top$?)
-  \item \emph{Validity} (VA): is $\alpha \equiv \top$?
-  \item \emph{Clausal entailment} (CE): given a clause $c$, does $\alpha \models c$? (i.e. is $\alpha \wedge \neg c$ unsatisfiable?)
-  \item \emph{Implicant} (IM): given a term $t$, does $t \models \alpha$? (i.e. is $t \wedge \neg \alpha$ unsatisfiable?)
-  \item \emph{Equivalence} (EQ): is $\alpha \equiv \beta$ for a given $\beta$? (i.e. does $\alpha(\vec{x}) = \beta(\vec{x})$ for all $\vec{x}$?)
-  \item \emph{Model counting} (CT): compute $|\{ \vec{x} : \alpha(\vec{x}) = \top \}|$.
-  \item \emph{Model enumeration} (ME): enumerate all satisfying assignments (i.e. return $\{ \vec{x} : \alpha(\vec{x}) = \top \}$).
-  \item \emph{Sentential entailment} (SE): does $\alpha \models \beta$ for a given sentence $\beta$?
-\end{itemize} \citet{Darwiche_2002}
+\textbf{Query} \\
+A \emph{query} takes a formula $\alpha \in L$ (and possibly auxiliary inputs) and returns a Boolean answer or a numerical value without modifying $\alpha$.
+
+The standard query operations in this project are \defref{query-co}, \defref{query-va}, \defref{query-ce}, \defref{query-im}, \defref{query-eq}, \defref{query-ct}, \defref{query-me}, and \defref{query-se}. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-operation}
-\textbf{Transformation Operation} \\
-A \emph{transformation operation} maps one or more formulas in a language $L$ to a new formula. We require the output formula to be in $L$. The canonical transformations cataloged by \citet{Darwiche_2002} are:
-\begin{itemize}[noitemsep]
-  \item \emph{Conditioning} (CD): given a partial assignment $\gamma$, compute $\alpha|_{\gamma}$ (i.e. ``plug in'' the assignment $\gamma$).
-  \item \emph{Singleton Forgetting} (SFO): given a variable $x_i$, compute $(\alpha|_{x_i=0}) \vee (\alpha|_{x_i=1})$.
-  \item \emph{Forgetting} (FO): given a \emph{subset} of variables $\gamma = \{x_{i_1}, x_{i_2}, \ldots, x_{i_k}\} \subseteq X$, compute $\bigvee_{\gamma \in \{0,1\}^k} \alpha \mid \gamma$.
-  \item \emph{Conjunction} ($\wedge$C): compute $\alpha \wedge \beta$.
-  \item \emph{Disjunction} ($\vee$C): compute $\alpha \vee \beta$.
+\textbf{Transformation} \\
+A \emph{transformation} maps one or more formulas from $\alpha_1,\alpha_2,..., \alpha_m\ \in L$, where $m$ may be arbitrarily large, to a new formula $\alpha_{m+1} \in L$.
 
-(TODO: Differentiate between bounded and unbounded conjunction/disjunction)
-\end{itemize}
-Unlike query operations, transformations must produce new representable elements; tractability therefore requires both efficient execution \emph{and} that the output remains in $L$.
-
-(TODO: double check that these are the full set to include) \citet{Darwiche_2002}
+The standard transformations in this project are \defref{transformation-cd}, \defref{transformation-fo}, \defref{transformation-sfo}, \defref{transformation-and-c}, \defref{transformation-and-bc}, \defref{transformation-or-c}, \defref{transformation-or-bc}, and \defref{transformation-not-c}. \citet{Darwiche_2002}
 \end{definition}
+
+\begin{definition}\label{kdef:query-co}
+\textbf{Consistency (CO)} \\
+Given a sentence $\alpha$, decide whether $\alpha$ is satisfiable, i.e., whether there exists an assignment $X$ such that $\alpha(X)=\top$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-va}
+\textbf{Validity (VA)} \\
+Given a sentence $\alpha$, decide whether $\alpha$ is valid, i.e., $\alpha \equiv \top$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-ce}
+\textbf{Clausal Entailment (CE)} \\
+Given a sentence $\alpha$ and a clause $c$, decide whether $\alpha \models c$ (equivalently, whether $\alpha \wedge \neg c$ is unsatisfiable). \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-im}
+\textbf{Implicant (IM)} \\
+Given a sentence $\alpha$ and a term $t$, decide whether $t \models \alpha$ (equivalently, whether $t \wedge \neg \alpha$ is unsatisfiable). \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-eq}
+\textbf{Equivalence (EQ)} \\
+Given two sentences $\alpha$ and $\beta$, decide whether $\alpha \equiv \beta$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-ct}
+\textbf{Model Counting (CT)} \\
+Given a sentence $\alpha$, compute the number of satisfying assignments: $|\{X:\alpha(X)=\top\}|$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-me}
+\textbf{Model Enumeration (ME)} \\
+Given a sentence $\alpha$, enumerate all satisfying assignments, i.e., output $\{X:\alpha(X)=\top\}$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:query-se}
+\textbf{Sentential Entailment (SE)} \\
+Given sentences $\alpha$ and $\beta$, decide whether $\alpha \models \beta$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-cd}
+\textbf{Conditioning (CD)} \\
+Given a sentence $\alpha$ and a consistent term $\gamma$, compute the conditioned sentence $\alpha|_{\gamma}$ obtained by substituting the assignments in $\gamma$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-fo}
+\textbf{Forgetting (FO)} \\
+Given a sentence $\alpha$ and a set of variables $Y$, compute $\exists Y.\alpha$ (existentially quantifying the variables in $Y$). \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-sfo}
+\textbf{Singleton Forgetting (SFO)} \\
+Given a sentence $\alpha$ and a variable $x$, compute $\exists x.\alpha = (\alpha|_{x=0}) \vee (\alpha|_{x=1})$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-and-c}
+\textbf{Conjunction (\texorpdfstring{$\wedge$}{AND}C)} \\
+Given sentences $\alpha_1,\ldots,\alpha_m$, compute $\bigwedge_{i=1}^m \alpha_i$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-and-bc}
+\textbf{Bounded Conjunction (\texorpdfstring{$\wedge$}{AND}BC)} \\
+Given two sentences $\alpha_1,\alpha_2$, compute $\alpha_1 \wedge \alpha_2$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-or-c}
+\textbf{Disjunction (\texorpdfstring{$\vee$}{OR}C)} \\
+Given sentences $\alpha_1,\ldots,\alpha_m$, compute $\bigvee_{i=1}^m \alpha_i$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-or-bc}
+\textbf{Bounded Disjunction (\texorpdfstring{$\vee$}{OR}BC)} \\
+Given two sentences $\alpha_1,\alpha_2$, compute $\alpha_1 \vee \alpha_2$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:transformation-not-c}
+\textbf{Negation (\texorpdfstring{$\neg$}{NOT}C)} \\
+Given a sentence $\alpha$, compute $\neg \alpha$. \citet{Darwiche_2002}
+\end{definition}
+
+\begin{definition}\label{kdef:order}
+\textbf{Variable Order} \\
+A \emph{variable order} $<$ on $PS$ is a strict total order on $PS$. For any finite nonempty $X \subseteq PS$, the induced order $<|_X$ is the restriction of $<$ to $X$. \citet{Bryant_1986}
+\end{definition}
+
+\begin{definition}\label{kdef:vtree}
+\textbf{vtree} \\
+A \emph{global vtree} $T$ over $PS$ is an infinite rooted binary tree where every internal node has exactly two children and leaves are in bijection with $PS$.
+
+For any finite nonempty $X \subseteq PS$, the \emph{restriction} $T|_X$ is obtained by taking the minimal connected subgraph containing the root and the leaves for variables in $X$, then repeatedly contracting internal nodes with exactly one child while preserving left/right orientation. The result is a finite full rooted binary tree with leaves in bijection with $X$. 
+
+A formula $f_n:X \to \{0,1\}$ is said to respect the vtree $T$ if it respects the restriction $T|_X$.
+\end{definition}
+
+\begin{definition}\label{kdef:right-linear-vtree}
+\textbf{Right-Linear vtree} \\
+A finite vtree is \emph{right-linear} if every internal node has a leaf as its left child. Equivalently, all non-leaf nodes form a single chain through right children. This construction is useful in its bijection with the total orders\citet{Pipatsrisawat_2008}
+\end{definition}
+
 
 % =============================
 % Bibliography

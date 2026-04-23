@@ -16,7 +16,7 @@
   import { extractCitationKeys } from '$lib/utils/math-text.js';
   import { getGlobalRefNumber } from '$lib/data/references.js';
 
-  import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
+  import { QUERIES, TRANSFORMATIONS, getOperationDescription } from '$lib/data/operations.js';
 
   let {
     selectedOperation = null,
@@ -61,7 +61,7 @@
       onOperationSelect({
         code: opDef.code,
         label: opDef.label,
-        description: opDef.description,
+        description: getOperationDescription(type, opDef.code, opDef.description),
         type
       });
     }
@@ -175,12 +175,6 @@
             <MathText text={selectedOperation.description} className="inline" />
           </p>
         {/if}
-
-        <div class="info-note">
-          <p class="text-sm text-gray-500">
-            Click on a cell in the matrix to see how a specific language supports this {selectedOperation.type}.
-          </p>
-        </div>
       </div>
     {:else}
       <div class="welcome-message">
@@ -275,10 +269,4 @@
     border-radius: 0.25rem;
   }
 
-  .info-note {
-    padding: 0.75rem;
-    background: #f0f9ff;
-    border: 1px solid #bae6fd;
-    border-radius: 0.375rem;
-  }
 </style>

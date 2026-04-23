@@ -121,6 +121,19 @@
     return allEdgeTypes.filter(et => statusesInGraph.has(et.status));
   });
 
+  const hasVisibleConditionalSuccinctness = $derived.by(() => {
+    const { matrix, languageIds } = filteredData.adjacencyMatrix;
+    for (let i = 0; i < languageIds.length; i++) {
+      for (let j = 0; j < languageIds.length; j++) {
+        const relation = matrix[i][j];
+        if (!relation?.caveat) continue;
+        const edgeId = `${languageIds[i]}->${languageIds[j]}`;
+        if (filteredData.visibleEdgeIds.has(edgeId)) return true;
+      }
+    }
+    return false;
+  });
+
   // Determine which operation complexity emojis are visible on graph nodes
   // Only show when operation filters are active (nodes have labelSuffix)
   const visibleComplexities = $derived.by(() => {
@@ -185,6 +198,21 @@
     
     const catalog = filteredData.complexities;
     return Object.values(catalog).filter(c => codesInUse.has(c.code));
+  });
+
+  const hasVisibleConditionalOperations = $derived.by(() => {
+    if (viewMode !== 'queries' && viewMode !== 'transforms') return false;
+    const isQueries = viewMode === 'queries';
+    const visibleIds = filteredData.visibleLanguageIds;
+    for (const lang of filteredData.languages) {
+      if (!visibleIds.has(lang.id)) continue;
+      const supportMap = isQueries ? lang.properties.queries : lang.properties.transformations;
+      if (!supportMap) continue;
+      for (const support of Object.values(supportMap)) {
+        if (support.caveat) return true;
+      }
+    }
+    return false;
   });
 
   let containerRefs = $state<{ [status: string]: HTMLDivElement | null }>({});
@@ -306,6 +334,12 @@
               </div>
             {/if}
           {/each}
+          {#if hasVisibleConditionalSuccinctness}
+            <div class="legend-row matrix-row caveat-row">
+              <span class="matrix-notation caveat-marker">*</span>
+              <span class="matrix-description">conditional result (unless the listed condition holds)</span>
+            </div>
+          {/if}
         </div>
       {/if}
     </div>
@@ -320,6 +354,12 @@
           <span title={complexity.opDescription}>{complexity.label}</span>
         </div>
       {/each}
+      {#if hasVisibleConditionalOperations}
+        <div class="legend-row caveat-row">
+          <span class="complexity-emoji caveat-marker">*</span>
+          <span>conditional result (unless the listed condition holds)</span>
+        </div>
+      {/if}
     </div>
   {/if}
 </div>
@@ -424,5 +464,14 @@
   .matrix-description {
     font-size: 0.875rem;
     color: #4b5563;
+  }
+
+  .caveat-row {
+    margin-top: 0.25rem;
+  }
+
+  .caveat-marker {
+    font-weight: 700;
+    color: #1f2937;
   }
 </style>

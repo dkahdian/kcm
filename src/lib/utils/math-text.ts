@@ -42,6 +42,12 @@ export function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
+function decodeLatexLiteralEscapes(value: string): string {
+  // Decode escaped literal characters used in LaTeX prose (e.g. "\#P").
+  // Keep command backslashes intact so macros like \langref still parse later.
+  return value.replace(/\\([#%&_{}])/g, '$1');
+}
+
 /**
  * Extract all citation keys from text.
  * Supports \cite{key}, \citet{key}, \citep{key} and comma-separated keys like \cite{key1,key2}
@@ -121,7 +127,7 @@ export function renderMathText(input?: string | null): MathRenderResult {
 
   if (!containsLatex(text)) {
     // No LaTeX, but still convert newlines to <br> for proper display
-    const htmlWithBreaks = escapeHtml(text).replace(/\n/g, '<br>');
+    const htmlWithBreaks = escapeHtml(decodeLatexLiteralEscapes(text)).replace(/\n/g, '<br>');
     return cacheAndReturn({ hasLatex: false, html: htmlWithBreaks, plainText: text, citationKeys });
   }
 
@@ -133,7 +139,7 @@ export function renderMathText(input?: string | null): MathRenderResult {
 
   while ((match = LATEX_FRAGMENT.exec(text)) !== null) {
     foundLatex = true;
-    html += escapeHtml(text.slice(cursor, match.index)).replace(/\n/g, '<br>');
+    html += escapeHtml(decodeLatexLiteralEscapes(text.slice(cursor, match.index))).replace(/\n/g, '<br>');
     const fragment = match[0];
     const { content, displayMode } = stripDelimiters(fragment);
     html += renderFragment(content.trim(), displayMode);
@@ -141,11 +147,11 @@ export function renderMathText(input?: string | null): MathRenderResult {
   }
 
   if (!foundLatex) {
-    const htmlWithBreaks = escapeHtml(text).replace(/\n/g, '<br>');
+    const htmlWithBreaks = escapeHtml(decodeLatexLiteralEscapes(text)).replace(/\n/g, '<br>');
     return cacheAndReturn({ hasLatex: false, html: htmlWithBreaks, plainText: text, citationKeys });
   }
 
-  html += escapeHtml(text.slice(cursor)).replace(/\n/g, '<br>');
+  html += escapeHtml(decodeLatexLiteralEscapes(text.slice(cursor))).replace(/\n/g, '<br>');
   return cacheAndReturn({ hasLatex: true, html, plainText: text, citationKeys });
 }
 

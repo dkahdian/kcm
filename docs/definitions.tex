@@ -71,7 +71,9 @@ A \emph{representation language} $L$ is a set of Boolean formulas sharing a comm
 \textbf{Language Family} \\
 A \emph{language family} is a parameterized collection $\mathcal{F} = \{L_\theta\}_{\theta \in \Theta}$ of representation languages. The parameter $\theta$ may be, for example, a variable order or a vtree.
 
-For example, \langfam{OBDD}{<} is parameterized by a variable order, and \langref{OBDD} is the union over all such parameters: $\langref{OBDD} = \bigcup_< \langfam{OBDD}{<}$. Distinguishing family-level from language-level claims is central in this project. \citet{Darwiche_2002,Amarilli_2018}
+For example, \langfam{OBDD}{<} is parameterized by a variable order, and \langref{OBDD} is the union over all such parameters: \langref{OBDD} $= \bigcup_<$ \langfam{OBDD}{<}. Distinguishing family-level from language-level claims is central in this project. \citet{Darwiche_2002,Amarilli_2018}
+
+We will sometimes overload the \emph{family names} (e.g. \langfam{OBDD}{<}) to discuss \emph{family members}; for clarity we will always use language like: \emph{"For each order $<$, the language \langfam{OBDD}{<} satisfies ..."}
 \end{definition}
 
 \begin{definition}\label{kdef:succinctness-language}
@@ -173,27 +175,27 @@ Given a sentence $\alpha$ and a variable $x$, compute $\exists x.\alpha = (\alph
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-and-c}
-\textbf{Conjunction (\texorpdfstring{$\wedge$}{AND}C)} \\
+\textbf{Conjunction ($\wedge$C)} \\
 Given sentences $\alpha_1,\ldots,\alpha_m$, compute $\bigwedge_{i=1}^m \alpha_i$. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-and-bc}
-\textbf{Bounded Conjunction (\texorpdfstring{$\wedge$}{AND}BC)} \\
+\textbf{Bounded Conjunction ($\wedge$BC)} \\
 Given two sentences $\alpha_1,\alpha_2$, compute $\alpha_1 \wedge \alpha_2$. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-or-c}
-\textbf{Disjunction (\texorpdfstring{$\vee$}{OR}C)} \\
+\textbf{Disjunction ($\vee$C)} \\
 Given sentences $\alpha_1,\ldots,\alpha_m$, compute $\bigvee_{i=1}^m \alpha_i$. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-or-bc}
-\textbf{Bounded Disjunction (\texorpdfstring{$\vee$}{OR}BC)} \\
+\textbf{Bounded Disjunction ($\vee$BC)} \\
 Given two sentences $\alpha_1,\alpha_2$, compute $\alpha_1 \vee \alpha_2$. \citet{Darwiche_2002}
 \end{definition}
 
 \begin{definition}\label{kdef:transformation-not-c}
-\textbf{Negation (\texorpdfstring{$\neg$}{NOT}C)} \\
+\textbf{Negation ($\neg$C)} \\
 Given a sentence $\alpha$, compute $\neg \alpha$. \citet{Darwiche_2002}
 \end{definition}
 
@@ -208,7 +210,7 @@ A \emph{global vtree} $T$ over $PS$ is an infinite rooted binary tree where ever
 
 For any finite nonempty $X \subseteq PS$, the \emph{restriction} $T|_X$ is obtained by taking the minimal connected subgraph containing the root and the leaves for variables in $X$, then repeatedly contracting internal nodes with exactly one child while preserving left/right orientation. The result is a finite full rooted binary tree with leaves in bijection with $X$. 
 
-A formula $f_n:X \to \{0,1\}$ is said to respect the vtree $T$ if it respects the restriction $T|_X$.
+A formula $f:X \to \{0,1\}$ is said to respect the (infinite) vtree $T$ if it respects the (finite) restriction $T|_X$.
 \end{definition}
 
 \begin{definition}\label{kdef:right-linear-vtree}

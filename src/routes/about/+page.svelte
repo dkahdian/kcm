@@ -42,7 +42,7 @@
 				{#each definitions as definition}
 					<article class="definition-card" id={definition.id}>
 						<header class="definition-card-header">
-							<h3>{definition.title}</h3>
+							<h3><MathText text={definition.title} as="span" /></h3>
 							<span class="definition-id">{definition.id}</span>
 						</header>
 						<div class="definition-statement">

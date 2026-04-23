@@ -345,7 +345,7 @@
       },
       "tags": [],
       "id": "lang_83e3b023",
-      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{cSDD} $= \\bigcup_T$ \\langfam{cSDD}{T}.\n\\citet{VanDenBroeck_2015,Darwiche_2011}.",
+      "definition": "The language obtained by taking the union of every \\defref{vtree}: \\langref{cSDD} $= \\bigcup_T \\langfam{cSDD}{T}$.\n\\citet{VanDenBroeck_2015,Darwiche_2011}.",
       "definitionRefs": []
     },
     {
@@ -541,7 +541,7 @@
       },
       "tags": [],
       "id": "lang_6c130090",
-      "definition": "A subset of \\langref{DNNF} where the children of every $\\vee$ node represent mutually exclusive subformulas. \\citet{Darwiche_2001a}.",
+      "definition": "A subset of \\langref{DNNF} where the children of every $\\vee$ node represent mutually exclusive sub-formulas. \\citet{Darwiche_2001a}.",
       "definitionRefs": []
     },
     {
@@ -699,7 +699,7 @@
       },
       "tags": [],
       "id": "lang_ea9b5299",
-      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{d-SDNNF} $= \\bigcup_T$ \\langfam{d-SDNNF}{T}.\n\\citet{Pipatsrisawat_2008}.",
+      "definition": "The language obtained by taking the union of every \\defref{vtree}: \\langref{d-SDNNF} $= \\bigcup_T \\langfam{d-SDNNF}{T}$.\n\\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
@@ -861,7 +861,7 @@
       },
       "tags": [],
       "id": "lang_91f812d0",
-      "definition": "The subset of \\langref{d-DNNF} that respects the fixed \\defref{vtree} $T$.",
+      "definition": "For each fixed \\defref{vtree} $T$, \\langfam{d-SDNNF}{T} is the subset of \\langref{d-DNNF} that respects $T$. Equivalently, it is the deterministic subset of \\langfam{SDNNF}{T} (see \\langref{d-DNNF}).",
       "definitionRefs": [
         "Pipatsrisawat_2008"
       ]
@@ -1223,7 +1223,7 @@
       },
       "tags": [],
       "id": "lang_3bebcab7",
-      "definition": "The subset of \\langref{NNF} where the children of every AND node operate on completely disjoint sets of variables. This non-overlapping variable property, known as decomposability, guarantees polynomial-time consistency checking \\citet{Darwiche_2001a}.",
+      "definition": "The subset of \\langref{NNF} where the children of every $\\wedge$ node operate on disjoint sets of variables. \\citet{Darwiche_2001a}.",
       "definitionRefs": []
     },
     {
@@ -1402,7 +1402,7 @@
       },
       "tags": [],
       "id": "lang_684b1ca7",
-      "definition": "A Binary Decision Diagram that allows variables to be tested in any order along any given path, provided no variable is tested more than once per path. This property is called the read-once property \\citet{Gergov_1994}.",
+      "definition": "A Binary Decision Diagram (i.e. circuit of decision nodes) that allows variables to be tested in any order along any given path, provided no variable is tested more than once per path. This property is called the read-once property \\citet{Gergov_1994}.",
       "definitionRefs": []
     },
     {
@@ -1588,7 +1588,7 @@
       },
       "tags": [],
       "id": "lang_6ae90adc",
-      "definition": "A formula represented exactly as the disjunction of all its minimal entailing conjunctions (prime implicants). \\citet{Quine_1952}.",
+      "definition": "The subset of \\langref{DNF} where formulas represent exactly  the disjunction of all minimal entailing terms (prime implicants). \\citet{Quine_1952}.",
       "definitionRefs": []
     },
     {
@@ -1902,7 +1902,7 @@
       },
       "tags": [],
       "id": "lang_1df07cc3",
-      "definition": "A generalization of \\langref{FBDD} that allows for nondeterministic \"guess\" nodes in addition to standard variable decisions. \\citet{Wegener_2000}.",
+      "definition": "A generalization of \\langref{FBDD} that allows for nondeterministic $\\vee$ \"guess\" nodes in addition to standard variable decisions. \\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -2141,7 +2141,7 @@
       },
       "tags": [],
       "id": "lang_5bf00851",
-      "definition": "A boolean formula constructed strictly with AND, OR, and literals, where negations are only allowed directly on the variables. It serves as the broad, foundational structural superset for most tractable knowledge compilation languages \\citet{Darwiche_2002}.",
+      "definition": "A boolean formula constructed strictly with $\\wedge$, $\\vee$, and literals, where negations are only allowed directly on the variables. It serves as the broad superset for most tractable knowledge compilation languages \\citet{Darwiche_2002}.",
       "definitionRefs": []
     },
     {
@@ -2248,7 +2248,7 @@
       },
       "tags": [],
       "id": "lang_d24efe0e",
-      "definition": "The language obtained by taking the union over all \\defref{order}s: \\langref{nOBDD} $= \\bigcup_<$ \\langfam{nOBDD}{<}.\n\\citet{Wegener_2000}.",
+      "definition": "The language obtained by taking the union of every \\defref{order}: \\langref{nOBDD} $= \\bigcup_{<} \\langfam{nOBDD}{<}$.\n\\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -2418,7 +2418,7 @@
       },
       "tags": [],
       "id": "lang_d69995dd",
-      "definition": "The set of \\langref{OBDD} formulas respecting a fixed \\defref{order} $<$. Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}.",
+      "definition": "For each fixed \\defref{order} $<$, \\langfam{OBDD}{<} is the set of \\langref{FBDD} formulas where every root-to-sink path tests variables in an order consistent with $<$. In an \\langref{FBDD}, the order may vary by path; in \\langfam{OBDD}{<}, the order is fixed by $<$.",
       "definitionRefs": [
         "Bryant_1986"
       ]
@@ -2607,7 +2607,7 @@
       },
       "tags": [],
       "id": "lang_27fffab2",
-      "definition": "A formula represented exactly as the conjunction of all its minimal entailed disjunctive clauses (prime implicates). \\citet{Quine_1952}.",
+      "definition": "The subset of \\langref{CNF} where formulas represent exactly the disjunction of all minimal entailed clauses (prime implicates). \\citet{Quine_1952}.",
       "definitionRefs": []
     },
     {
@@ -2771,7 +2771,7 @@
       },
       "tags": [],
       "id": "lang_1afefbe2",
-      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{SDD} $= \\bigcup_T$ \\langfam{SDD}{T}.\n\\citet{Darwiche_2011}.",
+      "definition": "The language obtained by taking the union of every \\defref{vtree}: \\langref{SDD} $= \\bigcup_T \\langfam{SDD}{T}$.\n\\citet{Darwiche_2011}.",
       "definitionRefs": []
     },
     {
@@ -2974,7 +2974,7 @@
       },
       "tags": [],
       "id": "lang_9c84a267",
-      "definition": "The set of \\langref{SDD} formulas respecting the fixed \\defref{vtree} $T$.",
+      "definition": "For each fixed \\defref{vtree} $T$, \\langfam{SDD}{T} is the set of \\langref{DNNF} formulas that respect $T$ and whose disjunction gates are sentential decisions aligned with nodes of $T$.",
       "definitionRefs": [
         "Darwiche_2011"
       ]
@@ -3105,7 +3105,7 @@
       },
       "tags": [],
       "id": "lang_b13b0d78",
-      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{SDNNF} $= \\bigcup_T$ \\langfam{SDNNF}{T}.\n\\citet{Pipatsrisawat_2008}.",
+      "definition": "The language obtained by taking the union of every \\defref{vtree}: \\langref{SDNNF} $= \\bigcup_T \\langfam{SDNNF}{T}$.\n\\citet{Pipatsrisawat_2008}.",
       "definitionRefs": []
     },
     {
@@ -3260,7 +3260,7 @@
       },
       "tags": [],
       "id": "lang_3c803ba1",
-      "definition": "The set of \\langref{SDNNF} formulas respecting the fixed \\defref{vtree} $T$.",
+      "definition": "For each fixed \\defref{vtree} $T$, \\langfam{SDNNF}{T} is the subset of \\langref{DNNF} that respects $T$.",
       "definitionRefs": [
         "Pipatsrisawat_2008"
       ]
@@ -3537,7 +3537,7 @@
       },
       "tags": [],
       "id": "lang_c2df8c2b",
-      "definition": "The language obtained by taking the union over all \\defref{order}s: \\langref{uOBDD} $= \\bigcup_<$ \\langfam{uOBDD}{<}.\n\\citet{Wegener_2000}.",
+      "definition": "The language obtained by taking the union of every \\defref{order}: \\langref{uOBDD} $= \\bigcup_{<} \\langfam{uOBDD}{<}$.\n\\citet{Wegener_2000}.",
       "definitionRefs": []
     },
     {
@@ -3714,7 +3714,7 @@
       },
       "tags": [],
       "id": "lang_b9d72a7c",
-      "definition": "The language obtained by taking the union over all \\defref{order}s: \\langref{OBDD} $= \\bigcup_<$ \\langfam{OBDD}{<}.",
+      "definition": "The language obtained by taking the union of every \\defref{order}: \\langref{OBDD} $= \\bigcup_{<} \\langfam{OBDD}{<}$.",
       "definitionRefs": [
         "Bryant_1986",
         "Darwiche_2002"
@@ -4003,7 +4003,7 @@
         }
       },
       "tags": [],
-      "definition": "The language obtained by taking the union over all admissible \\defref{vtree}s: \\langref{dec-SDNNF} $= \\bigcup_T$ \\langfam{dec-SDNNF}{T}.\n\\citet{Oztok_2014}.",
+      "definition": "The language obtained by taking the union of every \\defref{vtree}: \\langref{dec-SDNNF} $= \\bigcup_T \\langfam{dec-SDNNF}{T}$.\n\\citet{Oztok_2014}.",
       "definitionRefs": []
     },
     {
@@ -4159,7 +4159,7 @@
         }
       },
       "tags": [],
-      "definition": "The subset of \\langref{dec-DNNF} that respects the fixed \\defref{vtree} $T$.",
+      "definition": "For each fixed \\defref{vtree} $T$, \\langfam{dec-SDNNF}{T} is the subset of \\langref{dec-DNNF} that respects $T$. Equivalently, it is the decision fragment of \\langfam{SDNNF}{T}.",
       "definitionRefs": [
         "Oztok_2014"
       ]
@@ -4367,7 +4367,7 @@
         }
       },
       "tags": [],
-      "definition": "For a fixed \\defref{vtree} $T$, \\langfam{cSDD}{T} is the subset of \\langfam{SDD}{T} that is \\emph{compressed} (no two primes share equivalent subs), together with either normalization or trimming conventions.\n\nUnder fixed $T$, compressed+normalized and compressed+trimmed are both canonical (and efficiently inter-convertible), so all map claims apply to either convention.",
+      "definition": "For each fixed \\defref{vtree} $T$, \\langfam{cSDD}{T} is the subset of \\langfam{SDD}{T} that is \\emph{compressed} (no two elements share equivalent subs), together with either normalization or trimming conventions.\nUnder fixed $T$, compressed+normalized and compressed+trimmed forms are efficiently inter-convertible, so map claims apply to either convention.",
       "definitionRefs": [
         "Darwiche_2011"
       ]
@@ -4376,7 +4376,7 @@
       "id": "lang_e827cf31",
       "name": "nOBDD$_<$",
       "fullName": "Nondeterministic Ordered Binary Decision Diagram (wrt a fixed variable order)",
-      "definition": "The set of all \\langref{nOBDD} formulas that follow one fixed \\defref{order} $<$. Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}. \\citet{Wegener_2000}.",
+      "definition": "For each fixed \\defref{order} $<$, \\langfam{nOBDD}{<} is the set of \\langref{nFBDD} formulas where every root-to-sink path tests variables in an order consistent with $<$. \\citet{Wegener_2000}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -4483,7 +4483,7 @@
       "id": "lang_43a33aec",
       "name": "uOBDD$_<$",
       "fullName": "Unambiguous Ordered Binary Decision Diagram (wrt a fixed variable order)",
-      "definition": "The set of all \\langref{uOBDD} formulas that follow one fixed \\defref{order} $<$. Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}. \\citet{Wegener_2000}.",
+      "definition": "For each fixed \\defref{order} $<$, \\langfam{uOBDD}{<} is the subset of \\langfam{nOBDD}{<} with the unambiguity property (every satisfying assignment induces exactly one accepting path). Equivalently, this is the order-constrained view corresponding to a \\defref{right-linear-vtree}. \\citet{Wegener_2000}.",
       "definitionRefs": [],
       "properties": {
         "queries": {
@@ -19365,7 +19365,7 @@
     {
       "id": "language-family",
       "title": "Language Family",
-      "statement": "A \\emph{language family} is a parameterized collection $\\mathcal{F} = \\{L_\\theta\\}_{\\theta \\in \\Theta}$ of representation languages. The parameter $\\theta$ may be, for example, a variable order or a vtree.\n\nFor example, \\langfam{OBDD}{<} is parameterized by a variable order, and \\langref{OBDD} is the union over all such parameters: $\\langref{OBDD} = \\bigcup_< \\langfam{OBDD}{<}$. Distinguishing family-level from language-level claims is central in this project.",
+      "statement": "A \\emph{language family} is a parameterized collection $\\mathcal{F} = \\{L_\\theta\\}_{\\theta \\in \\Theta}$ of representation languages. The parameter $\\theta$ may be, for example, a variable order or a vtree.\n\nFor example, \\langfam{OBDD}{<} is parameterized by a variable order, and \\langref{OBDD} is the union over all such parameters: \\langref{OBDD} $= \\bigcup_<$ \\langfam{OBDD}{<}. Distinguishing family-level from language-level claims is central in this project. \\citet{Darwiche_2002,Amarilli_2018}\n\nWe will sometimes overload the \\emph{family names} (e.g. \\langfam{OBDD}{<}) to discuss \\emph{family members}; for clarity we will always use language like: \\emph{\"For each order $<$, the language \\langfam{OBDD}{<} satisfies ...\"}",
       "refs": [
         "Darwiche_2002",
         "Amarilli_2018"
@@ -19423,7 +19423,7 @@
     {
       "id": "vtree",
       "title": "vtree",
-      "statement": "A \\emph{global vtree} $T$ over $PS$ is an infinite rooted binary tree where every internal node has exactly two children and leaves are in bijection with $PS$.\n\nFor any finite nonempty $X \\subseteq PS$, the \\emph{restriction} $T|_X$ is obtained by taking the minimal connected subgraph containing the root and the leaves for variables in $X$, then repeatedly contracting internal nodes with exactly one child while preserving left/right orientation. The result is a finite full rooted binary tree with leaves in bijection with $X$. \n\nA formula $f_n:X \\to \\{0,1\\}$ is said to respect the vtree $T$ if it respects the restriction $T|_X$.",
+      "statement": "A \\emph{global vtree} $T$ over $PS$ is an infinite rooted binary tree where every internal node has exactly two children and leaves are in bijection with $PS$.\n\nFor any finite nonempty $X \\subseteq PS$, the \\emph{restriction} $T|_X$ is obtained by taking the minimal connected subgraph containing the root and the leaves for variables in $X$, then repeatedly contracting internal nodes with exactly one child while preserving left/right orientation. The result is a finite full rooted binary tree with leaves in bijection with $X$. \n\nA formula $f:X \\to \\{0,1\\}$ is said to respect the (infinite) vtree $T$ if it respects the (finite) restriction $T|_X$.",
       "refs": [
         "Darwiche_2011"
       ]
@@ -19526,7 +19526,7 @@
     },
     {
       "id": "transformation-and-c",
-      "title": "Conjunction (\\texorpdfstring{$\\wedge$}{AND}C)",
+      "title": "Conjunction ($\\wedge$C)",
       "statement": "Given sentences $\\alpha_1,\\ldots,\\alpha_m$, compute $\\bigwedge_{i=1}^m \\alpha_i$.",
       "refs": [
         "Darwiche_2002"
@@ -19534,7 +19534,7 @@
     },
     {
       "id": "transformation-and-bc",
-      "title": "Bounded Conjunction (\\texorpdfstring{$\\wedge$}{AND}BC)",
+      "title": "Bounded Conjunction ($\\wedge$BC)",
       "statement": "Given two sentences $\\alpha_1,\\alpha_2$, compute $\\alpha_1 \\wedge \\alpha_2$.",
       "refs": [
         "Darwiche_2002"
@@ -19542,7 +19542,7 @@
     },
     {
       "id": "transformation-or-c",
-      "title": "Disjunction (\\texorpdfstring{$\\vee$}{OR}C)",
+      "title": "Disjunction ($\\vee$C)",
       "statement": "Given sentences $\\alpha_1,\\ldots,\\alpha_m$, compute $\\bigvee_{i=1}^m \\alpha_i$.",
       "refs": [
         "Darwiche_2002"
@@ -19550,7 +19550,7 @@
     },
     {
       "id": "transformation-or-bc",
-      "title": "Bounded Disjunction (\\texorpdfstring{$\\vee$}{OR}BC)",
+      "title": "Bounded Disjunction ($\\vee$BC)",
       "statement": "Given two sentences $\\alpha_1,\\alpha_2$, compute $\\alpha_1 \\vee \\alpha_2$.",
       "refs": [
         "Darwiche_2002"
@@ -19558,7 +19558,7 @@
     },
     {
       "id": "transformation-not-c",
-      "title": "Negation (\\texorpdfstring{$\\neg$}{NOT}C)",
+      "title": "Negation ($\\neg$C)",
       "statement": "Given a sentence $\\alpha$, compute $\\neg \\alpha$.",
       "refs": [
         "Darwiche_2002"

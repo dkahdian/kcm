@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import {
   containsEntityLinks,
-  renderEntityLinks
+  renderEntityLinks,
+  renderMathText,
+  renderTextWithCitations
 } from '../src/lib/utils/math-text.js';
 
 type Definition = { id: string; title: string };
@@ -89,5 +91,26 @@ const mixed = renderEntityLinks(
 assertIncludes(mixed, 'data-entity-type="lang"', 'language links should still render');
 assertIncludes(mixed, 'data-entity-type="edge"', 'edge links should still render');
 assertIncludes(mixed, 'data-entity-type="op"', 'operation links should still render');
+
+// Escaped LaTeX literals in prose should render as plain characters.
+const renderedHash = renderMathText('This is \\#P-complete.').html ?? '';
+assertIncludes(renderedHash, '#P-complete', 'escaped # should render without a leading backslash');
+assert.equal(renderedHash.includes('\\#P'), false, 'escaped # should not keep the backslash in HTML output');
+
+// Mixed prose + entity/citation commands should preserve command processing while decoding \#.
+const mixedLatex = renderMathText(
+  '\\langref{PI} counting is \\#P-hard \\citet{Roth_1996}.'
+).html ?? '';
+const mixedLatexWithLinks = renderEntityLinks(
+  renderTextWithCitations(mixedLatex, (key) => (key === 'Roth_1996' ? 35 : null)),
+  (id) => (id === 'lang_pi' ? 'PI' : id),
+  undefined,
+  (name) => (name === 'PI' ? 'lang_pi' : undefined),
+  resolveDefinitionRef
+);
+assertIncludes(mixedLatexWithLinks, '#P-hard', 'escaped # should decode in mixed LaTeX text');
+assert.equal(mixedLatexWithLinks.includes('\\#P'), false, 'mixed output should not contain escaped #');
+assertIncludes(mixedLatexWithLinks, 'data-entity-type="lang"', 'language links should still render in mixed output');
+assertIncludes(mixedLatexWithLinks, '[35]', 'citations should still render in mixed output');
 
 console.log('math-text defref checks passed');

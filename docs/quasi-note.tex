@@ -1,0 +1,264 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{natbib}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\vars}{\operatorname{vars}}
+\newcommand{\size}{\operatorname{size}}
+\newcommand{\lw}{\operatorname{lw}}
+\newcommand{\OBDD}{\mathrm{OBDD}}
+\newcommand{\decSDNNF}{\mathrm{dec}\mbox{-}\mathrm{SDNNF}}
+
+\title{A Common-Order Quasipolynomial Simulation from dec-SDNNF to OBDD}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+
+This note records a small variant of the Bollig--Buttkus simulation of structured
+decision-DNNFs by OBDDs.  The usual simulation orients each vtree split
+using counts that depend on the input circuit.  That is enough for simulating one
+circuit, but it can produce different output variable orders for two circuits
+respecting the same vtree.
+
+The variant below fixes the orientation from the vtree alone.  Consequently,
+several circuits respecting the same finite vtree can be compiled into
+OBDDs using one common variable order, while preserving a quasipolynomial size
+bound.
+
+\section{Setup}
+
+Let $T$ be a finite vtree over a finite nonempty variable set $X$.  For a node
+$t$ of $T$, write $T_t$ for the subtree rooted at $t$, and define
+\[
+  w(t) := |\text{leaves}(T_t)|.
+\]
+At each internal node $t$ of $T$ with children $t_0,t_1$, call the child with
+smaller weight the light child, breaking ties by a fixed convention depending
+only on $T$.  The other child is the heavy child.
+
+This orientation induces a total order $\pi_X$ on $X$: recursively list the
+variables of the light child first and the variables of the heavy child second.
+
+\begin{remark}[Normalization]
+We assume the input circuit has been cleaned so that every gate reachable from
+the output computes a function depending on at least one variable, except for the
+constant sinks, and every AND gate has two nonconstant inputs.  Constant-only
+subcircuits can be evaluated and contracted in linear time.  This keeps every
+AND split nonempty and does not affect determinism, structuredness, or
+asymptotic size.
+\end{remark}
+
+\section{The Construction}
+
+Let $D$ be a normalized $\decSDNNF$ respecting $T$.  Literals, if present, are
+treated as decision nodes: a leaf $x$ tests $x$ and sends the $1$-edge to the
+$1$-sink and the $0$-edge to the $0$-sink; a leaf $\neg x$ does the reverse.
+
+We first classify edges of $D$.  Let $g$ be an AND gate.  Its two inputs are
+separated by some split of $T$; one input uses variables from the light side of
+that split, and the other uses variables from the heavy side.  The edge from
+$g$ to the light-side input is a \emph{light edge}; the edge from $g$ to the
+heavy-side input is a \emph{heavy edge}.  All edges out of decision nodes are
+\emph{neutral edges}.
+
+The rest of this construction is identical to that of Beame; only the convention
+of "light" and "heavy" has been altered.
+
+For a directed path $P$ in $D$, let $S(P)$ be the set of light edges on $P$.
+This can be thought of as the "stack" of remaining AND-nodes whose heavy edges 
+are left to traverse.
+For a node $u$ of $D$, define
+\[
+  S(u) := \{S(P) \mid P \text{ is a directed path from the root of } D
+          \text{ to } u\}.
+\]
+The output graph $F$ has one node $(u,s)$ for every node $u$ of $D$ and every
+$s\in S(u)$.  Its root is $(r,\emptyset)$, where $r$ is the root of $D$.
+
+The labels of nodes in $F$ are as follows.
+\begin{enumerate}[label=(\roman*),noitemsep]
+  \item If $u$ is a decision node labeled by $x$, then $(u,s)$ is a decision
+  node labeled by $x$.
+  \item If $u$ is an AND gate, then $(u,s)$ is an unlabeled no-op node.
+  \item If $u$ is a $0$-sink, then $(u,s)$ is a $0$-sink.
+  \item If $u$ is a $1$-sink and $s=\emptyset$, then $(u,s)$ is a $1$-sink.
+  If $u$ is a $1$-sink and $s\neq\emptyset$, then $(u,s)$ is an unlabeled
+  no-op node.
+\end{enumerate}
+
+The edges of $F$ are defined by three rules.
+\begin{enumerate}[label=(\arabic*),noitemsep]
+  \item For each light edge $e=(u,v)$ of $D$ and each $s\in S(u)$, add
+  \[
+    ((u,s),(v,s\cup\{e\})).
+  \]
+  This records that we have entered the first half of an AND gate and must later
+  continue into its heavy sibling if this light subcomputation accepts.
+
+  This is akin to a "stack push" operation
+
+  \item For each neutral edge $(u,v)$ of $D$ and each $s\in S(u)$, add
+  \[
+    ((u,s),(v,s)).
+  \]
+  Neutral motion does not create or discharge any pending ANDs.
+
+  \item For each heavy edge $(u,v_h)$ of $D$, let $e=(u,v_\ell)$ be its sibling
+  light edge.  For each $s\in S(u)$ and each $1$-sink $w$ reachable in
+  $D_{v_\ell}$, add
+  \[
+    ((w,s\cup\{e\}),(v_h,s)).
+  \]
+  This is akin to the "stack pop". After the light input has accepted, the computation
+  pops the obligation $e$ and continues into the heavy input.
+\end{enumerate}
+
+Unlabeled no-op nodes can be contracted after the construction.  They are kept
+in the description because they make the bookkeeping transparent.
+
+After contracting the unlabeled no-op nodes, the only internal nodes left are
+decision nodes.  Thus the result is an FBDD. However, we can show that all paths
+respect the same order $\pi_X$, hence the result is an $OBDD_{\pi_X}$
+
+\section{Why the Order is Common}
+
+\begin{lemma}[Order lemma]
+Let $D$ be a normalized $\decSDNNF$ respecting $T$.  The OBDD produced by the
+construction above respects the order $\pi_X$.
+\end{lemma}
+
+\begin{proof}
+The only point to check is an AND gate $g$ decomposed at a vtree node $t$ with
+children $t_0,t_1$.  By construction, all variables in the light side of $t$ are
+placed before all variables in the heavy side of $t$ in $\pi_X$.  The simulation
+therefore evaluates the earlier block before the later block.
+
+Inside each block, the same argument applies recursively to lower vtree nodes.
+Decision gates do not change the vtree region in which the computation is
+located; they only move within the current region.  Hence along every accepting
+or rejecting computation path, variables are queried in increasing $\pi_X$ order,
+with variables absent from $D$ simply skipped.
+\end{proof}
+
+\begin{corollary}[Same order for all circuits respecting the same tree]
+Let $D_1,\ldots,D_k$ be normalized $\decSDNNF$s respecting the
+same finite vtree $T$ over variables $X$.
+Then the construction compiles every $D_i$ into an $\OBDD$ respecting the same
+variable order $\pi_X$.
+\end{corollary}
+
+\section{Size Bound}
+
+Let $N=\size(D)$ and let $M$ be the number of AND gates of $D$.  Once the
+light/heavy orientation is fixed, call an edge from an AND gate to its light
+input a light edge.  Here $L$ means the maximum number of light edges on any
+directed source-to-sink path in the original circuit graph, where a path through
+an AND gate follows one of its two outgoing edges.
+
+The construction bounds the size of the output by
+\[
+  O(NM^L),
+\]
+
+with the reasoning that each node is labeled $(v, s)$ for some node $v$ from $D$ and
+some stack $s$. With $M$ possible choices for an AND-node (hence for a light edge), and since
+s is a set of at most $L$ light edges, we obtain the above.
+
+It remains only to bound $L$ for the vtree-based ordering.
+
+\begin{lemma}[Light edges halve vtree weight]
+For every normalized $\decSDNNF$ $D$ respecting $T$,
+every directed source-to-sink path of $D$ contains at most
+$\lceil \log_2 |X| \rceil + 1$ light edges.
+\end{lemma}
+
+\begin{proof}
+Consider the light edges on one path, and let their corresponding AND gates be
+$g_1,\ldots,g_L$.  Let $t_i=t(g_i)$ be the vtree node used by $g_i$.
+
+This is a path in the original circuit DAG, not the later stacked OBDD.  Hence,
+after the path takes the light input of $g_i$, every subsequent gate on the path
+is still inside that light-input subcircuit.  Therefore, if $i<L$, then
+$t_{i+1}$ lies strictly inside the light child subtree of $t_i$.  Since that
+child was chosen to have minimum weight in $T$,
+\[
+  w(t_{i+1}) \leq \frac{w(t_i)}{2}.
+\]
+By induction,
+\[
+  w(t_L) \leq \frac{w(t_1)}{2^{L-1}} \leq \frac{|X|}{2^{L-1}}.
+\]
+The final AND gate $g_L$ has two nonconstant inputs after normalization, so its
+decomposition node contains at least one variable of $X$.  Hence $w(t_L)\geq 1$.
+Combining the inequalities gives
+\[
+  1 \leq \frac{|X|}{2^{L-1}},
+\]
+so $L \leq \log_2 |X| + 1$.
+\end{proof}
+
+\begin{theorem}[Common-order simulation]
+Let $D_1,\ldots,D_k$ be normalized $\decSDNNF$ circuits respecting the same finite
+vtree $T$ over variables $X$.
+For each $i$, the construction above outputs an $\OBDD$ for $D_i$ respecting the
+same order $\pi_X$, of size
+\[
+  O\!\left(N_iM_i^{\lceil \log_2 |X| \rceil + 1}\right),
+\]
+where $N_i=\size(D_i)$ and $M_i$ is the number of AND gates of $D_i$.
+\end{theorem}
+
+\begin{proof}
+The common-order claim is the corollary above.  The size claim is the standard
+copying bound $O(N_iM_i^L)$ together with the light-edge bound
+$L\leq \lceil \log_2 |X| \rceil+1$.  Because the input has only decision gates
+and AND gates, the output has only decision nodes after contracting no-op nodes,
+so it is an OBDD.
+\end{proof}
+
+\begin{corollary}[Two size-$N$ circuits]
+If $D_1$ and $D_2$ both have size at most $N$, then
+Since $M_i, X\leq N$, both circuits compile to $\OBDD$s over one common order of
+size
+\[
+  O(NN^{\log(N) + 1}) = O(N2^{\log(N)+1})
+\].
+
+\end{corollary}
+
+\section{Takeaway}
+
+The original circuit-dependent orientation is useful because it can give a
+slightly sharper bound for one circuit.  The vtree leaf-count orientation trades
+that local sharpness for a global benefit: the output order depends only on the
+shared finite vtree.  For any fixed finite family of dec-SDNNF circuits
+respecting that vtree, this gives one common OBDD order and keeps the simulation
+quasipolynomial in the total input size.
+
+\end{document}

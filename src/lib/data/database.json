@@ -37,8 +37,8 @@
               "Roth_1996"
             ],
             "derived": true,
-            "description": "\\nopref{lang_27fffab2}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002,Roth_1996}, and \\edgeref{lang_27fffab2}{lang_89649e36} in polynomial time. If CNF supported Model Counting in polynomial time, then PI could too by compiling first. Therefore Model Counting is unsupported by CNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1287,
+            "description": "\\nopref{lang_27fffab2}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002,Roth_1996}, and \\edgeref{lang_27fffab2}{lang_89649e36} in polynomial time \\citet{Darwiche_2002}. If CNF supported Model Counting in polynomial time, then PI could too by compiling first. Therefore Model Counting is unsupported by CNF (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1294,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_27fffab2",
@@ -55,7 +55,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Consistency \\citet{Darwiche_2002}, and since \\nopref{lang_89649e36}{CO} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 1288,
+            "derivationOrder": 1295,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-co",
@@ -72,7 +72,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_89649e36}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 1289,
+            "derivationOrder": 1296,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -89,7 +89,7 @@
             ],
             "derived": true,
             "description": "Since Clausal Entailment implies Consistency \\citet{Darwiche_2002}, and since \\nopref{lang_89649e36}{CO} (unless P = NP) \\citet{Darwiche_2002}, then Clausal Entailment is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 1290,
+            "derivationOrder": 1297,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "ce-co",
@@ -106,7 +106,7 @@
             ],
             "derived": true,
             "description": "Since Model Enumeration implies Consistency \\citet{Darwiche_2002}, and since \\nopref{lang_89649e36}{CO} (unless P = NP) \\citet{Darwiche_2002}, then Model Enumeration is unsupported by CNF as well (unless P = NP).",
-            "derivationOrder": 1291,
+            "derivationOrder": 1298,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "me-co",
@@ -161,7 +161,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_89649e36} supports Conjunction, it also supports Bounded Conjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1133,
+            "derivationOrder": 1153,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "and-c-and-bc",
@@ -176,7 +176,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_89649e36} supports Conditioning, Bounded Disjunction, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1134,
+            "derivationOrder": 1154,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "cd-or-bc-sfo",
@@ -191,7 +191,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Conjunction implies Disjunction \\citet{Darwiche_2002}, and since \\nopref{lang_89649e36}{OR_C} \\citet{Darwiche_2002}, and since Conjunction is supported in polynomial time, then Negation is unsupported by CNF as well.",
-            "derivationOrder": 1292,
+            "derivationOrder": 1299,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-and-c-or-c",
@@ -212,12 +212,14 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore cSDD supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1241,
+            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore cSDD supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1225,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_83e3b023",
@@ -229,11 +231,13 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore cSDD supports Model Counting in polynomial time.",
-            "derivationOrder": 1120,
+            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore cSDD supports Model Counting in polynomial time.",
+            "derivationOrder": 1140,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_83e3b023",
@@ -245,15 +249,19 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_83e3b023} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1137,
+            "description": "\\edgeref{lang_83e3b023}{lang_3bebcab7} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore cSDD supports Consistency in polynomial time.",
+            "derivationOrder": 1099,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_83e3b023",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_83e3b023",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -264,7 +272,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_83e3b023} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1138,
+            "derivationOrder": 1156,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -275,15 +283,16 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD supports Implicant in polynomial time.",
-            "derivationOrder": 1250,
+            "description": "\\edgeref{lang_83e3b023}{lang_1afefbe2} in polynomial time \\citet{VanDenBroeck_2015}, and \\opref{lang_1afefbe2}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD supports Implicant in polynomial time.",
+            "derivationOrder": 1241,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_83e3b023",
-              "targetLanguageId": "lang_6c130090",
+              "targetLanguageId": "lang_1afefbe2",
               "operation": "IM",
               "level": "poly"
             }
@@ -291,11 +300,13 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1259,
+            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1246,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_83e3b023",
@@ -307,11 +318,13 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_Huang_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore cSDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
-            "derivationOrder": 1105,
+            "description": "\\edgeref{lang_83e3b023}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore cSDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
+            "derivationOrder": 1125,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_83e3b023",
@@ -368,7 +381,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6c130090} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1222,
+            "derivationOrder": 1158,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -379,15 +392,17 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_6c130090} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1141,
+            "description": "\\edgeref{lang_6c130090}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore d-DNNF supports Consistency in polynomial time.",
+            "derivationOrder": 1100,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_6c130090",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_6c130090",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -398,7 +413,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6c130090} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1142,
+            "derivationOrder": 1160,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -413,7 +428,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6c130090} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1221,
+            "derivationOrder": 1157,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -428,7 +443,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6c130090} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1223,
+            "derivationOrder": 1261,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "va-cd-im",
@@ -476,7 +491,7 @@
             ],
             "derived": true,
             "description": "Since Conjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_6c130090}{AND_BC} (unless P = NP) \\citet{Darwiche_2002}, then Conjunction is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 1293,
+            "derivationOrder": 1300,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "and-c-and-bc",
@@ -493,7 +508,7 @@
             ],
             "derived": true,
             "description": "Since Conditioning ∧ Bounded Disjunction implies Singleton Forgetting \\citet{Darwiche_2002}, and since \\nopref{lang_6c130090}{SFO} (unless P = NP) \\citet{Darwiche_2002}, and since Conditioning is supported in polynomial time, then Bounded Disjunction is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 1295,
+            "derivationOrder": 1302,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "cd-or-bc-sfo",
@@ -510,7 +525,7 @@
             ],
             "derived": true,
             "description": "Since Disjunction implies Bounded Disjunction \\citet{Darwiche_2002}, and since \\nopref{lang_6c130090}{OR_BC} (unless P = NP) \\citet{Darwiche_2002}, then Disjunction is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 1345,
+            "derivationOrder": 1356,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "or-c-or-bc",
@@ -527,7 +542,7 @@
             ],
             "derived": true,
             "description": "Since Forgetting implies Singleton Forgetting \\citet{Darwiche_2002}, and since \\nopref{lang_6c130090}{SFO} (unless P = NP) \\citet{Darwiche_2002}, then Forgetting is unsupported by d-DNNF as well (unless P = NP).",
-            "derivationOrder": 1294,
+            "derivationOrder": 1301,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "fo-sfo",
@@ -557,7 +572,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_ea9b5299} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1225,
+            "derivationOrder": 1162,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -568,11 +583,12 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_ea9b5299}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore d-SDNNF supports Model Counting in polynomial time.",
-            "derivationOrder": 1121,
+            "description": "\\edgeref{lang_ea9b5299}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore d-SDNNF supports Model Counting in polynomial time.",
+            "derivationOrder": 1141,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_ea9b5299",
@@ -584,15 +600,18 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_ea9b5299} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1145,
+            "description": "\\edgeref{lang_ea9b5299}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore d-SDNNF supports Consistency in polynomial time.",
+            "derivationOrder": 1101,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_ea9b5299",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_ea9b5299",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -603,7 +622,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_ea9b5299} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1146,
+            "derivationOrder": 1164,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -618,7 +637,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_ea9b5299} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1226,
+            "derivationOrder": 1262,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "va-cd-im",
@@ -633,7 +652,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_ea9b5299} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1224,
+            "derivationOrder": 1161,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -644,11 +663,12 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_Huang_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_ea9b5299}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore d-SDNNF supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
-            "derivationOrder": 1106,
+            "description": "\\edgeref{lang_ea9b5299}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore d-SDNNF supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
+            "derivationOrder": 1126,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_ea9b5299",
@@ -710,12 +730,14 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore d-SDNNF$_T$ supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1242,
+            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore d-SDNNF$_T$ supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1226,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_91f812d0",
@@ -731,7 +753,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_91f812d0} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1227,
+            "derivationOrder": 1263,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -742,11 +764,13 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore d-SDNNF$_T$ supports Model Counting in polynomial time.",
-            "derivationOrder": 1122,
+            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore d-SDNNF$_T$ supports Model Counting in polynomial time.",
+            "derivationOrder": 1142,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_91f812d0",
@@ -758,15 +782,19 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
+              "Pipatsrisawat_2008",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_91f812d0} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1149,
+            "description": "\\edgeref{lang_91f812d0}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Pipatsrisawat_2008}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore d-SDNNF$_T$ supports Consistency in polynomial time.",
+            "derivationOrder": 1102,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_91f812d0",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_91f812d0",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -777,7 +805,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_91f812d0} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1150,
+            "derivationOrder": 1166,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -790,7 +818,7 @@
             "refs": [],
             "derived": true,
             "description": "Since \\langref{lang_91f812d0} supports Model Counting, Bounded Conjunction, it also supports Sentential Entailment.",
-            "derivationOrder": 1151,
+            "derivationOrder": 1167,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-and-bc-se",
@@ -801,11 +829,13 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore d-SDNNF$_T$ supports Implicant in polynomial time.",
-            "derivationOrder": 1251,
+            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore d-SDNNF$_T$ supports Implicant in polynomial time.",
+            "derivationOrder": 1270,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_91f812d0",
@@ -817,11 +847,13 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore d-SDNNF$_T$ supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1260,
+            "description": "\\edgeref{lang_91f812d0}{lang_6c130090} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore d-SDNNF$_T$ supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1247,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_91f812d0",
@@ -888,8 +920,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_4c204bf3} in polynomial time. If DNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by DNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1279,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_4c204bf3} in polynomial time \\citet{Darwiche_2002}. If DNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by DNF (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1286,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -906,7 +938,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by DNF as well (unless P = NP).",
-            "derivationOrder": 1296,
+            "derivationOrder": 1303,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -923,7 +955,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_4c204bf3}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by DNF as well (unless P = NP).",
-            "derivationOrder": 1297,
+            "derivationOrder": 1304,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -940,7 +972,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by DNF as well (unless P = NP).",
-            "derivationOrder": 1298,
+            "derivationOrder": 1305,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -949,6 +981,56 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_4c204bf3}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore DNF supports Consistency in polynomial time.",
+            "derivationOrder": 1103,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_4c204bf3",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_4c204bf3}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_3bebcab7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore DNF supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1235,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_4c204bf3",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_4c204bf3}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_3bebcab7}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore DNF supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1255,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_4c204bf3",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "ME",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -959,7 +1041,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_4c204bf3}{AND_C} in quasi-polynomial time \\citet{Darwiche_2002}, and since Disjunction is supported in quasi-polynomial time, then Negation is unsupported by DNF in quasi-polynomial time as well.",
-            "derivationOrder": 1300,
+            "derivationOrder": 1307,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-c-and-c",
@@ -1003,7 +1085,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_4c204bf3} supports Disjunction, it also supports Bounded Disjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1152,
+            "derivationOrder": 1168,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "or-c-or-bc",
@@ -1018,7 +1100,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_4c204bf3} supports Forgetting, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1153,
+            "derivationOrder": 1169,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "fo-sfo",
@@ -1033,7 +1115,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_4c204bf3} supports Bounded Conjunction, Singleton Forgetting, it also supports Conditioning \\citet{Darwiche_2002}.",
-            "derivationOrder": 1154,
+            "derivationOrder": 1170,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "and-bc-sfo-cd",
@@ -1056,8 +1138,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_3bebcab7} in polynomial time. If DNNF supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by DNNF (unless P = NP).",
-            "derivationOrder": 1272,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}. If DNNF supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by DNNF (unless P = NP).",
+            "derivationOrder": 1279,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -1074,7 +1156,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_3bebcab7}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 1302,
+            "derivationOrder": 1309,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -1090,8 +1172,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_3bebcab7} in polynomial time. If DNNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by DNNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1280,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}. If DNNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by DNNF (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1287,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -1108,7 +1190,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_3bebcab7}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 1301,
+            "derivationOrder": 1308,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -1125,7 +1207,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_3bebcab7}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by DNNF as well (unless P = NP).",
-            "derivationOrder": 1303,
+            "derivationOrder": 1310,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -1134,6 +1216,45 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2001a",
+              "Darwiche_2002"
+            ],
+            "description": "Consistency of a \\langref{DNNF} sentence can be decided by a bottom-up traversal. A literal or constant node is handled directly; an $\\lor$-node is consistent iff at least one child is consistent; and an $\\land$-node is consistent iff all children are consistent. The last test is sound because decomposability ensures that conjuncts mention disjoint variable sets, so independently satisfiable children have compatible models. Hence consistency is decidable in linear time in the circuit size."
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "Since \\langref{lang_3bebcab7} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
+            "derivationOrder": 1171,
+            "proofTrace": {
+              "rule": "lemma-forward",
+              "lemmaId": "co-cd-me",
+              "languageId": "lang_3bebcab7",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "Since \\langref{lang_3bebcab7} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
+            "derivationOrder": 1172,
+            "proofTrace": {
+              "rule": "lemma-forward",
+              "lemmaId": "co-cd-ce",
+              "languageId": "lang_3bebcab7",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -1173,7 +1294,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_3bebcab7} supports Disjunction, it also supports Bounded Disjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1155,
+            "derivationOrder": 1173,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "or-c-or-bc",
@@ -1188,7 +1309,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_3bebcab7} supports Forgetting, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1156,
+            "derivationOrder": 1174,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "fo-sfo",
@@ -1210,7 +1331,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_3bebcab7}{AND_C} in quasi-polynomial time \\citet{Darwiche_2002}, and since Disjunction is supported in quasi-polynomial time, then Negation is unsupported by DNNF in quasi-polynomial time as well.",
-            "derivationOrder": 1305,
+            "derivationOrder": 1312,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-c-and-c",
@@ -1263,7 +1384,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_684b1ca7} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1158,
+            "derivationOrder": 1176,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -1278,7 +1399,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_684b1ca7} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1157,
+            "derivationOrder": 1175,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -1293,7 +1414,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_684b1ca7} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1159,
+            "derivationOrder": 1177,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "va-cd-im",
@@ -1340,7 +1461,7 @@
             ],
             "derived": true,
             "description": "Since Forgetting implies Singleton Forgetting \\citet{Darwiche_2002}, and since \\nopref{lang_684b1ca7}{SFO} (unless P = NP) \\citet{Darwiche_2002}, then Forgetting is unsupported by FBDD as well (unless P = NP).",
-            "derivationOrder": 1306,
+            "derivationOrder": 1313,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "fo-sfo",
@@ -1357,7 +1478,7 @@
             ],
             "derived": true,
             "description": "Since Conditioning ∧ Bounded Disjunction implies Singleton Forgetting \\citet{Darwiche_2002}, and since \\nopref{lang_684b1ca7}{SFO} (unless P = NP) \\citet{Darwiche_2002}, and since Conditioning is supported in polynomial time, then Bounded Disjunction is unsupported by FBDD as well (unless P = NP).",
-            "derivationOrder": 1307,
+            "derivationOrder": 1314,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "cd-or-bc-sfo",
@@ -1374,7 +1495,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Bounded Conjunction implies Bounded Disjunction \\citet{Darwiche_2002}, and since \\nopref{lang_684b1ca7}{OR_BC} (unless P = NP) \\citet{Darwiche_2002}, and since Negation is supported in polynomial time, then Bounded Conjunction is unsupported by FBDD as well (unless P = NP).",
-            "derivationOrder": 1308,
+            "derivationOrder": 1315,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-and-bc-or-bc",
@@ -1440,7 +1561,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6ae90adc} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1269,
+            "derivationOrder": 1179,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -1455,7 +1576,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6ae90adc} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1160,
+            "derivationOrder": 1180,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -1470,7 +1591,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6ae90adc} supports Implicant, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1161,
+            "derivationOrder": 1181,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "im-va",
@@ -1481,15 +1602,17 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_6ae90adc} supports Equivalence, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1228,
+            "description": "\\edgeref{lang_6ae90adc}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore IP supports Consistency in polynomial time.",
+            "derivationOrder": 1104,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "eq-co",
-              "languageId": "lang_6ae90adc",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_6ae90adc",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -1500,7 +1623,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_6ae90adc} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1268,
+            "derivationOrder": 1178,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -1531,7 +1654,7 @@
             ],
             "derived": true,
             "description": "Since Disjunction implies Bounded Disjunction \\citet{Darwiche_2002}, and since \\nopref{lang_6ae90adc}{OR_BC} in quasi-polynomial time \\citet{Darwiche_2002}, then Disjunction is unsupported by IP in quasi-polynomial time as well.",
-            "derivationOrder": 1310,
+            "derivationOrder": 1317,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "or-c-or-bc",
@@ -1561,7 +1684,7 @@
             ],
             "derived": true,
             "description": "Since Forgetting implies Singleton Forgetting \\citet{Darwiche_2002}, and since \\nopref{lang_6ae90adc}{SFO} in quasi-polynomial time \\citet{Darwiche_2002}, then Forgetting is unsupported by IP in quasi-polynomial time as well.",
-            "derivationOrder": 1312,
+            "derivationOrder": 1319,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "fo-sfo",
@@ -1616,8 +1739,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_e02902d0}{lang_89649e36} in polynomial time, and \\opref{lang_89649e36}{VA} in polynomial time \\citet{Darwiche_2002}. Therefore MODS supports Validity in polynomial time.",
-            "derivationOrder": 1100,
+            "description": "\\edgeref{lang_e02902d0}{lang_89649e36} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_89649e36}{VA} in polynomial time \\citet{Darwiche_2002}. Therefore MODS supports Validity in polynomial time.",
+            "derivationOrder": 1120,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_e02902d0",
@@ -1633,12 +1756,12 @@
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_e02902d0}{lang_684b1ca7} in polynomial time, and \\opref{lang_684b1ca7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore MODS supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1217,
+            "description": "\\edgeref{lang_e02902d0}{lang_6c130090} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore MODS supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1227,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_e02902d0",
-              "targetLanguageId": "lang_684b1ca7",
+              "targetLanguageId": "lang_6c130090",
               "operation": "CE",
               "level": "poly"
             }
@@ -1649,8 +1772,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_e02902d0}{lang_89649e36} in polynomial time, and \\opref{lang_89649e36}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore MODS supports Implicant in polynomial time.",
-            "derivationOrder": 1103,
+            "description": "\\edgeref{lang_e02902d0}{lang_89649e36} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_89649e36}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore MODS supports Implicant in polynomial time.",
+            "derivationOrder": 1123,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_e02902d0",
@@ -1662,13 +1785,14 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "Darwiche_2002",
               "Bryant_1986",
               "Bryant_1992",
               "Meinel_Theobald_1998"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_e02902d0}{lang_d69995dd} in polynomial time, and \\opref{lang_d69995dd}{EQ} in polynomial time \\citet{Bryant_1986,Bryant_1992,Meinel_Theobald_1998}. Therefore MODS supports Equivalence in polynomial time.",
-            "derivationOrder": 1118,
+            "description": "\\edgeref{lang_e02902d0}{lang_d69995dd} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_d69995dd}{EQ} in polynomial time \\citet{Bryant_1986,Bryant_1992,Meinel_Theobald_1998}. Therefore MODS supports Equivalence in polynomial time.",
+            "derivationOrder": 1138,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_e02902d0",
@@ -1680,11 +1804,12 @@
           "SE": {
             "complexity": "poly",
             "refs": [
+              "Wegener_1987",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_e02902d0}{lang_6ae90adc} in polynomial time, and \\opref{lang_6ae90adc}{SE} in polynomial time \\citet{Darwiche_2002}. Therefore MODS supports Sentential Entailment in polynomial time.",
-            "derivationOrder": 1119,
+            "description": "\\edgeref{lang_e02902d0}{lang_6ae90adc} in polynomial time \\citet{Wegener_1987}, and \\opref{lang_6ae90adc}{SE} in polynomial time \\citet{Darwiche_2002}. Therefore MODS supports Sentential Entailment in polynomial time.",
+            "derivationOrder": 1139,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_e02902d0",
@@ -1696,11 +1821,12 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Darwiche_2002",
               "Bryant_1986"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_e02902d0}{lang_d69995dd} in polynomial time, and \\opref{lang_d69995dd}{ME} in polynomial time \\citet{Bryant_1986}. Therefore MODS supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1132,
+            "description": "\\edgeref{lang_e02902d0}{lang_d69995dd} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_d69995dd}{ME} in polynomial time \\citet{Bryant_1986}. Therefore MODS supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1152,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_e02902d0",
@@ -1746,7 +1872,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_e02902d0} supports Forgetting, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1162,
+            "derivationOrder": 1182,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "fo-sfo",
@@ -1761,7 +1887,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_e02902d0} supports Bounded Conjunction, Singleton Forgetting, it also supports Conditioning \\citet{Darwiche_2002}.",
-            "derivationOrder": 1163,
+            "derivationOrder": 1183,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "and-bc-sfo-cd",
@@ -1783,7 +1909,7 @@
             ],
             "derived": true,
             "description": "Since Disjunction implies Bounded Disjunction \\citet{Darwiche_2002}, and since \\nopref{lang_e02902d0}{OR_BC} in quasi-polynomial time \\citet{Darwiche_2002}, then Disjunction is unsupported by MODS in quasi-polynomial time as well.",
-            "derivationOrder": 1314,
+            "derivationOrder": 1321,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "or-c-or-bc",
@@ -1807,11 +1933,13 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 1316,
+            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{EQ} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Sentential Entailment is unsupported by nFBDD as well (unless P = NP).",
+            "derivationOrder": 1323,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -1824,11 +1952,13 @@
           "VA": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_1df07cc3} in polynomial time. If nFBDD supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by nFBDD (unless P = NP).",
-            "derivationOrder": 1273,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_1df07cc3} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If nFBDD supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by nFBDD (unless P = NP).",
+            "derivationOrder": 1280,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -1841,11 +1971,13 @@
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 1315,
+            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Equivalence is unsupported by nFBDD as well (unless P = NP).",
+            "derivationOrder": 1322,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -1858,11 +1990,13 @@
           "IM": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by nFBDD as well (unless P = NP).",
-            "derivationOrder": 1317,
+            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Implicant is unsupported by nFBDD as well (unless P = NP).",
+            "derivationOrder": 1324,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -1875,11 +2009,13 @@
           "CT": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_1df07cc3} in polynomial time. If nFBDD supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nFBDD (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1281,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_1df07cc3} in polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}. If nFBDD supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nFBDD (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1288,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -1888,6 +2024,59 @@
               "level": "poly"
             },
             "caveat": "the polynomial hierarchy collapses"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2001a",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_1df07cc3}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore nFBDD supports Consistency in polynomial time.",
+            "derivationOrder": 1105,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_1df07cc3",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_1df07cc3}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore nFBDD supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1236,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_1df07cc3",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_1df07cc3}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore nFBDD supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1256,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_1df07cc3",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "ME",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -1897,6 +2086,25 @@
               "Amarilli_2018"
             ],
             "description": "Any clause can be represented in \\langref{nFBDD} because every FBDD is already an nFBDD, and a clause has a polynomial-size FBDD representation \\citet{Amarilli_2018}. If \\langref{nFBDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{nFBDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_1df07cc3} in quasipolynomial time \\citet{Amarilli_2018}, this is impossible."
+          },
+          "NOT_C": {
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
+            ],
+            "derived": true,
+            "description": "Since Negation ∧ Consistency implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_1df07cc3}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, and since Consistency is supported in polynomial time, then Negation is unsupported by nFBDD as well (unless P = NP).",
+            "derivationOrder": 1325,
+            "proofTrace": {
+              "rule": "lemma-contrapositive",
+              "lemmaId": "not-c-co-va",
+              "languageId": "lang_1df07cc3",
+              "pivotOp": "NOT_C",
+              "level": "poly"
+            },
+            "caveat": "P = NP"
           }
         }
       },
@@ -1916,8 +2124,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\nopref{lang_89649e36}{CO} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_89649e36}{lang_5bf00851} in polynomial time. If NNF supported Consistency in polynomial time, then CNF could too by compiling first. Therefore Consistency is unsupported by NNF (unless P = NP).",
-            "derivationOrder": 1271,
+            "description": "\\nopref{lang_89649e36}{CO} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_89649e36}{lang_5bf00851} in polynomial time \\citet{Darwiche_2002}. If NNF supported Consistency in polynomial time, then CNF could too by compiling first. Therefore Consistency is unsupported by NNF (unless P = NP).",
+            "derivationOrder": 1278,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_89649e36",
@@ -1933,8 +2141,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_5bf00851} in polynomial time. If NNF supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by NNF (unless P = NP).",
-            "derivationOrder": 1274,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_5bf00851} in polynomial time \\citet{Darwiche_2002}. If NNF supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by NNF (unless P = NP).",
+            "derivationOrder": 1281,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -1951,7 +2159,7 @@
             ],
             "derived": true,
             "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_5bf00851}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 1319,
+            "derivationOrder": 1327,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -1967,8 +2175,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_5bf00851} in polynomial time. If NNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by NNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1282,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_5bf00851} in polynomial time \\citet{Darwiche_2002}. If NNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by NNF (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1289,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -1985,7 +2193,7 @@
             ],
             "derived": true,
             "description": "Since Equivalence implies Consistency \\citet{Darwiche_2002}, and since \\nopref{lang_5bf00851}{CO} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 1318,
+            "derivationOrder": 1326,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-co",
@@ -2002,7 +2210,7 @@
             ],
             "derived": true,
             "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_5bf00851}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 1320,
+            "derivationOrder": 1328,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -2019,7 +2227,7 @@
             ],
             "derived": true,
             "description": "Since Clausal Entailment implies Consistency \\citet{Darwiche_2002}, and since \\nopref{lang_5bf00851}{CO} (unless P = NP) \\citet{Darwiche_2002}, then Clausal Entailment is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 1321,
+            "derivationOrder": 1329,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "ce-co",
@@ -2036,7 +2244,7 @@
             ],
             "derived": true,
             "description": "Since Model Enumeration implies Consistency \\citet{Darwiche_2002}, and since \\nopref{lang_5bf00851}{CO} (unless P = NP) \\citet{Darwiche_2002}, then Model Enumeration is unsupported by NNF as well (unless P = NP).",
-            "derivationOrder": 1322,
+            "derivationOrder": 1330,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "me-co",
@@ -2084,7 +2292,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_5bf00851} supports Conjunction, it also supports Bounded Conjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1164,
+            "derivationOrder": 1184,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "and-c-and-bc",
@@ -2099,7 +2307,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_5bf00851} supports Negation, Bounded Conjunction, it also supports Bounded Disjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1166,
+            "derivationOrder": 1186,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "not-c-and-bc-or-bc",
@@ -2114,7 +2322,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_5bf00851} supports Conditioning, Bounded Disjunction, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1229,
+            "derivationOrder": 1264,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "cd-or-bc-sfo",
@@ -2129,7 +2337,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_5bf00851} supports Negation, Conjunction, it also supports Disjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1165,
+            "derivationOrder": 1185,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "not-c-and-c-or-c",
@@ -2152,11 +2360,13 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 1324,
+            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{EQ} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Sentential Entailment is unsupported by nOBDD as well (unless P = NP).",
+            "derivationOrder": 1332,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -2169,11 +2379,13 @@
           "VA": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_d24efe0e} in polynomial time. If nOBDD supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by nOBDD (unless P = NP).",
-            "derivationOrder": 1275,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_d24efe0e} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If nOBDD supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by nOBDD (unless P = NP).",
+            "derivationOrder": 1282,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -2186,11 +2398,13 @@
           "CT": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_d24efe0e} in polynomial time. If nOBDD supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nOBDD (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1283,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_d24efe0e} in polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}. If nOBDD supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nOBDD (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1290,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -2203,11 +2417,13 @@
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 1323,
+            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Equivalence is unsupported by nOBDD as well (unless P = NP).",
+            "derivationOrder": 1331,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -2220,11 +2436,13 @@
           "IM": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by nOBDD as well (unless P = NP).",
-            "derivationOrder": 1325,
+            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Implicant is unsupported by nOBDD as well (unless P = NP).",
+            "derivationOrder": 1333,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -2233,6 +2451,59 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2001a",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d24efe0e}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore nOBDD supports Consistency in polynomial time.",
+            "derivationOrder": 1106,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d24efe0e",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d24efe0e}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore nOBDD supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1237,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d24efe0e",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_d24efe0e}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore nOBDD supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1257,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_d24efe0e",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "ME",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -2243,6 +2514,25 @@
               "Wegener_2000"
             ],
             "description": "Any clause can be represented in \\langref{nOBDD} because every OBDD is already an nOBDD, and a clause has a polynomial-size OBDD representation \\citet{Amarilli_2018,Wegener_2000}. If \\langref{nOBDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{nOBDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_d24efe0e} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+          },
+          "NOT_C": {
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
+            ],
+            "derived": true,
+            "description": "Since Negation ∧ Consistency implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_d24efe0e}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, and since Consistency is supported in polynomial time, then Negation is unsupported by nOBDD as well (unless P = NP).",
+            "derivationOrder": 1334,
+            "proofTrace": {
+              "rule": "lemma-contrapositive",
+              "lemmaId": "not-c-co-va",
+              "languageId": "lang_d24efe0e",
+              "pivotOp": "NOT_C",
+              "level": "poly"
+            },
+            "caveat": "P = NP"
           }
         }
       },
@@ -2301,7 +2591,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_d69995dd} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1167,
+            "derivationOrder": 1187,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -2316,7 +2606,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_d69995dd} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1168,
+            "derivationOrder": 1188,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "va-cd-im",
@@ -2331,7 +2621,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_d69995dd} supports Negation, Bounded Conjunction, Consistency, it also supports Sentential Entailment \\citet{Darwiche_2002}.",
-            "derivationOrder": 1170,
+            "derivationOrder": 1190,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "not-c-and-bc-co-se",
@@ -2348,7 +2638,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Conjunction implies Disjunction \\citet{Darwiche_2002}, and since \\nopref{lang_d69995dd}{OR_C} in quasi-polynomial time \\citet{Darwiche_2002}, and since Negation is supported in quasi-polynomial time, then Conjunction is unsupported by OBDD$_<$ in quasi-polynomial time as well.",
-            "derivationOrder": 1327,
+            "derivationOrder": 1336,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-and-c-or-c",
@@ -2399,7 +2689,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_d69995dd} supports Conditioning, Bounded Disjunction, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1169,
+            "derivationOrder": 1189,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "cd-or-bc-sfo",
@@ -2457,8 +2747,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_27fffab2}{lang_89649e36} in polynomial time, and \\opref{lang_89649e36}{VA} in polynomial time \\citet{Darwiche_2002}. Therefore PI supports Validity in polynomial time.",
-            "derivationOrder": 1101,
+            "description": "\\edgeref{lang_27fffab2}{lang_89649e36} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_89649e36}{VA} in polynomial time \\citet{Darwiche_2002}. Therefore PI supports Validity in polynomial time.",
+            "derivationOrder": 1121,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_27fffab2",
@@ -2473,8 +2763,8 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_27fffab2}{lang_89649e36} in polynomial time, and \\opref{lang_89649e36}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore PI supports Implicant in polynomial time.",
-            "derivationOrder": 1104,
+            "description": "\\edgeref{lang_27fffab2}{lang_89649e36} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_89649e36}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore PI supports Implicant in polynomial time.",
+            "derivationOrder": 1124,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_27fffab2",
@@ -2490,7 +2780,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_27fffab2} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1171,
+            "derivationOrder": 1191,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -2505,7 +2795,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_27fffab2} supports Clausal Entailment, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1172,
+            "derivationOrder": 1192,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ce-co",
@@ -2520,7 +2810,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_27fffab2} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1230,
+            "derivationOrder": 1265,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -2551,7 +2841,7 @@
             ],
             "derived": true,
             "description": "Since Conjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_27fffab2}{AND_BC} in quasi-polynomial time \\citet{Darwiche_2002}, then Conjunction is unsupported by PI in quasi-polynomial time as well.",
-            "derivationOrder": 1329,
+            "derivationOrder": 1338,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "and-c-and-bc",
@@ -2595,7 +2885,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_27fffab2} supports Forgetting, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1173,
+            "derivationOrder": 1193,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "fo-sfo",
@@ -2623,7 +2913,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_1afefbe2} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1232,
+            "derivationOrder": 1195,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -2634,11 +2924,13 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_1afefbe2}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore SDD supports Model Counting in polynomial time.",
-            "derivationOrder": 1123,
+            "description": "\\edgeref{lang_1afefbe2}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore SDD supports Model Counting in polynomial time.",
+            "derivationOrder": 1143,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_1afefbe2",
@@ -2650,15 +2942,19 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_1afefbe2} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1176,
+            "description": "\\edgeref{lang_1afefbe2}{lang_3bebcab7} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore SDD supports Consistency in polynomial time.",
+            "derivationOrder": 1107,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_1afefbe2",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_1afefbe2",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -2669,7 +2965,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_1afefbe2} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1177,
+            "derivationOrder": 1197,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -2683,11 +2979,11 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_1afefbe2} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1233,
+            "description": "Since \\langref{lang_1afefbe2} supports Negation, Clausal Entailment, it also supports Implicant \\citet{Darwiche_2002}.",
+            "derivationOrder": 1198,
             "proofTrace": {
               "rule": "lemma-forward",
-              "lemmaId": "va-cd-im",
+              "lemmaId": "not-c-ce-im",
               "languageId": "lang_1afefbe2",
               "level": "poly"
             }
@@ -2699,7 +2995,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_1afefbe2} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1231,
+            "derivationOrder": 1194,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -2710,11 +3006,13 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_Huang_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_1afefbe2}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore SDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
-            "derivationOrder": 1109,
+            "description": "\\edgeref{lang_1afefbe2}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore SDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
+            "derivationOrder": 1129,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_1afefbe2",
@@ -2758,7 +3056,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_1afefbe2}{AND_C} in quasi-polynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}, and since Negation is supported in quasi-polynomial time, then Disjunction is unsupported by SDD in quasi-polynomial time as well.",
-            "derivationOrder": 1331,
+            "derivationOrder": 1340,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-c-and-c",
@@ -2787,7 +3085,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_9c84a267} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1235,
+            "derivationOrder": 1200,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -2802,7 +3100,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_9c84a267} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1237,
+            "derivationOrder": 1266,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -2813,11 +3111,14 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Darwiche_2011",
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_9c84a267}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore SDD$_T$ supports Model Counting in polynomial time.",
-            "derivationOrder": 1124,
+            "description": "\\edgeref{lang_9c84a267}{lang_6c130090} in polynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore SDD$_T$ supports Model Counting in polynomial time.",
+            "derivationOrder": 1144,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_9c84a267",
@@ -2829,15 +3130,20 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Darwiche_2011",
+              "VanDenBroeck_2015",
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_9c84a267} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1180,
+            "description": "\\edgeref{lang_9c84a267}{lang_3bebcab7} in polynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore SDD$_T$ supports Consistency in polynomial time.",
+            "derivationOrder": 1108,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_9c84a267",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_9c84a267",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -2848,7 +3154,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_9c84a267} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1181,
+            "derivationOrder": 1202,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -2862,11 +3168,11 @@
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_9c84a267} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1236,
+            "description": "Since \\langref{lang_9c84a267} supports Negation, Clausal Entailment, it also supports Implicant \\citet{Darwiche_2002}.",
+            "derivationOrder": 1204,
             "proofTrace": {
               "rule": "lemma-forward",
-              "lemmaId": "va-cd-im",
+              "lemmaId": "not-c-ce-im",
               "languageId": "lang_9c84a267",
               "level": "poly"
             }
@@ -2878,7 +3184,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_9c84a267} supports Negation, Bounded Conjunction, Consistency, it also supports Sentential Entailment \\citet{Darwiche_2002}.",
-            "derivationOrder": 1183,
+            "derivationOrder": 1205,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "not-c-and-bc-co-se",
@@ -2893,7 +3199,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_9c84a267} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1234,
+            "derivationOrder": 1199,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -2938,7 +3244,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_9c84a267} supports Conditioning, Bounded Disjunction, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1182,
+            "derivationOrder": 1203,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "cd-or-bc-sfo",
@@ -2987,11 +3293,14 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000",
+              "Pipatsrisawat_2008"
             ],
             "derived": true,
-            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 1333,
+            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{EQ} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, then Sentential Entailment is unsupported by SDNNF as well (unless P = NP).",
+            "derivationOrder": 1342,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -3004,11 +3313,14 @@
           "VA": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000",
+              "Pipatsrisawat_2008"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_b13b0d78} in polynomial time. If SDNNF supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by SDNNF (unless P = NP).",
-            "derivationOrder": 1276,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_b13b0d78} in polynomial time \\citet{Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}. If SDNNF supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by SDNNF (unless P = NP).",
+            "derivationOrder": 1283,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -3021,11 +3333,14 @@
           "CT": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000",
+              "Pipatsrisawat_2008"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_b13b0d78} in polynomial time. If SDNNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by SDNNF (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1284,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_b13b0d78} in polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}. If SDNNF supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by SDNNF (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1291,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -3038,11 +3353,14 @@
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000",
+              "Pipatsrisawat_2008"
             ],
             "derived": true,
-            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 1332,
+            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, then Equivalence is unsupported by SDNNF as well (unless P = NP).",
+            "derivationOrder": 1341,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -3055,11 +3373,14 @@
           "IM": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000",
+              "Pipatsrisawat_2008"
             ],
             "derived": true,
-            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by SDNNF as well (unless P = NP).",
-            "derivationOrder": 1334,
+            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, then Implicant is unsupported by SDNNF as well (unless P = NP).",
+            "derivationOrder": 1343,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -3068,6 +3389,59 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2001a",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_b13b0d78}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore SDNNF supports Consistency in polynomial time.",
+            "derivationOrder": 1109,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_b13b0d78",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_b13b0d78}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore SDNNF supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1238,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_b13b0d78",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_b13b0d78}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore SDNNF supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1258,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_b13b0d78",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "ME",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -3093,13 +3467,33 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_b13b0d78} supports Forgetting, it also supports Singleton Forgetting \\citet{Darwiche_2002}.",
-            "derivationOrder": 1184,
+            "derivationOrder": 1206,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "fo-sfo",
               "languageId": "lang_b13b0d78",
               "level": "poly"
             }
+          },
+          "NOT_C": {
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000",
+              "Pipatsrisawat_2008"
+            ],
+            "derived": true,
+            "description": "Since Negation ∧ Consistency implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_b13b0d78}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, and since Consistency is supported in polynomial time, then Negation is unsupported by SDNNF as well (unless P = NP).",
+            "derivationOrder": 1344,
+            "proofTrace": {
+              "rule": "lemma-contrapositive",
+              "lemmaId": "not-c-co-va",
+              "languageId": "lang_b13b0d78",
+              "pivotOp": "NOT_C",
+              "level": "poly"
+            },
+            "caveat": "P = NP"
           }
         }
       },
@@ -3116,11 +3510,13 @@
           "VA": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_3c803ba1} in polynomial time. If SDNNF$_T$ supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by SDNNF$_T$ (unless P = NP).",
-            "derivationOrder": 1277,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_3c803ba1} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If SDNNF$_T$ supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by SDNNF$_T$ (unless P = NP).",
+            "derivationOrder": 1284,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -3133,11 +3529,13 @@
           "CT": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_3c803ba1} in polynomial time. If SDNNF$_T$ supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by SDNNF$_T$ (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1285,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_3c803ba1} in polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}. If SDNNF$_T$ supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by SDNNF$_T$ (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1292,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -3150,11 +3548,13 @@
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by SDNNF$_T$ as well (unless P = NP).",
-            "derivationOrder": 1335,
+            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Equivalence is unsupported by SDNNF$_T$ as well (unless P = NP).",
+            "derivationOrder": 1345,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -3167,11 +3567,13 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by SDNNF$_T$ as well (unless P = NP).",
-            "derivationOrder": 1336,
+            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{EQ} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Sentential Entailment is unsupported by SDNNF$_T$ as well (unless P = NP).",
+            "derivationOrder": 1346,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -3184,11 +3586,13 @@
           "IM": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by SDNNF$_T$ as well (unless P = NP).",
-            "derivationOrder": 1337,
+            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Implicant is unsupported by SDNNF$_T$ as well (unless P = NP).",
+            "derivationOrder": 1347,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -3197,6 +3601,62 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
+              "Darwiche_2001a",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_3c803ba1}{lang_3bebcab7} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore SDNNF$_T$ supports Consistency in polynomial time.",
+            "derivationOrder": 1110,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_3c803ba1",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_3c803ba1}{lang_3bebcab7} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_3bebcab7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore SDNNF$_T$ supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1239,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_3c803ba1",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Pipatsrisawat_2008",
+              "Amarilli_2018",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_3c803ba1}{lang_3bebcab7} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018}, and \\opref{lang_3bebcab7}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore SDNNF$_T$ supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1259,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_3c803ba1",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "ME",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -3221,7 +3681,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_3c803ba1} supports Disjunction, it also supports Bounded Disjunction \\citet{Darwiche_2002}.",
-            "derivationOrder": 1185,
+            "derivationOrder": 1207,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "or-c-or-bc",
@@ -3247,7 +3707,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{AND_C} in quasi-polynomial time \\citet{Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, and since Disjunction is supported in quasi-polynomial time, then Negation is unsupported by SDNNF$_T$ in quasi-polynomial time as well.",
-            "derivationOrder": 1339,
+            "derivationOrder": 1349,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-c-and-c",
@@ -3273,12 +3733,13 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore uFBDD supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1243,
+            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore uFBDD supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1228,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4e62a038",
@@ -3290,11 +3751,12 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore uFBDD supports Model Counting in polynomial time.",
-            "derivationOrder": 1125,
+            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore uFBDD supports Model Counting in polynomial time.",
+            "derivationOrder": 1145,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4e62a038",
@@ -3306,15 +3768,18 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_4e62a038} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1188,
+            "description": "\\edgeref{lang_4e62a038}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore uFBDD supports Consistency in polynomial time.",
+            "derivationOrder": 1111,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_4e62a038",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_4e62a038",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -3325,7 +3790,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_4e62a038} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1189,
+            "derivationOrder": 1209,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -3336,11 +3801,12 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore uFBDD supports Implicant in polynomial time.",
-            "derivationOrder": 1252,
+            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore uFBDD supports Implicant in polynomial time.",
+            "derivationOrder": 1271,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4e62a038",
@@ -3352,11 +3818,12 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore uFBDD supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1261,
+            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore uFBDD supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1248,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4e62a038",
@@ -3368,11 +3835,12 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_Huang_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore uFBDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
-            "derivationOrder": 1111,
+            "description": "\\edgeref{lang_4e62a038}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore uFBDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
+            "derivationOrder": 1131,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4e62a038",
@@ -3406,12 +3874,13 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore uOBDD supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1244,
+            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore uOBDD supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1229,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_c2df8c2b",
@@ -3423,11 +3892,12 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore uOBDD supports Model Counting in polynomial time.",
-            "derivationOrder": 1126,
+            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore uOBDD supports Model Counting in polynomial time.",
+            "derivationOrder": 1146,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_c2df8c2b",
@@ -3439,15 +3909,18 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_c2df8c2b} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1192,
+            "description": "\\edgeref{lang_c2df8c2b}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore uOBDD supports Consistency in polynomial time.",
+            "derivationOrder": 1112,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_c2df8c2b",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_c2df8c2b",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -3458,7 +3931,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_c2df8c2b} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1193,
+            "derivationOrder": 1211,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -3469,11 +3942,12 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD supports Implicant in polynomial time.",
-            "derivationOrder": 1253,
+            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD supports Implicant in polynomial time.",
+            "derivationOrder": 1272,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_c2df8c2b",
@@ -3485,11 +3959,12 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1262,
+            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1249,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_c2df8c2b",
@@ -3501,11 +3976,12 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_Huang_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore uOBDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
-            "derivationOrder": 1112,
+            "description": "\\edgeref{lang_c2df8c2b}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore uOBDD supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
+            "derivationOrder": 1132,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_c2df8c2b",
@@ -3564,16 +4040,17 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Gergov_1994",
-              "Bryant_1992"
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_b9d72a7c}{lang_684b1ca7} in polynomial time, and \\opref{lang_684b1ca7}{CO} in polynomial time \\citet{Gergov_1994,Bryant_1992}. Therefore OBDD supports Consistency in polynomial time.",
-            "derivationOrder": 1099,
+            "description": "\\edgeref{lang_b9d72a7c}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore OBDD supports Consistency in polynomial time.",
+            "derivationOrder": 1113,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_b9d72a7c",
-              "targetLanguageId": "lang_684b1ca7",
+              "targetLanguageId": "lang_3bebcab7",
               "operation": "CO",
               "level": "poly"
             }
@@ -3581,12 +4058,13 @@
           "VA": {
             "complexity": "poly",
             "refs": [
+              "Darwiche_2002",
               "Gergov_1994",
               "Bryant_1992"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_b9d72a7c}{lang_684b1ca7} in polynomial time, and \\opref{lang_684b1ca7}{VA} in polynomial time \\citet{Gergov_1994,Bryant_1992}. Therefore OBDD supports Validity in polynomial time.",
-            "derivationOrder": 1102,
+            "description": "\\edgeref{lang_b9d72a7c}{lang_684b1ca7} in polynomial time \\citet{Darwiche_2002}, and \\opref{lang_684b1ca7}{VA} in polynomial time \\citet{Gergov_1994,Bryant_1992}. Therefore OBDD supports Validity in polynomial time.",
+            "derivationOrder": 1122,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_b9d72a7c",
@@ -3603,7 +4081,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_b9d72a7c} supports Consistency, Conditioning, it also supports Clausal Entailment \\citet{Darwiche_2002,Darwiche_2001a}.",
-            "derivationOrder": 1195,
+            "derivationOrder": 1213,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-ce",
@@ -3618,7 +4096,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_b9d72a7c} supports Consistency, Conditioning, it also supports Model Enumeration \\citet{Darwiche_2002}.",
-            "derivationOrder": 1194,
+            "derivationOrder": 1212,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "co-cd-me",
@@ -3633,7 +4111,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_b9d72a7c} supports Validity, Conditioning, it also supports Implicant \\citet{Darwiche_2002}.",
-            "derivationOrder": 1196,
+            "derivationOrder": 1214,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "va-cd-im",
@@ -3700,7 +4178,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Bounded Disjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_b9d72a7c}{AND_BC} (unless P = NP) \\citet{Darwiche_2002}, and since Negation is supported in polynomial time, then Bounded Disjunction is unsupported by OBDD as well (unless P = NP).",
-            "derivationOrder": 1340,
+            "derivationOrder": 1350,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-bc-and-bc",
@@ -3729,12 +4207,13 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore dec-DNNF supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1245,
+            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore dec-DNNF supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1230,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_981b62f0",
@@ -3746,11 +4225,12 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore dec-DNNF supports Model Counting in polynomial time.",
-            "derivationOrder": 1127,
+            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore dec-DNNF supports Model Counting in polynomial time.",
+            "derivationOrder": 1147,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_981b62f0",
@@ -3762,15 +4242,18 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_981b62f0} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1199,
+            "description": "\\edgeref{lang_981b62f0}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore dec-DNNF supports Consistency in polynomial time.",
+            "derivationOrder": 1114,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_981b62f0",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_981b62f0",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -3781,7 +4264,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_981b62f0} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1200,
+            "derivationOrder": 1216,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -3792,11 +4275,12 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore dec-DNNF supports Implicant in polynomial time.",
-            "derivationOrder": 1254,
+            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore dec-DNNF supports Implicant in polynomial time.",
+            "derivationOrder": 1273,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_981b62f0",
@@ -3808,11 +4292,12 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore dec-DNNF supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1263,
+            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore dec-DNNF supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1250,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_981b62f0",
@@ -3824,11 +4309,12 @@
           "EQ": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_Huang_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore dec-DNNF supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
-            "derivationOrder": 1113,
+            "description": "\\edgeref{lang_981b62f0}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{EQ} in polynomial time (unless $P \\neq$ BPP) \\citet{Darwiche_Huang_2002}. Therefore dec-DNNF supports Equivalence in polynomial time (unless $P \\neq$ BPP).",
+            "derivationOrder": 1133,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_981b62f0",
@@ -3873,12 +4359,13 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore dec-SDNNF supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1246,
+            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore dec-SDNNF supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1231,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_0f27d539",
@@ -3890,11 +4377,12 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore dec-SDNNF supports Model Counting in polynomial time.",
-            "derivationOrder": 1128,
+            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore dec-SDNNF supports Model Counting in polynomial time.",
+            "derivationOrder": 1148,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_0f27d539",
@@ -3906,15 +4394,18 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_0f27d539} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1203,
+            "description": "\\edgeref{lang_0f27d539}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore dec-SDNNF supports Consistency in polynomial time.",
+            "derivationOrder": 1115,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_0f27d539",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_0f27d539",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -3925,7 +4416,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_0f27d539} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1204,
+            "derivationOrder": 1218,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -3936,11 +4427,12 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Implicant in polynomial time.",
-            "derivationOrder": 1255,
+            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Implicant in polynomial time.",
+            "derivationOrder": 1274,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_0f27d539",
@@ -3952,11 +4444,12 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1264,
+            "description": "\\edgeref{lang_0f27d539}{lang_6c130090} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1251,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_0f27d539",
@@ -3968,12 +4461,15 @@
           "EQ": {
             "complexity": "unknown-poly-quasi",
             "refs": [
-              "Meinel_Theobald_1998",
-              "Darwiche_2002"
+              "Amarilli_2018",
+              "Bollig_2018",
+              "Beame_2015",
+              "Darwiche_2002",
+              "Meinel_Theobald_1998"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_0f27d539}{lang_b9d72a7c} in quasi-polynomial time, and \\opref{lang_b9d72a7c}{EQ} in quasi-polynomial time \\citet{Meinel_Theobald_1998,Darwiche_2002}. Therefore dec-SDNNF supports Equivalence in at most quasi-polynomial time.",
-            "derivationOrder": 1357,
+            "description": "\\edgeref{lang_0f27d539}{lang_b9d72a7c} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}, and \\opref{lang_b9d72a7c}{EQ} in quasi-polynomial time \\citet{Meinel_Theobald_1998,Darwiche_2002}. Therefore dec-SDNNF supports Equivalence in at most quasi-polynomial time.",
+            "derivationOrder": 1368,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_0f27d539",
@@ -4015,12 +4511,14 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Oztok_2014",
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore dec-SDNNF$_T$ supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1247,
+            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time \\citet{Oztok_2014,Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore dec-SDNNF$_T$ supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1232,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4ae03bc8",
@@ -4036,7 +4534,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_4ae03bc8} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1238,
+            "derivationOrder": 1267,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -4047,11 +4545,13 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Oztok_2014",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore dec-SDNNF$_T$ supports Model Counting in polynomial time.",
-            "derivationOrder": 1129,
+            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time \\citet{Oztok_2014,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore dec-SDNNF$_T$ supports Model Counting in polynomial time.",
+            "derivationOrder": 1149,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4ae03bc8",
@@ -4063,15 +4563,19 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Darwiche_2002"
+              "Oztok_2014",
+              "Amarilli_2018",
+              "Darwiche_2002",
+              "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_4ae03bc8} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1207,
+            "description": "\\edgeref{lang_4ae03bc8}{lang_3bebcab7} in polynomial time \\citet{Oztok_2014,Amarilli_2018,Darwiche_2002}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore dec-SDNNF$_T$ supports Consistency in polynomial time.",
+            "derivationOrder": 1116,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_4ae03bc8",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_4ae03bc8",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -4082,7 +4586,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_4ae03bc8} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1208,
+            "derivationOrder": 1220,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -4092,10 +4596,12 @@
           },
           "SE": {
             "complexity": "poly",
-            "refs": [],
+            "refs": [
+              "Amarilli_2018"
+            ],
             "derived": true,
-            "description": "\\edgeref{lang_4ae03bc8}{lang_91f812d0} in polynomial time, and \\opref{lang_91f812d0}{SE} in polynomial time. Therefore dec-SDNNF$_T$ supports Sentential Entailment in polynomial time.",
-            "derivationOrder": 1218,
+            "description": "\\edgeref{lang_4ae03bc8}{lang_91f812d0} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_91f812d0}{SE} in polynomial time. Therefore dec-SDNNF$_T$ supports Sentential Entailment in polynomial time.",
+            "derivationOrder": 1243,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4ae03bc8",
@@ -4107,11 +4613,13 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Oztok_2014",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF$_T$ supports Implicant in polynomial time.",
-            "derivationOrder": 1256,
+            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time \\citet{Oztok_2014,Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF$_T$ supports Implicant in polynomial time.",
+            "derivationOrder": 1275,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4ae03bc8",
@@ -4123,11 +4631,13 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Oztok_2014",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF$_T$ supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1265,
+            "description": "\\edgeref{lang_4ae03bc8}{lang_6c130090} in polynomial time \\citet{Oztok_2014,Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore dec-SDNNF$_T$ supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1252,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_4ae03bc8",
@@ -4173,12 +4683,15 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Darwiche_2011",
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore cSDD$_T$ supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1248,
+            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Darwiche_2011,Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore cSDD$_T$ supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1233,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_82fa749e",
@@ -4194,7 +4707,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_82fa749e} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1239,
+            "derivationOrder": 1268,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -4205,11 +4718,14 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Darwiche_2011",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore cSDD$_T$ supports Model Counting in polynomial time.",
-            "derivationOrder": 1130,
+            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Darwiche_2011,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore cSDD$_T$ supports Model Counting in polynomial time.",
+            "derivationOrder": 1150,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_82fa749e",
@@ -4221,15 +4737,20 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Darwiche_2011",
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_82fa749e} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1211,
+            "description": "\\edgeref{lang_82fa749e}{lang_3bebcab7} in polynomial time \\citet{VanDenBroeck_2015,Darwiche_2011,Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore cSDD$_T$ supports Consistency in polynomial time.",
+            "derivationOrder": 1117,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_82fa749e",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_82fa749e",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -4240,7 +4761,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_82fa749e} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1212,
+            "derivationOrder": 1222,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -4251,25 +4772,29 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Darwiche_2011",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD$_T$ supports Implicant in polynomial time.",
-            "derivationOrder": 1257,
+            "description": "\\edgeref{lang_82fa749e}{lang_1afefbe2} in polynomial time \\citet{VanDenBroeck_2015,Darwiche_2011}, and \\opref{lang_1afefbe2}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD$_T$ supports Implicant in polynomial time.",
+            "derivationOrder": 1242,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_82fa749e",
-              "targetLanguageId": "lang_6c130090",
+              "targetLanguageId": "lang_1afefbe2",
               "operation": "IM",
               "level": "poly"
             }
           },
           "SE": {
             "complexity": "poly",
-            "refs": [],
+            "refs": [
+              "VanDenBroeck_2015"
+            ],
             "derived": true,
-            "description": "\\edgeref{lang_82fa749e}{lang_91f812d0} in polynomial time, and \\opref{lang_91f812d0}{SE} in polynomial time. Therefore cSDD$_T$ supports Sentential Entailment in polynomial time.",
-            "derivationOrder": 1219,
+            "description": "\\edgeref{lang_82fa749e}{lang_91f812d0} in polynomial time \\citet{VanDenBroeck_2015}, and \\opref{lang_91f812d0}{SE} in polynomial time. Therefore cSDD$_T$ supports Sentential Entailment in polynomial time.",
+            "derivationOrder": 1244,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_82fa749e",
@@ -4281,11 +4806,14 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "VanDenBroeck_2015",
+              "Darwiche_2011",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD$_T$ supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1266,
+            "description": "\\edgeref{lang_82fa749e}{lang_6c130090} in polynomial time \\citet{VanDenBroeck_2015,Darwiche_2011,Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore cSDD$_T$ supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1253,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_82fa749e",
@@ -4355,7 +4883,7 @@
             ],
             "derived": true,
             "description": "Since Negation ∧ Bounded Disjunction implies Bounded Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_82fa749e}{AND_BC} \\citet{VanDenBroeck_2015}, and since Negation is supported in polynomial time, then Bounded Disjunction is unsupported by cSDD$_T$ as well.",
-            "derivationOrder": 1341,
+            "derivationOrder": 1351,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "not-c-or-bc-and-bc",
@@ -4383,11 +4911,13 @@
           "VA": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_e827cf31} in polynomial time. If nOBDD$_<$ supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by nOBDD$_<$ (unless P = NP).",
-            "derivationOrder": 1278,
+            "description": "\\nopref{lang_4c204bf3}{VA} (unless P = NP) \\citet{Darwiche_2002}, and \\edgeref{lang_4c204bf3}{lang_e827cf31} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If nOBDD$_<$ supported Validity in polynomial time, then DNF could too by compiling first. Therefore Validity is unsupported by nOBDD$_<$ (unless P = NP).",
+            "derivationOrder": 1285,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_4c204bf3",
@@ -4400,11 +4930,13 @@
           "CT": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_e827cf31} in polynomial time. If nOBDD$_<$ supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nOBDD$_<$ (unless the polynomial hierarchy collapses).",
-            "derivationOrder": 1286,
+            "description": "\\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}, and \\edgeref{lang_6ae90adc}{lang_e827cf31} in polynomial time \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}. If nOBDD$_<$ supported Model Counting in polynomial time, then IP could too by compiling first. Therefore Model Counting is unsupported by nOBDD$_<$ (unless the polynomial hierarchy collapses).",
+            "derivationOrder": 1293,
             "proofTrace": {
               "rule": "query-downgrade-via-succinctness",
               "sourceLanguageId": "lang_6ae90adc",
@@ -4417,11 +4949,13 @@
           "EQ": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Equivalence is unsupported by nOBDD$_<$ as well (unless P = NP).",
-            "derivationOrder": 1342,
+            "description": "Since Equivalence implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Equivalence is unsupported by nOBDD$_<$ as well (unless P = NP).",
+            "derivationOrder": 1352,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "eq-va",
@@ -4434,11 +4968,13 @@
           "SE": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{EQ} (unless P = NP) \\citet{Darwiche_2002}, then Sentential Entailment is unsupported by nOBDD$_<$ as well (unless P = NP).",
-            "derivationOrder": 1343,
+            "description": "Since Sentential Entailment implies Equivalence \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{EQ} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Sentential Entailment is unsupported by nOBDD$_<$ as well (unless P = NP).",
+            "derivationOrder": 1353,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "se-eq",
@@ -4451,11 +4987,13 @@
           "IM": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
             ],
             "derived": true,
-            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{VA} (unless P = NP) \\citet{Darwiche_2002}, then Implicant is unsupported by nOBDD$_<$ as well (unless P = NP).",
-            "derivationOrder": 1344,
+            "description": "Since Implicant implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, then Implicant is unsupported by nOBDD$_<$ as well (unless P = NP).",
+            "derivationOrder": 1354,
             "proofTrace": {
               "rule": "lemma-contrapositive",
               "lemmaId": "im-va",
@@ -4464,6 +5002,62 @@
               "level": "poly"
             },
             "caveat": "P = NP"
+          },
+          "CO": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Pipatsrisawat_2008",
+              "Darwiche_2001a",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_e827cf31}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Pipatsrisawat_2008}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore nOBDD$_<$ supports Consistency in polynomial time.",
+            "derivationOrder": 1118,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_e827cf31",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
+              "level": "poly"
+            }
+          },
+          "CE": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Pipatsrisawat_2008",
+              "Darwiche_2002",
+              "Darwiche_2001a"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_e827cf31}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Pipatsrisawat_2008}, and \\opref{lang_3bebcab7}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore nOBDD$_<$ supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1240,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_e827cf31",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CE",
+              "level": "poly"
+            }
+          },
+          "ME": {
+            "complexity": "poly",
+            "refs": [
+              "Amarilli_2018",
+              "Pipatsrisawat_2008",
+              "Darwiche_2002"
+            ],
+            "derived": true,
+            "description": "\\edgeref{lang_e827cf31}{lang_3bebcab7} in polynomial time \\citet{Amarilli_2018,Pipatsrisawat_2008}, and \\opref{lang_3bebcab7}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore nOBDD$_<$ supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1260,
+            "proofTrace": {
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_e827cf31",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "ME",
+              "level": "poly"
+            }
           }
         },
         "transformations": {
@@ -4474,6 +5068,25 @@
               "Wegener_2000"
             ],
             "description": "Any clause can be represented in \\langfam{nOBDD}{<} because OBDD$_<$ is a special case of \\langfam{nOBDD}{<}, and a clause has a polynomial-size OBDD$_<$ representation \\citet{Wegener_2000}. If \\langfam{nOBDD}{<} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{nOBDD}{<} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_e827cf31} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+          },
+          "NOT_C": {
+            "complexity": "no-poly-unknown-quasi",
+            "refs": [
+              "Darwiche_2002",
+              "Amarilli_2018",
+              "Wegener_2000"
+            ],
+            "derived": true,
+            "description": "Since Negation ∧ Consistency implies Validity \\citet{Darwiche_2002}, and since \\nopref{lang_e827cf31}{VA} (unless P = NP) \\citet{Darwiche_2002,Amarilli_2018,Wegener_2000}, and since Consistency is supported in polynomial time, then Negation is unsupported by nOBDD$_<$ as well (unless P = NP).",
+            "derivationOrder": 1355,
+            "proofTrace": {
+              "rule": "lemma-contrapositive",
+              "lemmaId": "not-c-co-va",
+              "languageId": "lang_e827cf31",
+              "pivotOp": "NOT_C",
+              "level": "poly"
+            },
+            "caveat": "P = NP"
           }
         }
       },
@@ -4490,12 +5103,14 @@
           "CE": {
             "complexity": "poly",
             "refs": [
+              "Wegener_2000",
+              "Amarilli_2018",
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore uOBDD$_<$ supports Clausal Entailment in polynomial time.",
-            "derivationOrder": 1249,
+            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time \\citet{Wegener_2000,Amarilli_2018}, and \\opref{lang_6c130090}{CE} in polynomial time \\citet{Darwiche_2002,Darwiche_2001a}. Therefore uOBDD$_<$ supports Clausal Entailment in polynomial time.",
+            "derivationOrder": 1234,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_43a33aec",
@@ -4511,7 +5126,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_43a33aec} supports Sentential Entailment, it also supports Equivalence \\citet{Darwiche_2002}.",
-            "derivationOrder": 1240,
+            "derivationOrder": 1269,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "se-eq",
@@ -4522,11 +5137,13 @@
           "CT": {
             "complexity": "poly",
             "refs": [
+              "Wegener_2000",
+              "Amarilli_2018",
               "Darwiche_2001b"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore uOBDD$_<$ supports Model Counting in polynomial time.",
-            "derivationOrder": 1131,
+            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time \\citet{Wegener_2000,Amarilli_2018}, and \\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}. Therefore uOBDD$_<$ supports Model Counting in polynomial time.",
+            "derivationOrder": 1151,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_43a33aec",
@@ -4538,15 +5155,19 @@
           "CO": {
             "complexity": "poly",
             "refs": [
+              "Wegener_2000",
+              "Amarilli_2018",
+              "Darwiche_2001a",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since \\langref{lang_43a33aec} supports Model Counting, it also supports Consistency \\citet{Darwiche_2002}.",
-            "derivationOrder": 1215,
+            "description": "\\edgeref{lang_43a33aec}{lang_3bebcab7} in polynomial time \\citet{Wegener_2000,Amarilli_2018}, and \\opref{lang_3bebcab7}{CO} in polynomial time \\citet{Darwiche_2001a,Darwiche_2002}. Therefore uOBDD$_<$ supports Consistency in polynomial time.",
+            "derivationOrder": 1119,
             "proofTrace": {
-              "rule": "lemma-forward",
-              "lemmaId": "ct-co",
-              "languageId": "lang_43a33aec",
+              "rule": "query-via-succinctness",
+              "sourceLanguageId": "lang_43a33aec",
+              "targetLanguageId": "lang_3bebcab7",
+              "operation": "CO",
               "level": "poly"
             }
           },
@@ -4557,7 +5178,7 @@
             ],
             "derived": true,
             "description": "Since \\langref{lang_43a33aec} supports Model Counting, it also supports Validity \\citet{Darwiche_2002}.",
-            "derivationOrder": 1216,
+            "derivationOrder": 1224,
             "proofTrace": {
               "rule": "lemma-forward",
               "lemmaId": "ct-va",
@@ -4567,10 +5188,12 @@
           },
           "SE": {
             "complexity": "poly",
-            "refs": [],
+            "refs": [
+              "Amarilli_2018"
+            ],
             "derived": true,
-            "description": "\\edgeref{lang_43a33aec}{lang_91f812d0} in polynomial time, and \\opref{lang_91f812d0}{SE} in polynomial time. Therefore uOBDD$_<$ supports Sentential Entailment in polynomial time.",
-            "derivationOrder": 1220,
+            "description": "\\edgeref{lang_43a33aec}{lang_91f812d0} in polynomial time \\citet{Amarilli_2018}, and \\opref{lang_91f812d0}{SE} in polynomial time. Therefore uOBDD$_<$ supports Sentential Entailment in polynomial time.",
+            "derivationOrder": 1245,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_43a33aec",
@@ -4582,11 +5205,13 @@
           "IM": {
             "complexity": "poly",
             "refs": [
+              "Wegener_2000",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD$_<$ supports Implicant in polynomial time.",
-            "derivationOrder": 1258,
+            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time \\citet{Wegener_2000,Amarilli_2018}, and \\opref{lang_6c130090}{IM} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD$_<$ supports Implicant in polynomial time.",
+            "derivationOrder": 1276,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_43a33aec",
@@ -4598,11 +5223,13 @@
           "ME": {
             "complexity": "poly",
             "refs": [
+              "Wegener_2000",
+              "Amarilli_2018",
               "Darwiche_2002"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD$_<$ supports Model Enumeration in polynomial time.",
-            "derivationOrder": 1267,
+            "description": "\\edgeref{lang_43a33aec}{lang_6c130090} in polynomial time \\citet{Wegener_2000,Amarilli_2018}, and \\opref{lang_6c130090}{ME} in polynomial time \\citet{Darwiche_2002}. Therefore uOBDD$_<$ supports Model Enumeration in polynomial time.",
+            "derivationOrder": 1254,
             "proofTrace": {
               "rule": "query-via-succinctness",
               "sourceLanguageId": "lang_43a33aec",
@@ -9048,14 +9675,16 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "VanDenBroeck_2015",
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_83e3b023}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to cSDD in polynomial time, IP could support Model Counting by first compiling to cSDD. Therefore IP cannot compile to cSDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1346,
+          "description": "\\opref{lang_83e3b023}{CT} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to cSDD in polynomial time, IP could support Model Counting by first compiling to cSDD. Therefore IP cannot compile to cSDD in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1357,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9074,7 +9703,7 @@
           "hidden": false,
           "derived": true,
           "description": "\\opref{lang_6c130090}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-DNNF in polynomial time, IP could support Model Counting by first compiling to d-DNNF. Therefore IP cannot compile to d-DNNF in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1347,
+          "derivationOrder": 1358,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9086,14 +9715,15 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_ea9b5299}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-SDNNF in polynomial time, IP could support Model Counting by first compiling to d-SDNNF. Therefore IP cannot compile to d-SDNNF in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1348,
+          "description": "\\opref{lang_ea9b5299}{CT} in polynomial time \\citet{Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-SDNNF in polynomial time, IP could support Model Counting by first compiling to d-SDNNF. Therefore IP cannot compile to d-SDNNF in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1359,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9105,14 +9735,16 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "Pipatsrisawat_2008",
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_91f812d0}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-SDNNF$_T$ in polynomial time, IP could support Model Counting by first compiling to d-SDNNF$_T$. Therefore IP cannot compile to d-SDNNF$_T$ in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1349,
+          "description": "\\opref{lang_91f812d0}{CT} in polynomial time \\citet{Pipatsrisawat_2008,Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to d-SDNNF$_T$ in polynomial time, IP could support Model Counting by first compiling to d-SDNNF$_T$. Therefore IP cannot compile to d-SDNNF$_T$ in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1360,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9275,14 +9907,16 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "VanDenBroeck_2015",
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_1afefbe2}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to SDD in polynomial time, IP could support Model Counting by first compiling to SDD. Therefore IP cannot compile to SDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1350,
+          "description": "\\opref{lang_1afefbe2}{CT} in polynomial time \\citet{VanDenBroeck_2015,Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to SDD in polynomial time, IP could support Model Counting by first compiling to SDD. Therefore IP cannot compile to SDD in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1361,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9294,14 +9928,17 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "Darwiche_2011",
+            "VanDenBroeck_2015",
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_9c84a267}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to SDD$_T$ in polynomial time, IP could support Model Counting by first compiling to SDD$_T$. Therefore IP cannot compile to SDD$_T$ in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1351,
+          "description": "\\opref{lang_9c84a267}{CT} in polynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to SDD$_T$ in polynomial time, IP could support Model Counting by first compiling to SDD$_T$. Therefore IP cannot compile to SDD$_T$ in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1362,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9359,14 +9996,15 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_4e62a038}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uFBDD in polynomial time, IP could support Model Counting by first compiling to uFBDD. Therefore IP cannot compile to uFBDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1352,
+          "description": "\\opref{lang_4e62a038}{CT} in polynomial time \\citet{Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uFBDD in polynomial time, IP could support Model Counting by first compiling to uFBDD. Therefore IP cannot compile to uFBDD in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1363,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9378,14 +10016,15 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_c2df8c2b}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uOBDD in polynomial time, IP could support Model Counting by first compiling to uOBDD. Therefore IP cannot compile to uOBDD in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1353,
+          "description": "\\opref{lang_c2df8c2b}{CT} in polynomial time \\citet{Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uOBDD in polynomial time, IP could support Model Counting by first compiling to uOBDD. Therefore IP cannot compile to uOBDD in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1364,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9477,14 +10116,17 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "VanDenBroeck_2015",
+            "Darwiche_2011",
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_82fa749e}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to cSDD$_T$ in polynomial time, IP could support Model Counting by first compiling to cSDD$_T$. Therefore IP cannot compile to cSDD$_T$ in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1354,
+          "description": "\\opref{lang_82fa749e}{CT} in polynomial time \\citet{VanDenBroeck_2015,Darwiche_2011,Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to cSDD$_T$ in polynomial time, IP could support Model Counting by first compiling to cSDD$_T$. Therefore IP cannot compile to cSDD$_T$ in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1365,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",
@@ -9517,14 +10159,16 @@
         {
           "status": "no-poly-unknown-quasi",
           "refs": [
+            "Wegener_2000",
+            "Amarilli_2018",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
           "caveat": "the polynomial hierarchy collapses",
           "hidden": false,
           "derived": true,
-          "description": "\\opref{lang_43a33aec}{CT} in polynomial time \\citet{Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uOBDD$_<$ in polynomial time, IP could support Model Counting by first compiling to uOBDD$_<$. Therefore IP cannot compile to uOBDD$_<$ in polynomial time (unless the polynomial hierarchy collapses).",
-          "derivationOrder": 1355,
+          "description": "\\opref{lang_43a33aec}{CT} in polynomial time \\citet{Wegener_2000,Amarilli_2018,Darwiche_2001b}, but \\nopref{lang_6ae90adc}{CT} (unless the polynomial hierarchy collapses) \\citet{Darwiche_2002}. If IP could compile to uOBDD$_<$ in polynomial time, IP could support Model Counting by first compiling to uOBDD$_<$. Therefore IP cannot compile to uOBDD$_<$ in polynomial time (unless the polynomial hierarchy collapses).",
+          "derivationOrder": 1366,
           "proofTrace": {
             "rule": "query-difference",
             "operation": "CT",

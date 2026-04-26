@@ -279,6 +279,14 @@ Validity is equivalent to absence of any falsifying path. For a general FBDD, ch
 \langref{d-DNNF} satisfies CT: model counting can be performed in polynomial time by exploiting decomposability (multiplying counts at $\land$-nodes) and determinism (adding counts at $\lor$-nodes). This is the key tractability result motivating \langref{d-DNNF} as a compilation target \citet{Darwiche_2001b} (\citet{Darwiche_2002}, Proposition 4.1, Table 26).
 \end{claimdescription}
 
+% lang=lang_3bebcab7, op=CO
+\begin{claim}
+\langref{DNNF} supports Consistency in polynomial time \citet{Darwiche_2001a,Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Consistency of a \langref{DNNF} sentence can be decided by a bottom-up traversal. A literal or constant node is handled directly; an $\lor$-node is consistent iff at least one child is consistent; and an $\land$-node is consistent iff all children are consistent. The last test is sound because decomposability ensures that conjuncts mention disjoint variable sets, so independently satisfiable children have compatible models. Hence consistency is decidable in linear time in the circuit size.
+\end{claimdescription}
+
 
 % =============================
 \section{M. Blum and A. K. Chandra and M. N. Wegman, "Equivalence of free boolean graphs ...}

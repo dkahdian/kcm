@@ -49,6 +49,27 @@ function collectPathCaveats(
   return collectCaveatsUnion(path, matrix);
 }
 
+/**
+ * Collect edge references along the reachability path from source to target.
+ */
+function collectPathRefs(
+  sourceIdx: number,
+  targetIdx: number,
+  parent: number[][],
+  matrix: KCAdjacencyMatrix
+): string[] {
+  const pathIndices = reconstructPathIndices(sourceIdx, targetIdx, parent[sourceIdx]);
+  const path = ensurePath(pathIndices, sourceIdx, targetIdx);
+  const refs = new Set<string>();
+  for (let i = 0; i < path.length - 1; i += 1) {
+    const relation = matrix.matrix[path[i]]?.[path[i + 1]];
+    for (const ref of relation?.refs ?? []) {
+      refs.add(ref);
+    }
+  }
+  return Array.from(refs);
+}
+
 /** Map an operation safe key (e.g. AND_C) to its human-readable label (e.g. Conjunction). */
 function opLabel(code: string): string {
   const q = QUERIES[code];
@@ -136,6 +157,7 @@ export function propagateQueriesViaSuccinctness(
             const l1Support = getOperationSupport(l1, queryCode);
             // Compute caveats early for description and prefer-unconditional check
             const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
+            const pathRefs = collectPathRefs(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
             const queryCaveat = l2Support?.caveat;
             const caveat = mergeCaveats(pathCaveat, queryCaveat);
             const needsUpgrade = !queryGuaranteesPoly(l1Complexity);
@@ -145,7 +167,8 @@ export function propagateQueriesViaSuccinctness(
               const l1Name = idToName(l1Id);
               const l2Name = idToName(l2Id);
               const l2Refs = l2.properties?.queries?.[queryCode]?.refs ?? [];
-              const description = `\\edgeref{${l1Id}}{${l2Id}} in polynomial time${formatInlineCaveat(pathCaveat)}, and \\opref{${l2Id}}{${queryCode}} in polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in polynomial time${formatInlineCaveat(caveat)}.`;
+              const refs = [...new Set([...pathRefs, ...l2Refs])];
+              const description = `\\edgeref{${l1Id}}{${l2Id}} in polynomial time${formatInlineCaveat(pathCaveat)}${formatCitations(pathRefs)}, and \\opref{${l2Id}}{${queryCode}} in polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in polynomial time${formatInlineCaveat(caveat)}.`;
 
               if (DEBUG_PROPAGATION) {
                 const reason = canImproveCaveat ? 'CAVEAT-IMPROVE' : 'UPGRADE';
@@ -154,7 +177,7 @@ export function propagateQueriesViaSuccinctness(
               
               setQuerySupport(l1, queryCode, {
                 complexity: 'poly',
-                refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
+                refs,
                 derived: true,
                 description,
                 derivationOrder: nextDerivationOrder(),
@@ -185,6 +208,7 @@ export function propagateQueriesViaSuccinctness(
 
             // Compute caveats early for description and prefer-unconditional check
             const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
+            const pathRefs = collectPathRefs(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
             const queryCaveat = l2Support?.caveat;
             const caveat = mergeCaveats(pathCaveat, queryCaveat);
             const needsUpgrade = !queryGuaranteesQuasi(l1Complexity);
@@ -196,7 +220,8 @@ export function propagateQueriesViaSuccinctness(
             const l2Name = idToName(l2Id);
             const newComplexity = l1Complexity === 'no-poly-unknown-quasi' ? 'no-poly-quasi' : 'unknown-poly-quasi';
             const l2Refs = l2.properties?.queries?.[queryCode]?.refs ?? [];
-            const description = `\\edgeref{${l1Id}}{${l2Id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}, and \\opref{${l2Id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in at most quasi-polynomial time${formatInlineCaveat(caveat)}.`;
+            const refs = [...new Set([...pathRefs, ...l2Refs])];
+            const description = `\\edgeref{${l1Id}}{${l2Id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}${formatCitations(pathRefs)}, and \\opref{${l2Id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l2Refs)}. Therefore ${idToName(l1Id)} supports ${opLabel(queryCode)} in at most quasi-polynomial time${formatInlineCaveat(caveat)}.`;
 
             if (DEBUG_PROPAGATION) {
               const reason = canImproveCaveat ? 'CAVEAT-IMPROVE' : 'UPGRADE';
@@ -205,7 +230,7 @@ export function propagateQueriesViaSuccinctness(
             
             setQuerySupport(l1, queryCode, {
               complexity: newComplexity,
-              refs: l2.properties?.queries?.[queryCode]?.refs ?? [],
+              refs,
               derived: true,
               description,
               derivationOrder: nextDerivationOrder(),
@@ -375,6 +400,7 @@ export function propagateQueryDowngrades(
 
           // Compute caveats early for prefer-unconditional check
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
+          const pathRefs = collectPathRefs(l1MatrixIdx, l2MatrixIdx, reachP.parent, adjacencyMatrix);
           const queryCaveat = l1Support?.caveat;
           const caveat = mergeCaveats(pathCaveat, queryCaveat);
 
@@ -384,7 +410,8 @@ export function propagateQueryDowngrades(
 
           const l2Name = idToName(l2.id);
           const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
-          const description = `\\nopref{${l1.id}}{${queryCode}}${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in polynomial time${formatInlineCaveat(pathCaveat)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)}${formatInlineCaveat(caveat)}.`;
+          const refs = [...new Set([...l1Refs, ...pathRefs])];
+          const description = `\\nopref{${l1.id}}{${queryCode}}${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in polynomial time${formatInlineCaveat(pathCaveat)}${formatCitations(pathRefs)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)}${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-poly-unknown-quasi`);
@@ -392,7 +419,7 @@ export function propagateQueryDowngrades(
 
           setQuerySupport(l2, queryCode, {
             complexity: 'no-poly-unknown-quasi',
-            refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
+            refs,
             derived: true,
             description,
             derivationOrder: nextDerivationOrder(),
@@ -419,6 +446,7 @@ export function propagateQueryDowngrades(
 
           // Compute caveats early for prefer-unconditional check
           const pathCaveat = collectPathCaveats(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
+          const pathRefs = collectPathRefs(l1MatrixIdx, l2MatrixIdx, reachQ.parent, adjacencyMatrix);
           const queryCaveat = l1Support?.caveat;
           const caveat = mergeCaveats(pathCaveat, queryCaveat);
 
@@ -428,7 +456,8 @@ export function propagateQueryDowngrades(
 
           const l2Name = idToName(l2.id);
           const l1Refs = l1.properties?.queries?.[queryCode]?.refs ?? [];
-          const description = `\\nopref{${l1.id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in quasi-polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
+          const refs = [...new Set([...l1Refs, ...pathRefs])];
+          const description = `\\nopref{${l1.id}}{${queryCode}} in quasi-polynomial time${formatInlineCaveat(queryCaveat)}${formatCitations(l1Refs)}, and \\edgeref{${l1.id}}{${l2.id}} in quasi-polynomial time${formatInlineCaveat(pathCaveat)}${formatCitations(pathRefs)}. If ${idToName(l2.id)} supported ${opLabel(queryCode)} in quasi-polynomial time, then ${idToName(l1.id)} could too by compiling first. Therefore ${opLabel(queryCode)} is unsupported by ${idToName(l2.id)} in quasi-polynomial time${formatInlineCaveat(caveat)}.`;
 
           if (DEBUG_PROPAGATION) {
             console.log(`[Query Propagation] DOWNGRADE ${l2Name}.${queryCode}: ${l2Complexity} -> no-quasi`);
@@ -436,7 +465,7 @@ export function propagateQueryDowngrades(
 
           setQuerySupport(l2, queryCode, {
             complexity: 'no-quasi',
-            refs: l1.properties?.queries?.[queryCode]?.refs ?? [],
+            refs,
             derived: true,
             description,
             derivationOrder: nextDerivationOrder(),

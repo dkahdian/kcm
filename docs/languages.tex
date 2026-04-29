@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Language Definitions
 % Auto-generated from database.json
-% Generated: 2026-04-21T23:09:59.171Z
+% Generated: 2026-04-29T01:26:57.866Z
 % 
 % EDITING INSTRUCTIONS:
 % - Language names in brackets are auto-generated. Do NOT edit.
@@ -44,7 +44,6 @@
 \newcommand{\nedgeref}[2]{#1 cannot compile to #2}
 \newcommand{\opref}[2]{#1 supports #2}
 \newcommand{\nopref}[2]{#2 is unsupported by #1}
-\newcommand{\defref}[1]{\textit{#1}}
 
 % -------- Title info --------
 \title{Knowledge Compilation Map: Language Definitions}
@@ -150,8 +149,7 @@ For each fixed \defref{order} $<$, \langfam{nOBDD}{<} is the set of \langref{nFB
 
 \begin{definition}[\langref{OBDD}]\label{def:lang_b9d72a7c}
 \textbf{Ordered Binary Decision Diagram} \\
-The language obtained by taking the union of every \defref{order}: \langref{OBDD} $= \bigcup_{<} \langfam{OBDD}{<}$.
-\citet{Bryant_1986,Darwiche_2002}
+The language obtained by taking the union of every \defref{order}: \langref{OBDD} $= \bigcup_{<} \langfam{OBDD}{<}$. \citet{Bryant_1986,Darwiche_2002}
 \end{definition}
 
 \begin{definition}[\langfam{OBDD}{<}]\label{def:lang_d69995dd}

@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Query Support Claims
 % Auto-generated from database.json
-% Generated: 2026-04-23T01:13:26.564Z
+% Generated: 2026-04-29T01:26:57.873Z
 %
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -99,6 +99,14 @@ A \langref{CNF} sentence is valid iff every clause in it is valid (i.e., contain
 Validity checking for \langref{DNF} is coNP-complete. A \langref{DNF} is valid iff every assignment satisfies at least one term, which requires checking that term coverage is complete (\citet{Darwiche_2002}, Proposition 4.1, Table 16).
 \end{claimdescription}
 
+% lang=lang_3bebcab7, op=CO
+\begin{claim}
+\langref{DNNF} supports Consistency in polynomial time \citet{Darwiche_2001a,Darwiche_2002}
+\end{claim}
+\begin{claimdescription}
+Consistency of a \langref{DNNF} sentence can be decided by a bottom-up traversal. A literal or constant node is handled directly; an $\lor$-node is consistent iff at least one child is consistent; and an $\land$-node is consistent iff all children are consistent. The last test is sound because decomposability ensures that conjuncts mention disjoint variable sets, so independently satisfiable children have compatible models. Hence consistency is decidable in linear time in the circuit size.
+\end{claimdescription}
+
 % lang=lang_6ae90adc, op=CT
 \begin{claim}
 \langref{IP} supports Model Counting not in polynomial time (quasi-polynomial unknown) unless the polynomial hierarchy collapses \citet{Darwiche_2002}
@@ -149,10 +157,18 @@ Any query concerning \langref{OBDD} is equivalent to the corresponding query con
 
 % lang=lang_b9d72a7c, op=EQ
 \begin{claim}
-\langref{OBDD} supports Equivalence in polynomial time \citet{Meinel_Theobald_1998,Darwiche_2002}
+\langref{OBDD} supports Equivalence in polynomial time \citet{Fortune_1978,Meinel_Theobald_1998,Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
-\langref{OBDD} satisfies EQ (Theorem 8.11, Meinel \& Theobald 1998). Any equivalence query on a single \langref{OBDD} reduces to the corresponding query on \langfam{OBDD}{<}, and \langfam{OBDD}{<} supports EQ (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
+\citet{Meinel_Theobald_1998} cite the polynomial-time equivalence algorithm of \citet{Fortune_1978} for free single-variable program schemes where one input tests predicates in one fixed order on all executions. An \langref{OBDD} is such a free read-once scheme: along every root-to-sink path, variables are tested according to its associated order. The algorithm compares the two diagrams by recursively comparing residual subprograms. When the ordered input next tests variable $x$, both $x=0$ and $x=1$ cofactors are compared against the corresponding restrictions of the other diagram; terminal disagreements reject, and repeated residual pairs are memoized. The number of residual pairs is polynomial in the input sizes, so equivalence of two \langref{OBDD} sentences is decidable in polynomial time (\citet{Meinel_Theobald_1998}, Theorem 8.11; \citet{Darwiche_2002}, Proposition 4.1, Table 20).
+\end{claimdescription}
+
+% lang=lang_b9d72a7c, op=SE
+\begin{claim}
+\langref{OBDD} supports Sentential Entailment not in polynomial time (quasi-polynomial unknown) unless P = NP \citet{Darwiche_2002,Meinel_Theobald_1998}
+\end{claim}
+\begin{claimdescription}
+Sentential entailment for \langref{OBDD} is coNP-complete. Darwiche and Marquis use the result that checking consistency of two \langfam{OBDD}{<} formulas using different variable orders is NP-complete (Lemma 8.14, \citet{Meinel_Theobald_1998}). Since \langref{OBDD} supports negation, consistency of $\alpha \land \beta$ is equivalent to $\alpha \not\models \neg\beta$, so polynomial-time SE for arbitrary OBDDs would imply polynomial-time consistency for such pairs (\citet{Darwiche_2002}, Proposition 4.1, Table 20).
 \end{claimdescription}
 
 % lang=lang_27fffab2, op=CE
@@ -277,14 +293,6 @@ Validity is equivalent to absence of any falsifying path. For a general FBDD, ch
 \end{claim}
 \begin{claimdescription}
 \langref{d-DNNF} satisfies CT: model counting can be performed in polynomial time by exploiting decomposability (multiplying counts at $\land$-nodes) and determinism (adding counts at $\lor$-nodes). This is the key tractability result motivating \langref{d-DNNF} as a compilation target \citet{Darwiche_2001b} (\citet{Darwiche_2002}, Proposition 4.1, Table 26).
-\end{claimdescription}
-
-% lang=lang_3bebcab7, op=CO
-\begin{claim}
-\langref{DNNF} supports Consistency in polynomial time \citet{Darwiche_2001a,Darwiche_2002}
-\end{claim}
-\begin{claimdescription}
-Consistency of a \langref{DNNF} sentence can be decided by a bottom-up traversal. A literal or constant node is handled directly; an $\lor$-node is consistent iff at least one child is consistent; and an $\land$-node is consistent iff all children are consistent. The last test is sound because decomposability ensures that conjuncts mention disjoint variable sets, so independently satisfiable children have compatible models. Hence consistency is decidable in linear time in the circuit size.
 \end{claimdescription}
 
 

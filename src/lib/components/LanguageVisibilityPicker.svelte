@@ -1,6 +1,7 @@
 <script lang="ts">
   import MathText from './MathText.svelte';
   import type { KCLanguage, LanguageClassification, LanguageVisibilityParam } from '$lib/types.js';
+  import { ORIGINAL_KCM_LANGUAGE_IDS } from '$lib/data/filters/language-scope-filters.js';
 
   let {
     languages = [],
@@ -88,6 +89,13 @@
     onChange({ mode: 'only', ids: [] });
   }
 
+  function setOnlyOriginalKcmVisible() {
+    const availableKcmIds = ORIGINAL_KCM_LANGUAGE_IDS.filter((id) =>
+      languages.some((language) => language.id === id)
+    );
+    onChange({ mode: 'only', ids: availableKcmIds });
+  }
+
   function resetPicker() {
     search = '';
     onChange({ mode: 'all', ids: [] });
@@ -139,6 +147,7 @@
       <button type="button" class="toolbar-btn" onclick={() => toggleClassification('union')}>
         {getClassificationButtonLabel('union')}
       </button>
+      <button type="button" class="toolbar-btn" onclick={setOnlyOriginalKcmVisible}>Only KCM</button>
       <button type="button" class="toolbar-btn" onclick={setAllVisible}>Show all</button>
       <button type="button" class="toolbar-btn" onclick={setNoneVisible}>Hide all</button>
       <button type="button" class="toolbar-btn subtle" onclick={resetPicker}>Reset</button>

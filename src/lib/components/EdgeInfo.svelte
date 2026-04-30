@@ -19,25 +19,36 @@
   
   let referencesSection: HTMLElement | null = $state(null);
 
-  // Look up edge data from the currently displayed graph when available so
-  // status text reflects active filters (e.g. poly/quasi collapse mode).
+  function lookupRelationPair(sourceData: GraphData | FilteredGraphData, source: string, target: string) {
+    const { adjacencyMatrix } = sourceData;
+    const sourceIdx = adjacencyMatrix.indexByLanguage[source];
+    const targetIdx = adjacencyMatrix.indexByLanguage[target];
+
+    if (sourceIdx === undefined || targetIdx === undefined) return null;
+
+    return {
+      forward: adjacencyMatrix.matrix[sourceIdx][targetIdx],
+      backward: adjacencyMatrix.matrix[targetIdx][sourceIdx]
+    };
+  }
+
+  // Look up edge data from the displayed graph when available so status text
+  // reflects active filters; fall back to the base graph for linked hidden edges.
   const originalEdge = $derived.by(() => {
     if (!selectedEdge) return null;
 
-    const sourceData = filteredGraphData ?? graphData;
-    const { adjacencyMatrix } = sourceData;
-    const sourceIdx = adjacencyMatrix.indexByLanguage[selectedEdge.source];
-    const targetIdx = adjacencyMatrix.indexByLanguage[selectedEdge.target];
+    const filteredPair = filteredGraphData
+      ? lookupRelationPair(filteredGraphData, selectedEdge.source, selectedEdge.target)
+      : null;
+    const basePair = lookupRelationPair(graphData, selectedEdge.source, selectedEdge.target);
+    const pair = filteredPair && (filteredPair.forward || filteredPair.backward) ? filteredPair : basePair;
 
-    if (sourceIdx === undefined || targetIdx === undefined) return selectedEdge;
-
-    const forwardRelation = adjacencyMatrix.matrix[sourceIdx][targetIdx];
-    const backwardRelation = adjacencyMatrix.matrix[targetIdx][sourceIdx];
+    if (!pair) return selectedEdge;
 
     return {
       ...selectedEdge,
-      forward: forwardRelation,
-      backward: backwardRelation
+      forward: pair.forward,
+      backward: pair.backward
     };
   });
 

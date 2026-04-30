@@ -331,6 +331,14 @@
   const baseGraphData = $derived(previewGraphData || initialGraphData);
   const filteredGraphData = $derived(applyFiltersWithParams(baseGraphData, languageFilters, edgeFilters, filterStates, viewMode));
 
+  function hasBaseEdge(sourceId: string, targetId: string) {
+    const { adjacencyMatrix } = baseGraphData;
+    const sourceIdx = adjacencyMatrix.indexByLanguage[sourceId];
+    const targetIdx = adjacencyMatrix.indexByLanguage[targetId];
+    if (sourceIdx === undefined || targetIdx === undefined) return false;
+    return Boolean(adjacencyMatrix.matrix[sourceIdx]?.[targetIdx] || adjacencyMatrix.matrix[targetIdx]?.[sourceIdx]);
+  }
+
   // =========================================================================
   // Hash-based navigation for entity links (lang, edge, op)
   // =========================================================================
@@ -374,9 +382,9 @@
               ...(adjacencyMatrix.matrix[tgtIdx]?.[srcIdx]?.refs ?? [])
             ]
           };
-          // Switch to graph/succinctness view if in operations view
+          // Switch to the succinctness matrix if an edge link is opened from an operations view.
           if (viewMode === 'queries' || viewMode === 'transforms') {
-            viewMode = 'graph';
+            viewMode = 'succinctness';
             filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
           }
         }
@@ -461,7 +469,7 @@
       const edgeId = `${selectedEdge.source}->${selectedEdge.target}`;
       const reverseEdgeId = `${selectedEdge.target}->${selectedEdge.source}`;
       const isVisible = filteredGraphData.visibleEdgeIds.has(edgeId) || filteredGraphData.visibleEdgeIds.has(reverseEdgeId);
-      if (!isVisible) {
+      if (!isVisible && !hasBaseEdge(selectedEdge.source, selectedEdge.target)) {
         selectedEdge = null;
       }
     }

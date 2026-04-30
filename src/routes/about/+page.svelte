@@ -1,9 +1,48 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import MathText from '$lib/components/MathText.svelte';
 	import { initialGraphData } from '$lib/data/index.js';
 	import { getReferences } from '$lib/data/references.js';
 
 	const definitions = initialGraphData.definitions ?? [];
+
+	let expandedDefinitionIds = new Set<string>();
+
+	function expandDefinition(id: string, scroll = false) {
+		expandedDefinitionIds = new Set(expandedDefinitionIds).add(id);
+
+		if (scroll) {
+			requestAnimationFrame(() => {
+				document.getElementById(id)?.scrollIntoView({ block: 'start' });
+			});
+		}
+	}
+
+	function toggleDefinition(id: string) {
+		const next = new Set(expandedDefinitionIds);
+		if (next.has(id)) {
+			next.delete(id);
+		} else {
+			next.add(id);
+		}
+		expandedDefinitionIds = next;
+	}
+
+	function expandHashDefinition() {
+		const id = decodeURIComponent(window.location.hash.slice(1));
+		if (id && definitions.some((definition) => definition.id === id)) {
+			expandDefinition(id, true);
+		}
+	}
+
+	onMount(() => {
+		expandHashDefinition();
+		window.addEventListener('hashchange', expandHashDefinition);
+
+		return () => {
+			window.removeEventListener('hashchange', expandHashDefinition);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -40,25 +79,36 @@
 			</p>
 			<div class="definition-list">
 				{#each definitions as definition}
-					<article class="definition-card" id={definition.id}>
-						<header class="definition-card-header">
+					{@const expanded = expandedDefinitionIds.has(definition.id)}
+					<article class="definition-card" class:expanded id={definition.id}>
+						<button
+							type="button"
+							class="definition-card-header"
+							aria-expanded={expanded}
+							aria-controls={`${definition.id}-body`}
+							onclick={() => toggleDefinition(definition.id)}
+						>
 							<h3><MathText text={definition.title} as="span" /></h3>
-							<span class="definition-id">{definition.id}</span>
-						</header>
-						<div class="definition-statement">
-							<MathText text={definition.statement} as="p" />
-						</div>
-						{#if definition.explanation}
-							<div class="definition-explanation">
-								<MathText text={definition.explanation} as="p" />
-							</div>
-						{/if}
-						{#if definition.refs.length > 0}
-							<div class="definition-refs">
-								<span>References:</span>
-								{#each getReferences(...definition.refs) as ref, index}
-									<a href={ref.href} target="_blank" rel="noopener noreferrer">{ref.title}</a>{index < definition.refs.length - 1 ? ', ' : ''}
-								{/each}
+							<span class="definition-toggle" aria-hidden="true">{expanded ? '-' : '+'}</span>
+						</button>
+						{#if expanded}
+							<div class="definition-body" id={`${definition.id}-body`}>
+								<div class="definition-statement">
+									<MathText text={definition.statement} as="p" />
+								</div>
+								{#if definition.explanation}
+									<div class="definition-explanation">
+										<MathText text={definition.explanation} as="p" />
+									</div>
+								{/if}
+								{#if definition.refs.length > 0}
+									<div class="definition-refs">
+										<span>References:</span>
+										{#each getReferences(...definition.refs) as ref, index}
+											<a href={ref.href} target="_blank" rel="noopener noreferrer">{ref.title}</a>{index < definition.refs.length - 1 ? ', ' : ''}
+										{/each}
+									</div>
+								{/if}
 							</div>
 						{/if}
 					</article>
@@ -201,19 +251,28 @@
 	}
 
 	.definition-card {
-		padding: 1rem 1rem 0.875rem;
+		scroll-margin-top: 1rem;
 		border: 1px solid #e2e8f0;
-		border-radius: 0.875rem;
+		border-radius: 0.5rem;
 		background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
 		box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 	}
 
+	.definition-card.expanded {
+		border-color: #cbd5e1;
+	}
+
 	.definition-card-header {
 		display: flex;
-		align-items: baseline;
+		width: 100%;
+		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		margin-bottom: 0.5rem;
+		padding: 0.875rem 1rem;
+		border: 0;
+		background: transparent;
+		cursor: pointer;
+		text-align: left;
 	}
 
 	.definition-card h3 {
@@ -223,10 +282,23 @@
 		margin: 0;
 	}
 
-	.definition-id {
-		font-size: 0.75rem;
-		color: #64748b;
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+	.definition-toggle {
+		display: inline-grid;
+		flex: 0 0 auto;
+		width: 1.5rem;
+		height: 1.5rem;
+		place-items: center;
+		border-radius: 999px;
+		background: #e2e8f0;
+		color: #334155;
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.definition-body {
+		padding: 0 1rem 0.875rem;
+		border-top: 1px solid #e2e8f0;
 	}
 
 	.definition-statement,

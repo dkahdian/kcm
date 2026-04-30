@@ -324,7 +324,7 @@ export function renderEntityLinks(
     }
 
     const safeId = escapeHtml(resolved.id);
-    return `<a class="entity-link def-link" href="/about#${safeId}" data-entity-type="def" data-def-id="${safeId}">${escapeHtml(resolved.title)}</a>`;
+    return `<a class="entity-link def-link" href="/about#${safeId}" data-entity-type="def" data-def-id="${safeId}">${renderNameHtml(resolved.title)}</a>`;
   });
 
   // Replace \langref{langId or langName}

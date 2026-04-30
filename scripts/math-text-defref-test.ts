@@ -10,7 +10,8 @@ type Definition = { id: string; title: string };
 
 const definitions: Definition[] = [
   { id: 'representation-language', title: 'Representation Language' },
-  { id: 'language-family', title: 'Language Family' }
+  { id: 'language-family', title: 'Language Family' },
+  { id: 'transformation-and-c', title: 'Conjunction ($\\wedge$C)' }
 ];
 
 const definitionLookup = new Map(definitions.map((definition) => [definition.id, definition]));
@@ -68,6 +69,19 @@ const byTitle = renderEntityLinks(
 );
 assertIncludes(byTitle, 'href="/about#language-family"', 'definition title should link to the matching definition id');
 assertIncludes(byTitle, '>Language Family<', 'definition title should render the canonical title');
+
+// Definition link labels can contain inline LaTeX and should render it instead of
+// exposing raw delimiters.
+const latexTitle = renderEntityLinks(
+  'See \\defref{transformation-and-c}.',
+  (id) => id,
+  undefined,
+  undefined,
+  resolveDefinitionRef
+);
+assertIncludes(latexTitle, 'href="/about#transformation-and-c"', 'latex definition title should link to /about#id');
+assertIncludes(latexTitle, 'katex', 'latex definition title should render KaTeX markup');
+assert.equal(latexTitle.includes('$\\wedge$C'), false, 'latex definition title should not expose raw math delimiters');
 
 // Missing references should stay visible instead of breaking rendering.
 const missing = renderEntityLinks(

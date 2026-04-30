@@ -12,30 +12,30 @@ export const CANONICAL_ORDER: Record<string, number> = {
 	'lang_3bebcab7': 1, // DNNF
 	'lang_1df07cc3': 2, // nFBDD
 	'lang_b13b0d78': 3, // SDNNF
-	'lang_6c130090': 4, // d-DNNF
-	'lang_d24efe0e': 5, // nOBDD
-	'lang_4e62a038': 6, // uFBDD
-	'lang_ea9b5299': 7, // d-SDNNF
-	'lang_981b62f0': 8, // dec-DNNF
-	'lang_684b1ca7': 9, // FBDD
-	'lang_c2df8c2b': 10, // uOBDD
-	'lang_1afefbe2': 11, // SDD
-	'lang_83e3b023': 12, // cSDD
-	'lang_0f27d539': 13, // dec-SDNNF
-	'lang_b9d72a7c': 14, // OBDD
-	'lang_89649e36': 15, // CNF
-	'lang_27fffab2': 16, // PI
-	'lang_3c803ba1': 17, // SDNNF_T
-	'lang_91f812d0': 18, // d-SDNNF_T
-	'lang_9c84a267': 19, // SDD_T
-	'lang_82fa749e': 20, // cSDD_T
-	'lang_4ae03bc8': 21, // dec-SDNNF_T
+	'lang_3c803ba1': 4, // SDNNF_T
+	'lang_6c130090': 5, // d-DNNF
+	'lang_d24efe0e': 6, // nOBDD
+	'lang_e827cf31': 7, // nOBDD_<
+	'lang_4e62a038': 8, // uFBDD
+	'lang_ea9b5299': 9, // d-SDNNF
+	'lang_91f812d0': 10, // d-SDNNF_T
+	'lang_981b62f0': 11, // dec-DNNF
+	'lang_684b1ca7': 12, // FBDD
+	'lang_c2df8c2b': 13, // uOBDD
+	'lang_43a33aec': 14, // uOBDD_<
+	'lang_1afefbe2': 15, // SDD
+	'lang_9c84a267': 16, // SDD_T
+	'lang_83e3b023': 17, // cSDD
+	'lang_82fa749e': 18, // cSDD_T
+	'lang_0f27d539': 19, // dec-SDNNF
+	'lang_4ae03bc8': 20, // dec-SDNNF_T
+	'lang_b9d72a7c': 21, // OBDD
 	'lang_d69995dd': 22, // OBDD_<
-	'lang_e827cf31': 23, // nOBDD_<
-	'lang_4c204bf3': 24, // DNF
-	'lang_6ae90adc': 25, // IP
-	'lang_e02902d0': 26, // MODS
-	'lang_43a33aec': 27 // uOBDD_<
+	'lang_89649e36': 23, // CNF
+	'lang_27fffab2': 24, // PI
+	'lang_4c204bf3': 25, // DNF
+	'lang_6ae90adc': 26, // IP
+	'lang_e02902d0': 27 // MODS
 };
 
 /**

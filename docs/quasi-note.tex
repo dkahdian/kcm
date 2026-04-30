@@ -29,9 +29,13 @@
 \newcommand{\size}{\operatorname{size}}
 \newcommand{\lw}{\operatorname{lw}}
 \newcommand{\OBDD}{\mathrm{OBDD}}
+\newcommand{\nOBDD}{\mathrm{nOBDD}}
+\newcommand{\uOBDD}{\mathrm{uOBDD}}
+\newcommand{\SDNNF}{\mathrm{SDNNF}}
+\newcommand{\dSDNNF}{\mathrm{d}\mbox{-}\mathrm{SDNNF}}
 \newcommand{\decSDNNF}{\mathrm{dec}\mbox{-}\mathrm{SDNNF}}
 
-\title{A Common-Order Quasipolynomial Simulation from dec-SDNNF to OBDD}
+\title{A Common-Order Quasipolynomial Simulation from SDNNF to nOBDD}
 \author{}
 \date{\today}
 
@@ -41,14 +45,14 @@
 \section{Purpose}
 
 This note records a small variant of the Bollig--Buttkus simulation of structured
-decision-DNNFs by OBDDs.  The usual simulation orients each vtree split
+DNNFs by nondeterministic OBDDs.  The usual simulation orients each vtree split
 using counts that depend on the input circuit.  That is enough for simulating one
 circuit, but it can produce different output variable orders for two circuits
 respecting the same vtree.
 
 The variant below fixes the orientation from the vtree alone.  Consequently,
 several circuits respecting the same finite vtree can be compiled into
-OBDDs using one common variable order, while preserving a quasipolynomial size
+nOBDDs using one common variable order, while preserving a quasipolynomial size
 bound.
 
 \section{Setup}
@@ -76,7 +80,7 @@ asymptotic size.
 
 \section{The Construction}
 
-Let $D$ be a normalized $\decSDNNF$ respecting $T$.  Literals, if present, are
+Let $D$ be a normalized $\SDNNF$ respecting $T$.  Literals, if present, are
 treated as decision nodes: a leaf $x$ tests $x$ and sends the $1$-edge to the
 $1$-sink and the $0$-edge to the $0$-sink; a leaf $\neg x$ does the reverse.
 
@@ -84,8 +88,8 @@ We first classify edges of $D$.  Let $g$ be an AND gate.  Its two inputs are
 separated by some split of $T$; one input uses variables from the light side of
 that split, and the other uses variables from the heavy side.  The edge from
 $g$ to the light-side input is a \emph{light edge}; the edge from $g$ to the
-heavy-side input is a \emph{heavy edge}.  All edges out of decision nodes are
-\emph{neutral edges}.
+heavy-side input is a \emph{heavy edge}.  Edges out of decision nodes and OR
+nodes are \emph{neutral edges}.
 
 The rest of this construction is identical to that of Beame; only the convention
 of "light" and "heavy" has been altered.
@@ -106,6 +110,7 @@ The labels of nodes in $F$ are as follows.
   \item If $u$ is a decision node labeled by $x$, then $(u,s)$ is a decision
   node labeled by $x$.
   \item If $u$ is an AND gate, then $(u,s)$ is an unlabeled no-op node.
+  \item If $u$ is an OR gate, then $(u,s)$ is an OR node.
   \item If $u$ is a $0$-sink, then $(u,s)$ is a $0$-sink.
   \item If $u$ is a $1$-sink and $s=\emptyset$, then $(u,s)$ is a $1$-sink.
   If $u$ is a $1$-sink and $s\neq\emptyset$, then $(u,s)$ is an unlabeled
@@ -143,13 +148,14 @@ Unlabeled no-op nodes can be contracted after the construction.  They are kept
 in the description because they make the bookkeeping transparent.
 
 After contracting the unlabeled no-op nodes, the only internal nodes left are
-decision nodes.  Thus the result is an FBDD. However, we can show that all paths
-respect the same order $\pi_X$, hence the result is an $OBDD_{\pi_X}$
+decision nodes and OR nodes.  Thus the result is a nondeterministic BDD. However,
+we can show that all paths respect the same order $\pi_X$, hence the result is
+an $\nOBDD_{\pi_X}$.
 
 \section{Why the Order is Common}
 
 \begin{lemma}[Order lemma]
-Let $D$ be a normalized $\decSDNNF$ respecting $T$.  The OBDD produced by the
+Let $D$ be a normalized $\SDNNF$ respecting $T$.  The nOBDD produced by the
 construction above respects the order $\pi_X$.
 \end{lemma}
 
@@ -160,16 +166,16 @@ placed before all variables in the heavy side of $t$ in $\pi_X$.  The simulation
 therefore evaluates the earlier block before the later block.
 
 Inside each block, the same argument applies recursively to lower vtree nodes.
-Decision gates do not change the vtree region in which the computation is
-located; they only move within the current region.  Hence along every accepting
-or rejecting computation path, variables are queried in increasing $\pi_X$ order,
-with variables absent from $D$ simply skipped.
+Decision gates and OR gates do not change the vtree region in which the
+computation is located; they only move within the current region.  Hence along
+every accepting or rejecting computation path, variables are queried in
+increasing $\pi_X$ order, with variables absent from $D$ simply skipped.
 \end{proof}
 
 \begin{corollary}[Same order for all circuits respecting the same tree]
-Let $D_1,\ldots,D_k$ be normalized $\decSDNNF$s respecting the
+Let $D_1,\ldots,D_k$ be normalized $\SDNNF$s respecting the
 same finite vtree $T$ over variables $X$.
-Then the construction compiles every $D_i$ into an $\OBDD$ respecting the same
+Then the construction compiles every $D_i$ into an $\nOBDD$ respecting the same
 variable order $\pi_X$.
 \end{corollary}
 
@@ -193,7 +199,7 @@ s is a set of at most $L$ light edges, we obtain the above.
 It remains only to bound $L$ for the vtree-based ordering.
 
 \begin{lemma}[Light edges halve vtree weight]
-For every normalized $\decSDNNF$ $D$ respecting $T$,
+For every normalized $\SDNNF$ $D$ respecting $T$,
 every directed source-to-sink path of $D$ contains at most
 $\lceil \log_2 |X| \rceil + 1$ light edges.
 \end{lemma}
@@ -224,9 +230,9 @@ so $L \leq \log_2 |X| + 1$.
 \end{proof}
 
 \begin{theorem}[Common-order simulation]
-Let $D_1,\ldots,D_k$ be normalized $\decSDNNF$ circuits respecting the same finite
+Let $D_1,\ldots,D_k$ be normalized $\SDNNF$ circuits respecting the same finite
 vtree $T$ over variables $X$.
-For each $i$, the construction above outputs an $\OBDD$ for $D_i$ respecting the
+For each $i$, the construction above outputs an $\nOBDD$ for $D_i$ respecting the
 same order $\pi_X$, of size
 \[
   O\!\left(N_iM_i^{\lceil \log_2 |X| \rceil + 1}\right),
@@ -237,17 +243,44 @@ where $N_i=\size(D_i)$ and $M_i$ is the number of AND gates of $D_i$.
 \begin{proof}
 The common-order claim is the corollary above.  The size claim is the standard
 copying bound $O(N_iM_i^L)$ together with the light-edge bound
-$L\leq \lceil \log_2 |X| \rceil+1$.  Because the input has only decision gates
-and AND gates, the output has only decision nodes after contracting no-op nodes,
-so it is an OBDD.
+$L\leq \lceil \log_2 |X| \rceil+1$.  After contracting no-op nodes, the output
+has only decision nodes, OR nodes, and sinks, so it is an nOBDD.
+\end{proof}
+
+\begin{corollary}[Deterministic inputs give unambiguous outputs]
+If each $D_i$ is a normalized $\dSDNNF$ respecting $T$, then the construction
+outputs $\uOBDD$s respecting the same order $\pi_X$ and satisfying the same
+quasipolynomial size bound.
+\end{corollary}
+
+\begin{proof}
+The common-order and size claims are exactly those of the theorem.  It remains
+only to check unambiguity.  The Bollig--Buttkus argument shows that, for this
+simulation, accepting paths of the output correspond to $1$-certificates of the
+input.  In a deterministic DNNF, every satisfying assignment has exactly one
+$1$-certificate.  Hence every satisfying assignment has at most one accepting
+path in the output nOBDD.
+\end{proof}
+
+\begin{corollary}[Decision inputs give deterministic outputs]
+If each $D_i$ is a normalized $\decSDNNF$ respecting $T$, then the construction
+outputs $\OBDD$s respecting the same order $\pi_X$ and satisfying the same
+quasipolynomial size bound.
+\end{corollary}
+
+\begin{proof}
+A decision structured DNNF can first be put in the equivalent form where each
+decision OR is represented as a decision node labeled by its tested variable.
+Then the simulation introduces no nondeterministic OR nodes.  After contracting
+no-op nodes, the output has only deterministic decision nodes and sinks.
 \end{proof}
 
 \begin{corollary}[Two size-$N$ circuits]
 If $D_1$ and $D_2$ both have size at most $N$, then
-Since $M_i, X\leq N$, both circuits compile to $\OBDD$s over one common order of
+Since $M_i, |X|\leq N$, both circuits compile to $\nOBDD$s over one common order of
 size
 \[
-  O(NN^{\log(N) + 1}) = O(N2^{\log(N)+1})
+  O(NN^{\log(N) + 1}) = N^{O(\log N)}
 \].
 
 \end{corollary}
@@ -257,8 +290,9 @@ size
 The original circuit-dependent orientation is useful because it can give a
 slightly sharper bound for one circuit.  The vtree leaf-count orientation trades
 that local sharpness for a global benefit: the output order depends only on the
-shared finite vtree.  For any fixed finite family of dec-SDNNF circuits
-respecting that vtree, this gives one common OBDD order and keeps the simulation
-quasipolynomial in the total input size.
+shared finite vtree.  For any fixed finite family of SDNNF circuits respecting
+that vtree, this gives one common nOBDD order and keeps the simulation
+quasipolynomial in the total input size.  Deterministic inputs give unambiguous
+nOBDDs, and decision inputs give OBDDs.
 
 \end{document}

@@ -17,7 +17,7 @@
   import { renderMathText, escapeHtml } from '$lib/utils/math-text.js';
   import { normalizeEdgePairs, buildSameLayerGroups, type EdgePair } from '$lib/utils/graph-layout.js';
 
-  const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions_v1';
+  const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions';
 
   let pluginsRegistered = false;
 
@@ -705,11 +705,11 @@
 
 <div class="kcm-graph-container">
   <div bind:this={graphContainer} class="w-full h-full"></div>
-  <!-- Y-axis overlay: Less succinct (top) to More succinct (bottom) -->
+  <!-- Y-axis overlay: More succinct (top) to Less succinct (bottom) -->
   <div class="y-axis" aria-hidden="true">
-    <div class="axis-label axis-label-top">Less succinct</div>
+    <div class="axis-label axis-label-top">More succinct</div>
     <div class="axis-line"></div>
-    <div class="axis-label axis-label-bottom">More succinct</div>
+    <div class="axis-label axis-label-bottom">Less succinct</div>
   </div>
   
   {#if showResetButton}

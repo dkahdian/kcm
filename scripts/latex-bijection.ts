@@ -815,7 +815,7 @@ function parseLatex(latexContent: string): ParsedClaim[] {
     const line = lines[i];
     
     // Check for derived marker
-    if (line.includes('% [DERIVED')) {
+    if (line.trimStart().startsWith('% [DERIVED')) {
       isDerived = true;
       i++;
       continue;

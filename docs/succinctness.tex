@@ -1,7 +1,7 @@
 % =============================
 % Knowledge Compilation Map - Succinctness Claims and Descriptions
 % Auto-generated from database.json
-% Generated: 2026-04-30T04:27:56.688Z
+% Generated: 2026-04-30T04:55:56.117Z
 % 
 % EDITING INSTRUCTIONS:
 % - Claim environments are auto-generated. Do NOT edit.
@@ -75,6 +75,20 @@
 \section{A. Amarilli and F. Capelli and M. Monet and P. Senellart, "Connecting Knowledge ...}
 % Reference ID: Amarilli_2018
 % =============================
+\begin{claim}
+\langref{d-SDNNF} is polynomial-time compilable to \langref{d-DNNF} \citet{Amarilli_2018}
+\end{claim}
+\begin{claimdescription}
+As defined by \citet{Amarilli_2018}, a \langref{d-SDNNF} is simply a structured \langref{d-DNNF}, so discarding the vtree completes the compilation.
+\end{claimdescription}
+
+\begin{claim}
+\langref{d-SDNNF} is polynomial-time compilable to \langref{SDNNF} \citet{Amarilli_2018}
+\end{claim}
+\begin{claimdescription}
+As defined by \citet{Amarilli_2018}, \langref{d-SDNNF} is exactly the subset of \langref{SDNNF} satisfying determinism, so compilation is trivial.
+\end{claimdescription}
+
 \begin{claim}
 \langref{d-SDNNF} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langref{uOBDD} \citet{Amarilli_2018,Bollig_2018,Beame_2015}
 \end{claim}
@@ -698,25 +712,6 @@ Shown by Corollary 3.5 of \citet{Beame_2013}.
 
 
 % =============================
-\section{K. Pipatsrisawat and A. Darwiche, "New Compilation Languages Based on Structured...}
-% Reference ID: Pipatsrisawat_2008
-% =============================
-\begin{claim}
-\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
-\end{claim}
-\begin{claimdescription}
-\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
-\end{claim}
-\begin{claimdescription}
-\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-
-% =============================
 \section{S. Bova and F. Capelli and S. Mengel and F. Slivovsky, "Knowledge Compilation Me...}
 % Reference ID: Bova_2016
 % =============================
@@ -790,6 +785,25 @@ Theorem 1 of \citet{Vinall-Smeeth_2024} proves that there are functions with str
 \end{claim}
 \begin{claimdescription}
 The Vinall-Smeeth construction gives small source circuits that are explicitly structured: for the hard unambiguous DNF $\psi'$, the proof fixes a vtree $T$ over $\operatorname{var}(\psi')$, compiles each term as a d-DNNF respecting $T$, and takes their deterministic disjunction. Thus the source side can be stated as \langfam{d-SDNNF}{T}. The lower bound is against every equivalent \langref{SDD}; since \langfam{SDD}{T} is a subfamily of \langref{SDD}, it also rules out every target vtree family member.
+\end{claimdescription}
+
+
+% =============================
+\section{K. Pipatsrisawat and A. Darwiche, "New Compilation Languages Based on Structured...}
+% Reference ID: Pipatsrisawat_2008
+% =============================
+\begin{claim}
+\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 

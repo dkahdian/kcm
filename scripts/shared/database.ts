@@ -4,6 +4,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import type {
   KCAdjacencyMatrix,
+  KCBatchClaim,
   KCDefinition,
   KCLanguage,
   KCReference,
@@ -27,6 +28,7 @@ export interface DatabaseSchema {
   metadata?: Record<string, unknown>;
   operations: Record<string, unknown>;
   operationLemmas?: unknown[];
+  batchClaims?: KCBatchClaim[];
 }
 
 export function loadDatabase(): DatabaseSchema {

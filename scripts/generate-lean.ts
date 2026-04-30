@@ -631,7 +631,7 @@ function main(): void {
       if (!opMap) continue;
       for (const [opCode, support] of Object.entries(opMap) as [string, KCOpSupport][]) {
         if (!support) continue;
-        if (!support.derived) {
+        if (!support.derived || support.batchId) {
           emitOpAxioms(emit, lang.id, opCode, support);
         } else {
           collectDerivedOpFacts(lang.id, opCode, support, derivedOps);
@@ -648,7 +648,7 @@ function main(): void {
       const opMap = lang.properties?.[mapKey];
       if (!opMap) continue;
       for (const [opCode, support] of Object.entries(opMap) as [string, KCOpSupport][]) {
-        if (!support || support.derived) continue;
+        if (!support || (support.derived && !support.batchId)) continue;
         if (support.complexity === 'poly') {
           const qName = opTheoremName(lang.id, opCode, 'quasi');
           if (!emittedNames.has(qName)) {
@@ -669,7 +669,7 @@ function main(): void {
       const opMap = lang.properties?.[mapKey];
       if (!opMap) continue;
       for (const [opCode, support] of Object.entries(opMap) as [string, KCOpSupport][]) {
-        if (!support || support.derived) continue;
+        if (!support || (support.derived && !support.batchId)) continue;
         if (support.complexity === 'no-quasi') {
           const npName = opTheoremName(lang.id, opCode, 'no_poly');
           if (!emittedNames.has(npName)) {

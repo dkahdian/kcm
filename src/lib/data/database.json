@@ -1,4 +1,66 @@
 {
+  "batchClaims": [
+    {
+      "id": "darwiche-and-c-clause-cnf-lower-bound",
+      "opType": "transformations",
+      "op": "AND_C",
+      "status": "no-quasi",
+      "languageIds": [
+        "lang_83e3b023",
+        "lang_ea9b5299",
+        "lang_4c204bf3",
+        "lang_3bebcab7",
+        "lang_684b1ca7",
+        "lang_1df07cc3",
+        "lang_d24efe0e",
+        "lang_1afefbe2",
+        "lang_b13b0d78",
+        "lang_4e62a038",
+        "lang_c2df8c2b",
+        "lang_b9d72a7c",
+        "lang_981b62f0",
+        "lang_0f27d539",
+        "lang_91f812d0",
+        "lang_9c84a267",
+        "lang_3c803ba1",
+        "lang_4ae03bc8",
+        "lang_82fa749e",
+        "lang_e827cf31",
+        "lang_43a33aec"
+      ],
+      "claimTemplate": "For each language $\\mathcal{L}$ in\n\\[\n\\{\n  \\langref{cSDD},\n  \\langref{d-SDNNF},\n  \\langfam{d-SDNNF}{T},\n  \\langref{DNF},\n  \\langref{DNNF},\n  \\langref{FBDD},\n  \\langref{nFBDD},\n  \\langref{nOBDD},\n  \\langref{SDD},\n  \\langfam{SDD}{T},\n  \\langref{SDNNF},\n  \\langfam{SDNNF}{T},\n  \\langref{uFBDD},\n  \\langref{uOBDD},\n  \\langref{OBDD},\n  \\langref{dec-DNNF},\n  \\langref{dec-SDNNF},\n  \\langfam{dec-SDNNF}{T},\n  \\langfam{cSDD}{T},\n  \\langfam{nOBDD}{<},\n  \\langfam{uOBDD}{<}\n\\},\n\\]\n$\\mathcal{L}$ supports Conjunction not in quasi-polynomial time \\citet{Darwiche_2002}.",
+      "descriptionTemplate": "In the language $\\mathcal{L}$, every clause has a polynomial-size representation. If $\\mathcal{L}$ supported $\\land$C, then every CNF could be compiled into $\\mathcal{L}$ by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{\\mathcal{L}}.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    },
+    {
+      "id": "darwiche-or-c-term-dnf-lower-bound",
+      "opType": "transformations",
+      "op": "OR_C",
+      "status": "no-quasi",
+      "languageIds": [
+        "lang_83e3b023",
+        "lang_ea9b5299",
+        "lang_684b1ca7",
+        "lang_c2df8c2b",
+        "lang_b9d72a7c",
+        "lang_981b62f0",
+        "lang_0f27d539",
+        "lang_91f812d0",
+        "lang_d69995dd",
+        "lang_9c84a267",
+        "lang_4ae03bc8",
+        "lang_82fa749e",
+        "lang_43a33aec"
+      ],
+      "claimTemplate": "For each language $\\mathcal{L}$ in\n\\[\n\\{\n  \\langref{cSDD},\n  \\langref{d-SDNNF},\n  \\langfam{d-SDNNF}{T},\n  \\langref{FBDD},\n  \\langfam{OBDD}{<},\n  \\langfam{SDD}{T},\n  \\langref{uOBDD},\n  \\langref{OBDD},\n  \\langref{dec-DNNF},\n  \\langref{dec-SDNNF},\n  \\langfam{dec-SDNNF}{T},\n  \\langfam{cSDD}{T},\n  \\langfam{uOBDD}{<}\n\\},\n\\]\n$\\mathcal{L}$ supports Disjunction not in quasi-polynomial time \\citet{Darwiche_2002}.",
+      "descriptionTemplate": "In the language $\\mathcal{L}$, every term has a polynomial-size representation. If $\\mathcal{L}$ supported $\\lor$C, then every DNF could be compiled into $\\mathcal{L}$ by disjoining the translated terms. This contradicts \\nedgeref{DNF}{\\mathcal{L}}.",
+      "refs": [
+        "Darwiche_2002"
+      ]
+    }
+  ],
   "languages": [
     {
       "id": "lang_89649e36",
@@ -358,20 +420,25 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2011",
+              "Darwiche_2002",
               "VanDenBroeck_2015",
-              "Amarilli_2018"
+              "Amarilli_2018",
+              "Bova_2016"
             ],
-            "description": "Any clause can be represented in \\langref{cSDD} because it has a polynomial-size OBDD representation, and every OBDD is already a canonical SDD \\citet{Darwiche_2011}. If \\langref{cSDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{cSDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_83e3b023} in quasipolynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{cSDD}, every clause has a polynomial-size representation. If \\langref{cSDD} supported $\\land$C, then every CNF could be compiled into \\langref{cSDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{cSDD} \\citet{Darwiche_2002,VanDenBroeck_2015,Amarilli_2018,Bova_2016}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2011",
+              "Darwiche_2002",
               "VanDenBroeck_2015",
               "Amarilli_2018"
             ],
-            "description": "Any term can be represented in \\langref{cSDD} because it has a polynomial-size OBDD representation, and every OBDD is already a canonical SDD \\citet{Darwiche_2011}. If \\langref{cSDD} supported $\\lor$C, then \\langref{DNF} could compile into \\langref{cSDD} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_83e3b023} in quasipolynomial time \\citet{VanDenBroeck_2015,Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{cSDD}, every term has a polynomial-size representation. If \\langref{cSDD} supported $\\lor$C, then every DNF could be compiled into \\langref{cSDD} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{cSDD} \\citet{VanDenBroeck_2015,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -780,16 +847,22 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Pipatsrisawat_2008"
+              "Darwiche_2002",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be trivially expressed as a \\langref{d-SDNNF} formula. If \\langref{d-SDNNF} satisfied $\\land$C, any \\langref{CNF} could be compiled to \\langref{d-SDNNF} in polytime. Since specific \\langref{CNF}s require exponential-size \\langref{d-SDNNF} representations (unconditionally), this is impossible (\\citet{Pipatsrisawat_2008}, Proposition 4)."
+            "description": "In the language \\langref{d-SDNNF}, every clause has a polynomial-size representation. If \\langref{d-SDNNF} supported $\\land$C, then every CNF could be compiled into \\langref{d-SDNNF} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{d-SDNNF} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Pipatsrisawat_2008"
+              "Darwiche_2002",
+              "Amarilli_2018"
             ],
-            "description": "Any term can be trivially expressed as a \\langref{d-SDNNF} formula. If \\langref{d-SDNNF} satisfied $\\lor$C, any \\langref{DNF} could be compiled to \\langref{d-SDNNF} in polytime. Since specific \\langref{DNF}s require exponential-size \\langref{d-SDNNF} representations (unconditionally), this is impossible (\\citet{Pipatsrisawat_2008}, Proposition 4)."
+            "description": "In the language \\langref{d-SDNNF}, every term has a polynomial-size representation. If \\langref{d-SDNNF} supported $\\lor$C, then every DNF could be compiled into \\langref{d-SDNNF} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{d-SDNNF} \\citet{Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -969,20 +1042,24 @@
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000",
-              "Pipatsrisawat_2008"
+              "Darwiche_2002",
+              "Pipatsrisawat_2008",
+              "Amarilli_2018"
             ],
-            "description": "Any term can be represented in \\langfam{d-SDNNF}{T} because it has a polynomial-size OBDD$_<$ representation, and OBDD$_<$ compiles to \\langfam{dec-SDNNF}{T}, which is a subset of \\langfam{d-SDNNF}{T} \\citet{Amarilli_2018,Wegener_2000}. If \\langfam{d-SDNNF}{T} supported $\\lor$C, then \\langref{DNF} could compile into \\langfam{d-SDNNF}{T} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_91f812d0} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, this is impossible."
+            "description": "In the language \\langfam{d-SDNNF}{T}, every term has a polynomial-size representation. If \\langfam{d-SDNNF}{T} supported $\\lor$C, then every DNF could be compiled into \\langfam{d-SDNNF}{T} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{d-SDNNF_T} \\citet{Pipatsrisawat_2008,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000",
-              "Pipatsrisawat_2008"
+              "Darwiche_2002",
+              "Pipatsrisawat_2008",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langfam{d-SDNNF}{T} because it has a polynomial-size OBDD$_<$ representation, and OBDD$_<$ compiles to \\langfam{dec-SDNNF}{T}, which is a subset of \\langfam{d-SDNNF}{T} \\citet{Amarilli_2018,Wegener_2000}. If \\langfam{d-SDNNF}{T} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{d-SDNNF}{T} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_91f812d0} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, this is impossible."
+            "description": "In the language \\langfam{d-SDNNF}{T}, every clause has a polynomial-size representation. If \\langfam{d-SDNNF}{T} supported $\\land$C, then every CNF could be compiled into \\langfam{d-SDNNF}{T} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{d-SDNNF_T} \\citet{Pipatsrisawat_2008,Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           }
         }
       },
@@ -1157,7 +1234,9 @@
             "refs": [
               "Darwiche_2002"
             ],
-            "description": "It is straightforward to convert a clause into an equivalent DNF formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent DNF formulas in quasi-polynomial space (CNF $\\not\\leq$ DNF), DNF does not satisfy $\\land$C (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "In the language \\langref{DNF}, every clause has a polynomial-size representation. If \\langref{DNF} supported $\\land$C, then every CNF could be compiled into \\langref{DNF} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{DNF} \\citet{Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "poly",
@@ -1417,9 +1496,12 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Bova_2016"
             ],
-            "description": "Any clause can be represented in \\langref{DNNF} because a clause is already a DNNF sentence: decomposability only constrains $\\land$-nodes, and a clause has no nontrivial $\\land$-node. If \\langref{DNNF} supported $\\land$C, then \\langref{CNF} could compile into \\langref{DNNF} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_3bebcab7} in quasipolynomial time \\citet{Darwiche_2002}, this is impossible."
+            "description": "In the language \\langref{DNNF}, every clause has a polynomial-size representation. If \\langref{DNNF} supported $\\land$C, then every CNF could be compiled into \\langref{DNNF} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{DNNF} \\citet{Darwiche_2002,Bova_2016}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "NOT_C": {
             "complexity": "no-quasi",
@@ -1625,14 +1707,19 @@
             "refs": [
               "Darwiche_2002"
             ],
-            "description": "It is straightforward to convert a clause into an equivalent FBDD formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent FBDD formulas in polynomial space (CNF $\\not\\leq$ FBDD), FBDD does not satisfy $\\land$C (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "In the language \\langref{FBDD}, every clause has a polynomial-size representation. If \\langref{FBDD} supported $\\land$C, then every CNF could be compiled into \\langref{FBDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{FBDD} \\citet{Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Wegener_1987"
             ],
-            "description": "It is straightforward to convert any term into an equivalent FBDD formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent FBDD formulas in polynomial space (DNF $\\not\\leq$ FBDD), FBDD does not satisfy $\\lor$C (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "In the language \\langref{FBDD}, every term has a polynomial-size representation. If \\langref{FBDD} supported $\\lor$C, then every DNF could be compiled into \\langref{FBDD} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{FBDD} \\citet{Darwiche_2002,Wegener_1987}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           }
         }
       },
@@ -2198,9 +2285,12 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
               "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{nFBDD} because every FBDD is already an nFBDD, and a clause has a polynomial-size FBDD representation \\citet{Amarilli_2018}. If \\langref{nFBDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{nFBDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_1df07cc3} in quasipolynomial time \\citet{Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{nFBDD}, every clause has a polynomial-size representation. If \\langref{nFBDD} supported $\\land$C, then every CNF could be compiled into \\langref{nFBDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{nFBDD} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "NOT_C": {
             "complexity": "no-poly-unknown-quasi",
@@ -2627,10 +2717,12 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000"
+              "Darwiche_2002",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{nOBDD} because every OBDD is already an nOBDD, and a clause has a polynomial-size OBDD representation \\citet{Amarilli_2018,Wegener_2000}. If \\langref{nOBDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{nOBDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_d24efe0e} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langref{nOBDD}, every clause has a polynomial-size representation. If \\langref{nOBDD} supported $\\land$C, then every CNF could be compiled into \\langref{nOBDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{nOBDD} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "NOT_C": {
             "complexity": "no-poly-unknown-quasi",
@@ -2817,9 +2909,13 @@
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Darwiche_2011",
+              "VanDenBroeck_2015"
             ],
-            "description": "It is straightforward to convert any term into an equivalent OBDD$_<$ formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent OBDD$_<$ formulas in polynomial space (DNF $\\not\\leq$ OBDD$_<$), OBDD$_<$ does not satisfy $\\lor$C (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "In the language \\langfam{OBDD}{<}, every term has a polynomial-size representation. If \\langfam{OBDD}{<} supported $\\lor$C, then every DNF could be compiled into \\langfam{OBDD}{<} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{OBDD_<} \\citet{Darwiche_2011,VanDenBroeck_2015}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           }
         }
       },
@@ -3178,21 +3274,21 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2011",
+              "Darwiche_2002",
               "VanDenBroeck_2015",
               "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{SDD} because it has a polynomial-size OBDD representation, and every OBDD is already a right-linear SDD \\citet{Darwiche_2011}. If \\langref{SDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{SDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_1afefbe2} in quasipolynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{SDD}, every clause has a polynomial-size representation. If \\langref{SDD} supported $\\land$C, then every CNF could be compiled into \\langref{SDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{SDD} \\citet{VanDenBroeck_2015,Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2011",
-              "VanDenBroeck_2015",
-              "Amarilli_2018"
+              "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_1afefbe2}{AND_C} in quasi-polynomial time \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}, and since Negation is supported in quasi-polynomial time, then Disjunction is unsupported by SDD in quasi-polynomial time as well.",
+            "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_1afefbe2}{AND_C} in quasi-polynomial time \\citet{Darwiche_2002}, and since Negation is supported in quasi-polynomial time, then Disjunction is unsupported by SDD in quasi-polynomial time as well.",
             "derivationOrder": 1352,
             "proofTrace": {
               "rule": "lemma-contrapositive",
@@ -3433,17 +3529,25 @@
             "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002",
-              "VanDenBroeck_2015"
+              "Darwiche_2011",
+              "VanDenBroeck_2015",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langfam{SDD}{T} because, on a right-linear vtree, \\langfam{SDD}{T} is exactly the OBDD fragment, and a clause has a polynomial-size OBDD$_<$ representation. If \\langfam{SDD}{T} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{SDD}{T} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_9c84a267} in quasipolynomial time \\citet{Darwiche_2002,VanDenBroeck_2015}, this is impossible."
+            "description": "In the language \\langfam{SDD}{T}, every clause has a polynomial-size representation. If \\langfam{SDD}{T} supported $\\land$C, then every CNF could be compiled into \\langfam{SDD}{T} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{SDD_T} \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002",
-              "VanDenBroeck_2015"
+              "Darwiche_2011",
+              "VanDenBroeck_2015",
+              "Amarilli_2018"
             ],
-            "description": "Any term can be represented in \\langfam{SDD}{T} because, on a right-linear vtree, \\langfam{SDD}{T} is exactly the OBDD fragment, and a term has a polynomial-size OBDD$_<$ representation. If \\langfam{SDD}{T} supported $\\lor$C, then \\langref{DNF} could compile into \\langfam{SDD}{T} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_9c84a267} in quasipolynomial time \\citet{Darwiche_2002,VanDenBroeck_2015}, this is impossible."
+            "description": "In the language \\langfam{SDD}{T}, every term has a polynomial-size representation. If \\langfam{SDD}{T} supported $\\lor$C, then every DNF could be compiled into \\langfam{SDD}{T} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{SDD_T} \\citet{Darwiche_2011,VanDenBroeck_2015,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "FO": {
             "complexity": "no-poly-unknown-quasi",
@@ -3634,7 +3738,9 @@
               "Darwiche_2002",
               "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{SDNNF} because it has a polynomial-size OBDD$_<$ representation, and OBDD$_<$ compiles to a right-linear structured form in polynomial time. If \\langref{SDNNF} supported $\\land$C, then \\langref{CNF} could compile into \\langref{SDNNF} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_b13b0d78} in quasipolynomial time \\citet{Darwiche_2002,Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{SDNNF}, every clause has a polynomial-size representation. If \\langref{SDNNF} supported $\\land$C, then every CNF could be compiled into \\langref{SDNNF} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{SDNNF} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "SFO": {
             "complexity": "poly",
@@ -3868,21 +3974,21 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000",
-              "Pipatsrisawat_2008"
+              "Darwiche_2002",
+              "Pipatsrisawat_2008",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langfam{SDNNF}{T} because it has a polynomial-size OBDD$_<$ representation, and OBDD$_<$ compiles to \\langfam{dec-SDNNF}{T}, which is a subset of \\langfam{SDNNF}{T} \\citet{Amarilli_2018,Wegener_2000}. If \\langfam{SDNNF}{T} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{SDNNF}{T} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_3c803ba1} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, this is impossible."
+            "description": "In the language \\langfam{SDNNF}{T}, every clause has a polynomial-size representation. If \\langfam{SDNNF}{T} supported $\\land$C, then every CNF could be compiled into \\langfam{SDNNF}{T} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{SDNNF_T} \\citet{Pipatsrisawat_2008,Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "NOT_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000",
-              "Pipatsrisawat_2008"
+              "Darwiche_2002"
             ],
             "derived": true,
-            "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{AND_C} in quasi-polynomial time \\citet{Amarilli_2018,Wegener_2000,Pipatsrisawat_2008}, and since Disjunction is supported in quasi-polynomial time, then Negation is unsupported by SDNNF$_T$ in quasi-polynomial time as well.",
+            "description": "Since Negation ∧ Disjunction implies Conjunction \\citet{Darwiche_2002}, and since \\nopref{lang_3c803ba1}{AND_C} in quasi-polynomial time \\citet{Darwiche_2002}, and since Disjunction is supported in quasi-polynomial time, then Negation is unsupported by SDNNF$_T$ in quasi-polynomial time as well.",
             "derivationOrder": 1361,
             "proofTrace": {
               "rule": "lemma-contrapositive",
@@ -4050,9 +4156,12 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
               "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{uFBDD} because every FBDD is already a uFBDD, and a clause has a polynomial-size FBDD representation \\citet{Amarilli_2018}. If \\langref{uFBDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{uFBDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_4e62a038} in quasipolynomial time \\citet{Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{uFBDD}, every clause has a polynomial-size representation. If \\langref{uFBDD} supported $\\land$C, then every CNF could be compiled into \\langref{uFBDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{uFBDD} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -4229,18 +4338,22 @@
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000"
+              "Darwiche_2002",
+              "Amarilli_2018"
             ],
-            "description": "Any term can be represented in \\langref{uOBDD} because every OBDD is already a \\langref{uOBDD}, and a term has a polynomial-size OBDD representation \\citet{Amarilli_2018,Wegener_2000}. If \\langref{uOBDD} supported $\\lor$C, then \\langref{DNF} could compile into \\langref{uOBDD} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_c2df8c2b} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langref{uOBDD}, every term has a polynomial-size representation. If \\langref{uOBDD} supported $\\lor$C, then every DNF could be compiled into \\langref{uOBDD} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{uOBDD} \\citet{Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000"
+              "Darwiche_2002",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{uOBDD} because every OBDD is already a uOBDD, and a clause has a polynomial-size OBDD representation \\citet{Amarilli_2018,Wegener_2000}. If \\langref{uOBDD} supported $\\land$C, then \\langref{CNF} could compile into \\langref{uOBDD} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_c2df8c2b} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langref{uOBDD}, every clause has a polynomial-size representation. If \\langref{uOBDD} supported $\\land$C, then every CNF could be compiled into \\langref{uOBDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{uOBDD} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -4422,16 +4535,24 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Darwiche_2011",
+              "VanDenBroeck_2015",
+              "Amarilli_2018"
             ],
-            "description": "It is straightforward to convert a clause into an equivalent OBDD formula in polynomial time. Since specific CNF formulas cannot be turned into equivalent OBDD formulas in polynomial space (CNF $\\not\\leq$ OBDD), OBDD does not satisfy $\\land$C (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "In the language \\langref{OBDD}, every clause has a polynomial-size representation. If \\langref{OBDD} supported $\\land$C, then every CNF could be compiled into \\langref{OBDD} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{OBDD} \\citet{Darwiche_2011,Darwiche_2002,VanDenBroeck_2015,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Darwiche_2002"
+              "Darwiche_2002",
+              "Devadas_1993"
             ],
-            "description": "It is straightforward to convert any term into an equivalent OBDD formula in polynomial time. Since specific DNF formulas cannot be turned into equivalent OBDD formulas in polynomial space (DNF $\\not\\leq$ OBDD), OBDD does not satisfy $\\lor$C (\\citet{Darwiche_2002}, Proposition 5.1)."
+            "description": "In the language \\langref{OBDD}, every term has a polynomial-size representation. If \\langref{OBDD} supported $\\lor$C, then every DNF could be compiled into \\langref{OBDD} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{OBDD} \\citet{Devadas_1993}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "OR_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -4610,11 +4731,12 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
               "Darwiche_2002",
-              "Beame_2013"
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langref{dec-DNNF} because it has a polynomial-size FBDD representation, and FBDD compiles to \\langref{dec-DNNF} in polynomial time \\citet{Amarilli_2018}. If \\langref{dec-DNNF} supported $\\land$C, then \\langref{CNF} could compile into \\langref{dec-DNNF} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_981b62f0} in quasipolynomial time \\citet{Amarilli_2018,Darwiche_2002,Beame_2013}, this is impossible."
+            "description": "In the language \\langref{dec-DNNF}, every clause has a polynomial-size representation. If \\langref{dec-DNNF} supported $\\land$C, then every CNF could be compiled into \\langref{dec-DNNF} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{dec-DNNF} \\citet{Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "OR_C": {
             "complexity": "no-quasi",
@@ -4623,7 +4745,9 @@
               "Beame_2013",
               "Amarilli_2018"
             ],
-            "description": "Any term can be represented in \\langref{dec-DNNF} because it has a polynomial-size FBDD representation, and FBDD compiles to \\langref{dec-DNNF} in polynomial time \\citet{Amarilli_2018}. If \\langref{dec-DNNF} supported $\\lor$C, then \\langref{DNF} could compile into \\langref{dec-DNNF} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_981b62f0} in quasipolynomial time \\citet{Darwiche_2002,Beame_2013,Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{dec-DNNF}, every term has a polynomial-size representation. If \\langref{dec-DNNF} supported $\\lor$C, then every DNF could be compiled into \\langref{dec-DNNF} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{dec-DNNF} \\citet{Darwiche_2002,Beame_2013,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -4765,10 +4889,11 @@
               "Bollig_2018",
               "Beame_2015",
               "Darwiche_2002",
+              "Fortune_1978",
               "Meinel_Theobald_1998"
             ],
             "derived": true,
-            "description": "\\edgeref{lang_0f27d539}{lang_b9d72a7c} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}, and \\opref{lang_b9d72a7c}{EQ} in quasi-polynomial time \\citet{Meinel_Theobald_1998,Darwiche_2002}. Therefore dec-SDNNF supports Equivalence in at most quasi-polynomial time.",
+            "description": "\\edgeref{lang_0f27d539}{lang_b9d72a7c} in quasi-polynomial time \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2002}, and \\opref{lang_b9d72a7c}{EQ} in quasi-polynomial time \\citet{Fortune_1978,Meinel_Theobald_1998,Darwiche_2002}. Therefore dec-SDNNF supports Equivalence in at most quasi-polynomial time.",
             "derivationOrder": 1407,
             "proofTrace": {
               "rule": "query-via-succinctness",
@@ -4802,18 +4927,30 @@
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
               "Amarilli_2018",
-              "Wegener_2000"
+              "Bollig_2018",
+              "Beame_2015",
+              "Darwiche_2011",
+              "VanDenBroeck_2015"
             ],
-            "description": "Any term can be represented in \\langref{dec-SDNNF} because it has a polynomial-size OBDD representation, and OBDD compiles to \\langref{dec-SDNNF} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If \\langref{dec-SDNNF} supported $\\lor$C, then \\langref{DNF} could compile into \\langref{dec-SDNNF} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_0f27d539} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langref{dec-SDNNF}, every term has a polynomial-size representation. If \\langref{dec-SDNNF} supported $\\lor$C, then every DNF could be compiled into \\langref{dec-SDNNF} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{dec-SDNNF} \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011,VanDenBroeck_2015}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
               "Amarilli_2018",
-              "Wegener_2000"
+              "Bollig_2018",
+              "Beame_2015",
+              "Darwiche_2011",
+              "VanDenBroeck_2015"
             ],
-            "description": "Any clause can be represented in \\langref{dec-SDNNF} because it has a polynomial-size OBDD representation, and OBDD compiles to \\langref{dec-SDNNF} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If \\langref{dec-SDNNF} supported $\\land$C, then \\langref{CNF} could compile into \\langref{dec-SDNNF} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_0f27d539} in quasipolynomial time \\citet{Amarilli_2018}, this is impossible."
+            "description": "In the language \\langref{dec-SDNNF}, every clause has a polynomial-size representation. If \\langref{dec-SDNNF} supported $\\land$C, then every CNF could be compiled into \\langref{dec-SDNNF} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{dec-SDNNF} \\citet{Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011,Darwiche_2002,VanDenBroeck_2015}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -4989,20 +5126,32 @@
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
+              "Oztok_2014",
               "Amarilli_2018",
-              "Wegener_2000",
-              "Oztok_2014"
+              "Bollig_2018",
+              "Beame_2015",
+              "Darwiche_2011",
+              "VanDenBroeck_2015"
             ],
-            "description": "Any term can be represented in \\langfam{dec-SDNNF}{T} because it has a polynomial-size OBDD$_<$ representation, and OBDD$_<$ compiles to \\langfam{dec-SDNNF}{T} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If \\langfam{dec-SDNNF}{T} supported $\\lor$C, then \\langref{DNF} could compile into \\langfam{dec-SDNNF}{T} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_4ae03bc8} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000,Oztok_2014}, this is impossible."
+            "description": "In the language \\langfam{dec-SDNNF}{T}, every term has a polynomial-size representation. If \\langfam{dec-SDNNF}{T} supported $\\lor$C, then every DNF could be compiled into \\langfam{dec-SDNNF}{T} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{dec-SDNNF_T} \\citet{Oztok_2014,Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011,VanDenBroeck_2015}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
+              "Oztok_2014",
               "Amarilli_2018",
-              "Wegener_2000",
-              "Oztok_2014"
+              "Bollig_2018",
+              "Beame_2015",
+              "Darwiche_2011",
+              "VanDenBroeck_2015"
             ],
-            "description": "Any clause can be represented in \\langfam{dec-SDNNF}{T} because it has a polynomial-size OBDD$_<$ representation, and OBDD$_<$ compiles to \\langfam{dec-SDNNF}{T} in polynomial time \\citet{Amarilli_2018,Wegener_2000}. If \\langfam{dec-SDNNF}{T} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{dec-SDNNF}{T} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_4ae03bc8} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000,Oztok_2014}, this is impossible."
+            "description": "In the language \\langfam{dec-SDNNF}{T}, every clause has a polynomial-size representation. If \\langfam{dec-SDNNF}{T} supported $\\land$C, then every CNF could be compiled into \\langfam{dec-SDNNF}{T} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{dec-SDNNF_T} \\citet{Oztok_2014,Amarilli_2018,Bollig_2018,Beame_2015,Darwiche_2011,Darwiche_2002,VanDenBroeck_2015}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           }
         }
       },
@@ -5195,9 +5344,13 @@
             "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002",
-              "VanDenBroeck_2015"
+              "Darwiche_2011",
+              "VanDenBroeck_2015",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langfam{cSDD}{T} because, on a right-linear vtree, \\langfam{cSDD}{T} is exactly the canonical OBDD fragment, and a clause has a polynomial-size OBDD$_<$ representation. If \\langfam{cSDD}{T} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{cSDD}{T} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_82fa749e} in quasipolynomial time \\citet{Darwiche_2002,VanDenBroeck_2015}, this is impossible."
+            "description": "In the language \\langfam{cSDD}{T}, every clause has a polynomial-size representation. If \\langfam{cSDD}{T} supported $\\land$C, then every CNF could be compiled into \\langfam{cSDD}{T} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{cSDD_T} \\citet{Darwiche_2011,Darwiche_2002,VanDenBroeck_2015,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "AND_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -5210,9 +5363,12 @@
             "complexity": "no-quasi",
             "refs": [
               "Darwiche_2002",
+              "Darwiche_2011",
               "VanDenBroeck_2015"
             ],
-            "description": "Any term can be represented in \\langfam{cSDD}{T} because, on a right-linear vtree, \\langfam{cSDD}{T} is exactly the canonical OBDD fragment, and a term has a polynomial-size OBDD$_<$ representation. If \\langfam{cSDD}{T} supported $\\lor$C, then \\langref{DNF} could compile into \\langfam{cSDD}{T} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_82fa749e} in quasipolynomial time \\citet{Darwiche_2002,VanDenBroeck_2015}, this is impossible."
+            "description": "In the language \\langfam{cSDD}{T}, every term has a polynomial-size representation. If \\langfam{cSDD}{T} supported $\\lor$C, then every DNF could be compiled into \\langfam{cSDD}{T} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{cSDD_T} \\citet{Darwiche_2011,VanDenBroeck_2015}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "OR_BC": {
             "complexity": "no-poly-unknown-quasi",
@@ -5402,10 +5558,13 @@
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
+              "Darwiche_2002",
               "Amarilli_2018",
-              "Wegener_2000"
+              "Pipatsrisawat_2008"
             ],
-            "description": "Any clause can be represented in \\langfam{nOBDD}{<} because OBDD$_<$ is a special case of \\langfam{nOBDD}{<}, and a clause has a polynomial-size OBDD$_<$ representation \\citet{Wegener_2000}. If \\langfam{nOBDD}{<} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{nOBDD}{<} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_e827cf31} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langfam{nOBDD}{<}, every clause has a polynomial-size representation. If \\langfam{nOBDD}{<} supported $\\land$C, then every CNF could be compiled into \\langfam{nOBDD}{<} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{nOBDD_<} \\citet{Amarilli_2018,Pipatsrisawat_2008,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           },
           "NOT_C": {
             "complexity": "no-poly-unknown-quasi",
@@ -5581,18 +5740,24 @@
           "OR_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000"
+              "Darwiche_2002",
+              "Wegener_2000",
+              "Amarilli_2018"
             ],
-            "description": "Any term can be represented in \\langfam{uOBDD}{<} because OBDD$_<$ is a special case of \\langfam{uOBDD}{<}, and a term has a polynomial-size OBDD$_<$ representation \\citet{Wegener_2000}. If \\langfam{uOBDD}{<} supported $\\lor$C, then \\langref{DNF} could compile into \\langfam{uOBDD}{<} by disjoining all terms. Since \\nedgeref{lang_4c204bf3}{lang_43a33aec} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langfam{uOBDD}{<}, every term has a polynomial-size representation. If \\langfam{uOBDD}{<} supported $\\lor$C, then every DNF could be compiled into \\langfam{uOBDD}{<} by disjoining the translated terms. This contradicts \\nedgeref{DNF}{uOBDD_<} \\citet{Wegener_2000,Amarilli_2018}.",
+            "derived": true,
+            "batchId": "darwiche-or-c-term-dnf-lower-bound"
           },
           "AND_C": {
             "complexity": "no-quasi",
             "refs": [
-              "Amarilli_2018",
-              "Wegener_2000"
+              "Darwiche_2002",
+              "Wegener_2000",
+              "Amarilli_2018"
             ],
-            "description": "Any clause can be represented in \\langfam{uOBDD}{<} because OBDD$_<$ is a special case of \\langfam{uOBDD}{<}, and a clause has a polynomial-size OBDD$_<$ representation \\citet{Wegener_2000}. If \\langfam{uOBDD}{<} supported $\\land$C, then \\langref{CNF} could compile into \\langfam{uOBDD}{<} by conjoining all clauses. Since \\nedgeref{lang_89649e36}{lang_43a33aec} in quasipolynomial time \\citet{Amarilli_2018,Wegener_2000}, this is impossible."
+            "description": "In the language \\langfam{uOBDD}{<}, every clause has a polynomial-size representation. If \\langfam{uOBDD}{<} supported $\\land$C, then every CNF could be compiled into \\langfam{uOBDD}{<} by conjoining the translated clauses. This contradicts \\nedgeref{CNF}{uOBDD_<} \\citet{Wegener_2000,Amarilli_2018,Darwiche_2002}.",
+            "derived": true,
+            "batchId": "darwiche-and-c-clause-cnf-lower-bound"
           }
         }
       },
@@ -5733,16 +5898,16 @@
       "bibtex": "@article{Devadas_1993,\n  title={Comparing two-level and ordered binary decision diagram representations of logic functions},\n  author={Devadas, Srinivas},\n  journal={IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},\n  volume={12},\n  number={5},\n  pages={722--723},\n  year={1993},\n  publisher={IEEE},\n  doi={10.1109/43.277617}\n}"
     },
     {
+      "id": "Fortune_1978",
+      "bibtex": "@inproceedings{Fortune_1978,\n  author = {Fortune, Steven and Hopcroft, John E. and Schmidt, Erik Meineche},\n  title = {The Complexity of Equivalence and Containment for Free Single Variable Program Schemes},\n  booktitle = {Automata, Languages and Programming},\n  series = {Lecture Notes in Computer Science},\n  volume = {62},\n  pages = {227--240},\n  publisher = {Springer},\n  year = {1978},\n  doi = {10.1007/3-540-08860-1_17}\n}",
+      "title": "S. Fortune and J. E. Hopcroft and E. M. Schmidt, \"The Complexity of Equivalence and Containment for Free Single Variable Program Schemes\", Automata, Languages and Programming, vol. 62, pp. 227–240, 1978.",
+      "href": "https://doi.org/10.1007/3-540-08860-1_17"
+    },
+    {
       "id": "Gergov_1994",
       "bibtex": "@ARTICLE{Gergov_1994,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197-1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}",
       "title": "J. Gergov and C. Meinel, \"Efficient Boolean manipulation with OBDD's can be extended to FBDD's\", IEEE Transactions on Computers, vol. 43, pp. 1197-1209, 1994.",
       "href": "https://doi.org/10.1109/12.324545"
-    },
-    {
-      "id": "Fortune_1978",
-      "bibtex": "@inproceedings{Fortune_1978,\n  author = {Fortune, Steven and Hopcroft, John E. and Schmidt, Erik Meineche},\n  title = {The Complexity of Equivalence and Containment for Free Single Variable Program Schemes},\n  booktitle = {Automata, Languages and Programming},\n  series = {Lecture Notes in Computer Science},\n  volume = {62},\n  pages = {227--240},\n  publisher = {Springer},\n  year = {1978},\n  doi = {10.1007/3-540-08860-1_17}\n}",
-      "title": "S. Fortune, J. E. Hopcroft and E. M. Schmidt, \"The Complexity of Equivalence and Containment for Free Single Variable Program Schemes\", Automata, Languages and Programming, LNCS 62, pp. 227-240, 1978.",
-      "href": "https://doi.org/10.1007/3-540-08860-1_17"
     },
     {
       "id": "Gogic_1995",

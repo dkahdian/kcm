@@ -120,6 +120,8 @@ export interface KCOpSupport {
   description?: string;
   /** True if this operation support was inferred by the propagator rather than manually authored */
   derived?: boolean;
+  /** ID of the authored batch claim that generated this operation support entry. */
+  batchId?: string;
   /** Global derivation order for Lean proof generation (lower = derived earlier). Undefined for non-derived. */
   derivationOrder?: number;
   /** Structured proof trace for Lean code generation */
@@ -128,6 +130,22 @@ export interface KCOpSupport {
   dimmed?: boolean;
   /** True if this cell should be highlighted as explicit (set by implicitEdgeTreatment filter). */
   explicit?: boolean;
+}
+
+/**
+ * A human-authored grouped operation claim, expanded into ordinary derived
+ * operation support entries before propagation.
+ */
+export interface KCBatchClaim {
+  id: string;
+  opType: 'queries' | 'transformations';
+  op: string;
+  status: string;
+  caveat?: string;
+  languageIds: string[];
+  claimTemplate: string;
+  descriptionTemplate: string;
+  refs: string[];
 }
 
 /**

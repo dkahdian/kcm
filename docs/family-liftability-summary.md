@@ -1,10 +1,5 @@
 Family-Level Liftability Summary (2026-04-30)
 
-Scope:
-- Succinctness results only.
-- This file records family-level duals that were actually added or promoted during the family-lift cleanup.
-- Already-present family duals, identity duals, and merely-derived consequences are omitted.
-
 Lifted results added explicitly:
 
 | Union-level source result | Added family-level result | Status | Main justification |
@@ -23,8 +18,3 @@ Family subset edges added explicitly:
 | --- | --- | --- | --- |
 | OBDD -> uOBDD | OBDD_< -> uOBDD_< | poly | A deterministic fixed-order OBDD is an unambiguous fixed-order OBDD under the same order. |
 | uOBDD -> nOBDD | uOBDD_< -> nOBDD_< | poly | An unambiguous fixed-order OBDD is a nondeterministic fixed-order OBDD under the same order. |
-
-Related cleanup:
-- The suspicious SDNNF_T -> nOBDD_< and d-SDNNF_T -> uOBDD_< claims were restored only after being justified by the common-order argument in quasi-note.tex.
-- Propagatable union-level claims were purged only when the family-level result is stronger and the union-level result follows by the family-to-union inclusion.
-- The parser bug that treated the generated header's literal text `% [DERIVED` as an actual derived marker was fixed; this was causing the first direct claim in succinctness.tex to be skipped and then regenerated as derived.

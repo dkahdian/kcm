@@ -191,9 +191,8 @@ export function describePath(pathIds: string[], matrix: KCAdjacencyMatrix): stri
     const toIdx = languageIds.indexOf(toId);
     const relation = matrix.matrix[fromIdx]?.[toIdx];
     const status = relation?.status ?? 'unknown';
-    const refs = relation?.refs ?? [];
     const caveat = relation?.caveat;
-    parts.push(`\\edgeref{${fromId}}{${toId}} ${phraseForStatus(status)}${formatInlineCaveat(caveat)}${formatCitations(refs)}.`);
+    parts.push(`\\edgeref{${fromId}}{${toId}} ${phraseForStatus(status)}${formatInlineCaveat(caveat)}.`);
   }
   return parts.join(' ');
 }
@@ -206,17 +205,16 @@ export function formatContradictingPremise(
   srcId: string,
   tgtId: string,
   status: string,
-  caveat: string | undefined,
-  refs: string[]
+  caveat: string | undefined
 ): string {
   switch (status) {
     case 'no-poly-quasi':
     case 'no-poly-unknown-quasi':
-      return `\\nedgeref{${srcId}}{${tgtId}} in polynomial time${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
+      return `\\nedgeref{${srcId}}{${tgtId}} in polynomial time${formatInlineCaveat(caveat)}`;
     case 'no-quasi':
-      return `\\nedgeref{${srcId}}{${tgtId}} in quasi-polynomial time${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
+      return `\\nedgeref{${srcId}}{${tgtId}} in quasi-polynomial time${formatInlineCaveat(caveat)}`;
     default:
-      return `${idToName(srcId)} and ${idToName(tgtId)} have an incompatible relationship${formatInlineCaveat(caveat)}${formatCitations(refs)}`;
+      return `${idToName(srcId)} and ${idToName(tgtId)} have an incompatible relationship${formatInlineCaveat(caveat)}`;
   }
 }
 

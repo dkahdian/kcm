@@ -15,7 +15,6 @@ import {
   ensurePath,
   phraseForStatus,
   formatContradictingPremise,
-  formatCitations,
   formatInlineCaveat,
   collectCaveatsUnion,
   describePath,
@@ -307,7 +306,6 @@ export function tryDowngrade(
     const endIdx = languageIds.indexOf(pathEnd);
     const actualRelation = adjacencyMatrix.matrix[startIdx]?.[endIdx];
     const actualStatus = actualRelation?.status ?? 'unknown';
-    const actualRefs = actualRelation?.refs ?? [];
     const actualCaveat = actualRelation?.caveat;
 
     // Build premises: existing path edges (excluding the tested edge), each with inline caveats
@@ -321,13 +319,12 @@ export function tryDowngrade(
       const toIdx = languageIds.indexOf(toId);
       const edgeRelation = adjacencyMatrix.matrix[fromIdx]?.[toIdx];
       const edgeStatus = edgeRelation?.status ?? 'unknown';
-      const edgeRefs = edgeRelation?.refs ?? [];
       const edgeCaveat = edgeRelation?.caveat;
-      premises.push(`\\edgeref{${fromId}}{${toId}} ${phraseForStatus(edgeStatus)}${formatInlineCaveat(edgeCaveat)}${formatCitations(edgeRefs)}`);
+      premises.push(`\\edgeref{${fromId}}{${toId}} ${phraseForStatus(edgeStatus)}${formatInlineCaveat(edgeCaveat)}`);
     }
 
     // State the contradicting fact as a premise with its own inline caveat
-    premises.push(formatContradictingPremise(pathStart, pathEnd, actualStatus, actualCaveat, actualRefs));
+    premises.push(formatContradictingPremise(pathStart, pathEnd, actualStatus, actualCaveat));
 
     const premisesPart = premises.join('. ') + '. ';
     const triedPhrase = phraseForStatus(triedStatus);

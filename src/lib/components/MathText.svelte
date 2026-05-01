@@ -10,8 +10,9 @@
   } from '$lib/utils/math-text';
   import { getGlobalRefNumber } from '$lib/data/references.js';
   import { idToName, nameToId } from '$lib/utils/language-id.js';
-  import { QUERIES, TRANSFORMATIONS } from '$lib/data/operations.js';
+  import { QUERIES, TRANSFORMATIONS, displayCodeToSafeKey } from '$lib/data/operations.js';
   import { initialGraphData } from '$lib/data/index.js';
+  import type { EntityRefResolver } from '$lib/utils/math-text';
 
   function opCodeToLabel(code: string): string {
     return QUERIES[code]?.label ?? TRANSFORMATIONS[code]?.label ?? code;
@@ -20,6 +21,44 @@
   type DefinitionRefResolution = { id: string; title: string; resolved: boolean };
   const definitionById = new Map((initialGraphData.definitions ?? []).map((d) => [d.id, d]));
   const definitionByTitle = new Map((initialGraphData.definitions ?? []).map((d) => [d.title.toLowerCase(), d]));
+  const languageById = new Map(initialGraphData.languages.map((language) => [language.id, language]));
+
+  function uniqueRefs(...refLists: Array<string[] | undefined>): string[] {
+    const refs = new Set<string>();
+    for (const refList of refLists) {
+      for (const ref of refList ?? []) {
+        if (ref) refs.add(ref);
+      }
+    }
+    return Array.from(refs);
+  }
+
+  const entityRefResolver: EntityRefResolver = {
+    edgeRefs(sourceId: string, targetId: string) {
+      const { adjacencyMatrix } = initialGraphData;
+      const sourceIdx = adjacencyMatrix.indexByLanguage[sourceId];
+      const targetIdx = adjacencyMatrix.indexByLanguage[targetId];
+      if (sourceIdx === undefined || targetIdx === undefined) return [];
+      const relation = adjacencyMatrix.matrix[sourceIdx]?.[targetIdx];
+      if (!relation) return [];
+      return uniqueRefs(
+        relation.refs,
+        relation.noPolyDescription?.refs,
+        relation.quasiDescription?.refs
+      );
+    },
+    opRefs(languageId: string, opCode: string) {
+      const language = languageById.get(languageId);
+      if (!language) return [];
+      const safeCode = displayCodeToSafeKey(opCode);
+      const support =
+        language.properties?.queries?.[safeCode] ??
+        language.properties?.queries?.[opCode] ??
+        language.properties?.transformations?.[safeCode] ??
+        language.properties?.transformations?.[opCode];
+      return uniqueRefs(support?.refs);
+    }
+  };
 
   function resolveDefinitionRef(ref: string): DefinitionRefResolution {
     const normalized = ref.trim();
@@ -87,12 +126,12 @@
       html = renderLatexTextFormatting(html);
     }
     
-    if (containsCitations(text ?? '')) {
-      html = renderTextWithCitations(html, getGlobalRefNumber);
-    }
-    
     if (containsEntityLinks(text ?? '')) {
-      html = renderEntityLinks(html, idToName, opCodeToLabel, nameToId, resolveDefinitionRef);
+      html = renderEntityLinks(html, idToName, opCodeToLabel, nameToId, resolveDefinitionRef, entityRefResolver);
+    }
+
+    if (containsCitations(html)) {
+      html = renderTextWithCitations(html, getGlobalRefNumber);
     }
     
     return html;

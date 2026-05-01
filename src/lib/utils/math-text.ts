@@ -17,6 +17,11 @@ const TEXTIT_PATTERN = /\\textit\{([^}]+)\}/g;
 const TEXTBF_PATTERN = /\\textbf\{([^}]+)\}/g;
 const TEXTTT_PATTERN = /\\texttt\{([^}]+)\}/g;
 
+export interface EntityRefResolver {
+  edgeRefs?: (sourceId: string, targetId: string) => string[];
+  opRefs?: (languageId: string, opCode: string) => string[];
+}
+
 /**
  * LRU-style render cache for renderMathText results.
  * Avoids re-running KaTeX for identical input strings (e.g., the same
@@ -275,6 +280,31 @@ function normalizeLangRefArg(ref: string): string {
     .replace(/\s+/g, ' ');
 }
 
+function uniqueRefs(refs: string[] | undefined): string[] {
+  return [...new Set((refs ?? []).filter(Boolean))];
+}
+
+function immediatelyCitedRefs(fullText: string, offset: number, matchLength: number): Set<string> {
+  const match = /^\s*\\cite[tp]?(?:\[[^\]]*\]){0,2}\{([^}]*)\}/.exec(
+    fullText.slice(offset + matchLength)
+  );
+  if (!match) return new Set();
+  return new Set(match[1].split(',').map((ref) => ref.trim()).filter(Boolean));
+}
+
+function entityCitationSuffix(
+  refs: string[] | undefined,
+  fullText: string,
+  offset: number,
+  matchLength: number
+): string {
+  const unique = uniqueRefs(refs);
+  const alreadyCited = immediatelyCitedRefs(fullText, offset, matchLength);
+  const missing = unique.filter((ref) => !alreadyCited.has(ref));
+  if (missing.length === 0) return '';
+  return ` \\citet{${missing.join(',')}}`;
+}
+
 /**
  * Replace entity link commands with clickable <a> elements.
  * 
@@ -290,7 +320,8 @@ export function renderEntityLinks(
   idToName: (id: string) => string,
   opCodeToLabel?: (code: string) => string,
   nameToId?: (name: string) => string | undefined,
-  definitionRefResolver?: (ref: string) => { id: string; title: string; resolved: boolean }
+  definitionRefResolver?: (ref: string) => { id: string; title: string; resolved: boolean },
+  entityRefResolver?: EntityRefResolver
 ): string {
   let result = html;
 
@@ -351,7 +382,7 @@ export function renderEntityLinks(
   });
 
   // Replace \edgeref{srcRef}{tgtRef}
-  result = result.replace(EDGEREF_PATTERN, (_match, srcRef: string, tgtRef: string) => {
+  result = result.replace(EDGEREF_PATTERN, (match: string, srcRef: string, tgtRef: string, offset: number, fullText: string) => {
     const src = resolveLang(srcRef);
     const tgt = resolveLang(tgtRef);
     const labelHtml = `${renderNameHtml(src.name)} compiles to ${renderNameHtml(tgt.name)}`;
@@ -360,11 +391,12 @@ export function renderEntityLinks(
     }
     const safeSrc = escapeHtml(src.id);
     const safeTgt = escapeHtml(tgt.id);
-    return `<a class="entity-link edge-link" href="/#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
+    const citation = entityCitationSuffix(entityRefResolver?.edgeRefs?.(src.id, tgt.id), fullText, offset, match.length);
+    return `<a class="entity-link edge-link" href="/#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>${citation}`;
   });
 
   // Replace \nedgeref{srcRef}{tgtRef} (negative edge: "cannot compile to")
-  result = result.replace(NEDGEREF_PATTERN, (_match, srcRef: string, tgtRef: string) => {
+  result = result.replace(NEDGEREF_PATTERN, (match: string, srcRef: string, tgtRef: string, offset: number, fullText: string) => {
     const src = resolveLang(srcRef);
     const tgt = resolveLang(tgtRef);
     const labelHtml = `${renderNameHtml(src.name)} cannot compile to ${renderNameHtml(tgt.name)}`;
@@ -373,11 +405,12 @@ export function renderEntityLinks(
     }
     const safeSrc = escapeHtml(src.id);
     const safeTgt = escapeHtml(tgt.id);
-    return `<a class="entity-link edge-link" href="/#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>`;
+    const citation = entityCitationSuffix(entityRefResolver?.edgeRefs?.(src.id, tgt.id), fullText, offset, match.length);
+    return `<a class="entity-link edge-link" href="/#edge/${safeSrc}/${safeTgt}" data-entity-type="edge" data-source-id="${safeSrc}" data-target-id="${safeTgt}">${labelHtml}</a>${citation}`;
   });
 
   // Replace \opref{langRef}{opCode}
-  result = result.replace(OPREF_PATTERN, (_match, langRef: string, opCode: string) => {
+  result = result.replace(OPREF_PATTERN, (match: string, langRef: string, opCode: string, offset: number, fullText: string) => {
     const lang = resolveLang(langRef);
     const opLabel = opCodeToLabel ? opCodeToLabel(opCode) : opCode;
     const labelHtml = `${renderNameHtml(lang.name)} supports ${escapeHtml(opLabel)}`;
@@ -386,11 +419,12 @@ export function renderEntityLinks(
     }
     const safeId = escapeHtml(lang.id);
     const safeCode = escapeHtml(opCode);
-    return `<a class="entity-link op-link" href="/#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
+    const citation = entityCitationSuffix(entityRefResolver?.opRefs?.(lang.id, opCode), fullText, offset, match.length);
+    return `<a class="entity-link op-link" href="/#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>${citation}`;
   });
 
   // Replace \nopref{langRef}{opCode} (negative op: "is unsupported by")
-  result = result.replace(NOPREF_PATTERN, (_match, langRef: string, opCode: string) => {
+  result = result.replace(NOPREF_PATTERN, (match: string, langRef: string, opCode: string, offset: number, fullText: string) => {
     const lang = resolveLang(langRef);
     const opLabel = opCodeToLabel ? opCodeToLabel(opCode) : opCode;
     const labelHtml = `${escapeHtml(opLabel)} is unsupported by ${renderNameHtml(lang.name)}`;
@@ -399,7 +433,8 @@ export function renderEntityLinks(
     }
     const safeId = escapeHtml(lang.id);
     const safeCode = escapeHtml(opCode);
-    return `<a class="entity-link op-link" href="/#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>`;
+    const citation = entityCitationSuffix(entityRefResolver?.opRefs?.(lang.id, opCode), fullText, offset, match.length);
+    return `<a class="entity-link op-link" href="/#op/${safeId}/${safeCode}" data-entity-type="op" data-lang-id="${safeId}" data-op-code="${safeCode}">${labelHtml}</a>${citation}`;
   });
 
   return result;

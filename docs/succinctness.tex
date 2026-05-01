@@ -188,6 +188,13 @@ Fix any variable order $<$. Each term of a \langref{DNF} can be represented as a
 \end{claimdescription}
 
 \begin{claim}
+\langref{DNNF} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langref{nFBDD} \citet{Bodlaender_1993}
+\end{claim}
+\begin{claimdescription}
+Section 5 of \citet{Bodlaender_1993} extends the compilation of \langref{dec-DNNF}s into \langref{FBDD}s (shown in \citet{Beame_2013}) to show that \langref{DNNF} can be quasi-polynomial-time compiled into \langref{nFBDD}.
+\end{claimdescription}
+
+\begin{claim}
 \langref{FBDD} is polynomial-time compilable to \langref{dec-DNNF} \citet{Amarilli_2018}
 \end{claim}
 \begin{claimdescription}
@@ -415,13 +422,6 @@ It is well-known that some \langref{DNF} formulas (i.e. the parity function $PAR
 \end{claimdescription}
 
 \begin{claim}
-\langref{DNNF} has unknown polynomial-time (but has quasi-polynomial-time) compilation to \langref{nFBDD} \citet{Bodlaender_1993}
-\end{claim}
-\begin{claimdescription}
-Section 5 of \citet{Bodlaender_1993} extends the compilation of \langref{dec-DNNF}s into \langref{FBDD}s (shown in \citet{Beame_2013}) to show that \langref{DNNF} can be quasi-polynomial-time compiled into \langref{nFBDD}.
-\end{claimdescription}
-
-\begin{claim}
 \langref{DNNF} is polynomial-time compilable to \langref{NNF} \citet{Darwiche_2002}
 \end{claim}
 \begin{claimdescription}
@@ -634,6 +634,49 @@ The weighted sum function $WS_n$ can be represented by SDDs of size $O(n^3)$ res
 
 
 % =============================
+\section{P. Beame and J. Li and S. Roy and D. Suciu, "Model Counting of Query Expressions...}
+% Reference ID: Beame_2013
+% =============================
+\begin{claim}
+\langref{d-DNNF} is not quasi-polynomial-time compilable to \langref{dec-DNNF} \citet{Beame_2013}
+\end{claim}
+\begin{claimdescription}
+Shown by Corollary 3.5 of \citet{Beame_2013}.
+\end{claimdescription}
+
+
+% =============================
+\section{K. Pipatsrisawat and A. Darwiche, "New Compilation Languages Based on Structured...}
+% Reference ID: Pipatsrisawat_2008
+% =============================
+\begin{claim}
+\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+\begin{claim}
+\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
+\end{claim}
+\begin{claimdescription}
+\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+
+% =============================
+\section{U. Oztok and A. Darwiche, "On Compiling CNF into Decision-DNNF", International C...}
+% Reference ID: Oztok_2014
+% =============================
+\begin{claim}
+\langfam{dec-SDNNF}{T} is polynomial-time compilable to \langref{dec-SDNNF} \citet{Oztok_2014}
+\end{claim}
+\begin{claimdescription}
+\langref{dec-SDNNF} is the union of fixed-vtree \langfam{dec-SDNNF}{T} languages. Hence any fixed-family formula is already a \langref{dec-SDNNF} formula, so the compilation is trivial and polynomial-time.
+\end{claimdescription}
+
+
+% =============================
 \section{G. Van den Broeck and A. Darwiche, "On the Role of Canonicity in Knowledge Compi...}
 % Reference ID: VanDenBroeck_2015
 % =============================
@@ -700,18 +743,6 @@ Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. 
 
 
 % =============================
-\section{P. Beame and J. Li and S. Roy and D. Suciu, "Model Counting of Query Expressions...}
-% Reference ID: Beame_2013
-% =============================
-\begin{claim}
-\langref{d-DNNF} is not quasi-polynomial-time compilable to \langref{dec-DNNF} \citet{Beame_2013}
-\end{claim}
-\begin{claimdescription}
-Shown by Corollary 3.5 of \citet{Beame_2013}.
-\end{claimdescription}
-
-
-% =============================
 \section{S. Bova and F. Capelli and S. Mengel and F. Slivovsky, "Knowledge Compilation Me...}
 % Reference ID: Bova_2016
 % =============================
@@ -745,18 +776,6 @@ The Quine-McCluskey algorithm generates an \langref{IP} formula in polynomial ti
 
 
 % =============================
-\section{U. Oztok and A. Darwiche, "On Compiling CNF into Decision-DNNF", International C...}
-% Reference ID: Oztok_2014
-% =============================
-\begin{claim}
-\langfam{dec-SDNNF}{T} is polynomial-time compilable to \langref{dec-SDNNF} \citet{Oztok_2014}
-\end{claim}
-\begin{claimdescription}
-\langref{dec-SDNNF} is the union of fixed-vtree \langfam{dec-SDNNF}{T} languages. Hence any fixed-family formula is already a \langref{dec-SDNNF} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-
-% =============================
 \section{S. Bova, "SDDs Are Exponentially More Succinct than OBDDs", Proceedings of the A...}
 % Reference ID: Bova_2016_a
 % =============================
@@ -785,25 +804,6 @@ Theorem 1 of \citet{Vinall-Smeeth_2024} proves that there are functions with str
 \end{claim}
 \begin{claimdescription}
 The Vinall-Smeeth construction gives small source circuits that are explicitly structured: for the hard unambiguous DNF $\psi'$, the proof fixes a vtree $T$ over $\operatorname{var}(\psi')$, compiles each term as a d-DNNF respecting $T$, and takes their deterministic disjunction. Thus the source side can be stated as \langfam{d-SDNNF}{T}. The lower bound is against every equivalent \langref{SDD}; since \langfam{SDD}{T} is a subfamily of \langref{SDD}, it also rules out every target vtree family member.
-\end{claimdescription}
-
-
-% =============================
-\section{K. Pipatsrisawat and A. Darwiche, "New Compilation Languages Based on Structured...}
-% Reference ID: Pipatsrisawat_2008
-% =============================
-\begin{claim}
-\langfam{d-SDNNF}{T} is polynomial-time compilable to \langref{d-SDNNF} \citet{Pipatsrisawat_2008}
-\end{claim}
-\begin{claimdescription}
-\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time.
-\end{claimdescription}
-
-\begin{claim}
-\langfam{SDNNF}{T} is polynomial-time compilable to \langref{SDNNF} \citet{Pipatsrisawat_2008}
-\end{claim}
-\begin{claimdescription}
-\langref{SDNNF} is the union of the fixed-vtree families \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} formula is already an \langref{SDNNF} formula, so the compilation is trivial and polynomial-time.
 \end{claimdescription}
 
 

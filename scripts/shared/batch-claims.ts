@@ -126,13 +126,10 @@ function citeEdgeReferences(
 
   const expandedText = text.replace(
     EDGE_REF_PATTERN,
-    (match: string, _command: string, sourceRef: string, targetRef: string, offset: number, fullText: string) => {
+    (match: string, _command: string, sourceRef: string, targetRef: string) => {
       const citedRefs = edgeRefs(database, resolveLanguageId, sourceRef, targetRef);
       addUnique(refs, citedRefs);
-
-      const alreadyCited = /^\s*\\cite[tp]?\{/.test(fullText.slice(offset + match.length));
-      if (citedRefs.length === 0 || alreadyCited) return match;
-      return `${match} \\citet{${citedRefs.join(',')}}`;
+      return match;
     }
   );
 

@@ -14,6 +14,7 @@
 
 import { loadDatabase, saveDatabase, type DatabaseSchema } from './shared/database.js';
 import { expandBatchClaims } from './shared/batch-claims.js';
+import { hydrateEntityReferenceRefs } from './shared/entity-reference-refs.js';
 
 // Import the propagation logic and types
 import { propagateImplicitRelations } from '../src/lib/data/propagation/index.js';
@@ -194,6 +195,10 @@ function main(): void {
   console.log('\nRefreshing batch claim edge citations...');
   const batchHydrated = expandBatchClaims(database);
   console.log(`Hydrated ${batchHydrated} batch claim entries.`);
+
+  console.log('\nHydrating entity-reference citations...');
+  const entityRefHydrated = hydrateEntityReferenceRefs(database);
+  console.log(`Hydrated refs for ${entityRefHydrated} facts with entity-reference premises.`);
   
   // Save
   console.log('\nSaving database.json...');
@@ -204,6 +209,7 @@ function main(): void {
   console.log(`         Removed ${queriesRemoved} queries, ${transformationsRemoved} transformations`);
   console.log(`         Expanded ${batchExpanded} batch claim entries`);
   console.log(`         Generated ${newDerived} derived edges`);
+  console.log(`         Hydrated ${entityRefHydrated} entity-reference fact ref lists`);
 }
 
 main();

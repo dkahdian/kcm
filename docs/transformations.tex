@@ -695,27 +695,6 @@ The hard direction for singleton forgetting is tied to the bounded-conjunction l
 
 
 % =============================
-\section{A. Darwiche, "Decomposable Negation Normal Form", Journal of the ACM, vol. 48, p...}
-% Reference ID: Darwiche_2001a
-% =============================
-% lang=lang_3bebcab7, op=NOT_C
-\begin{claim}
-\langref{DNNF} supports Negation not in quasi-polynomial time \citet{Darwiche_2001a,Bova_2014}
-\end{claim}
-\begin{claimdescription}
-The older non-closure argument is that if DNNF supported negation in polynomial time, then, since DNNF supports disjunction, it would also support unbounded conjunction by De Morgan; this would let one compile arbitrary CNF formulas to DNNF and decide SAT using DNNF consistency. Thus polynomial-time negation would imply P = NP. The stronger no-quasi-polynomial form follows from the exponential lower bound for DNNF representations of expander CNFs: if DNNF could be negated in quasi-polynomial time, the negations of the corresponding small DNF formulas would yield quasi-polynomial DNNF representations of those hard CNFs \citet{Darwiche_2001a,Bova_2014}.
-\end{claimdescription}
-
-% lang=lang_3bebcab7, op=FO
-\begin{claim}
-\langref{DNNF} supports Forgetting in polynomial time \citet{Darwiche_2001a}
-\end{claim}
-\begin{claimdescription}
-DNNF satisfies FO: forgetting a set of variables in a DNNF sentence can be performed in polynomial time while preserving decomposability \citet{Darwiche_2001a} (\citet{Darwiche_2002}, Proposition 5.1).
-\end{claimdescription}
-
-
-% =============================
 \section{H. Vinall-Smeeth, "Structured d-DNNF Is Not Closed Under Negation", Proceedings ...}
 % Reference ID: Vinall-Smeeth_2024
 % =============================
@@ -738,6 +717,19 @@ Structured deterministic DNNF (\langref{d-SDNNF}) is not closed under negation i
 \end{claim}
 \begin{claimdescription}
 DNF satisfies FO \citet{Lang_2003}. Forgetting variables from a DNF sentence can be done in polytime (\citet{Darwiche_2002}, Proposition 5.1).
+\end{claimdescription}
+
+
+% =============================
+\section{A. Darwiche, "Decomposable Negation Normal Form", Journal of the ACM, vol. 48, p...}
+% Reference ID: Darwiche_2001a
+% =============================
+% lang=lang_3bebcab7, op=FO
+\begin{claim}
+\langref{DNNF} supports Forgetting in polynomial time \citet{Darwiche_2001a}
+\end{claim}
+\begin{claimdescription}
+DNNF satisfies FO: forgetting a set of variables in a DNNF sentence can be performed in polynomial time while preserving decomposability \citet{Darwiche_2001a} (\citet{Darwiche_2002}, Proposition 5.1).
 \end{claimdescription}
 
 % =============================

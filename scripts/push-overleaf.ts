@@ -70,7 +70,7 @@ async function main(): Promise<void> {
 
   const commitMessage =
     process.env.OVERLEAF_COMMIT_MESSAGE ||
-    `Sync docs from starai (${new Date().toISOString()})`;
+    `Sync docs from tcz (${new Date().toISOString()})`;
 
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'overleaf-sync-'));
 

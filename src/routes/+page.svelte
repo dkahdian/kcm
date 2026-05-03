@@ -280,7 +280,7 @@
       const t2 = 'uYuSB5EGMOq31ueJ64VNZjTICPO27KQESFcK7l';
       const token = t1 + t2;
 
-      const response = await fetch('https://api.github.com/repos/dkahdian/kcm/dispatches', {
+      const response = await fetch('https://api.github.com/repos/dkahdian/tcz/dispatches', {
         method: 'POST',
         headers: {
           'Accept': 'application/vnd.github+json',
@@ -477,8 +477,8 @@
 </script>
 
 <svelte:head>
-  <title>Knowledge Compilation Map</title>
-  <meta name="description" content="Interactive visualization of knowledge compilation languages and their relationships" />
+  <title>Tractable Circuit Zoo</title>
+  <meta name="description" content="Interactive visualization of tractable circuit and knowledge compilation languages and their relationships" />
 </svelte:head>
 
 <div class="app-shell">
@@ -486,7 +486,7 @@
   <header class="app-header" class:preview-mode={isPreviewMode}>
     <div class="header-content">
       <div class="header-left">
-        <h1 class="title">Knowledge Compilation Map</h1>
+        <h1 class="title">Tractable Circuit Zoo</h1>
         {#if isPreviewMode}
           <div class="preview-badge">
             <svg class="icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
@@ -523,9 +523,6 @@
           </a>
           <a href="/bibliography" class="bib-link">
             Bibliography
-          </a>
-          <a href="/contribute" target="_blank" class="contribute-link">
-            Contribute
           </a>
         {/if}
         <div class="view-toggle" role="group" aria-label="Visualization mode">

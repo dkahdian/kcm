@@ -402,7 +402,7 @@
       </div>
     {:else}
       <div class="welcome-message">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">Knowledge Compilation Map</h3>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Tractable Circuit Zoo</h3>
         <p class="text-gray-600 text-sm mb-4">
           Click on a node or edge for more information.
         </p>

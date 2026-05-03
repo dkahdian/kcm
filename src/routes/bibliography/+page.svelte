@@ -211,15 +211,15 @@
 </script>
 
 <svelte:head>
-	<title>Bibliography — Knowledge Compilation Map</title>
+	<title>Bibliography — Tractable Circuit Zoo</title>
 </svelte:head>
 
 <div class="page">
 	<header>
-		<a href="/" class="back">← Back to Map</a>
+		<a href="/" class="back">← Back to Zoo</a>
 		<h1>Bibliography</h1>
 		<p class="subtitle">
-			{allReferences.length} references used across the Knowledge Compilation Map
+			{allReferences.length} references used across the Tractable Circuit Zoo
 		</p>
 	</header>
 

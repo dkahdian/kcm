@@ -46,24 +46,25 @@
 </script>
 
 <svelte:head>
-	<title>About — Knowledge Compilation Map</title>
+	<title>About — Tractable Circuit Zoo</title>
 </svelte:head>
 
 <div class="about-page">
 	<header class="about-header">
-		<a href="/" class="back-link">← Back to Map</a>
-		<h1>About the Knowledge Compilation Map</h1>
+		<a href="/" class="back-link">← Back to Zoo</a>
+		<h1>About the Tractable Circuit Zoo</h1>
 	</header>
 
 	<main class="about-content">
 		<section>
 			<h2>What is this?</h2>
 			<p>
-				The Knowledge Compilation Map is an interactive summary of the core
+				The Tractable Circuit Zoo is a modernized interactive zoo of tractable circuit
+				and knowledge-compilation languages. It summarizes the core
 				<MathText text="succinctness" /> and <MathText text="tractability" /> concepts
-				that organize propositional knowledge compilation. It presents a curated graph of
+				that organize propositional knowledge compilation, presenting a curated graph of
 				representation languages, the operations they support, and the known compilation
-				relationships between them, building on the foundational work of
+				relationships between them. It builds on the foundational work of
 				<a href="https://doi.org/10.1613/jair.1391" target="_blank" rel="noopener">
 					Darwiche &amp; Marquis (2002)
 				</a>
@@ -119,7 +120,7 @@
 		<section>
 			<h2>Languages</h2>
 			<p>
-				The map covers roughly 28 propositional language classes — including NNF, DNNF,
+				The zoo covers roughly 28 propositional language classes — including NNF, DNNF,
 				d-DNNF, FBDD, OBDD, SDD, CNF, DNF, and others — organized in a directed graph
 				where edges represent whether one language can be polynomially or
 				quasi-polynomially compiled into another.
@@ -175,9 +176,8 @@
 		<section>
 			<h2>Contributing</h2>
 			<p>
-				Know of a new result? Use the
-				<a href="/contribute">contribution workflow</a> to propose new edges, operation
-				results, or language additions. Submissions are reviewed before integration.
+				Know of a new result? The contribution workflow is temporarily paused while the
+				project is prepared for its MVP release.
 			</p>
 		</section>
 
@@ -185,7 +185,7 @@
 			<h2>Links</h2>
 			<ul>
 				<li>
-					<a href="https://github.com/dkahdian/kcm" target="_blank" rel="noopener">
+					<a href="https://github.com/dkahdian/tcz" target="_blank" rel="noopener">
 						GitHub repository
 					</a>
 				</li>

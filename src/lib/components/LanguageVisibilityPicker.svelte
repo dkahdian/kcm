@@ -147,7 +147,7 @@
       <button type="button" class="toolbar-btn" onclick={() => toggleClassification('union')}>
         {getClassificationButtonLabel('union')}
       </button>
-      <button type="button" class="toolbar-btn" onclick={setOnlyOriginalKcmVisible}>Only KCM</button>
+      <button type="button" class="toolbar-btn" onclick={setOnlyOriginalKcmVisible}>Only original map</button>
       <button type="button" class="toolbar-btn" onclick={setAllVisible}>Show all</button>
       <button type="button" class="toolbar-btn" onclick={setNoneVisible}>Hide all</button>
       <button type="button" class="toolbar-btn subtle" onclick={resetPicker}>Reset</button>

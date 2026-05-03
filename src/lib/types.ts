@@ -1,4 +1,6 @@
-// Types for the Knowledge Compilation Map
+// Types for the Tractable Circuit Zoo.
+// TODO: Clean up legacy KC-prefixed type conventions in a later refactor
+// (for example, KCLanguage may eventually become TCLanguage).
 
 /**
  * Arrow shape types for relation endpoints

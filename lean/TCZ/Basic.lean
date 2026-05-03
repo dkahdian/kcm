@@ -1,5 +1,5 @@
 /-
-  KCMap.Basic — Core definitions for the Knowledge Compilation Map formalization.
+  TCZ.Basic — Core definitions for the Tractable Circuit Zoo formalization.
 
   This file defines:
   - The `Language` inductive (one constructor per KC language)
@@ -8,10 +8,10 @@
   - Structural metatheorems (axioms about polynomial/quasi-polynomial computation)
 
   These are mathematical truths about polynomial-time computation, not specific
-  to the KCM data. They form the trusted kernel of the proof system.
+  to the TCZ data. They form the trusted kernel of the proof system.
 -/
 
-/-- Knowledge compilation language classes from the KC map. -/
+/-- Knowledge compilation language classes from the Tractable Circuit Zoo. -/
 inductive Language where
   | anf           -- ANF
   | bdd           -- BDD
@@ -28,6 +28,7 @@ inductive Language where
   | nfbdd         -- nFBDD
   | nnf           -- NNF
   | nobdd         -- nOBDD
+  | nobdd_lt      -- nOBDD_<
   | obdd_lt       -- OBDD_<
   | pi            -- PI
   | sdd           -- SDD
@@ -36,6 +37,7 @@ inductive Language where
   | sdnnf_t       -- SDNNF_T
   | ufbdd         -- uFBDD
   | uobdd         -- uOBDD
+  | uobdd_lt      -- uOBDD_<
   | obdd          -- OBDD
   | dec_dnnf      -- dec-DNNF
   | dec_sdnnf     -- dec-SDNNF
@@ -43,7 +45,7 @@ inductive Language where
   | csdd_t        -- cSDD_T
   deriving DecidableEq, Repr
 
-/-- Query and transformation operations from the KC map. -/
+/-- Query and transformation operations from the Tractable Circuit Zoo. -/
 inductive Operation where
   -- Queries
   | CO    -- Consistency

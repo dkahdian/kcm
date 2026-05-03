@@ -1,11 +1,11 @@
 import Lake
 open Lake DSL
 
-package «kcmap» where
+package «tcz» where
   leanOptions := #[
     ⟨`autoImplicit, false⟩
   ]
 
 @[default_target]
-lean_lib «KCMap» where
+lean_lib «TCZ» where
   srcDir := "."

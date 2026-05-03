@@ -602,7 +602,7 @@ function generateLatex(database: DatabaseSchema): string {
   
   // Build full document
   const preamble = `% =============================
-% Knowledge Compilation Map - Succinctness Claims and Descriptions
+% Tractable Circuit Zoo - Succinctness Claims and Descriptions
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 % 
@@ -665,7 +665,7 @@ function generateLatex(database: DatabaseSchema): string {
 \\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: Succinctness Claims}
+\\title{Tractable Circuit Zoo: Succinctness Claims}
 \\date{\\today}
 
 \\begin{document}
@@ -1337,7 +1337,7 @@ function generateLanguagesLatex(database: DatabaseSchema): string {
   
   // Build full document
   const preamble = `% =============================
-% Knowledge Compilation Map - Language Definitions
+% Tractable Circuit Zoo - Language Definitions
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 % 
@@ -1384,7 +1384,7 @@ function generateLanguagesLatex(database: DatabaseSchema): string {
 \\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: Language Definitions}
+\\title{Tractable Circuit Zoo: Language Definitions}
 \\date{\\today}
 
 \\begin{document}
@@ -1627,7 +1627,7 @@ function generateDefinitionsLatex(database: DatabaseSchema): string {
     .join('\n');
 
   const preamble = `% =============================
-% Knowledge Compilation Map - Conceptual Definitions
+% Tractable Circuit Zoo - Conceptual Definitions
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 %
@@ -1674,7 +1674,7 @@ function generateDefinitionsLatex(database: DatabaseSchema): string {
 \\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: Conceptual Definitions}
+\\title{Tractable Circuit Zoo: Conceptual Definitions}
 \\date{\\today}
 
 \\begin{document}
@@ -1855,7 +1855,7 @@ function generateSepFuncsLatex(database: DatabaseSchema): string {
     .join('\n');
 
   const preamble = `% =============================
-% Knowledge Compilation Map - Separating Functions
+% Tractable Circuit Zoo - Separating Functions
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 %
@@ -1902,7 +1902,7 @@ function generateSepFuncsLatex(database: DatabaseSchema): string {
 \\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: Separating Functions}
+\\title{Tractable Circuit Zoo: Separating Functions}
 \\date{\\today}
 
 \\begin{document}
@@ -2357,7 +2357,7 @@ function generateOpsLatex(database: DatabaseSchema, opType: 'queries' | 'transfo
   const opTypeLabel = opType === 'queries' ? 'Query' : 'Transformation';
 
   const preamble = `% =============================
-% Knowledge Compilation Map - ${opTypeLabel} Support Claims
+% Tractable Circuit Zoo - ${opTypeLabel} Support Claims
 % Auto-generated from database.json
 % Generated: ${new Date().toISOString()}
 %
@@ -2414,7 +2414,7 @@ function generateOpsLatex(database: DatabaseSchema, opType: 'queries' | 'transfo
 \\newcommand{\\nopref}[2]{#2 is unsupported by #1}
 
 % -------- Title info --------
-\\title{Knowledge Compilation Map: ${opTypeLabel} Support}
+\\title{Tractable Circuit Zoo: ${opTypeLabel} Support}
 \\date{\\today}
 
 \\begin{document}
@@ -2766,7 +2766,7 @@ function updateOpsFromLatex(
 
 function printUsage(): void {
   console.log(`
-Knowledge Compilation Map - LaTeX Bijection Script
+Tractable Circuit Zoo - LaTeX Bijection Script
 
 Usage:
   npx tsx scripts/latex-bijection.ts --to-latex

@@ -125,8 +125,8 @@ export const COMPLEXITIES: Record<string, Complexity> = {
     opDescription: 'No polynomial transformation',
     notation: '$\\not\\leq$',
     emoji: '❌',
-    color: '#ef4444', // red-500
-    pastel: '#fee2e2', // red-100
+    color: '#dc2626', // red-600
+    pastel: '#fecaca', // red-200
     cssClass: 'complexity-not-poly',
     arrow: 'square',
     dashed: false

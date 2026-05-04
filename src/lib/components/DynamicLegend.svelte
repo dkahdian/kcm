@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
   import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, ViewMode } from '../types.js';
-  import { resolveLanguageProperties } from '../data/operations.js';
+  import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '../data/operations.js';
   import MathText from './MathText.svelte';
   import {
     getOperationTractabilityDisplay,
@@ -41,7 +41,9 @@
     return {
       ...graphData,
       visibleLanguageIds: allLanguageIds,
-      visibleEdgeIds: allEdgeIds
+      visibleEdgeIds: allEdgeIds,
+      visibleQueryIds: new Set(Object.keys(QUERIES)),
+      visibleTransformationIds: new Set(Object.keys(TRANSFORMATIONS))
     } as FilteredGraphData;
   });
 
@@ -150,6 +152,9 @@
     if (viewMode === 'queries' || viewMode === 'transforms') {
       const idsInUse = new Set<OperationTractabilityId>();
       const isQueries = viewMode === 'queries';
+      const visibleOperationIds = isQueries
+        ? filteredData.visibleQueryIds
+        : filteredData.visibleTransformationIds;
       
       for (const lang of filteredData.languages) {
         const supportMap = isQueries 
@@ -157,7 +162,8 @@
           : lang.properties.transformations;
         if (!supportMap) continue;
         
-        for (const support of Object.values(supportMap)) {
+        for (const [opId, support] of Object.entries(supportMap)) {
+          if (!visibleOperationIds.has(opId)) continue;
           idsInUse.add(getOperationTractabilityDisplay(support).id);
         }
       }

@@ -33,7 +33,16 @@
   const operations = $derived(operationType === 'queries' ? QUERIES : TRANSFORMATIONS);
 
   // Get operation codes in display order
-  const operationCodes = $derived(Object.keys(operations));
+  const operationCodes = $derived.by(() => {
+    const codes = Object.keys(operations);
+    if (operationType === 'queries' && 'visibleQueryIds' in graphData) {
+      return codes.filter((code) => graphData.visibleQueryIds.has(code));
+    }
+    if (operationType === 'transformations' && 'visibleTransformationIds' in graphData) {
+      return codes.filter((code) => graphData.visibleTransformationIds.has(code));
+    }
+    return codes;
+  });
 
   // Get visible languages
   const languageLookup = $derived.by<Map<string, KCLanguage>>(() => {

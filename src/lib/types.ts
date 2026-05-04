@@ -409,6 +409,11 @@ export interface GraphData {
   defaultNodePositionsByLanguageName?: NodePositionsByLanguageName;
   /** optional metadata copied from database.json */
   metadata?: Record<string, unknown>;
+  /** UI-filtered operation visibility, used by operation matrix views. */
+  operationVisibility?: {
+    queryIds: string[];
+    transformationIds: string[];
+  };
 }
 
 export interface TransformValidationResult {
@@ -432,6 +437,10 @@ export type FilterControlType = 'checkbox' | 'toggle' | 'radio' | 'dropdown' | '
 export interface LanguageVisibilityParam {
   mode: 'all' | 'only' | 'except';
   ids: string[];
+  hiddenQueryIds?: string[];
+  hiddenTransformationIds?: string[];
+  graphQueryIds?: string[];
+  graphTransformationIds?: string[];
 }
 
 export type FilterParamValue = boolean | string | number | LanguageVisibilityParam;
@@ -522,6 +531,10 @@ export interface FilteredGraphData extends GraphData {
   visibleLanguageIds: Set<string>;
   /** Set of visible edge IDs in format "sourceId->targetId" */
   visibleEdgeIds: Set<string>;
+  /** Set of visible query operation codes */
+  visibleQueryIds: Set<string>;
+  /** Set of visible transformation operation codes */
+  visibleTransformationIds: Set<string>;
 }
 
 // TODO: Future enhancement - Filter Presets

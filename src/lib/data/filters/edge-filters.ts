@@ -2,7 +2,6 @@ import type { DirectedSuccinctnessRelation, EdgeFilter, GraphData } from '../../
 import { mapRelationsInDataset, mapLanguagesInDataset } from '../transforms.js';
 
 type ManageUnknownsMode = 'omit-all' | 'expressively' | 'optimistically' | 'pessimistically';
-type PolyDisplayMode = 'include-quasipolynomial' | 'polytime-vs-not';
 
 /**
  * A classifier function that determines if an edge matches a certain criterion.
@@ -49,23 +48,19 @@ function createPairwiseOmitFilter(
 }
 
 /**
- * Control how polynomial and quasipolynomial edges are displayed
+ * Control whether quasipolynomial distinctions are displayed.
  */
-export const polyDisplay: EdgeFilter<PolyDisplayMode> = {
+export const polyDisplay: EdgeFilter<boolean> = {
   id: 'poly-display',
-  name: 'Polynomial Display',
-  description: 'Control how polynomial and quasipolynomial complexity edges are shown',
+  name: 'Show quasipolynomial succinctness relations',
+  description: 'Show quasipolynomial distinctions instead of collapsing succinctness to polynomial vs not polynomial',
   applicableViews: ['graph', 'succinctness'],
   uiGroup: 'Display',
   kind: 'matrix-display',
-  defaultParam: 'polytime-vs-not',
-  controlType: 'dropdown',
-  options: [
-    { value: 'include-quasipolynomial', label: 'Also include quasipolynomial time', description: 'Show all edge types as-is' },
-    { value: 'polytime-vs-not', label: 'Polytime vs not polytime', description: 'Collapse to polynomial, not polynomial, or unknown' }
-  ],
-  lambda: (data, mode) => {
-    if (mode === 'include-quasipolynomial') {
+  defaultParam: false,
+  controlType: 'checkbox',
+  lambda: (data, showQuasipolynomial) => {
+    if (showQuasipolynomial === true) {
       return data;
     }
     let mapped = mapRelationsInDataset(data, (relation) => {

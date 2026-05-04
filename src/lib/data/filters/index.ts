@@ -11,14 +11,10 @@ export {
 
 // Convenience array of all predefined filters (excluding dynamic language selection filters)
 import { languageVisibilityFilter } from './language-scope-filters.js';
-import { queryVisualizationFilters } from './query-visualizations.js';
-import { transformationVisualizationFilters } from './transformation-visualizations.js';
 import { createFillUnknownOperationsFilter } from './helpers.js';
 import type { LanguageFilter } from '../../types.js';
 
 export const allPredefinedFilters: LanguageFilter<any>[] = [
   languageVisibilityFilter,
-  createFillUnknownOperationsFilter(), // Hidden internal filter
-  ...queryVisualizationFilters,
-  ...transformationVisualizationFilters
+  createFillUnknownOperationsFilter() // Hidden internal filter
 ];

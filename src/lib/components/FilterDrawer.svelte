@@ -37,7 +37,7 @@
   let isOpen = $state(false);
   const visibleFilters = $derived(getVisibleFiltersForView(filters, viewMode));
   const orderedFilters = $derived.by(() => {
-    const priority: Record<string, number> = { 'poly-display': 0 };
+    const priority: Record<string, number> = { 'poly-display': 0, 'language-visibility': 99 };
     return [...visibleFilters].sort((a, b) => {
       const pa = priority[a.id] ?? 1;
       const pb = priority[b.id] ?? 1;
@@ -86,10 +86,7 @@
   }
 
   function toggleBooleanFilter(filter: AnyFilter) {
-    const value = getFilterValue(filter);
-    if (typeof value === 'boolean') {
-      setFilterValue(filter, !value);
-    }
+    setFilterValue(filter, getFilterValue(filter) !== true);
   }
 </script>
 
@@ -121,7 +118,7 @@
 
       <div class="drawer-body">
         {#each orderedFilters as filter (filter.id)}
-          <div class="filter-row">
+          <div class="filter-row" class:filter-row--language-picker={filter.controlType === 'language-picker'}>
             {#if filter.controlType === 'language-picker'}
               <div class="filter-block">
                 <div class="field-copy">
@@ -130,6 +127,7 @@
                 <LanguageVisibilityPicker
                   languages={languages}
                   value={getLanguageVisibilityValue(filter)}
+                  {viewMode}
                   onChange={(value) => setFilterValue(filter, value)}
                 />
               </div>
@@ -294,6 +292,23 @@
     border-top: 1px solid #eef2f7;
   }
 
+  .filter-row--language-picker {
+    flex: 1 1 min(34rem, 65vh);
+    min-height: 24rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-row--language-picker .filter-block {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .filter-row--language-picker :global(.picker-shell) {
+    flex: 1;
+    min-height: 0;
+  }
+
   .filter-row:first-child {
     border-top: none;
   }
@@ -309,7 +324,11 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 0.5rem;
-    align-items: start;
+    align-items: center;
+  }
+
+  .toggle-field input {
+    margin: 0;
   }
 
   .filter-block {

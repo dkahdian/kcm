@@ -10,6 +10,7 @@ import type {
   LanguageVisibilityParam
 } from './types.js';
 import { transformData } from './data/transforms.js';
+import { QUERIES, TRANSFORMATIONS } from './data/operations.js';
 
 type AnyFilter = LanguageFilter | EdgeFilter;
 
@@ -53,7 +54,11 @@ function normalizeFilterValue(value: FilterParamValue): FilterParamValue {
   const uniqueSortedIds = Array.from(new Set(value.ids)).sort();
   return {
     mode: value.mode,
-    ids: uniqueSortedIds
+    ids: uniqueSortedIds,
+    hiddenQueryIds: Array.from(new Set(value.hiddenQueryIds ?? [])).sort(),
+    hiddenTransformationIds: Array.from(new Set(value.hiddenTransformationIds ?? [])).sort(),
+    graphQueryIds: Array.from(new Set(value.graphQueryIds ?? [])).sort(),
+    graphTransformationIds: Array.from(new Set(value.graphTransformationIds ?? [])).sort()
   };
 }
 
@@ -65,7 +70,19 @@ export function areFilterValuesEqual(a: FilterParamValue, b: FilterParamValue): 
     return (
       normalizedA.mode === normalizedB.mode &&
       normalizedA.ids.length === normalizedB.ids.length &&
-      normalizedA.ids.every((id, index) => id === normalizedB.ids[index])
+      normalizedA.ids.every((id, index) => id === normalizedB.ids[index]) &&
+      (normalizedA.hiddenQueryIds ?? []).length === (normalizedB.hiddenQueryIds ?? []).length &&
+      (normalizedA.hiddenQueryIds ?? []).every((id, index) => id === (normalizedB.hiddenQueryIds ?? [])[index]) &&
+      (normalizedA.hiddenTransformationIds ?? []).length === (normalizedB.hiddenTransformationIds ?? []).length &&
+      (normalizedA.hiddenTransformationIds ?? []).every(
+        (id, index) => id === (normalizedB.hiddenTransformationIds ?? [])[index]
+      ) &&
+      (normalizedA.graphQueryIds ?? []).length === (normalizedB.graphQueryIds ?? []).length &&
+      (normalizedA.graphQueryIds ?? []).every((id, index) => id === (normalizedB.graphQueryIds ?? [])[index]) &&
+      (normalizedA.graphTransformationIds ?? []).length === (normalizedB.graphTransformationIds ?? []).length &&
+      (normalizedA.graphTransformationIds ?? []).every(
+        (id, index) => id === (normalizedB.graphTransformationIds ?? [])[index]
+      )
     );
   }
 
@@ -216,11 +233,17 @@ export function applyFiltersWithParams(
 
   const visibleLanguageIds = new Set(afterEdgeFilters.languages.map((language) => language.id));
   const visibleEdgeIds = collectVisibleEdgeIds(afterEdgeFilters.adjacencyMatrix);
+  const visibleQueryIds = new Set(afterEdgeFilters.operationVisibility?.queryIds ?? Object.keys(QUERIES));
+  const visibleTransformationIds = new Set(
+    afterEdgeFilters.operationVisibility?.transformationIds ?? Object.keys(TRANSFORMATIONS)
+  );
 
   return {
     ...afterEdgeFilters,
     visibleLanguageIds,
-    visibleEdgeIds
+    visibleEdgeIds,
+    visibleQueryIds,
+    visibleTransformationIds
   };
 }
 

@@ -59,13 +59,11 @@
 		<section>
 			<h2>What is this?</h2>
 			<p>
-				The Tractable Circuit Zoo is a modernized interactive zoo of tractable circuit
-				and knowledge-compilation languages. It summarizes the core
-				<MathText text="succinctness" /> and <MathText text="tractability" /> concepts
-				that organize propositional knowledge compilation, presenting a curated graph of
+				The Tractable Circuit Zoo is a modernized interactive zoo of tractable circuit languages.
+				It summarizes the core succinctness and tractability concepts into a graph displaying
 				representation languages, the operations they support, and the known compilation
 				relationships between them. It builds on the foundational work of
-				<a href="https://doi.org/10.1613/jair.1391" target="_blank" rel="noopener">
+				<a href="https://arxiv.org/abs/1106.1819" target="_blank" rel="noopener">
 					Darwiche &amp; Marquis (2002)
 				</a>
 				and incorporates results from subsequent research.
@@ -75,8 +73,7 @@
 		<section>
 			<h2>Definitions</h2>
 			<p>
-				These definitions intend to provide a concise overview of the key concepts in knowledge compilation. They are kept
-				lightweight and informal for accessibility, but each is linked to more formal statements in the literature.
+				These informal definitions intend to provide a minimalistic, intuitive overview so the reader can understand what this project is about. Each is linked to more formal statements in the literature.
 			</p>
 			<div class="definition-list">
 				{#each definitions as definition}

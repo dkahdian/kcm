@@ -126,6 +126,18 @@
     return complexity.description;
   }
 
+  function getStatusComplexity(status: string) {
+    return getComplexityFromCatalog(graphData.complexities, status);
+  }
+
+  function getStatusCssClass(status: string): string {
+    return getStatusComplexity(status).cssClass;
+  }
+
+  function getStatusNotation(status: string): string {
+    return getStatusComplexity(status).notation;
+  }
+
   /**
    * Split a compound status label at the semicolon so the caveat can be
    * inserted after the first part (the primary claim) rather than at the
@@ -166,11 +178,21 @@
         <div class="space-y-4">
 {#snippet directionBlock(fromName: string, toName: string, relation: DirectedSuccinctnessRelation, separatingFns: KCSeparatingFunction[])}
             <div class="direction-block">
-              <h5 class="font-semibold text-gray-900 mb-2">
+              {#if false}<h5 class="font-semibold text-gray-900 mb-2">
                 <MathText text={fromName} className="inline" />
                 <span> → </span>
                 <MathText text={toName} className="inline" />
-              </h5>
+              </h5>{/if}
+              <div class={`succinctness-statement ${getStatusCssClass(relation.status)}`}>
+                <MathText text={fromName} className="inline" />
+                <span class="compile-arrow">→</span>
+                <MathText text={toName} className="inline" />
+                <span class="order-statement">
+                  (<MathText text={toName} className="inline" />
+                  <MathText text={getStatusNotation(relation.status)} className="inline succinctness-notation" />
+                  <MathText text={fromName} className="inline" />)
+                </span>
+              </div>
               {#if true}
                 {@const parts = splitStatusLabel(relation.status)}
                 <p class="text-sm text-gray-700 mb-2">
@@ -246,5 +268,37 @@
     background: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 0.375rem;
+  }
+
+  .succinctness-statement {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .compile-arrow {
+    font-family: KaTeX_Main, "Times New Roman", serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .order-statement {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    color: inherit;
+  }
+
+  .succinctness-notation {
+    font-weight: 700;
   }
 </style>

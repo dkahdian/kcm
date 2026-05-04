@@ -1,11 +1,11 @@
 import type { LanguageFilter, GraphData } from '../../types.js';
-import { QUERIES, TRANSFORMATIONS, resolveLanguageProperties } from '../operations.js';
-import { getComplexityFromCatalog } from '../complexities.js';
+import { QUERIES, TRANSFORMATIONS } from '../operations.js';
 import { mapLanguagesInDataset } from '../transforms.js';
+import { getOperationTractabilityDisplay } from '../../utils/operation-tractability.js';
 
 /**
  * Helper function to create visualization filters for queries and transformations.
- * Adds emoji and operation codes to node labels (vertically stacked).
+ * Adds tractability symbols and operation codes to node labels (vertically stacked).
  */
 export function createOperationVisualizer(
   code: string,
@@ -14,18 +14,21 @@ export function createOperationVisualizer(
   return (data: GraphData, param: boolean) => {
     if (!param) return data;
     return mapLanguagesInDataset(data, (language) => {
-      const resolved = resolveLanguageProperties(
-        language.properties.queries,
-        language.properties.transformations
+      const operationDefs = type === 'query' ? QUERIES : TRANSFORMATIONS;
+      const supportMap = type === 'query'
+        ? language.properties.queries
+        : language.properties.transformations;
+      const entry = Object.entries(operationDefs).find(
+        ([safeKey, opDef]) => safeKey === code || opDef.code === code
       );
+      if (!entry) return language;
 
-      const operations = type === 'query' ? resolved.queries : resolved.transformations;
-      const operation = operations?.find((op) => op.code === code);
-      if (!operation) return language;
+      const [safeKey, opDef] = entry;
+      const support = supportMap?.[safeKey] ?? supportMap?.[opDef.code];
+      if (!support) return language;
 
-      const complexity = getComplexityFromCatalog(data.complexities, operation.complexity);
-      // Use emoji for operation display (vertically stacked, one per line)
-      const suffix = `\n${complexity.emoji} ${code}`;
+      const display = getOperationTractabilityDisplay(support);
+      const suffix = `\n${display.symbol} ${code}`;
 
       return {
         ...language,

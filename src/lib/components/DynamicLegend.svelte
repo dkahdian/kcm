@@ -1,9 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import cytoscape from 'cytoscape';
-  import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, Complexity, ViewMode } from '../types.js';
+  import type { GraphData, FilteredGraphData, SelectedEdge, KCLanguage, ViewMode } from '../types.js';
   import { resolveLanguageProperties } from '../data/operations.js';
   import MathText from './MathText.svelte';
+  import {
+    getOperationTractabilityDisplay,
+    getOrderedOperationTractabilityDisplays,
+    type OperationTractabilityId
+  } from '$lib/utils/operation-tractability.js';
 
   let {
     graphData,
@@ -134,15 +139,16 @@
     return false;
   });
 
-  // Determine which operation complexity emojis are visible on graph nodes
+  // Determine which operation tractability symbols are visible on graph nodes
   // Only show when operation filters are active (nodes have labelSuffix)
-  const visibleComplexities = $derived.by(() => {
+  const visibleOperationDisplays = $derived.by(() => {
     // In succinctness view, never show operation complexities on the legend
     if (viewMode === 'succinctness') return [];
     
-    // In queries/transforms view, show all complexity codes that appear in the matrix
+    // In queries/transforms view, show all tractability categories that appear in studied cells.
+    // Blank cells are intentionally excluded: they mean "not studied yet", not unknown.
     if (viewMode === 'queries' || viewMode === 'transforms') {
-      const codesInUse = new Set<string>();
+      const idsInUse = new Set<OperationTractabilityId>();
       const isQueries = viewMode === 'queries';
       
       for (const lang of filteredData.languages) {
@@ -152,31 +158,26 @@
         if (!supportMap) continue;
         
         for (const support of Object.values(supportMap)) {
-          if (support.complexity) {
-            codesInUse.add(support.complexity);
-          }
+          idsInUse.add(getOperationTractabilityDisplay(support).id);
         }
       }
       
-      // Also add 'unknown-to-us' if any operations don't have explicit support
-      codesInUse.add('unknown-to-us');
-      
-      const catalog = filteredData.complexities;
-      return Object.values(catalog).filter(c => codesInUse.has(c.code));
+      return getOrderedOperationTractabilityDisplays(idsInUse);
     }
     
     // Graph view: only show when operation filters are active
-    const codesInUse = new Set<string>();
+    const idsInUse = new Set<OperationTractabilityId>();
     
     // Only collect from nodes that have visual labelSuffix (meaning an operation filter is active)
     for (const lang of filteredData.languages) {
       if (!lang.visual?.labelSuffix) continue;
       
-      // Parse the labelSuffix to find which operations are being displayed
-      // The format is "\n{emoji} {opCode}" for each operation
+      // Parse the labelSuffix to find which operations are being displayed.
+      // The format is "\n{symbol} {opCode}" for each operation.
       const suffix = lang.visual.labelSuffix;
       
-      // Resolve properties to include defaults (operations without explicit complexity get 'unknown-to-us')
+      // Resolve properties so we can recover the displayed operation entry.
+      // Missing operations should not have a suffix, so they do not appear here.
       const resolved = resolveLanguageProperties(
         lang.properties.queries,
         lang.properties.transformations
@@ -185,34 +186,18 @@
       // Check queries
       for (const op of resolved.queries) {
         if (suffix.includes(op.code)) {
-          codesInUse.add(op.complexity);
+          idsInUse.add(getOperationTractabilityDisplay(op).id);
         }
       }
       // Check transformations
       for (const op of resolved.transformations) {
         if (suffix.includes(op.code)) {
-          codesInUse.add(op.complexity);
+          idsInUse.add(getOperationTractabilityDisplay(op).id);
         }
       }
     }
     
-    const catalog = filteredData.complexities;
-    return Object.values(catalog).filter(c => codesInUse.has(c.code));
-  });
-
-  const hasVisibleConditionalOperations = $derived.by(() => {
-    if (viewMode !== 'queries' && viewMode !== 'transforms') return false;
-    const isQueries = viewMode === 'queries';
-    const visibleIds = filteredData.visibleLanguageIds;
-    for (const lang of filteredData.languages) {
-      if (!visibleIds.has(lang.id)) continue;
-      const supportMap = isQueries ? lang.properties.queries : lang.properties.transformations;
-      if (!supportMap) continue;
-      for (const support of Object.values(supportMap)) {
-        if (support.caveat) return true;
-      }
-    }
-    return false;
+    return getOrderedOperationTractabilityDisplays(idsInUse);
   });
 
   let containerRefs = $state<{ [status: string]: HTMLDivElement | null }>({});
@@ -345,21 +330,15 @@
     </div>
   {/if}
   
-  {#if visibleComplexities.length > 0}
+  {#if visibleOperationDisplays.length > 0}
     <div class="legend-section">
       <h5>Operations</h5>
-      {#each visibleComplexities as complexity}
+      {#each visibleOperationDisplays as display}
         <div class="legend-row">
-          <span class="complexity-emoji">{complexity.emoji}</span>
-          <span title={complexity.opDescription}>{complexity.label}</span>
+          <span class={`operation-symbol ${display.cssClass}`}>{display.symbol}</span>
+          <span title={display.description}>{display.label}</span>
         </div>
       {/each}
-      {#if hasVisibleConditionalOperations}
-        <div class="legend-row caveat-row">
-          <span class="complexity-emoji caveat-marker">*</span>
-          <span>conditional result (unless the listed condition holds)</span>
-        </div>
-      {/if}
     </div>
   {/if}
 </div>
@@ -438,11 +417,16 @@
     color: #4b5563;
   }
 
-  .complexity-emoji {
-    display: inline-block;
-    min-width: 2rem;
+  .operation-symbol {
+    display: inline-grid;
+    width: 1.65rem;
+    height: 1.35rem;
+    place-items: center;
+    border-radius: 0.2rem;
     text-align: center;
+    font-family: KaTeX_Main, "Times New Roman", serif;
     font-size: 1rem;
+    font-weight: 700;
   }
 
   /* Matrix view legend styles */

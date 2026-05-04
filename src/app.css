@@ -104,6 +104,28 @@
 }
 
 .complexity-unknown-to-us {
-  background: #ffffff;
-  color: #9ca3af;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Collapsed operation tractability display. The backend keeps the richer
+   propagation statuses; these classes are only for query/transform UI. */
+.operation-tractability-tractable {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.operation-tractability-conditional {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.operation-tractability-intractable {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.operation-tractability-unknown {
+  background: #f3f4f6;
+  color: #6b7280;
 }

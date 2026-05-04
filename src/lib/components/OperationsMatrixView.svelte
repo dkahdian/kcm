@@ -6,13 +6,12 @@
     KCLanguage,
     KCOpEntry,
     SelectedOperation,
-    SelectedOperationCell,
-    Complexity
+    SelectedOperationCell
   } from '$lib/types.js';
   import { QUERIES, TRANSFORMATIONS, getOperationDescription } from '$lib/data/operations.js';
-  import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { measureCellSize } from '$lib/utils/matrix-cell-size.js';
   import { compareByCanonicalOrder } from '$lib/utils/canonical-order.js';
+  import { getOperationTractabilityDisplay } from '$lib/utils/operation-tractability.js';
 
   type OperationType = 'queries' | 'transformations';
 
@@ -29,8 +28,6 @@
     selectedOperation: SelectedOperation | null;
     selectedOperationCell: SelectedOperationCell | null;
   } = $props();
-
-  const complexityCatalog = $derived(graphData.complexities);
 
   // Get the operations based on type
   const operations = $derived(operationType === 'queries' ? QUERIES : TRANSFORMATIONS);
@@ -87,10 +84,6 @@
       dimmed: support.dimmed,
       explicit: support.explicit
     };
-  }
-
-  function getComplexity(code: string): Complexity {
-    return getComplexityFromCatalog(complexityCatalog, code);
   }
 
   function handleLanguageClick(language: KCLanguage) {
@@ -151,9 +144,9 @@
   function getCellTitle(language: KCLanguage, opCode: string, support: KCOpEntry | null): string {
     const opDef = operations[opCode];
     if (!support) return `${language.name} - ${opDef?.label ?? opCode}: no data`;
-    const complexity = getComplexity(support.complexity);
+    const display = getOperationTractabilityDisplay(support);
     const caveatStr = support.caveat ? ` (unless ${support.caveat})` : '';
-    return `${language.name} - ${opDef?.label ?? opCode}: ${complexity.label}${caveatStr}`;
+    return `${language.name} - ${opDef?.label ?? opCode}: ${display.label}${caveatStr}`;
   }
 
   // Dynamic cell sizing
@@ -225,16 +218,16 @@
             </th>
             {#each operationCodes as opCode}
               {@const support = getOperationSupport(language, opCode)}
-              {@const complexity = support ? getComplexity(support.complexity) : null}
+              {@const display = getOperationTractabilityDisplay(support)}
               <td>
                 {#if support}
                 <button
                   type="button"
-                  class={`matrix-cell matrix-cell--button ${complexity?.cssClass ?? 'complexity-unknown-to-us'} ${isCellSelected(language, opCode) ? 'is-selected' : ''} ${support?.dimmed ? 'is-dimmed' : ''} ${support?.explicit ? 'is-explicit' : ''}`}
+                  class={`matrix-cell matrix-cell--button ${display.cssClass} ${isCellSelected(language, opCode) ? 'is-selected' : ''} ${support?.dimmed ? 'is-dimmed' : ''} ${support?.explicit ? 'is-explicit' : ''}`}
                   onclick={() => handleCellClick(language, opCode)}
                   title={getCellTitle(language, opCode, support)}
                 >
-                  <span class="cell-emoji">{complexity?.emoji ?? '❓'}{#if support?.caveat}*{/if}</span>
+                  <span class="cell-symbol">{display.symbol}</span>
                 </button>
                 {:else}
                 <span class="matrix-cell matrix-cell--empty" title={`${language.name}: ${opCode} — no data`}>&nbsp;</span>
@@ -402,8 +395,10 @@
     background: #f9fafb;
   }
 
-  .cell-emoji {
-    font-size: 0.9rem;
+  .cell-symbol {
+    font-family: KaTeX_Main, "Times New Roman", serif;
+    font-size: 1.08rem;
+    font-weight: 700;
     line-height: 1;
   }
 
@@ -437,14 +432,9 @@
     z-index: 1;
   }
 
-  .matrix-cell.is-dimmed .cell-emoji {
+  .matrix-cell.is-dimmed .cell-symbol {
     position: relative;
     z-index: 2;
-  }
-
-  .complexity-unknown-to-us {
-    background: #ffffff;
-    color: #9ca3af;
   }
 
   @media (max-width: 1024px) {

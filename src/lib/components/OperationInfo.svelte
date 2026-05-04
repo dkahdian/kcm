@@ -9,12 +9,11 @@
     KCOpEntry,
     SelectedOperation,
     SelectedOperationCell,
-    Complexity,
     ViewMode
   } from '$lib/types.js';
-  import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { extractCitationKeys } from '$lib/utils/math-text.js';
   import { getGlobalRefNumber } from '$lib/data/references.js';
+  import { getOperationTractabilityDisplay } from '$lib/utils/operation-tractability.js';
 
   import { QUERIES, TRANSFORMATIONS, getOperationDescription } from '$lib/data/operations.js';
 
@@ -37,12 +36,6 @@
   } = $props();
 
   const legendGraphData = $derived(filteredGraphData ?? graphData);
-
-  const complexityCatalog = $derived(graphData.complexities);
-
-  function getComplexity(code: string): Complexity {
-    return getComplexityFromCatalog(complexityCatalog, code);
-  }
 
   let referencesSection: HTMLElement | null = $state(null);
 
@@ -107,7 +100,7 @@
   <div class="scrollable-content">
     {#if selectedOperationCell}
       <!-- Show language + operation cell info -->
-      {@const complexity = getComplexity(selectedOperationCell.support.complexity)}
+      {@const display = getOperationTractabilityDisplay(selectedOperationCell.support)}
       <div class="operation-cell-details">
         <div class="cell-header">
           <button 
@@ -132,21 +125,18 @@
           ({selectedOperationCell.operationType})
         </div>
 
-        {#if true}
-          {@const label = complexity.opDescription}
-          {@const semiIdx = label.indexOf(';')}
-          <p class="text-sm text-gray-700 mb-2">
-            {#if semiIdx !== -1}{label.slice(0, semiIdx)}{#if selectedOperationCell.support.caveat}{' '}unless <MathText 
-                text={selectedOperationCell.support.caveat} 
-                className="inline"
-                onCitationClick={handleCitationClick}
-              />{/if}{label.slice(semiIdx)}{:else}{label}{#if selectedOperationCell.support.caveat}{' '}unless <MathText 
-                text={selectedOperationCell.support.caveat} 
-                className="inline"
-                onCitationClick={handleCitationClick}
-              />{/if}{/if}
-          </p>
-        {/if}
+        <p class="tractability-line text-sm text-gray-700 mb-2">
+          <span class={`tractability-symbol ${display.cssClass}`}>{display.symbol}</span>
+          <span>{display.label}</span>
+          {#if selectedOperationCell.support.caveat}
+            <span> unless </span>
+            <MathText
+              text={selectedOperationCell.support.caveat}
+              className="inline"
+              onCitationClick={handleCitationClick}
+            />
+          {/if}
+        </p>
 
         {#if selectedOperationCell.support.description}
           <div class="description-section mb-4">
@@ -240,6 +230,24 @@
 
   .operation-code-link:hover {
     text-decoration: underline;
+  }
+
+  .tractability-line {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .tractability-symbol {
+    display: inline-grid;
+    width: 1.5rem;
+    height: 1.25rem;
+    place-items: center;
+    border-radius: 0.2rem;
+    font-family: KaTeX_Main, "Times New Roman", serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
   }
 
   .operation-header {

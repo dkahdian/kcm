@@ -12,12 +12,12 @@
     SelectedOperationCell
   } from '$lib/types.js';
   import { resolveLanguageProperties } from '$lib/data/operations.js';
-  import { getComplexityFromCatalog } from '$lib/data/complexities.js';
   import { extractCitationKeys } from '$lib/utils/math-text.js';
   import { getGlobalRefNumber } from '$lib/data/references.js';
   import DynamicLegend from './DynamicLegend.svelte';
   import ReferenceList from './ReferenceList.svelte';
   import type { ViewMode } from '$lib/types.js';
+  import { getOperationTractabilityDisplay } from '$lib/utils/operation-tractability.js';
 
   let {
     selectedLanguage,
@@ -36,6 +36,8 @@
   } = $props();
 
   const isOperationsView = $derived(viewMode === 'queries' || viewMode === 'transforms');
+  const isStudiedOperation = (op: KCOpEntry) =>
+    op.complexity !== 'unknown-to-us' || Boolean(op.caveat || op.description || op.refs?.length);
 
   // Use filteredGraphData for the legend if provided, otherwise fall back to graphData
   const legendGraphData = $derived(filteredGraphData ?? graphData);
@@ -210,10 +212,6 @@
     });
   });
 
-  const getOpComplexity = (op: KCOpEntry) => {
-    return getComplexityFromCatalog(graphData.complexities, op.complexity);
-  };
-
   function scrollToReferences(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
     referencesSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -320,6 +318,7 @@
             <h5 class="font-semibold text-gray-900 mb-2">{heading}</h5>
             <div class="grid grid-cols-2 gap-x-4 gap-y-2">
               {#each ops as op}
+                {@const display = getOperationTractabilityDisplay(op)}
                 <button
                   type="button"
                   class="op-row grid grid-cols-[auto,1fr] items-start gap-x-2"
@@ -327,8 +326,8 @@
                   onclick={() => selectOperationCell(op, opType)}
                   disabled={!isOperationsView}
                 >
-                  <span class="shrink-0 text-sm leading-none" style="color: {getOpComplexity(op).color}" title={getOpComplexity(op).label}>
-                    {getOpComplexity(op).emoji}
+                  <span class={`op-symbol ${display.cssClass}`} title={display.label}>
+                    {display.symbol}
                   </span>
                   <div class="text-sm leading-5 text-left">
                     <div>
@@ -361,8 +360,8 @@
           </div>
           {/snippet}
 
-          {@render operationSection('Queries', resolvedProperties?.queries ?? [], 'query')}
-          {@render operationSection('Transformations', resolvedProperties?.transformations ?? [], 'transformation')}
+          {@render operationSection('Queries', (resolvedProperties?.queries ?? []).filter(isStudiedOperation), 'query')}
+          {@render operationSection('Transformations', (resolvedProperties?.transformations ?? []).filter(isStudiedOperation), 'transformation')}
         </div>
         {#if !isOperationsView && languageRelationships.length}
           <!-- TODO: Fix multi-line link text causing newline injection before suffix -->
@@ -447,5 +446,17 @@
 
     .op-row--clickable:hover {
       background: #f0f9ff;
+    }
+
+    .op-symbol {
+      display: inline-grid;
+      width: 1.35rem;
+      height: 1.2rem;
+      place-items: center;
+      border-radius: 0.2rem;
+      font-family: KaTeX_Main, "Times New Roman", serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1;
     }
   </style>

@@ -59,21 +59,20 @@
 		<section>
 			<h2>What is this?</h2>
 			<p>
-				The Tractable Circuit Zoo is a modernized interactive zoo of tractable circuit languages.
-				It summarizes the core succinctness and tractability concepts into a graph displaying
-				representation languages, the operations they support, and the known compilation
-				relationships between them. It builds on the foundational work of
+				The Tractable Circuit Zoo is a visual guide to tractable circuit languages.
+				We display succinctness relations between languages and operations they support.
+				We build on the foundational work of
 				<a href="https://arxiv.org/abs/1106.1819" target="_blank" rel="noopener">
 					Darwiche &amp; Marquis (2002)
 				</a>
-				and incorporates results from subsequent research.
+				and incorporate results from subsequent research.
 			</p>
 		</section>
 
 		<section>
 			<h2>Definitions</h2>
 			<p>
-				These informal definitions intend to provide a minimalistic, intuitive overview so the reader can understand what this project is about. Each is linked to more formal statements in the literature.
+				These informal definitions intend to provide a minimalistic, intuitive overview of the project. Each is linked to more formal statements in the literature.
 			</p>
 			<div class="definition-list">
 				{#each definitions as definition}
@@ -113,85 +112,11 @@
 				{/each}
 			</div>
 		</section>
-
-		<section>
-			<h2>Languages</h2>
-			<p>
-				The zoo covers roughly 28 propositional language classes — including NNF, DNNF,
-				d-DNNF, FBDD, OBDD, SDD, CNF, DNF, and others — organized in a directed graph
-				where edges represent whether one language can be polynomially or
-				quasi-polynomially compiled into another.
-			</p>
-		</section>
-
-		<section>
-			<h2>Operations</h2>
-			<p>
-				For each language, the map tracks support for standard <strong>queries</strong>
-				(CO, VA, CE, IM, EQ, SE, CT, ME) and <strong>transformations</strong>
-				(CD, FO, SFO, ∧C, ∧BC, ∨C, ∨BC, ¬C), indicating whether each can be
-				performed in polynomial time, quasi-polynomial time, or not at all.
-			</p>
-		</section>
-
 		<section>
 			<h2>Automated reasoning</h2>
 			<p>
-				Starting from a hand-curated knowledge base of published results, the tool
-				validates consistency and propagates derived facts through fixed-point algorithms:
+				Not all of folklore is explicitly documented. We use automated reasoning to derive portions of the zoo, and provide sketch proofs.
 			</p>
-			<ul>
-				<li>
-					<strong>Upgrade propagation</strong> — transitive closure over succinctness
-					edges infers new polynomial/quasi-polynomial compilations.
-				</li>
-				<li>
-					<strong>Downgrade propagation</strong> — contradiction-based reasoning rules out
-					compilations that would violate known negative results.
-				</li>
-				<li>
-					<strong>Operation propagation</strong> — query and transformation support is
-					inferred via succinctness relations and operation implication lemmas.
-				</li>
-			</ul>
-			<p>
-				All derived entries are tagged with human-readable proof descriptions and
-				literature references.
-			</p>
-		</section>
-
-		<section>
-			<h2>Separating functions</h2>
-			<p>
-				Exponential succinctness gaps between languages are witnessed by
-				<strong>separating function families</strong> — Boolean functions like
-				<MathText text="OR_n" />, Clique, Parity, and others — that have compact
-				representations in one language but provably require exponential size in another.
-			</p>
-		</section>
-
-		<section>
-			<h2>Contributing</h2>
-			<p>
-				Know of a new result? The contribution workflow is temporarily paused while the
-				project is prepared for its MVP release.
-			</p>
-		</section>
-
-		<section>
-			<h2>Links</h2>
-			<ul>
-				<li>
-					<a href="https://github.com/dkahdian/tcz" target="_blank" rel="noopener">
-						GitHub repository
-					</a>
-				</li>
-				<li>
-					<a href="https://doi.org/10.1613/jair.989" target="_blank" rel="noopener">
-						Darwiche &amp; Marquis, "A Knowledge Compilation Map" (JAIR, 2002)
-					</a>
-				</li>
-			</ul>
 		</section>
 	</main>
 </div>

@@ -361,6 +361,15 @@ Conditioning preserves decomposability: if $\alpha$ and $\beta$ do not share var
 
 \begin{transformationclaim}
 \claimlanguage{\langref{FBDD}}
+\operation{\ORBC}
+\status{\nopolyunknownquasi}
+\begin{description}
+\citet[Theorem 6.3.2]{Wegener_2000} shows that there are Boolean functions $f,g:\{0,1\}^n\to\{0,1\}$, each computable by \langref{OBDD}{s} of size $O(n)$, such that any \langref{FBDD} computing $f\lor g$ has size $2^{\Omega(\sqrt{n})}$.
+\end{description}
+\end{transformationclaim}
+
+\begin{transformationclaim}
+\claimlanguage{\langref{FBDD}}
 \operation{\NOTC}
 \status{\poly}
 \begin{description}

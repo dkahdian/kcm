@@ -425,7 +425,7 @@
   }
 
   let matrixScrollEl: HTMLDivElement;
-  let cellSize = $state({ width: 44, height: 34, headerWidth: 116 });
+  let cellSize = $state({ width: 42, height: 34, headerWidth: 92 });
   let lastContainerSize = { width: 0, height: 0 };
   let lastLanguageCount = 0;
   let lastQuasiSizingMode = showQuasipolynomialSandboxOptions;
@@ -467,12 +467,16 @@
       return;
     }
 
-    const headerWidth = 116;
+    // Keep the row labels compact. The previous measured table generally resolved
+    // to about this width; 116px made the sticky first column disproportionately wide.
+    const headerWidth = 92;
     const headerHeight = 80;
     const dataCols = Math.max(langCount, 1);
     const availableDataWidth = Math.max(0, containerWidth - headerWidth);
     const availableDataHeight = Math.max(0, containerHeight - headerHeight);
-    const minCellWidth = quasiSizingMode ? 66 : 42;
+    // Quasipolynomial notation needs a little extra room, but 66px forced the
+    // complete matrix to overflow even when its contents fit more tightly.
+    const minCellWidth = quasiSizingMode ? 52 : 42;
     const width = Math.max(minCellWidth, Math.floor(availableDataWidth / dataCols));
     const height = Math.max(28, Math.floor(availableDataHeight / dataCols));
     const next = { width, height, headerWidth };

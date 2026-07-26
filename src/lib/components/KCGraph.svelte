@@ -17,8 +17,6 @@
   import { renderMathText, escapeHtml } from '$lib/utils/math-text.js';
   import { normalizeEdgePairs, buildSameLayerGroups, type EdgePair } from '$lib/utils/graph-layout.js';
 
-  const NODE_POSITIONS_STORAGE_KEY = 'kcm_graph_positions';
-
   let pluginsRegistered = false;
 
   function ensureCytoscapePluginsRegistered() {
@@ -26,57 +24,6 @@
     cytoscape.use(dagre);
     nodeEdgeHtmlLabel(cytoscape as any);
     pluginsRegistered = true;
-  }
-
-  type StoredNodePositions = Record<string, NodePosition>;
-
-  function loadStoredNodePositions(): StoredNodePositions {
-    if (!browser) return {};
-    try {
-      const raw = localStorage.getItem(NODE_POSITIONS_STORAGE_KEY);
-      if (!raw) return {};
-      const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== 'object') return {};
-      const result: StoredNodePositions = {};
-      for (const [key, value] of Object.entries(parsed as Record<string, any>)) {
-        if (!value || typeof value !== 'object') continue;
-        const x = typeof (value as any).x === 'number' ? (value as any).x : null;
-        const y = typeof (value as any).y === 'number' ? (value as any).y : null;
-        if (x === null || y === null) continue;
-        result[key] = { x, y };
-      }
-      return result;
-    } catch (error) {
-      console.warn('Failed to load stored node positions', error);
-      return {};
-    }
-  }
-
-  function persistNodePositions(nodes: cytoscape.NodeCollection) {
-    if (!browser) return;
-    try {
-      const existing = loadStoredNodePositions();
-      nodes.forEach((node) => {
-        const pos = node.position();
-        existing[node.id()] = { x: pos.x, y: pos.y };
-      });
-      localStorage.setItem(NODE_POSITIONS_STORAGE_KEY, JSON.stringify(existing));
-    } catch (error) {
-      console.warn('Failed to persist node positions', error);
-    }
-  }
-
-  function persistPositionMap(positions: Map<string, NodePosition>) {
-    if (!browser) return;
-    try {
-      const existing = loadStoredNodePositions();
-      for (const [nodeId, pos] of positions) {
-        existing[nodeId] = { x: pos.x, y: pos.y };
-      }
-      localStorage.setItem(NODE_POSITIONS_STORAGE_KEY, JSON.stringify(existing));
-    } catch (error) {
-      console.warn('Failed to persist node positions', error);
-    }
   }
 
   function getRenderableContent(value: string | null | undefined) {
@@ -152,23 +99,13 @@
   }
 
   function resetGraphPositions() {
-    if (!browser) return;
-    if (sandboxMode) {
-      const languageIds = cy?.nodes().map((node) => node.id()) ?? [];
-      onSandboxNodePositionsReset?.(languageIds);
-      return;
-    }
-    localStorage.removeItem(NODE_POSITIONS_STORAGE_KEY);
-    
-    // Recreate the graph with default positions
-    if (cy) {
-      cy.destroy();
-      createGraph();
-    }
+    if (!browser || !sandboxMode) return;
+    const languageIds = cy?.nodes().map((node) => node.id()) ?? [];
+    onSandboxNodePositionsReset?.(languageIds);
   }
 
   function applyAutoLayout() {
-    if (!cy || autoLayoutPositions.size === 0) return;
+    if (!sandboxMode || !cy || autoLayoutPositions.size === 0) return;
 
     cy.batch(() => {
       cy.nodes().forEach((node) => {
@@ -178,16 +115,12 @@
       });
     });
 
-    if (sandboxMode) {
-      onSandboxNodePositionsChange?.(
-        Array.from(autoLayoutPositions.entries()).map(([languageId, position]) => ({
-          languageId,
-          position: { x: position.x, y: position.y }
-        }))
-      );
-    } else {
-      persistPositionMap(autoLayoutPositions);
-    }
+    onSandboxNodePositionsChange?.(
+      Array.from(autoLayoutPositions.entries()).map(([languageId, position]) => ({
+        languageId,
+        position: { x: position.x, y: position.y }
+      }))
+    );
     reportCurrentNodePositions();
     cy.fit(cy.elements(), 40);
   }
@@ -204,8 +137,6 @@
       .filter(lang => !isFilteredData || visibleLanguageIds!.has(lang.id));
     const configuredDefaultPositions = graphData.defaultNodePositionsByLanguageName ?? {};
 
-    const storedPositions = sandboxMode ? {} : loadStoredNodePositions();
-    
     // Clear default positions map for this rebuild
     defaultPositions.clear();
     autoLayoutPositions.clear();
@@ -382,10 +313,7 @@
         defaultPositions.set(lang.id, { ...defaultPosition });
         autoLayoutPositions.set(lang.id, { ...computedDefaultPosition });
 
-        const storedPosition = storedPositions[lang.id];
-        const initialPosition = storedPosition
-          ? { x: storedPosition.x, y: storedPosition.y }
-          : { ...defaultPosition };
+        const initialPosition = { ...defaultPosition };
 
         const labelPrefix = lang.visual?.labelPrefix || '';
         const labelSuffix = lang.visual?.labelSuffix || '';
@@ -524,6 +452,7 @@
       userZoomingEnabled: true,
       userPanningEnabled: true,
       boxSelectionEnabled: false,
+      autoungrabify: !sandboxMode,
       selectionType: 'single'
     });
 
@@ -555,28 +484,22 @@
 
     // @ts-ignore - provided by plugin
     cy.nodeHtmlLabel(htmlLabelOptions);
+    if (!sandboxMode) {
+      cy.nodes().ungrabify();
+    }
 
     if (browser) {
-      if (!sandboxMode) {
-        persistNodePositions(cy.nodes());
-      }
       reportCurrentNodePositions();
-      
-      cy.on('free', 'node', (evt) => {
+
+      if (sandboxMode) cy.on('free', 'node', (evt) => {
         const movedNode = evt.target;
         const pos = movedNode.position();
-        if (sandboxMode) {
-          onSandboxNodePositionsChange?.([
-            {
-              languageId: movedNode.id(),
-              position: { x: pos.x, y: pos.y }
-            }
-          ]);
-        } else {
-          // After a reset, only persist the positions of nodes that were actually moved
-          // to avoid overwriting the empty localStorage with all default positions
-          persistNodePositions(movedNode);
-        }
+        onSandboxNodePositionsChange?.([
+          {
+            languageId: movedNode.id(),
+            position: { x: pos.x, y: pos.y }
+          }
+        ]);
         reportCurrentNodePositions();
       });
     }
@@ -803,24 +726,26 @@
     <div class="axis-label axis-label-bottom">Less succinct</div>
   </div>
   
-  <div class="layout-controls" aria-label="Graph layout controls">
-    <button 
-      class="layout-btn"
-      onclick={resetGraphPositions}
-      type="button"
-      title="Use the default saved layout"
-    >
-      Default
-    </button>
-    <button 
-      class="layout-btn"
-      onclick={applyAutoLayout}
-      type="button"
-      title="Automatically place visible nodes with Dagre"
-    >
-      Auto
-    </button>
-  </div>
+  {#if sandboxMode}
+    <div class="layout-controls" aria-label="Graph layout controls">
+      <button
+        class="layout-btn"
+        onclick={resetGraphPositions}
+        type="button"
+        title="Reset node positions to the default layout"
+      >
+        Default
+      </button>
+      <button
+        class="layout-btn"
+        onclick={applyAutoLayout}
+        type="button"
+        title="Automatically place visible nodes with Dagre"
+      >
+        Auto
+      </button>
+    </div>
+  {/if}
 </div>
 
 <style>

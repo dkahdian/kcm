@@ -270,8 +270,8 @@
                             tabindex="0"
                             onclick={scrollToReferences}
                             onkeydown={(e) => e.key === 'Enter' && scrollToReferences(e)}
-                            title="View reference"
-                          >[bib]</span>{/each}{/if}
+                            title={`View reference ${getGlobalRefNumber(refId) ?? '?'}`}
+                          >[{getGlobalRefNumber(refId) ?? '?'}]</span>{/each}{/if}
                     </div>
                     {#if op.assumption}
                       <div class="text-xs text-gray-500">

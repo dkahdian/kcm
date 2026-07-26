@@ -89,7 +89,9 @@
 			<ol class="reference-list">
 				{#each aboutReferences as reference}
 					<li class="reference-item">
-						<span class="reference-number" title={`Reference ${getGlobalRefNumber(reference.id) ?? '?'}`}>[bib]</span>
+						<span class="reference-number" title={`Reference ${getGlobalRefNumber(reference.id) ?? '?'}`}>
+							[{getGlobalRefNumber(reference.id) ?? '?'}]
+						</span>
 						{#if reference.href && reference.href !== '#'}
 							<a
 								class="reference-link"

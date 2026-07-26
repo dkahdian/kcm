@@ -256,7 +256,9 @@
 			{#each filtered as ref (ref.id)}
 				{@const claimTags = getClaimTagsForRef(ref.id)}
 				<li class="ref" id={ref.id}>
-					<span class="ordinal" title={`Reference ${getGlobalRefNumber(ref.id) ?? '?'}`}>[bib]</span>
+					<span class="ordinal" title={`Reference ${getGlobalRefNumber(ref.id) ?? '?'}`}>
+						[{getGlobalRefNumber(ref.id) ?? '?'}]
+					</span>
 					<span class="year-badge">{extractYear(ref) < 9999 ? extractYear(ref) : '—'}</span>
 					<div class="ref-main">
 						{#if ref.href && ref.href !== '#'}

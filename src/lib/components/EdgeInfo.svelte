@@ -382,8 +382,8 @@
                   {parts.prefix}{#if relation.assumption}{' '}assuming <MathText text={formatAssumptionForMathText(relation.assumption)} className="inline" />{/if}{parts.suffix}{#if relation.refs.length}{' '}{#each relation.refs as refId}<button 
                       class="ref-badge"
                       onclick={scrollToReferences}
-                      title="View reference"
-                    >[bib]</button>{/each}{/if}
+                      title={`View reference ${getGlobalRefNumber(refId) ?? '?'}`}
+                    >[{getGlobalRefNumber(refId) ?? '?'}]</button>{/each}{/if}
                 </h5>
               {/if}
               {#if relation.description && !(sandboxMode && editable)}

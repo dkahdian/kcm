@@ -92,7 +92,7 @@ Alternatively, since \thislang does not support Bounded Conjunction in quasipoly
 \operation{\ANDC}
 \status{\nopolyunknownquasi}
 \begin{description}
-In the language \thislang, every clause has a polynomial-size representation. If \thislang supported $\land$C, then every \langref{CNF} could be compiled into \thislang by conjoining the translated clauses. This contradicts \nocompilespoly{\langref{CNF}}{\thislang} \citep{TCZ_Forthcoming}. \citep{Darwiche_2002}
+In the language \thislang, every clause has a polynomial-size representation. If \thislang supported $\land$C, then every \langref{CNF} could be compiled into \thislang by conjoining the translated clauses. This contradicts \nocompilespoly{\langref{CNF}}{\thislang} \citep{TCZ_Forthcoming}.
 \end{description}
 \end{batchclaim}
 
@@ -145,7 +145,7 @@ Note that \citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly
 \operation{\SFO}
 \status{\nopolyunknownquasi}
 \begin{description}
-If \thislang supported Singleton Forgetting in polynomial time, then given two \thislang circuits $f$ and $g$ we could form the decision $(x \land f) \lor (\neg x \land g)$ with only constant overhead and forget $x$, yielding $f \lor g$. This would give polynomial-time Bounded Disjunction for \thislang, contradicting the lower bound of \citet{Vinall-Smeeth_2024}. \citep{TCZ_Forthcoming}
+If \thislang supported SFO in polynomial time, then given two \thislang circuits $f$ and $g$ we could form the decision $(x \land f) \lor (\neg x \land g)$ with only constant overhead and forget $x$, yielding $f \lor g$. This would give polynomial-time Bounded Disjunction for \thislang, contradicting the lower bound of \citet{Vinall-Smeeth_2024}. \citep{TCZ_Forthcoming}
 \end{description}
 \end{batchclaim}
 
@@ -184,7 +184,7 @@ In the language \thislang, every term has a polynomial-size representation. If \
 \status{\nopolyunknownquasi}
 \assuming{P \neq NP}
 \begin{description}
-If \thislang supported FO, then the consistency of any \langref{CNF} representation $\Sigma$ could be tested in polynomial time: represent $\Sigma$ in \thislang, compute $\exists\text{Vars}(\Sigma).\Sigma$, and check the resulting constant representation. This would decide \langref{CNF} consistency in polynomial time, implying P = NP \citep{Darwiche_2002}.
+If \thislang supported FO, then the consistency of any \langref{CNF} representation $\Sigma$ could be tested in polynomial time: represent $\Sigma$ in \thislang, compute $\exists\text{Vars}(\Sigma).\Sigma$, and check the resulting constant representation. This would decide \langref{CNF} consistency in polynomial time, implying $\mathrm{P = NP}$ \citep{Darwiche_2002}.
 \end{description}
 \end{batchclaim}
 
@@ -193,7 +193,7 @@ If \thislang supported FO, then the consistency of any \langref{CNF} representat
 \operation{\FO}
 \status{\nopolyunknownquasi}
 \begin{description}
-A quasipolynomial-time forgetting procedure for \thislang would turn every \langref{DNF} representation into an equivalent \thislang representation of quasipolynomial size in the input \langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \nocompilespoly{\langref{DNF}}{\thislang} \citep{TCZ_Forthcoming}. \citep{Darwiche_2002,VanDenBroeck_2015}
+A polynomial-time forgetting procedure for \thislang would turn every \langref{DNF} representation into an equivalent \thislang representation of polynomial size in the input \langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \nocompilespoly{\langref{DNF}}{\thislang} \citep{TCZ_Forthcoming}. \citep{Darwiche_2002,VanDenBroeck_2015}
 \end{description}
 \end{batchclaim}
 

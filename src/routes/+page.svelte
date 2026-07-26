@@ -1510,6 +1510,9 @@
           onclick={downloadCurrentLatexExport}
           title="Download LaTeX for the current filtered view"
         >
+          <svg class="export-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
+          </svg>
           {latexExportLabel}
         </button>
         <a href="/about" class="about-link">
@@ -2215,25 +2218,44 @@
 
   .latex-export {
     padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
-    color: white;
-    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
     border-radius: 0.5rem;
     font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 1px 2px 0 rgba(6, 95, 70, 0.15);
+    box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
   }
 
   .latex-export:hover {
-    background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
-    box-shadow: 0 4px 6px -1px rgba(6, 95, 70, 0.2);
+    background: #f8fafc;
+    color: #1d4ed8;
+    border-color: #94a3b8;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
     transform: translateY(-1px);
   }
 
   .latex-export:active {
     transform: translateY(0);
+  }
+
+  .latex-export:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+  }
+
+  .export-icon {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
   }
 
   .about-link:hover {

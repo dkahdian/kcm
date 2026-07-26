@@ -206,7 +206,7 @@ Equivalently, \langfam{OBDD}{<}{s} are \langref{FBDD}{s} required to respect the
 \shortname{\langref{PI}}
 \fullname{Prime Implicates}
 \begin{description}
-The subset of \langref{CNF} where formulas are the conjunction of all minimal entailed clauses (prime implicates). \citep{Quine_1952}.
+The subset of \langref{CNF} where formulas are the conjunction of all minimal entailed clauses (prime implicates) \citep{Quine_1952}.
 \end{description}
 \end{language}
 
@@ -324,7 +324,7 @@ Equivalently, \langfam{dec-SDNNF}{T} formulas are \langfam{SDNNF}{T} formulas wh
 \shortname{\langfam{cSDD}{T}}
 \fullname{Compressed Sentential Decision Diagrams (wrt a fixed vtree)}
 \begin{description}
-\langfam{cSDD}{T} is the subset of \langfam{SDD}{T} that is \emph{compressed}, a restriction that makes the representation canonical (i.e., there is a unique representation for every function). \citep{Darwiche_2011}
+\langfam{cSDD}{T} is the subset of \langfam{SDD}{T} that is \emph{compressed} and either \emph{trimmed} or \emph{normalized}, a restriction that makes the representation canonical (i.e., there is a unique representation for every function). Since both trimming and normalization can be performed in polynomial time, claims in this project hold under either convention \citep{Darwiche_2011}
 \end{description}
 \end{language}
 

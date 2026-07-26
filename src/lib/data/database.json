@@ -10689,8 +10689,8 @@
     {
       "id": "Beame_2013",
       "title": "Lower Bounds for Exact Model Counting and Applications in Probabilistic Databases",
-      "href": "https://dslpitt.org/uai/displayArticleDetails.jsp?mmnu=1\\&smnu=2\\&article\\_id=2366\\&proceeding\\_id=29",
-      "bibtex": "@inproceedings{Beame_2013,\n  author       = {Paul Beame and\n                  Jerry Li and\n                  Sudeepa Roy and\n                  Dan Suciu},\n  editor       = {Ann E. Nicholson and\n                  Padhraic Smyth},\n  title        = {Lower Bounds for Exact Model Counting and Applications in Probabilistic\n                  Databases},\n  booktitle    = {Proceedings of the Twenty-Ninth Conference on Uncertainty in Artificial\n                  Intelligence, {UAI} 2013, Bellevue, WA, USA, August 11-15, 2013},\n  publisher    = {{AUAI} Press},\n  year         = {2013},\n  url          = {https://dslpitt.org/uai/displayArticleDetails.jsp?mmnu=1\\&smnu=2\\&article\\_id=2366\\&proceeding\\_id=29},\n  timestamp    = {Tue, 19 Aug 2025 13:16:28 +0200},\n  biburl       = {https://dblp.org/rec/conf/uai/BeameLRS13.bib},\n  bibsource    = {dblp computer science bibliography, https://dblp.org}\n}"
+      "href": "https://auai.org/uai2013/prints/proceedings.pdf",
+      "bibtex": "@inproceedings{Beame_2013,\n  author    = {Beame, Paul and Li, Jerry and Roy, Sudeepa and Suciu, Dan},\n  editor    = {Nicholson, Ann E. and Smyth, Padhraic},\n  title     = {Lower Bounds for Exact Model Counting and Applications in Probabilistic Databases},\n  booktitle = {Proceedings of the Twenty-Ninth Conference on Uncertainty in Artificial Intelligence ({UAI} 2013)},\n  pages     = {52--61},\n  publisher = {{AUAI} Press},\n  year      = {2013},\n  url       = {https://auai.org/uai2013/prints/proceedings.pdf}\n}"
     },
     {
       "id": "Beame_2015",
@@ -10705,12 +10705,6 @@
       "bibtex": "@article{Blum_1980,\n  title={Equivalence of free boolean graphs can be decided probabilistically in polynomial time},\n  author={Blum, Manuel and Chandra, Ashok K. and Wegman, Mark N.},\n  journal={Information Processing Letters},\n  volume={10},\n  number={2},\n  pages={80--82},\n  year={1980},\n  publisher={Elsevier},\n  doi={10.1016/S0020-0190(80)90078-2}\n}"
     },
     {
-      "id": "Bodlaender_1993",
-      "title": "A Linear Time Algorithm for Finding Tree-decompositions of Small Treewidth",
-      "href": "10.1145/167088.167161",
-      "bibtex": "@inproceedings{Bodlaender_1993,\ntitle = \"A Linear Time Algorithm for Finding Tree-decompositions of Small Treewidth\",\nabstract = \"In this paper, we give, for constant k, a linear time algorithm, that given a graph G = (V, E), determines whether the treewidth of G is at most k, and if so, finds a treedecomposition of G with treewidth at most k. A consequence is that every minor-closed class of graphs that does not contain all planar graphs has a linear time recognition algorithm. \",\nkeywords = \"graph algorithms, graph minors, partial k-trees, pathwidth, treewidth\",\nauthor = \"Bodlaender, \\{Hans L.\\}\",\nyear = \"1993\",\ndoi = \"10.1145/167088.167161\",\nlanguage = \"English\",\nseries = \"STOC '93\",\npublisher = \"Association for Computing Machinery\",\npages = \"226--234\",\nbooktitle = \"Proceedings of the Twenty-fifth Annual ACM Symposium on Theory of Computing\",\n}"
-    },
-    {
       "id": "Bollig_2019",
       "title": "On the Relative Succinctness of Sentential Decision Diagrams",
       "href": "https://doi.org/10.1007/s00224-018-9904-z",
@@ -10718,21 +10712,21 @@
     },
     {
       "id": "Bova_2014",
-      "title": "Expander CNFs have exponential DNNF size",
-      "href": "http://www.cril.univ-artois.fr/~mengel/papers/cnf-to-dnnf-lower-bound.pdf",
-      "bibtex": "@unpublished{Bova_2014,\n  title={Expander {CNFs} have exponential {DNNF} size},\n  author={Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  year={2014},\n  note={Unpublished manuscript},\n  url={http://www.cril.univ-artois.fr/~mengel/papers/cnf-to-dnnf-lower-bound.pdf}\n}"
+      "title": "A Strongly Exponential Separation of DNNFs from CNF Formulas",
+      "href": "https://arxiv.org/abs/1411.1995",
+      "bibtex": "@misc{Bova_2014,\n  author        = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  title         = {A Strongly Exponential Separation of {DNNF}s from {CNF} Formulas},\n  year          = {2014},\n  eprint        = {1411.1995},\n  archivePrefix = {arXiv},\n  primaryClass  = {cs.CC},\n  doi           = {10.48550/arXiv.1411.1995},\n  url           = {https://arxiv.org/abs/1411.1995}\n}"
     },
     {
       "id": "Bova_2016",
       "title": "Knowledge Compilation Meets Communication Complexity",
-      "href": "https://univ-artois.hal.science/hal-03301001",
-      "bibtex": "@inproceedings{Bova_2016,\n  TITLE = {{Knowledge Compilation Meets Communication Complexity}},\n  AUTHOR = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  URL = {https://univ-artois.hal.science/hal-03301001},\n  BOOKTITLE = {{25th International Joint Conference on Artificial Intelligence (IJCAI'16)}},\n  ADDRESS = {New York, NY, USA},\n  EDITOR = {Subbarao Kambhampati},\n  PUBLISHER = {{IJCAI/AAAI Press}},\n  PAGES = {1008--1014},\n  YEAR = {2016},\n  HAL_ID = {hal-03301001},\n  HAL_VERSION = {v1},\n}"
+      "href": "https://www.ijcai.org/Abstract/16/147",
+      "bibtex": "@inproceedings{Bova_2016,\n  author    = {Bova, Simone and Capelli, Florent and Mengel, Stefan and Slivovsky, Friedrich},\n  editor    = {Kambhampati, Subbarao},\n  title     = {Knowledge Compilation Meets Communication Complexity},\n  booktitle = {Proceedings of the Twenty-Fifth International Joint Conference on Artificial Intelligence ({IJCAI} 2016)},\n  pages     = {1008--1014},\n  publisher = {{IJCAI/AAAI} Press},\n  year      = {2016},\n  url       = {https://www.ijcai.org/Abstract/16/147}\n}"
     },
     {
       "id": "Bova_2016_a",
       "title": "SDDs Are Exponentially More Succinct than OBDDs",
       "href": "https://ojs.aaai.org/index.php/AAAI/article/view/10107",
-      "bibtex": "@article{Bova_2016_a, title={SDDs Are Exponentially More Succinct than OBDDs}, volume={30}, url={https://ojs.aaai.org/index.php/AAAI/article/view/10107}, DOI={10.1609/aaai.v30i1.10107}, abstractNote={ &lt;p&gt; Introduced by Darwiche (2011), sentential decision diagrams (SDDs) are essentially as tractable as ordered binary decision diagrams (OBDDs), but tend to be more succinct in practice. This makes SDDs a prominent representation language, with many applications in artificial intelligence and knowledge compilation. We prove that SDDs are more succinct than OBDDs also in theory, by constructing a family of boolean functions where each member has polynomial SDD size but exponential OBDD size. This exponential separation improves a quasipolynomial separation recently established by Razgon (2014), and settles an open problem in knowledge compilation (Darwiche, 2011). &lt;/p&gt; }, number={1}, journal={Proceedings of the AAAI Conference on Artificial Intelligence}, author={Bova, Simone}, year={2016}, month={Feb.} }"
+      "bibtex": "@inproceedings{Bova_2016_a,\n  author    = {Bova, Simone},\n  editor    = {Schuurmans, Dale and Wellman, Michael P.},\n  title     = {{SDD}s Are Exponentially More Succinct than {OBDD}s},\n  booktitle = {Proceedings of the Thirtieth {AAAI} Conference on Artificial Intelligence},\n  pages     = {929--935},\n  publisher = {{AAAI} Press},\n  year      = {2016},\n  doi       = {10.1609/aaai.v30i1.10107},\n  url       = {https://ojs.aaai.org/index.php/AAAI/article/view/10107}\n}"
     },
     {
       "id": "Bryant_1986",
@@ -10791,14 +10785,14 @@
     {
       "id": "Darwiche_2002",
       "title": "A Knowledge Compilation Map",
-      "href": "http://dx.doi.org/10.1613/jair.989",
-      "bibtex": "@article{Darwiche_2002,\n   title={A Knowledge Compilation Map},\n   volume={17},\n   ISSN={1076-9757},\n   url={http://dx.doi.org/10.1613/jair.989},\n   DOI={10.1613/jair.989},\n   journal={Journal of Artificial Intelligence Research},\n   publisher={AI Access Foundation},\n   author={Darwiche, A. and Marquis, P.},\n   year={2002},\n   month=sep, pages={229--264} }"
+      "href": "https://doi.org/10.1613/jair.989",
+      "bibtex": "@article{Darwiche_2002,\n  author    = {Darwiche, Adnan and Marquis, Pierre},\n  title     = {A Knowledge Compilation Map},\n  journal   = {Journal of Artificial Intelligence Research},\n  volume    = {17},\n  pages     = {229--264},\n  year      = {2002},\n  issn      = {1076-9757},\n  doi       = {10.1613/jair.989},\n  url       = {https://doi.org/10.1613/jair.989}\n}"
     },
     {
       "id": "Darwiche_2011",
-      "title": "SDD: a new canonical representation of propositional knowledge bases",
-      "href": "10.5591/978-1-57735-516-8/IJCAI11-143",
-      "bibtex": "@inproceedings{Darwiche_2011,\nauthor = {Darwiche, Adnan},\ntitle = {SDD: a new canonical representation of propositional knowledge bases},\nyear = {2011},\nisbn = {9781577355144},\npublisher = {AAAI Press},\nabstract = {We identify a new representation of propositional knowledge bases, the Sentential Decision Diagram (SDD), which is interesting for a number of reasons. First, it is canonical in the presence of additional properties that resemble reduction rules of OBDDs. Second, SDDs can be combined using any Boolean operator in polytime. Third, CNFs with n variables and treewidth w have canonical SDDs of size O(n2w), which is tighter than the bound on OBDDs based on pathwidth. Finally, every OBDD is an SDD. Hence, working with the latter does not preclude the former.},\nbooktitle = {Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence - Volume Two},\npages = {819--826},\nnumpages = {8},\nlocation = {Barcelona, Catalonia, Spain},\nseries = {IJCAI'11},\ndoi = {10.5591/978-1-57735-516-8/IJCAI11-143}\n}"
+      "title": "SDD: A New Canonical Representation of Propositional Knowledge Bases",
+      "href": "https://www.ijcai.org/Abstract/11/143",
+      "bibtex": "@inproceedings{Darwiche_2011,\n  author    = {Darwiche, Adnan},\n  editor    = {Walsh, Toby},\n  title     = {{SDD}: A New Canonical Representation of Propositional Knowledge Bases},\n  booktitle = {Proceedings of the Twenty-Second International Joint Conference on Artificial Intelligence ({IJCAI} 2011)},\n  pages     = {819--826},\n  publisher = {{AAAI} Press/International Joint Conferences on Artificial Intelligence},\n  year      = {2011},\n  doi       = {10.5591/978-1-57735-516-8/IJCAI11-143},\n  url       = {https://www.ijcai.org/Abstract/11/143}\n}"
     },
     {
       "id": "Darwiche_Huang_2002",
@@ -10831,22 +10825,10 @@
       "bibtex": "@ARTICLE{Gergov_1994,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197--1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}"
     },
     {
-      "id": "Gogic_1995",
-      "title": "The Comparative Linguistics of Knowledge Representation",
-      "href": "http://ijcai.org/Proceedings/95-1/Papers/111.pdf",
-      "bibtex": "@inproceedings{Gogic_1995,\n  title={The Comparative Linguistics of Knowledge Representation},\n  author={Gogic, Goran and Kautz, Henry and Papadimitriou, Christos H. and Selman, Bart},\n  booktitle={Proceedings of the 14th International Joint Conference on Artificial Intelligence (IJCAI-95)},\n  pages={862--869},\n  year={1995},\n  publisher={Morgan Kaufmann},\n  url={http://ijcai.org/Proceedings/95-1/Papers/111.pdf}\n}"
-    },
-    {
-      "id": "Jukna_2002",
-      "title": "Triangle-Freeness is Hard to Detect",
-      "href": "10.1017/S0963548302005333",
-      "bibtex": "@article{Jukna_2002, title={Triangle-Freeness is Hard to Detect}, volume={11}, DOI={10.1017/S0963548302005333}, number={6}, journal={Combinatorics, Probability and Computing}, author={Jukna, S. and Schnitger, G.}, year={2002}, pages={549--569}}"
-    },
-    {
       "id": "Kaleyski_2016",
-      "title": "Boolean methods in knowledge compilation",
-      "href": "https://dspace.cuni.cz/bitstream/handle/20.500.11956/83080/DPTX_2014_2_11320_0_450653_0_169085.pdf?sequence=1",
-      "bibtex": "@mastersthesis{Kaleyski_2016,\n  author       = {Kaleyski, Nikolay Stoyanov},\n  title        = {Boolean methods in knowledge compilation},\n  school       = {Charles University, Faculty of Mathematics and Physics},\n  year         = {2016},\n  address      = {Prague, Czech Republic},\n  type         = {Master's thesis},\n  keywords     = {Boolean functions, knowledge compilation, PI, MODS, prime implicants},\n  note         = {Master's thesis, Department of Theoretical Computer Science and Mathematical Logic},\n  url          = {https://dspace.cuni.cz/bitstream/handle/20.500.11956/83080/DPTX_2014_2_11320_0_450653_0_169085.pdf?sequence=1}\n}"
+      "title": "Boolean Methods in Knowledge Compilation",
+      "href": "https://hdl.handle.net/20.500.11956/83080",
+      "bibtex": "@mastersthesis{Kaleyski_2016,\n  author  = {Kaleyski, Nikolay Stoyanov},\n  title   = {Boolean Methods in Knowledge Compilation},\n  school  = {Charles University, Faculty of Mathematics and Physics},\n  address = {Prague, Czech Republic},\n  type    = {Master's thesis},\n  year    = {2016},\n  url     = {https://hdl.handle.net/20.500.11956/83080}\n}"
     },
     {
       "id": "Lang_2003",
@@ -10863,14 +10845,14 @@
     {
       "id": "Marquis_2000",
       "title": "Consequence Finding Algorithms",
-      "href": "10.1007/978-94-017-1737-3_3",
-      "bibtex": "@incollection{Marquis_2000,\n  author = {Marquis, Pierre},\n  title = {Consequence Finding Algorithms},\n  booktitle = {Handbook of Defeasible Reasoning and Uncertainty Management Systems},\n  volume = {5},\n  pages = {41--145},\n  year = {2000},\n  publisher = {Springer},\n  doi={10.1007/978-94-017-1737-3_3}\n}"
+      "href": "https://doi.org/10.1007/978-94-017-1737-3_3",
+      "bibtex": "@incollection{Marquis_2000,\n  author    = {Marquis, Pierre},\n  editor    = {Kohlas, J{\\\"u}rg and Moral, Seraf{\\'i}n},\n  title     = {Consequence Finding Algorithms},\n  booktitle = {Algorithms for Uncertainty and Defeasible Reasoning},\n  series    = {Handbook of Defeasible Reasoning and Uncertainty Management Systems},\n  volume    = {5},\n  pages     = {41--145},\n  publisher = {Springer},\n  address   = {Dordrecht},\n  year      = {2000},\n  doi       = {10.1007/978-94-017-1737-3_3},\n  url       = {https://doi.org/10.1007/978-94-017-1737-3_3}\n}"
     },
     {
       "id": "Meinel_Theobald_1998",
-      "title": "Algorithms and Data Structures in VLSI Design: OBDD - Foundations and Applications",
-      "href": "",
-      "bibtex": "@book{Meinel_Theobald_1998,\n  author = {Meinel, Christoph and Theobald, Thorsten},\n  title = {Algorithms and Data Structures in VLSI Design: OBDD - Foundations and Applications},\n  year = {1998},\n  isbn = {3540644865},\n  publisher = {Springer-Verlag},\n  address = {Berlin, Heidelberg}\n}"
+      "title": "Algorithms and Data Structures in VLSI Design: OBDD–-Foundations and Applications",
+      "href": "https://doi.org/10.1007/978-3-642-58940-9",
+      "bibtex": "@book{Meinel_Theobald_1998,\n  author    = {Meinel, Christoph and Theobald, Thorsten},\n  title     = {Algorithms and Data Structures in {VLSI} Design: {OBDD}---Foundations and Applications},\n  publisher = {Springer-Verlag},\n  address   = {Berlin, Heidelberg},\n  year      = {1998},\n  isbn      = {978-3-540-64486-6},\n  doi       = {10.1007/978-3-642-58940-9},\n  url       = {https://doi.org/10.1007/978-3-642-58940-9}\n}"
     },
     {
       "id": "Pipatsrisawat_2008",
@@ -10888,7 +10870,7 @@
       "id": "Pipatsrisawat_Darwiche_2010",
       "title": "A Lower Bound on the Size of Decomposable Negation Normal Form",
       "href": "https://ojs.aaai.org/index.php/AAAI/article/view/7600",
-      "bibtex": "@inproceedings{Pipatsrisawat_Darwiche_2010,\n  title={A Lower Bound on the Size of Decomposable Negation Normal Form},\n  author={Pipatsrisawat, Knot and Darwiche, Adnan},\n  booktitle={Proceedings of the Twenty-Fourth AAAI Conference on Artificial Intelligence},\n  pages={345--350},\n  year={2010},\n  publisher={AAAI Press},\n  doi={10.1609/aaai.v24i1.7600},\n  url={https://ojs.aaai.org/index.php/AAAI/article/view/7600}\n}"
+      "bibtex": "@inproceedings{Pipatsrisawat_Darwiche_2010,\n  author    = {Pipatsrisawat, Thammanit and Darwiche, Adnan},\n  title     = {A Lower Bound on the Size of Decomposable Negation Normal Form},\n  booktitle = {Proceedings of the Twenty-Fourth {AAAI} Conference on Artificial Intelligence},\n  pages     = {345--350},\n  publisher = {{AAAI} Press},\n  year      = {2010},\n  doi       = {10.1609/aaai.v24i1.7600},\n  url       = {https://ojs.aaai.org/index.php/AAAI/article/view/7600}\n}"
     },
     {
       "id": "Quine_1952",
@@ -10901,12 +10883,6 @@
       "title": "On the Hardness of Approximate Reasoning",
       "href": "10.1016/0004-3702(94)00092-1",
       "bibtex": "@article{Roth_1996,\n  author = {Roth, Dan},\n  title = {On the Hardness of Approximate Reasoning},\n  journal = {Artificial Intelligence},\n  volume = {82},\n  number = {1--2},\n  pages = {273--302},\n  year = {1996},\n  publisher={Elsevier},\n  doi={10.1016/0004-3702(94)00092-1}\n}"
-    },
-    {
-      "id": "Sauerhoff_2003",
-      "title": "Approximation of boolean functions by combinatorial rectangles",
-      "href": "https://www.sciencedirect.com/science/article/pii/S0304397502005686",
-      "bibtex": "@article{Sauerhoff_2003,\ntitle = {Approximation of boolean functions by combinatorial rectangles},\njournal = {Theoretical Computer Science},\nvolume = {301},\nnumber = {1},\npages = {45--78},\nyear = {2003},\nissn = {0304-3975},\ndoi = {10.1016/S0304-3975(02)00568-6},\nurl = {https://www.sciencedirect.com/science/article/pii/S0304397502005686},\nauthor = {Martin Sauerhoff},\nkeywords = {Branching programs, Communication complexity, Lower bounds, Approximation, Nondeterminism, Randomness},\nabstract = {This paper deals with the number of monochromatic combinatorial rectangles required to approximate a boolean function on a constant fraction of all inputs, where each rectangle may use its own partition of the input variables. The main result of the paper is that the number of rectangles required for the approximation of boolean functions in this model is very sensitive to the allowed error. There is an explicitly defined sequence of boolean functions fn on n variables such that fn has rectangle approximations with a constant number of rectangles and one-sided error 13+o(1) or two-sided error 14+o(1), but, on the other hand, fn requires exponentially many rectangles if the error bounds are decreased by an arbitrarily small constant. As applications of this result, the following separation results for read-once branching programs are obtained. The functions from the main result require only linear size for nondeterministic read-once branching programs and randomized read-once branching programs with two-sided error 13+o(1), while randomized read-once branching programs with constant two-sided error smaller than 13 and unambiguous nondeterministic read-once branching programs require exponential size.}\n}"
     },
     {
       "id": "Savicky_Zak_2000",
@@ -10936,7 +10912,7 @@
       "id": "TCZ_Forthcoming",
       "title": "A Tractable Circuit Zoo",
       "href": "",
-      "bibtex": "@misc{TCZ_Forthcoming,\n  title={A Tractable Circuit Zoo},\n  author={anonymous},\n  year={forthcoming},\n  note={Forthcoming}\n}"
+      "bibtex": "@misc{TCZ_Forthcoming,\n  title={A Tractable Circuit Zoo},\n  author={Anonymous},\n  year={forthcoming},\n  note={Forthcoming}\n}"
     },
     {
       "id": "VanDenBroeck_2015",
@@ -10946,21 +10922,21 @@
     },
     {
       "id": "Vinall-Smeeth_2024",
-      "title": "Structured d-DNNF Is Not Closed Under Negation",
-      "href": "https://www.ijcai.org/proceedings/2024/398",
-      "bibtex": "@inproceedings{Vinall-Smeeth_2024,\n  title={Structured d-DNNF Is Not Closed Under Negation},\n  author={Vinall-Smeeth, Harry},\n  booktitle={Proceedings of the 33rd International Joint Conference on Artificial Intelligence (IJCAI-24)},\n  pages={3593--3601},\n  year={2024},\n  publisher={IJCAI},\n  url={https://www.ijcai.org/proceedings/2024/398}\n}"
+      "title": "Structured d-DNNF Is Not Closed under Negation",
+      "href": "https://doi.org/10.24963/ijcai.2024/398",
+      "bibtex": "@inproceedings{Vinall-Smeeth_2024,\n  author    = {Vinall-Smeeth, Harry},\n  title     = {Structured {d-DNNF} Is Not Closed under Negation},\n  booktitle = {Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence ({IJCAI} 2024)},\n  pages     = {3593--3601},\n  publisher = {International Joint Conferences on Artificial Intelligence Organization},\n  year      = {2024},\n  doi       = {10.24963/ijcai.2024/398},\n  url       = {https://doi.org/10.24963/ijcai.2024/398}\n}"
     },
     {
       "id": "Wegener_1987",
       "title": "The Complexity of Boolean Functions",
       "href": "https://eccc.weizmann.ac.il/static/books/The_Complexity_of_Boolean_Functions/",
-      "bibtex": "@book{Wegener_1987,\n\tauthor = {Ingo Wegener},\n\teditor = {},\n\tpublisher = {Wiley-Teubner},\n\ttitle = {The Complexity of Boolean Functions},\n\tyear = {1987},\n\turl = {https://eccc.weizmann.ac.il/static/books/The_Complexity_of_Boolean_Functions/}\n}"
+      "bibtex": "@book{Wegener_1987,\n  author    = {Wegener, Ingo},\n  title     = {The Complexity of Boolean Functions},\n  series    = {Wiley-Teubner Series in Computer Science},\n  publisher = {John Wiley \\& Sons and B. G. Teubner},\n  year      = {1987},\n  isbn      = {3-519-02107-2},\n  url       = {https://eccc.weizmann.ac.il/static/books/The_Complexity_of_Boolean_Functions/}\n}"
     },
     {
       "id": "Wegener_2000",
       "title": "Branching Programs and Binary Decision Diagrams: Theory and Applications",
-      "href": "https://books.google.com/books?id=xqqJj42ZoXcC",
-      "bibtex": "@book{Wegener_2000,\n  title={Branching Programs and Binary Decision Diagrams: Theory and Applications},\n  author={Wegener, I.},\n  isbn={9780898719789},\n  lccn={00035749},\n  series={Discrete Mathematics and Applications},\n  url={https://books.google.com/books?id=xqqJj42ZoXcC},\n  year={2000},\n  publisher={Society for Industrial and Applied Mathematics}\n}"
+      "href": "https://doi.org/10.1137/1.9780898719789",
+      "bibtex": "@book{Wegener_2000,\n  author    = {Wegener, Ingo},\n  title     = {Branching Programs and Binary Decision Diagrams: Theory and Applications},\n  series    = {Discrete Mathematics and Applications},\n  publisher = {Society for Industrial and Applied Mathematics},\n  address   = {Philadelphia, Pennsylvania},\n  year      = {2000},\n  isbn      = {978-0-89871-458-6},\n  doi       = {10.1137/1.9780898719789},\n  url       = {https://doi.org/10.1137/1.9780898719789}\n}"
     }
   ],
   "defaultNodePositionsByLanguageName": {

@@ -5187,7 +5187,7 @@
         }
       },
       "id": "lang_27fffab2",
-      "definition": "The subset of \\langref{CNF} where formulas are the conjunction of all minimal entailed clauses (prime implicates). \\citep{Quine_1952}."
+      "definition": "The subset of \\langref{CNF} where formulas are the conjunction of all minimal entailed clauses (prime implicates) \\citep{Quine_1952}."
     },
     {
       "fullName": "Sentential Decision Diagram",
@@ -8739,11 +8739,9 @@
               "TCZ_Forthcoming",
               "Darwiche_2002",
               "Wegener_1987",
-              "Beame_2013",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "description": "In the language \\langref{dec-DNNF}, every term has a polynomial-size representation. If \\langref{dec-DNNF} supported $\\lor$C, then every \\langref{DNF} could be compiled into \\langref{dec-DNNF} by disjoining the translated terms. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langref{dec-DNNF}} \\citep{TCZ_Forthcoming}.\n\nAlternatively, since \\langref{dec-DNNF} does not support Bounded Disjunction in quasipolynomial time, intractability of Disjunction is immediate. \\citep{Darwiche_2002}",
             "derived": false,
@@ -9960,7 +9958,7 @@
           }
         }
       },
-      "definition": "\\langfam{cSDD}{T} is the subset of \\langfam{SDD}{T} that is \\emph{compressed}, a restriction that makes the representation canonical (i.e., there is a unique representation for every function). \\citep{Darwiche_2011}"
+      "definition": "\\langfam{cSDD}{T} is the subset of \\langfam{SDD}{T} that is \\emph{compressed} and either \\emph{trimmed} or \\emph{normalized}, a restriction that makes the representation canonical (i.e., there is a unique representation for every function). Since both trimming and normalization can be performed in polynomial time, claims in this project hold under either convention \\citep{Darwiche_2011}"
     },
     {
       "id": "lang_e827cf31",
@@ -12445,8 +12443,6 @@
             "VanDenBroeck_2015",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langref{cSDD}}{\\langref{nFBDD}}.",
@@ -12532,11 +12528,8 @@
           "refs": [
             "VanDenBroeck_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langref{cSDD}}{\\langref{nOBDD}}.",
           "hidden": false,
@@ -12736,12 +12729,9 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langref{cSDD}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -12777,12 +12767,9 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langref{cSDD}}{\\langref{uOBDD}}.",
           "hidden": false,
@@ -12861,13 +12848,10 @@
           "status": "no-quasi",
           "refs": [
             "Bova_2016_a",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{cSDD} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{cSDD}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -12894,12 +12878,10 @@
           "refs": [
             "Bova_2016_a",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{cSDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{cSDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -13287,9 +13269,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -13299,9 +13279,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -13335,8 +13313,6 @@
             "description": "\\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langref{d-DNNF}}{\\langref{nFBDD}}.",
             "refs": [
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
@@ -13615,9 +13591,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{d-DNNF} compiled to \\langref{uFBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{d-DNNF}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -13793,10 +13767,8 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2001b",
-            "Beame_2013",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Beame_2015"
+            "Pipatsrisawat_Darwiche_2010"
           ],
           "description": "\\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{d-DNNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -13822,12 +13794,9 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2001b",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Beame_2013"
+            "Pipatsrisawat_Darwiche_2010"
           ],
           "description": "\\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langref{d-DNNF} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -13859,11 +13828,9 @@
           "refs": [
             "Darwiche_2001b",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Beame_2015"
+            "Pipatsrisawat_Darwiche_2010"
           ],
           "description": "\\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langref{d-DNNF} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-DNNF}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -14302,9 +14269,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -14314,9 +14279,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -14346,8 +14309,6 @@
             "refs": [
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
               "Amarilli_2020"
             ],
             "derived": true,
@@ -14412,10 +14373,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -14425,10 +14383,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -14462,11 +14417,8 @@
             "description": "\\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langref{d-SDNNF}}{\\langref{nOBDD}}.",
             "refs": [
               "Pipatsrisawat_Darwiche_2010",
-              "Bollig_2019",
-              "Beame_2015",
               "Amarilli_2020",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -14657,11 +14609,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -14671,10 +14620,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -14707,12 +14653,9 @@
           "quasiDescription": {
             "description": "\\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uFBDD}}.",
             "refs": [
-              "Bollig_2019",
-              "Beame_2015",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -14738,11 +14681,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -14752,10 +14692,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -14791,11 +14728,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet[Theorem 2]{Bollig_2019} shows that \\langref{SDNNF} can be compiled into \\langref{nOBDD} by adapting the compilation of \\citet{Beame_2015} from \\langref{DNNF} to \\langref{nFBDD}; \\citet[Proposition 2]{Bollig_2019} shows that this \\langref{nOBDD} is unambiguous if the \\langref{SDNNF} is deterministic.",
-            "refs": [
-              "Bollig_2019",
-              "Beame_2015"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -14803,7 +14737,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langref{d-SDNNF} compiled to \\langref{uOBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{d-SDNNF}}{\\langref{uOBDD}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet[Theorem 2]{Bollig_2019} shows that \\langref{SDNNF} can be compiled into \\langref{nOBDD} by adapting the compilation of \\citet{Beame_2015} from \\langref{DNNF} to \\langref{nFBDD}; \\citet[Proposition 2]{Bollig_2019} shows that this \\langref{nOBDD} is unambiguous if the \\langref{SDNNF} is deterministic."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langref{d-SDNNF} compiled to \\langref{uOBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{d-SDNNF}}{\\langref{uOBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
@@ -14905,10 +14839,8 @@
             "Amarilli_2020",
             "Wegener_2000",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{d-SDNNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-SDNNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -14940,12 +14872,9 @@
           "refs": [
             "Amarilli_2020",
             "Bryant_1991",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{d-SDNNF} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{d-SDNNF}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -14978,11 +14907,9 @@
             "Amarilli_2020",
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{d-SDNNF} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{d-SDNNF}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -15407,9 +15334,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -15419,9 +15344,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15446,9 +15369,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15523,10 +15444,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -15536,10 +15454,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15569,10 +15484,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Bollig_2019",
-              "Beame_2015",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15742,11 +15654,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -15756,10 +15665,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15788,11 +15694,8 @@
             "description": "\\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langref{uFBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Bollig_2019",
-              "Beame_2015",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15823,11 +15726,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -15837,10 +15737,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15874,11 +15771,8 @@
             "description": "\\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langref{uOBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Bollig_2019",
-              "Beame_2015",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -15998,11 +15892,9 @@
             "VanDenBroeck_2015",
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{d-SDNNF}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{d-SDNNF}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -16035,12 +15927,10 @@
             "VanDenBroeck_2015",
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2015",
             "Darwiche_2002",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langfam{d-SDNNF}{T} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{d-SDNNF}{T}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -16079,12 +15969,10 @@
             "Bova_2016_a",
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langfam{d-SDNNF}{T} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -16147,11 +16035,8 @@
           "refs": [
             "Amarilli_2020",
             "Wegener_2000",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -16162,10 +16047,7 @@
               "Amarilli_2020",
               "Wegener_2000",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "TCZ_Forthcoming"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -16199,12 +16081,9 @@
             "description": "\\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\compilesquasi{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}. Therefore \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{nOBDD}{<}}.",
             "refs": [
               "Amarilli_2020",
-              "TCZ_Forthcoming",
-              "Beame_2013",
               "Wegener_2000",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -16231,11 +16110,8 @@
           "refs": [
             "Amarilli_2020",
             "Wegener_2000",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -16246,10 +16122,7 @@
               "Amarilli_2020",
               "Wegener_2000",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "TCZ_Forthcoming"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -16285,11 +16158,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet{TCZ_Forthcoming} adapts the quasipolynomial simulation of \\citet{Beame_2013} to compile \\langfam{d-SDNNF}{T} into \\langfam{uOBDD}{<} in quasipolynomial time.",
-            "refs": [
-              "TCZ_Forthcoming",
-              "Beame_2013"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -16297,7 +16167,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{uOBDD}{<}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langfam{d-SDNNF}{T} compiled to \\langfam{uOBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet{TCZ_Forthcoming} adapts the quasipolynomial simulation of \\citet{Beame_2013} to compile \\langfam{d-SDNNF}{T} into \\langfam{uOBDD}{<} in quasipolynomial time."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{uOBDD}{<}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langfam{d-SDNNF}{T} compiled to \\langfam{uOBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}.\n\nNow, we show a quasipolynomial compilation exists."
         }
       ],
       [
@@ -16845,11 +16715,9 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{IP}}{\\langref{DNF}}. \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{DNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{DNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -17267,9 +17135,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -17279,9 +17145,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -17317,11 +17181,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet[Section 5]{Beame_2015} extends the compilation of \\langref{dec-DNNF}s into \\langref{FBDD}s (shown in \\citet{Beame_2013}) to show that \\langref{DNNF} can be quasipolynomial-time compiled into \\langref{nFBDD}.",
-            "refs": [
-              "Beame_2015",
-              "Beame_2013"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -17329,7 +17190,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. If \\langref{DNNF} compiled to \\langref{nFBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{DNNF}}{\\langref{nFBDD}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet[Section 5]{Beame_2015} extends the compilation of \\langref{dec-DNNF}s into \\langref{FBDD}s (shown in \\citet{Beame_2013}) to show that \\langref{DNNF} can be quasipolynomial-time compiled into \\langref{nFBDD}."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. If \\langref{DNNF} compiled to \\langref{nFBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{DNNF}}{\\langref{nFBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "poly",
@@ -18555,13 +18416,10 @@
           "refs": [
             "Bryant_1991",
             "Sieling_Wegener_1995",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{FBDD} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{FBDD}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -18589,12 +18447,10 @@
             "Bryant_1991",
             "Sieling_Wegener_1995",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{FBDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{FBDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -19332,11 +19188,9 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{IP} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{IP}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -19363,12 +19217,9 @@
           "refs": [
             "Darwiche_2002",
             "Wegener_1987",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langref{IP} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{IP}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -19401,11 +19252,9 @@
             "Darwiche_2002",
             "Wegener_1987",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langref{IP} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{IP}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -20298,8 +20147,6 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b"
@@ -20501,8 +20348,6 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b"
@@ -20658,8 +20503,6 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b"
@@ -22984,10 +22827,8 @@
             "Amarilli_2020",
             "Wegener_2000",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{nOBDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{nOBDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -23019,12 +22860,9 @@
           "refs": [
             "Amarilli_2020",
             "Bryant_1991",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{nOBDD} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{nOBDD}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -23057,11 +22895,9 @@
             "Amarilli_2020",
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{nOBDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{nOBDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -24587,11 +24423,9 @@
           "refs": [
             "Wegener_1987",
             "Darwiche_2002",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{PI} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{PI}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -24618,12 +24452,9 @@
           "refs": [
             "Wegener_1987",
             "Darwiche_2002",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langref{PI} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{PI}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -24656,11 +24487,9 @@
             "Wegener_1987",
             "Darwiche_2002",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langref{PI} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{PI}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -25115,8 +24944,6 @@
             "VanDenBroeck_2015",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020"
           ],
           "description": "\\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langref{SDD}}{\\langref{nFBDD}}.",
@@ -25192,11 +25019,8 @@
           "refs": [
             "VanDenBroeck_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langref{SDD}}{\\langref{nOBDD}}.",
           "hidden": false,
@@ -25401,12 +25225,9 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langref{SDD}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -25437,12 +25258,9 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langref{SDD}}{\\langref{uOBDD}}.",
           "hidden": false,
@@ -25540,11 +25358,9 @@
             "Darwiche_2011",
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langref{SDD}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{SDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{SDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -25576,13 +25392,10 @@
           "refs": [
             "VanDenBroeck_2015",
             "Bova_2016_a",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{SDD} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{SDD}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -25615,12 +25428,10 @@
             "VanDenBroeck_2015",
             "Bova_2016_a",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{SDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{SDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -26033,9 +25844,7 @@
             "VanDenBroeck_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{SDD}{T}}{\\langref{nFBDD}}.",
           "hidden": false,
@@ -26122,10 +25931,7 @@
             "VanDenBroeck_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langfam{SDD}{T}}{\\langref{nOBDD}}.",
           "hidden": false,
@@ -26293,11 +26099,8 @@
           "refs": [
             "VanDenBroeck_2015",
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{SDD}{T}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -26334,11 +26137,8 @@
           "refs": [
             "VanDenBroeck_2015",
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langfam{SDD}{T}}{\\langref{uOBDD}}.",
           "hidden": false,
@@ -26399,11 +26199,9 @@
           "refs": [
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{SDD}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -26430,12 +26228,10 @@
           "refs": [
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2015",
             "Darwiche_2002",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langfam{SDD}{T} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -26469,12 +26265,10 @@
             "Bova_2016_a",
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langfam{SDD}{T}}. \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langfam{SDD}{T} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langfam{SDD}{T}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -26515,12 +26309,9 @@
           "refs": [
             "VanDenBroeck_2015",
             "Amarilli_2020",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\compilesquasi{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}. Therefore \\compilesquasi{\\langfam{SDD}{T}}{\\langfam{nOBDD}{<}}.",
           "hidden": false,
@@ -26551,13 +26342,10 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. Therefore \\compilesquasi{\\langfam{SDD}{T}}{\\langfam{uOBDD}{<}}.",
           "hidden": false,
@@ -26954,8 +26742,6 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Beame_2015",
-            "Beame_2013",
             "Darwiche_2001b"
           ],
           "hidden": false,
@@ -26966,9 +26752,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -27002,8 +26786,6 @@
             "description": "\\compilespoly{\\langref{SDNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langref{SDNNF}}{\\langref{nFBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Beame_2015",
-              "Beame_2013",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
@@ -27058,10 +26840,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -27071,10 +26850,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -27110,11 +26886,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet[Theorem 2]{Bollig_2019} shows that \\langref{SDNNF} can be compiled into \\langref{nOBDD} by adapting the compilation of \\citet{Beame_2015} from \\langref{DNNF} to \\langref{nFBDD}.",
-            "refs": [
-              "Bollig_2019",
-              "Beame_2015"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -27122,7 +26895,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langref{SDNNF} compiled to \\langref{nOBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{SDNNF}}{\\langref{nOBDD}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet[Theorem 2]{Bollig_2019} shows that \\langref{SDNNF} can be compiled into \\langref{nOBDD} by adapting the compilation of \\citet{Beame_2015} from \\langref{DNNF} to \\langref{nFBDD}."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langref{SDNNF} compiled to \\langref{nOBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{SDNNF}}{\\langref{nOBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
@@ -27341,9 +27114,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{SDNNF} compiled to \\langref{uFBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{SDNNF}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -27549,9 +27320,7 @@
             "Pipatsrisawat_Darwiche_2010",
             "Wegener_2000",
             "Savicky_Zak_2000",
-            "Beame_2013",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{SDNNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{SDNNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -27589,11 +27358,8 @@
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
             "Bryant_1991",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{SDNNF} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{SDNNF}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -27632,10 +27398,8 @@
             "Pipatsrisawat_Darwiche_2010",
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{SDNNF} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{SDNNF}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -28157,8 +27921,6 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_2008",
-            "Beame_2015",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b"
           ],
@@ -28171,8 +27933,6 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
               "Pipatsrisawat_2008"
             ],
             "derived": true,
@@ -28203,8 +27963,6 @@
             "refs": [
               "Pipatsrisawat_2008",
               "Amarilli_2020",
-              "Beame_2015",
-              "Beame_2013",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
@@ -28270,11 +28028,8 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_2008",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -28285,10 +28040,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Pipatsrisawat_2008",
-              "Bollig_2019"
+              "Pipatsrisawat_2008"
             ],
             "derived": true,
             "origin": "derived",
@@ -28322,12 +28074,9 @@
             "description": "\\compilespoly{\\langfam{SDNNF}{T}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langfam{SDNNF}{T}}{\\langref{nOBDD}}.",
             "refs": [
               "Pipatsrisawat_2008",
-              "Bollig_2019",
-              "Beame_2015",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -28519,9 +28268,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langfam{SDNNF}{T} compiled to \\langref{uFBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{SDNNF}{T}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -28703,10 +28450,8 @@
             "Amarilli_2020",
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{SDNNF}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{SDNNF}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -28865,11 +28610,8 @@
           "refs": [
             "Amarilli_2020",
             "Wegener_2000",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -28880,10 +28622,7 @@
               "Amarilli_2020",
               "Wegener_2000",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "TCZ_Forthcoming"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -28919,11 +28658,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet{TCZ_Forthcoming} adapts the quasipolynomial simulation of \\citet{Beame_2013} to compile \\langfam{SDNNF}{T} into \\langfam{nOBDD}{<} in quasipolynomial time.",
-            "refs": [
-              "TCZ_Forthcoming",
-              "Beame_2013"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -28931,7 +28667,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{nOBDD}{<}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langfam{SDNNF}{T} compiled to \\langfam{nOBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet{TCZ_Forthcoming} adapts the quasipolynomial simulation of \\citet{Beame_2013} to compile \\langfam{SDNNF}{T} into \\langfam{nOBDD}{<} in quasipolynomial time."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{nOBDD}{<}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langfam{SDNNF}{T} compiled to \\langfam{nOBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
@@ -29687,10 +29423,8 @@
             "Bova_2016",
             "Wegener_2000",
             "Amarilli_2020",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{uFBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{uFBDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uFBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{uFBDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -29718,12 +29452,9 @@
             "Amarilli_2020",
             "Bryant_1991",
             "Sieling_Wegener_1995",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{uFBDD} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{uFBDD}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -29757,11 +29488,9 @@
             "Bryant_1991",
             "Sieling_Wegener_1995",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{uFBDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{uFBDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -30533,11 +30262,9 @@
           "refs": [
             "Wegener_2000",
             "Savicky_Zak_2000",
-            "Beame_2013",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{uOBDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{uOBDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -30563,13 +30290,10 @@
           "status": "no-quasi",
           "refs": [
             "Bryant_1991",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{uOBDD} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{uOBDD}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -30596,12 +30320,10 @@
           "refs": [
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{uOBDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{uOBDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -31317,12 +31039,10 @@
           "refs": [
             "Wegener_2000",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{OBDD}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langref{OBDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langref{OBDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -31667,9 +31387,7 @@
             "Capelli_2026",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{nFBDD}}.",
           "hidden": false,
@@ -31756,10 +31474,7 @@
             "Capelli_2026",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{nOBDD}}.",
           "hidden": false,
@@ -31946,11 +31661,8 @@
           "refs": [
             "Capelli_2026",
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -31987,11 +31699,8 @@
           "refs": [
             "Capelli_2026",
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{uOBDD}}.",
           "hidden": false,
@@ -32046,12 +31755,9 @@
           "refs": [
             "Capelli_2026",
             "Amarilli_2020",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\compilesquasi{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langfam{nOBDD}{<}}.",
           "hidden": false,
@@ -32082,13 +31788,10 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "Capelli_2026",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langfam{uOBDD}{<}}.",
           "hidden": false,
@@ -32352,8 +32055,6 @@
             "Capelli_2026",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020"
           ],
           "description": "\\compilespoly{\\langref{TDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langref{TDD}}{\\langref{nFBDD}}.",
@@ -32429,11 +32130,8 @@
           "refs": [
             "Capelli_2026",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{TDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langref{TDD}}{\\langref{nOBDD}}.",
           "hidden": false,
@@ -32626,12 +32324,9 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "Capelli_2026",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{TDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langref{TDD}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -32662,12 +32357,9 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "Capelli_2026",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{TDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langref{TDD}}{\\langref{uOBDD}}.",
           "hidden": false,
@@ -32760,12 +32452,10 @@
             "Capelli_2026",
             "Wegener_2000",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{OBDD}}{\\langref{TDD}}. \\nocompilesquasi{\\langref{OBDD}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langref{TDD} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langref{TDD}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -33122,10 +32812,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -33135,9 +32823,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -33173,10 +32859,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet[Corollary 3.2]{Beame_2013} shows quasipolynomial compilation from \\langref{dec-DNNF} to \\langref{FBDD}.",
-            "refs": [
-              "Beame_2013"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -33184,7 +32868,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{dec-SDNNF}}. \\compilespoly{\\langref{dec-SDNNF}}{\\langref{dec-DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{dec-DNNF} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{dec-DNNF}}{\\langref{FBDD}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet[Corollary 3.2]{Beame_2013} shows quasipolynomial compilation from \\langref{dec-DNNF} to \\langref{FBDD}."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{dec-SDNNF}}. \\compilespoly{\\langref{dec-SDNNF}}{\\langref{dec-DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{dec-DNNF} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{dec-DNNF}}{\\langref{FBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
@@ -33272,8 +32956,6 @@
           "refs": [
             "Amarilli_2020",
             "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010"
           ],
           "hidden": false,
@@ -33284,9 +32966,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -33316,8 +32996,6 @@
             "refs": [
               "Amarilli_2020",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
               "Pipatsrisawat_Darwiche_2010"
             ],
             "derived": true,
@@ -33606,10 +33284,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -33619,9 +33295,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -33654,11 +33328,9 @@
           "quasiDescription": {
             "description": "\\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langref{dec-DNNF}}{\\langref{uFBDD}}.",
             "refs": [
-              "Beame_2013",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -33822,12 +33494,9 @@
             "Amarilli_2020",
             "Bryant_1991",
             "Sieling_Wegener_1995",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langref{dec-DNNF} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -33861,11 +33530,9 @@
             "Bryant_1991",
             "Sieling_Wegener_1995",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. If \\langref{dec-DNNF} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -34053,13 +33720,10 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{cSDD}}. Therefore \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{cSDD}}.",
           "hidden": false,
@@ -34215,12 +33879,9 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -34231,9 +33892,6 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019",
               "Darwiche_2002"
             ],
             "derived": true,
@@ -34267,13 +33925,10 @@
           "quasiDescription": {
             "description": "\\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. Therefore \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{FBDD}}.",
             "refs": [
-              "Bollig_2019",
-              "Beame_2015",
               "Darwiche_2002",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34369,9 +34024,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -34381,9 +34034,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34408,9 +34059,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34485,10 +34134,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -34498,10 +34144,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34531,10 +34174,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Bollig_2019",
-              "Beame_2015",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34627,14 +34267,11 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "Bollig_2019",
-            "Beame_2015",
             "VanDenBroeck_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. Therefore \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{SDD}}.",
           "hidden": false,
@@ -34754,11 +34391,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -34768,10 +34402,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34800,11 +34431,8 @@
             "description": "\\compilespoly{\\langref{dec-SDNNF}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{uFBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Bollig_2019",
-              "Beame_2015",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34835,11 +34463,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -34849,10 +34474,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34886,11 +34508,8 @@
             "description": "\\compilespoly{\\langref{dec-SDNNF}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{uOBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Bollig_2019",
-              "Beame_2015",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34917,11 +34536,8 @@
           "refs": [
             "Amarilli_2020",
             "Darwiche_2002",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -34932,10 +34548,7 @@
               "Amarilli_2020",
               "Darwiche_2002",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -34971,11 +34584,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet[Theorem 2]{Bollig_2019} shows that \\langref{SDNNF} can be compiled into \\langref{nOBDD} by adapting the compilation of \\citet{Beame_2015} from \\langref{DNNF} to \\langref{nFBDD}. The same compilation yields an \\langref{OBDD} if the input is a \\langref{dec-SDNNF} since there are no $\\vee$-gates that are not decision gates in a \\langref{dec-SDNNF}.",
-            "refs": [
-              "Bollig_2019",
-              "Beame_2015"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -34983,7 +34593,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{dec-SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{dec-SDNNF} compiled to \\langref{OBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{dec-SDNNF}}{\\langref{OBDD}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet[Theorem 2]{Bollig_2019} shows that \\langref{SDNNF} can be compiled into \\langref{nOBDD} by adapting the compilation of \\citet{Beame_2015} from \\langref{DNNF} to \\langref{nFBDD}. The same compilation yields an \\langref{OBDD} if the input is a \\langref{dec-SDNNF} since there are no $\\vee$-gates that are not decision gates in a \\langref{dec-SDNNF}."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{dec-SDNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{dec-SDNNF} compiled to \\langref{OBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{dec-SDNNF}}{\\langref{OBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
@@ -35025,14 +34635,11 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "Bollig_2019",
-            "Beame_2015",
             "Capelli_2026",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{TDD}}. Therefore \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{TDD}}.",
           "hidden": false,
@@ -35070,11 +34677,9 @@
             "Amarilli_2020",
             "Wegener_2000",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{OBDD}}{\\langref{dec-SDNNF}}. \\nocompilesquasi{\\langref{OBDD}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langref{dec-SDNNF} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langref{dec-SDNNF}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -35242,12 +34847,10 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{cSDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{cSDD}}.",
           "hidden": false,
@@ -35407,11 +35010,9 @@
           "refs": [
             "Amarilli_2020",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -35422,8 +35023,6 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
               "TCZ_Forthcoming",
               "Darwiche_2002"
             ],
@@ -35454,12 +35053,10 @@
             "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{FBDD}}.",
             "refs": [
               "TCZ_Forthcoming",
-              "Beame_2013",
               "Darwiche_2002",
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -35553,18 +35150,14 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
           "origin": "authored",
           "noPolyDescription": {
-            "description": "\\citet[Proposition 3.10]{Amarilli_2020} proves that there exist a family of functions with $O(n^2)$ \\langref{dec-SDNNF} representations but no \\langref{nFBDD} of size smaller than $n^{\\Omega(\\log n)}$.",
-            "refs": [
-              "Amarilli_2020"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -35577,9 +35170,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -35614,7 +35205,7 @@
               ]
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\citet[Proposition 3.10]{Amarilli_2020} proves that there exist a family of functions with $O(n^2)$ \\langref{dec-SDNNF} representations but no \\langref{nFBDD} of size smaller than $n^{\\Omega(\\log n)}$.\n\nNow, we show a quasipolynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}."
+          "description": "First, we show no polynomial compilation exists.\n\nNow, we show a quasipolynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}."
         },
         {
           "status": "poly",
@@ -35664,10 +35255,7 @@
           "refs": [
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -35677,10 +35265,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -35705,10 +35290,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Bollig_2019",
-              "Beame_2015",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -35743,13 +35325,11 @@
         {
           "status": "no-poly-quasi",
           "refs": [
-            "Amarilli_2020",
             "TCZ_Forthcoming",
             "Darwiche_2002",
-            "Beame_2013",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": false,
@@ -35757,13 +35337,11 @@
           "noPolyDescription": {
             "description": "\\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langfam{dec-SDNNF}{T} compiled to \\langfam{OBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}.",
             "refs": [
-              "Amarilli_2020",
               "TCZ_Forthcoming",
               "Darwiche_2002",
+              "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -35799,11 +35377,8 @@
             }
           },
           "quasiDescription": {
-            "description": "\\citet{TCZ_Forthcoming} adapts the quasipolynomial simulation of \\citet{Beame_2013} to compile \\langfam{dec-SDNNF}{T} into \\langfam{OBDD}{<} in quasipolynomial time.",
-            "refs": [
-              "TCZ_Forthcoming",
-              "Beame_2013"
-            ],
+            "description": "",
+            "refs": [],
             "derived": false,
             "origin": "authored",
             "proof": {
@@ -35811,7 +35386,7 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langfam{dec-SDNNF}{T} compiled to \\langfam{OBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}.\n\nNow, we show a quasipolynomial compilation exists.\n\\citet{TCZ_Forthcoming} adapts the quasipolynomial simulation of \\citet{Beame_2013} to compile \\langfam{dec-SDNNF}{T} into \\langfam{OBDD}{<} in quasipolynomial time."
+          "description": "First, we show no polynomial compilation exists.\n\\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langfam{dec-SDNNF}{T} compiled to \\langfam{OBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
@@ -35848,13 +35423,11 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "TCZ_Forthcoming",
-            "Beame_2013",
             "VanDenBroeck_2015",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{SDD}}.",
           "hidden": false,
@@ -35889,14 +35462,12 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Capelli_2026",
-            "Amarilli_2020",
+            "TCZ_Forthcoming",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{SDD}{T}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{SDD}{T}}.",
           "hidden": false,
@@ -35983,11 +35554,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -35997,10 +35565,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36024,11 +35589,8 @@
             "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{uFBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Bollig_2019",
-              "Beame_2015",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36064,11 +35626,8 @@
           "status": "no-poly-quasi",
           "refs": [
             "Amarilli_2020",
-            "Bollig_2019",
-            "Beame_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -36078,10 +35637,7 @@
             "refs": [
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "Bollig_2019"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36110,11 +35666,8 @@
             "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{uOBDD}}.",
             "refs": [
               "Amarilli_2020",
-              "Bollig_2019",
-              "Beame_2015",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2013"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36144,13 +35697,11 @@
         {
           "status": "no-poly-quasi",
           "refs": [
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -36158,12 +35709,10 @@
           "noPolyDescription": {
             "description": "\\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langfam{dec-SDNNF}{T} compiled to \\langref{OBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{OBDD}}.",
             "refs": [
-              "Amarilli_2020",
               "Darwiche_2002",
+              "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
               "TCZ_Forthcoming"
             ],
             "derived": true,
@@ -36198,12 +35747,10 @@
             "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{OBDD}}.",
             "refs": [
               "TCZ_Forthcoming",
-              "Beame_2013",
-              "Amarilli_2020",
               "Darwiche_2002",
+              "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36228,14 +35775,12 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Capelli_2026",
-            "Amarilli_2020",
+            "TCZ_Forthcoming",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{TDD}{T}}.",
           "hidden": false,
@@ -36261,13 +35806,11 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "TCZ_Forthcoming",
-            "Beame_2013",
             "Capelli_2026",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{TDD}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langref{TDD}}.",
           "hidden": false,
@@ -36332,14 +35875,12 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Darwiche_2011",
-            "Amarilli_2020",
+            "TCZ_Forthcoming",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{cSDD}{T}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{cSDD}{T}}.",
           "hidden": false,
@@ -36364,13 +35905,10 @@
         {
           "status": "no-poly-quasi",
           "refs": [
-            "Amarilli_2020",
             "Wegener_2000",
-            "TCZ_Forthcoming",
-            "Beame_2013",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -36378,13 +35916,10 @@
           "noPolyDescription": {
             "description": "\\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{nOBDD}{<}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langfam{dec-SDNNF}{T} compiled to \\langfam{nOBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{nOBDD}{<}}.",
             "refs": [
-              "Amarilli_2020",
               "Wegener_2000",
+              "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "TCZ_Forthcoming"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36413,12 +35948,9 @@
             "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\compilesquasi{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{nOBDD}{<}}.",
             "refs": [
               "Amarilli_2020",
-              "TCZ_Forthcoming",
-              "Beame_2013",
               "Wegener_2000",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36448,13 +35980,10 @@
         {
           "status": "no-poly-quasi",
           "refs": [
-            "Amarilli_2020",
             "Wegener_2000",
-            "TCZ_Forthcoming",
-            "Beame_2013",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "hidden": false,
           "derived": true,
@@ -36462,13 +35991,10 @@
           "noPolyDescription": {
             "description": "\\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langfam{uOBDD}{<}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{nFBDD}}. If \\langfam{dec-SDNNF}{T} compiled to \\langfam{uOBDD}{<} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{uOBDD}{<}}.",
             "refs": [
-              "Amarilli_2020",
               "Wegener_2000",
+              "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015",
-              "Beame_2013",
-              "TCZ_Forthcoming"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36502,12 +36028,9 @@
             "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. Therefore \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{uOBDD}{<}}.",
             "refs": [
               "Amarilli_2020",
-              "TCZ_Forthcoming",
-              "Beame_2013",
               "Wegener_2000",
               "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b",
-              "Beame_2015"
+              "Darwiche_2001b"
             ],
             "derived": true,
             "origin": "derived",
@@ -36794,8 +36317,6 @@
             "VanDenBroeck_2015",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b",
-            "Beame_2015",
-            "Beame_2013",
             "Amarilli_2020"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{cSDD}{T}}{\\langref{nFBDD}}.",
@@ -36893,11 +36414,8 @@
             "Darwiche_2011",
             "VanDenBroeck_2015",
             "Pipatsrisawat_Darwiche_2010",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\compilesquasi{\\langref{SDNNF}}{\\langref{nOBDD}}. Therefore \\compilesquasi{\\langfam{cSDD}{T}}{\\langref{nOBDD}}.",
           "hidden": false,
@@ -37083,12 +36601,9 @@
           "refs": [
             "Darwiche_2011",
             "VanDenBroeck_2015",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{cSDD}{T}}{\\langref{uFBDD}}.",
           "hidden": false,
@@ -37130,12 +36645,9 @@
           "refs": [
             "Darwiche_2011",
             "VanDenBroeck_2015",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\compilespoly{\\langref{SDD}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. Therefore \\compilesquasi{\\langfam{cSDD}{T}}{\\langref{uOBDD}}.",
           "hidden": false,
@@ -37183,13 +36695,10 @@
           "status": "no-quasi",
           "refs": [
             "Bova_2016_a",
-            "Bollig_2019",
-            "Beame_2015",
             "Amarilli_2020",
             "Darwiche_2002",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2013"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{OBDD}}. \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{OBDD}}. If \\langfam{cSDD}{T} compiled to \\langref{dec-SDNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{OBDD}}. Therefore \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{dec-SDNNF}}.",
           "hidden": false,
@@ -37217,12 +36726,10 @@
             "Bova_2016_a",
             "Bryant_1991",
             "TCZ_Forthcoming",
-            "Beame_2013",
-            "Amarilli_2020",
             "Darwiche_2002",
+            "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langfam{cSDD}{T} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{dec-SDNNF}{T}}.",
           "hidden": false,
@@ -37250,12 +36757,9 @@
           "refs": [
             "VanDenBroeck_2015",
             "Amarilli_2020",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\compilesquasi{\\langfam{SDNNF}{T}}{\\langfam{nOBDD}{<}}. Therefore \\compilesquasi{\\langfam{cSDD}{T}}{\\langfam{nOBDD}{<}}.",
           "hidden": false,
@@ -37291,13 +36795,10 @@
           "status": "unknown-poly-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. Therefore \\compilesquasi{\\langfam{cSDD}{T}}{\\langfam{uOBDD}{<}}.",
           "hidden": false,
@@ -38030,10 +37531,8 @@
             "Darwiche_2002",
             "Amarilli_2020",
             "Wegener_1987",
-            "Beame_2013",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langref{IP}}{\\langref{DNF}}. \\compilespoly{\\langref{DNF}}{\\langfam{nOBDD}{<}}. \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{nOBDD}{<} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{nOBDD}{<}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -38397,15 +37896,12 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Bollig_2019",
             "Savicky_Zak_2000",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. If \\langfam{uOBDD}{<} compiled to \\langref{FBDD} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{uOBDD}{<}}{\\langref{FBDD}}.",
           "hidden": false,
@@ -38600,15 +38096,12 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Bova_2016_a",
             "Bryant_1991",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. If \\langfam{uOBDD}{<} compiled to \\langfam{OBDD}{<} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langfam{uOBDD}{<}}{\\langfam{OBDD}{<}}.",
           "hidden": false,
@@ -38803,16 +38296,13 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Bollig_2019",
             "Savicky_Zak_2000",
             "Darwiche_2002",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. If \\langfam{uOBDD}{<} compiled to \\langref{OBDD} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{uOBDD}{<}}{\\langref{OBDD}}.",
           "hidden": false,
@@ -38907,15 +38397,12 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Bollig_2019",
             "Savicky_Zak_2000",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b",
-            "Beame_2015"
+            "Darwiche_2001b"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{uOBDD}{<} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{uOBDD}{<}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -38951,11 +38438,8 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Bollig_2019",
             "Savicky_Zak_2000",
-            "Beame_2015",
             "Darwiche_2002",
             "Amarilli_2020",
             "Wegener_2000",
@@ -39001,15 +38485,13 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Beame_2013",
             "Bova_2016_a",
             "Bryant_1991",
             "Amarilli_2020",
             "Wegener_2000",
             "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b",
-            "Beame_2015",
+            "TCZ_Forthcoming",
             "Darwiche_2002"
           ],
           "description": "\\compilespoly{\\langfam{cSDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. \\compilesquasi{\\langfam{dec-SDNNF}{T}}{\\langfam{OBDD}{<}}. If \\langfam{uOBDD}{<} compiled to \\langfam{dec-SDNNF}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{OBDD}{<}}. Therefore \\nocompilesquasi{\\langfam{uOBDD}{<}}{\\langfam{dec-SDNNF}{T}}.",

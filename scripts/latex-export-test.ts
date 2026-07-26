@@ -24,7 +24,8 @@ function filtered(view: 'graph' | 'succinctness' | 'queries' | 'transforms') {
 }
 
 const graph = createLatexExport('graph', filtered('graph'));
-const succinctness = createLatexExport('succinctness', filtered('succinctness'));
+const succinctnessData = filtered('succinctness');
+const succinctness = createLatexExport('succinctness', succinctnessData);
 const queries = createLatexExport('queries', filtered('queries'));
 const transformations = createLatexExport('transforms', filtered('transforms'));
 
@@ -46,9 +47,34 @@ assert.match(graphWithLivePositions.content, /closely stacked nodes are separate
 
 assert.equal(succinctness.filename, 'tcz-succinctness-table.tex');
 assert.match(succinctness.content, /Rows are targets and columns are sources/);
-assert.match(succinctness.content, /\\TCZCellPolyCollapsed/);
+const decSdnnf = succinctnessData.languages.find((language) => language.name === 'dec-SDNNF$_T$');
+const obdd = succinctnessData.languages.find((language) => language.name === 'OBDD$_<$');
+assert.ok(decSdnnf && obdd, 'Expected the dec-SDNNF and OBDD family members to be present in the succinctness view');
+const decSdnnfIndex = succinctnessData.adjacencyMatrix.indexByLanguage[decSdnnf.id];
+const obddIndex = succinctnessData.adjacencyMatrix.indexByLanguage[obdd.id];
+assert.equal(
+  succinctnessData.adjacencyMatrix.matrix[decSdnnfIndex]?.[obddIndex]?.status,
+  'no-poly-quasi',
+  'the default frontend data must preserve mixed polynomial/quasipolynomial compilation statuses'
+);
+assert.match(succinctness.content, /\\TCZCellNoPolyQuasi/);
 assert.match(succinctness.content, /\\input\{tcz-succinctness-table\}/);
 assert.match(succinctness.content, /\\rotatebox\{90\}\{\\langfam\{SDNNF\}\{T\}\}/);
+
+const collapsedSuccinctness = applyFiltersWithParams(
+  initialGraphData,
+  languageFilters,
+  edgeFilters,
+  computeEffectiveFilterState(languageFilters, edgeFilters, 'succinctness', new Map([['poly-display', false]])),
+  'succinctness'
+);
+const collapsedDecSdnnfIndex = collapsedSuccinctness.adjacencyMatrix.indexByLanguage[decSdnnf.id];
+const collapsedObddIndex = collapsedSuccinctness.adjacencyMatrix.indexByLanguage[obdd.id];
+assert.equal(
+  collapsedSuccinctness.adjacencyMatrix.matrix[collapsedDecSdnnfIndex]?.[collapsedObddIndex]?.status,
+  'not-poly',
+  'the display filter should still allow an explicit collapse to polynomial-only distinctions'
+);
 
 assert.equal(queries.filename, 'tcz-queries-table.tex');
 assert.match(queries.content, /\\CO & \\VA/);

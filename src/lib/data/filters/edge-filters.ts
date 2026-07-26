@@ -56,7 +56,7 @@ export const polyDisplay: EdgeFilter<boolean> = {
   applicableViews: ['graph', 'succinctness'],
   uiGroup: 'Display',
   kind: 'matrix-display',
-  defaultParam: false,
+  defaultParam: true,
   controlType: 'checkbox',
   lambda: (data, showQuasipolynomial) => {
     if (showQuasipolynomial === true) {

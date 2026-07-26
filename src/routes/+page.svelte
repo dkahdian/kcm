@@ -200,6 +200,12 @@
           const parsed = JSON.parse(oldStored);
           if (Array.isArray(parsed)) {
             const oldStates: FilterStateMap = new Map(parsed);
+            // The legacy format stored every default value. Its false value for
+            // poly-display was the former default, not an explicit request to
+            // hide quasipolynomial distinctions, so let the new default apply.
+            if (oldStates.get('poly-display') === false) {
+              oldStates.delete('poly-display');
+            }
             filterDeltas = extractDeltasFromState(oldStates, languageFilters, edgeFilters);
             filterStates = computeEffectiveFilterState(languageFilters, edgeFilters, viewMode, filterDeltas);
             // Clean up old key

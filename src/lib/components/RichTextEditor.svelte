@@ -493,6 +493,9 @@
         />
         {#if focusedPicker === 'reference'}
           <div class="result-list">
+            <button type="button" class="result-row add-row" onmousedown={(event) => event.preventDefault()} onclick={openReferenceModal}>
+              Add new reference
+            </button>
             {#each filteredReferences as reference}
               <button
                 type="button"
@@ -505,9 +508,6 @@
                 <span><MathText text={reference.title} className="inline" /></span>
               </button>
             {/each}
-            <button type="button" class="result-row add-row" onmousedown={(event) => event.preventDefault()} onclick={openReferenceModal}>
-              Add new reference
-            </button>
           </div>
         {/if}
         <button type="button" class="panel-action" disabled={!selectedReferenceId} onclick={() => insertReference(selectedReferenceId)}>
@@ -877,8 +877,10 @@
 
   .add-row {
     position: sticky;
-    bottom: 0;
+    top: 0;
+    z-index: 1;
     border-color: #2563eb;
+    background: #eff6ff;
     color: #1d4ed8;
     font-weight: 750;
   }

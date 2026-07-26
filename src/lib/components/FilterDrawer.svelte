@@ -91,7 +91,7 @@
   }
 </script>
 
-<div class="filter-shell">
+<div class="filter-shell" class:filter-shell--open={isOpen}>
   <button
     type="button"
     class="trigger-btn"
@@ -169,6 +169,10 @@
 <style>
   .filter-shell {
     position: relative;
+    z-index: 100;
+  }
+
+  .filter-shell--open {
     z-index: 1000;
   }
 

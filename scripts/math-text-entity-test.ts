@@ -28,6 +28,16 @@ assertIncludes(suffixedLang, '>CNFs</a>', 'suffixed langref should include suffi
 assertIncludes(suffixedLang, 'href="/#lang/lang_obdd_lt"', 'suffixed langfam should keep the class-member target');
 assertIncludes(suffixedLang, '<sub>&lt;</sub>s</a>', 'suffixed langfam should render suffix after the subscript inside the link');
 
+const parameterizedFamily = renderEntityLinks(
+  renderMathText("\\langfam{SDD}{T_m} and \\langfam{cSDD}{T'}").html ?? '',
+  (id) => id,
+  undefined,
+  () => undefined
+);
+assertIncludes(parameterizedFamily, 'SDD$_{T_m}$', 'multi-character langfam parameters should render as a complete subscript');
+assert.equal(parameterizedFamily.includes('SDD_T_m'), false, 'multi-character langfam parameters should not fall back to literal underscores');
+assert.equal(parameterizedFamily.includes('&amp;#39;'), false, 'apostrophes in langfam parameters should not be double-escaped');
+
 const relationHtml = renderEntityLinks(
   renderMathText('\\compilespoly{\\langfam{cSDD}{T}}{\\langref{d-SDNNF}}').html ?? '',
   (id) => (id === 'lang_csdd_t' ? 'cSDD$_T$' : id === 'lang_dsdnnf' ? 'd-SDNNF' : id),

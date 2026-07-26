@@ -7,14 +7,14 @@ const CITATION_RENDER_PATTERN = /\\(cite|citet|citep)((?:\[[^\]]*\]){0,2})\{([^}
 
 // Entity link patterns (processed after HTML rendering)
 const LANGREF_PATTERN = /\\langref\{((?:[^{}]|\{[^{}]*\})+)\}(?:\{([^{}]*)\})?/g;
-const LANGFAM_PATTERN = /\\langfam\{([^}]+)\}\{([^}]+)\}(?:\{([^{}]*)\})?/g;
+const LANGFAM_PATTERN = /\\langfam\{((?:[^{}]|\{[^{}]*\})+)\}\{((?:[^{}]|\{[^{}]*\})+)\}(?:\{((?:[^{}]|\{[^{}]*\})*)\})?/g;
 const RELATIONREF_PATTERN = /\\(compilespoly|compilesquasi|nocompilespoly|nocompilesquasi)\{((?:[^{}]|\{[^{}]*\})+)\}\{((?:[^{}]|\{[^{}]*\})+)\}/g;
 const OPRESULT_PATTERN = /\\(supportspoly|supportsquasi|nosupportspoly|nosupportsquasi)\{((?:[^{}]|\{[^{}]*\})+)\}\{(\\[A-Za-z]+)\}/g;
 const EMPH_PATTERN = /\\emph\{([^}]+)\}/g;
 const TEXTIT_PATTERN = /\\textit\{([^}]+)\}/g;
 const TEXTBF_PATTERN = /\\textbf\{([^}]+)\}/g;
 const TEXTTT_PATTERN = /\\texttt\{([^}]+)\}/g;
-const ENTITY_COMMAND_PATTERN = /\\langref\{(?:[^{}]|\{[^{}]*\})+\}(?:\{[^{}]*\})?|\\langfam\{[^{}]+\}\{[^{}]+\}(?:\{[^{}]*\})?|\\(?:compilespoly|compilesquasi|nocompilespoly|nocompilesquasi)\{(?:[^{}]|\{[^{}]*\})+\}\{(?:[^{}]|\{[^{}]*\})+\}|\\(?:supportspoly|supportsquasi|nosupportspoly|nosupportsquasi)\{(?:[^{}]|\{[^{}]*\})+\}\{\\[A-Za-z]+\}/g;
+const ENTITY_COMMAND_PATTERN = /\\langref\{(?:[^{}]|\{[^{}]*\})+\}(?:\{[^{}]*\})?|\\langfam\{(?:[^{}]|\{[^{}]*\})+\}\{(?:[^{}]|\{[^{}]*\})+\}(?:\{(?:[^{}]|\{[^{}]*\})*\})?|\\(?:compilespoly|compilesquasi|nocompilespoly|nocompilesquasi)\{(?:[^{}]|\{[^{}]*\})+\}\{(?:[^{}]|\{[^{}]*\})+\}|\\(?:supportspoly|supportsquasi|nosupportspoly|nosupportsquasi)\{(?:[^{}]|\{[^{}]*\})+\}\{\\[A-Za-z]+\}/g;
 
 export interface EntityRefResolver {
   edgeRefs?: (sourceId: string, targetId: string) => string[];
@@ -350,7 +350,27 @@ function decodeMinimalEntities(value: string): string {
   return value
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#(?:0*39|x27);/gi, "'")
     .replace(/&amp;/gi, '&');
+}
+
+function escapeLatexText(value: string): string {
+  return value.replace(/([#$%&_{}\\])/g, '\\$1');
+}
+
+/**
+ * Render a family reference whose particular parameter does not have a
+ * language entry. For example, SDD_T is a known language, whereas SDD_{T_m}
+ * and cSDD_{T'} identify individual members of those families. They should
+ * retain the \langfam typography instead of being shown as literal text.
+ */
+function renderUnresolvedLanguageFamilyHtml(base: string, index: string, suffix: string | undefined): string {
+  const decodedBase = decodeMinimalEntities(base);
+  const decodedIndex = decodeMinimalEntities(index);
+  const decodedSuffix = decodeMinimalEntities(suffix ?? '');
+  const latex = `\\textbf{${escapeLatexText(decodedBase)}$_{${decodedIndex}}$${escapeLatexText(decodedSuffix)}}`;
+  return renderFragment(latex, false);
 }
 
 function normalizeLangRefArg(ref: string): string {
@@ -510,7 +530,9 @@ export function renderEntityLinks(
   result = result.replace(LANGFAM_PATTERN, (_match, base: string, index: string, suffix: string | undefined) => {
     const familyRef = `${base}_${index}`;
     const { id, name } = resolveLang(familyRef);
-    const nameHtml = `${renderNameHtml(name)}${renderEntitySuffixHtml(suffix)}`;
+    const nameHtml = id.startsWith('lang_')
+      ? `${renderNameHtml(name)}${renderEntitySuffixHtml(suffix)}`
+      : renderUnresolvedLanguageFamilyHtml(base, index, suffix);
     if (!id.startsWith('lang_')) {
       return nameHtml;
     }

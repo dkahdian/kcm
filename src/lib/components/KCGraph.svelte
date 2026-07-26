@@ -109,7 +109,8 @@
     selectedEdge = $bindable(),
     sandboxMode = false,
     onSandboxNodePositionsChange,
-    onSandboxNodePositionsReset
+    onSandboxNodePositionsReset,
+    onGraphNodePositionsChange
   }: {
     graphData: GraphData | FilteredGraphData;
     selectedNode: KCLanguage | null;
@@ -117,12 +118,23 @@
     sandboxMode?: boolean;
     onSandboxNodePositionsChange?: (updates: Array<{ languageId: string; position: NodePosition }>) => void;
     onSandboxNodePositionsReset?: (languageIds: string[]) => void;
+    onGraphNodePositionsChange?: (positions: Record<string, NodePosition>) => void;
   } = $props();
 
   let graphContainer: HTMLDivElement;
   let cy: cytoscape.Core;
   let defaultPositions = new Map<string, NodePosition>();
   let autoLayoutPositions = new Map<string, NodePosition>();
+
+  function reportCurrentNodePositions() {
+    if (!cy) return;
+    const positions: Record<string, NodePosition> = {};
+    cy.nodes().forEach((node) => {
+      const position = node.position();
+      positions[node.id()] = { x: position.x, y: position.y };
+    });
+    onGraphNodePositionsChange?.(positions);
+  }
 
   const BASE_NODE_STYLE = {
     'border-color': '#d1d5db',
@@ -176,6 +188,7 @@
     } else {
       persistPositionMap(autoLayoutPositions);
     }
+    reportCurrentNodePositions();
     cy.fit(cy.elements(), 40);
   }
 
@@ -547,6 +560,7 @@
       if (!sandboxMode) {
         persistNodePositions(cy.nodes());
       }
+      reportCurrentNodePositions();
       
       cy.on('free', 'node', (evt) => {
         const movedNode = evt.target;
@@ -563,6 +577,7 @@
           // to avoid overwriting the empty localStorage with all default positions
           persistNodePositions(movedNode);
         }
+        reportCurrentNodePositions();
       });
     }
 
@@ -739,6 +754,7 @@
         node.position({ x: nextPosition.x, y: nextPosition.y });
       }
     });
+    reportCurrentNodePositions();
   }
 
   onMount(() => {

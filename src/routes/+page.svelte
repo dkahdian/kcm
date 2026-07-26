@@ -16,6 +16,7 @@
   import { QUERIES, TRANSFORMATIONS, displayCodeToSafeKey } from '$lib/data/operations.js';
   import { parseBibtex } from '$lib/data/references.js';
   import { generateLanguageId } from '$lib/utils/language-id.js';
+  import { createLatexExport } from '$lib/utils/latex-export.js';
   import { loadSandboxState, saveSandboxState, clearSandboxState } from '$lib/sandbox-storage.js';
   import {
     applySandboxEdits,
@@ -58,6 +59,7 @@
   let selectedEdge = $state<SelectedEdge | null>(null);
   let selectedOperation = $state<SelectedOperation | null>(null);
   let selectedOperationCell = $state<SelectedOperationCell | null>(null);
+  let graphNodePositions = $state<Record<string, NodePosition>>({});
   const VIEW_MODES: Array<{ id: ViewMode; label: string }> = [
     { id: 'graph', label: 'Graph' },
     { id: 'succinctness', label: 'Succinctness' },
@@ -609,6 +611,28 @@
       : filteredGraphData
   );
   const showQuasipolynomialSandboxOptions = $derived(filterStates.get('poly-display') === true);
+  const latexExportLabel = 'Export'
+
+  function handleGraphNodePositionsChange(positions: Record<string, NodePosition>) {
+    graphNodePositions = positions;
+  }
+
+  function downloadCurrentLatexExport() {
+    if (!browser) return;
+    const data = viewMode === 'graph' ? displayedFilteredGraphData : filteredGraphData;
+    const latexExport = createLatexExport(viewMode, data, {
+      nodePositions: viewMode === 'graph' ? graphNodePositions : undefined
+    });
+    const blob = new Blob([latexExport.content], { type: 'text/x-tex;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = latexExport.filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
 
   function hasBaseEdge(sourceId: string, targetId: string) {
     const { adjacencyMatrix } = displayedBaseGraphData;
@@ -1597,6 +1621,14 @@
         <h1 class="title">Tractable Circuit Zoo</h1>
       </div>
       <div class="header-controls">
+        <button
+          type="button"
+          class="latex-export"
+          onclick={downloadCurrentLatexExport}
+          title="Download LaTeX for the current filtered view"
+        >
+          {latexExportLabel}
+        </button>
         <a href="/about" class="about-link">
           About
         </a>
@@ -1670,6 +1702,7 @@
           sandboxMode={isSandboxMode}
           onSandboxNodePositionsChange={handleSandboxNodePositionsChange}
           onSandboxNodePositionsReset={handleSandboxNodePositionsReset}
+          onGraphNodePositionsChange={handleGraphNodePositionsChange}
         />
       {/if}
       {#if succinctnessMounted}
@@ -2295,6 +2328,29 @@
     font-size: 0.875rem;
     transition: all 0.2s;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .latex-export {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(6, 95, 70, 0.15);
+  }
+
+  .latex-export:hover {
+    background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+    box-shadow: 0 4px 6px -1px rgba(6, 95, 70, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .latex-export:active {
+    transform: translateY(0);
   }
 
   .about-link:hover {

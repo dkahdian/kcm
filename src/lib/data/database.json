@@ -10825,6 +10825,12 @@
       "bibtex": "@ARTICLE{Gergov_1994,\n  author={Gergov, J. and Meinel, C.},\n  journal={IEEE Transactions on Computers}, \n  title={Efficient Boolean manipulation with OBDD's can be extended to FBDD's}, \n  year={1994},\n  volume={43},\n  number={10},\n  pages={1197--1209},\n  keywords={Boolean functions;Circuit testing;Data structures;Performance evaluation;Circuit synthesis;Input variables;Design optimization;Logic;Hardware design languages},\n  doi={10.1109/12.324545}}"
     },
     {
+      "id": "Gogic_1995",
+      "title": "The Comparative Linguistics of Knowledge Representation",
+      "href": "http://ijcai.org/Proceedings/95-1/Papers/111.pdf",
+      "bibtex": "@inproceedings{Gogic_1995,\n  title={The Comparative Linguistics of Knowledge Representation},\n  author={Gogic, Goran and Kautz, Henry and Papadimitriou, Christos H. and Selman, Bart},\n  booktitle={Proceedings of the 14th International Joint Conference on Artificial Intelligence (IJCAI-95)},\n  pages={862--869},\n  year={1995},\n  publisher={Morgan Kaufmann},\n  url={http://ijcai.org/Proceedings/95-1/Papers/111.pdf}\n}"
+    },
+    {
       "id": "Kaleyski_2016",
       "title": "Boolean Methods in Knowledge Compilation",
       "href": "https://hdl.handle.net/20.500.11956/83080",

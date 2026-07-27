@@ -12,6 +12,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:latex-projection": "node --import ./scripts/tsx-register.mjs scripts/latex-authored-projection-test.ts",
 		"test:latex-export": "node --import ./scripts/tsx-register.mjs scripts/latex-export-test.ts",
+		"test:canonical-dataset": "node --import ./scripts/tsx-register.mjs scripts/canonical-dataset-validation-test.ts",
 		"generate:latex-exports": "node --import ./scripts/tsx-register.mjs scripts/generate-latex-export-docs.ts",
 		"test:propagation-refs": "node --import ./scripts/tsx-register.mjs scripts/propagation-entity-reference-test.ts",
 		"deploy": "npm run build",

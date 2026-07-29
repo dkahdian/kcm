@@ -2353,7 +2353,7 @@
               "Darwiche_2002",
               "Lang_2003"
             ],
-            "description": "\\supportspoly{\\langref{DNF}}{\\ANDBC}. \\supportspoly{\\langref{DNF}}{\\SFO}. Since Bounded conjunction and singleton forgetting imply conditioning: $\\Sigma|\\gamma$ for term $\\gamma = l_1 \\land \\cdots \\land l_k$ is computed iteratively by $\\Sigma \\leftarrow \\exists x_i.(\\Sigma \\land l_i)$ for each literal $l_i$, using $\\land$BC then SFO. \\citep{Darwiche_2002}, \\supportspoly{\\langref{DNF}}{\\CD}.",
+            "description": "\\supportspoly{\\langref{DNF}}{\\ANDBC}. \\supportspoly{\\langref{DNF}}{\\FO}. Since Bounded conjunction and forgetting imply conditioning: $\\Sigma|\\gamma$ for a term $\\gamma$ is computed as $\\exists\\operatorname{Vars}(\\gamma).(\\Sigma \\land \\gamma)$, using $\\land$BC then FO. \\citep{Darwiche_2002}, \\supportspoly{\\langref{DNF}}{\\CD}.",
             "derived": true,
             "origin": "derived",
             "proof": {
@@ -2367,7 +2367,7 @@
                 {
                   "kind": "supportsP",
                   "languageId": "lang_4c204bf3",
-                  "op": "SFO"
+                  "op": "FO"
                 }
               ]
             }
@@ -3451,7 +3451,7 @@
               "Darwiche_2002",
               "Darwiche_2001a"
             ],
-            "description": "\\supportspoly{\\langref{MODS}}{\\ANDBC}. \\supportspoly{\\langref{MODS}}{\\SFO}. Since Bounded conjunction and singleton forgetting imply conditioning: $\\Sigma|\\gamma$ for term $\\gamma = l_1 \\land \\cdots \\land l_k$ is computed iteratively by $\\Sigma \\leftarrow \\exists x_i.(\\Sigma \\land l_i)$ for each literal $l_i$, using $\\land$BC then SFO. \\citep{Darwiche_2002}, \\supportspoly{\\langref{MODS}}{\\CD}.",
+            "description": "\\supportspoly{\\langref{MODS}}{\\ANDBC}. \\supportspoly{\\langref{MODS}}{\\FO}. Since Bounded conjunction and forgetting imply conditioning: $\\Sigma|\\gamma$ for a term $\\gamma$ is computed as $\\exists\\operatorname{Vars}(\\gamma).(\\Sigma \\land \\gamma)$, using $\\land$BC then FO. \\citep{Darwiche_2002}, \\supportspoly{\\langref{MODS}}{\\CD}.",
             "derived": true,
             "origin": "derived",
             "proof": {
@@ -3465,7 +3465,7 @@
                 {
                   "kind": "supportsP",
                   "languageId": "lang_e02902d0",
-                  "op": "SFO"
+                  "op": "FO"
                 }
               ]
             }
@@ -39215,13 +39215,13 @@
       ]
     },
     {
-      "id": "and-bc-sfo-cd",
+      "id": "and-bc-fo-cd",
       "antecedent": [
         "AND_BC",
-        "SFO"
+        "FO"
       ],
       "consequent": "CD",
-      "description": "Bounded conjunction and singleton forgetting imply conditioning: $\\Sigma|\\gamma$ for term $\\gamma = l_1 \\land \\cdots \\land l_k$ is computed iteratively by $\\Sigma \\leftarrow \\exists x_i.(\\Sigma \\land l_i)$ for each literal $l_i$, using $\\land$BC then SFO.",
+      "description": "Bounded conjunction and forgetting imply conditioning: $\\Sigma|\\gamma$ for a term $\\gamma$ is computed as $\\exists\\operatorname{Vars}(\\gamma).(\\Sigma \\land \\gamma)$, using $\\land$BC then FO.",
       "refs": [
         "Darwiche_2002"
       ]

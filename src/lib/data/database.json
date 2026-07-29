@@ -36250,7 +36250,15 @@
             ]
           }
         },
-        null,
+        {
+          "status": "no-quasi",
+          "description": "\\citet[Theorem 2]{TCZ_Forthcoming} proves that the generalized weighted sum function $GWS_n : \\{0, 1\\}^n \\mapsto \\{0, 1\\}$ has \\langfam{cSDD}{T} size $O(n^3)$ and \\langref{FBDD} size $2^{\\Omega(n)}.$",
+          "refs": [
+            "TCZ_Forthcoming"
+          ],
+          "derived": false,
+          "origin": "authored"
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -36689,7 +36697,34 @@
         },
         null,
         null,
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "TCZ_Forthcoming",
+            "Amarilli_2020",
+            "Pipatsrisawat_Darwiche_2010",
+            "Darwiche_2001b"
+          ],
+          "description": "\\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{cSDD}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{dec-DNNF}}.",
+          "hidden": false,
+          "derived": true,
+          "origin": "derived",
+          "proof": {
+            "rule": "negative-obstruction",
+            "premises": [
+              {
+                "kind": "notLeQ",
+                "sourceId": "lang_82fa749e",
+                "targetId": "lang_684b1ca7"
+              },
+              {
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
+              }
+            ]
+          }
+        },
         {
           "status": "no-quasi",
           "refs": [

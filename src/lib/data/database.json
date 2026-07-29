@@ -2931,22 +2931,6 @@
             },
             "batchId": "batch-acfaba1563a1"
           },
-          "OR_BC": {
-            "complexity": "no-poly-unknown-quasi",
-            "refs": [
-              "TCZ_Forthcoming",
-              "Bova_2016",
-              "Darwiche_2002"
-            ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{FBDD}} and \\compilesquasi{\\langref{FBDD}}{\\langref{d-DNNF}}, \\langref{FBDD} cannot support bounded disjunction in quasipolynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
-            "derived": false,
-            "origin": "batch",
-            "proof": {
-              "rule": "batch",
-              "premises": []
-            },
-            "batchId": "batch-1fc9ddee1513"
-          },
           "FO": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
@@ -2966,6 +2950,15 @@
                 }
               ]
             }
+          },
+          "OR_BC": {
+            "complexity": "no-poly-unknown-quasi",
+            "description": "\\citet[Theorem 6.3.2]{Wegener_2000} shows that there are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{FBDD} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$.",
+            "refs": [
+              "Wegener_2000"
+            ],
+            "derived": false,
+            "origin": "authored"
           },
           "NOT_C": {
             "complexity": "poly",

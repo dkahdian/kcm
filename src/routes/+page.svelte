@@ -34,6 +34,7 @@
   const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
   const FILTER_STORAGE_KEY = 'kcm_filter_deltas_v2';
+  const CONTRIBUTION_SUBMISSION_ENABLED = false;
   type SandboxProofTarget =
     | { kind: 'edge'; sourceId: string; targetId: string }
     | { kind: 'operation'; operationType: SandboxOperationType; languageId: string; operationCode: string };
@@ -249,6 +250,13 @@
 
   async function handleSandboxSubmit() {
     if (!browser || submittingSandbox) return;
+    if (!CONTRIBUTION_SUBMISSION_ENABLED) {
+      showSandboxSubmitModal = false;
+      sandboxSubmitError = null;
+      sandboxSubmitSuccess = 'Disabled during review process';
+      return;
+    }
+
     const name = sandboxContributorName.trim();
     const email = sandboxContributorEmail.trim();
     const github = sandboxContributorGithub.trim().replace(/^@+/, '');
@@ -279,14 +287,11 @@
         }
       };
 
-      // Submit via GitHub API. This token is intentionally public and scoped only
-      // to triggering the contribution dispatch flow for user-submitted data.
-      // If its GitHub permissions ever expand, replace this with a server-side token.
-      const t1 = 'github_pat_11BODXYDQ0Fw5d4huTq6Ff_0w6DLns2rxcWbDjrX4oQz';
-      const t2 = 'uYuSB5EGMOq31ueJ64VNZjTICPO27KQESFcK7l';
-      const token = t1 + t2;
+      const token = import.meta.env.VITE_GITHUB_CONTRIBUTION_PAT;
+      const repository = import.meta.env.VITE_GITHUB_CONTRIBUTION_REPOSITORY;
+      if (!token || !repository) throw new Error('Contribution submission is not configured.');
 
-      const response = await fetch('https://api.github.com/repos/dkahdian/tcz/dispatches', {
+      const response = await fetch(`https://api.github.com/repos/${repository}/dispatches`, {
         method: 'POST',
         headers: {
           'Accept': 'application/vnd.github+json',

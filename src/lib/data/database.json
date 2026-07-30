@@ -7717,14 +7717,12 @@
           "CO": {
             "complexity": "poly",
             "refs": [
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
               "Darwiche_2001a",
               "Darwiche_2002"
             ],
-            "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}, and \\supportspoly{\\langref{DNNF}}{\\CO}. Therefore \\supportspoly{\\langfam{TDD}{T}}{\\CO}.",
+            "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}, and \\supportspoly{\\langref{DNNF}}{\\CO}. Therefore \\supportspoly{\\langfam{TDD}{T}}{\\CO}.",
             "derived": true,
             "origin": "derived",
             "proof": {
@@ -7733,16 +7731,11 @@
                 {
                   "kind": "leP",
                   "sourceId": "lang_8cf1da0e",
-                  "targetId": "lang_91f812d0"
+                  "targetId": "lang_981b62f0"
                 },
                 {
                   "kind": "leP",
-                  "sourceId": "lang_91f812d0",
-                  "targetId": "lang_ea9b5299"
-                },
-                {
-                  "kind": "leP",
-                  "sourceId": "lang_ea9b5299",
+                  "sourceId": "lang_981b62f0",
                   "targetId": "lang_6c130090"
                 },
                 {
@@ -7792,13 +7785,11 @@
           "CT": {
             "complexity": "poly",
             "refs": [
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
               "Darwiche_2002"
             ],
-            "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}, and \\supportspoly{\\langref{d-DNNF}}{\\CT}. Therefore \\supportspoly{\\langfam{TDD}{T}}{\\CT}.",
+            "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}, and \\supportspoly{\\langref{d-DNNF}}{\\CT}. Therefore \\supportspoly{\\langfam{TDD}{T}}{\\CT}.",
             "derived": true,
             "origin": "derived",
             "proof": {
@@ -7807,16 +7798,11 @@
                 {
                   "kind": "leP",
                   "sourceId": "lang_8cf1da0e",
-                  "targetId": "lang_91f812d0"
+                  "targetId": "lang_981b62f0"
                 },
                 {
                   "kind": "leP",
-                  "sourceId": "lang_91f812d0",
-                  "targetId": "lang_ea9b5299"
-                },
-                {
-                  "kind": "leP",
-                  "sourceId": "lang_ea9b5299",
+                  "sourceId": "lang_981b62f0",
                   "targetId": "lang_6c130090"
                 },
                 {
@@ -7830,9 +7816,7 @@
           "ME": {
             "complexity": "poly",
             "refs": [
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
               "Darwiche_2001a",
               "Darwiche_2002"
@@ -7859,9 +7843,7 @@
           "CE": {
             "complexity": "poly",
             "refs": [
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
               "Darwiche_2001a",
               "Darwiche_2002"
@@ -7888,9 +7870,7 @@
           "VA": {
             "complexity": "poly",
             "refs": [
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
               "Darwiche_2002"
             ],
@@ -7916,9 +7896,7 @@
           "IM": {
             "complexity": "poly",
             "refs": [
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b",
               "Darwiche_2002"
             ],
@@ -7979,9 +7957,7 @@
             "refs": [
               "TCZ_Forthcoming",
               "Bova_2014",
-              "Capelli_2026",
               "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
             "description": "In the language \\langfam{TDD}{T}, every clause has a polynomial-size representation. If \\langfam{TDD}{T} supported $\\land$C, then every \\langref{CNF} could be compiled into \\langfam{TDD}{T} by conjoining the translated clauses. This contradicts \\nocompilespoly{\\langref{CNF}}{\\langfam{TDD}{T}} \\citep{TCZ_Forthcoming}.",
@@ -8726,10 +8702,7 @@
             "refs": [
               "TCZ_Forthcoming",
               "Darwiche_2002",
-              "Wegener_1987",
-              "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b"
+              "Wegener_1987"
             ],
             "description": "In the language \\langref{dec-DNNF}, every term has a polynomial-size representation. If \\langref{dec-DNNF} supported $\\lor$C, then every \\langref{DNF} could be compiled into \\langref{dec-DNNF} by disjoining the translated terms. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langref{dec-DNNF}} \\citep{TCZ_Forthcoming}.\n\nAlternatively, since \\langref{dec-DNNF} does not support Bounded Disjunction in quasipolynomial time, intractability of Disjunction is immediate. \\citep{Darwiche_2002}",
             "derived": false,
@@ -11825,12 +11798,10 @@
           "status": "no-quasi",
           "refs": [
             "Bova_2014",
-            "Capelli_2026",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b"
           ],
-          "description": "\\nocompilesquasi{\\langref{CNF}}{\\langref{DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. If \\langref{CNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{CNF}}{\\langref{DNNF}}. Therefore \\nocompilesquasi{\\langref{CNF}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{CNF}}{\\langref{DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. If \\langref{CNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{CNF}}{\\langref{DNNF}}. Therefore \\nocompilesquasi{\\langref{CNF}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -11845,16 +11816,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
+                "sourceId": "lang_981b62f0",
                 "targetId": "lang_6c130090"
               },
               {
@@ -12782,11 +12748,9 @@
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Capelli_2026",
-            "Amarilli_2020"
+            "TCZ_Forthcoming"
           ],
-          "description": "\\compilespoly{\\langref{OBDD}}{\\langref{cSDD}}. \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. If \\langref{cSDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. Therefore \\nocompilesquasi{\\langref{cSDD}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{cSDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{cSDD}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -12794,24 +12758,19 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_83e3b023"
-              },
-              {
                 "kind": "notLeQ",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_3c803ba1"
+                "sourceId": "lang_83e3b023",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_3c803ba1"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -12820,10 +12779,7 @@
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "TCZ_Forthcoming"
           ],
           "description": "\\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{cSDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{cSDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -13697,12 +13653,9 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Beame_2015",
-            "Capelli_2026",
-            "Darwiche_2011"
+            "Darwiche_2001b"
           ],
-          "description": "\\compilespoly{\\langref{FBDD}}{\\langref{d-DNNF}}. \\nocompilesquasi{\\langref{FBDD}}{\\langref{SDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langref{SDD}}. If \\langref{d-DNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{SDD}}. Therefore \\nocompilesquasi{\\langref{d-DNNF}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{d-DNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-DNNF}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -13710,24 +13663,19 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
-                "targetId": "lang_6c130090"
-              },
-              {
                 "kind": "notLeQ",
-                "sourceId": "lang_684b1ca7",
-                "targetId": "lang_1afefbe2"
+                "sourceId": "lang_6c130090",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_9c84a267"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_9c84a267",
-                "targetId": "lang_1afefbe2"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -13767,9 +13715,7 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2001b",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010"
+            "Darwiche_2001b"
           ],
           "description": "\\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{d-DNNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-DNNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -14770,10 +14716,10 @@
           "status": "no-quasi",
           "refs": [
             "Amarilli_2020",
-            "TCZ_Forthcoming",
-            "Capelli_2026"
+            "Wegener_2000",
+            "Savicky_Zak_2000"
           ],
-          "description": "\\compilespoly{\\langref{OBDD}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. If \\langref{d-SDNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. Therefore \\nocompilesquasi{\\langref{d-SDNNF}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{d-SDNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-SDNNF}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -14782,28 +14728,23 @@
             "premises": [
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_c2df8c2b"
-              },
-              {
-                "kind": "leP",
                 "sourceId": "lang_c2df8c2b",
                 "targetId": "lang_ea9b5299"
               },
               {
                 "kind": "notLeQ",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_3c803ba1"
+                "sourceId": "lang_c2df8c2b",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_3c803ba1"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -14839,9 +14780,7 @@
           "refs": [
             "Amarilli_2020",
             "Wegener_2000",
-            "Savicky_Zak_2000",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{d-SDNNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{d-SDNNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -15829,12 +15768,13 @@
           }
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
-            "Vinall-Smeeth_2024",
-            "Capelli_2026"
+            "VanDenBroeck_2015",
+            "Bollig_2019",
+            "Savicky_Zak_2000"
           ],
-          "description": "\\nocompilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{SDD}{T}}. If \\langfam{d-SDNNF}{T} compiled to \\langfam{TDD}{T} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDD}{T}}. Therefore \\nocompilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{d-SDNNF}{T} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -15842,14 +15782,24 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "notLeP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_9c84a267"
+                "kind": "leP",
+                "sourceId": "lang_9c84a267",
+                "targetId": "lang_91f812d0"
+              },
+              {
+                "kind": "notLeQ",
+                "sourceId": "lang_9c84a267",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_9c84a267"
+                "targetId": "lang_981b62f0"
+              },
+              {
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -15892,10 +15842,7 @@
           "refs": [
             "VanDenBroeck_2015",
             "Bollig_2019",
-            "Savicky_Zak_2000",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{d-SDNNF}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{d-SDNNF}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -16715,10 +16662,7 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Wegener_1987",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Wegener_1987"
           ],
           "description": "\\compilespoly{\\langref{IP}}{\\langref{DNF}}. \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{DNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{DNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -17536,11 +17480,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Darwiche_2002",
-            "Amarilli_2020",
-            "Capelli_2026"
+            "Bova_2016",
+            "Bova_2014",
+            "Amarilli_2020"
           ],
-          "description": "\\compilespoly{\\langref{DNF}}{\\langref{DNNF}}. \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. If \\langref{DNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. Therefore \\nocompilesquasi{\\langref{DNNF}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. If \\langref{DNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{DNNF}}{\\langref{d-DNNF}}. Therefore \\nocompilesquasi{\\langref{DNNF}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -17548,24 +17492,19 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "leP",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_3bebcab7"
-              },
-              {
                 "kind": "notLeQ",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_ea9b5299"
+                "sourceId": "lang_3bebcab7",
+                "targetId": "lang_6c130090"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_6c130090"
               }
             ]
           }
@@ -19126,16 +19065,12 @@
           }
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
-            "Darwiche_2001b",
             "Darwiche_2002",
-            "Capelli_2026",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010"
+            "Wegener_1987"
           ],
-          "description": "\\nocompilespoly{\\langref{IP}}{\\langref{d-DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{d-DNNF}}. If \\langref{IP} compiled to \\langfam{TDD}{T} with polynomial blowup, this would contradict \\nocompilespoly{\\langref{IP}}{\\langref{d-DNNF}}. Therefore \\nocompilespoly{\\langref{IP}}{\\langfam{TDD}{T}}.",
-          "assumption": "the polynomial hierarchy does not collapse",
+          "description": "\\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{IP} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{IP}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -19143,14 +19078,19 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "notLeP",
+                "kind": "notLeQ",
                 "sourceId": "lang_6ae90adc",
-                "targetId": "lang_6c130090"
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_6c130090"
+                "targetId": "lang_981b62f0"
+              },
+              {
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -19188,10 +19128,7 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Wegener_1987",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Wegener_1987"
           ],
           "description": "\\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{IP} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{IP}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -19972,10 +19909,9 @@
           "status": "poly",
           "refs": [
             "Darwiche_2002",
-            "TCZ_Forthcoming",
-            "Amarilli_2020"
+            "Capelli_2026"
           ],
-          "description": "\\compilespoly{\\langref{MODS}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. Therefore \\compilespoly{\\langref{MODS}}{\\langref{dec-DNNF}}.",
+          "description": "\\compilespoly{\\langref{MODS}}{\\langfam{OBDD}{<}}. \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. Therefore \\compilespoly{\\langref{MODS}}{\\langref{dec-DNNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -19990,16 +19926,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_d69995dd",
-                "targetId": "lang_b9d72a7c"
+                "targetId": "lang_8cf1da0e"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_684b1ca7"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
+                "sourceId": "lang_8cf1da0e",
                 "targetId": "lang_981b62f0"
               }
             ]
@@ -20766,11 +20697,9 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2020",
-            "Capelli_2026",
-            "Pipatsrisawat_Darwiche_2010"
+            "Amarilli_2020"
           ],
-          "description": "\\nocompilesquasi{\\langref{nFBDD}}{\\langref{d-DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. If \\langref{nFBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{nFBDD}}{\\langref{d-DNNF}}. Therefore \\nocompilesquasi{\\langref{nFBDD}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{nFBDD}}{\\langref{d-DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. If \\langref{nFBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{nFBDD}}{\\langref{d-DNNF}}. Therefore \\nocompilesquasi{\\langref{nFBDD}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -20785,16 +20714,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
+                "sourceId": "lang_981b62f0",
                 "targetId": "lang_6c130090"
               }
             ]
@@ -21753,10 +21677,11 @@
           "status": "no-quasi",
           "refs": [
             "Darwiche_2002",
-            "Amarilli_2020",
-            "Capelli_2026"
+            "Bova_2016",
+            "Bova_2014",
+            "Amarilli_2020"
           ],
-          "description": "\\compilespoly{\\langref{DNF}}{\\langref{DNNF}}. \\compilespoly{\\langref{DNNF}}{\\langref{NNF}}. \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. If \\langref{NNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. Therefore \\nocompilesquasi{\\langref{NNF}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langref{DNNF}}{\\langref{NNF}}. \\nocompilesquasi{\\langref{DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. If \\langref{NNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{DNNF}}{\\langref{d-DNNF}}. Therefore \\nocompilesquasi{\\langref{NNF}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -21765,28 +21690,23 @@
             "premises": [
               {
                 "kind": "leP",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_3bebcab7"
-              },
-              {
-                "kind": "leP",
                 "sourceId": "lang_3bebcab7",
                 "targetId": "lang_5bf00851"
               },
               {
                 "kind": "notLeQ",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_ea9b5299"
+                "sourceId": "lang_3bebcab7",
+                "targetId": "lang_6c130090"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_6c130090"
               }
             ]
           }
@@ -22748,9 +22668,9 @@
           "refs": [
             "Amarilli_2020",
             "Wegener_2000",
-            "Capelli_2026"
+            "Savicky_Zak_2000"
           ],
-          "description": "\\compilespoly{\\langref{DNF}}{\\langfam{nOBDD}{<}}. \\compilespoly{\\langfam{nOBDD}{<}}{\\langref{nOBDD}}. \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. If \\langref{nOBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. Therefore \\nocompilesquasi{\\langref{nOBDD}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{nOBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{nOBDD}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -22759,28 +22679,23 @@
             "premises": [
               {
                 "kind": "leP",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_e827cf31"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_e827cf31",
+                "sourceId": "lang_c2df8c2b",
                 "targetId": "lang_d24efe0e"
               },
               {
                 "kind": "notLeQ",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_ea9b5299"
+                "sourceId": "lang_c2df8c2b",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -22827,9 +22742,7 @@
           "refs": [
             "Amarilli_2020",
             "Wegener_2000",
-            "Savicky_Zak_2000",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{nOBDD}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{nOBDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{nOBDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -23665,11 +23578,9 @@
         {
           "status": "poly",
           "refs": [
-            "TCZ_Forthcoming",
-            "Darwiche_2002",
-            "Amarilli_2020"
+            "Capelli_2026"
           ],
-          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. Therefore \\compilespoly{\\langfam{OBDD}{<}}{\\langref{dec-DNNF}}.",
+          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. Therefore \\compilespoly{\\langfam{OBDD}{<}}{\\langref{dec-DNNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -23679,16 +23590,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_d69995dd",
-                "targetId": "lang_b9d72a7c"
+                "targetId": "lang_8cf1da0e"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_684b1ca7"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
+                "sourceId": "lang_8cf1da0e",
                 "targetId": "lang_981b62f0"
               }
             ]
@@ -24340,13 +24246,10 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Bova_2016",
-            "Capelli_2026",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Wegener_1987",
+            "Darwiche_2002"
           ],
-          "description": "\\nocompilesquasi{\\langref{PI}}{\\langref{DNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. If \\langref{PI} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{PI}}{\\langref{DNNF}}. Therefore \\nocompilesquasi{\\langref{PI}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{PI} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{PI}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -24356,27 +24259,17 @@
               {
                 "kind": "notLeQ",
                 "sourceId": "lang_27fffab2",
-                "targetId": "lang_3bebcab7"
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
-                "targetId": "lang_6c130090"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_6c130090",
-                "targetId": "lang_3bebcab7"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -24423,10 +24316,7 @@
           "status": "no-quasi",
           "refs": [
             "Wegener_1987",
-            "Darwiche_2002",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Darwiche_2002"
           ],
           "description": "\\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{PI} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{PI}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{PI}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -25312,11 +25202,9 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Capelli_2026",
-            "Amarilli_2020"
+            "TCZ_Forthcoming"
           ],
-          "description": "\\compilespoly{\\langref{OBDD}}{\\langref{cSDD}}. \\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. If \\langref{SDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. Therefore \\nocompilesquasi{\\langref{SDD}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{SDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{SDD}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -25325,28 +25213,23 @@
             "premises": [
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_83e3b023"
-              },
-              {
-                "kind": "leP",
                 "sourceId": "lang_83e3b023",
                 "targetId": "lang_1afefbe2"
               },
               {
                 "kind": "notLeQ",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_3c803ba1"
+                "sourceId": "lang_83e3b023",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_3c803ba1"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -25356,10 +25239,7 @@
           "status": "no-quasi",
           "refs": [
             "VanDenBroeck_2015",
-            "TCZ_Forthcoming",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "TCZ_Forthcoming"
           ],
           "description": "\\compilespoly{\\langref{cSDD}}{\\langref{SDD}}. \\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{SDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{cSDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{SDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -26191,16 +26071,43 @@
             ]
           }
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "Bollig_2019",
+            "Savicky_Zak_2000"
+          ],
+          "description": "\\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{SDD}{T} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{SDD}{T}}{\\langfam{TDD}{T}}.",
+          "hidden": false,
+          "derived": true,
+          "origin": "derived",
+          "proof": {
+            "rule": "negative-obstruction",
+            "premises": [
+              {
+                "kind": "notLeQ",
+                "sourceId": "lang_9c84a267",
+                "targetId": "lang_684b1ca7"
+              },
+              {
+                "kind": "leP",
+                "sourceId": "lang_8cf1da0e",
+                "targetId": "lang_981b62f0"
+              },
+              {
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
+              }
+            ]
+          }
+        },
         null,
         {
           "status": "no-quasi",
           "refs": [
             "Bollig_2019",
-            "Savicky_Zak_2000",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{SDD}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -27227,10 +27134,11 @@
           "status": "no-quasi",
           "refs": [
             "Amarilli_2020",
+            "Pipatsrisawat_Darwiche_2010",
             "Wegener_2000",
-            "Capelli_2026"
+            "Savicky_Zak_2000"
           ],
-          "description": "\\compilespoly{\\langref{DNF}}{\\langfam{nOBDD}{<}}. \\compilespoly{\\langfam{nOBDD}{<}}{\\langref{nOBDD}}. \\compilespoly{\\langref{nOBDD}}{\\langref{SDNNF}}. \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. If \\langref{SDNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{DNF}}{\\langref{d-SDNNF}}. Therefore \\nocompilesquasi{\\langref{SDNNF}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{SDNNF} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{SDNNF}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -27239,33 +27147,28 @@
             "premises": [
               {
                 "kind": "leP",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_e827cf31"
+                "sourceId": "lang_c2df8c2b",
+                "targetId": "lang_ea9b5299"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_e827cf31",
-                "targetId": "lang_d24efe0e"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_d24efe0e",
+                "sourceId": "lang_ea9b5299",
                 "targetId": "lang_b13b0d78"
               },
               {
                 "kind": "notLeQ",
-                "sourceId": "lang_4c204bf3",
-                "targetId": "lang_ea9b5299"
+                "sourceId": "lang_c2df8c2b",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -27318,8 +27221,7 @@
             "Amarilli_2020",
             "Pipatsrisawat_Darwiche_2010",
             "Wegener_2000",
-            "Savicky_Zak_2000",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\compilespoly{\\langref{uOBDD}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}. \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{SDNNF} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{SDNNF}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -28448,9 +28350,7 @@
             "VanDenBroeck_2015",
             "Amarilli_2020",
             "Bollig_2019",
-            "Savicky_Zak_2000",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{SDNNF}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{SDNNF}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -29349,12 +29249,11 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2020",
-            "Beame_2015",
-            "Capelli_2026",
-            "Darwiche_2011"
+            "Bova_2016",
+            "Wegener_2000",
+            "Amarilli_2020"
           ],
-          "description": "\\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\nocompilesquasi{\\langref{FBDD}}{\\langref{SDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langref{SDD}}. If \\langref{uFBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{FBDD}}{\\langref{SDD}}. Therefore \\nocompilesquasi{\\langref{uFBDD}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{uFBDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{uFBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uFBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{uFBDD}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -29362,24 +29261,19 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
-                "targetId": "lang_4e62a038"
-              },
-              {
                 "kind": "notLeQ",
-                "sourceId": "lang_684b1ca7",
-                "targetId": "lang_1afefbe2"
+                "sourceId": "lang_4e62a038",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_9c84a267"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_9c84a267",
-                "targetId": "lang_1afefbe2"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -29421,9 +29315,7 @@
           "refs": [
             "Bova_2016",
             "Wegener_2000",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Amarilli_2020"
           ],
           "description": "\\nocompilesquasi{\\langref{uFBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{uFBDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uFBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{uFBDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -30189,11 +30081,10 @@
         {
           "status": "no-quasi",
           "refs": [
-            "Amarilli_2020",
-            "TCZ_Forthcoming",
-            "Capelli_2026"
+            "Wegener_2000",
+            "Savicky_Zak_2000"
           ],
-          "description": "\\compilespoly{\\langref{OBDD}}{\\langref{uOBDD}}. \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langfam{SDNNF}{T}}. If \\langref{uOBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{OBDD}}{\\langfam{SDNNF}{T}}. Therefore \\nocompilesquasi{\\langref{uOBDD}}{\\langfam{TDD}{T}}.",
+          "description": "\\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{uOBDD} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{uOBDD}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -30201,24 +30092,19 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_c2df8c2b"
-              },
-              {
                 "kind": "notLeQ",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_3c803ba1"
+                "sourceId": "lang_c2df8c2b",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_3c803ba1"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }
@@ -30260,10 +30146,7 @@
           "status": "no-quasi",
           "refs": [
             "Wegener_2000",
-            "Savicky_Zak_2000",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Savicky_Zak_2000"
           ],
           "description": "\\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langref{uOBDD} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{uOBDD}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langref{uOBDD}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -31189,11 +31072,9 @@
         {
           "status": "poly",
           "refs": [
-            "Capelli_2026",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010"
+            "Amarilli_2020"
           ],
-          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. Therefore \\compilespoly{\\langfam{TDD}{T}}{\\langref{d-DNNF}}.",
+          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. Therefore \\compilespoly{\\langfam{TDD}{T}}{\\langref{d-DNNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -31203,16 +31084,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
+                "sourceId": "lang_981b62f0",
                 "targetId": "lang_6c130090"
               }
             ]
@@ -31282,12 +31158,10 @@
         {
           "status": "poly",
           "refs": [
-            "Capelli_2026",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b"
           ],
-          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. Therefore \\compilespoly{\\langfam{TDD}{T}}{\\langref{DNNF}}.",
+          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. Therefore \\compilespoly{\\langfam{TDD}{T}}{\\langref{DNNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -31297,16 +31171,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
+                "sourceId": "lang_981b62f0",
                 "targetId": "lang_6c130090"
               },
               {
@@ -31317,7 +31186,45 @@
             ]
           }
         },
-        null,
+        {
+          "status": "no-poly-quasi",
+          "refs": [],
+          "hidden": false,
+          "derived": false,
+          "origin": "authored",
+          "noPolyDescription": {
+            "description": "",
+            "refs": [],
+            "derived": false,
+            "origin": "authored",
+            "proof": {
+              "rule": "authored",
+              "premises": []
+            }
+          },
+          "quasiDescription": {
+            "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{FBDD}}.",
+            "refs": [],
+            "derived": true,
+            "origin": "derived",
+            "proof": {
+              "rule": "positive-path",
+              "premises": [
+                {
+                  "kind": "leP",
+                  "sourceId": "lang_8cf1da0e",
+                  "targetId": "lang_981b62f0"
+                },
+                {
+                  "kind": "leQ",
+                  "sourceId": "lang_981b62f0",
+                  "targetId": "lang_684b1ca7"
+                }
+              ]
+            }
+          },
+          "description": "First, we show no polynomial compilation exists.\n\nNow, we show a quasipolynomial compilation exists.\n\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{FBDD}}."
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -31383,12 +31290,11 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "Capelli_2026",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Darwiche_2001b",
+            "Pipatsrisawat_Darwiche_2010"
           ],
-          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{nFBDD}}.",
+          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilesquasi{\\langref{DNNF}}{\\langref{nFBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{nFBDD}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -31398,16 +31304,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
+                "sourceId": "lang_981b62f0",
                 "targetId": "lang_6c130090"
               },
               {
@@ -31426,13 +31327,11 @@
         {
           "status": "poly",
           "refs": [
-            "Capelli_2026",
             "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
             "Darwiche_2001b",
             "Darwiche_2002"
           ],
-          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilespoly{\\langref{d-SDNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilespoly{\\langref{DNNF}}{\\langref{NNF}}. Therefore \\compilespoly{\\langfam{TDD}{T}}{\\langref{NNF}}.",
+          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}. \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}. \\compilespoly{\\langref{DNNF}}{\\langref{NNF}}. Therefore \\compilespoly{\\langfam{TDD}{T}}{\\langref{NNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -31442,16 +31341,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_ea9b5299",
+                "sourceId": "lang_981b62f0",
                 "targetId": "lang_6c130090"
               },
               {
@@ -31658,12 +31552,9 @@
         {
           "status": "unknown-poly-quasi",
           "refs": [
-            "Capelli_2026",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Amarilli_2020"
           ],
-          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilespoly{\\langfam{d-SDNNF}{T}}{\\langref{d-SDNNF}}. \\compilesquasi{\\langref{d-SDNNF}}{\\langref{uOBDD}}. \\compilespoly{\\langref{uOBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{uFBDD}}.",
+          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. Therefore \\compilesquasi{\\langfam{TDD}{T}}{\\langref{uFBDD}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -31673,21 +31564,16 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_91f812d0"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_91f812d0",
-                "targetId": "lang_ea9b5299"
+                "targetId": "lang_981b62f0"
               },
               {
                 "kind": "leQ",
-                "sourceId": "lang_ea9b5299",
-                "targetId": "lang_c2df8c2b"
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_c2df8c2b",
+                "sourceId": "lang_684b1ca7",
                 "targetId": "lang_4e62a038"
               }
             ]
@@ -31745,7 +31631,13 @@
           "derived": false,
           "origin": "authored"
         },
-        null,
+        {
+          "status": "poly",
+          "description": "",
+          "refs": [],
+          "derived": false,
+          "origin": "authored"
+        },
         null,
         null,
         null,
@@ -31978,7 +31870,31 @@
             ]
           }
         },
-        null,
+        {
+          "status": "no-poly-unknown-quasi",
+          "refs": [
+            "Capelli_2026"
+          ],
+          "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{TDD}}. \\nocompilespoly{\\langfam{TDD}{T}}{\\langref{FBDD}}. If \\langref{TDD} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{TDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilespoly{\\langref{TDD}}{\\langref{FBDD}}.",
+          "hidden": false,
+          "derived": true,
+          "origin": "derived",
+          "proof": {
+            "rule": "negative-obstruction",
+            "premises": [
+              {
+                "kind": "leP",
+                "sourceId": "lang_8cf1da0e",
+                "targetId": "lang_d7403a53"
+              },
+              {
+                "kind": "notLeP",
+                "sourceId": "lang_8cf1da0e",
+                "targetId": "lang_684b1ca7"
+              }
+            ]
+          }
+        },
         {
           "status": "no-quasi",
           "refs": [
@@ -32598,11 +32514,10 @@
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Darwiche_2002",
-            "Amarilli_2020"
+            "Capelli_2026",
+            "Darwiche_2002"
           ],
-          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. If \\langref{dec-DNNF} compiled to \\langref{CNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{CNF}}.",
+          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. If \\langref{dec-DNNF} compiled to \\langref{CNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{CNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -32612,16 +32527,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_d69995dd",
-                "targetId": "lang_b9d72a7c"
+                "targetId": "lang_8cf1da0e"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_684b1ca7"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
+                "sourceId": "lang_8cf1da0e",
                 "targetId": "lang_981b62f0"
               },
               {
@@ -32747,11 +32657,10 @@
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Darwiche_2002",
-            "Amarilli_2020"
+            "Capelli_2026",
+            "Darwiche_2002"
           ],
-          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. If \\langref{dec-DNNF} compiled to \\langref{DNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{DNF}}.",
+          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. If \\langref{dec-DNNF} compiled to \\langref{DNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{DNF}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -32761,16 +32670,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_d69995dd",
-                "targetId": "lang_b9d72a7c"
+                "targetId": "lang_8cf1da0e"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_684b1ca7"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
+                "sourceId": "lang_8cf1da0e",
                 "targetId": "lang_981b62f0"
               },
               {
@@ -32809,21 +32713,13 @@
         },
         {
           "status": "no-poly-quasi",
-          "refs": [
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
-          ],
+          "refs": [],
           "hidden": false,
           "derived": false,
           "origin": "authored",
           "noPolyDescription": {
-            "description": "\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{dec-SDNNF}}. \\compilespoly{\\langref{dec-SDNNF}}{\\langref{dec-DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{dec-DNNF} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{dec-DNNF}}{\\langref{FBDD}}.",
-            "refs": [
-              "Amarilli_2020",
-              "Pipatsrisawat_Darwiche_2010",
-              "Darwiche_2001b"
-            ],
+            "description": "\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\nocompilespoly{\\langfam{TDD}{T}}{\\langref{FBDD}}. If \\langref{dec-DNNF} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{TDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilespoly{\\langref{dec-DNNF}}{\\langref{FBDD}}.",
+            "refs": [],
             "derived": true,
             "origin": "derived",
             "proof": {
@@ -32831,28 +32727,13 @@
               "premises": [
                 {
                   "kind": "leP",
-                  "sourceId": "lang_4ae03bc8",
-                  "targetId": "lang_0f27d539"
-                },
-                {
-                  "kind": "leP",
-                  "sourceId": "lang_0f27d539",
+                  "sourceId": "lang_8cf1da0e",
                   "targetId": "lang_981b62f0"
                 },
                 {
                   "kind": "notLeP",
-                  "sourceId": "lang_4ae03bc8",
-                  "targetId": "lang_1df07cc3"
-                },
-                {
-                  "kind": "leP",
-                  "sourceId": "lang_684b1ca7",
-                  "targetId": "lang_4e62a038"
-                },
-                {
-                  "kind": "leP",
-                  "sourceId": "lang_4e62a038",
-                  "targetId": "lang_1df07cc3"
+                  "sourceId": "lang_8cf1da0e",
+                  "targetId": "lang_684b1ca7"
                 }
               ]
             }
@@ -32867,16 +32748,15 @@
               "premises": []
             }
           },
-          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{dec-SDNNF}}. \\compilespoly{\\langref{dec-SDNNF}}{\\langref{dec-DNNF}}. \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{uFBDD}}. \\compilespoly{\\langref{uFBDD}}{\\langref{nFBDD}}. If \\langref{dec-DNNF} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{dec-SDNNF}{T}}{\\langref{nFBDD}}. Therefore \\nocompilespoly{\\langref{dec-DNNF}}{\\langref{FBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
+          "description": "First, we show no polynomial compilation exists.\n\\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\nocompilespoly{\\langfam{TDD}{T}}{\\langref{FBDD}}. If \\langref{dec-DNNF} compiled to \\langref{FBDD} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{TDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilespoly{\\langref{dec-DNNF}}{\\langref{FBDD}}.\n\nNow, we show a quasipolynomial compilation exists."
         },
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Darwiche_2002",
-            "Amarilli_2020"
+            "Capelli_2026",
+            "Darwiche_2002"
           ],
-          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. \\compilespoly{\\langref{IP}}{\\langref{DNF}}. If \\langref{dec-DNNF} compiled to \\langref{IP} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{IP}}.",
+          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. \\compilespoly{\\langref{IP}}{\\langref{DNF}}. If \\langref{dec-DNNF} compiled to \\langref{IP} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{DNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{IP}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -32886,16 +32766,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_d69995dd",
-                "targetId": "lang_b9d72a7c"
+                "targetId": "lang_8cf1da0e"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_684b1ca7"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
+                "sourceId": "lang_8cf1da0e",
                 "targetId": "lang_981b62f0"
               },
               {
@@ -33122,11 +32997,10 @@
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Darwiche_2002",
-            "Amarilli_2020"
+            "Capelli_2026",
+            "Darwiche_2002"
           ],
-          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}. \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}}. \\compilespoly{\\langref{FBDD}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. \\compilespoly{\\langref{PI}}{\\langref{CNF}}. If \\langref{dec-DNNF} compiled to \\langref{PI} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{PI}}.",
+          "description": "\\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. \\compilespoly{\\langref{PI}}{\\langref{CNF}}. If \\langref{dec-DNNF} compiled to \\langref{PI} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{OBDD}{<}}{\\langref{CNF}}. Therefore \\nocompilesquasi{\\langref{dec-DNNF}}{\\langref{PI}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -33136,16 +33010,11 @@
               {
                 "kind": "leP",
                 "sourceId": "lang_d69995dd",
-                "targetId": "lang_b9d72a7c"
+                "targetId": "lang_8cf1da0e"
               },
               {
                 "kind": "leP",
-                "sourceId": "lang_b9d72a7c",
-                "targetId": "lang_684b1ca7"
-              },
-              {
-                "kind": "leP",
-                "sourceId": "lang_684b1ca7",
+                "sourceId": "lang_8cf1da0e",
                 "targetId": "lang_981b62f0"
               },
               {
@@ -36695,15 +36564,41 @@
           "derived": false,
           "origin": "authored"
         },
-        null,
+        {
+          "status": "no-quasi",
+          "refs": [
+            "TCZ_Forthcoming"
+          ],
+          "description": "\\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{cSDD}{T} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langfam{TDD}{T}}.",
+          "hidden": false,
+          "derived": true,
+          "origin": "derived",
+          "proof": {
+            "rule": "negative-obstruction",
+            "premises": [
+              {
+                "kind": "notLeQ",
+                "sourceId": "lang_82fa749e",
+                "targetId": "lang_684b1ca7"
+              },
+              {
+                "kind": "leP",
+                "sourceId": "lang_8cf1da0e",
+                "targetId": "lang_981b62f0"
+              },
+              {
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
+              }
+            ]
+          }
+        },
         null,
         {
           "status": "no-quasi",
           "refs": [
-            "TCZ_Forthcoming",
-            "Amarilli_2020",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "TCZ_Forthcoming"
           ],
           "description": "\\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{cSDD}{T} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{cSDD}{T}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -37564,9 +37459,7 @@
           "refs": [
             "Darwiche_2002",
             "Amarilli_2020",
-            "Wegener_1987",
-            "Pipatsrisawat_Darwiche_2010",
-            "Darwiche_2001b"
+            "Wegener_1987"
           ],
           "description": "\\compilespoly{\\langref{IP}}{\\langref{DNF}}. \\compilespoly{\\langref{DNF}}{\\langfam{nOBDD}{<}}. \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{nOBDD}{<} compiled to \\langref{dec-DNNF} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langref{IP}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{nOBDD}{<}}{\\langref{dec-DNNF}}.",
           "hidden": false,
@@ -38369,13 +38262,17 @@
           }
         },
         {
-          "status": "no-poly-unknown-quasi",
+          "status": "no-quasi",
           "refs": [
-            "Vinall-Smeeth_2024",
-            "Darwiche_2011",
-            "Capelli_2026"
+            "VanDenBroeck_2015",
+            "Bollig_2019",
+            "Savicky_Zak_2000",
+            "Amarilli_2020",
+            "Wegener_2000",
+            "Pipatsrisawat_Darwiche_2010",
+            "Darwiche_2001b"
           ],
-          "description": "\\nocompilespoly{\\langfam{uOBDD}{<}}{\\langref{SDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langfam{SDD}{T}}. \\compilespoly{\\langfam{SDD}{T}}{\\langref{SDD}}. If \\langfam{uOBDD}{<} compiled to \\langfam{TDD}{T} with polynomial blowup, this would contradict \\nocompilespoly{\\langfam{uOBDD}{<}}{\\langref{SDD}}. Therefore \\nocompilespoly{\\langfam{uOBDD}{<}}{\\langfam{TDD}{T}}.",
+          "description": "\\compilespoly{\\langfam{SDD}{T}}{\\langfam{d-SDNNF}{T}}. \\compilesquasi{\\langfam{d-SDNNF}{T}}{\\langfam{uOBDD}{<}}. \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. \\compilespoly{\\langfam{TDD}{T}}{\\langref{dec-DNNF}}. \\compilesquasi{\\langref{dec-DNNF}}{\\langref{FBDD}}. If \\langfam{uOBDD}{<} compiled to \\langfam{TDD}{T} with quasipolynomial blowup, this would contradict \\nocompilesquasi{\\langfam{SDD}{T}}{\\langref{FBDD}}. Therefore \\nocompilesquasi{\\langfam{uOBDD}{<}}{\\langfam{TDD}{T}}.",
           "hidden": false,
           "derived": true,
           "origin": "derived",
@@ -38383,19 +38280,29 @@
             "rule": "negative-obstruction",
             "premises": [
               {
-                "kind": "notLeP",
-                "sourceId": "lang_43a33aec",
-                "targetId": "lang_1afefbe2"
+                "kind": "leP",
+                "sourceId": "lang_9c84a267",
+                "targetId": "lang_91f812d0"
+              },
+              {
+                "kind": "leQ",
+                "sourceId": "lang_91f812d0",
+                "targetId": "lang_43a33aec"
+              },
+              {
+                "kind": "notLeQ",
+                "sourceId": "lang_9c84a267",
+                "targetId": "lang_684b1ca7"
               },
               {
                 "kind": "leP",
                 "sourceId": "lang_8cf1da0e",
-                "targetId": "lang_9c84a267"
+                "targetId": "lang_981b62f0"
               },
               {
-                "kind": "leP",
-                "sourceId": "lang_9c84a267",
-                "targetId": "lang_1afefbe2"
+                "kind": "leQ",
+                "sourceId": "lang_981b62f0",
+                "targetId": "lang_684b1ca7"
               }
             ]
           }

@@ -505,8 +505,6 @@
       : filteredGraphData
   );
   const showQuasipolynomialSandboxOptions = $derived(filterStates.get('poly-display') === true);
-  const latexExportLabel = 'Export'
-
   function handleGraphNodePositionsChange(positions: Record<string, NodePosition>) {
     graphNodePositions = positions;
   }
@@ -1515,17 +1513,6 @@
         <h1 class="title">Tractable Circuit Zoo</h1>
       </div>
       <div class="header-controls">
-        <button
-          type="button"
-          class="latex-export"
-          onclick={downloadCurrentLatexExport}
-          title="Download LaTeX for the current filtered view"
-        >
-          <svg class="export-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-            <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
-          </svg>
-          {latexExportLabel}
-        </button>
         <a href="/about" class="about-link">
           About
         </a>
@@ -1695,6 +1682,7 @@
               selectedOperationCell = null;
               selectedOperation = op;
             }}
+            onExport={downloadCurrentLatexExport}
           />
         {:else if selectedOperation}
           <OperationInfo 
@@ -1717,6 +1705,7 @@
               selectedOperationCell = null;
               selectedOperation = op;
             }}
+            onExport={downloadCurrentLatexExport}
           />
         {:else if selectedNode}
           <LanguageInfo 
@@ -1731,6 +1720,7 @@
             onSandboxLanguageReset={handleSandboxLanguageReset}
             onSandboxReferenceAdd={handleSandboxReferenceAdd}
             viewMode={viewMode}
+            onExport={downloadCurrentLatexExport}
           />
         {:else}
           <OperationInfo 
@@ -1744,6 +1734,7 @@
             onSandboxOperationEdit={handleSandboxOperationMetadataEdit}
             onSandboxOperationReset={handleSandboxOperationReset}
             onSandboxReferenceAdd={handleSandboxReferenceAdd}
+            onExport={downloadCurrentLatexExport}
           />
         {/if}
       {:else if selectedEdge}
@@ -1759,6 +1750,7 @@
           onSandboxEdgeReset={handleSandboxEdgeReset}
           onSandboxReferenceAdd={handleSandboxReferenceAdd}
           viewMode={viewMode}
+          onExport={downloadCurrentLatexExport}
         />
       {:else if selectedNode}
         <LanguageInfo 
@@ -1773,6 +1765,7 @@
           onSandboxLanguageReset={handleSandboxLanguageReset}
           onSandboxReferenceAdd={handleSandboxReferenceAdd}
           viewMode={viewMode}
+          onExport={downloadCurrentLatexExport}
         />
       {:else}
         <LanguageInfo 
@@ -1786,6 +1779,7 @@
           onSandboxLanguageReset={handleSandboxLanguageReset}
           onSandboxReferenceAdd={handleSandboxReferenceAdd}
           viewMode={viewMode}
+          onExport={downloadCurrentLatexExport}
         />
       {/if}
     </aside>
@@ -2225,48 +2219,6 @@
     font-size: 0.875rem;
     transition: all 0.2s;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  }
-
-  .latex-export {
-    padding: 0.5rem 1rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: #ffffff;
-    color: #334155;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  }
-
-  .latex-export:hover {
-    background: #f8fafc;
-    color: #1d4ed8;
-    border-color: #94a3b8;
-    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
-    transform: translateY(-1px);
-  }
-
-  .latex-export:active {
-    transform: translateY(0);
-  }
-
-  .latex-export:focus-visible {
-    outline: 2px solid #93c5fd;
-    outline-offset: 2px;
-  }
-
-  .export-icon {
-    width: 1rem;
-    height: 1rem;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    flex: none;
   }
 
   .about-link:hover {

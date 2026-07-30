@@ -2,6 +2,7 @@
   import MathText from './MathText.svelte';
   import DynamicLegend from './DynamicLegend.svelte';
   import ReferenceList from './ReferenceList.svelte';
+  import LatexExportButton from './LatexExportButton.svelte';
   import RichTextEditor from './RichTextEditor.svelte';
   import AssumptionPicker from './AssumptionPicker.svelte';
   import type { 
@@ -36,7 +37,8 @@
     onSandboxOperationReset,
     onSandboxReferenceAdd,
     sandboxEdited = false,
-    viewMode = 'queries' as ViewMode
+    viewMode = 'queries' as ViewMode,
+    onExport
   }: {
     selectedOperation: SelectedOperation | null;
     selectedOperationCell: SelectedOperationCell | null;
@@ -60,6 +62,7 @@
     onSandboxReferenceAdd?: (bibtex: string) => string | null;
     sandboxEdited?: boolean;
     viewMode?: ViewMode;
+    onExport?: () => void;
   } = $props();
 
   const legendGraphData = $derived(filteredGraphData ?? graphData);
@@ -195,7 +198,12 @@
         selectedOperationCell.operationType
       )}
       <div class="operation-cell-details">
-        <h3 class="panel-title">{panelTitle}</h3>
+        <div class="panel-heading">
+          <h3 class="panel-title">{panelTitle}</h3>
+          {#if onExport}
+            <LatexExportButton scope={panelTitle} onExport={onExport} />
+          {/if}
+        </div>
         <div class="cell-header">
           <button 
             type="button"
@@ -277,6 +285,12 @@
     {:else if selectedOperation}
       <!-- Show operation info only -->
       <div class="operation-details">
+        <div class="panel-heading">
+          <h3 class="panel-title">{panelTitle}</h3>
+          {#if onExport}
+            <LatexExportButton scope={panelTitle} onExport={onExport} />
+          {/if}
+        </div>
         <div class="operation-header">
           <span class="operation-code-large">{selectedOperation.code}</span>
           <span class="operation-type-badge">{selectedOperation.type}</span>
@@ -292,7 +306,12 @@
       </div>
     {:else}
       <div class="welcome-message">
-        <h3 class="panel-title">{panelTitle}</h3>
+        <div class="panel-heading">
+          <h3 class="panel-title">{panelTitle}</h3>
+          {#if onExport}
+            <LatexExportButton scope={panelTitle} onExport={onExport} />
+          {/if}
+        </div>
         <p class="text-gray-600 text-sm mb-4">
           Click on any cell for more information.
         </p>
@@ -323,8 +342,17 @@
     line-height: 1.25;
   }
 
-  .panel-title {
+  .panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin: 0 0 1rem;
+  }
+
+  .panel-title {
+    margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
     color: #374151;

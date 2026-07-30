@@ -244,10 +244,11 @@
   }
 
   function togglePanel(panel: Exclude<ToolPanel, null>) {
-    activePanel = activePanel === panel ? null : panel;
+    const nextPanel = activePanel === panel ? null : panel;
+    activePanel = nextPanel;
     referenceModalOpen = false;
     referenceError = null;
-    focusedPicker = null;
+    focusedPicker = nextPanel === 'reference' ? 'reference' : null;
   }
 
   function insertText(text: string, cursorOffset = text.length) {

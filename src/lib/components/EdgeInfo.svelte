@@ -10,6 +10,7 @@
   import { validSandboxEdgeStatuses } from '$lib/utils/sandbox-status-options.js';
   import DynamicLegend from './DynamicLegend.svelte';
   import ReferenceList from './ReferenceList.svelte';
+  import LatexExportButton from './LatexExportButton.svelte';
   
   let {
     selectedEdge,
@@ -22,7 +23,8 @@
     onSandboxEdgeEdit,
     onSandboxEdgeReset,
     onSandboxReferenceAdd,
-    viewMode = 'graph' as ViewMode
+    viewMode = 'graph' as ViewMode,
+    onExport
   }: {
     selectedEdge: SelectedEdge | null; 
     graphData: GraphData | FilteredGraphData;
@@ -45,6 +47,7 @@
     onSandboxEdgeReset?: (sourceId: string, targetId: string) => void;
     onSandboxReferenceAdd?: (bibtex: string) => string | null;
     viewMode?: ViewMode;
+    onExport?: () => void;
   } = $props();
 
   // Use filteredGraphData for the legend if provided, otherwise fall back to graphData
@@ -297,9 +300,14 @@
             <span> &harr; </span>
             <MathText text={selectedEdge.targetName} className="inline" />
           </h3>
-          {#if sandboxMode && sandboxEdited}
-            <button type="button" class="sandbox-cell-reset" onclick={resetSelectedEdgeEdit}>Reset</button>
-          {/if}
+          <div class="edge-title-actions">
+            {#if onExport}
+              <LatexExportButton scope={viewMode === 'succinctness' ? 'Succinctness' : 'Graph'} onExport={onExport} />
+            {/if}
+            {#if sandboxMode && sandboxEdited}
+              <button type="button" class="sandbox-cell-reset" onclick={resetSelectedEdgeEdit}>Reset</button>
+            {/if}
+          </div>
         </div>
         
         <div class="space-y-4">
@@ -673,10 +681,18 @@
 
   .edge-title-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 0.75rem;
     margin-bottom: 1rem;
+  }
+
+  .edge-title-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-left: auto;
   }
 
   .edge-title {

@@ -101,15 +101,15 @@
       case 'poly':
         return '$\\leq_p^\\ast$';
       case 'no-poly-unknown-quasi':
-        return '$\\not\\leq_p^\\ast \\ \\leq_q^?$';
+        return '$\\nleq_p^\\ast \\ \\leq_q^?$';
       case 'no-poly-quasi':
-        return '$\\not\\leq_p^\\ast \\ \\leq_q$';
+        return '$\\nleq_p^\\ast \\ \\leq_q$';
       case 'unknown-poly-quasi':
         return '$\\leq_p^? \\ \\leq_q^\\ast$';
       case 'no-quasi':
-        return '$\\not\\leq_q^\\ast$';
+        return '$\\nleq_q^\\ast$';
       case 'not-poly':
-        return '$\\not\\leq^\\ast$';
+        return '$\\nleq^\\ast$';
       default:
         return notation;
     }
@@ -425,7 +425,7 @@
   }
 
   let matrixScrollEl: HTMLDivElement;
-  let cellSize = $state({ width: 42, height: 34, headerWidth: 92 });
+  let cellSize = $state({ width: 42, height: 34, headerWidth: 72 });
   let lastContainerSize = { width: 0, height: 0 };
   let lastLanguageCount = 0;
   let lastQuasiSizingMode = showQuasipolynomialSandboxOptions;
@@ -467,9 +467,9 @@
       return;
     }
 
-    // Keep the row labels compact. The previous measured table generally resolved
-    // to about this width; 116px made the sticky first column disproportionately wide.
-    const headerWidth = 92;
+    // Keep the sticky row-label column close to the data-cell scale. Longer labels
+    // truncate with a tooltip instead of forcing a disproportionately wide column.
+    const headerWidth = 72;
     const headerHeight = 80;
     const dataCols = Math.max(langCount, 1);
     const availableDataWidth = Math.max(0, containerWidth - headerWidth);

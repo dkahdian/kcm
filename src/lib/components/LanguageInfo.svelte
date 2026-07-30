@@ -17,6 +17,7 @@
   import ReferenceList from './ReferenceList.svelte';
   import type { ViewMode } from '$lib/types.js';
   import { getOperationTractabilityDisplay } from '$lib/utils/operation-tractability.js';
+  import LatexExportButton from './LatexExportButton.svelte';
 
   let {
     selectedLanguage,
@@ -29,7 +30,8 @@
     sandboxMode = false,
     sandboxEdited = false,
     nameEditable = false,
-    viewMode = 'graph' as ViewMode
+    viewMode = 'graph' as ViewMode,
+    onExport
   }: {
     selectedLanguage: KCLanguage | null;
     graphData: GraphData | FilteredGraphData;
@@ -42,9 +44,26 @@
     sandboxEdited?: boolean;
     nameEditable?: boolean;
     viewMode?: ViewMode;
+    onExport?: () => void;
   } = $props();
 
   const isOperationsView = $derived(viewMode === 'queries' || viewMode === 'transforms');
+  const exportScope = $derived(
+    viewMode === 'queries'
+      ? 'Query Tractability'
+      : viewMode === 'transforms'
+        ? 'Transformation Tractability'
+        : viewMode === 'succinctness'
+          ? 'Succinctness Matrix'
+          : 'Succinctness Graph'
+  );
+  const welcomeTitle = $derived(
+    viewMode === 'succinctness'
+      ? 'Succinctness Matrix'
+      : viewMode === 'graph'
+        ? 'Succinctness Graph'
+        : 'Tractable Circuit Zoo'
+  );
 
   function hasOperationVisibility(data: GraphData | FilteredGraphData): data is FilteredGraphData {
     return 'visibleQueryIds' in data && 'visibleTransformationIds' in data;
@@ -188,7 +207,12 @@
   <div class="scrollable-content">
     {#if selectedLanguage}
       <div class="language-details">
-        <MathText as="h3" className="text-xl font-bold text-gray-900 mb-2" text={selectedLanguage.name} />
+        <div class="language-heading">
+          <MathText as="h3" className="text-xl font-bold text-gray-900" text={selectedLanguage.name} />
+          {#if onExport}
+            <LatexExportButton scope={exportScope} onExport={onExport} />
+          {/if}
+        </div>
         {#if sandboxMode && sandboxEdited}
           <div class="sandbox-editor-actions">
             <button type="button" class="sandbox-cell-reset" onclick={resetLanguageEdit}>Reset</button>
@@ -298,7 +322,12 @@
       </div>
     {:else}
       <div class="welcome-message">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2">Tractable Circuit Zoo</h3>
+        <div class="language-heading">
+          <h3 class="text-lg font-semibold text-gray-700">{welcomeTitle}</h3>
+          {#if onExport}
+            <LatexExportButton scope={exportScope} onExport={onExport} />
+          {/if}
+        </div>
         <p class="text-gray-600 text-sm mb-4">
           {viewMode === 'graph'
             ? 'Click on a node or edge for more information.'
@@ -318,6 +347,19 @@
       border-radius: 0.5rem;
       padding: 1rem;
       margin-bottom: 1rem;
+    }
+
+    .language-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .language-heading :global(h3) {
+      margin: 0;
     }
 
     .ref-badge.inline {

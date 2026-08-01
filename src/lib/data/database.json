@@ -119,7 +119,7 @@
       },
       "languageIds": [],
       "claimTemplate": "",
-      "descriptionTemplate": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\thislang} and \\compilesquasi{\\thislang}{\\langref{DNNF}}, \\thislang cannot support bounded conjunction.",
+      "descriptionTemplate": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\thislang} and \\compilespoly{\\thislang}{\\langref{DNNF}}, \\thislang cannot support bounded conjunction in polynomial time.",
       "refs": [
         "TCZ_Forthcoming"
       ]
@@ -160,7 +160,7 @@
       },
       "languageIds": [],
       "claimTemplate": "",
-      "descriptionTemplate": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\thislang} and \\compilesquasi{\\thislang}{\\langref{SDNNF}}, \\thislang cannot support bounded disjunction in quasipolynomial time.",
+      "descriptionTemplate": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\thislang} and \\compilespoly{\\thislang}{\\langref{SDNNF}}, \\thislang cannot support bounded disjunction in polynomial time.",
       "refs": [
         "TCZ_Forthcoming"
       ]
@@ -201,7 +201,7 @@
       },
       "languageIds": [],
       "claimTemplate": "",
-      "descriptionTemplate": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\thislang} and \\compilesquasi{\\thislang}{\\langref{d-DNNF}}, \\thislang cannot support bounded disjunction in quasipolynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
+      "descriptionTemplate": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\thislang} and \\compilespoly{\\thislang}{\\langref{d-DNNF}}, \\thislang cannot support bounded disjunction in polynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
       "refs": [
         "TCZ_Forthcoming",
         "Bova_2016"
@@ -376,22 +376,24 @@
       ]
     },
     {
-      "id": "batch-4bbfce3be719",
+      "id": "batch-40f5f49ba576",
       "opType": "transformations",
       "op": "FO",
       "status": "no-poly-unknown-quasi",
       "assumption": "P \\neq NP",
       "selector": {
-        "kind": "list",
-        "languageIds": [
-          "lang_89649e36",
-          "lang_5bf00851"
-        ]
+        "kind": "edge",
+        "source": {
+          "kind": "language",
+          "id": "lang_89649e36"
+        },
+        "target": {
+          "kind": "current"
+        },
+        "level": "poly",
+        "polarity": "positive"
       },
-      "languageIds": [
-        "lang_89649e36",
-        "lang_5bf00851"
-      ],
+      "languageIds": [],
       "claimTemplate": "",
       "descriptionTemplate": "If \\thislang supported FO, then the consistency of any \\langref{CNF} representation $\\Sigma$ could be tested in polynomial time: represent $\\Sigma$ in \\thislang, compute $\\exists\\text{Vars}(\\Sigma).\\Sigma$, and check the resulting constant representation. This would decide \\langref{CNF} consistency in polynomial time, implying $\\mathrm{P = NP}$ \\citep{Darwiche_2002}.",
       "refs": [
@@ -423,11 +425,9 @@
         "lang_8cf1da0e"
       ],
       "claimTemplate": "",
-      "descriptionTemplate": "A polynomial-time forgetting procedure for \\thislang would turn every \\langref{DNF} representation into an equivalent \\thislang representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\thislang} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+      "descriptionTemplate": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, \\compilespoly{\\langfam{OBDD}{<}}{\\thislang}, so $B_\\Gamma$ has an equivalent polynomial-size \\thislang representation. If \\thislang supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\thislang representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\thislang}.",
       "refs": [
-        "TCZ_Forthcoming",
-        "Darwiche_2002",
-        "VanDenBroeck_2015"
+        "TCZ_Forthcoming"
       ]
     }
   ],
@@ -597,7 +597,7 @@
               "rule": "batch",
               "premises": []
             },
-            "batchId": "batch-4bbfce3be719"
+            "batchId": "batch-40f5f49ba576"
           },
           "AND_BC": {
             "complexity": "poly",
@@ -1010,7 +1010,7 @@
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{cSDD}} and \\compilesquasi{\\langref{cSDD}}{\\langref{DNNF}}, \\langref{cSDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{cSDD}} and \\compilespoly{\\langref{cSDD}}{\\langref{DNNF}}, \\langref{cSDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -1026,7 +1026,7 @@
               "VanDenBroeck_2015",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{cSDD}} and \\compilesquasi{\\langref{cSDD}}{\\langref{SDNNF}}, \\langref{cSDD} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{cSDD}} and \\compilespoly{\\langref{cSDD}}{\\langref{SDNNF}}, \\langref{cSDD} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -1273,7 +1273,7 @@
               "Darwiche_2002",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{d-DNNF}} and \\compilesquasi{\\langref{d-DNNF}}{\\langref{DNNF}}, \\langref{d-DNNF} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{d-DNNF}} and \\compilespoly{\\langref{d-DNNF}}{\\langref{DNNF}}, \\langref{d-DNNF} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -1310,7 +1310,7 @@
               "Bova_2016",
               "Darwiche_2002"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{d-DNNF}}, \\langref{d-DNNF} cannot support bounded disjunction in quasipolynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{d-DNNF}}, \\langref{d-DNNF} cannot support bounded disjunction in polynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -1661,7 +1661,7 @@
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{d-SDNNF}} and \\compilesquasi{\\langref{d-SDNNF}}{\\langref{DNNF}}, \\langref{d-SDNNF} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{d-SDNNF}} and \\compilespoly{\\langref{d-SDNNF}}{\\langref{DNNF}}, \\langref{d-SDNNF} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -1677,7 +1677,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{d-SDNNF}} and \\compilesquasi{\\langref{d-SDNNF}}{\\langref{SDNNF}}, \\langref{d-SDNNF} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{d-SDNNF}} and \\compilespoly{\\langref{d-SDNNF}}{\\langref{SDNNF}}, \\langref{d-SDNNF} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -2619,7 +2619,7 @@
               "Darwiche_2002",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{DNNF}}, \\langref{DNNF} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{DNNF}}, \\langref{DNNF} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -2890,7 +2890,7 @@
               "Darwiche_2002",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{FBDD}} and \\compilesquasi{\\langref{FBDD}}{\\langref{DNNF}}, \\langref{FBDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{FBDD}} and \\compilespoly{\\langref{FBDD}}{\\langref{DNNF}}, \\langref{FBDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -3835,7 +3835,7 @@
               "Darwiche_2002",
               "Amarilli_2020"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{nFBDD}} and \\compilesquasi{\\langref{nFBDD}}{\\langref{DNNF}}, \\langref{nFBDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{nFBDD}} and \\compilespoly{\\langref{nFBDD}}{\\langref{DNNF}}, \\langref{nFBDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -4176,7 +4176,7 @@
               "rule": "batch",
               "premises": []
             },
-            "batchId": "batch-4bbfce3be719"
+            "batchId": "batch-40f5f49ba576"
           },
           "AND_BC": {
             "complexity": "poly",
@@ -4580,7 +4580,7 @@
               "TCZ_Forthcoming",
               "Amarilli_2020"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{nOBDD}} and \\compilesquasi{\\langref{nOBDD}}{\\langref{DNNF}}, \\langref{nOBDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{nOBDD}} and \\compilespoly{\\langref{nOBDD}}{\\langref{DNNF}}, \\langref{nOBDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -4595,7 +4595,7 @@
               "TCZ_Forthcoming",
               "Amarilli_2020"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{nOBDD}} and \\compilesquasi{\\langref{nOBDD}}{\\langref{SDNNF}}, \\langref{nOBDD} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{nOBDD}} and \\compilespoly{\\langref{nOBDD}}{\\langref{SDNNF}}, \\langref{nOBDD} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -4824,11 +4824,9 @@
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "TCZ_Forthcoming",
-              "Darwiche_2002",
-              "VanDenBroeck_2015",
               "Wegener_2000"
             ],
-            "description": "A polynomial-time forgetting procedure for \\langfam{OBDD}{<} would turn every \\langref{DNF} representation into an equivalent \\langfam{OBDD}{<} representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{OBDD}{<}} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+            "description": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, so $B_\\Gamma$ has an equivalent polynomial-size \\langfam{OBDD}{<} representation. If \\langfam{OBDD}{<} supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\langfam{OBDD}{<} representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{OBDD}{<}}.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -5490,7 +5488,7 @@
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{SDD}} and \\compilesquasi{\\langref{SDD}}{\\langref{DNNF}}, \\langref{SDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{SDD}} and \\compilespoly{\\langref{SDD}}{\\langref{DNNF}}, \\langref{SDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -5506,7 +5504,7 @@
               "VanDenBroeck_2015",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{SDD}} and \\compilesquasi{\\langref{SDD}}{\\langref{SDNNF}}, \\langref{SDD} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{SDD}} and \\compilespoly{\\langref{SDD}}{\\langref{SDNNF}}, \\langref{SDD} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -5878,11 +5876,11 @@
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "TCZ_Forthcoming",
-              "Darwiche_2002",
-              "VanDenBroeck_2015",
-              "Amarilli_2020"
+              "Capelli_2026",
+              "Amarilli_2020",
+              "VanDenBroeck_2015"
             ],
-            "description": "A polynomial-time forgetting procedure for \\langfam{SDD}{T} would turn every \\langref{DNF} representation into an equivalent \\langfam{SDD}{T} representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{SDD}{T}} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+            "description": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{SDD}{T}}, so $B_\\Gamma$ has an equivalent polynomial-size \\langfam{SDD}{T} representation. If \\langfam{SDD}{T} supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\langfam{SDD}{T} representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{SDD}{T}}.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -6253,7 +6251,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{SDNNF}} and \\compilesquasi{\\langref{SDNNF}}{\\langref{DNNF}}, \\langref{SDNNF} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{SDNNF}} and \\compilespoly{\\langref{SDNNF}}{\\langref{DNNF}}, \\langref{SDNNF} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -6269,7 +6267,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{SDNNF}}, \\langref{SDNNF} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{SDNNF}}, \\langref{SDNNF} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -6945,7 +6943,7 @@
               "Amarilli_2020",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{uFBDD}} and \\compilesquasi{\\langref{uFBDD}}{\\langref{DNNF}}, \\langref{uFBDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{uFBDD}} and \\compilespoly{\\langref{uFBDD}}{\\langref{DNNF}}, \\langref{uFBDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -6962,7 +6960,7 @@
               "Darwiche_2002",
               "Amarilli_2020"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{uFBDD}} and \\compilesquasi{\\langref{uFBDD}}{\\langref{d-DNNF}}, \\langref{uFBDD} cannot support bounded disjunction in quasipolynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{uFBDD}} and \\compilespoly{\\langref{uFBDD}}{\\langref{d-DNNF}}, \\langref{uFBDD} cannot support bounded disjunction in polynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -7332,7 +7330,7 @@
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{uOBDD}} and \\compilesquasi{\\langref{uOBDD}}{\\langref{DNNF}}, \\langref{uOBDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{uOBDD}} and \\compilespoly{\\langref{uOBDD}}{\\langref{DNNF}}, \\langref{uOBDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -7348,7 +7346,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{uOBDD}} and \\compilesquasi{\\langref{uOBDD}}{\\langref{SDNNF}}, \\langref{uOBDD} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{uOBDD}} and \\compilespoly{\\langref{uOBDD}}{\\langref{SDNNF}}, \\langref{uOBDD} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -7601,7 +7599,7 @@
               "Darwiche_2002",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{DNNF}}, \\langref{OBDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{DNNF}}, \\langref{OBDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -7649,7 +7647,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{SDNNF}}, \\langref{OBDD} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{SDNNF}}, \\langref{OBDD} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -7662,11 +7660,9 @@
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "TCZ_Forthcoming",
-              "Darwiche_2002",
-              "VanDenBroeck_2015",
               "Wegener_2000"
             ],
-            "description": "A polynomial-time forgetting procedure for \\langref{OBDD} would turn every \\langref{DNF} representation into an equivalent \\langref{OBDD} representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langref{OBDD}} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+            "description": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, \\compilespoly{\\langfam{OBDD}{<}}{\\langref{OBDD}}, so $B_\\Gamma$ has an equivalent polynomial-size \\langref{OBDD} representation. If \\langref{OBDD} supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\langref{OBDD} representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langref{OBDD}}.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -8014,12 +8010,10 @@
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "TCZ_Forthcoming",
-              "Darwiche_2002",
-              "VanDenBroeck_2015",
-              "Amarilli_2020",
-              "Capelli_2026"
+              "Capelli_2026",
+              "Amarilli_2020"
             ],
-            "description": "A polynomial-time forgetting procedure for \\langfam{TDD}{T} would turn every \\langref{DNF} representation into an equivalent \\langfam{TDD}{T} representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{TDD}{T}} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+            "description": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{TDD}{T}}, so $B_\\Gamma$ has an equivalent polynomial-size \\langfam{TDD}{T} representation. If \\langfam{TDD}{T} supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\langfam{TDD}{T} representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{TDD}{T}}.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -8364,7 +8358,7 @@
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{TDD}} and \\compilesquasi{\\langref{TDD}}{\\langref{DNNF}}, \\langref{TDD} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{TDD}} and \\compilespoly{\\langref{TDD}}{\\langref{DNNF}}, \\langref{TDD} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -8380,7 +8374,7 @@
               "Capelli_2026",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{TDD}} and \\compilesquasi{\\langref{TDD}}{\\langref{SDNNF}}, \\langref{TDD} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{TDD}} and \\compilespoly{\\langref{TDD}}{\\langref{SDNNF}}, \\langref{TDD} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -8429,12 +8423,10 @@
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "TCZ_Forthcoming",
-              "Darwiche_2002",
-              "VanDenBroeck_2015",
-              "Amarilli_2020",
-              "Capelli_2026"
+              "Capelli_2026",
+              "Amarilli_2020"
             ],
-            "description": "A polynomial-time forgetting procedure for \\langref{TDD} would turn every \\langref{DNF} representation into an equivalent \\langref{TDD} representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langref{TDD}} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+            "description": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, \\compilespoly{\\langfam{OBDD}{<}}{\\langref{TDD}}, so $B_\\Gamma$ has an equivalent polynomial-size \\langref{TDD} representation. If \\langref{TDD} supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\langref{TDD} representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langref{TDD}}.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -8748,7 +8740,7 @@
               "Amarilli_2020",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{dec-DNNF}} and \\compilesquasi{\\langref{dec-DNNF}}{\\langref{DNNF}}, \\langref{dec-DNNF} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{dec-DNNF}} and \\compilespoly{\\langref{dec-DNNF}}{\\langref{DNNF}}, \\langref{dec-DNNF} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -8765,7 +8757,7 @@
               "Darwiche_2002",
               "Amarilli_2020"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{dec-DNNF}} and \\compilesquasi{\\langref{dec-DNNF}}{\\langref{d-DNNF}}, \\langref{dec-DNNF} cannot support bounded disjunction in quasipolynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{d-DNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{dec-DNNF}} and \\compilespoly{\\langref{dec-DNNF}}{\\langref{d-DNNF}}, \\langref{dec-DNNF} cannot support bounded disjunction in polynomial time.\n\nNote that \\citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -9113,7 +9105,7 @@
               "Pipatsrisawat_Darwiche_2010",
               "Darwiche_2001b"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{dec-SDNNF}} and \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{DNNF}}, \\langref{dec-SDNNF} cannot support bounded conjunction.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{DNNF} computing $f\\land g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{dec-SDNNF}} and \\compilespoly{\\langref{dec-SDNNF}}{\\langref{DNNF}}, \\langref{dec-SDNNF} cannot support bounded conjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -9129,7 +9121,7 @@
               "Amarilli_2020",
               "Pipatsrisawat_Darwiche_2010"
             ],
-            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilesquasi{\\langref{OBDD}}{\\langref{dec-SDNNF}} and \\compilesquasi{\\langref{dec-SDNNF}}{\\langref{SDNNF}}, \\langref{dec-SDNNF} cannot support bounded disjunction in quasipolynomial time.",
+            "description": "There are Boolean functions $f,g:\\{0,1\\}^n\\to\\{0,1\\}$, each computable by \\langref{OBDD}{s} of size $O(n)$, such that any \\langref{SDNNF} computing $f\\lor g$ has size $2^{\\Omega(\\sqrt{n})}$ \\citep{TCZ_Forthcoming}.\n\nAs a result, because \\compilespoly{\\langref{OBDD}}{\\langref{dec-SDNNF}} and \\compilespoly{\\langref{dec-SDNNF}}{\\langref{SDNNF}}, \\langref{dec-SDNNF} cannot support bounded disjunction in polynomial time.",
             "derived": false,
             "origin": "batch",
             "proof": {
@@ -9867,12 +9859,11 @@
             "complexity": "no-poly-unknown-quasi",
             "refs": [
               "TCZ_Forthcoming",
-              "Darwiche_2002",
-              "VanDenBroeck_2015",
+              "Darwiche_2011",
               "Amarilli_2020",
-              "Darwiche_2011"
+              "VanDenBroeck_2015"
             ],
-            "description": "A polynomial-time forgetting procedure for \\langfam{cSDD}{T} would turn every \\langref{DNF} representation into an equivalent \\langfam{cSDD}{T} representation of polynomial size in the input \\langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{cSDD}{T}} \\citep{TCZ_Forthcoming}. \\citep{Darwiche_2002,VanDenBroeck_2015}",
+            "description": "For every \\langref{DNF} representation $\\Gamma$, \\citet{TCZ_Forthcoming} constructs a polynomial-size \\langfam{OBDD}{<}\nrepresentation $B_\\Gamma$ over fresh selector variables $V$ such that $\\Gamma \\equiv \\exists V.B_\\Gamma$. Moreover, \\compilespoly{\\langfam{OBDD}{<}}{\\langfam{cSDD}{T}}, so $B_\\Gamma$ has an equivalent polynomial-size \\langfam{cSDD}{T} representation. If \\langfam{cSDD}{T} supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \\langfam{cSDD}{T} representation of $\\Gamma$. This contradicts \\nocompilespoly{\\langref{DNF}}{\\langfam{cSDD}{T}}.",
             "derived": false,
             "origin": "batch",
             "proof": {

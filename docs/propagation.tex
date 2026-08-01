@@ -1,0 +1,242 @@
+
+\subsection{The Algorithm}\label{app:ar-algorithm}
+
+% \oliver{we can worry less about showing how the facts are expressed in FOL and focus more on psuedocode for the actual algorithm, i.e., how does it apply the inference rules, and in what order, and why?}
+Propagation begins with a simple distinction: claims manually entered by a contributor are called \emph{authored}, while \emph{derived} claims must follow from authored claims and possibly other derived claims. The algorithm has two jobs: discovering facts; and drafting short, human-readable proof sketches, including citations and assumptions.
+
+For performance purposes, we split propagation into two engines: a Datalog fact-finder and a custom proof writer. The proof writer finds human-readable certificates for the facts identified by Datalog.
+
+% We begin by defining the atomic facts under consideration for proof. Let $A, B, L$ range over languages (and classes of languages), and let $o$ range over queries and transforms. Note that we maintain a quasipolynomial detail for succinctness edges, but no such distinction for queries and transformations.
+% Then the full set of atomic facts are:
+% \[
+% \begin{aligned}
+% \mathsf{Translates}(\mathcal{A},\mathcal{B}):\mathcal{A}\preceq \mathcal{B}\\
+% % \mathsf{Succincter}(\mathcal{A},\mathcal{B}):\mathcal{A}\preceq \mathcal{B}\\
+% % \mathcal{A}\preceq \mathcal{B}\\
+% % \preceq(A,B) &: A \text{ compiles to }B\text{ polynomially},\\
+% % \le(A,B) &: A \text{ compiles to }B\text{ quasipolynomially},\\
+% % \not\preceq(A,B) &: A\text{ has no polynomial compilation to }B,\\
+% % \mathsf{NotLeQ}(A,B) &: A\text{ has no quasipolynomial compilation to }B,\\
+% \mathsf{SupportsP}(L,o) &: L\text{ supports }o\text{ in polynomial time},\\
+% \mathsf{NotSupportsP}(L,o) &: L\text{ does not support }o\text{ in polynomial time},\\
+% \mathsf{BatchApplies}(b,L) &: \text{batch }b\text{ applies to }L.
+% \end{aligned}
+% \]
+% \[
+% \begin{aligned}
+% \mathsf{LeP}(A,B) &: A \text{ compiles to }B\text{ polynomially},\\
+% \mathsf{LeQ}(A,B) &: A \text{ compiles to }B\text{ quasipolynomially},\\
+% \mathsf{NotLeP}(A,B) &: A\text{ has no polynomial compilation to }B,\\
+% \mathsf{NotLeQ}(A,B) &: A\text{ has no quasipolynomial compilation to }B,\\
+% \mathsf{SupportsP}(L,o) &: L\text{ supports }o\text{ in polynomial time},\\
+% \mathsf{NotSupportsP}(L,o) &: L\text{ does not support }o\text{ in polynomial time},\\
+% \mathsf{BatchApplies}(b,L) &: \text{batch }b\text{ applies to }L.
+% \end{aligned}
+% \]
+
+\textbf{Candidate discovery.} The Datalog engine is responsible for discovering ``candidate'' facts. It is important to note that these facts are candidates for \emph{certification}, not for proof.
+% \renato{This sentence reads weird. A bit confusing. Needs rewriting.}
+
+The rule families we use follow from the inference rules (1)--(7):
+\begin{footnotesize}
+\begin{align*}
+\mathsf{Le}(A,C)&\texttt{:-}\mathsf{Le}(A,B),\mathsf{Le}(B,C),\\
+\mathsf{NotLe}(X,Y)&\texttt{:-}\mathsf{Le}(C,X),\mathsf{NotLe}(C,D),\mathsf{Le}(Y,D),\\
+\mathsf{Supports}(A,q)&\texttt{:-}\mathsf{Le}(A,B),\mathsf{Supports}(B,q),\\
+\mathsf{NotSupports}(B,q)&\texttt{:-}\mathsf{Le}(A,B),\mathsf{NotSupports}(A,q),\\
+\mathsf{NotLe}(B,A)&\texttt{:-}\mathsf{Supports}(A,q),\mathsf{NotSupports}(B,q).\\
+\end{align*}
+\end{footnotesize}
+% \renato{We should connect these rules with the inference rules (1)--(7) above.}
+% \oliver{also they are not defined}
+% \oliver{we can ignore batch claims}
+%     \emph{Batch claims} are used when a single tractability argument generalizes to many languages; a clean example of this is \Cref{batch-claim-1}. Each batch claim has a \emph{selector}, which consists of requirements for the claim to hold, that governs its encoding as a rule.
+% ; succinctness or tractability claims may be tested \renato{Tested for what? The requirements? This and the next sentence feel too much like implementation details}, but the simplest batch claims simply list the languages for which the claim applies.
+
+
+\Cref{tab:operation-lemmas} gives the full list of operation lemmas. We check each of these lemmas and their contrapositives. These all follow straightforwardly from definitions; see \citet{darwiche2002knowledge}.
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{Operation lemmas used by the Propagator}
+\label{tab:operation-lemmas}
+\begin{tabular}{@{}p{0.47\columnwidth}@{\hspace{0.04\columnwidth}}p{0.47\columnwidth}@{}}
+\toprule
+\multicolumn{1}{l}{Lemma} & \multicolumn{1}{l}{Lemma} \\
+\midrule
+\langfmt{CO}, \langfmt{CD} \(\Rightarrow\) \langfmt{ME}
+  & \langfmt{CO}, \langfmt{CD} \(\Rightarrow\) \langfmt{CE} \\
+\langfmt{VA}, \langfmt{CD} \(\Rightarrow\) \langfmt{IM}
+  & \langfmt{EQ} \(\Rightarrow\) \langfmt{CO} \\
+\langfmt{EQ} \(\Rightarrow\) \langfmt{VA}
+  & \langfmt{SE} \(\Rightarrow\) \langfmt{EQ} \\
+\langfmt{CT} \(\Rightarrow\) \langfmt{CO}
+  & \langfmt{CT} \(\Rightarrow\) \langfmt{VA} \\
+\langfmt{IM} \(\Rightarrow\) \langfmt{VA}
+  & \langfmt{CE} \(\Rightarrow\) \langfmt{CO} \\
+\langfmt{ME} \(\Rightarrow\) \langfmt{CO}
+  & \langfmt{\(\wedge\)C} \(\Rightarrow\) \langfmt{\(\wedge\)BC} \\
+\langfmt{\(\vee\)C} \(\Rightarrow\) \langfmt{\(\vee\)BC}
+  & \langfmt{FO} \(\Rightarrow\) \langfmt{SFO} \\
+\langfmt{CD}, \langfmt{\(\vee\)BC} \(\Rightarrow\) \langfmt{SFO}
+  & \langfmt{\(\neg\)C}, \langfmt{\(\wedge\)C} \(\Rightarrow\) \langfmt{\(\vee\)C} \\
+\langfmt{\(\neg\)C}, \langfmt{\(\vee\)C} \(\Rightarrow\) \langfmt{\(\wedge\)C}
+  & \langfmt{\(\neg\)C}, \langfmt{\(\wedge\)BC} \(\Rightarrow\) \langfmt{\(\vee\)BC} \\
+\langfmt{\(\neg\)C}, \langfmt{\(\vee\)BC} \(\Rightarrow\) \langfmt{\(\wedge\)BC}
+  & \langfmt{\(\neg\)C}, \langfmt{CO} \(\Rightarrow\) \langfmt{VA} \\
+\langfmt{\(\neg\)C}, \langfmt{VA} \(\Rightarrow\) \langfmt{CO}
+  & \langfmt{\(\neg\)C}, \langfmt{CE} \(\Rightarrow\) \langfmt{IM} \\
+\langfmt{\(\neg\)C}, \langfmt{IM} \(\Rightarrow\) \langfmt{CE}
+  & \langfmt{\(\neg\)C}, \langfmt{\(\wedge\)BC}, \langfmt{CO} \(\Rightarrow\) \langfmt{SE} \\
+\langfmt{\(\wedge\)BC}, \langfmt{FO} \(\Rightarrow\) \langfmt{CD}
+  & \langfmt{CT}, \langfmt{\(\wedge\)BC} \(\Rightarrow\) \langfmt{SE} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+Once facts and rules are properly encoded into first-order logic, a Datalog engine is used to identify the closure. Note that the engine is oblivious to assumptions; preferring proofs without assumptions is left to the proof-writer.
+
+\textbf{Certificate Selection.} The goal of certificate selection is to pick the most natural proof (as sketched below) for a fact.
+% The certification of a \emph{candidate fact} is not a test of its truth but a selection of a single readable proof.
+% \renato{Can we give a little bit more context for this paragraph? Seems a little bit out of place, as in why introduce this here?}
+
+
+We define a \emph{clean} proof as one written without assumptions and a \emph{dirty} proof as one with assumptions. We broadly prefer a clean proof to a dirty proof unless the dirty proof.
+
+An \emph{authored} fact comes explicitly from the literature with a citation. When writing certificates, such facts are preferable to facts certified by the engine, which are called \emph{derived}.
+
+To formalize this preference order, let
+\[
+O_1=\{\mathit{authored}\},\,
+O_2=\{\mathit{authored},\mathit{derived}\}
+\]
+and let
+\[
+\Phi_{\mathrm c}=\{\mathit{clean}\},\,
+\Phi_{\mathrm d}=\{\mathit{clean},\mathit{dirty}\}.
+\]
+Throughout this section, let \(T\) be the set of candidate facts and \(\Pi\) a partial map from facts to their certificates.  Each certificate records its origin and phase.  For \(\alpha\in\{\mathrm c,\mathrm d\}\) and
+\(i\in\{1,2\}\), define the \emph{reducer} $\rho_{\alpha,i}(\Pi)$ which filters out any facts not allowed in the current algorithm stage.
+
+The reducers are applied in the order below:
+\[
+\textsc{Reducers}=\langle
+\rho_{\mathrm c,1},\rho_{\mathrm c,2},
+\rho_{\mathrm d,1},\rho_{\mathrm d,2},
+\rangle .
+\]
+
+% \oliver{let's simplify and shorten these pseudocodes as much as possible (perhaps remove all the `end for' type lines and replace the repeat until with a while }
+
+\begin{algorithm}[t]
+\caption{Certificate selection}
+\label{alg:certification}
+\begin{algorithmic}[1]
+\raggedright
+\STATE \textbf{function} \textsc{Certify}(\(T\))
+\STATE \(\Pi\leftarrow\) empty map
+\STATE \textbf{for each} \(\rho\in\textsc{Reducers}\), in order:
+\STATE \hspace{\algorithmicindent}\(\Gamma\leftarrow\rho(\Pi)\)
+\STATE \hspace{\algorithmicindent}\(U\leftarrow\{f\in T\setminus\operatorname{dom}(\Pi): \textsc{Witness}(f,\Gamma)\neq\bot\}\)
+\STATE \hspace{\algorithmicindent}\textbf{while} \(U\neq\emptyset\):
+\STATE \hspace{2\algorithmicindent}\(f\leftarrow\) \(U[0]\)
+\STATE \hspace{2\algorithmicindent}\(\Pi[f]\leftarrow\textsc{Witness}(f,\Gamma)\)
+\STATE \hspace{2\algorithmicindent}\(\Gamma\leftarrow\rho(\Pi)\)
+\STATE \hspace{2\algorithmicindent}\(U\leftarrow\{f\in T\setminus\operatorname{dom}(\Pi): \textsc{Witness}(f,\Gamma)\neq\bot\}\)
+\STATE \textbf{if} \(\operatorname{dom}(\Pi)\neq T\): \textbf{fail}
+\STATE \textbf{return} \(\Pi\)
+\vspace{0.4ex}
+\STATE \textbf{function} \textsc{Witness}(\(f,\Gamma\))
+\STATE \textbf{if} \(f\in\{P(A,B),\bar P(A,B)\}\):
+\STATE \hspace{\algorithmicindent}
+       \textbf{return} \(\textsc{EdgeWitness}(f,\Gamma)\)
+\STATE \textbf{if} \(f\in\{S(L,o),\bar S(L,o)\}\):
+\STATE \hspace{\algorithmicindent}
+       \textbf{return} \(\textsc{OperationWitness}(f,\Gamma)\)
+\STATE \textbf{return} \(\bot\)
+\end{algorithmic}
+\end{algorithm}
+
+
+
+The witness routine depends on the kind of fact $f$: Succinctness edges use \Cref{alg:edge-witness} while operation facts use \Cref{alg:operation-witness}. We use a stable iteration order to guarantee deterministic certificate selection. For simplicity, we ignore some simple details, such as quasipolynomial detail and citation/assumption propagation.
+
+We must also define the (reduced) polynomial edge set by $E(\Gamma)=\{P(A,B):P(A,B)\in\Gamma\}$; we assume \textsc{BFS} implements a breadth-first search, while \textsc{LemmaApplies} checks directly if some lemma from \Cref{tab:operation-lemmas} can certify the given fact.
+
+
+\begin{algorithm}[t]
+\caption{Succinctness witnesses}
+\label{alg:edge-witness}
+\begin{algorithmic}[1]
+\raggedright
+\STATE \textbf{function} \textsc{EdgeWitness}(\(f,\Gamma\))
+\STATE \textbf{if} \(f=P(A,B)\):
+\STATE \hspace{\algorithmicindent}
+       \textbf{return} \(\textsc{PathWitness}(A,B,\Gamma)\)
+\STATE \textbf{if} \(f=\bar P(A,B)\):
+\STATE \hspace{\algorithmicindent}
+       \(w\leftarrow\textsc{ObstructionWitness}(A,B,\Gamma)\)
+\STATE \hspace{\algorithmicindent}
+       \textbf{if} \(w\neq\bot\): \textbf{return} \(w\)
+\STATE \hspace{\algorithmicindent}
+       \(U\leftarrow\{q\in\mathcal Q:\{S(B,q),\bar S(A,q)\}
+       \subseteq\Gamma\}\)
+\STATE \hspace{\algorithmicindent} \textbf{if} \(U\neq\emptyset\):
+\STATE \hspace{2\algorithmicindent} \(q\leftarrow\) \(U[0]\)
+\STATE \hspace{2\algorithmicindent} \textbf{return} \(\langle S(B,q),\bar S(A,q)\rangle\)
+\STATE \textbf{return} \(\bot\)
+\vspace{0.4ex}
+\STATE \textbf{function} \textsc{ObstructionWitness}(\(A,B,\Gamma\))
+\STATE \((d_L,r_L)\leftarrow\textsc{BFS}(A,E(\Gamma),\mathit{backward})\)
+\STATE \((d_R,r_R)\leftarrow\textsc{BFS}(B,E(\Gamma),\mathit{forward})\)
+\STATE \(\mathcal B\leftarrow\{(C,D)\in\mathcal L^2:
+       \bar P(C,D)\in\Gamma \}\)
+\STATE \textbf{if} \(\min_{\mathcal B} \{d_L(C) + d_R(D)\} = \infty\): \textbf{return} \(\bot\)
+\STATE \((C,D)\leftarrow \operatorname{argmin}_{\mathcal B} \{ d_L(C)+d_R(D) \}\)
+\STATE \textbf{return} \( \textsc{PathWitness}(C,A,\Gamma) \mathbin{\|}\langle\bar P(C,D) \rangle
+       \mathbin{\|} \textsc{PathWitness}(B,D,\Gamma)\)
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+\begin{algorithm}[t]
+\caption{Operation witnesses}
+\label{alg:operation-witness}
+\begin{algorithmic}[1]
+\raggedright
+\STATE \textbf{function} \textsc{OperationWitness}(\(f,\Gamma\))
+\STATE \textbf{for each} \(q\in\mathcal Q\):
+\STATE \hspace{\algorithmicindent}\textbf{if} \(f=S(L,q)\):
+\STATE \hspace{2\algorithmicindent}\textbf{for each} \(K\in\mathcal L\setminus\{L\}\):
+\STATE \hspace{3\algorithmicindent}\(p\leftarrow\textsc{PathWitness}(L,K,\Gamma)\)
+\STATE \hspace{3\algorithmicindent}\textbf{if} \(S(K,q)\in\Gamma\) and \(p\neq\bot\):
+\STATE \hspace{4\algorithmicindent}\textbf{return} \(p\mathbin{\|}\langle S(K,q)\rangle\)
+\STATE \hspace{\algorithmicindent}\textbf{if} \(f=\bar S(L,q)\):
+\STATE \hspace{2\algorithmicindent}\textbf{for each} \(K\in\mathcal L\setminus\{L\}\):
+\STATE \hspace{3\algorithmicindent}\(p\leftarrow\textsc{PathWitness}(K,L,\Gamma)\)
+\STATE \hspace{3\algorithmicindent}\textbf{if} \(\bar S(K,q)\in\Gamma\) and \(p\neq\bot\):
+\STATE \hspace{4\algorithmicindent}\textbf{return} \(\langle\bar S(K,q)\rangle\mathbin{\|}p\)
+\STATE \textbf{for each} lemma \(l\) in \Cref{tab:operation-lemmas}:
+\STATE \hspace{\algorithmicindent}\(w\leftarrow \textsc{LemmaApplies}(l,f,\Gamma)\)
+\STATE \hspace{\algorithmicindent}\textbf{if} \(w\neq\bot\): \textbf{return} \(w\)
+\STATE \textbf{return} \(\bot\)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{Path witnesses}
+\label{alg:path-search}
+\begin{algorithmic}[1]
+\raggedright
+\STATE \textbf{function} \textsc{PathWitness}(\(A,B,\Gamma\))
+\STATE \((d,\textsc{ParentChain})\leftarrow\textsc{BFS}(A,E(\Gamma),\mathit{forward})\)
+\STATE \textbf{if} \(d(B)=\infty\): \textbf{return} \(\bot\)
+\STATE \((v_0,\ldots,v_k)\leftarrow\textsc{ParentChain}(r,A,B)\),
+       where \(v_0=A\) and \(v_k=B\)
+\STATE \textbf{return}
+       \(\langle P(v_0,v_1),\ldots,P(v_{k-1},v_k)\rangle\)
+\end{algorithmic}
+\end{algorithm}

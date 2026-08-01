@@ -103,7 +103,7 @@ In the language \thislang, every clause has a polynomial-size representation. If
 \begin{description}
 There are Boolean functions $f,g:\{0,1\}^n\to\{0,1\}$, each computable by \langref{OBDD}{s} of size $O(n)$, such that any \langref{DNNF} computing $f\land g$ has size $2^{\Omega(\sqrt{n})}$ \citep{TCZ_Forthcoming}.
 
-As a result, because \compilesquasi{\langref{OBDD}}{\thislang} and \compilesquasi{\thislang}{\langref{DNNF}}, \thislang cannot support bounded conjunction.
+As a result, because \compilespoly{\langref{OBDD}}{\thislang} and \compilespoly{\thislang}{\langref{DNNF}}, \thislang cannot support bounded conjunction in polynomial time.
 \end{description}
 \end{batchclaim}
 
@@ -114,7 +114,7 @@ As a result, because \compilesquasi{\langref{OBDD}}{\thislang} and \compilesquas
 \begin{description}
 There are Boolean functions $f,g:\{0,1\}^n\to\{0,1\}$, each computable by \langref{OBDD}{s} of size $O(n)$, such that any \langref{SDNNF} computing $f\lor g$ has size $2^{\Omega(\sqrt{n})}$ \citep{TCZ_Forthcoming}.
 
-As a result, because \compilesquasi{\langref{OBDD}}{\thislang} and \compilesquasi{\thislang}{\langref{SDNNF}}, \thislang cannot support bounded disjunction in quasipolynomial time.
+As a result, because \compilespoly{\langref{OBDD}}{\thislang} and \compilespoly{\thislang}{\langref{SDNNF}}, \thislang cannot support bounded disjunction in polynomial time.
 \end{description}
 \end{batchclaim}
 
@@ -125,7 +125,7 @@ As a result, because \compilesquasi{\langref{OBDD}}{\thislang} and \compilesquas
 \begin{description}
 There are Boolean functions $f,g:\{0,1\}^n\to\{0,1\}$, each computable by \langref{OBDD}{s} of size $O(n)$, such that any \langref{d-DNNF} computing $f\lor g$ has size $2^{\Omega(\sqrt{n})}$ \citep{TCZ_Forthcoming}.
 
-As a result, because \compilesquasi{\langref{OBDD}}{\thislang} and \compilesquasi{\thislang}{\langref{d-DNNF}}, \thislang cannot support bounded disjunction in quasipolynomial time.
+As a result, because \compilespoly{\langref{OBDD}}{\thislang} and \compilespoly{\thislang}{\langref{d-DNNF}}, \thislang cannot support bounded disjunction in polynomial time.
 
 Note that \citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly noting the implication for Bounded Disjunction.
 \end{description}
@@ -179,7 +179,7 @@ In the language \thislang, every term has a polynomial-size representation. If \
 \end{batchclaim}
 
 \begin{batchclaim}
-\selector{\isin{\langref{CNF}, \langref{NNF}}}
+\selector{\compilespoly{\langref{CNF}}{\thislang}}
 \operation{\FO}
 \status{\nopolyunknownquasi}
 \assuming{P \neq NP}
@@ -189,11 +189,14 @@ If \thislang supported FO, then the consistency of any \langref{CNF} representat
 \end{batchclaim}
 
 \begin{batchclaim}
-\selector{\isin{\langref{OBDD}, \langref{TDD}, \langfam{OBDD}{<}, \langfam{SDD}{T}, \langfam{cSDD}{T}, \langfam{TDD}{T}}}
+\selector{\isin{\langref{OBDD}, \langref{TDD},
+    \langfam{OBDD}{<}, \langfam{SDD}{T},
+    \langfam{cSDD}{T}, \langfam{TDD}{T}}}
 \operation{\FO}
 \status{\nopolyunknownquasi}
 \begin{description}
-A polynomial-time forgetting procedure for \thislang would turn every \langref{DNF} representation into an equivalent \thislang representation of polynomial size in the input \langref{DNF} after introducing fresh selectors and forgetting them. This contradicts \nocompilespoly{\langref{DNF}}{\thislang} \citep{TCZ_Forthcoming}. \citep{Darwiche_2002,VanDenBroeck_2015}
+For every \langref{DNF} representation $\Gamma$, \citet{TCZ_Forthcoming} constructs a polynomial-size \langfam{OBDD}{<}
+representation $B_\Gamma$ over fresh selector variables $V$ such that $\Gamma \equiv \exists V.B_\Gamma$. Moreover, \compilespoly{\langfam{OBDD}{<}}{\thislang}, so $B_\Gamma$ has an equivalent polynomial-size \thislang representation. If \thislang supported FO in polynomial time, forgetting $V$ from this representation would yield a polynomial-size \thislang representation of $\Gamma$. This contradicts \nocompilespoly{\langref{DNF}}{\thislang}.
 \end{description}
 \end{batchclaim}
 

@@ -141,7 +141,7 @@ Note that \citet[Theorem 9]{Bova_2016} proves the lower bound without explicitly
 \end{batchclaim}
 
 \begin{batchclaim}
-\selector{\isin{\langref{cSDD}, \langref{d-DNNF}, \langref{dec-DNNF}, \langref{dec-SDNNF}, \langref{SDD}, \langref{uFBDD}, \langfam{d-SDNNF}{T}, \langfam{dec-SDNNF}{T}, \langfam{uOBDD}{<}}}
+\selector{\isin{\langref{d-DNNF}, \langref{dec-DNNF}, \langref{uFBDD}, \langfam{d-SDNNF}{T}, \langfam{dec-SDNNF}{T}, \langfam{uOBDD}{<}}}
 \operation{\SFO}
 \status{\nopolyunknownquasi}
 \begin{description}
@@ -189,7 +189,7 @@ If \thislang supported FO, then the consistency of any \langref{CNF} representat
 \end{batchclaim}
 
 \begin{batchclaim}
-\selector{\isin{\langref{OBDD}, \langref{TDD},
+\selector{\isin{\langref{OBDD}, \langref{SDD}, \langref{cSDD}, \langref{dec-SDNNF}, \langref{TDD},
     \langfam{OBDD}{<}, \langfam{SDD}{T},
     \langfam{cSDD}{T}, \langfam{TDD}{T}}}
 \operation{\FO}
@@ -674,6 +674,15 @@ An \langref{SDD} can be negated in polytime by applying exclusive-or with $\top$
 \status{\poly}
 \begin{description}
 Conditioning an \langref{SDD} $f$ on a literal $l$ is equivalent to computing $f \land l$. Since any literal is a trivially small \langref{SDD} and \langref{SDD} supports $\land$BC in polytime via Apply, conditioning is polytime \citep{Darwiche_2011}.
+\end{description}
+\end{transformationclaim}
+
+\begin{transformationclaim}
+\claimlanguage{\langref{SDD}}
+\operation{\SFO}
+\status{\poly}
+\begin{description}
+Every \langref{SDD} representation $f$ respects some vtree $T$. Conditioning $f$ on $x$ and on $\neg x$ produces two \langref{SDD} representations respecting the same pruned vtree $T \setminus \{x\}$. Applying bounded disjunction to these compatible representations yields $f|_{x=0} \lor f|_{x=1} \equiv \exists x.f$ in polynomial time \citep{Darwiche_2011}.
 \end{description}
 \end{transformationclaim}
 

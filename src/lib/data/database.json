@@ -1035,10 +1035,6 @@
             },
             "batchId": "batch-6c84faca0f6e"
           },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
           "FO": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
@@ -5497,15 +5493,6 @@
             },
             "batchId": "batch-6c84faca0f6e"
           },
-          "SFO": {
-            "complexity": "poly",
-            "description": "Every \\langref{SDD} representation $f$ respects some vtree $T$. Conditioning $f$ on $x$ and on $\\neg x$ produces two \\langref{SDD} representations respecting the same pruned vtree $T \\setminus \\{x\\}$. Applying bounded disjunction to these compatible representations yields $f|_{x=0} \\lor f|_{x=1} \\equiv \\exists x.f$ in polynomial time \\citep{Darwiche_2011}.",
-            "refs": [
-              "Darwiche_2011"
-            ],
-            "derived": false,
-            "origin": "authored"
-          },
           "FO": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
@@ -5521,6 +5508,15 @@
               "premises": []
             },
             "batchId": "batch-0f27619ade4b"
+          },
+          "SFO": {
+            "complexity": "poly",
+            "description": "Every \\langref{SDD} representation $f$ respects some vtree $T$. Conditioning $f$ on $x$ and on $\\neg x$ produces two \\langref{SDD} representations respecting the same pruned vtree $T \\setminus \\{x\\}$. Applying bounded disjunction to these compatible representations yields $f|_{x=0} \\lor f|_{x=1} \\equiv \\exists x.f$ in polynomial time \\citep{Darwiche_2011}.",
+            "refs": [
+              "Darwiche_2011"
+            ],
+            "derived": false,
+            "origin": "authored"
           },
           "NOT_C": {
             "complexity": "poly",
@@ -9103,10 +9099,6 @@
             },
             "batchId": "batch-6c84faca0f6e"
           },
-          "SFO": {
-            "complexity": "unknown-to-us",
-            "refs": []
-          },
           "FO": {
             "complexity": "no-poly-unknown-quasi",
             "refs": [
@@ -10856,7 +10848,7 @@
       "id": "TCZ_Forthcoming",
       "title": "A Tractable Circuit Zoo",
       "href": "",
-      "bibtex": "@misc{TCZ_Forthcoming,\n  title={A Tractable Circuit Zoo},\n  author={Anonymous},\n  year={forthcoming},\n  note={Forthcoming}\n}"
+      "bibtex": "@misc{TCZ_Forthcoming,\n  title={A Tractable Circuit Zoo},\n  author={Kahdian, David and Broadrick, Oliver and Geh, Renato Lui and Van Den Broeck, Guy},\n  year={forthcoming},\n  note={Forthcoming}\n}"
     },
     {
       "id": "VanDenBroeck_2015",

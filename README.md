@@ -7,7 +7,7 @@ Visit the zoo at https://circuitzoo.net/
 
 Sandbox submissions dispatch the `Process Data Contribution` GitHub Actions
 workflow. The deployed site reads the intentionally public dispatcher PAT from
-the `GITHUB_CONTRIBUTION_PAT` repository Actions variable. The PAT must be a
+the `PUBLIC_CONTRIBUTION_PAT` repository Actions variable. The PAT must be a
 fine-grained token scoped only to `circuitzoo/tcz` with `Contents: read and
 write`; it does not need pull-request access.
 

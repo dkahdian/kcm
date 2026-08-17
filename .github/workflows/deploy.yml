@@ -16,10 +16,18 @@ jobs:
     env:
       # This PAT is intentionally public: Vite embeds it in the deployed browser bundle.
       # Scope it to circuitzoo/tcz with Contents: write only.
-      VITE_GITHUB_CONTRIBUTION_PAT: ${{ vars.GITHUB_CONTRIBUTION_PAT }}
+      VITE_GITHUB_CONTRIBUTION_PAT: ${{ vars.PUBLIC_CONTRIBUTION_PAT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Verify contribution submission configuration
+        shell: bash
+        run: |
+          if [[ -z "$VITE_GITHUB_CONTRIBUTION_PAT" ]]; then
+            echo "::error::Repository Actions variable PUBLIC_CONTRIBUTION_PAT is not configured."
+            exit 1
+          fi
 
       - name: Setup Node
         uses: actions/setup-node@v6

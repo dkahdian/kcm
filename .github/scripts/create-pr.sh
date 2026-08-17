@@ -110,7 +110,7 @@ if [[ -n "$CONTRIBUTOR_GITHUB" ]]; then
 	PR_TITLE+=" (by @${CONTRIBUTOR_GITHUB})"
 fi
 
-export GH_TOKEN=${GH_TOKEN:-$CONTRIBUTION_TOKEN}
+: "${GH_TOKEN:?GH_TOKEN must be set by the contribution workflow}"
 
 PR_BODY_FILE=$(mktemp)
 if [[ -f .github/contribution-pr-body.md ]]; then

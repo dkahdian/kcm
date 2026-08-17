@@ -34,7 +34,8 @@
   const languageFilters = getAllLanguageFilters();
   const edgeFilters = getAllEdgeFilters();
   const FILTER_STORAGE_KEY = 'kcm_filter_deltas_v2';
-  const CONTRIBUTION_SUBMISSION_ENABLED = false;
+  const CONTRIBUTION_REPOSITORY = 'circuitzoo/tcz';
+  const CONTRIBUTION_SUBMISSION_ENABLED = Boolean(import.meta.env.VITE_GITHUB_CONTRIBUTION_PAT);
   type SandboxProofTarget =
     | { kind: 'edge'; sourceId: string; targetId: string }
     | { kind: 'operation'; operationType: SandboxOperationType; languageId: string; operationCode: string };
@@ -253,7 +254,7 @@
     if (!CONTRIBUTION_SUBMISSION_ENABLED) {
       showSandboxSubmitModal = false;
       sandboxSubmitError = null;
-      sandboxSubmitSuccess = 'Disabled during review process';
+      sandboxSubmitSuccess = 'Contribution submission is not configured.';
       return;
     }
 
@@ -288,10 +289,9 @@
       };
 
       const token = import.meta.env.VITE_GITHUB_CONTRIBUTION_PAT;
-      const repository = import.meta.env.VITE_GITHUB_CONTRIBUTION_REPOSITORY;
-      if (!token || !repository) throw new Error('Contribution submission is not configured.');
+      if (!token) throw new Error('Contribution submission is not configured.');
 
-      const response = await fetch(`https://api.github.com/repos/${repository}/dispatches`, {
+      const response = await fetch(`https://api.github.com/repos/${CONTRIBUTION_REPOSITORY}/dispatches`, {
         method: 'POST',
         headers: {
           'Accept': 'application/vnd.github+json',
@@ -306,7 +306,7 @@
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit contribution');
+        throw new Error(`Failed to submit contribution (GitHub returned ${response.status}).`);
       }
 
       sandboxContributorName = '';

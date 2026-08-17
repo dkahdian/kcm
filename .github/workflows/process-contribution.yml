@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        with:
-          token: ${{ secrets.CONTRIBUTION_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -83,8 +81,7 @@ jobs:
 
       - name: Create branch, commit, and PR
         env:
-          GH_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
-          CONTRIBUTION_TOKEN: ${{ secrets.CONTRIBUTION_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           chmod +x .github/scripts/create-pr.sh
           .github/scripts/create-pr.sh

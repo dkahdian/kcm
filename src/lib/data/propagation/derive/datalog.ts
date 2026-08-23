@@ -26,7 +26,7 @@ import {
   type DatalogValue
 } from './engine.js';
 
-const EDGE_KINDS: EdgeKind[] = ['leP', 'leQ', 'notLeP', 'notLeQ'];
+const EDGE_KINDS: EdgeKind[] = ['leP', 'leQ', 'notLeP', 'notLeQ', 'transP', 'notTransP'];
 const OP_KINDS: OpKind[] = ['supportsP', 'notSupportsP'];
 
 const A = variable('a');
@@ -92,6 +92,8 @@ function buildProgram(context: FactContext, tables: FactTables, lemmas: Operatio
       case 'leQ':
       case 'notLeP':
       case 'notLeQ':
+      case 'transP':
+      case 'notTransP':
         program.addFact(fact.kind, fact.source, fact.target);
         break;
       case 'supportsP':
@@ -116,9 +118,16 @@ function addPropagationRules(program: DatalogProgram): void {
   program.addRule(guardedRule(atom('leQ', A, C), [atom('leQ', A, B), atom('leQ', B, C)], unequal('a', 'c')));
   program.addRule(rule(atom('leQ', A, B), atom('leP', A, B)));
 
+  // A compiler is stronger than a size upper bound, but not conversely.
+  program.addRule(guardedRule(atom('transP', A, C), [atom('transP', A, B), atom('transP', B, C)], unequal('a', 'c')));
+  program.addRule(rule(atom('leP', A, B), atom('transP', A, B)));
+  program.addRule(rule(atom('notTransP', A, B), atom('notLeP', A, B)));
+
   // Reflexivity is available only through these internal reachability predicates.
   program.addRule(guardedRule(atom('reachP', A, B), [atom('language', A), atom('language', B)], equal('a', 'b')));
   program.addRule(rule(atom('reachP', A, B), atom('leP', A, B)));
+  program.addRule(guardedRule(atom('transReachP', A, B), [atom('language', A), atom('language', B)], equal('a', 'b')));
+  program.addRule(rule(atom('transReachP', A, B), atom('transP', A, B)));
   program.addRule(guardedRule(atom('reachQ', A, B), [atom('language', A), atom('language', B)], equal('a', 'b')));
   program.addRule(rule(atom('reachQ', A, B), atom('leP', A, B)));
   program.addRule(rule(atom('reachQ', A, B), atom('leQ', A, B)));
@@ -131,6 +140,11 @@ function addPropagationRules(program: DatalogProgram): void {
     unequal('x', 'y')
   ));
   program.addRule(guardedRule(
+    atom('notTransP', X, Y),
+    [atom('notTransP', C, D), atom('transReachP', C, X), atom('transReachP', Y, D)],
+    unequal('x', 'y')
+  ));
+  program.addRule(guardedRule(
     atom('notLeQ', X, Y),
     [atom('notLeQ', C, D), atom('reachQ', C, X), atom('reachQ', Y, D)],
     unequal('x', 'y')
@@ -139,14 +153,14 @@ function addPropagationRules(program: DatalogProgram): void {
   // Queries transfer along polynomial compilations and can separate languages.
   program.addRule(rule(
     atom('supportsP', A, Q),
-    atom('query', Q), atom('reachP', A, B), atom('supportsP', B, Q)
+    atom('query', Q), atom('transReachP', A, B), atom('supportsP', B, Q)
   ));
   program.addRule(rule(
     atom('notSupportsP', B, Q),
-    atom('query', Q), atom('reachP', A, B), atom('notSupportsP', A, Q)
+    atom('query', Q), atom('transReachP', A, B), atom('notSupportsP', A, Q)
   ));
   program.addRule(guardedRule(
-    atom('notLeP', B, A),
+    atom('notTransP', B, A),
     [atom('query', Q), atom('supportsP', A, Q), atom('notSupportsP', B, Q)],
     unequal('a', 'b')
   ));

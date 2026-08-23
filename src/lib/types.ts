@@ -93,7 +93,7 @@ export interface VisualOverrides {
 export type ClaimOrigin = 'authored' | 'batch' | 'derived';
 
 export type ProofAtom =
-  | { kind: 'leP' | 'leQ' | 'notLeP' | 'notLeQ'; sourceId: string; targetId: string }
+  | { kind: 'leP' | 'leQ' | 'notLeP' | 'notLeQ' | 'transP' | 'notTransP'; sourceId: string; targetId: string }
   | { kind: 'supportsP' | 'notSupportsP'; languageId: string; op: string };
 
 export interface PropagationProof {
@@ -101,6 +101,9 @@ export interface PropagationProof {
     | 'authored'
     | 'batch'
     | 'positive-path'
+    | 'translation-path'
+    | 'translation-separation'
+    | 'translation-lower-from-succinctness'
     | 'negative-obstruction'
     | 'query-transfer'
     | 'query-separation'
@@ -378,6 +381,23 @@ export interface KCAdjacencyMatrix {
   matrix: (DirectedSuccinctnessRelation | null)[][];
 }
 
+/** An internal, sparse matrix of polynomial-time compiler claims. */
+export interface DirectedTranslatabilityRelation {
+  status: 'poly' | 'no-poly';
+  description?: string;
+  assumption?: string;
+  refs: string[];
+  derived?: boolean;
+  origin?: ClaimOrigin;
+  proof?: PropagationProof;
+}
+
+export interface KCTranslatabilityMatrix {
+  languageIds: string[];
+  indexByLanguage: Record<string, number>;
+  matrix: (DirectedTranslatabilityRelation | null)[][];
+}
+
 export interface NodePosition {
   x: number;
   y: number;
@@ -391,6 +411,8 @@ export interface GraphData {
   definitions?: KCDefinition[];
   /** Directed succinctness relationships stored as an adjacency matrix */
   adjacencyMatrix: KCAdjacencyMatrix;
+  /** Internal compiler facts. Deliberately not consumed by ordinary views. */
+  translatabilityMatrix?: KCTranslatabilityMatrix;
   /** catalog of relation types used by relations and legend */
   relationTypes: KCRelationType[];
   /** catalog of complexity definitions used for rendering */

@@ -118,6 +118,15 @@ interface ParsedRelation {
   refs: string[];
 }
 
+interface ParsedTranslationClaim {
+  sourceId: string;
+  targetId: string;
+  status: 'poly' | 'no-poly';
+  assumption?: string;
+  description: string;
+  refs: string[];
+}
+
 interface ParsedOperationClaim {
   languageId: string;
   operation: string;
@@ -435,6 +444,7 @@ ${theoremStyle}
 \\newcommand{\\claimlanguage}[1]{\\textbf{Language:} #1\\par}
 \\newcommand{\\operation}[1]{\\textbf{Operation:} #1\\par}
 \\newcommand{\\status}[1]{\\textbf{Status:} #1\\par}
+\\newcommand{\\translator}[1]{\\textbf{Polynomial-time translator:} #1\\par}
 \\newcommand{\\selector}[1]{\\textbf{Selector:} #1\\par}
 \\newcommand{\\assuming}[1]{\\textbf{Assuming:} #1\\par}
 \\newcommand{\\titlefield}[1]{\\textbf{Title:} #1\\par}
@@ -449,6 +459,7 @@ ${theoremStyle}
 \\makeatother
 \\newenvironment{concept}{}{}
 \\newenvironment{succinctnessclaim}{}{}
+\\newenvironment{translationclaim}{}{}
 \\newenvironment{queryclaim}{}{}
 \\newenvironment{transformationclaim}{}{}
 \\newenvironment{batchclaim}{}{}
@@ -503,6 +514,7 @@ function relationDescription(relation: DirectedSuccinctnessRelation): string {
 function generateSuccinctnessLatex(database: DatabaseSchema): string {
   const idToLanguage = new Map(database.languages.map((language) => [language.id, language]));
   const blocks: string[] = [];
+  const translationBlocks: string[] = [];
   const { languageIds, matrix } = database.adjacencyMatrix;
   for (let i = 0; i < languageIds.length; i++) {
     for (let j = 0; j < languageIds.length; j++) {
@@ -520,9 +532,36 @@ ${relation.assumption ? `\\assuming{${relation.assumption}}\n` : ''}\\begin{desc
 ${migrateLegacyDescription(relationDescription(relation), database)}
 \\end{description}
 \\end{succinctnessclaim}`);
+
     }
   }
-  return titlePreamble('Succinctness Claims') + blocks.join('\n\n') + postamble();
+  const translations = database.translatabilityMatrix;
+  if (translations) {
+    for (let i = 0; i < translations.languageIds.length; i++) {
+      for (let j = 0; j < translations.languageIds.length; j++) {
+        if (i === j) continue;
+        const translation = translations.matrix[i]?.[j];
+        if (!translation || translation.derived || translation.origin === 'derived') continue;
+        const source = idToLanguage.get(translations.languageIds[i]);
+        const target = idToLanguage.get(translations.languageIds[j]);
+        if (!source || !target) continue;
+        translationBlocks.push(`\\begin{translationclaim}
+\\source{${languageToLatex(source.name)}}
+\\target{${languageToLatex(target.name)}}
+\\translator{${translation.status === 'poly' ? 'yes' : 'no'}}
+${translation.assumption ? `\\assuming{${translation.assumption}}\n` : ''}\\begin{description}
+${migrateLegacyDescription(translation.description ?? '', database)}
+\\end{description}
+\\end{translationclaim}`);
+      }
+    }
+  }
+  return titlePreamble('Succinctness Claims')
+    + '\\section*{Succinctness claims}\n\n'
+    + blocks.join('\n\n')
+    + '\n\n\\section*{Polynomial-time translation claims}\n\n'
+    + translationBlocks.join('\n\n')
+    + postamble();
 }
 
 function opMacro(opType: 'queries' | 'transformations', op: string): string {
@@ -824,6 +863,29 @@ function parseSuccinctnessLatex(content: string, database: DatabaseSchema): Pars
   });
 }
 
+function parseTranslatorStatus(block: string): 'poly' | 'no-poly' {
+  const value = commandValue(block, 'translator')?.trim().toLowerCase();
+  if (value === 'yes') return 'poly';
+  if (value === 'no') return 'no-poly';
+  return fail('Translation claims require \\translator{yes} or \\translator{no}.');
+}
+
+function parseTranslationClaims(content: string, database: DatabaseSchema): ParsedTranslationClaim[] {
+  stripPreambleWarning(content);
+  const resolveLanguage = languageResolver(database);
+  return environmentBlocks(content, 'translationclaim').map((block) => {
+    const description = environmentValue(block.body, 'description')!;
+    return {
+      sourceId: resolveLanguage(commandValue(block.body, 'source')!),
+      targetId: resolveLanguage(commandValue(block.body, 'target')!),
+      status: parseTranslatorStatus(block.body),
+      assumption: parseAssumption(block.body),
+      description,
+      refs: extractCitationKeys(description)
+    };
+  });
+}
+
 function parseOperationMacro(opType: 'queries' | 'transformations', value: string): string {
   const table = opType === 'queries' ? MACRO_TO_QUERY_OPERATION : MACRO_TO_TRANSFORMATION_OPERATION;
   return table[value.trim()] ?? fail(`Unknown ${opType} operation macro ${value}`);
@@ -967,6 +1029,7 @@ function alignLanguages(database: DatabaseSchema, parsed: ParsedLanguage[]): voi
   const existingByName = new Map(database.languages.map((language) => [language.name, language]));
   const oldIds = database.adjacencyMatrix.languageIds;
   const oldMatrix = database.adjacencyMatrix.matrix;
+  const oldTranslations = database.translatabilityMatrix;
   const nextLanguages: KCLanguage[] = parsed.map((item) => {
     const existing = existingByName.get(item.name);
     const language = existing ?? {
@@ -999,6 +1062,19 @@ function alignLanguages(database: DatabaseSchema, parsed: ParsedLanguage[]): voi
     indexByLanguage: Object.fromEntries(nextIds.map((id, index) => [id, index])),
     matrix
   };
+  if (oldTranslations) {
+    const oldTranslationIndex = oldTranslations.indexByLanguage;
+    database.translatabilityMatrix = {
+      languageIds: nextIds,
+      indexByLanguage: Object.fromEntries(nextIds.map((id, index) => [id, index])),
+      matrix: nextIds.map((sourceId) => nextIds.map((targetId) => {
+        if (sourceId === targetId) return null;
+        const i = oldTranslationIndex[sourceId];
+        const j = oldTranslationIndex[targetId];
+        return i === undefined || j === undefined ? null : oldTranslations.matrix[i]?.[j] ?? null;
+      }))
+    };
+  }
 }
 
 function updateDefinitions(database: DatabaseSchema, concepts: ParsedConcept[]): void {
@@ -1029,6 +1105,38 @@ function updateSuccinctness(database: DatabaseSchema, relations: ParsedRelation[
       description: item.description,
       refs: item.refs,
       ...(item.assumption ? { assumption: item.assumption } : {}),
+      derived: false,
+      origin: 'authored'
+    };
+  }
+}
+
+function updateTranslations(database: DatabaseSchema, claims: ParsedTranslationClaim[]): void {
+  const n = database.adjacencyMatrix.languageIds.length;
+  database.translatabilityMatrix ??= {
+    languageIds: [...database.adjacencyMatrix.languageIds],
+    indexByLanguage: { ...database.adjacencyMatrix.indexByLanguage },
+    matrix: Array.from({ length: n }, () => Array(n).fill(null))
+  };
+  const matrix = database.translatabilityMatrix.matrix;
+
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const relation = matrix[i]?.[j];
+    if (relation && relation.derived !== true && relation.origin !== 'derived') matrix[i][j] = null;
+  }
+
+  for (const claim of claims) {
+    if (claim.sourceId === claim.targetId) fail(`Self translation claim is invalid: ${claim.sourceId}`);
+    const source = database.translatabilityMatrix.indexByLanguage[claim.sourceId];
+    const target = database.translatabilityMatrix.indexByLanguage[claim.targetId];
+    if (source === undefined || target === undefined) {
+      fail(`Unknown translation claim endpoint ${claim.sourceId}->${claim.targetId}`);
+    }
+    matrix[source][target] = {
+      status: claim.status,
+      description: claim.description,
+      refs: claim.refs,
+      ...(claim.assumption ? { assumption: claim.assumption } : {}),
       derived: false,
       origin: 'authored'
     };
@@ -1124,7 +1232,9 @@ async function writeJson(): Promise<void> {
 
   alignLanguages(database, parseLanguagesLatex(fs.readFileSync(DEFAULT_LANGUAGES_OUTPUT, 'utf-8')));
   updateDefinitions(database, parseDefinitionsLatex(fs.readFileSync(DEFAULT_DEFINITIONS_OUTPUT, 'utf-8')));
-  updateSuccinctness(database, parseSuccinctnessLatex(fs.readFileSync(DEFAULT_SUCCINCTNESS_OUTPUT, 'utf-8'), database));
+  const succinctnessContent = fs.readFileSync(DEFAULT_SUCCINCTNESS_OUTPUT, 'utf-8');
+  updateSuccinctness(database, parseSuccinctnessLatex(succinctnessContent, database));
+  updateTranslations(database, parseTranslationClaims(succinctnessContent, database));
 
   const queriesContent = fs.readFileSync(DEFAULT_QUERIES_OUTPUT, 'utf-8');
   updateOperations(

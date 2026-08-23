@@ -54,6 +54,7 @@
 \newcommand{\claimlanguage}[1]{\textbf{Language:} #1\par}
 \newcommand{\operation}[1]{\textbf{Operation:} #1\par}
 \newcommand{\status}[1]{\textbf{Status:} #1\par}
+\newcommand{\translator}[1]{\textbf{Polynomial-time translator:} #1\par}
 \newcommand{\selector}[1]{\textbf{Selector:} #1\par}
 \newcommand{\assuming}[1]{\textbf{Assuming:} #1\par}
 \newcommand{\titlefield}[1]{\textbf{Title:} #1\par}
@@ -68,6 +69,7 @@
 \makeatother
 \newenvironment{concept}{}{}
 \newenvironment{succinctnessclaim}{}{}
+\newenvironment{translationclaim}{}{}
 \newenvironment{queryclaim}{}{}
 \newenvironment{transformationclaim}{}{}
 \newenvironment{batchclaim}{}{}
@@ -75,6 +77,8 @@
 \date{\today}
 \begin{document}
 \maketitle
+
+\section*{Succinctness claims}
 
 \begin{succinctnessclaim}
 \source{\langref{CNF}}
@@ -1057,6 +1061,548 @@ The proof of \citet[Theorem 2]{Vinall-Smeeth_2024} constructs unambiguous DNFs $
 For any fixed variable order $<$, every \langfam{uOBDD}{<} formula is a \langfam{nOBDD}{<} formula respecting the same order $<$. Thus, for each $<$, \langfam{uOBDD}{<} $\subset$ \langfam{nOBDD}{<}, and the compilation is the identity. \citep{Amarilli_2020,Wegener_2000}
 \end{description}
 \end{succinctnessclaim}
+
+\section*{Polynomial-time translation claims}
+
+\begin{translationclaim}
+\source{\langref{CNF}}
+\target{\langref{NNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{CNF} is a subset of \langref{NNF}. Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{cSDD}}
+\target{\langref{SDD}}
+\translator{yes}
+\begin{description}
+For each fixed vtree $T$, \langfam{cSDD}{T} is the compressed subset of \langfam{SDD}{T}, so compilation from \langref{cSDD} to \langref{SDD} is trivial. \citep{VanDenBroeck_2015}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{d-DNNF}}
+\target{\langref{DNNF}}
+\translator{yes}
+\begin{description}
+As introduced in \citet{Darwiche_2001b}, \langref{d-DNNF} is a subset of \langref{DNNF} satisfying the determinism property, making a polynomial compilation trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{d-SDNNF}}
+\target{\langref{d-DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Pipatsrisawat_Darwiche_2010}, a \langref{d-SDNNF} is simply a structured \langref{d-DNNF}, so discarding the vtree completes the compilation.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{d-SDNNF}}
+\target{\langref{SDNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Pipatsrisawat_Darwiche_2010}, \langref{d-SDNNF} is exactly the subset of \langref{SDNNF} satisfying determinism, so compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{d-SDNNF}{T}}
+\target{\langref{d-SDNNF}}
+\translator{yes}
+\begin{description}
+\langref{d-SDNNF} is the union of the fixed-vtree languages \langfam{d-SDNNF}{T}. Hence any \langfam{d-SDNNF}{T} formula is already a \langref{d-SDNNF} formula, so the compilation is trivial and polynomial-time. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{d-SDNNF}{T}}
+\target{\langfam{SDNNF}{T}}
+\translator{yes}
+\begin{description}
+For any fixed vtree $T$, \langfam{d-SDNNF}{T} is exactly the subset of \langfam{SDNNF}{T} satisfying determinism, so compilation is trivial. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{DNF}}
+\target{\langref{DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{DNF} is a subset of \langref{DNNF}. Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{DNF}}
+\target{\langfam{nOBDD}{<}}
+\translator{yes}
+\begin{description}
+Fix any variable order $<$. Each term of a \langref{DNF} can be represented as an \langfam{OBDD}{<} of linear size (a chain of decision nodes for each literal in the term). Their nondeterministic disjunction yields an \langfam{nOBDD}{<} of size $O(|\phi|)$ because every branch follows the same fixed order. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{DNNF}}
+\target{\langref{NNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{DNNF} is a subset of \langref{NNF}, so a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{FBDD}}
+\target{\langref{d-DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{FBDD} is a subset of \langref{d-DNNF}, so a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{FBDD}}
+\target{\langref{uFBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{FBDD} is the subset of \langref{uFBDD} with no $\vee$-nodes.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{FBDD}}
+\target{\langref{dec-DNNF}}
+\translator{yes}
+\begin{description}
+Rewrite each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$, where $D_0$ and $D_1$ are the rewritings of the 0- and 1-successors. The introduced $\vee$-gates are decision gates and the $\wedge$-gates are decomposable, so all $\vee$-gates arise from decision node rewrites, yielding a \langref{dec-DNNF} in linear time \citep{Amarilli_2020}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{IP}}
+\target{\langref{DNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{IP} is a subset of \langref{DNF}. Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{MODS}}
+\target{\langref{CNF}}
+\translator{yes}
+\begin{description}
+A Shannon tree for any \langref{MODS} formula can be generated in polynomial time. Paths from the root to 0-leaves yield a \langref{CNF} representation \citep{Darwiche_2002}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{MODS}}
+\target{\langref{d-DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{MODS} is a subset of \langref{d-DNNF}. Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{MODS}}
+\target{\langref{DNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{MODS} is a subset of \langref{DNF} (any \langref{MODS} formula can be written as a disjunction of the individual models). Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{MODS}}
+\target{\langref{IP}}
+\translator{yes}
+\begin{description}
+The prime implicants of a function given by an explicit \langref{MODS} representation can be generated in time polynomial in the MODS input size; see the proof of \citet[Proposition 3.1]{Darwiche_2002}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{MODS}}
+\target{\langfam{OBDD}{<}}
+\translator{yes}
+\begin{description}
+A Shannon tree for any \langref{MODS} formula following order $<$ can be generated in polynomial time. This tree can be reduced into a corresponding \langfam{OBDD}{<} in polynomial time \citep{Darwiche_2002}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{nFBDD}}
+\target{\langref{DNNF}}
+\translator{yes}
+\begin{description}
+Rewrite each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The $\wedge$-gates are decomposable, yielding a \langref{DNNF} in linear time \citep{Amarilli_2020}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{nOBDD}}
+\target{\langref{nFBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{nOBDD} is the subset of \langref{nFBDD} satisfying an order of the variables, so compilation entails discarding the order.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{nOBDD}}
+\target{\langref{SDNNF}}
+\translator{yes}
+\begin{description}
+Construct a right-linear vtree from the variable order, then rewrite each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The vtree alignment ensures every $\wedge$-gate respects the variable partition, yielding an \langref{SDNNF} in linear time \citep{Amarilli_2020}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{OBDD}{<}}
+\target{\langref{OBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{TCZ_Forthcoming}, for each order $<$, \langfam{OBDD}{<} is a subset of \langref{OBDD}. Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{OBDD}{<}}
+\target{\langfam{TDD}{T}}
+\translator{yes}
+\begin{description}
+\citet[Theorem 17]{Capelli_2026} shows that an \langfam{OBDD}{<} over order $\pi$ can be converted in linear time into an equivalent \langfam{TDD}{T} respecting the corresponding linear vtree $T_{\pi^{-1}}$, with size at most three times the input size.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{OBDD}{<}}
+\target{\langfam{dec-SDNNF}{T}}
+\translator{yes}
+\begin{description}
+Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$ yields a structured output that respects $T$, and all introduced $\vee$-gates are decision gates, producing \langfam{dec-SDNNF}{T} in linear time. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{OBDD}{<}}
+\target{\langfam{cSDD}{T}}
+\translator{yes}
+\begin{description}
+Reduce the input \langfam{OBDD}{<} first, then view the reduced \langref{OBDD} as a compressed \langref{SDD} on the corresponding right-linear vtree. This yields a polynomial-time compilation to \langfam{cSDD}{T} \citep{Darwiche_2011}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{OBDD}{<}}
+\target{\langfam{uOBDD}{<}}
+\translator{yes}
+\begin{description}
+For any fixed variable order $<$, every \langfam{OBDD}{<} is already a \langfam{uOBDD}{<} formula respecting the same order $<$. Thus, for each $<$, \langfam{OBDD}{<} $\subset$ \langfam{uOBDD}{<}, and the compilation is the identity. \citep{Amarilli_2020,Wegener_2000}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{PI}}
+\target{\langref{CNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{PI} is a subset of \langref{CNF}. Therefore, a polynomial compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{SDD}}
+\target{\langref{d-SDNNF}}
+\translator{yes}
+\begin{description}
+For each fixed vtree $T$, \langfam{SDD}{T} $\subset$ \langfam{d-SDNNF}{T}, so compilation is trivial. \citep{VanDenBroeck_2015}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{SDD}{T}}
+\target{\langfam{d-SDNNF}{T}}
+\translator{yes}
+\begin{description}
+For any fixed vtree $T$, \langfam{SDD}{T} is a strict subset of \langfam{d-SDNNF}{T}, so compilation is trivial. \citep{VanDenBroeck_2015}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{SDD}{T}}
+\target{\langref{SDD}}
+\translator{yes}
+\begin{description}
+\langref{SDD} is the union of the fixed-vtree languages \langfam{SDD}{T}. Hence any \langfam{SDD}{T} formula is already an \langref{SDD} formula, so the compilation is trivial and polynomial-time. \citep{Darwiche_2011}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{SDNNF}}
+\target{\langref{DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, a structured \langref{DNNF} is a triple of the corresponding \langref{DNNF}, the vtree $T$, and a mapping $\rho$; as such, extracting a \langref{DNNF} from a \langref{SDNNF} is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{SDNNF}{T}}
+\target{\langref{SDNNF}}
+\translator{yes}
+\begin{description}
+\langref{SDNNF} = $\bigcup_T$ \langfam{SDNNF}{T}. Hence any \langfam{SDNNF}{T} representation is already an \langref{SDNNF} representation, so the compilation is trivial and polynomial-time. \citep{Pipatsrisawat_2008}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{uFBDD}}
+\target{\langref{d-DNNF}}
+\translator{yes}
+\begin{description}
+Rewrite each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The $\wedge$-gates are decomposable, and unambiguity of the \langref{uFBDD} ensures all introduced $\vee$-gates are deterministic, yielding a \langref{d-DNNF} in linear time \citep{Amarilli_2020}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{uFBDD}}
+\target{\langref{nFBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{uFBDD} is the subset of \langref{nFBDD} satisfying unambiguity.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{uOBDD}}
+\target{\langref{d-SDNNF}}
+\translator{yes}
+\begin{description}
+Construct a right-linear vtree from the variable order, then rewrite each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The vtree alignment ensures structuredness, and unambiguity of the \langref{uOBDD} makes all introduced $\vee$-gates deterministic, yielding a \langref{d-SDNNF} in linear time \citep{Amarilli_2020}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{uOBDD}}
+\target{\langref{nOBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{uOBDD} is the subset of \langref{nOBDD} satisfying unambiguity.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{uOBDD}}
+\target{\langref{uFBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{uOBDD} is the subset of \langref{uFBDD} satisfying an order of the variables, so compilation entails discarding the order.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{OBDD}}
+\target{\langref{cSDD}}
+\translator{yes}
+\begin{description}
+Reduce the input \langref{OBDD} and view the reduced diagram as a compressed \langref{SDD} on its associated right-linear vtree. This proves polynomial compilation to \langref{cSDD}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{OBDD}}
+\target{\langref{FBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Darwiche_2002}, \langref{OBDD} is a subset of \langref{FBDD}. Therefore a polynomial time compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{OBDD}}
+\target{\langref{uOBDD}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{OBDD} is the subset of \langref{uOBDD} without any $\vee$-node.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{OBDD}}
+\target{\langref{TDD}}
+\translator{yes}
+\begin{description}
+\citet[Theorem 17]{Capelli_2026} shows how to convert every fixed-order \langfam{OBDD}{<} into an equivalent \langfam{TDD}{T} of linear size for the corresponding linear vtree. Taking the union over orders gives a polynomial compilation from \langref{OBDD} to \langref{TDD}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{OBDD}}
+\target{\langref{dec-SDNNF}}
+\translator{yes}
+\begin{description}
+Construct a right-linear vtree from the variable order, then rewrite each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$, where $D_0, D_1$ are the rewritings of the 0- and 1-successors. The vtree alignment ensures structuredness, and since all $\vee$-gates arise from decision node rewrites, every $\vee$-gate is a decision gate, yielding a \langref{dec-SDNNF} in linear time \citep{Amarilli_2020}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{TDD}{T}}
+\target{\langfam{d-SDNNF}{T}}
+\translator{yes}
+\begin{description}
+\citet[Theorem 3]{Capelli_2026} shows that a \langfam{TDD}{T} can be converted in linear time into an equivalent \langfam{d-SDNNF}{T} respecting the same vtree.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{TDD}{T}}
+\target{\langfam{SDD}{T}}
+\translator{yes}
+\begin{description}
+\citet[Theorem 21]{Capelli_2026} show that, given a \langfam{TDD}{T} $C$ respecting a vtree $T$, one can construct a vtree $T'$ and an equivalent \langfam{SDD}{T'} $C'$ with $|C'| = O(|C|^2)$. This gives a polynomial compilation from \langfam{TDD}{T} to the corresponding fixed-vtree family \langfam{SDD}{T'}. Under our definition the output vtree $T'$ need not match the input vtree $T$.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{TDD}{T}}
+\target{\langref{TDD}}
+\translator{yes}
+\begin{description}
+\langref{TDD} is the union of the fixed-vtree languages \langfam{TDD}{T}. Hence any \langfam{TDD}{T} representation is already a \langref{TDD} representation. \citep{Capelli_2026}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{TDD}}
+\target{\langref{d-SDNNF}}
+\translator{yes}
+\begin{description}
+\citet[Theorem 3]{Capelli_2026} convert every fixed-vtree TDD into an equivalent structured deterministic DNNF respecting the same vtree. Taking the union over vtrees gives a polynomial compilation from \langref{TDD} to \langref{d-SDNNF}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{TDD}}
+\target{\langref{SDD}}
+\translator{yes}
+\begin{description}
+\citet[Theorem 21]{Capelli_2026} show that, given a \langref{TDD} $C$ respecting a vtree $T$, one can construct a vtree $T'$ and an equivalent \langfam{SDD}{T'} $C'$ with $|C'| = O(|C|^2)$. Thus every \langref{TDD} can be converted into an equivalent polynomial-size \langref{SDD}.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{dec-DNNF}}
+\target{\langref{d-DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{dec-DNNF} is the subset of \langref{d-DNNF} satisfying the decision property.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{dec-SDNNF}}
+\target{\langref{d-SDNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, \langref{dec-SDNNF} is the subset of \langref{d-SDNNF} satisfying the decision property, so compilation is trivial.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langref{dec-SDNNF}}
+\target{\langref{dec-DNNF}}
+\translator{yes}
+\begin{description}
+As defined by \citet{Amarilli_2020}, a \langref{dec-SDNNF} is simply a structured \langref{dec-DNNF}, so discarding the vtree completes the compilation.
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{dec-SDNNF}{T}}
+\target{\langfam{d-SDNNF}{T}}
+\translator{yes}
+\begin{description}
+For any fixed vtree $T$, \langfam{dec-SDNNF}{T} is the subset of \langfam{d-SDNNF}{T} satisfying the decision property, so compilation is trivial. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{dec-SDNNF}{T}}
+\target{\langref{dec-SDNNF}}
+\translator{yes}
+\begin{description}
+\langref{dec-SDNNF} is the union of fixed-vtree \langfam{dec-SDNNF}{T} languages. Hence any fixed-class formula is already a \langref{dec-SDNNF} formula, so the compilation is trivial and polynomial-time. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{cSDD}{T}}
+\target{\langref{cSDD}}
+\translator{yes}
+\begin{description}
+\langref{cSDD} is the union of the fixed-vtree languages \langfam{cSDD}{T}. Hence any \langfam{cSDD}{T} formula is already a \langref{cSDD} formula, so the compilation is trivial and polynomial-time. \citep{Darwiche_2011}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{cSDD}{T}}
+\target{\langfam{SDD}{T}}
+\translator{yes}
+\begin{description}
+For any fixed vtree $T$, \langfam{cSDD}{T} is the compressed subset of \langfam{SDD}{T}, so compilation is trivial. \citep{VanDenBroeck_2015}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{nOBDD}{<}}
+\target{\langref{nOBDD}}
+\translator{yes}
+\begin{description}
+\langref{nOBDD} is the union of fixed-order languages \langfam{nOBDD}{<}. Hence any \langfam{nOBDD}{<} formula is already an \langref{nOBDD} formula, so the compilation is trivial and polynomial-time. \citep{Wegener_2000}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{nOBDD}{<}}
+\target{\langfam{SDNNF}{T}}
+\translator{yes}
+\begin{description}
+Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$ yields an output respecting $T$, so \langfam{nOBDD}{<} compiles to \langfam{SDNNF}{T} in linear time. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{uOBDD}{<}}
+\target{\langfam{d-SDNNF}{T}}
+\translator{yes}
+\begin{description}
+Fix any variable order $<$ and let $T$ be the corresponding right-linear vtree. Rewriting each decision node labeled $x$ as $(\neg x \wedge D_0) \vee (x \wedge D_1)$ yields a structured output respecting $T$, and unambiguity ensures determinism of introduced $\vee$-gates, giving \langfam{d-SDNNF}{T} in linear time. \citep{Amarilli_2020}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{uOBDD}{<}}
+\target{\langref{uOBDD}}
+\translator{yes}
+\begin{description}
+\langref{uOBDD} is the union of fixed-order languages \langfam{uOBDD}{<}. Hence any \langfam{uOBDD}{<} formula is already a \langref{uOBDD} formula, so the compilation is trivial and polynomial-time. \citep{Wegener_2000}
+\end{description}
+\end{translationclaim}
+
+\begin{translationclaim}
+\source{\langfam{uOBDD}{<}}
+\target{\langfam{nOBDD}{<}}
+\translator{yes}
+\begin{description}
+For any fixed variable order $<$, every \langfam{uOBDD}{<} formula is a \langfam{nOBDD}{<} formula respecting the same order $<$. Thus, for each $<$, \langfam{uOBDD}{<} $\subset$ \langfam{nOBDD}{<}, and the compilation is the identity. \citep{Amarilli_2020,Wegener_2000}
+\end{description}
+\end{translationclaim}
 \bibliographystyle{plainnat}
 \bibliography{refs}
 \end{document}

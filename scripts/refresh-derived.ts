@@ -126,6 +126,7 @@ export function refreshDerivedDatabase(database: DatabaseSchema): {
     complexities: COMPLEXITIES,
     relationTypes: relationTypes,
     adjacencyMatrix: database.adjacencyMatrix,
+    translatabilityMatrix: database.translatabilityMatrix,
     metadata: database.metadata,
     batchClaims: database.batchClaims
   };
@@ -133,6 +134,7 @@ export function refreshDerivedDatabase(database: DatabaseSchema): {
   const propagated = propagateImplicitRelations(graphData);
   const newDerived = countDerivedEdges(propagated.adjacencyMatrix);
   database.adjacencyMatrix = propagated.adjacencyMatrix;
+  database.translatabilityMatrix = propagated.translatabilityMatrix;
   const entityRefHydrated = hydrateEntityReferenceRefs(database);
 
   return {

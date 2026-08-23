@@ -4,6 +4,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import type {
   KCAdjacencyMatrix,
+  KCTranslatabilityMatrix,
   KCBatchClaim,
   KCDefinition,
   KCLanguage,
@@ -20,6 +21,7 @@ export interface DatabaseSchema {
   languages: KCLanguage[];
   definitions?: KCDefinition[];
   adjacencyMatrix: KCAdjacencyMatrix;
+  translatabilityMatrix?: KCTranslatabilityMatrix;
   references: KCReference[];
   assumptions?: string[];
   defaultNodePositionsByLanguageName?: NodePositionsByLanguageName;

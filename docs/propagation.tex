@@ -6,6 +6,13 @@ Propagation begins with a simple distinction: claims manually entered by a contr
 
 For performance purposes, we split propagation into two engines: a Datalog fact-finder and a custom proof writer. The proof writer finds human-readable certificates for the facts identified by Datalog.
 
+Succinctness and translatability are tracked separately. A polynomial
+translatability fact asserts a polynomial-time compiler and therefore implies
+the corresponding polynomial succinctness fact. The converse is not used.
+Query-by-compiling, including its contrapositives, uses only translatability:
+a query difference can rule out a polynomial-time compiler, but cannot by
+itself rule out polynomial-size target representations.
+
 % We begin by defining the atomic facts under consideration for proof. Let $A, B, L$ range over languages (and classes of languages), and let $o$ range over queries and transforms. Note that we maintain a quasipolynomial detail for succinctness edges, but no such distinction for queries and transformations.
 % Then the full set of atomic facts are:
 % \[

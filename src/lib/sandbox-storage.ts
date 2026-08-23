@@ -46,6 +46,7 @@ function isSandboxEdit(value: unknown): value is SandboxEdit {
       (edit.description === undefined || typeof edit.description === 'string') &&
       (edit.noPolyDescription === undefined || typeof edit.noPolyDescription === 'string') &&
       (edit.quasiDescription === undefined || typeof edit.quasiDescription === 'string')
+      && (edit.translatable === undefined || typeof edit.translatable === 'boolean')
     );
   }
   if (edit.kind === 'operation') {

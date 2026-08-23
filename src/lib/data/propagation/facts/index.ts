@@ -1,5 +1,6 @@
 import type {
   DirectedSuccinctnessRelation,
+  DirectedTranslatabilityRelation,
   GraphData,
   KCBatchClaim,
   KCBatchSelector,
@@ -8,7 +9,7 @@ import type {
 } from '../../../types.js';
 import { getAllQueryCodes, getAllTransformationCodes, QUERIES } from '../../operations.js';
 
-export type EdgeKind = 'leP' | 'leQ' | 'notLeP' | 'notLeQ';
+export type EdgeKind = 'leP' | 'leQ' | 'notLeP' | 'notLeQ' | 'transP' | 'notTransP';
 export type OpKind = 'supportsP' | 'notSupportsP';
 export type AtomKind = EdgeKind | OpKind | 'batchApplies';
 export type FactOrigin = 'authored' | 'batch' | 'derived';
@@ -57,6 +58,8 @@ export interface FactTables {
   leQ: boolean[][];
   notLeP: boolean[][];
   notLeQ: boolean[][];
+  transP: boolean[][];
+  notTransP: boolean[][];
   supportsP: Map<string, boolean[]>;
   notSupportsP: Map<string, boolean[]>;
   batchApplies: boolean[][];
@@ -71,6 +74,8 @@ export function atomKey(atom: Atom): string {
     case 'leQ':
     case 'notLeP':
     case 'notLeQ':
+    case 'transP':
+    case 'notTransP':
       return `${atom.kind}:${atom.source}:${atom.target}`;
     case 'supportsP':
     case 'notSupportsP':
@@ -102,6 +107,8 @@ export function createTables(languageCount: number, batchCount: number): FactTab
     leQ: createMatrix(languageCount),
     notLeP: createMatrix(languageCount),
     notLeQ: createMatrix(languageCount),
+    transP: createMatrix(languageCount),
+    notTransP: createMatrix(languageCount),
     supportsP: new Map(),
     notSupportsP: new Map(),
     batchApplies: Array.from({ length: batchCount }, () => Array<boolean>(languageCount).fill(false)),
@@ -128,6 +135,10 @@ export function hasFact(tables: FactTables, atom: Atom): boolean {
       return tables.notLeP[atom.source]?.[atom.target] === true;
     case 'notLeQ':
       return tables.notLeQ[atom.source]?.[atom.target] === true;
+    case 'transP':
+      return tables.transP[atom.source]?.[atom.target] === true;
+    case 'notTransP':
+      return tables.notTransP[atom.source]?.[atom.target] === true;
     case 'supportsP':
       return tables.supportsP.get(atom.op)?.[atom.language] === true;
     case 'notSupportsP':
@@ -176,6 +187,12 @@ export function addFact(tables: FactTables, atom: Atom, origin: FactOrigin, lang
         changed = true;
       }
       break;
+    case 'transP':
+      if (!tables.transP[atom.source][atom.target]) { tables.transP[atom.source][atom.target] = true; changed = true; }
+      break;
+    case 'notTransP':
+      if (!tables.notTransP[atom.source][atom.target]) { tables.notTransP[atom.source][atom.target] = true; changed = true; }
+      break;
     case 'supportsP': {
       const row = opRow(tables.supportsP, atom.op, languageCount);
       if (!row[atom.language]) {
@@ -217,6 +234,8 @@ export function allAtoms(tables: FactTables, context: FactContext): Atom[] {
       if (tables.leQ[i][j]) atoms.push(edgeAtom('leQ', i, j));
       if (tables.notLeP[i][j]) atoms.push(edgeAtom('notLeP', i, j));
       if (tables.notLeQ[i][j]) atoms.push(edgeAtom('notLeQ', i, j));
+      if (tables.transP[i][j]) atoms.push(edgeAtom('transP', i, j));
+      if (tables.notTransP[i][j]) atoms.push(edgeAtom('notTransP', i, j));
     }
   }
   for (const op of context.operations.allCodes) {
@@ -324,6 +343,18 @@ export function seedAuthoredFacts(context: FactContext): FactTables {
     const entry = context.data.languages[language];
     seedAuthoredOperationMap(context, tables, language, entry.properties?.queries ?? {}, n);
     seedAuthoredOperationMap(context, tables, language, entry.properties?.transformations ?? {}, n);
+  }
+
+  const translations = context.data.translatabilityMatrix;
+  if (translations) {
+    for (let source = 0; source < n; source += 1) for (let target = 0; target < n; target += 1) {
+      if (source === target) continue;
+      const relation = translations.matrix[source]?.[target];
+      if (!relation || relation.derived || relation.origin === 'derived') continue;
+      const atom = edgeAtom(relation.status === 'poly' ? 'transP' : 'notTransP', source, target);
+      addFact(tables, atom, 'authored', n);
+      addAuthoredMetadata(context, atom, relation.refs, relation.description, relation.assumption);
+    }
   }
 
   return tables;
@@ -453,6 +484,15 @@ export function collectExistingProofs(data: GraphData): FactMetadataStore {
           relation.quasiDescription?.proof
         );
       }
+    }
+  }
+
+  const translations = data.translatabilityMatrix;
+  if (translations) for (let source = 0; source < languageIds.length; source += 1) {
+    for (let target = 0; target < languageIds.length; target += 1) {
+      const relation = translations.matrix[source]?.[target];
+      if (!relation) continue;
+      add(edgeAtom(relation.status === 'poly' ? 'transP' : 'notTransP', source, target), relation.refs, relation.description, relation.assumption, relation.origin, relation.proof);
     }
   }
 

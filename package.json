@@ -19,6 +19,8 @@
 		"deploy": "npm run build",
 		"stats": "node --import ./scripts/tsx-register.mjs scripts/database-stats.ts",
 		"refresh": "node --import ./scripts/tsx-register.mjs scripts/refresh-derived.ts",
+
+		"migrate:translatability": "node --import ./scripts/tsx-register.mjs scripts/migrate-translatability.ts",
 		"to-json": "node --import ./scripts/tsx-register.mjs scripts/latex-bijection.ts --to-json",
 		"to-latex": "node --import ./scripts/tsx-register.mjs scripts/latex-bijection.ts --to-latex && npm run push-overleaf",
 		"latex:roundtrip": "node scripts/latex-roundtrip-check.mjs",

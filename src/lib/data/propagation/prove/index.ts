@@ -1,5 +1,6 @@
 import type {
   DirectedSuccinctnessRelation,
+  DirectedTranslatabilityRelation,
   GraphData,
   KCBatchSelector,
   OperationLemma,
@@ -101,6 +102,10 @@ function atomLabel(context: FactContext, atom: Atom): string {
       return negativeCompilationRef(context.languageIds[atom.source], context.languageIds[atom.target], 'poly');
     case 'notLeQ':
       return negativeCompilationRef(context.languageIds[atom.source], context.languageIds[atom.target], 'quasi');
+    case 'transP':
+      return `${languageRefForId(context.languageIds[atom.source])} polynomially translates to ${languageRefForId(context.languageIds[atom.target])}`;
+    case 'notTransP':
+      return `${languageRefForId(context.languageIds[atom.source])} does not polynomially translate to ${languageRefForId(context.languageIds[atom.target])}`;
     case 'supportsP':
       return supportPhrase(context, atom.language, atom.op);
     case 'notSupportsP':
@@ -116,6 +121,8 @@ function toProofAtom(context: FactContext, atom: Atom): ProofAtom | null {
     case 'leQ':
     case 'notLeP':
     case 'notLeQ':
+    case 'transP':
+    case 'notTransP':
       return { kind: atom.kind, sourceId: context.languageIds[atom.source], targetId: context.languageIds[atom.target] };
     case 'supportsP':
     case 'notSupportsP':
@@ -130,7 +137,9 @@ function fromProofAtom(context: FactContext, atom: ProofAtom): Atom | null {
     case 'leP':
     case 'leQ':
     case 'notLeP':
-    case 'notLeQ': {
+    case 'notLeQ':
+    case 'transP':
+    case 'notTransP': {
       const source = context.languageIndex.get(atom.sourceId);
       const target = context.languageIndex.get(atom.targetId);
       return source === undefined || target === undefined ? null : edgeAtom(atom.kind, source, target);
@@ -205,6 +214,13 @@ function validProofRule(context: FactContext, atom: Atom, oldProof: PropagationP
       return validBatchProof(context, atom, premises);
     case 'positive-path':
       return validPositivePath(atom, premises);
+    case 'translation-path':
+      return atom.kind === 'transP' && pathConnects(premises, atom.source, atom.target, 'transP');
+    case 'translation-separation':
+      return validQuerySeparation(context, atom, premises);
+    case 'translation-lower-from-succinctness':
+      return atom.kind === 'notTransP' && premises.length === 1 && premises[0].kind === 'notLeP'
+        && premises[0].source === atom.source && premises[0].target === atom.target;
     case 'negative-obstruction':
       return validNegativeObstruction(atom, premises);
     case 'query-transfer':
@@ -239,14 +255,15 @@ function validBatchProof(context: FactContext, atom: Atom, premises: Atom[]): bo
     && premise.language === atom.language;
 }
 
-function positiveStep(atom: Atom, level: 'leP' | 'leQ', source: number): number | null {
-  if (atom.kind !== 'leP' && atom.kind !== 'leQ') return null;
+function positiveStep(atom: Atom, level: 'leP' | 'leQ' | 'transP', source: number): number | null {
+  if (atom.kind !== 'leP' && atom.kind !== 'leQ' && atom.kind !== 'transP') return null;
   if (atom.source !== source) return null;
   if (level === 'leP' && atom.kind !== 'leP') return null;
+  if (level === 'transP' && atom.kind !== 'transP') return null;
   return atom.target;
 }
 
-function pathConnects(premises: Atom[], source: number, target: number, level: 'leP' | 'leQ'): boolean {
+function pathConnects(premises: Atom[], source: number, target: number, level: 'leP' | 'leQ' | 'transP'): boolean {
   let current = source;
   for (const premise of premises) {
     const next = positiveStep(premise, level, current);
@@ -290,7 +307,7 @@ function validQueryTransfer(context: FactContext, atom: Atom, premises: Atom[]):
 }
 
 function validQuerySeparation(context: FactContext, atom: Atom, premises: Atom[]): boolean {
-  if (atom.kind !== 'notLeP' || premises.length !== 2) return false;
+  if (atom.kind !== 'notTransP' || premises.length !== 2) return false;
   const support = premises.find((premise) => premise.kind === 'supportsP');
   const noSupport = premises.find((premise) => premise.kind === 'notSupportsP');
   if (!support || !noSupport || support.kind !== 'supportsP' || noSupport.kind !== 'notSupportsP') return false;
@@ -506,10 +523,14 @@ function proveDerivedFact(
       return provePositiveEdge(context, atom.source, atom.target, 'leP', certified, policy);
     case 'leQ':
       return provePositiveEdge(context, atom.source, atom.target, 'leQ', certified, policy);
+    case 'transP':
+      return provePositiveEdge(context, atom.source, atom.target, 'transP', certified, policy);
     case 'notLeP':
       return proveNoPolyEdge(context, tables, atom.source, atom.target, certified, policy);
     case 'notLeQ':
       return proveNegativeObstruction(context, atom.source, atom.target, 'notLeQ', certified, policy);
+    case 'notTransP':
+      return proveNoTranslation(context, atom.source, atom.target, certified, policy);
     case 'supportsP':
       return proveSupport(context, atom.language, atom.op, certified, policy);
     case 'notSupportsP':
@@ -523,7 +544,7 @@ function provePositiveEdge(
   context: FactContext,
   source: number,
   target: number,
-  level: 'leP' | 'leQ',
+  level: 'leP' | 'leQ' | 'transP',
   certified: CertifiedMap,
   policy: ProofPolicy
 ): Omit<CertifiedFact, 'atom' | 'origin' | 'phase'> | null {
@@ -535,7 +556,7 @@ function provePositiveEdge(
     refs: metadata.refs,
     assumption: metadata.assumption,
     description: `${pathText}. Therefore ${atomLabel(context, edgeAtom(level, source, target))}.`,
-    proof: proof('positive-path', context, path)
+    proof: proof(level === 'transP' ? 'translation-path' : 'positive-path', context, path)
   };
 }
 
@@ -617,11 +638,31 @@ function proveQuerySeparation(
     return {
       refs: metadata.refs,
       assumption: metadata.assumption,
-      description: `${atomLabel(context, positive)}, but ${atomLabel(context, negative)}. If ${languageRefForId(context.languageIds[source])} compiled to ${languageRefForId(context.languageIds[target])} with polynomial blowup, then ${languageRefForId(context.languageIds[source])} would support ${operationMacro(query)} in polynomial time, a contradiction. Therefore ${atomLabel(context, edgeAtom('notLeP', source, target))}.`,
-      proof: proof('query-separation', context, [positive, negative])
+      description: `${atomLabel(context, positive)}, but ${atomLabel(context, negative)}. A polynomial-time translation would let ${languageRefForId(context.languageIds[source])} answer ${operationMacro(query)} in polynomial time, a contradiction. Therefore ${atomLabel(context, edgeAtom('notTransP', source, target))}.`,
+      proof: proof('translation-separation', context, [positive, negative])
     };
   }
   return null;
+}
+
+function proveNoTranslation(
+  context: FactContext,
+  source: number,
+  target: number,
+  certified: CertifiedMap,
+  policy: ProofPolicy
+): Omit<CertifiedFact, 'atom' | 'origin' | 'phase'> | null {
+  const sizeLower = edgeAtom('notLeP', source, target);
+  const knownSizeLower = available(certified, sizeLower, policy);
+  if (knownSizeLower) {
+    return {
+      refs: knownSizeLower.refs,
+      assumption: knownSizeLower.assumption,
+      description: `${atomLabel(context, sizeLower)}. A polynomial-time translation would produce a polynomial-size output. Therefore ${atomLabel(context, edgeAtom('notTransP', source, target))}.`,
+      proof: proof('translation-lower-from-succinctness', context, [sizeLower])
+    };
+  }
+  return proveQuerySeparation(context, source, target, certified, policy);
 }
 
 function proveSupport(
@@ -636,7 +677,7 @@ function proveSupport(
       if (target === language) continue;
       const leaf = opAtom('supportsP', target, op);
       if (!available(certified, leaf, policy)) continue;
-      const path = findPath(context, language, target, 'leP', certified, policy);
+      const path = findPath(context, language, target, 'transP', certified, policy);
       if (!path) continue;
       const metadata = certifiedMetadata(certified, [...path, leaf]);
       return {
@@ -662,7 +703,7 @@ function proveNoSupport(
       if (source === language) continue;
       const leaf = opAtom('notSupportsP', source, op);
       if (!available(certified, leaf, policy)) continue;
-      const path = findPath(context, source, language, 'leP', certified, policy);
+      const path = findPath(context, source, language, 'transP', certified, policy);
       if (!path) continue;
       const metadata = certifiedMetadata(certified, [...path, leaf]);
       return {
@@ -727,11 +768,13 @@ function proveLemmaContrapositive(
 function edgeAtomsForStep(
   source: number,
   target: number,
-  level: 'leP' | 'leQ',
+  level: 'leP' | 'leQ' | 'transP',
   certified: CertifiedMap,
   policy: ProofPolicy
 ): Atom[] {
-  const atoms = level === 'leP'
+  const atoms = level === 'transP'
+    ? [edgeAtom('transP', source, target)]
+    : level === 'leP'
     ? [edgeAtom('leP', source, target)]
     : [edgeAtom('leP', source, target), edgeAtom('leQ', source, target)];
   return atoms.filter((atom) => available(certified, atom, policy));
@@ -741,7 +784,7 @@ function findPath(
   context: FactContext,
   source: number,
   target: number,
-  level: 'leP' | 'leQ',
+  level: 'leP' | 'leQ' | 'transP',
   certified: CertifiedMap,
   policy: ProofPolicy
 ): Atom[] | null {
@@ -754,7 +797,7 @@ function findPath(
 function bfsDistances(
   context: FactContext,
   start: number,
-  level: 'leP' | 'leQ',
+  level: 'leP' | 'leQ' | 'transP',
   direction: 'forward' | 'backward',
   certified: CertifiedMap,
   policy: ProofPolicy
@@ -784,7 +827,7 @@ function reconstructPath(
   source: number,
   target: number,
   parent: number[],
-  level: 'leP' | 'leQ',
+  level: 'leP' | 'leQ' | 'transP',
   certified: CertifiedMap,
   policy: ProofPolicy
 ): Atom[] {
@@ -810,7 +853,7 @@ function reconstructBackwardPath(
   source: number,
   target: number,
   parentTowardTarget: number[],
-  level: 'leP' | 'leQ',
+  level: 'leP' | 'leQ' | 'transP',
   certified: CertifiedMap,
   policy: ProofPolicy
 ): Atom[] {
@@ -869,6 +912,15 @@ export function stripGeneratedFacts(data: GraphData): void {
         if (support?.derived === true || support?.origin === 'derived' || support?.origin === 'batch' || support?.batchId) {
           map[op] = { complexity: 'unknown-to-us', refs: [] };
         }
+      }
+    }
+  }
+
+  if (data.translatabilityMatrix) {
+    for (let i = 0; i < data.translatabilityMatrix.matrix.length; i += 1) {
+      for (let j = 0; j < data.translatabilityMatrix.matrix[i].length; j += 1) {
+        const relation = data.translatabilityMatrix.matrix[i][j];
+        if (relation?.derived || relation?.origin === 'derived') data.translatabilityMatrix.matrix[i][j] = null;
       }
     }
   }
@@ -994,7 +1046,35 @@ export function serializeCertifiedFacts(
     }
   }
 
+  serializeTranslatability(data, context, certified);
   return data;
+}
+
+function serializeTranslatability(data: GraphData, context: FactContext, certified: CertifiedMap): void {
+  const n = context.languageIds.length;
+  const existing = data.translatabilityMatrix;
+  const matrix = existing?.matrix ?? Array.from({ length: n }, () => Array<DirectedTranslatabilityRelation | null>(n).fill(null));
+  data.translatabilityMatrix = {
+    languageIds: [...context.languageIds],
+    indexByLanguage: Object.fromEntries(context.languageIds.map((id, index) => [id, index])),
+    matrix
+  };
+  for (let source = 0; source < n; source += 1) for (let target = 0; target < n; target += 1) {
+    if (source === target) { matrix[source][target] = null; continue; }
+    const positive = certified.get(atomKey(edgeAtom('transP', source, target)));
+    const negative = certified.get(atomKey(edgeAtom('notTransP', source, target)));
+    if (positive && negative) throw new Error(`Contradiction while serializing translation ${context.languageIds[source]} -> ${context.languageIds[target]}`);
+    const fact = positive ?? negative;
+    matrix[source][target] = fact ? {
+      status: positive ? 'poly' : 'no-poly',
+      refs: fact.refs,
+      ...(fact.description && { description: fact.description }),
+      ...(fact.assumption && { assumption: fact.assumption }),
+      derived: fact.origin === 'derived',
+      origin: fact.origin,
+      ...(fact.proof && { proof: fact.proof })
+    } : null;
+  }
 }
 
 export function serializeCandidateFacts(

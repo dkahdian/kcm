@@ -43,6 +43,8 @@ export type SandboxEdit =
       description?: string;
       noPolyDescription?: string;
       quasiDescription?: string;
+      /** Whether this positive succinctness claim includes a polynomial-time compiler. */
+      translatable?: boolean;
       refs?: string[];
     }
   | {
@@ -140,7 +142,8 @@ function relationSignature(source: GraphData, sourceId: string, targetId: string
   if (!relation) return 'null';
   return JSON.stringify({
     status: relation.status ?? null,
-    assumption: relation.assumption ?? null
+    assumption: relation.assumption ?? null,
+    translatable: source.translatabilityMatrix?.matrix[sourceIdx]?.[targetIdx]?.status === 'poly'
   });
 }
 
@@ -268,6 +271,34 @@ function ensureLanguageInMatrix(data: GraphData, languageId: string): void {
     row.push(null);
   }
   adjacencyMatrix.matrix.push(new Array(newIndex + 1).fill(null));
+  if (data.translatabilityMatrix) {
+    data.translatabilityMatrix.languageIds.push(languageId);
+    data.translatabilityMatrix.indexByLanguage[languageId] = newIndex;
+    for (const row of data.translatabilityMatrix.matrix) row.push(null);
+    data.translatabilityMatrix.matrix.push(new Array(newIndex + 1).fill(null));
+  }
+}
+
+function setSandboxTranslatability(data: GraphData, edit: Extract<SandboxEdit, { kind: 'edge' }>, status: string | null): void {
+  if (edit.translatable === undefined) return;
+  const source = data.adjacencyMatrix.indexByLanguage[edit.sourceId];
+  const target = data.adjacencyMatrix.indexByLanguage[edit.targetId];
+  if (source === undefined || target === undefined || source === target) return;
+  const n = data.adjacencyMatrix.languageIds.length;
+  data.translatabilityMatrix ??= {
+    languageIds: [...data.adjacencyMatrix.languageIds],
+    indexByLanguage: { ...data.adjacencyMatrix.indexByLanguage },
+    matrix: Array.from({ length: n }, () => Array(n).fill(null))
+  };
+  data.translatabilityMatrix.matrix[source][target] = status === 'poly'
+    ? {
+        status: edit.translatable ? 'poly' : 'no-poly',
+        refs: [...(edit.refs ?? [])],
+        ...(edit.description?.trim() ? { description: edit.description.trim() } : {}),
+        derived: false,
+        origin: 'authored'
+      }
+    : null;
 }
 
 function applyReferenceEdit(data: GraphData, edit: Extract<SandboxEdit, { kind: 'reference' }>): void {
@@ -374,6 +405,7 @@ function applyEdgeEdit(data: GraphData, edit: Extract<SandboxEdit, { kind: 'edge
   }
 
   data.adjacencyMatrix.matrix[sourceIdx][targetIdx] = relation;
+  setSandboxTranslatability(data, edit, status);
 }
 
 function normalizeSandboxEdgeStatus(

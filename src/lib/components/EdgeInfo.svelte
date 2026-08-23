@@ -42,6 +42,7 @@
         description?: string;
         noPolyDescription?: string;
         quasiDescription?: string;
+        translatable?: boolean;
       }
     ) => void;
     onSandboxEdgeReset?: (sourceId: string, targetId: string) => void;
@@ -61,6 +62,7 @@
   let draftEdgeDescription = $state('');
   let draftNoPolyDescription = $state('');
   let draftQuasiDescription = $state('');
+  let draftTranslatable = $state(false);
   let statusDropdownOpen = $state(false);
   let statusDropdownRoot: HTMLElement | null = $state(null);
 
@@ -82,7 +84,8 @@
           assumption: originalEdge.forward.assumption ?? '',
           description: originalEdge.forward.description ?? '',
           noPolyDescription: originalEdge.forward.noPolyDescription?.description ?? '',
-          quasiDescription: originalEdge.forward.quasiDescription?.description ?? ''
+          quasiDescription: originalEdge.forward.quasiDescription?.description ?? '',
+          translatable: translatorKnown(graphData, selectedEdge?.source ?? '', selectedEdge?.target ?? '')
         })
       : null;
     if (key !== draftEdgeKey || snapshot !== draftEdgeSnapshot) {
@@ -93,6 +96,7 @@
       draftEdgeDescription = originalEdge?.forward?.description ?? '';
       draftNoPolyDescription = draftNoPolyText(originalEdge?.forward);
       draftQuasiDescription = draftQuasiText(originalEdge?.forward);
+      draftTranslatable = selectedEdge ? translatorKnown(graphData, selectedEdge.source, selectedEdge.target) : false;
       statusDropdownOpen = false;
     }
   });
@@ -110,6 +114,27 @@
     if (relation.status === 'unknown-poly-quasi') return relation.description ?? '';
     return '';
   }
+
+  function translatorKnown(data: GraphData | FilteredGraphData, source: string, target: string): boolean {
+    return translatorStatus(data, source, target) === 'poly';
+  }
+
+  function translatorStatus(
+    data: GraphData | FilteredGraphData,
+    source: string,
+    target: string
+  ): 'poly' | 'no-poly' | null {
+    const sourceIndex = data.translatabilityMatrix?.indexByLanguage[source];
+    const targetIndex = data.translatabilityMatrix?.indexByLanguage[target];
+    if (sourceIndex === undefined || targetIndex === undefined) return null;
+    return data.translatabilityMatrix?.matrix[sourceIndex]?.[targetIndex]?.status ?? null;
+  }
+
+  const translatorRuledOut = $derived(
+    selectedEdge
+      ? translatorStatus(graphData, selectedEdge.source, selectedEdge.target) === 'no-poly'
+      : false
+  );
 
   onMount(() => {
     const handlePointerDown = (event: PointerEvent) => {
@@ -256,12 +281,14 @@
       description: draftEdgeDescription.trim(),
       noPolyDescription: draftNoPolyDescription.trim(),
       quasiDescription: draftQuasiDescription.trim()
+      ,translatable: draftTranslatable
     });
   }
 
   function commitSelectedEdgeStatus(status: string | null) {
     const nextStatus = status === 'unknown-both' ? null : status;
     draftEdgeStatus = nextStatus ?? '';
+    if (nextStatus === 'poly') draftTranslatable = true;
     statusDropdownOpen = false;
     commitSelectedEdgeEdit();
   }
@@ -405,6 +432,12 @@
               {/if}
               {#if sandboxMode && editable}
                 <div class="edge-editor">
+                  {#if draftEdgeStatus === 'poly' || relation.status === 'poly'}
+                    <label class:translator-unavailable={translatorRuledOut} class="translator-choice" title={translatorRuledOut ? 'A polynomial-time translator is ruled out by the current sandbox claims.' : undefined}>
+                      <input type="checkbox" bind:checked={draftTranslatable} disabled={translatorRuledOut} onchange={commitSelectedEdgeEdit} />
+                      Polynomial-time translator exists?
+                    </label>
+                  {/if}
                   {#if draftEdgeStatus === 'no-poly-quasi' || relation.status === 'no-poly-quasi'}
                     <label class="editor-label" for="edge-no-poly-description">
                       {derivedLabel('Polynomial Gap', relation.noPolyDescription?.derived ?? relation.derived)}
@@ -530,6 +563,12 @@
               {/if}
               {#if sandboxMode}
                 <div class="edge-editor">
+                  {#if draftEdgeStatus === 'poly'}
+                    <label class:translator-unavailable={translatorRuledOut} class="translator-choice" title={translatorRuledOut ? 'A polynomial-time translator is ruled out by the current sandbox claims.' : undefined}>
+                      <input type="checkbox" bind:checked={draftTranslatable} disabled={translatorRuledOut} onchange={commitSelectedEdgeEdit} />
+                      Polynomial-time translator exists?
+                    </label>
+                  {/if}
                   {#if draftEdgeStatus === 'no-poly-quasi'}
                     <label class="editor-label" for="edge-no-poly-description">Polynomial Gap</label>
                     <RichTextEditor
@@ -650,6 +689,15 @@
   .status-trigger:disabled:hover {
     border-color: transparent;
     box-shadow: none;
+  }
+
+  .translator-unavailable {
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .translator-unavailable input {
+    cursor: not-allowed;
   }
 
   .status-dropdown {

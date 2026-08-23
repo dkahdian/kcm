@@ -102,6 +102,24 @@ Operation code table:
 \end{succinctnessclaim}
 ```
 
+## Polynomial-Time Translation Claims (in `succinctness.tex`)
+
+Translation claims are independent of succinctness claims. Use one to record
+whether a polynomial-time translator exists, including when a query separation
+rules one out without establishing a size lower bound.
+
+```tex
+\begin{translationclaim}
+\source{<source language \langref or \langfam command>}
+\target{<target language \langref or \langfam command>}
+\translator{yes} % or \translator{no}
+(optionally \assuming{<assumption>})
+\begin{description}
+<English description of the translation claim, including any relevant references>
+\end{description}
+\end{translationclaim}
+```
+
 ## Query And Transformation Claims (in `queries.tex` and `transformations.tex`)
 ```tex
 \begin{queryclaim} or \begin{transformationclaim}

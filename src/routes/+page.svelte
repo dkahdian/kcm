@@ -534,11 +534,24 @@
     return Boolean(adjacencyMatrix.matrix[sourceIdx]?.[targetIdx] || adjacencyMatrix.matrix[targetIdx]?.[sourceIdx]);
   }
 
+  const currentSemanticSandboxKey = $derived(JSON.stringify(sandboxEdits.filter(isSemanticSandboxEdit)));
+  const currentSandboxIsHydrated = $derived(
+    hydratedSemanticSandboxKey === currentSemanticSandboxKey
+    && hydratedSemanticSandboxEvaluation?.ok === true
+  );
+  // The synchronous path deliberately uses lazy propagation for immediate
+  // editing feedback. Its broad candidate closure is replaced shortly after
+  // by the worker's eager, proof-certified result, so do not briefly render
+  // those candidates as inferred changes.
   const sandboxChangedSuccinctnessCellIds = $derived(
-    isSandboxMode && sandboxEvaluation?.ok ? sandboxEvaluation.changedEdgeIds : new Set<string>()
+    isSandboxMode && currentSandboxIsHydrated && sandboxEvaluation?.ok
+      ? sandboxEvaluation.changedEdgeIds
+      : new Set<string>()
   );
   const sandboxChangedOperationCellIds = $derived(
-    isSandboxMode && sandboxEvaluation?.ok ? sandboxEvaluation.changedOperationCellIds : new Set<string>()
+    isSandboxMode && currentSandboxIsHydrated && sandboxEvaluation?.ok
+      ? sandboxEvaluation.changedOperationCellIds
+      : new Set<string>()
   );
   const directSandboxEdgeIds = $derived(
     isSandboxMode && sandboxEvaluation?.ok ? sandboxEvaluation.directEdgeIds : new Set<string>()
@@ -546,7 +559,11 @@
   const directSandboxOperationCellIds = $derived(
     isSandboxMode && sandboxEvaluation?.ok ? sandboxEvaluation.directOperationCellIds : new Set<string>()
   );
-  const highlightedSuccinctnessCellIds = $derived(sandboxChangedSuccinctnessCellIds);
+  // Purple preview highlighting is reserved for inferred consequences. Direct
+  // contributor edits use the blue sandbox-direct treatment instead.
+  const highlightedSuccinctnessCellIds = $derived.by(() => new Set(
+    [...sandboxChangedSuccinctnessCellIds].filter((id) => !directSandboxEdgeIds.has(id))
+  ));
 
   $effect(() => {
     if (!isSandboxMode) return;
@@ -1023,10 +1040,20 @@
       ...(existing?.description !== undefined ? { description: existing.description } : {}),
       ...(existing?.noPolyDescription !== undefined ? { noPolyDescription: existing.noPolyDescription } : {}),
       ...(existing?.quasiDescription !== undefined ? { quasiDescription: existing.quasiDescription } : {}),
+      ...(status === 'poly'
+        ? { translatable: existing?.translatable ?? true }
+        : existing?.translatable !== undefined ? { translatable: existing.translatable } : {}),
       ...(existing?.refs !== undefined ? { refs: existing.refs } : {})
     };
-    const nextEdits = nextSandboxEditsFor(edit);
-    const applied = commitSandboxEdits(nextEdits);
+    let nextEdits = nextSandboxEditsFor(edit);
+    let applied = commitSandboxEdits(nextEdits);
+    // A polynomial-size upper bound need not include a compiler. Try the
+    // contributor-friendly default first, then retain the size claim alone
+    // when a compiler is ruled out by the current sandbox facts.
+    if (!applied && status === 'poly' && edit.translatable === true) {
+      nextEdits = nextSandboxEditsFor({ ...edit, translatable: false });
+      applied = commitSandboxEdits(nextEdits);
+    }
     if (applied) {
       const evaluation = nextEdits.length > 0
         ? applySandboxEdits(initialGraphData, nextEdits, {
@@ -1048,6 +1075,7 @@
       description?: string;
       noPolyDescription?: string;
       quasiDescription?: string;
+      translatable?: boolean;
     }
   ) {
     const applied = handleSandboxApply({

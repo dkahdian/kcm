@@ -125,10 +125,12 @@ The propagation logic relies on the following simple lemmas. We always assume $L
  
 \paragraph{Query-by-compiling}
 \begin{itemize}
-\item{If $L_1 \leq_p L_2$ and $L_2$ supports $q$, then $L_1$ supports $q$ (compile, then query).}
-\item{Corollary: if $L_1$ does not support $q$, but $L_1 \leq_p L_2$, then $L_2$ does not support $q$ either.}
-\item{Corollary: if $L_1$ supports $q$, but $L_2$ does not support $q$, then $L_2$ cannot be compiled to $L_1$.}
+\item{If there is a polynomial-time translator from $L_1$ to $L_2$ and $L_2$ supports $q$, then $L_1$ supports $q$ (translate, then query).}
+\item{Corollary: if $L_1$ does not support $q$, but has a polynomial-time translator to $L_2$, then $L_2$ does not support $q$ either.}
+\item{Corollary: if $L_1$ supports $q$, but $L_2$ does not support $q$, then no polynomial-time translator exists from $L_2$ to $L_1$.}
 \end{itemize}
+
+Polynomial-size representability and polynomial-time translatability are distinct: a translator gives a polynomial-size target representation, but a size upper bound alone does not supply a translator. Thus a query difference can rule out a polynomial-time translator, but is not a succinctness lower bound.
 
 Warning: a similar result does not apply for transformations.
 
@@ -144,7 +146,7 @@ We additionally have a \emph{family} of lemmas $F_l \subset \mathcal{P}(O) \time
 
 \textbf{Succinctness validation.} Represent the succinctness relationships as a graph $G = (\textbf{L}, E)$, where $(L_1, L_2, s) \in E \iff M_s(L_1, L_2) = s$. There is a contradiction if and only if, for languages $L_i, L_j$, there exists a path of $\texttt{poly}$ edges while $M_s(L_i, L_j) = \texttt{no-poly}$. A DFS finds any such contradictions, with the corresponding witness path, in $O((\#\textbf{L})^2)$ time.
 
-\textbf{Query-by-compile validation.} We consider each pair of languages $L_i, L_j \in \textbf{L}$ so that a path of $\texttt{poly}$ edges exists from $L_i$ to $L_j$. For such pairs, we ensure that every query $q$ supported by $L_2$ is not unsupported by $L_1$. This requires a similar DFS algorithm taking $O((\#\textbf{L})^2(\#Q)$ time.
+\textbf{Query-by-compile validation.} We consider each pair of languages $L_i, L_j \in \textbf{L}$ so that a path of known polynomial-time translators exists from $L_i$ to $L_j$. For such pairs, we ensure that every query $q$ supported by $L_j$ is not unsupported by $L_i$. This requires a similar DFS algorithm taking $O((\#\textbf{L})^2(\#Q)$ time.
 
 \textbf{Implication lemma validation.} For each language $L \in \textbf{L}$ and for each lemma $l=(\{o_1, ..., o_n\}, o_{n+1}) \in F_l$, we check that $L.o_{n+1})=\texttt{no-poly}) \wedge (\bigwedge_{i=1}^n  L.o_i=\texttt{no-poly})$ does not hold. This takes $O((\#\textbf{L})(\#F_l)(\#\textbf{O}))$ time.
 
@@ -179,9 +181,9 @@ Note that, when handling $S$ instead of $\tilde S$, during each iteration of the
 
 After phase 2, $\widetilde M_s$ is finalized (ignoring Phase~6), so we move on to $\widetilde M_o$. We propagate query and transformation support across languages in three sub-phases.
 
-\subsection{Phase 3: Upgrades via Succinctness}
+\subsection{Phase 3: Upgrades via Translation}
 
-This is another fixed-point algorithm using the query-by-compiling principle: if $L_1 \leq_p L_2$ (because we now have transitive closure, this is equivalent to checking all paths) and $L_2.q = \texttt{poly}$, then $L_1.q = \texttt{poly}$. Checking all triples $(L_1, L_2, q)$ takes $O((\#\textbf{L})^2(\#Q))$ time. Since there are at most $O((\#\textbf{L})^2))$ upgrades to check, this takes at most $O((\#\textbf{L})^4(\#Q))$ time, although, again, we typically converge after very few iterations.
+This is another fixed-point algorithm using the query-by-compiling principle: if there is a polynomial-time translator from $L_1$ to $L_2$ (because we now have transitive closure, this is equivalent to checking all translator paths) and $L_2.q = \texttt{poly}$, then $L_1.q = \texttt{poly}$. Checking all triples $(L_1, L_2, q)$ takes $O((\#\textbf{L})^2(\#Q))$ time. Since there are at most $O((\#\textbf{L})^2))$ upgrades to check, this takes at most $O((\#\textbf{L})^4(\#Q))$ time, although, again, we typically converge after very few iterations.
 
 When dealing with the full set of statuses $S$, we process \texttt{poly} upgrades first (to a fixed point), then worry about quasipolynomial status upgrades.
 
@@ -190,8 +192,8 @@ When dealing with the full set of statuses $S$, we process \texttt{poly} upgrade
 For each language $L$ and each operation lemma $(\{o_1,...o_n\}, o_{n+1})$: if $L$ supports all $o_i: i \in [n]$, set $L.o_{n+1}$ to $\texttt{poly}$. Note that this is interleaved with Phase~3 in the same fixed-point loop. Cost: $O((\#F_l)(\#\textbf{L}))$ per iteration, with $O((\#F_l)(\#L))$ iterations, for a total complexity of $O((\#F_l)^2(\#\textbf{L})^2)$.
 \subsection{Phase 5: Downgrades}
 
-\paragraph{Via succinctness (contrapositive of query-by-compiling).}
-If $L_1.q = \texttt{no-poly}$ and $L_1 \leq_p L_2$, then $L_2.q = \texttt{no-poly}$. (If $L_2.q = \texttt{poly}$, $L_1$ would compile to $L_2$ and query there---contradiction.) Checking this for each pair of languages and for each query takes $O((\#\textbf{L})^2)(\#Q))$ per iteration.
+\paragraph{Via translation (contrapositive of query-by-compiling).}
+If $L_1.q = \texttt{no-poly}$ and there is a polynomial-time translator from $L_1$ to $L_2$, then $L_2.q = \texttt{no-poly}$. (If $L_2.q = \texttt{poly}$, $L_1$ could translate to $L_2$ and query there---contradiction.) Checking this for each pair of languages and for each query takes $O((\#\textbf{L})^2)(\#Q))$ per iteration.
 
 \paragraph{Via operation implications lemmas corollary.}
 For each language $L$ and each lemma $l=(\{o_1,o_2,...,o_n\},o_{n+1})$, if we have that $L$ supports $o_i$ for all $i$ except $\tilde i$ (which forces $L.o_{\tilde i}=\texttt{unknown}$), set $L.o_{\tilde i}$ to $\texttt{no-poly}$, for otherwise the lemma would imply $L_o$ supports $o_{n+1}$. This takes $O((\#\textbf{L})(\#F_l))$ time per iteration.
@@ -200,11 +202,11 @@ In theory, this can downgrade $\texttt{unknown}$ results to $\texttt{no-poly}$ f
 
 Phases 3--5 are each repeated to a fixed point, since one inference may enable another. This takes at most $O((\#\textbf{L})^4(\#Q + \#F_l))$ time. (All derived entries are tagged \texttt{derived = true} with human-readable proof descriptions and references.)
 
-\subsection{Phase 6: Succinctness Downgrades via Query Differences}
+\subsection{Phase 6: Translation Downgrades via Query Differences}
 
-For each pair of languages $L_1, L_2$ and each query $q$, if $q$ is unsupported by $L_1$ but supported by $L_2$, we may set $M_s(L_1,L_2)$ to $\texttt{no-poly}$ (for else we could query $L_1$ by compiling to $L_2$). This takes at most $O((\#\textbf{L})^2(\#Q))$ time per iteration.
+For each pair of languages $L_1, L_2$ and each query $q$, if $q$ is unsupported by $L_1$ but supported by $L_2$, we may record that no polynomial-time translator exists from $L_1$ to $L_2$ (for otherwise we could query $L_1$ by translating to $L_2$). This does not establish a succinctness lower bound. This takes at most $O((\#\textbf{L})^2(\#Q))$ time per iteration.
 
-Since Phase~6 may alter $M_s$, which may affect earlier phases, the entire propagator (Phases~1--6) is wrapped in a global fixed-point loop, although usually this requires no more than 2 iterations to converge.
+Since Phase~6 may add translatability facts that affect the earlier query phases, the entire propagator (Phases~1--6) is wrapped in a global fixed-point loop, although usually this requires no more than 2 iterations to converge.
 
 \section{Meta-Knowledge Compilation (Needs rewrite)}
 

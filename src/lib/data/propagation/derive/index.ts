@@ -18,6 +18,9 @@ export function validateNoContradictions(context: FactContext, tables: FactTable
       if ((tables.leQ[i][j] || tables.leP[i][j]) && tables.notLeQ[i][j]) {
         throw new Error(`Contradiction: ${context.languageIds[i]} both compiles and does not compile quasipolynomially to ${context.languageIds[j]}`);
       }
+      if (tables.transP[i][j] && tables.notTransP[i][j]) {
+        throw new Error(`Contradiction: ${context.languageIds[i]} both does and does not admit a polynomial-time translation to ${context.languageIds[j]}`);
+      }
     }
   }
 

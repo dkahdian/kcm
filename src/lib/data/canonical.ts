@@ -12,6 +12,7 @@ import { allReferences } from './references.js';
 import { COMPLEXITIES } from './complexities.js';
 import { initNameMap } from '../utils/language-id.js';
 import { collectAssumptions } from './assumptions.js';
+import type { KCTranslatabilityMatrix } from '../types.js';
 
 // Initialize the language ID → name map so idToName() works at runtime
 initNameMap(allLanguages);
@@ -45,11 +46,13 @@ const defaultNodePositionsByLanguageName: NodePositionsByLanguageName | undefine
 const metadata = ('metadata' in database
   ? (database as { metadata?: Record<string, unknown> }).metadata
   : undefined);
+const translatabilityMatrix = (database as { translatabilityMatrix?: KCTranslatabilityMatrix }).translatabilityMatrix;
 
 export const canonicalDataset: GraphData = {
   languages: allLanguages,
   definitions,
   adjacencyMatrix: adjacencyMatrixData,
+  ...(translatabilityMatrix ? { translatabilityMatrix } : {}),
   relationTypes,
   complexities: COMPLEXITIES,
   references: allReferences,
